@@ -1,0 +1,244 @@
+/*
+ * nvbio
+ * Copyright (c) 2011-2014, NVIDIA CORPORATION. All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *    * Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    * Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
+ *    * Neither the name of the NVIDIA CORPORATION nor the
+ *      names of its contributors may be used to endorse or promote products
+ *      derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL NVIDIA CORPORATION BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/// \page nvbowtie_page nvBowtie
+///
+///\htmlonly
+/// <img src="nvidia_cubes.png" style="position:relative; bottom:-10px; border:0px;"/>
+///\endhtmlonly
+///
+///\par
+///\n
+/// nvBowtie is a GPU-accelerated re-engineering of Bowtie2, a very widely used short-read aligner.
+/// While being completely rewritten from scratch, nvBowtie reproduces many (though not all) of the
+/// features of Bowtie2.
+///
+/// \section nvBowtieArch Architecture
+///
+///\par
+/// In order to take advantage of the massive parallelism available in modern processor
+/// architectures, nvBowtie re-implements the same underlying algorithms as Bowtie2 taking a fundamentally different
+/// approach.
+/// In fact, while Bowtie2 is essentially designed to operate on a single read at a time (possibly having multiple
+/// CPU threads working on a different read), carrying the entire alignment process in what is
+/// basically a very complex chain of nested function calls, nvBowtie works at all times with large batches
+/// of reads, and treats their alignment as a complex pipeline composed by many relatively simple but deeply
+/// parallel stages.
+/// In many of these stages parallelism is spread at a much finer granularity than at the reads-level, for example
+/// by processing many candidate hits from each read at the same time.
+///
+///\par
+/// There are effectively a few different pipelines, one for each kind of alignment:
+///  - best mapping of single-end reads
+///  - best mapping of paired-end reads
+///  - all mapping of single-end reads
+///  - all mapping of paired-end reads (not implemented yet)
+///
+/// \subsection BestMapping-SingleEnd best-mapping, single-end reads
+///
+///\par
+/// This pipeline can be described by the following pseudo-code:
+///
+/// \code
+///
+/// best-alignments = {}
+///
+/// seed-mapping-queue[in] := all reads
+/// while (seed-mapping-queue[in] not empty)
+/// {
+///     (seed-mapping-queue[out], seed-deques) := map( seed-mapping-queue[in] );
+///
+///     score( seed-mapping-queue[in], seed-deques, best-alignments );          // find the best alignments for each read
+///
+///     seed-mapping-queue[in] = seed-mapping-queue[out];
+/// }
+/// traceback_best( best-alignments );                                          // traceback the best alignments
+/// \endcode
+///
+///\par
+/// where score() is a sub-pipeline:
+///
+/// \code
+/// score([in] input-reads, [in] seed-deques, [in/out] best-alignments)
+/// {
+///    active-reads := input-reads
+///    while (active-reads not empty)
+///    {
+///         (hits-queue, active-reads) := select( active-reads, seed-deques );  // select the next round of hits to process
+///         locate( hits-queue );                                               // SA coordinates -> linear genome coordinates conversion
+///         score_best( hits-queue );                                           // assign a score to the selected hits using DP alignment
+///         score_reduce( hits-queue, best-alignments );                        // keep track of the best alignments found so far for each read
+///    }
+/// }
+/// \endcode
+///
+///\par
+/// The various functions involved correspond to different pipeline stages:
+///
+/// - \ref Mapping
+/// - \ref Locate
+/// - \ref Select
+/// - \ref Scoring
+/// - \ref Reduce
+/// - \ref Traceback
+///
+///\par
+/// The data flowing through the pipeline goes mostly through a single-data structure of type ScoringQueues (\ref ScoringQueuesModule),
+/// which itself contains the active-reads (ScoringQueues::active_reads), the hits-queue (ScoringQueues::hits)
+/// and an index allowing to walk all the hits belonging to each read (ScoringQueues::hits_index).
+///
+/// \subsection BestMapping-PairedEnd best-mapping, paired-end reads
+///
+///\par
+/// This pipeline can be described by the following pseudo-code:
+///
+/// \code
+///
+/// best-anchor-alignments   = {}
+/// best-opposite-alignments = {}
+///
+/// for (anchor in {mate1,mate2})
+/// {
+///     seed-mapping-queue[in] := all reads
+///     while (seed-mapping-queue[in] not empty)
+///     {
+///         (seed-mapping-queue[out], seed-deques) := map( seed-mapping-queue[in] );
+///
+///         score( seed-mapping-queue[in], seed-deques, best-anchor-alignments, best-opposite-alignments );
+///
+///         seed-mapping-queue[in] = seed-mapping-queue[out];
+///     }
+/// }
+/// traceback_best( best-anchor-alignments );
+/// opposite_traceback_best( best-opposite-alignments );
+/// \endcode
+///
+///\par
+/// where again score() is a sub-pipeline:
+///
+/// \code
+/// score([in] input-reads, [in] seed-deques, [in/out] best-anchor-alignments, [in/out] best-opposite-alignments)
+/// {
+///    active-reads := input-reads
+///    while (active-reads not empty)
+///    {
+///         (hits-queue, active-reads) := select( active-reads, seed-deques );  // select the next round of hits to process
+///         locate( hits-queue );                                               // SA coordinates -> linear genome coordinates conversion
+///         anchor_score_best( hits-queue );                                    // assign a score to the selected hits using DP alignment
+///         opposite_score_best( hits-queue );                                  // assign a score to opposite mate of the selected hits using DP alignment
+///         score_reduce_paired( hits-queue, best-anchor-alignments, best-opposite-alignments ); // keep track of the best alignments found so far for each read
+///    }
+/// }
+/// \endcode
+///
+/// \section nvBowtieUsage Usage
+///
+///\par
+/// At the moment, the command line options of nvBowtie differ from those of bowtie2.
+/// A comprehensive list can be obtained running:
+///
+///\verbatim
+/// ./nvBowtie --help
+///
+/// nvBowtie [options] reference-genome read-file output
+///  options:
+///    General:
+///      --max-reads        int [-1]      maximum number of reads to process
+///      --device           int [0]       select the given cuda device
+///      --file-ref                       load reference from file
+///      --server-ref                     load reference from server
+///      --phred33                        qualities are ASCII characters equal to Phred quality + 33
+///      --phred64                        qualities are ASCII characters equal to Phred quality + 64
+///      --solexa-quals                   qualities are in the Solexa format
+///      --pe                             paired ends input
+///      --ff                             paired mates are forward-forward
+///      --fr                             paired mates are forward-reverse
+///      --rf                             paired mates are reverse-forward
+///      --rr                             paired mates are reverse-reverse
+///      --verbosity                      verbosity level
+///    Seeding:
+///      --seed-len         int [22]      seed lengths
+///      --seed-freq        int [15]      interval between seeds
+///      --max-hits         int [100]     maximum amount of seed hits
+///      --max-reseed       int [2]       number of reseeding rounds
+///    Extension:
+///      --rand                           randomized seed selection
+///      --max-dist         int [15]      maximum edit distance
+///      --max-effort-init  int [15]      initial maximum number of consecutive extension failures
+///      --max-effort       int [15]      maximum number of consecutive extension failures
+///      --min-ext          int [30]      minimum number of extensions per read
+///      --max-ext          int [400]     maximum number of extensions per read
+///      --minins           int [0]       minimum insert length
+///      --minins           int [500]     maximum insert length
+///      --overlap                        allow overlapping mates
+///      --dovetail                       allow dovetailing mates
+///      --no-mixed                       only report paired alignments
+///    Reporting:
+///      --mapQ-filter      int [0]       minimum mapQ threshold
+///\endverbatim
+///
+///\par
+/// While most parameters should be easy to understand, a major difference is that nvBowtie
+/// relies on external programs to build the reference indices:
+///
+/// - \subpage nvbwt_page :      builds the BWT indices of the reference FASTA files
+/// - \subpage nvssa_page :      builds the Sampled Suffix Arrays corresponding to a given BWT
+///
+///\par
+/// e.g. suppose you have the human genome in a single FASTA file, <i>hg19.fa</i>; the
+/// following commands will create all indices needed by nvBowtie:
+///
+///\verbatim
+/// ./nvBWT hg19.fa hg19-index
+/// ./nvSSA hg19-index
+///\endverbatim
+///
+///\par
+/// At this point, one can run nvBowtie:
+///
+///\verbatim
+/// ./nvBowtie --file-ref hg19 my_reads.fastq my_reads.bam
+///\endverbatim
+///
+///\par
+/// Note the presence of the option <i>--file-ref</i>, specifying that the reference
+/// indices come from disk.
+/// Another noteworthy option is to let nvBowtie fetch them from a <i>shared memory</i> server 
+/// which can be run in the background: the \subpage nvfm_server_page.
+/// It be launched with:
+///
+///\verbatim
+/// ./nvFM-server hg19-index hg19 &
+///\endverbatim
+///
+///\par
+/// nvBowtie can then pickup the reference from the server:
+///
+///\verbatim
+/// ./nvBowtie hg19 my_reads.fastq my_reads.bam
+///\endverbatim
+///

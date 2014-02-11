@@ -1,0 +1,149 @@
+/*
+ * nvbio
+ * Copyright (c) 2011-2014, NVIDIA CORPORATION. All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *    * Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    * Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
+ *    * Neither the name of the NVIDIA CORPORATION nor the
+ *      names of its contributors may be used to endorse or promote products
+ *      derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL NVIDIA CORPORATION BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+///\page nvbio_page NVBIO
+///
+///\htmlonly
+/// <img src="nvidia_cubes.png" style="position:relative; bottom:-10px; border:0px;"/>
+///\endhtmlonly
+///
+///\par
+///\n
+/// <b>NVBIO</b> is a library of reusable components designed to accelerate bioinformatics applications
+/// using <i>CUDA</i>. Though it is specifically designed to unleash the power of <i>NVIDIA</i> <b>GPU</b>s,
+/// most if its components are completely cross-platform and can be used both from host C++ and device
+/// CUDA code.
+///
+/// \section ModulesSection Modules
+///\par
+/// NVBIO includes the following modules:
+///
+/// - \subpage basic_page
+/// - \subpage alignment_page
+/// - \subpage fmindex_page
+/// - \subpage tries_page
+/// - \subpage io_page
+/// - \subpage fasta_page
+/// - \subpage fastq_page
+///
+/// \section DesignConceptsSection Design Concepts
+///\par
+/// - \subpage host_device_page
+/// - \subpage generic_programming_page
+///
+/// \section DependenciesSection Dependencies
+///\par
+/// NVBIO depends on the following external libraries:
+///
+/// - <a href="http://nvlabs.github.io/cub/">CUB</a>
+/// - <a href="https://sites.google.com/site/yuta256/">SAIS</a>
+/// - <a href="http://www.zlib.net/">zlib</a>
+/// - <a href="http://www.barrgroup.com/Embedded-Systems/How-To/CRC-Calculation-C-Code">crc</a>
+/// - a modification of Nathaniel McClatchey's <a href="https://github.com/nmcclatchey/Priority-Deque/">priority_deque</a>
+///
+/// \section Licensing
+///\par
+/// NVBIO has been developed by <a href="www.nvidia.com">NVIDIA Corporation</a> and is licensed under BSD.
+///
+/// \section Contributors
+///\par
+/// The main contributors of NVBIO are <a href="jpantaleoni@nvidia.com">Jacopo Pantaleoni</a> and <a href="nsubtil@nvidia.com">Nuno Subtil</a>.
+///
+///\htmlonly
+/// <a href="http://research.nvidia.com"><img src="cuda_small.png" style="position:relative; bottom:-10px; border:0px;"/></a>
+/// &nbsp;&nbsp;
+///\endhtmlonly
+
+/// \page host_device_page Host & Device
+///\par
+/// The user of NVBIO needs to familiarize with the fact that on a GPU equipped system
+/// there is both a <i>host</i>, controlled by a <i>CPU</i>, and one or multiple <i>GPU</i> <i>devices</i>,
+/// with distinct memory spaces.
+/// Hence, there can be several types of functions and data-structures:
+///\par
+/// - functions that can be called on the host
+/// - functions that can be called on the device
+/// - functions that can be called both on the host and the device
+///\par
+/// - data-structures that encapsulate host data and are meant to be used on the host
+/// - data-structures that encapsulate device data but are meant to be used on the host
+///   (e.g. a resizable device vector)
+/// - data-structures that encapsulate device data and are meant to be used on the device
+///\par
+/// Unified Virtual Memory (coming with the NVIDIA Maxwell generation) will eventually allow
+/// to use any data-structure anywhere, but for now we have to cope with the distinct memory
+/// spaces.
+///
+/// \section PlainViewsSection Plain Views
+///\par
+/// The fact that some data structures contain device data but can only be used from the host,
+/// coupled with the fact that without Unified Virtual Memory it's only possible to pass PODs
+/// as device kernel parameters, lends naturally to the definition of <i>plain views</i>.
+///\par
+/// A plain view of an object is essentially a shallow reference to that object's data
+/// encapsulated in a POD data structure that can be passed as kernel parameters.
+///\par
+/// NVBIO defines the generic function plain_view() to obtain the plain view of a given object.
+/// Analogously it defines the meta function plain_view_subtype<T>::type to get the type of the
+/// plain view of any given type T (where defined).
+/// Moreover, as a convention NVBIO's data structures T define the subtype T::plain_view_type
+/// to identify their plain view type.
+
+/// \page generic_programming_page Generic Programming
+///\par
+/// Most of NVBIO's functions and data structures are <em>C++ templates</em>
+/// providing the flexibility and compile-time code generation needed
+/// to accomodate the exponential amount of type combinations possible in typical
+/// bioinformatics applications.
+///\par
+/// Just as an example, consider the problem of string alignment: one user might
+/// want to use <em>Smith-Waterman</em> to perform <em>local</em> alignment between
+/// two <em>ASCII</em> strings.
+/// Another, might want to use <em>Edit-Distance</em> to align two <em>4-bit encoded</em>
+/// strings  <em>semi-globally</em>.
+/// Yet another might want to perform <em>banded</em> alignment using <em>Gotoh</em>'s
+/// affine gap penalties, this time <em>globally</em> between an ASCII pattern and a 2-bit text.\n
+/// Now consider the cross product of all the possible combinations:
+/// <table>
+/// <tr><td><b>Aligner</b></td><td>	<b>Alignment Type</b>	</td><td><b>DP Algorithm</b></td><td><b>Pattern Type</b></td><td><b>Text Type</b></td></tr>
+/// <tr><td>Edit-Distance</td>		<td>Global</td>			<td>Full Matrix</td>	<td>ASCII</td>	<td>ASCII</td></tr>
+/// <tr><td>Smith-Waterman</td>		<td>Semi-Global			</td><td>Banded</td>	<td>2-bit</td>	<td>2-bit</td></tr>
+/// <tr><td>Gotoh</td>				<td>Local</td>			<td></td>				<td>4-bit</td>  <td>4-bit</td></tr>
+/// </table>
+/// Hard-coding them would result in <b>3 x 3 x 2 x 3 x 3 = 54</b> <em>almost equivalent <b>code paths!</b></em>\n
+///\par
+/// <b><em>Templates</em></b> instead allow:
+///  - to express all these alignment problems elegantly using a <b><em>single interface</em></b>;
+///  - while at the same time <b><em>not imposing any constraints</em></b> on the user's possibilities
+///    who might for example easily experiment switching from ASCII to 2-bit encodings
+///    or perhaps yet another custom representation of his choice;
+///  - and to <b><em>optimize</em></b> the generated code at <em>compile-time</em>, specializing behaviour
+///    for an important subset of the exponentially (or even infinitely) sized cross product
+///    of all possible combinations.
+///\par
+/// And obviously, the same story goes for FM-indices, Bloom filters, and so on and so on...
+///

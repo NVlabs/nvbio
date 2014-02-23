@@ -89,6 +89,7 @@ struct SortEnactor
     void sort(const uint32 count, SortBuffers<uint8*, uint32*>& buffers);
     void sort(const uint32 count, SortBuffers<uint16*,uint32*>& buffers);
     void sort(const uint32 count, SortBuffers<uint32*,uint32*>& buffers);
+    void sort(const uint32 count, SortBuffers<uint32*,uint64*>& buffers);
     void sort(const uint32 count, SortBuffers<uint64*,uint32*>& buffers);
     void sort(const uint32 count, SortBuffers<uint8*>&          buffers);
     void sort(const uint32 count, SortBuffers<uint16*>&         buffers);

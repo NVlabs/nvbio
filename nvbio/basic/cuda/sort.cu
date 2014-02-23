@@ -118,6 +118,32 @@ void SortEnactor::sort(const uint32 count, SortBuffers<uint32*,uint32*>& buffers
     // keep track of the current buffer
     buffers.selector = key_buffers.selector;
 }
+void SortEnactor::sort(const uint32 count, SortBuffers<uint32*,uint64*>& buffers)
+{
+    cub::DoubleBuffer<uint32> key_buffers;
+    cub::DoubleBuffer<uint64> value_buffers;
+
+    // Create ping-pong storage wrapper
+    key_buffers.selector       = buffers.selector;
+    value_buffers.selector     = buffers.selector;
+    key_buffers.d_buffers[0]   = buffers.keys[0];
+    key_buffers.d_buffers[1]   = buffers.keys[1];
+    value_buffers.d_buffers[0] = buffers.values[0];
+    value_buffers.d_buffers[1] = buffers.values[1];
+
+    size_t temp_storage_bytes = 0;
+
+    // gauge the amount of temp storage we need
+    cub::DeviceRadixSort::SortPairs( NULL, temp_storage_bytes, key_buffers, value_buffers, count );
+
+    thrust::device_vector<uint8> d_temp( temp_storage_bytes );
+
+    // do the real run
+    cub::DeviceRadixSort::SortPairs( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, value_buffers, count );
+
+    // keep track of the current buffer
+    buffers.selector = key_buffers.selector;
+}
 void SortEnactor::sort(const uint32 count, SortBuffers<uint64*,uint32*>& buffers)
 {
     cub::DoubleBuffer<uint64> key_buffers;

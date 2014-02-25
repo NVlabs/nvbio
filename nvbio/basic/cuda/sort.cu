@@ -40,7 +40,7 @@ SortEnactor::~SortEnactor()
 {
 }
 
-void SortEnactor::sort(const uint32 count, SortBuffers<uint8*, uint32*>& buffers)
+void SortEnactor::sort(const uint32 count, SortBuffers<uint8*, uint32*>& buffers, const uint32 begin_bit, const uint32 end_bit)
 {
     cub::DoubleBuffer<uint8>  key_buffers;
     cub::DoubleBuffer<uint32> value_buffers;
@@ -56,17 +56,17 @@ void SortEnactor::sort(const uint32 count, SortBuffers<uint8*, uint32*>& buffers
     size_t temp_storage_bytes = 0;
 
     // gauge the amount of temp storage we need
-    cub::DeviceRadixSort::SortPairs( NULL, temp_storage_bytes, key_buffers, value_buffers, count );
+    cub::DeviceRadixSort::SortPairs( NULL, temp_storage_bytes, key_buffers, value_buffers, count, begin_bit, end_bit );
 
     thrust::device_vector<uint8> d_temp( temp_storage_bytes );
 
     // do the real run
-    cub::DeviceRadixSort::SortPairs( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, value_buffers, count );
+    cub::DeviceRadixSort::SortPairs( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, value_buffers, count, begin_bit, end_bit );
 
     // keep track of the current buffer
     buffers.selector = key_buffers.selector;
 }
-void SortEnactor::sort(const uint32 count, SortBuffers<uint16*,uint32*>& buffers)
+void SortEnactor::sort(const uint32 count, SortBuffers<uint16*,uint32*>& buffers, const uint32 begin_bit, const uint32 end_bit)
 {
     cub::DoubleBuffer<uint16> key_buffers;
     cub::DoubleBuffer<uint32> value_buffers;
@@ -82,17 +82,17 @@ void SortEnactor::sort(const uint32 count, SortBuffers<uint16*,uint32*>& buffers
     size_t temp_storage_bytes = 0;
 
     // gauge the amount of temp storage we need
-    cub::DeviceRadixSort::SortPairs( NULL, temp_storage_bytes, key_buffers, value_buffers, count );
+    cub::DeviceRadixSort::SortPairs( NULL, temp_storage_bytes, key_buffers, value_buffers, count, begin_bit, end_bit );
 
     thrust::device_vector<uint8> d_temp( temp_storage_bytes );
 
     // do the real run
-    cub::DeviceRadixSort::SortPairs( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, value_buffers, count );
+    cub::DeviceRadixSort::SortPairs( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, value_buffers, count, begin_bit, end_bit );
 
     // keep track of the current buffer
     buffers.selector = key_buffers.selector;
 }
-void SortEnactor::sort(const uint32 count, SortBuffers<uint32*,uint32*>& buffers)
+void SortEnactor::sort(const uint32 count, SortBuffers<uint32*,uint32*>& buffers, const uint32 begin_bit, const uint32 end_bit)
 {
     cub::DoubleBuffer<uint32> key_buffers;
     cub::DoubleBuffer<uint32> value_buffers;
@@ -108,17 +108,17 @@ void SortEnactor::sort(const uint32 count, SortBuffers<uint32*,uint32*>& buffers
     size_t temp_storage_bytes = 0;
 
     // gauge the amount of temp storage we need
-    cub::DeviceRadixSort::SortPairs( NULL, temp_storage_bytes, key_buffers, value_buffers, count );
+    cub::DeviceRadixSort::SortPairs( NULL, temp_storage_bytes, key_buffers, value_buffers, count, begin_bit, end_bit );
 
     thrust::device_vector<uint8> d_temp( temp_storage_bytes );
 
     // do the real run
-    cub::DeviceRadixSort::SortPairs( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, value_buffers, count );
+    cub::DeviceRadixSort::SortPairs( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, value_buffers, count, begin_bit, end_bit );
 
     // keep track of the current buffer
     buffers.selector = key_buffers.selector;
 }
-void SortEnactor::sort(const uint32 count, SortBuffers<uint32*,uint64*>& buffers)
+void SortEnactor::sort(const uint32 count, SortBuffers<uint32*,uint64*>& buffers, const uint32 begin_bit, const uint32 end_bit)
 {
     cub::DoubleBuffer<uint32> key_buffers;
     cub::DoubleBuffer<uint64> value_buffers;
@@ -134,17 +134,17 @@ void SortEnactor::sort(const uint32 count, SortBuffers<uint32*,uint64*>& buffers
     size_t temp_storage_bytes = 0;
 
     // gauge the amount of temp storage we need
-    cub::DeviceRadixSort::SortPairs( NULL, temp_storage_bytes, key_buffers, value_buffers, count );
+    cub::DeviceRadixSort::SortPairs( NULL, temp_storage_bytes, key_buffers, value_buffers, count, begin_bit, end_bit );
 
     thrust::device_vector<uint8> d_temp( temp_storage_bytes );
 
     // do the real run
-    cub::DeviceRadixSort::SortPairs( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, value_buffers, count );
+    cub::DeviceRadixSort::SortPairs( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, value_buffers, count, begin_bit, end_bit );
 
     // keep track of the current buffer
     buffers.selector = key_buffers.selector;
 }
-void SortEnactor::sort(const uint32 count, SortBuffers<uint64*,uint32*>& buffers)
+void SortEnactor::sort(const uint32 count, SortBuffers<uint64*,uint32*>& buffers, const uint32 begin_bit, const uint32 end_bit)
 {
     cub::DoubleBuffer<uint64> key_buffers;
     cub::DoubleBuffer<uint32> value_buffers;
@@ -160,18 +160,18 @@ void SortEnactor::sort(const uint32 count, SortBuffers<uint64*,uint32*>& buffers
     size_t temp_storage_bytes = 0;
 
     // gauge the amount of temp storage we need
-    cub::DeviceRadixSort::SortPairs( NULL, temp_storage_bytes, key_buffers, value_buffers, count );
+    cub::DeviceRadixSort::SortPairs( NULL, temp_storage_bytes, key_buffers, value_buffers, count, begin_bit, end_bit );
 
     thrust::device_vector<uint8> d_temp( temp_storage_bytes );
 
     // do the real run
-    cub::DeviceRadixSort::SortPairs( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, value_buffers, count );
+    cub::DeviceRadixSort::SortPairs( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, value_buffers, count, begin_bit, end_bit );
 
     // keep track of the current buffer
     buffers.selector = key_buffers.selector;
 }
 
-void SortEnactor::sort(const uint32 count, SortBuffers<uint8*>& buffers)
+void SortEnactor::sort(const uint32 count, SortBuffers<uint8*>& buffers, const uint32 begin_bit, const uint32 end_bit)
 {
     cub::DoubleBuffer<uint8> key_buffers;
 
@@ -183,18 +183,18 @@ void SortEnactor::sort(const uint32 count, SortBuffers<uint8*>& buffers)
     size_t temp_storage_bytes = 0;
 
     // gauge the amount of temp storage we need
-    cub::DeviceRadixSort::SortKeys( NULL, temp_storage_bytes, key_buffers, count );
+    cub::DeviceRadixSort::SortKeys( NULL, temp_storage_bytes, key_buffers, count, begin_bit, end_bit );
 
     thrust::device_vector<uint8> d_temp( temp_storage_bytes );
 
     // do the real run
-    cub::DeviceRadixSort::SortKeys( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, count );
+    cub::DeviceRadixSort::SortKeys( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, count, begin_bit, end_bit );
 
     // keep track of the current buffer
     buffers.selector = key_buffers.selector;
 
 }
-void SortEnactor::sort(const uint32 count, SortBuffers<uint16*>& buffers)
+void SortEnactor::sort(const uint32 count, SortBuffers<uint16*>& buffers, const uint32 begin_bit, const uint32 end_bit)
 {
     cub::DoubleBuffer<uint16> key_buffers;
 
@@ -206,17 +206,17 @@ void SortEnactor::sort(const uint32 count, SortBuffers<uint16*>& buffers)
     size_t temp_storage_bytes = 0;
 
     // gauge the amount of temp storage we need
-    cub::DeviceRadixSort::SortKeys( NULL, temp_storage_bytes, key_buffers, count );
+    cub::DeviceRadixSort::SortKeys( NULL, temp_storage_bytes, key_buffers, count, begin_bit, end_bit );
 
     thrust::device_vector<uint8> d_temp( temp_storage_bytes );
 
     // do the real run
-    cub::DeviceRadixSort::SortKeys( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, count );
+    cub::DeviceRadixSort::SortKeys( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, count, begin_bit, end_bit );
 
     // keep track of the current buffer
     buffers.selector = key_buffers.selector;
 }
-void SortEnactor::sort(const uint32 count, SortBuffers<uint32*>& buffers)
+void SortEnactor::sort(const uint32 count, SortBuffers<uint32*>& buffers, const uint32 begin_bit, const uint32 end_bit)
 {
     cub::DoubleBuffer<uint32> key_buffers;
 
@@ -228,17 +228,17 @@ void SortEnactor::sort(const uint32 count, SortBuffers<uint32*>& buffers)
     size_t temp_storage_bytes = 0;
 
     // gauge the amount of temp storage we need
-    cub::DeviceRadixSort::SortKeys( NULL, temp_storage_bytes, key_buffers, count );
+    cub::DeviceRadixSort::SortKeys( NULL, temp_storage_bytes, key_buffers, count, begin_bit, end_bit );
 
     thrust::device_vector<uint8> d_temp( temp_storage_bytes );
 
     // do the real run
-    cub::DeviceRadixSort::SortKeys( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, count );
+    cub::DeviceRadixSort::SortKeys( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, count, begin_bit, end_bit );
 
     // keep track of the current buffer
     buffers.selector = key_buffers.selector;
 }
-void SortEnactor::sort(const uint32 count, SortBuffers<uint64*>& buffers)
+void SortEnactor::sort(const uint32 count, SortBuffers<uint64*>& buffers, const uint32 begin_bit, const uint32 end_bit)
 {
     cub::DoubleBuffer<uint64> key_buffers;
 
@@ -250,12 +250,12 @@ void SortEnactor::sort(const uint32 count, SortBuffers<uint64*>& buffers)
     size_t temp_storage_bytes = 0;
 
     // gauge the amount of temp storage we need
-    cub::DeviceRadixSort::SortKeys( NULL, temp_storage_bytes, key_buffers, count );
+    cub::DeviceRadixSort::SortKeys( NULL, temp_storage_bytes, key_buffers, count, begin_bit, end_bit );
 
     thrust::device_vector<uint8> d_temp( temp_storage_bytes );
 
     // do the real run
-    cub::DeviceRadixSort::SortKeys( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, count );
+    cub::DeviceRadixSort::SortKeys( nvbio::plain_view( d_temp ), temp_storage_bytes, key_buffers, count, begin_bit, end_bit );
 
     // keep track of the current buffer
     buffers.selector = key_buffers.selector;

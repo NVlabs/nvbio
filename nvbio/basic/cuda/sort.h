@@ -86,15 +86,15 @@ struct SortEnactor
     ///
     ~SortEnactor();
 
-    void sort(const uint32 count, SortBuffers<uint8*, uint32*>& buffers);
-    void sort(const uint32 count, SortBuffers<uint16*,uint32*>& buffers);
-    void sort(const uint32 count, SortBuffers<uint32*,uint32*>& buffers);
-    void sort(const uint32 count, SortBuffers<uint32*,uint64*>& buffers);
-    void sort(const uint32 count, SortBuffers<uint64*,uint32*>& buffers);
-    void sort(const uint32 count, SortBuffers<uint8*>&          buffers);
-    void sort(const uint32 count, SortBuffers<uint16*>&         buffers);
-    void sort(const uint32 count, SortBuffers<uint32*>&         buffers);
-    void sort(const uint32 count, SortBuffers<uint64*>&         buffers);
+    void sort(const uint32 count, SortBuffers<uint8*, uint32*>& buffers, const uint32 begin_bit = 0, const uint32 end_bit = 8);
+    void sort(const uint32 count, SortBuffers<uint16*,uint32*>& buffers, const uint32 begin_bit = 0, const uint32 end_bit = 16);
+    void sort(const uint32 count, SortBuffers<uint32*,uint32*>& buffers, const uint32 begin_bit = 0, const uint32 end_bit = 32);
+    void sort(const uint32 count, SortBuffers<uint32*,uint64*>& buffers, const uint32 begin_bit = 0, const uint32 end_bit = 32);
+    void sort(const uint32 count, SortBuffers<uint64*,uint32*>& buffers, const uint32 begin_bit = 0, const uint32 end_bit = 64);
+    void sort(const uint32 count, SortBuffers<uint8*>&          buffers, const uint32 begin_bit = 0, const uint32 end_bit = 8);
+    void sort(const uint32 count, SortBuffers<uint16*>&         buffers, const uint32 begin_bit = 0, const uint32 end_bit = 16);
+    void sort(const uint32 count, SortBuffers<uint32*>&         buffers, const uint32 begin_bit = 0, const uint32 end_bit = 32);
+    void sort(const uint32 count, SortBuffers<uint64*>&         buffers, const uint32 begin_bit = 0, const uint32 end_bit = 64);
 
 private:
     void*  m_impl;

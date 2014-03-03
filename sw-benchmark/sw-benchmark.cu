@@ -47,6 +47,11 @@
 #include <vector>
 #include <algorithm>
 
+#if defined(SSWLIB)
+#include "ssw.h"
+#include <omp.h>
+#endif
+
 using namespace nvbio;
 
 enum { CACHE_SIZE = 64 };
@@ -63,13 +68,13 @@ struct AlignmentStream
 
     typedef nvbio::cuda::ldg_pointer<uint32>                                        base_iterator;
 
-    typedef nvbio::PackedStringLoader<base_iterator,4,false,cache_type>             pattern_loader_type;
-    typedef typename pattern_loader_type::iterator                                  pattern_iterator;
-    typedef nvbio::vector_wrapper<pattern_iterator>                                 pattern_string;
+    typedef nvbio::PackedStringLoader<base_iterator,4,io::ReadData::HI_BITS,cache_type> pattern_loader_type;
+    typedef typename pattern_loader_type::iterator                                      pattern_iterator;
+    typedef nvbio::vector_wrapper<pattern_iterator>                                     pattern_string;
 
-    typedef nvbio::PackedStringLoader<base_iterator,2,false,uncached_tag_type>      text_loader_type;
-    typedef typename text_loader_type::iterator                                     text_iterator;
-    typedef nvbio::vector_wrapper<text_iterator>                                    text_string;
+    typedef nvbio::PackedStringLoader<base_iterator,2,false,uncached_tag_type>          text_loader_type;
+    typedef typename text_loader_type::iterator                                         text_iterator;
+    typedef nvbio::vector_wrapper<text_iterator>                                        text_string;
 
     // an alignment context
     struct context_type
@@ -97,7 +102,14 @@ struct AlignmentStream
         const uint32*       _text,
         const uint32        _text_len,
                int16*       _scores) :
-        m_aligner( _aligner ), m_count(_count), m_max_pattern_len(_max_pattern_len), m_text_len(_text_len), m_offsets(_offsets), m_patterns(_patterns), m_text(_text), m_scores(_scores) {}
+        m_aligner           ( _aligner ),
+        m_count             (_count),
+        m_max_pattern_len   (_max_pattern_len),
+        m_text_len          (_text_len),
+        m_offsets           (_offsets),
+        m_patterns          (_patterns),
+        m_text              (_text),
+        m_scores            (_scores) {}
 
     // get the aligner
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
@@ -157,7 +169,7 @@ struct AlignmentStream
                 false ) );
 
         strings->pattern = pattern_string( length,
-            strings->pattern_loader.load( m_patterns + offset, 0u, length ) );
+            strings->pattern_loader.load( m_patterns, offset, length ) );
     }
 
     // handle the output
@@ -182,31 +194,44 @@ struct AlignmentStream
 
 // A simple kernel to test the speed of alignment without the possible overheads of the BatchAlignmentScore interface
 //
-template <uint32 BLOCKDIM, uint32 MAX_REF_LEN, typename aligner_type, typename score_type>
-__global__ void alignment_test_kernel(const aligner_type aligner, const uint32 N_probs, const uint32 M, const uint32 N, const uint32* strptr, const uint32* refptr, score_type* score)
+template <uint32 BLOCKDIM, uint32 MAX_PATTERN_LEN, typename aligner_type, typename score_type>
+__global__ void alignment_test_kernel(
+    const aligner_type aligner,
+    const uint32        N_probs,
+    const uint32*       offsets,
+    const uint32*       pattern_ptr,
+    const uint32        text_len,
+    const uint32*       text_ptr,
+    score_type*         score)
 {
     const uint32 tid = blockIdx.x * BLOCKDIM + threadIdx.x;
 
     typedef lmem_cache_tag_type                                                 lmem_cache_type;
     typedef nvbio::cuda::ldg_pointer<uint32>                                    base_iterator;
 
-    typedef nvbio::PackedStringLoader<base_iterator,4,false,lmem_cache_type>    pattern_loader_type;
-    typedef typename pattern_loader_type::iterator                              pattern_iterator;
-    typedef nvbio::vector_wrapper<pattern_iterator>                             pattern_string;
+    typedef nvbio::PackedStringLoader<base_iterator,4,io::ReadData::HI_BITS,lmem_cache_type>    pattern_loader_type;
+    typedef typename pattern_loader_type::iterator                                              pattern_iterator;
+    typedef nvbio::vector_wrapper<pattern_iterator>                                             pattern_string;
 
-    typedef nvbio::PackedStringLoader<base_iterator,2,false,lmem_cache_type>    text_loader_type;
-    typedef typename text_loader_type::iterator                                 text_iterator;
-    typedef nvbio::vector_wrapper<text_iterator>                                text_string;
+    typedef nvbio::PackedStringLoader<base_iterator,2,false,uncached_tag_type>                  text_loader_type;
+    typedef typename text_loader_type::iterator                                                 text_iterator;
+    typedef nvbio::vector_wrapper<text_iterator>                                                text_string;
+
+    if (tid >= N_probs)
+        return;
+
+    const uint32 pattern_off = offsets[tid];
+    const uint32 pattern_len = offsets[tid+1] - pattern_off;
 
     pattern_loader_type pattern_loader;
-    pattern_string pattern = pattern_string( M, pattern_loader.load( strptr, tid * M, tid < N_probs ? M : 0u ) );
+    pattern_string pattern = pattern_string( pattern_len, pattern_loader.load( pattern_ptr, pattern_off, pattern_len ) );
 
     text_loader_type text_loader;
-    text_string text = text_string( N, text_loader.load( strptr, tid * N, tid < N_probs ? N : 0u ) );
+    text_string text = text_string( text_len, text_loader.load( text_ptr, 0, text_len ) );
 
     aln::BestSink<int32> sink;
 
-    aln::alignment_score<MAX_REF_LEN>(
+    aln::alignment_score<MAX_PATTERN_LEN>(
         aligner,
         pattern,
         aln::trivial_quality_string(),
@@ -352,10 +377,35 @@ void batch_score_profile_all(
             score_dvec );
 
         // test the ThreadParallelScheduler
-        //batch_score_profile<aln::ThreadParallelScheduler>( stream );
+        batch_score_profile<aln::ThreadParallelScheduler>( stream );
 
         // test the StagedThreadParallelScheduler
-        batch_score_profile<aln::StagedThreadParallelScheduler>( stream );
+        //batch_score_profile<aln::StagedThreadParallelScheduler>( stream );
+    }
+    {
+        const uint32 BLOCKDIM = 128;
+        const uint32 N_BLOCKS = (n_tasks + BLOCKDIM-1) / BLOCKDIM;
+
+        Timer timer;
+        timer.start();
+
+        // enact the batch
+        alignment_test_kernel<BLOCKDIM,400> <<<N_BLOCKS,BLOCKDIM>>>(
+            aligner,
+            n_tasks,
+            offsets_dvec,
+            pattern_dvec,
+            text_len,
+            text_dvec,
+            score_dvec );
+
+        cudaDeviceSynchronize();
+
+        timer.stop();
+
+        const float time = timer.seconds();
+
+        fprintf(stderr,"  %5.1f", 1.0e-9f * float(n_tasks*uint64(max_pattern_len)*uint64(text_len))/time );
     }
     fprintf(stderr, " GCUPS\n");
 }
@@ -369,6 +419,7 @@ enum AlignmentTest
     ED_BANDED           = 8u,
     SW_BANDED           = 16u,
     GOTOH_BANDED        = 32u,
+    SSW                 = 64u
 };
 
 int main(int argc, char* argv[])
@@ -413,6 +464,8 @@ int main(int argc, char* argv[])
                     TEST_MASK |= GOTOH;
                 else if (strcmp( temp, "gotoh-banded" ) == 0)
                     TEST_MASK |= GOTOH_BANDED;
+                else if (strcmp( temp, "ssw" ) == 0)
+                    TEST_MASK |= SSW;
 
                 if (*end == '\0')
                     break;
@@ -473,6 +526,18 @@ int main(int argc, char* argv[])
 
     thrust::device_vector<int16> score_dvec( batch_size, 0 );
 
+  #if defined(SSWLIB)
+    std::vector<int8> unpacked_ref( ref_length );
+    {
+        ref_stream_type h_ref_stream( nvbio::plain_view( h_ref_storage ) );
+        for (uint32 i = 0; i < ref_length; ++i)
+            unpacked_ref[i] = h_ref_stream[i];
+    }
+
+    // Now set the number of threads
+    omp_set_num_threads( omp_get_num_procs() );
+  #endif
+
     while (1)
     {
         io::ReadData* h_read_data = read_data_file->next( batch_size );
@@ -487,7 +552,7 @@ int main(int argc, char* argv[])
             aln::SimpleGotohScheme scoring;
             scoring.m_match    =  2;
             scoring.m_mismatch = -1;
-            scoring.m_gap_open = -1;
+            scoring.m_gap_open = -2;
             scoring.m_gap_ext  = -1;
 
             fprintf(stderr,"  testing Gotoh scoring speed...\n");
@@ -503,7 +568,73 @@ int main(int argc, char* argv[])
                     ref_length,
                     nvbio::plain_view( score_dvec ) );
             }
+            fprintf(stderr,"    %15s : ", "local");
+            {
+                batch_score_profile_all(
+                    aln::make_gotoh_aligner<aln::SEMI_GLOBAL,aln::TextBlockingTag>( scoring ),
+                    d_read_data.size(),
+                    d_read_data.read_index(),
+                    d_read_data.read_stream(),
+                    d_read_data.max_read_len(),
+                    nvbio::plain_view( d_ref_storage ),
+                    ref_length,
+                    nvbio::plain_view( score_dvec ) );
+            }
         }
+
+        #if defined(SSWLIB)
+        if (TEST_MASK & SSW)
+        {
+            fprintf(stderr,"  testing SSW scoring speed...\n");
+            fprintf(stderr,"    %15s : ", "local");
+
+            const int8 mat[4*4] = {2, -1, -1, -1, -1, 2, -1, -1, -1, -1, 2, -1, -1, -1, -1, 2};
+
+            const uint32 n_read_symbols = h_read_data->read_index()[ h_read_data->size() ];
+            std::vector<int8> unpacked_reads( n_read_symbols );
+
+            typedef io::ReadData::const_read_stream_type read_stream_type;
+
+            const read_stream_type packed_reads( h_read_data->read_stream() );
+
+            #pragma omp parallel for
+            for (int i = 0; i < n_read_symbols; ++i)
+                unpacked_reads[i] = packed_reads[i];
+
+            Timer timer;
+            timer.start();
+
+            #pragma omp parallel for
+            for (int i = 0; i < h_read_data->size(); ++i)
+            {
+                const uint32 read_off = h_read_data->read_index()[i];
+                const uint32 read_len = h_read_data->read_index()[i+1] - read_off;
+
+                s_profile* prof = ssw_init( &unpacked_reads[read_off], read_len, mat, 4, 2 );
+
+                s_align* align = ssw_align(
+                    prof, 
+					&unpacked_ref[0], 
+					ref_length, 
+					2, 
+					2,
+					0u,	
+					0u,
+					0,
+					15 );
+
+                align_destroy( align );
+
+                init_destroy( prof );
+            }
+
+            timer.stop();
+            const float time = timer.seconds();
+
+            fprintf(stderr,"  %5.1f", 1.0e-9f * float(h_read_data->size()*uint64(h_read_data->max_read_len())*uint64(ref_length))/time );
+            fprintf(stderr, " GCUPS\n");
+        }
+        #endif
     }
     fprintf(stderr,"sw-benchmark... done\n");
     return 0;

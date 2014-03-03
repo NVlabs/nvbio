@@ -938,8 +938,6 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
         }
 
         // save the last entry of the band
-        //temp[2*i  ] = H_band[ BAND_LEN ];
-        //temp[2*i+1] = E;
         temp[i] = make_vector<temp_scalar_type>( H_band[ BAND_LEN ], E );
 
         NVBIO_CUDA_ASSERT( H_band[ BAND_LEN ] >= Field_traits<temp_scalar_type>::min() );

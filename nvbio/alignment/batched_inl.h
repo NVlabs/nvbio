@@ -206,6 +206,17 @@ struct BatchedAlignmentScore<stream_type,ThreadParallelScheduler>
     typedef typename stream_type::aligner_type                  aligner_type;
     typedef typename column_storage_type<aligner_type>::type    cell_type;
 
+    /// return the per-element column storage size
+    ///
+    static uint32 column_storage(const uint32 max_pattern_len, const uint32 max_text_len)
+    {
+        const uint32 column_size = equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
+            uint32( max_text_len    * sizeof(cell_type) ) :
+            uint32( max_pattern_len * sizeof(cell_type) );
+
+        return align<4>( column_size );
+    }
+
     /// return the minimum number of bytes required by the algorithm
     ///
     static uint64 min_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size);
@@ -224,9 +235,7 @@ struct BatchedAlignmentScore<stream_type,ThreadParallelScheduler>
 template <typename stream_type>
 uint64 BatchedAlignmentScore<stream_type,ThreadParallelScheduler>::min_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
 {
-    return equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
-        max_text_len    * sizeof(cell_type) * 1024 :
-        max_pattern_len * sizeof(cell_type) * 1024;
+    return column_storage( max_pattern_len, max_text_len ) * 1024;
 }
 
 // return the maximum number of bytes required by the algorithm
@@ -234,9 +243,7 @@ uint64 BatchedAlignmentScore<stream_type,ThreadParallelScheduler>::min_temp_stor
 template <typename stream_type>
 uint64 BatchedAlignmentScore<stream_type,ThreadParallelScheduler>::max_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
 {
-    return equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
-        max_text_len    * sizeof(cell_type) * stream_size :
-        max_pattern_len * sizeof(cell_type) * stream_size;
+    return column_storage( max_pattern_len, max_text_len ) * stream_size;
 }
 
 // enact the batch execution
@@ -258,7 +265,7 @@ void BatchedAlignmentScore<stream_type,ThreadParallelScheduler>::enact(stream_ty
     }
 
     // set the queue capacity based on available memory
-    const uint32 queue_capacity = uint32( temp_size / (stream.max_text_length() * sizeof(cell_type)) );
+    const uint32 queue_capacity = uint32( temp_size / column_storage( stream.max_pattern_length(), stream.max_text_length() ) );
 
     if (queue_capacity >= stream.size())
     {

@@ -58,11 +58,13 @@ void batched_alignment_score(stream_type& stream, cell_type* columns, const uint
     }
 
     // compute the end of the current DP matrix window
-    const uint32 pattern_len = stream.pattern_length( work_id, &context );
+    const uint32 len = equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
+        stream.pattern_length( work_id, &context ) :
+        stream.text_length( work_id, &context );
 
     // load the strings to be aligned
     strings_type strings;
-    stream.load_strings( work_id, 0, pattern_len, &context, &strings );
+    stream.load_strings( work_id, 0, len, &context, &strings );
 
     // fetch the proper column storage
     typedef strided_iterator<cell_type*> column_type;
@@ -129,11 +131,13 @@ void warp_batched_alignment_score(stream_type& stream, cell_type* columns, const
     }
 
     // compute the end of the current DP matrix window
-    const uint32 pattern_len = stream.pattern_length( work_id, &context );
+    const uint32 len = equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
+        stream.pattern_length( work_id, &context ) :
+        stream.text_length( work_id, &context );
 
     // load the strings to be aligned
     strings_type strings;
-    stream.load_strings( work_id, 0, pattern_len, &context, &strings );
+    stream.load_strings( work_id, 0, len, &context, &strings );
 
     // fetch the proper column storage
     typedef block_strided_iterator<cuda::Arch::WARP_SIZE,cell_type*> column_type;
@@ -220,7 +224,9 @@ struct BatchedAlignmentScore<stream_type,ThreadParallelScheduler>
 template <typename stream_type>
 uint64 BatchedAlignmentScore<stream_type,ThreadParallelScheduler>::min_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
 {
-    return max_text_len * sizeof(cell_type) * 1024;
+    return equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
+        max_text_len    * sizeof(cell_type) * 1024 :
+        max_pattern_len * sizeof(cell_type) * 1024;
 }
 
 // return the maximum number of bytes required by the algorithm
@@ -228,7 +234,9 @@ uint64 BatchedAlignmentScore<stream_type,ThreadParallelScheduler>::min_temp_stor
 template <typename stream_type>
 uint64 BatchedAlignmentScore<stream_type,ThreadParallelScheduler>::max_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
 {
-    return max_text_len * sizeof(cell_type) * stream_size;
+    return equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
+        max_text_len    * sizeof(cell_type) * stream_size :
+        max_pattern_len * sizeof(cell_type) * stream_size;
 }
 
 // enact the batch execution
@@ -382,7 +390,11 @@ struct BatchedAlignmentScore<stream_type,StagedThreadParallelScheduler>
     ///
     static uint32 column_storage(const uint32 max_pattern_len, const uint32 max_text_len)
     {
-        return align<4>( uint32( max_text_len * sizeof(cell_type) ) );
+        const uint32 column_size = equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
+            uint32( max_text_len    * sizeof(cell_type) ) :
+            uint32( max_pattern_len * sizeof(cell_type) );
+
+        return align<4>( column_size );
     }
 
     /// return the minimum number of bytes required by the algorithm
@@ -548,24 +560,41 @@ struct BatchedAlignmentTraceback<CHECKPOINTS, stream_type,ThreadParallelSchedule
     ///
     static uint32 column_storage(const uint32 max_pattern_len, const uint32 max_text_len)
     {
-        return align<4>( uint32( max_text_len * sizeof(cell_type) ) );
+        const uint32 column_size = equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
+            uint32( max_text_len    * sizeof(cell_type) ) :
+            uint32( max_pattern_len * sizeof(cell_type) );
+
+        return align<4>( column_size );
     }
 
     /// return the per-element checkpoint storage size
     ///
     static uint32 checkpoint_storage(const uint32 max_pattern_len, const uint32 max_text_len)
     {
-        return align<4>( uint32( max_text_len * ((max_pattern_len + CHECKPOINTS-1) / CHECKPOINTS) * sizeof(cell_type) ) );
+        if (equal<typename aligner_type::algorithm_tag,PatternBlockingTag>())
+            return align<4>( uint32( max_text_len * ((max_pattern_len + CHECKPOINTS-1) / CHECKPOINTS) * sizeof(cell_type) ) );
+        else
+            return align<4>( uint32( max_pattern_len * ((max_text_len + CHECKPOINTS-1) / CHECKPOINTS) * sizeof(cell_type) ) );
     }
 
     /// return the per-element storage size
     ///
     static uint32 submatrix_storage(const uint32 max_pattern_len, const uint32 max_text_len)
     {
-        typedef typename stream_type::aligner_type  aligner_type;
-        const uint32 BITS = direction_vector_traits<aligner_type>::BITS;
-        const uint32 ELEMENTS_PER_WORD = 32 / BITS;
-        return ((max_text_len * CHECKPOINTS + ELEMENTS_PER_WORD-1) / ELEMENTS_PER_WORD) * sizeof(uint32);
+        if (equal<typename aligner_type::algorithm_tag,PatternBlockingTag>())
+        {
+            typedef typename stream_type::aligner_type  aligner_type;
+            const uint32 BITS = direction_vector_traits<aligner_type>::BITS;
+            const uint32 ELEMENTS_PER_WORD = 32 / BITS;
+            return ((max_text_len * CHECKPOINTS + ELEMENTS_PER_WORD-1) / ELEMENTS_PER_WORD) * sizeof(uint32);
+        }
+        else
+        {
+            typedef typename stream_type::aligner_type  aligner_type;
+            const uint32 BITS = direction_vector_traits<aligner_type>::BITS;
+            const uint32 ELEMENTS_PER_WORD = 32 / BITS;
+            return ((max_pattern_len * CHECKPOINTS + ELEMENTS_PER_WORD-1) / ELEMENTS_PER_WORD) * sizeof(uint32);
+        }
     }
 
     /// return the per-element storage size

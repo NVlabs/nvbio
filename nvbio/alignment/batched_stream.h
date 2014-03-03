@@ -129,6 +129,7 @@ struct StagedAlignmentUnitBase
 
     typedef typename stream_type::context_type                  context_type;
     typedef typename stream_type::strings_type                  strings_type;
+    typedef typename stream_type::aligner_type                  aligner_type;
 
     // constructor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
@@ -144,8 +145,10 @@ struct StagedAlignmentUnitBase
         // load the strings to be aligned
         if (valid)
         {
-            const uint32 pattern_len = stream.pattern_length( job_id, &context );
-            stream.load_strings( job_id, 0, pattern_len, &context, &strings );
+            const uint32 len = equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
+                stream.pattern_length( job_id, &context ) :
+                stream.text_length( job_id, &context );
+            stream.load_strings( job_id, 0, len, &context, &strings );
         }
     }
 
@@ -156,8 +159,10 @@ struct StagedAlignmentUnitBase
         if (valid)
         {
             // compute the end of the current DP matrix window
-            const uint32 pattern_len = strings.pattern.length();
-            const uint32 window_end  = nvbio::min( window_begin + WINDOW_SIZE, pattern_len );
+            const uint32 len = equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
+                strings.pattern.length() :
+                strings.text.length();
+            const uint32 window_end  = nvbio::min( window_begin + WINDOW_SIZE, len );
 
             valid = (static_cast<derived_type*>(this))->execute(
                 score_stream,
@@ -170,7 +175,7 @@ struct StagedAlignmentUnitBase
                 window_end,
                 context.sink );
 
-            if (window_end >= pattern_len)
+            if (window_end >= len)
                 valid = false;
 
             // update the pattern window

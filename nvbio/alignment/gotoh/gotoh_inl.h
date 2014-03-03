@@ -49,7 +49,7 @@ namespace priv
 //   computing checkpoints
 //   computing a flow submatrix
 //
-template <uint32 BAND_LEN, AlignmentType TYPE>
+template <uint32 BAND_LEN, AlignmentType TYPE, typename algorithm_tag>
 struct GotohScoringContext
 {
     // initialize the j-th column of the DP matrix
@@ -74,7 +74,9 @@ struct GotohScoringContext
         {
             for (uint32 i = 0; i < N; ++i)
             {
-                column[i].x = TYPE == GLOBAL ? scoring.text_gap_open() + scoring.text_gap_extension() * i : zero;
+                column[i].x = equal<algorithm_tag,PatternBlockingTag>() ?
+                    TYPE == GLOBAL ? scoring.text_gap_open() + scoring.text_gap_extension() * i : zero :
+                    TYPE != LOCAL  ? scoring.text_gap_open() + scoring.text_gap_extension() * i : zero;
                 column[i].y = TYPE == LOCAL  ? zero : infimum;
             }
         }
@@ -130,7 +132,7 @@ struct GotohScoringContext
 // A helper checkpointed-scoring context class which allows to perform scoring in multiple
 // passes, saving & restoring a checkpoint each time.
 //
-template <uint32 BAND_LEN, AlignmentType TYPE, typename checkpoint_type>
+template <uint32 BAND_LEN, AlignmentType TYPE, typename algorithm_tag, typename checkpoint_type>
 struct GotohCheckpointedScoringContext
 {
     // constructor
@@ -162,7 +164,9 @@ struct GotohCheckpointedScoringContext
         {
             for (uint32 i = 0; i < N; ++i)
             {
-                column[i].x = TYPE == GLOBAL ? scoring.text_gap_open() + scoring.text_gap_extension() * i : zero;
+                column[i].x = equal<algorithm_tag,PatternBlockingTag>() ?
+                    TYPE == GLOBAL ? scoring.text_gap_open() + scoring.text_gap_extension() * i : zero :
+                    TYPE != LOCAL  ? scoring.text_gap_open() + scoring.text_gap_extension() * i : zero;
                 column[i].y = TYPE == LOCAL  ? zero : infimum;
             }
         }
@@ -439,12 +443,15 @@ struct GotohSubmatrixContext
     submatrix_type      m_submatrix;
 };
 
+template <uint32 BAND_LEN, AlignmentType TYPE, typename algorithm_tag, typename symbol_type>
+struct gotoh_alignment_score_dispatch {};
+
 //
 // A template struct used to possibly specialize the implementation of the Gotoh-based alignment based on
 // the template parameters.
 //
 template <uint32 BAND_LEN, AlignmentType TYPE, typename symbol_type>
-struct gotoh_alignment_score_dispatch
+struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>
 {
     // update a DP row
     //
@@ -837,6 +844,412 @@ struct gotoh_alignment_score_dispatch
     }
 };
 
+//
+// A template struct used to possibly specialize the implementation of the Gotoh-based alignment based on
+// the template parameters.
+//
+template <uint32 BAND_LEN, AlignmentType TYPE, typename symbol_type>
+struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
+{
+    // update a DP row
+    //
+    template <
+        bool CHECK_N,
+        typename context_type,
+        typename ref_cache,
+        typename score_type,
+        typename temp_iterator,
+        typename sink_type>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static void update_row(
+        context_type&        context,
+        const uint32         block,
+        const uint32         N,
+        const uint32         i,
+        const uint32         M,
+        const symbol_type    q_i,
+        const score_type     m_i,
+        const score_type     s_i,
+        const ref_cache      r_cache,
+        temp_iterator        temp,
+        score_type&          temp_i,
+        score_type*          H_band,
+        score_type*          F_band,
+        sink_type&           sink,
+        score_type&          max_score,
+        const score_type     G_o,
+        const score_type     G_e,
+        const score_type     zero)
+    {
+        typedef typename std::iterator_traits<temp_iterator>::value_type temp_cell_type;
+        typedef typename vector_traits<temp_cell_type>::value_type       temp_scalar_type;
+
+        //
+        // NOTE:
+        // It might look as if we were going to make lots of out-of-bounds accesses here,
+        // as we loop across BAND_LEN cells irrespectively of whether the band straddles
+        // the end of the pattern.
+        // However, these accesses don't cause any page faults as they refer to properly
+        // sized temporary arrays (that in practice are placed in registers), and don't
+        // affect the results as they contribute to unused portions of the DP matrices.
+        // The reporting of the scores is properly guarded.
+        //
+
+        // set the 0-th coefficient in the band to be equal to the (i-1)-th row of the left column (diagonal term)
+        score_type H_diag = temp_i;
+
+        H_band[0]    = temp_i = temp[i].x;
+        score_type E =          temp[i].y;
+
+        #pragma unroll
+        for (uint32 j = 1; j <= BAND_LEN; ++j)
+        {
+            // update F
+            const score_type ftop = F_band[j] + G_e;
+            const score_type htop = H_band[j] + G_o;
+            F_band[j] = nvbio::max( ftop, htop );
+            const DirectionVector fdir = ftop > htop ? DELETION_EXT : SUBSTITUTION;
+
+            // update E
+            const score_type eleft = E + G_e;
+            const score_type hleft = H_band[j-1] + G_o;
+            E = nvbio::max( eleft, hleft );
+            const DirectionVector edir = eleft > hleft ? INSERTION_EXT : SUBSTITUTION;
+
+            const symbol_type r_j     = r_cache[ j-1 ];
+            const score_type S_ij     = (r_j == q_i) ? m_i : s_i;
+            const score_type diagonal = H_diag + S_ij;
+            const score_type top      = F_band[j];
+            const score_type left     = E;
+                  score_type hi       = nvbio::max3( left, top, diagonal );
+                             hi       = (TYPE == LOCAL)? nvbio::max( hi, zero ) : hi; // clamp to zero
+            H_diag                    = H_band[j];
+            H_band[j]                 = hi;
+
+            context.new_cell(
+                block + j - 1, N,
+                i,             M,
+                hi,
+                top > left ?
+                    (top  > diagonal ? DELETION  : SUBSTITUTION) :
+                    (left > diagonal ? INSERTION : SUBSTITUTION),
+                    edir,
+                    fdir );
+        }
+
+        // save the last entry of the band
+        //temp[2*i  ] = H_band[ BAND_LEN ];
+        //temp[2*i+1] = E;
+        temp[i] = make_vector<temp_scalar_type>( H_band[ BAND_LEN ], E );
+
+        NVBIO_CUDA_ASSERT( H_band[ BAND_LEN ] >= Field_traits<temp_scalar_type>::min() );
+        NVBIO_CUDA_ASSERT( H_band[ BAND_LEN ] <= Field_traits<temp_scalar_type>::max() );
+        NVBIO_CUDA_ASSERT( E                  >= Field_traits<temp_scalar_type>::min() );
+        NVBIO_CUDA_ASSERT( E                  <= Field_traits<temp_scalar_type>::max() );
+
+        max_score = nvbio::max( max_score, H_band[ BAND_LEN ] );
+
+        if (TYPE == LOCAL)
+        {
+            if (CHECK_N)
+            {
+                // during local alignment we save the best score across all bands
+                for (uint32 j = 1; j <= BAND_LEN; ++j)
+                {
+                    if (block + j <= N)
+                        sink.report( H_band[j], make_uint2( block+j, i+1 ) );
+                }
+            }
+            else
+            {
+                // during local alignment we save the best score across all bands
+                for (uint32 j = 1; j <= BAND_LEN; ++j)
+                    sink.report( H_band[j], make_uint2( block+j, i+1 ) );
+            }
+        }
+    }
+
+    //
+    // Calculate the alignment score between a string and a reference, using the Smith-Waterman algorithm,
+    // using a templated column storage.
+    //
+    // This function is templated over:
+    //   - a context that is passed the computed DP matrix values, and can be
+    //     used to specialize its behavior.
+    //   - a sink that is used to report successful alignments
+    //
+    // Furthermore, the function can be called on a window of the pattern, assuming that the context
+    // will provide the proper initialization for the first column of the corresponding DP matrix window.
+    //
+    // \param context       template context class, used to specialize the behavior of the aligner
+    // \param query         input pattern (horizontal string)
+    // \param quals         input pattern qualities (horizontal string)
+    // \param ref           input text (vertical string)
+    // \param scoring       scoring scheme
+    // \param min_score     minimum output score
+    // \param sink          alignment sink
+    // \param window_begin  beginning of pattern window
+    // \param window_end    end of pattern window
+    //
+    // \return              false if early-exited, true otherwise
+    //
+    template <
+        typename context_type,
+        typename string_type,
+        typename qual_type,
+        typename ref_type,
+        typename scoring_type,
+        typename sink_type,
+        typename column_type>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static
+    bool run(
+        const scoring_type& scoring,
+        context_type&       context,
+        string_type         query,
+        qual_type           quals,
+        ref_type            ref,
+        const int32         min_score,
+        sink_type&          sink,
+        const uint32        window_begin,
+        const uint32        window_end,
+        column_type         temp)
+    {
+        //
+        // This function breaks the DP matrix in vertical stripes of BAND_LEN cells,
+        // so as to keep the current reduced row (a band of coefficients) in registers
+        // throughout the entire computation.
+        // Within each stripe, the matrix is updated top-to-bottom, and the right-most
+        // border of the stripe is saved to a local memory array so as to allow resuming
+        // its values when processing the next stripe.
+        //
+        const uint32 M = query.length();
+        const uint32 N = ref.length();
+
+        typedef int32 score_type;
+        score_type H_band[BAND_LEN+1];
+        score_type F_band[BAND_LEN+1];
+
+        typedef typename std::iterator_traits<column_type>::value_type  temp_cell_type;
+        typedef typename vector_traits<temp_cell_type>::value_type      temp_scalar_type;
+
+        const score_type G_o     = scoring.pattern_gap_open();
+        const score_type G_e     = scoring.pattern_gap_extension();
+        const score_type zero    = score_type(0);
+        const score_type infimum = Field_traits<temp_scalar_type>::min() - nvbio::min( G_o, G_e );
+
+        uint8 r_cache[ BAND_LEN ];
+
+        // initialize the first column
+        context.init( window_begin, M, temp, scoring, zero, infimum );
+
+        const uint32 end_block = (window_end == N) ?
+            nvbio::max( BAND_LEN, BAND_LEN * ((N + BAND_LEN-1) / BAND_LEN) ) :
+            window_end + BAND_LEN;
+
+        // loop across the short edge of the DP matrix (i.e. the columns)
+        for (uint32 block = window_begin; block + BAND_LEN < end_block; block += BAND_LEN)
+        {
+            // save the previous column
+            context.previous_column( block, M, temp );
+
+            // load a block of entries from the reference
+            #pragma unroll
+            for (uint32 t = 0; t < BAND_LEN; ++t)
+                r_cache[ t ] = ref[ block + t ];
+
+            // initialize the first band
+            #pragma unroll
+            for (uint32 j = 0; j <= BAND_LEN; ++j)
+            {
+                H_band[j] = (TYPE == GLOBAL) ? (block + j > 0 ? G_o + G_e * (block + j - 1u) : zero) : zero;
+                F_band[j] = infimum;
+            }
+
+            score_type max_score = Field_traits<score_type>::min();
+
+            score_type temp_i = H_band[0];
+
+            // loop across the short edge of the DP matrix (i.e. the rows)
+            for (uint32 i = 0; i < M; ++i)
+            {
+                // load the new character from the reference
+                const uint8 q_i  = query[i];
+                const uint8 qq_i = quals[i];
+
+                const int32 m_i = scoring.match(qq_i);
+                const int32 s_i = scoring.mismatch(qq_i);
+
+                update_row<false>(
+                    context,
+                    block, N,
+                    i, M,
+                    q_i,
+                    m_i,
+                    s_i,
+                    r_cache,
+                    temp,
+                    temp_i,
+                    H_band,
+                    F_band,
+                    sink,
+                    max_score,
+                    G_o,G_e,
+                    zero );
+            }
+            if (TYPE == SEMI_GLOBAL)
+            {
+                // during semi-global alignment we save the best score across the last row
+                for (uint32 j = 1; j <= BAND_LEN; ++j)
+                    sink.report( H_band[j], make_uint2( block+j, M ) );
+            }
+        }
+
+        // process the very last stripe
+        if (window_end == N)
+        {
+            const uint32 block = end_block - BAND_LEN;
+
+            // save the previous column
+            context.previous_column( block, M, temp );
+
+            // load a block of entries from each query
+            const uint32 block_end = nvbio::min( block + BAND_LEN, N );
+            #pragma unroll
+            for (uint32 t = 0; t < BAND_LEN; ++t)
+            {
+                if (block + t < block_end)
+                    r_cache[ t ] = ref[ block + t ];
+            }
+
+            // initialize the first band
+            #pragma unroll
+            for (uint32 j = 0; j <= BAND_LEN; ++j)
+            {
+                H_band[j] = (TYPE == GLOBAL) ? (block + j > 0 ? G_o + G_e * (block + j - 1u) : zero) : zero;
+                F_band[j] = infimum;
+            }
+
+            score_type max_score = Field_traits<score_type>::min();
+
+            score_type temp_i = H_band[0];
+
+            // loop across the short edge of the DP matrix (i.e. the rows)
+            for (uint32 i = 0; i < M; ++i)
+            {
+                // load the new character from the reference
+                const uint8 q_i  = query[i];
+                const uint8 qq_i = quals[i];
+
+                const int32 m_i = scoring.match(qq_i);
+                const int32 s_i = scoring.mismatch(qq_i);
+
+                update_row<true>(
+                    context,
+                    block, N,
+                    i, M,
+                    q_i,
+                    m_i,
+                    s_i,
+                    r_cache,
+                    temp,
+                    temp_i,
+                    H_band,
+                    F_band,
+                    sink,
+                    max_score,
+                    G_o,G_e,
+                    zero );
+            }
+
+            if (TYPE == SEMI_GLOBAL)
+            {
+                // during semi-global alignment we save the best score across the last row
+                for (uint32 j = 1; j <= BAND_LEN; ++j)
+                {
+                    if (block + j <= N)
+                        sink.report( H_band[j], make_uint2( block+j, M ) );
+                }
+            }
+            else if (TYPE == GLOBAL)
+            {
+                // during global alignment we save the best score at cell [N][M]
+                for (uint32 j = 1; j <= BAND_LEN; ++j)
+                {
+                    if (block + j == N)
+                        sink.report( H_band[j], make_uint2( block+j, M ) );
+                }
+            }
+        }
+
+        // save the last column
+        context.last_column( window_end, N, M, temp );
+        return true;
+    }
+
+    //
+    // Calculate the alignment score between a string and a reference, using the Smith-Waterman algorithm,
+    // using local memory storage for the boundary columns.
+    //
+    // This function is templated over:
+    //   1. a context that is passed the computed DP matrix values, and can be
+    //      used to specialize its behavior.
+    //   2. a sink that is used to report successful alignments
+    //
+    // Furthermore, the function can be called on a window of the pattern, assuming that the context
+    // will provide the proper initialization for the first column of the corresponding DP matrix window.
+    //
+    // \param context       template context class, used to specialize the behavior of the aligner
+    // \param query         input pattern (horizontal string)
+    // \param quals         input pattern qualities (horizontal string)
+    // \param ref           input text (vertical string)
+    // \param scoring       scoring scheme
+    // \param min_score     minimum output score
+    // \param sink          alignment sink
+    // \param window_begin  beginning of pattern window
+    // \param window_end    end of pattern window
+    //
+    // \return              false if early-exited, true otherwise
+    //
+    template <
+        uint32   MAX_PATTERN_LEN,
+        typename context_type,
+        typename string_type,
+        typename qual_type,
+        typename ref_type,
+        typename scoring_type,
+        typename sink_type>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static
+    bool run(
+        const scoring_type& scoring,
+        context_type&       context,
+        string_type         query,
+        qual_type           quals,
+        ref_type            ref,
+        const int32         min_score,
+        sink_type&          sink,
+        const uint32        window_begin,
+        const uint32        window_end)
+    {
+        // instantiated a local memory array
+        short2  temp[MAX_PATTERN_LEN];
+        short2* temp_ptr = temp;
+
+        return run(
+            context,
+            query,
+            quals,
+            ref,
+            scoring,
+            min_score,
+            sink,
+            window_begin,
+            window_end,
+            temp_ptr );
+    }
+};
+
 template <AlignmentType TYPE, uint32 DIM, typename symbol_type>
 struct gotoh_bandlen_selector
 {
@@ -865,18 +1278,19 @@ struct gotoh_bandlen_selector<TYPE,DIM,simd4u8>
 template <
     AlignmentType   TYPE,
     typename        scoring_type,
+    typename        algorithm_tag,
     typename        pattern_string,
     typename        qual_string,
     typename        text_string,
     typename        column_type>
 struct alignment_score_dispatch<
-    GotohAligner<TYPE,scoring_type>,
+    GotohAligner<TYPE,scoring_type,algorithm_tag>,
     pattern_string,
     qual_string,
     text_string,
     column_type>
 {
-    typedef GotohAligner<TYPE,scoring_type> aligner_type;
+    typedef GotohAligner<TYPE,scoring_type,algorithm_tag> aligner_type;
 
     /// dispatch scoring across the whole pattern
     ///
@@ -906,9 +1320,11 @@ struct alignment_score_dispatch<
 
         NVBIO_VAR_UNUSED const uint32 BAND_LEN = gotoh_bandlen_selector<TYPE,1u,symbol_type>::BAND_LEN;
 
-        priv::GotohScoringContext<BAND_LEN,TYPE> context;
+        priv::GotohScoringContext<BAND_LEN,TYPE,algorithm_tag> context;
 
-        return gotoh_alignment_score_dispatch<BAND_LEN,TYPE,symbol_type>::run( aligner.scheme, context, pattern, quals, text, min_score, sink, 0, pattern.length(), column );
+        const uint32 length = equal<algorithm_tag,PatternBlockingTag>() ? pattern.length() : text.length();
+
+        return gotoh_alignment_score_dispatch<BAND_LEN,TYPE,algorithm_tag,symbol_type>::run( aligner.scheme, context, pattern, quals, text, min_score, sink, 0, length, column );
     }
 
     /// dispatch scoring in a window of the pattern
@@ -946,9 +1362,9 @@ struct alignment_score_dispatch<
 
         NVBIO_VAR_UNUSED const uint32 BAND_LEN = gotoh_bandlen_selector<TYPE,1u,symbol_type>::BAND_LEN;
 
-        priv::GotohCheckpointedScoringContext<BAND_LEN,TYPE,checkpoint_type> context( checkpoint );
+        priv::GotohCheckpointedScoringContext<BAND_LEN,TYPE,algorithm_tag,checkpoint_type> context( checkpoint );
 
-        return gotoh_alignment_score_dispatch<BAND_LEN,TYPE,symbol_type>::run( aligner.scheme, context, pattern, quals, text, min_score, sink, window_begin, window_end, column );
+        return gotoh_alignment_score_dispatch<BAND_LEN,TYPE,algorithm_tag,symbol_type>::run( aligner.scheme, context, pattern, quals, text, min_score, sink, window_begin, window_end, column );
     }
 
     /// dispatch scoring in a window of the pattern, retaining the intermediate results in the column
@@ -981,9 +1397,9 @@ struct alignment_score_dispatch<
 
         NVBIO_VAR_UNUSED const uint32 BAND_LEN = gotoh_bandlen_selector<TYPE,1u,symbol_type>::BAND_LEN;
 
-        priv::GotohScoringContext<BAND_LEN,TYPE> context;
+        priv::GotohScoringContext<BAND_LEN,TYPE,algorithm_tag> context;
 
-        return gotoh_alignment_score_dispatch<BAND_LEN,TYPE,symbol_type>::run( aligner.scheme, context, pattern, quals, text, min_score, sink, window_begin, window_end, column );
+        return gotoh_alignment_score_dispatch<BAND_LEN,TYPE,algorithm_tag,symbol_type>::run( aligner.scheme, context, pattern, quals, text, min_score, sink, window_begin, window_end, column );
     }
 };
 
@@ -1046,7 +1462,7 @@ struct alignment_checkpointed_dispatch<
 
         priv::GotohCheckpointContext<BAND_LEN,TYPE,CHECKPOINTS,checkpoint_type> context( checkpoints );
 
-        gotoh_alignment_score_dispatch<BAND_LEN,TYPE,symbol_type>::run( aligner.scheme, context, pattern, quals, text, min_score, sink, 0, pattern.length(), column );
+        gotoh_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>::run( aligner.scheme, context, pattern, quals, text, min_score, sink, 0, pattern.length(), column );
     }
 
     //
@@ -1101,7 +1517,7 @@ struct alignment_checkpointed_dispatch<
         const uint32 window_end   = nvbio::min( window_begin + CHECKPOINTS, uint32(pattern.length()) );
 
         NullSink null_sink;
-        gotoh_alignment_score_dispatch<BAND_LEN,TYPE,symbol_type>::run( aligner.scheme, context, pattern, quals, text, min_score, null_sink, window_begin, window_end, column );
+        gotoh_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>::run( aligner.scheme, context, pattern, quals, text, min_score, null_sink, window_begin, window_end, column );
 
         return window_end - window_begin;
     }

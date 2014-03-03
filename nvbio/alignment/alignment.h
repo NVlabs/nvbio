@@ -233,6 +233,9 @@ enum AlignmentType { GLOBAL, LOCAL, SEMI_GLOBAL };
 /// aligner tag of type SmithWatermanTag.
 ///@{
 
+struct PatternBlockingTag {};  ///< block along the pattern
+struct TextBlockingTag {};     ///< block along the text
+
 struct SmithWatermanTag {}; ///< the Smith-Waterman aligner tag
 struct GotohTag {};         ///< the Gotoh aligner tag
 struct EditDistanceTag {};  ///< the Edit Distance aligner tag
@@ -305,12 +308,13 @@ enum State
 ///
 /// \tparam T_TYPE                    specifies whether the alignment is SEMI_GLOBAL/GLOBAL
 ///
-template <AlignmentType T_TYPE>
+template <AlignmentType T_TYPE, typename AlgorithmType = PatternBlockingTag>
 struct EditDistanceAligner
 {
     static const AlignmentType TYPE =   T_TYPE;         ///< the AlignmentType
 
     typedef EditDistanceTag             aligner_tag;    ///< the \ref AlignerTag "Aligner Tag"
+    typedef AlgorithmType               algorithm_tag;  ///< the \ref AlgorithmTag "Algorithm Tag"
 };
 
 template <AlignmentType TYPE>
@@ -352,12 +356,13 @@ EditDistanceAligner<TYPE> make_edit_distance_aligner()
 /// };
 /// \endcode
 ///
-template <AlignmentType T_TYPE, typename scoring_scheme_type>
+template <AlignmentType T_TYPE, typename scoring_scheme_type, typename AlgorithmType = PatternBlockingTag>
 struct GotohAligner
 {
     static const AlignmentType TYPE =   T_TYPE;         ///< the AlignmentType
 
     typedef GotohTag                    aligner_tag;    ///< the \ref AlignerTag "Aligner Tag"
+    typedef AlgorithmType               algorithm_tag;  ///< the \ref AlgorithmTag "Algorithm Tag"
  
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     GotohAligner(const scoring_scheme_type _scheme) : scheme(_scheme) {}
@@ -370,6 +375,13 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 GotohAligner<TYPE,scoring_scheme_type> make_gotoh_aligner(const scoring_scheme_type& scheme)
 {
     return GotohAligner<TYPE,scoring_scheme_type>( scheme );
+}
+
+template <AlignmentType TYPE, typename algorithm_tag, typename scoring_scheme_type>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+GotohAligner<TYPE,scoring_scheme_type,algorithm_tag> make_gotoh_aligner(const scoring_scheme_type& scheme)
+{
+    return GotohAligner<TYPE,scoring_scheme_type,algorithm_tag>( scheme );
 }
 
 /// A Smith-Waterman alignment algorithm, see \ref Aligner
@@ -397,12 +409,13 @@ GotohAligner<TYPE,scoring_scheme_type> make_gotoh_aligner(const scoring_scheme_t
 /// };
 /// \endcode
 ///
-template <AlignmentType T_TYPE, typename scoring_scheme_type>
+template <AlignmentType T_TYPE, typename scoring_scheme_type, typename AlgorithmType = PatternBlockingTag>
 struct SmithWatermanAligner
 {
     static const AlignmentType TYPE =   T_TYPE;         ///< the AlignmentType
 
     typedef SmithWatermanTag            aligner_tag;    ///< the \ref AlignerTag "Aligner Tag"
+    typedef AlgorithmType               algorithm_tag;  ///< the \ref AlgorithmTag "Algorithm Tag"
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     SmithWatermanAligner(const scoring_scheme_type _scheme) : scheme(_scheme) {}

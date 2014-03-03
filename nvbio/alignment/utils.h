@@ -46,9 +46,9 @@ namespace aln {
 template <typename aligner_type> struct checkpoint_storage_type {
     typedef null_type type;    ///< the type of the checkpoint cells
 };
-template <AlignmentType TYPE>                        struct checkpoint_storage_type< EditDistanceAligner<TYPE> >                { typedef  int16 type; };
-template <AlignmentType TYPE, typename scoring_type> struct checkpoint_storage_type< SmithWatermanAligner<TYPE,scoring_type> >  { typedef  int16 type; };
-template <AlignmentType TYPE, typename scoring_type> struct checkpoint_storage_type< GotohAligner<TYPE,scoring_type> >          { typedef short2 type; };
+template <AlignmentType TYPE, typename algorithm_tag>                        struct checkpoint_storage_type< EditDistanceAligner<TYPE,algorithm_tag> >                { typedef  int16 type; };
+template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct checkpoint_storage_type< SmithWatermanAligner<TYPE,scoring_type,algorithm_tag> >  { typedef  int16 type; };
+template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct checkpoint_storage_type< GotohAligner<TYPE,scoring_type,algorithm_tag> >          { typedef short2 type; };
 
 /// A meta-function returning the type of the column cells for a given \ref Aligner "Aligner"
 ///
@@ -57,9 +57,9 @@ template <AlignmentType TYPE, typename scoring_type> struct checkpoint_storage_t
 template <typename aligner_type> struct column_storage_type {
     typedef null_type type;    ///< the type of the column cells
 };
-template <AlignmentType TYPE>                        struct column_storage_type< EditDistanceAligner<TYPE> >                { typedef  int16 type; };
-template <AlignmentType TYPE, typename scoring_type> struct column_storage_type< SmithWatermanAligner<TYPE,scoring_type> >  { typedef  int16 type; };
-template <AlignmentType TYPE, typename scoring_type> struct column_storage_type< GotohAligner<TYPE,scoring_type> >          { typedef short2 type; };
+template <AlignmentType TYPE, typename algorithm_tag>                        struct column_storage_type< EditDistanceAligner<TYPE,algorithm_tag> >                { typedef  int16 type; };
+template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct column_storage_type< SmithWatermanAligner<TYPE,scoring_type,algorithm_tag> >  { typedef  int16 type; };
+template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct column_storage_type< GotohAligner<TYPE,scoring_type,algorithm_tag> >          { typedef short2 type; };
 
 /// A meta-function returning the number of bits required to represent the direction vectors
 /// for a given \ref Aligner "Aligner"
@@ -75,7 +75,7 @@ template <typename aligner_type> struct direction_vector_traits {
 ///
 /// \tparam aligner_type        the queries \ref Aligner "Aligner" type
 ///
-template <AlignmentType TYPE, typename scoring_type> struct direction_vector_traits<GotohAligner<TYPE,scoring_type> > {
+template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct direction_vector_traits<GotohAligner<TYPE,scoring_type,algorithm_tag> > {
     static const uint32 BITS = 4;   ///< the number of bits needed to encode direction vectors
 };
 

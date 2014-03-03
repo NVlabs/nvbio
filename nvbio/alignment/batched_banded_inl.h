@@ -58,11 +58,13 @@ void batched_banded_alignment_score(const stream_type stream, const uint32 work_
     }
 
     // compute the end of the current DP matrix window
-    const uint32 pattern_len = stream.pattern_length( work_id, &context );
+    const uint32 len = equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
+        stream.pattern_length( work_id, &context ) :
+        stream.text_length( work_id, &context );
 
     // load the strings to be aligned
     strings_type strings;
-    stream.load_strings( work_id, 0, pattern_len, &context, &strings );
+    stream.load_strings( work_id, 0, len, &context, &strings );
 
     // score the current DP matrix window
     banded_alignment_score<BAND_LEN>(
@@ -206,11 +208,13 @@ void batched_banded_alignment_traceback(stream_type& stream, cell_type* checkpoi
     }
 
     // compute the end of the current DP matrix window
-    const uint32 pattern_len = stream.pattern_length( work_id, &context );
+    const uint32 len = equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
+        stream.pattern_length( work_id, &context ) :
+        stream.text_length( work_id, &context );
 
     // load the strings to be aligned
     strings_type strings;
-    stream.load_strings( work_id, 0, pattern_len, &context, &strings );
+    stream.load_strings( work_id, 0, len, &context, &strings );
 
     // fetch the proper checkpoint storage
     typedef strided_iterator<cell_type*> checkpoint_type;

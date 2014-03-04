@@ -28,6 +28,21 @@
 // sw-benchmark.cu
 //
 
+//
+// This project supports comparisons against multi-core SSE-enabled CPUs using
+// conditional compilation of the SSW library:
+//
+//  https://github.com/mengyao/Complete-Striped-Smith-Waterman-Library
+//
+// In order to perform these additional tests, the user must download ssw.h and ssw.c
+// from the above repository, copy them in the sw-benchmark directory, and run cmake with
+// the option -DSSWLIB=ON.
+//
+#if defined(SSWLIB)
+#include "ssw.h"
+#include <omp.h>
+#endif
+
 #include <nvbio/basic/timer.h>
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/cuda/ldg.h>
@@ -47,11 +62,7 @@
 #include <vector>
 #include <algorithm>
 
-//#define SSWLIB
-#if defined(SSWLIB)
-#include "ssw.h"
-#include <omp.h>
-#endif
+enum { MAX_READ_LENGTH = 1024 };
 
 using namespace nvbio;
 
@@ -396,7 +407,7 @@ void batch_score_profile_all(
         timer.start();
 
         // enact the batch
-        alignment_test_kernel<BLOCKDIM,400> <<<N_BLOCKS,BLOCKDIM>>>(
+        alignment_test_kernel<BLOCKDIM,MAX_READ_LENGTH> <<<N_BLOCKS,BLOCKDIM>>>(
             aligner,
             n_tasks,
             offsets_dvec,
@@ -460,16 +471,10 @@ int main(int argc, char* argv[])
 
                 if (strcmp( temp, "ed" ) == 0)
                     TEST_MASK |= ED;
-                else if (strcmp( temp, "ed-banded" ) == 0)
-                    TEST_MASK |= ED_BANDED;
                 else if (strcmp( temp, "sw" ) == 0)
                     TEST_MASK |= SW;
-                else if (strcmp( temp, "sw-banded" ) == 0)
-                    TEST_MASK |= SW_BANDED;
                 else if (strcmp( temp, "gotoh" ) == 0)
                     TEST_MASK |= GOTOH;
-                else if (strcmp( temp, "gotoh-banded" ) == 0)
-                    TEST_MASK |= GOTOH_BANDED;
                 else if (strcmp( temp, "ssw" ) == 0)
                     TEST_MASK |= SSW;
 
@@ -591,6 +596,23 @@ int main(int argc, char* argv[])
             {
                 batch_score_profile_all(
                     aln::make_gotoh_aligner<aln::SEMI_GLOBAL,aln::TextBlockingTag>( scoring ),
+                    d_read_data.size(),
+                    d_read_data.read_index(),
+                    d_read_data.read_stream(),
+                    d_read_data.max_read_len(),
+                    n_read_symbols,
+                    nvbio::plain_view( d_ref_storage ),
+                    ref_length,
+                    nvbio::plain_view( score_dvec ) );
+            }
+        }
+        if (TEST_MASK & ED)
+        {
+            fprintf(stderr,"  testing Edit Distance scoring speed...\n");
+            fprintf(stderr,"    %15s : ", "semi-global");
+            {
+                batch_score_profile_all(
+                    aln::make_edit_distance_aligner<aln::SEMI_GLOBAL,aln::TextBlockingTag>(),
                     d_read_data.size(),
                     d_read_data.read_index(),
                     d_read_data.read_stream(),

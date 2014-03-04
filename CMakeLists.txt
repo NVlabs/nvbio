@@ -45,7 +45,10 @@ find_package(CUDA)
 find_package(Doxygen)
 
 # set up required system libs
-set(SYSTEM_LINK_LIBRARIES "gomp")
+set(SYSTEM_LINK_LIBRARIES "")
+if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+  list(APPEND SYSTEM_LINK_LIBRARIES gomp)
+endif()
 
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")
   # shm_* live in librt on Linux

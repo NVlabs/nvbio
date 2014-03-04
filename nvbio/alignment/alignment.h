@@ -324,6 +324,13 @@ EditDistanceAligner<TYPE> make_edit_distance_aligner()
     return EditDistanceAligner<TYPE>();
 }
 
+template <AlignmentType TYPE, typename algorithm_tag>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+EditDistanceAligner<TYPE,algorithm_tag> make_edit_distance_aligner()
+{
+    return EditDistanceAligner<TYPE,algorithm_tag>();
+}
+
 /// A Gotoh alignment algorithm, see \ref Aligner
 /// \anchor GotohAligner
 ///

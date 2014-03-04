@@ -1071,7 +1071,7 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
             // loop across the short edge of the DP matrix (i.e. the rows)
             for (uint32 i = 0; i < M; ++i)
             {
-                // load the new character from the reference
+                // load the new character from the query
                 const uint8 q_i  = query[i];
                 const uint8 qq_i = quals[i];
 

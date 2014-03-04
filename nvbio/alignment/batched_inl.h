@@ -243,7 +243,7 @@ uint64 BatchedAlignmentScore<stream_type,ThreadParallelScheduler>::min_temp_stor
 template <typename stream_type>
 uint64 BatchedAlignmentScore<stream_type,ThreadParallelScheduler>::max_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
 {
-    return column_storage( max_pattern_len, max_text_len ) * stream_size;
+    return align<32>( column_storage( max_pattern_len, max_text_len ) * stream_size );
 }
 
 // enact the batch execution

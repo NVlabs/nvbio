@@ -45,7 +45,7 @@ find_package(CUDA)
 find_package(Doxygen)
 
 # set up required system libs
-set(SYSTEM_LINK_LIBRARIES "")
+set(SYSTEM_LINK_LIBRARIES "gomp")
 
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")
   # shm_* live in librt on Linux
@@ -57,7 +57,7 @@ if (MSVC_IDE)
   #set(CMAKE_SUPPRESS_REGENERATION ON)
 endif()
 
-set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} ${CUDA_NVCC_DEBUG_FLAGS} --gpu-architecture=sm_35 -use_fast_math)
+set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} ${CUDA_NVCC_DEBUG_FLAGS} --gpu-architecture=sm_35 -use_fast_math -Xcompiler -fopenmp)
 
 set(cudpp_INCLUDE_DIRS ${CMAKE_SOURCE_DIR})
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/contrib ${CMAKE_BINARY_DIR}/contrib/zlib-1.2.7 ${CMAKE_SOURCE_DIR}/contrib/crc ${CMAKE_SOURCE_DIR}/contrib/bamtools)

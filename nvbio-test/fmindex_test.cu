@@ -36,6 +36,7 @@
 //#define NVBIO_CUDA_DEBUG
 //#define NVBIO_CUDA_ASSERTS
 
+#include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
@@ -800,6 +801,9 @@ void count_kernel(
 //
 void backtrack_test(const char* index_file, const char* reads_name, const uint32 n_reads)
 {
+    // Now set the number of threads
+    omp_set_num_threads( omp_get_num_procs() );
+
     io::FMIndexDataRAM fmi;
     if (fmi.load( index_file, io::FMIndexData::FORWARD ))
     {
@@ -907,7 +911,8 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             timer.start();
 
             uint32 counter = 0;
-            for (uint32 i = 0; i < reads_data->size(); ++i)
+            #pragma omp parallel for
+            for (int i = 0; i < (int)reads_data->size(); ++i)
             {
                 count_core(
                     i,
@@ -954,7 +959,9 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             timer.start();
 
             uint32 counter = 0;
-            for (uint32 i = 0; i < reads_data->size(); ++i)
+
+            #pragma omp parallel for
+            for (int i = 0; i < (int)reads_data->size(); ++i)
             {
                 count_core(
                     i,
@@ -1001,7 +1008,9 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             timer.start();
 
             uint32 counter = 0;
-            for (uint32 i = 0; i < reads_data->size(); ++i)
+
+            #pragma omp parallel for
+            for (int i = 0; i < (int)reads_data->size(); ++i)
             {
                 count_core(
                     i,

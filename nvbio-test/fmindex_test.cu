@@ -920,8 +920,8 @@ int fmindex_test(int argc, char* argv[])
     uint32 synth_len     = 10000000;
     uint32 synth_queries = 64*1024;
 
-    char*  index_name        = "data/human.NCBI36/Homo_sapiens.NCBI36.53.dna.toplevel.fa";
-    char*  reads_name        = "data/SRR493095_1.fastq.gz";
+    char*  index_name        = "./data/human.NCBI36/Homo_sapiens.NCBI36.53.dna.toplevel.fa";
+    char*  reads_name        = "./data/SRR493095_1.fastq.gz";
     uint32 backtrack_queries = 64*1024;
 
     for (int i = 0; i < argc; ++i)

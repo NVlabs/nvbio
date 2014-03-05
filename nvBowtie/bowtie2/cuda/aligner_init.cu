@@ -120,8 +120,8 @@ std::pair<uint64,uint64> Aligner::init_alloc(const uint32 BATCH_SIZE, const Para
 
     //const uint32 n_cigar_entries = BATCH_SIZE*(MAXIMUM_BAND_LEN_MULT*band_len+1);
     //const uint32 n_mds_entries   = BATCH_SIZE*MAX_READ_LEN;
-    const uint32 n_cigar_entries = (32*1024*1024)/sizeof(io::Cigar);    // 32MB
-    const uint32 n_mds_entries   = (64*1024*1024)/sizeof(uint8);        // 32MB
+    const uint32 n_cigar_entries = (128 * BATCH_SIZE)/sizeof(io::Cigar);    // 32MB
+    const uint32 n_mds_entries   = (256 * BATCH_SIZE)/sizeof(uint8);        // 64MB
     if (do_alloc)
     {
         log_verbose(stderr, "    allocating %u MB of string storage\n      CIGARs : %u MB\n      MDs    : %u MB\n",

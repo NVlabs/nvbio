@@ -191,9 +191,6 @@ int driver(
     const uint32 band_len = Aligner::band_length( params.max_dist );
 
     const uint32 genome_length = driver_data_host.genome_length();
-    const uint32 BATCH_SIZE    = (params.allow_sub && params.mode == AllMapping) ?
-                                 (uint32)MAX_BATCH / 2u :
-                                 (uint32)(MAX_BATCH * 3u)/4u;
     
     // print command line options
     log_visible(stderr, "  mode           = %s\n", mapping_mode( params.mode ));
@@ -255,7 +252,41 @@ int driver(
     size_t free, total;
     cudaMemGetInfo(&free, &total);
     log_stats(stderr, "  device has %ld of %ld MB free\n", free/1024/1024, total/1024/1024);
-    log_stats(stderr, "  processing reads in batches of %u\n", BATCH_SIZE);
+
+    uint32 BATCH_SIZE = 64*1024*1024;
+
+    const uint64 GB = 1024u*1024u*1024u;
+    if (free <= GB)
+    {
+        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
+                     128*1024 :
+                     192*1024;
+    }
+    else if (free <= 2*GB)
+    {
+        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
+                     256*1024 :
+                     384*1024;
+    }
+    else if (free <= 4*GB)
+    {
+        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
+                     384*1024 :
+                     512*1024;
+    }
+    else if (free <= 6*GB)
+    {
+        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
+                     512*1024 :
+                     768*1024;
+    }
+    else
+    {
+        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
+                     768*1024 :
+                     1024*1024;
+    }
+    log_stats(stderr, "  processing reads in batches of %uK\n", BATCH_SIZE/1024);
 
     if (aligner.init( BATCH_SIZE, params, kSingleEnd ) == false)
         return 1;
@@ -522,9 +553,6 @@ int driver(
     const uint32 band_len = Aligner::band_length( params.max_dist );
 
     const uint32 genome_length = driver_data_host.genome_length();
-    const uint32 BATCH_SIZE    = (params.allow_sub && params.mode == AllMapping) ?
-                                 (uint32)MAX_BATCH / 2u :
-                                 (uint32)(MAX_BATCH * 3u)/4u;
 
     // print command line options
     log_visible(stderr, "  mode           = %s\n", mapping_mode( params.mode ));
@@ -587,7 +615,40 @@ int driver(
     size_t free, total;
     cudaMemGetInfo(&free, &total);
     log_stats(stderr, "  device has %ld of %ld MB free\n", free/1024/1024, total/1024/1024);
-    log_stats(stderr, "  processing reads in batches of %u\n", BATCH_SIZE);
+    uint32 BATCH_SIZE = 64*1024*1024;
+
+    const uint64 GB = 1024u*1024u*1024u;
+    if (free <= GB)
+    {
+        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
+                     128*1024 :
+                     192*1024;
+    }
+    else if (free <= 2*GB)
+    {
+        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
+                     256*1024 :
+                     384*1024;
+    }
+    else if (free <= 4*GB)
+    {
+        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
+                     384*1024 :
+                     512*1024;
+    }
+    else if (free <= 6*GB)
+    {
+        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
+                     512*1024 :
+                     768*1024;
+    }
+    else
+    {
+        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
+                      768*1024 :
+                     1024*1024;
+    }
+    log_stats(stderr, "  processing reads in batches of %uK\n", BATCH_SIZE/1024);
 
     if (aligner.init( BATCH_SIZE, params, kPairedEnds ) == false)
         return 1;

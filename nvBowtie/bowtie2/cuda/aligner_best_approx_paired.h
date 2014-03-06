@@ -283,6 +283,8 @@ void Aligner::best_approx(
         // as true opposite paired alignments require full DP backtracking, while unpaired
         // alignments require the banded version.
         //
+        timer.start();
+        device_timer.start();
 
         // overlap the paired indices with the loc queue
         thrust::device_vector<uint32>::iterator paired_idx_begin = scoring_queues.hits.loc.begin();
@@ -294,9 +296,6 @@ void Aligner::best_approx(
             best_opposite_iterator,
             paired_idx_begin,
             io::is_paired() ) - paired_idx_begin );
-
-        timer.start();
-        device_timer.start();
 
         if (n_paired)
         {
@@ -959,6 +958,7 @@ void Aligner::best_approx_score(
         stats.score.add( pipeline.hits_queue_size, score_time + timer.seconds(), dev_score_time + device_timer.seconds() );
     }
 
+    optional_device_synchronize();
     global_timer.stop();
     stats.scoring_pipe.add( seed_queue_size, global_timer.seconds(), global_timer.seconds() );
 }

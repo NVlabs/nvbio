@@ -154,10 +154,13 @@ void warp_batched_alignment_score(stream_type& stream, cell_type* columns, const
         &sink,
         column );
 
-    context.sink.report( score, sink );
+    if (warp_tid() == 0)
+    {
+        context.sink.report( score, sink );
 
-    // handle the output
-    stream.output( work_id, &context );
+        // handle the output
+        stream.output( work_id, &context );
+    }
 }
 
 template <uint32 BLOCKDIM, typename stream_type, typename cell_type>

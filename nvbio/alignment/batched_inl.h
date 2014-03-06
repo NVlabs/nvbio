@@ -125,8 +125,11 @@ void warp_batched_alignment_score(stream_type& stream, cell_type* columns, const
     context_type context;
     if (stream.init_context( work_id, &context ) == false)
     {
-        // handle the output
-        stream.output( work_id, &context );
+        if (warp_tid() == 0)
+        {
+            // handle the output
+            stream.output( work_id, &context );
+        }
         return;
     }
 

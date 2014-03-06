@@ -364,7 +364,7 @@ void BatchedAlignmentScore<stream_type,WarpParallelScheduler>::enact(stream_type
     const uint32 BLOCKWARPS = BLOCKDIM >> cuda::Arch::LOG_WARP_SIZE;
     if (queue_capacity >= stream.size())
     {
-        const uint32 n_warps  = (stream.size() + WARP_SIZE-1) / WARP_SIZE;
+        const uint32 n_warps  = stream.size();
         const uint32 n_blocks = (n_warps + BLOCKWARPS-1) / BLOCKWARPS;
 
         warp_batched_alignment_score_kernel<BLOCKDIM> <<<n_blocks, BLOCKDIM>>>(

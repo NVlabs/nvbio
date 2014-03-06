@@ -114,7 +114,7 @@ __global__ void persistent_batched_alignment_score_kernel(stream_type stream, ce
 }
 
 template <uint32 BLOCKDIM, typename stream_type, typename cell_type>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+NVBIO_FORCEINLINE NVBIO_DEVICE
 void warp_batched_alignment_score(stream_type& stream, cell_type* columns, const uint32 stride, const uint32 work_id, const uint32 warp_id)
 {
     typedef typename stream_type::aligner_type  aligner_type;
@@ -377,7 +377,7 @@ void BatchedAlignmentScore<stream_type,WarpParallelScheduler>::enact(stream_type
         // compute the number of blocks we are going to launch
         const uint32 n_blocks = nvbio::max( nvbio::min(
             (uint32)cuda::max_active_blocks( warp_persistent_batched_alignment_score_kernel<BLOCKDIM,stream_type,cell_type>, BLOCKDIM, 0u ),
-            queue_capacity / BLOCKWARPS ), 1u );
+            queue_capacity / BLOCKDIM ), 1u );
 
         warp_persistent_batched_alignment_score_kernel<BLOCKDIM> <<<n_blocks, BLOCKDIM>>>(
             stream,

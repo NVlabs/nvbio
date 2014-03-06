@@ -67,8 +67,7 @@ void Aligner::best_approx(
     //const int32          score_limit     = scoring_scheme.score_limit( params );
 
     // start timing
-    Timer timer;
-    Timer global_timer;
+    nvbio::Timer timer;
     nvbio::cuda::Timer device_timer;
 
     const uint32 count = read_data1.size();
@@ -625,6 +624,8 @@ void Aligner::best_approx_score(
     Timer global_timer;
     nvbio::cuda::Timer device_timer;
 
+    global_timer.start();
+
     const uint32 band_len = band_length( params.max_dist );
 
     read_batch_type reads1( read_data1 );
@@ -957,6 +958,9 @@ void Aligner::best_approx_score(
         timer.stop();
         stats.score.add( pipeline.hits_queue_size, score_time + timer.seconds(), dev_score_time + device_timer.seconds() );
     }
+
+    global_timer.stop();
+    stats.scoring_pipe.add( seed_queue_size, global_timer.seconds(), global_timer.seconds() );
 }
 
 } // namespace cuda

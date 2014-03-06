@@ -296,6 +296,7 @@ int driver(
     cudaMemGetInfo(&free, &total);
     log_stats(stderr, "  ready to start processing: device has %ld MB free\n", free/1024/1024);
 
+    float polling_time = 0.0f;
     Timer global_timer;
     global_timer.start();
 
@@ -343,9 +344,14 @@ int driver(
         stats.read_io_time += timer.seconds();
         stats.max_read_io_speed = std::max( stats.max_read_io_speed, float(read_data_host->size()) / timer.seconds() );
         */
+        Timer polling_timer;
+        polling_timer.start();
 
         // poll until the current input set is loaded...
         while (input_thread.read_data[ input_set ] == NULL) {}
+
+        polling_timer.stop();
+        polling_time += polling_timer.seconds();
 
         io::ReadData* read_data_host = input_thread.read_data[ input_set ];
         if (read_data_host == (io::ReadData*)InputThread::INVALID)
@@ -472,9 +478,11 @@ int driver(
     log_stats(stderr, "  scoring      : %2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.score.time, 1.0e-6f * stats.score.avg_speed(), 1.0e-6f * stats.score.max_speed, stats.score.device_time);
     log_stats(stderr, "  locating     : %2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.locate.time, 1.0e-6f * stats.locate.avg_speed(), 1.0e-6f * stats.locate.max_speed, stats.locate.device_time);
     log_stats(stderr, "  backtracking : %2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.backtrack.time, 1.0e-6f * stats.backtrack.avg_speed(), 1.0e-6f * stats.backtrack.max_speed, stats.backtrack.device_time);
+    log_stats(stderr, "  finalizing   : %2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.finalize.time, 1.0e-6f * stats.finalize.avg_speed(), 1.0e-6f * stats.finalize.max_speed, stats.finalize.device_time);
     log_stats(stderr, "  results DtoH : %2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.alignments_DtoH.time, 1.0e-6f * stats.alignments_DtoH.avg_speed(), 1.0e-6f * stats.alignments_DtoH.max_speed);
     log_stats(stderr, "  reads HtoD   : %2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.read_HtoD.time, 1.0e-6f * stats.read_HtoD.avg_speed(), 1.0e-6f * stats.read_HtoD.max_speed);
     log_stats(stderr, "  reads I/O    : %2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.read_io.time, 1.0e-6f * stats.read_io.avg_speed(), 1.0e-6f * stats.read_io.max_speed);
+    log_stats(stderr, "    exposed    : %.2f sec (avg: %.3fM reads/s).\n", polling_time);
     log_stats(stderr, "  output I/O   : %2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.io.time, 1.0e-6f * stats.io.avg_speed(), 1.0e-6f * stats.io.max_speed);
 
     std::vector<uint32>& mapped         = stats.mapped;
@@ -664,6 +672,7 @@ int driver(
     cudaDeviceGetLimit( &stack_size_limit, cudaLimitStackSize );
     log_debug(stderr, "    max cuda stack size: %u\n", stack_size_limit);
 
+    float polling_time = 0.0f;
     Timer timer;
     Timer global_timer;
     global_timer.start();
@@ -697,9 +706,15 @@ int driver(
     // loop through the batches of reads
     for (uint32 read_begin = 0; true; read_begin += BATCH_SIZE)
     {
+        Timer polling_timer;
+        polling_timer.start();
+
         // poll until the current input set is loaded...
         while (input_thread.read_data1[ input_set ] == NULL ||
                input_thread.read_data2[ input_set ] == NULL) {}
+
+        polling_timer.stop();
+        polling_time += polling_timer.seconds();
 
         io::ReadData* read_data_host1 = input_thread.read_data1[ input_set ];
         io::ReadData* read_data_host2 = input_thread.read_data2[ input_set ];
@@ -833,18 +848,21 @@ int driver(
 
     nvbio::bowtie2::cuda::generate_report(stats, params.report.c_str());
 
-    log_stats(stderr, "  total        : %.2f sec (avg: %.1fK reads/s).\n", stats.global_time, 1.0e-3f * float(n_reads)/stats.global_time);
-    log_stats(stderr, "  mapping      : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.map.time, 1.0e-6f * stats.map.avg_speed(), 1.0e-6f * stats.map.max_speed, stats.map.device_time);
-    log_stats(stderr, "  selecting    : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.select.time, 1.0e-6f * stats.select.avg_speed(), 1.0e-6f * stats.select.max_speed, stats.select.device_time);
-    log_stats(stderr, "  sorting      : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.sort.time, 1.0e-6f * stats.sort.avg_speed(), 1.0e-6f * stats.sort.max_speed, stats.sort.device_time);
-    log_stats(stderr, "  scoring      : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.score.time, 1.0e-6f * stats.score.avg_speed(), 1.0e-6f * stats.score.max_speed, stats.score.device_time);
-    log_stats(stderr, "  opp.scoring  : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.opposite_score.time, 1.0e-6f * stats.opposite_score.avg_speed(), 1.0e-6f * stats.opposite_score.max_speed, stats.opposite_score.device_time);
-    log_stats(stderr, "  locating     : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.locate.time, 1.0e-6f * stats.locate.avg_speed(), 1.0e-6f * stats.locate.max_speed, stats.locate.device_time);
-    log_stats(stderr, "  backtracking : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.backtrack.time, 1.0e-6f * stats.backtrack.avg_speed(), 1.0e-6f * stats.backtrack.max_speed, stats.backtrack.device_time);
-    log_stats(stderr, "  results DtoH : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.alignments_DtoH.time, 1.0e-6f * stats.alignments_DtoH.avg_speed(), 1.0e-6f * stats.alignments_DtoH.max_speed);
-    log_stats(stderr, "  reads HtoD   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.read_HtoD.time, 1.0e-6f * stats.read_HtoD.avg_speed(), 1.0e-6f * stats.read_HtoD.max_speed);
-    log_stats(stderr, "  reads I/O    : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.read_io.time, 1.0e-6f * stats.read_io.avg_speed(), 1.0e-6f * stats.read_io.max_speed);
-    log_stats(stderr, "  output I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.io.time, 1.0e-6f * stats.io.avg_speed(), 1.0e-6f * stats.io.max_speed);
+    log_stats(stderr, "  total         : %.2f sec (avg: %.1fK reads/s).\n", stats.global_time, 1.0e-3f * float(n_reads)/stats.global_time);
+    log_stats(stderr, "  mapping       : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.map.time, 1.0e-6f * stats.map.avg_speed(), 1.0e-6f * stats.map.max_speed, stats.map.device_time);
+    log_stats(stderr, "  scoring       : %.2f sec (avg: %.1fK reads/s, max: %.3fM reads/s, %.2f device sec).).\n", stats.scoring_pipe.time, 1.0e-6f * stats.scoring_pipe.avg_speed(), 1.0e-6f * stats.scoring_pipe.max_speed, stats.scoring_pipe.device_time);
+    log_stats(stderr, "    selecting   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.select.time, 1.0e-6f * stats.select.avg_speed(), 1.0e-6f * stats.select.max_speed, stats.select.device_time);
+    log_stats(stderr, "    sorting     : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.sort.time, 1.0e-6f * stats.sort.avg_speed(), 1.0e-6f * stats.sort.max_speed, stats.sort.device_time);
+    log_stats(stderr, "    scoring     : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.score.time, 1.0e-6f * stats.score.avg_speed(), 1.0e-6f * stats.score.max_speed, stats.score.device_time);
+    log_stats(stderr, "    opp.scoring : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.opposite_score.time, 1.0e-6f * stats.opposite_score.avg_speed(), 1.0e-6f * stats.opposite_score.max_speed, stats.opposite_score.device_time);
+    log_stats(stderr, "    locating    : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.locate.time, 1.0e-6f * stats.locate.avg_speed(), 1.0e-6f * stats.locate.max_speed, stats.locate.device_time);
+    log_stats(stderr, "  backtracking  : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.backtrack.time, 1.0e-6f * stats.backtrack.avg_speed(), 1.0e-6f * stats.backtrack.max_speed, stats.backtrack.device_time);
+    log_stats(stderr, "  finalizing    : %2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.finalize.time, 1.0e-6f * stats.finalize.avg_speed(), 1.0e-6f * stats.finalize.max_speed, stats.finalize.device_time);
+    log_stats(stderr, "  results DtoH  : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.alignments_DtoH.time, 1.0e-6f * stats.alignments_DtoH.avg_speed(), 1.0e-6f * stats.alignments_DtoH.max_speed);
+    log_stats(stderr, "  reads HtoD    : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.read_HtoD.time, 1.0e-6f * stats.read_HtoD.avg_speed(), 1.0e-6f * stats.read_HtoD.max_speed);
+    log_stats(stderr, "  reads I/O     : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.read_io.time, 1.0e-6f * stats.read_io.avg_speed(), 1.0e-6f * stats.read_io.max_speed);
+    log_stats(stderr, "    exposed     : %.2f sec (avg: %.3fM reads/s).\n", polling_time);
+    log_stats(stderr, "  output I/O    : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.io.time, 1.0e-6f * stats.io.avg_speed(), 1.0e-6f * stats.io.max_speed);
 
     std::vector<uint32>& mapped         = stats.mapped;
     uint32&              n_mapped       = stats.n_mapped;

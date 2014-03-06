@@ -62,6 +62,7 @@ struct Stats
     KernelStats read_HtoD;
     KernelStats read_io;
     KernelStats io;
+    KernelStats scoring_pipe;
 
     // mapping stats
     uint32              n_reads;

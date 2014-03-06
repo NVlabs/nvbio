@@ -862,16 +862,22 @@ int driver(
         }
 
         log_stats(stderr, "  mate1 : %.2f %% - of these:\n", 100.0f * float(iostats.mate1.n_mapped)/float(n_reads) );
-        log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate1.n_unique)/float(iostats.mate1.n_mapped), 100.0f * float(iostats.mate1.n_mapped - iostats.mate1.n_multiple)/float(n_reads) );
-        log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate1.n_unambiguous)/float(iostats.mate1.n_mapped), 100.0f * float(iostats.mate1.n_unambiguous)/float(n_reads) );
-        log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate1.n_ambiguous)/float(iostats.mate1.n_mapped), 100.0f * float(iostats.mate1.n_ambiguous)/float(n_reads) );
-        log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate1.n_multiple)/float(iostats.mate1.n_mapped), 100.0f * float(iostats.mate1.n_multiple)/float(n_reads) );
+        if (iostats.mate1.n_mapped)
+        {
+            log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate1.n_unique)/float(iostats.mate1.n_mapped), 100.0f * float(iostats.mate1.n_mapped - iostats.mate1.n_multiple)/float(n_reads) );
+            log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate1.n_unambiguous)/float(iostats.mate1.n_mapped), 100.0f * float(iostats.mate1.n_unambiguous)/float(n_reads) );
+            log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate1.n_ambiguous)/float(iostats.mate1.n_mapped), 100.0f * float(iostats.mate1.n_ambiguous)/float(n_reads) );
+            log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate1.n_multiple)/float(iostats.mate1.n_mapped), 100.0f * float(iostats.mate1.n_multiple)/float(n_reads) );
+        }
 
         log_stats(stderr, "  mate2 : %.2f %% - of these:\n", 100.0f * float(iostats.mate2.n_mapped)/float(n_reads) );
-        log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate2.n_unique)/float(iostats.mate2.n_mapped), 100.0f * float(iostats.mate2.n_mapped - iostats.mate2.n_multiple)/float(n_reads) );
-        log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate2.n_unambiguous)/float(iostats.mate2.n_mapped), 100.0f * float(iostats.mate2.n_unambiguous)/float(n_reads) );
-        log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate2.n_ambiguous)/float(iostats.mate2.n_mapped), 100.0f * float(iostats.mate2.n_ambiguous)/float(n_reads) );
-        log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate2.n_multiple)/float(iostats.mate2.n_mapped), 100.0f * float(iostats.mate2.n_multiple)/float(n_reads) );
+        if (iostats.mate2.n_mapped)
+        {
+            log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate2.n_unique)/float(iostats.mate2.n_mapped), 100.0f * float(iostats.mate2.n_mapped - iostats.mate2.n_multiple)/float(n_reads) );
+            log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate2.n_unambiguous)/float(iostats.mate2.n_mapped), 100.0f * float(iostats.mate2.n_unambiguous)/float(n_reads) );
+            log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate2.n_ambiguous)/float(iostats.mate2.n_mapped), 100.0f * float(iostats.mate2.n_ambiguous)/float(n_reads) );
+            log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate2.n_multiple)/float(iostats.mate2.n_mapped), 100.0f * float(iostats.mate2.n_multiple)/float(n_reads) );
+        }
     }
 
     log_visible(stderr, "Bowtie2 cuda driver... done\n");

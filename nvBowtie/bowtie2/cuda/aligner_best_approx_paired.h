@@ -878,7 +878,9 @@ void Aligner::best_approx_score(
         // and perform DP alignment on the opposite mates
         //
 
-        // compact the list of candidate hits with a valid anchor mate score
+        timer.start();
+        device_timer.start();
+
         // NOTE:
         //  Here we want the output opposite_queue to contain the list of indices *into* idx_queue, so as to keep the
         //  original sorting order by genome coordintes used for scoring the anchor.
@@ -907,17 +909,6 @@ void Aligner::best_approx_score(
                 pipeline,
                 params );
 
-            optional_device_synchronize();
-            nvbio::cuda::check_error("opposite-score kernel");
-
-            device_timer.stop();
-            timer.stop();
-            stats.opposite_score.add( pipeline.opposite_queue_size, timer.seconds(), device_timer.seconds() );
-            //stats.opposite_score.user[0] += score_mate_work_queue_stats.utilization(nvbio::cuda::STREAM_EVENT);
-            //stats.opposite_score.user[1] += score_mate_work_queue_stats.utilization(nvbio::cuda::RUN_EVENT);
-            //stats.opposite_score.user[2] += score_mate_work_queue_stats.avg_iterations();
-            //stats.opposite_score.user[3]  = nvbio::max( stats.opposite_score.user[3], score_mate_work_queue_stats.max_iterations() - score_mate_work_queue_stats.avg_iterations() );
-
             NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      crc: %llu\n", device_checksum( opposite_score_queue_iterator, opposite_score_queue_iterator + pipeline.hits_queue_size ) ) );
 
             // check if we need to persist this seeding pass
@@ -931,6 +922,17 @@ void Aligner::best_approx_score(
                     pipeline.hits_queue_size,
                     scoring_queues );
         }
+
+        optional_device_synchronize();
+        nvbio::cuda::check_error("opposite-score kernel");
+
+        device_timer.stop();
+        timer.stop();
+        stats.opposite_score.add( pipeline.opposite_queue_size, timer.seconds(), device_timer.seconds() );
+        //stats.opposite_score.user[0] += score_mate_work_queue_stats.utilization(nvbio::cuda::STREAM_EVENT);
+        //stats.opposite_score.user[1] += score_mate_work_queue_stats.utilization(nvbio::cuda::RUN_EVENT);
+        //stats.opposite_score.user[2] += score_mate_work_queue_stats.avg_iterations();
+        //stats.opposite_score.user[3]  = nvbio::max( stats.opposite_score.user[3], score_mate_work_queue_stats.max_iterations() - score_mate_work_queue_stats.avg_iterations() );
 
         timer.start();
         device_timer.start();

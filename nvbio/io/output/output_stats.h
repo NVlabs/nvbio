@@ -35,14 +35,27 @@
 namespace nvbio {
 namespace io {
 
-// I/O statistics that we collect
-struct IOStats
+struct AlignmentStats
 {
-    int   alignments_DtoH_count; // number of reads transferred from device to host
-    float alignments_DtoH_time;  // time spent moving alignment data from device to host
+    AlignmentStats()
+        : n_mapped(0),
+          n_ambiguous(0),
+          n_unambiguous(0),
+          n_unique(0),
+          n_multiple(0),
+          mapped_ed_histogram(4096, 0),
+          mapped_ed_histogram_fwd(4096, 0),
+          mapped_ed_histogram_rev(4096, 0)
+    {
+        for(uint32 c = 0; c < 64; c++)
+            mapq_bins[c] = 0;
 
-    // how many reads we output
-    uint32 n_reads;
+        for(uint32 c = 0; c < 64; c++)
+        {
+            for(uint32 d = 0; d < 64; d++)
+                mapped_ed_correlation[c][d] = 0;
+        }
+    }
 
     // mapping quality stats
     uint64 mapq_bins[64];
@@ -63,6 +76,21 @@ struct IOStats
 
     // edit distance correlation (xxxnsubtil: what exactly does this measure?)
     uint32  mapped_ed_correlation[64][64];
+};
+
+// I/O statistics that we collect
+struct IOStats
+{
+    int   alignments_DtoH_count; // number of reads transferred from device to host
+    float alignments_DtoH_time;  // time spent moving alignment data from device to host
+
+    // how many reads we output
+    uint32 n_reads;
+
+    // detailed mapping stats
+    AlignmentStats  paired;
+    AlignmentStats  mate1;
+    AlignmentStats  mate2;
 
     // time series for tracking each OutputFile::process() call
     TimeSeries output_process_timings;
@@ -70,33 +98,18 @@ struct IOStats
     IOStats()
         : alignments_DtoH_count(0),
           alignments_DtoH_time(0.0),
-          n_reads(0),
-          n_mapped(0),
-          n_ambiguous(0),
-          n_unambiguous(0),
-          n_unique(0),
-          n_multiple(0),
-          mapped_ed_histogram(4096, 0),
-          mapped_ed_histogram_fwd(4096, 0),
-          mapped_ed_histogram_rev(4096, 0)
-    {
-        for(uint32 c = 0; c < 64; c++)
-        {
-            mapq_bins[c] = 0;
-        }
+          n_reads(0)
+    {}
 
-        for(uint32 c = 0; c < 64; c++)
-        {
-            for(uint32 d = 0; d < 64; d++)
-            {
-                mapped_ed_correlation[c][d] = 0;
-            }
-        }
-    }
-
+    // paired-end alignment
     void track_alignment_statistics(const AlignmentData& alignment,
                                     const AlignmentData& mate,
                                     const uint8 mapq);
+
+    // single-end alignment
+    void track_alignment_statistics(AlignmentStats*      mate,
+                                    const AlignmentData& alignment,
+                                    const uint8          mapq);
 };
 
 } // namespace io

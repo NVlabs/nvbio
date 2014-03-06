@@ -445,16 +445,16 @@ int driver(
 
     stats.alignments_DtoH.add(iostats.alignments_DtoH_count, iostats.alignments_DtoH_time);
     stats.io = iostats.output_process_timings;
-    stats.n_mapped = iostats.n_mapped;
-    stats.n_ambiguous = iostats.n_ambiguous;
-    stats.n_nonambiguous = iostats.n_unambiguous;
-    stats.n_unique = iostats.n_unique;
-    stats.n_multiple = iostats.n_multiple;
-    stats.mapped = iostats.mapped_ed_histogram;
-    stats.f_mapped = iostats.mapped_ed_histogram_fwd;
-    stats.r_mapped = iostats.mapped_ed_histogram_rev;
-    memcpy(stats.mapq_bins, iostats.mapq_bins, sizeof(iostats.mapq_bins));
-    memcpy(stats.mapped2, iostats.mapped_ed_correlation, sizeof(iostats.mapped_ed_correlation));
+    stats.n_mapped          = iostats.mate1.n_mapped;
+    stats.n_ambiguous       = iostats.mate1.n_ambiguous;
+    stats.n_nonambiguous    = iostats.mate1.n_unambiguous;
+    stats.n_unique          = iostats.mate1.n_unique;
+    stats.n_multiple        = iostats.mate1.n_multiple;
+    stats.mapped            = iostats.mate1.mapped_ed_histogram;
+    stats.f_mapped          = iostats.mate1.mapped_ed_histogram_fwd;
+    stats.r_mapped          = iostats.mate1.mapped_ed_histogram_rev;
+    memcpy(stats.mapq_bins, iostats.mate1.mapq_bins,             sizeof(iostats.mate1.mapq_bins));
+    memcpy(stats.mapped2,   iostats.mate1.mapped_ed_correlation, sizeof(iostats.mate1.mapped_ed_correlation));
 
     delete aligner.output_file;
 
@@ -482,7 +482,7 @@ int driver(
     uint32&              n_nonambiguous = stats.n_nonambiguous;
     uint32&              n_multiple     = stats.n_multiple;
     {
-        log_stats(stderr, "  mapped reads : %.1f %% - of these:\n", 100.0f * float(n_mapped)/float(n_reads) );
+        log_stats(stderr, "  mapped reads : %.2f %% - of these:\n", 100.0f * float(n_mapped)/float(n_reads) );
         log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_unique)/float(n_mapped), 100.0f * float(n_mapped - n_multiple)/float(n_reads) );
         log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_nonambiguous)/float(n_mapped), 100.0f * float(n_nonambiguous)/float(n_reads) );
         log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_ambiguous)/float(n_mapped), 100.0f * float(n_ambiguous)/float(n_reads) );
@@ -809,18 +809,18 @@ int driver(
     iostats = aligner.output_file->get_aggregate_statistics();
 
     stats.alignments_DtoH.add(iostats.alignments_DtoH_count, iostats.alignments_DtoH_time);
-    stats.io = iostats.output_process_timings;
-    stats.n_reads = iostats.n_reads;
-    stats.n_mapped = iostats.n_mapped;
-    stats.n_ambiguous = iostats.n_ambiguous;
-    stats.n_nonambiguous = iostats.n_unambiguous;
-    stats.n_unique = iostats.n_unique;
-    stats.n_multiple = iostats.n_multiple;
-    stats.mapped = iostats.mapped_ed_histogram;
-    stats.f_mapped = iostats.mapped_ed_histogram_fwd;
-    stats.r_mapped = iostats.mapped_ed_histogram_rev;
-    memcpy(stats.mapq_bins, iostats.mapq_bins, sizeof(iostats.mapq_bins));
-    memcpy(stats.mapped2, iostats.mapped_ed_correlation, sizeof(iostats.mapped_ed_correlation));
+    stats.io                = iostats.output_process_timings;
+    stats.n_reads           = iostats.n_reads;
+    stats.n_mapped          = iostats.paired.n_mapped;
+    stats.n_ambiguous       = iostats.paired.n_ambiguous;
+    stats.n_nonambiguous    = iostats.paired.n_unambiguous;
+    stats.n_unique          = iostats.paired.n_unique;
+    stats.n_multiple        = iostats.paired.n_multiple;
+    stats.mapped            = iostats.paired.mapped_ed_histogram;
+    stats.f_mapped          = iostats.paired.mapped_ed_histogram_fwd;
+    stats.r_mapped          = iostats.paired.mapped_ed_histogram_rev;
+    memcpy(stats.mapq_bins, iostats.paired.mapq_bins,             sizeof(iostats.paired.mapq_bins));
+    memcpy(stats.mapped2,   iostats.paired.mapped_ed_correlation, sizeof(iostats.paired.mapped_ed_correlation));
 
     delete aligner.output_file;
 
@@ -849,7 +849,7 @@ int driver(
     uint32&              n_nonambiguous = stats.n_nonambiguous;
     uint32&              n_multiple     = stats.n_multiple;
     {
-        log_stats(stderr, "  mapped reads : %.1f %% - of these:\n", 100.0f * float(n_mapped)/float(n_reads) );
+        log_stats(stderr, "  mapped reads : %.2f %% - of these:\n", 100.0f * float(n_mapped)/float(n_reads) );
         log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_unique)/float(n_mapped), 100.0f * float(n_mapped - n_multiple)/float(n_reads) );
         log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_nonambiguous)/float(n_mapped), 100.0f * float(n_nonambiguous)/float(n_reads) );
         log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_ambiguous)/float(n_mapped), 100.0f * float(n_ambiguous)/float(n_reads) );

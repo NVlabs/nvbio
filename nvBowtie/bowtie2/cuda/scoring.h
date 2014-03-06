@@ -253,7 +253,7 @@ struct SmithWatermanScoringScheme
     /// default constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    SmithWatermanScoringScheme(const AlignmentType type = LocalAlignment);
+    SmithWatermanScoringScheme();
 
     /// constructor
     ///

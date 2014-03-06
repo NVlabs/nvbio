@@ -96,7 +96,7 @@ SmithWatermanScoringScheme<MMCost,NCost> SmithWatermanScoringScheme<MMCost,NCost
     options["ref-gap-const"]    = std::string("5");
     options["ref-gap-coeff"]    = std::string("3");
     options["gap-free"]         = std::string("5");
-    return SmithWatermanScoringScheme<MMCost,NCost>( options );
+    return SmithWatermanScoringScheme<MMCost,NCost>( options, LocalAlignment );
 }
 
 // default constructor
@@ -105,7 +105,7 @@ template <
     typename MMCost,
     typename NCost>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-SmithWatermanScoringScheme<MMCost,NCost>::SmithWatermanScoringScheme(const AlignmentType type) :
+SmithWatermanScoringScheme<MMCost,NCost>::SmithWatermanScoringScheme() :
     m_score_min( LinearFunc, -0.6f, -0.6f ),
     m_n_ceil_const( 0.0f ),
     m_n_ceil_coeff( 0.15f ),
@@ -118,7 +118,7 @@ SmithWatermanScoringScheme<MMCost,NCost>::SmithWatermanScoringScheme(const Align
     m_mmp( 2, 6 ),
     m_np( 1, 1 ),
     m_monotone( true ),
-    m_local( type == LocalAlignment ? true : false )
+    m_local( false )
 {}
 
 // constructor

@@ -383,6 +383,14 @@ Alignment<int32> alignment_traceback(
     //      * priv::alignment_traceback()
     //
 
+    //
+    // TODO: use the following strategy: perform two scoring passes, one to find the end,
+    // and one (backwards, reversing both sequences) to find the beginning of the alignment
+    // (if the traceback function was passed an exact end cell, the first pass could be skipped).
+    // At that point one can isolate a much a smaller submatrix in which to perform checkpointing,
+    // and the following algorithm can be employed.
+    //
+
     typedef typename pattern_string::value_type         symbol_type;
 
     // the submatrix height is equal to the text length (remember the DP matrix has the pattern as rows and the text as columns)

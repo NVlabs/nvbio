@@ -40,9 +40,9 @@ namespace aln {
 ///@addtogroup private
 ///@{
 
-template <typename stream_type, typename cell_type>
+template <typename stream_type, typename column_type>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-void batched_alignment_score(stream_type& stream, cell_type* columns, const uint32 stride, const uint32 work_id, const uint32 thread_id)
+void batched_alignment_score(stream_type& stream, column_type column, const uint32 work_id, const uint32 thread_id)
 {
     typedef typename stream_type::aligner_type  aligner_type;
     typedef typename stream_type::context_type  context_type;
@@ -66,10 +66,6 @@ void batched_alignment_score(stream_type& stream, cell_type* columns, const uint
     strings_type strings;
     stream.load_strings( work_id, 0, len, &context, &strings );
 
-    // fetch the proper column storage
-    typedef strided_iterator<cell_type*> column_type;
-    column_type column = column_type( columns + thread_id, stride );
-
     // score the current DP matrix window
     alignment_score(
         stream.aligner(),
@@ -84,6 +80,20 @@ void batched_alignment_score(stream_type& stream, cell_type* columns, const uint
     stream.output( work_id, &context );
 }
 
+template <uint32 BLOCKDIM, uint32 COLUMN_SIZE, typename stream_type, typename cell_type>
+__global__ void lmem_batched_alignment_score_kernel(stream_type stream, cell_type* columns, const uint32 stride)
+{
+    const uint32 tid = blockIdx.x * BLOCKDIM + threadIdx.x;
+
+    if (tid >= stream.size())
+        return;
+
+    // fetch the proper column storage
+    cell_type column[COLUMN_SIZE];
+
+    batched_alignment_score( stream, column, tid, tid );
+}
+
 template <uint32 BLOCKDIM, typename stream_type, typename cell_type>
 __global__ void batched_alignment_score_kernel(stream_type stream, cell_type* columns, const uint32 stride)
 {
@@ -92,7 +102,11 @@ __global__ void batched_alignment_score_kernel(stream_type stream, cell_type* co
     if (tid >= stream.size())
         return;
 
-    batched_alignment_score( stream, columns, stride, tid, tid );
+    // fetch the proper column storage
+    typedef strided_iterator<cell_type*> column_type;
+    column_type column = column_type( columns + tid, stride );
+
+    batched_alignment_score( stream, column, tid, tid );
 }
 
 template <uint32 BLOCKDIM, typename stream_type, typename cell_type>
@@ -103,13 +117,17 @@ __global__ void persistent_batched_alignment_score_kernel(stream_type stream, ce
 
     const uint32 stream_end = stream.size();
 
+    // fetch the proper column storage
+    typedef strided_iterator<cell_type*> column_type;
+    column_type column = column_type( columns + thread_id, stride );
+
     // let this CTA fetch all tiles at a grid-threads stride, starting from blockIdx.x*BLOCKDIM
     for (uint32 stream_begin = 0; stream_begin < stream_end; stream_begin += grid_threads)
     {
         const uint32 work_id = thread_id + stream_begin;
 
         if (work_id < stream_end)
-            batched_alignment_score( stream, columns, stride, work_id, thread_id );
+            batched_alignment_score( stream, column, work_id, thread_id );
     }
 }
 
@@ -257,42 +275,60 @@ uint64 BatchedAlignmentScore<stream_type,ThreadParallelScheduler>::max_temp_stor
 template <typename stream_type>
 void BatchedAlignmentScore<stream_type,ThreadParallelScheduler>::enact(stream_type stream, uint64 temp_size, uint8* temp)
 {
-    const uint64 min_temp_size = min_temp_storage(
-        stream.max_pattern_length(),
-        stream.max_text_length(),
-        stream.size() );
+    const uint32 column_size = equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
+        uint32( stream.max_pattern_length() ) :
+        uint32( stream.max_text_length() );
 
-    thrust::device_vector<uint8> temp_dvec;
-    if (temp_size == 0u)
-    {
-        temp_dvec.resize( min_temp_size );
-        temp = nvbio::device_view( temp_dvec );
-        temp_size = min_temp_size;
-    }
-
-    // set the queue capacity based on available memory
-    const uint32 queue_capacity = uint32( temp_size / column_storage( stream.max_pattern_length(), stream.max_text_length() ) );
-
-    if (queue_capacity >= stream.size())
+    // if the column is small, let's just use statically allocated local memory
+    if (column_size <= 1024)
     {
         const uint32 n_blocks = (stream.size() + BLOCKDIM-1) / BLOCKDIM;
 
-        batched_alignment_score_kernel<BLOCKDIM> <<<n_blocks, BLOCKDIM>>>(
+        lmem_batched_alignment_score_kernel<BLOCKDIM,1024> <<<n_blocks, BLOCKDIM>>>(
             stream,
             (cell_type*)temp,
             stream.size() );
     }
     else
     {
-        // compute the number of blocks we are going to launch
-        const uint32 n_blocks = nvbio::max( nvbio::min(
-            (uint32)cuda::max_active_blocks( persistent_batched_alignment_score_kernel<BLOCKDIM,stream_type,cell_type>, BLOCKDIM, 0u ),
-            queue_capacity / BLOCKDIM ), 1u );
+        // the column is large to be allocated in local memory, let's use global memory
+        const uint64 min_temp_size = min_temp_storage(
+            stream.max_pattern_length(),
+            stream.max_text_length(),
+            stream.size() );
 
-        persistent_batched_alignment_score_kernel<BLOCKDIM> <<<n_blocks, BLOCKDIM>>>(
-            stream,
-            (cell_type*)temp,
-            queue_capacity );
+        thrust::device_vector<uint8> temp_dvec;
+        if (temp == NULL)
+        {
+            temp_size = nvbio::max( min_temp_size, temp_size );
+            temp_dvec.resize( temp_size );
+            temp = nvbio::device_view( temp_dvec );
+        }
+
+        // set the queue capacity based on available memory
+        const uint32 queue_capacity = uint32( temp_size / column_storage( stream.max_pattern_length(), stream.max_text_length() ) );
+
+        if (queue_capacity >= stream.size())
+        {
+            const uint32 n_blocks = (stream.size() + BLOCKDIM-1) / BLOCKDIM;
+
+            batched_alignment_score_kernel<BLOCKDIM> <<<n_blocks, BLOCKDIM>>>(
+                stream,
+                (cell_type*)temp,
+                stream.size() );
+        }
+        else
+        {
+            // compute the number of blocks we are going to launch
+            const uint32 n_blocks = nvbio::max( nvbio::min(
+                (uint32)cuda::max_active_blocks( persistent_batched_alignment_score_kernel<BLOCKDIM,stream_type,cell_type>, BLOCKDIM, 0u ),
+                queue_capacity / BLOCKDIM ), 1u );
+
+            persistent_batched_alignment_score_kernel<BLOCKDIM> <<<n_blocks, BLOCKDIM>>>(
+                stream,
+                (cell_type*)temp,
+                queue_capacity );
+        }
     }
 }
 
@@ -349,11 +385,11 @@ void BatchedAlignmentScore<stream_type,WarpParallelScheduler>::enact(stream_type
         stream.size() );
 
     thrust::device_vector<uint8> temp_dvec;
-    if (temp_size == 0u)
+    if (temp == NULL)
     {
-        temp_dvec.resize( min_temp_size );
+        temp_size = nvbio::max( min_temp_size, temp_size );
+        temp_dvec.resize( temp_size );
         temp = nvbio::device_view( temp_dvec );
-        temp_size = min_temp_size;
     }
 
     const uint32 WARP_SIZE = cuda::Arch::WARP_SIZE;
@@ -434,11 +470,11 @@ struct BatchedAlignmentScore<stream_type,StagedThreadParallelScheduler>
             stream.size() );
 
         thrust::device_vector<uint8> temp_dvec;
-        if (temp_size == 0u)
+        if (temp == NULL)
         {
-            temp_dvec.resize( min_temp_size );
+            temp_size = nvbio::max( min_temp_size, temp_size );
+            temp_dvec.resize( temp_size );
             temp = nvbio::device_view( temp_dvec );
-            temp_size = min_temp_size;
         }
 
         // set the queue capacity based on available memory
@@ -659,11 +695,11 @@ void BatchedAlignmentTraceback<CHECKPOINTS,stream_type,ThreadParallelScheduler>:
         stream.size() );
 
     thrust::device_vector<uint8> temp_dvec;
-    if (temp_size == 0u)
+    if (temp == NULL)
     {
-        temp_dvec.resize( min_temp_size );
+        temp_size = nvbio::max( min_temp_size, temp_size );
+        temp_dvec.resize( temp_size );
         temp = nvbio::device_view( temp_dvec );
-        temp_size = min_temp_size;
     }
 
     // set the queue capacity based on available memory

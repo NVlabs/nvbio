@@ -486,13 +486,16 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>
                              prev     = band[j];
                              band[j]  = hi;
 
-            context.new_cell(
-                i,             N,
-                block + j - 1, M,
-                hi,
-                top > left ?
-                    (top  > diagonal ? DELETION  : SUBSTITUTION) :
-                    (left > diagonal ? INSERTION : SUBSTITUTION) );
+            if ((CHECK_M == false) || (block + j <= M))
+            {
+                context.new_cell(
+                    i,             N,
+                    block + j - 1, M,
+                    hi,
+                    top > left ?
+                        (top  > diagonal ? DELETION  : SUBSTITUTION) :
+                        (left > diagonal ? INSERTION : SUBSTITUTION) );
+            }
         }
 #endif
 
@@ -924,13 +927,16 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
                              prev     = band[j];
                              band[j]  = hi;
 
-            context.new_cell(
-                block + j - 1, N,
-                i,             M,
-                hi,
-                top > left ?
-                    (top  > diagonal ? INSERTION : SUBSTITUTION) :
-                    (left > diagonal ? DELETION  : SUBSTITUTION) );
+            if ((CHECK_N == false) || (block + j <= N))
+            {
+                context.new_cell(
+                    block + j - 1, N,
+                    i,             M,
+                    hi,
+                    top > left ?
+                        (top  > diagonal ? INSERTION : SUBSTITUTION) :
+                        (left > diagonal ? DELETION  : SUBSTITUTION) );
+            }
         }
 
         // save the last entry of the band

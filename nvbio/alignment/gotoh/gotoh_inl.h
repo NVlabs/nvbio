@@ -529,15 +529,18 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_ty
             H_diag                    = H_band[j];
             H_band[j]                 = hi;
 
-            context.new_cell(
-                i,             N,
-                block + j - 1, M,
-                hi,
-                top > left ?
-                    (top  > diagonal ? DELETION  : SUBSTITUTION) :
-                    (left > diagonal ? INSERTION : SUBSTITUTION),
-                    edir,
-                    fdir );
+            if ((CHECK_M == false) || (block + j <= M))
+            {
+                context.new_cell(
+                    i,             N,
+                    block + j - 1, M,
+                    hi,
+                    top > left ?
+                        (top  > diagonal ? DELETION  : SUBSTITUTION) :
+                        (left > diagonal ? INSERTION : SUBSTITUTION),
+                        edir,
+                        fdir );
+            }
         }
 
         // save the last entry of the band
@@ -926,15 +929,18 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
             H_diag                    = H_band[j];
             H_band[j]                 = hi;
 
-            context.new_cell(
-                block + j - 1, N,
-                i,             M,
-                hi,
-                top > left ?
-                    (top  > diagonal ? INSERTION : SUBSTITUTION) :
-                    (left > diagonal ? DELETION  : SUBSTITUTION),
-                    edir,
-                    fdir );
+            if ((CHECK_N == false) || (block + j <= N))
+            {
+                context.new_cell(
+                    block + j - 1, N,
+                    i,             M,
+                    hi,
+                    top > left ?
+                        (top  > diagonal ? INSERTION : SUBSTITUTION) :
+                        (left > diagonal ? DELETION  : SUBSTITUTION),
+                        edir,
+                        fdir );
+            }
         }
 
         // save the last entry of the band

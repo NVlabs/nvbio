@@ -235,8 +235,8 @@ struct SingleTest
 
         SharedPointer<SWMatrices> mat = SharedPointer<SWMatrices>( new SWMatrices() );
 
-        const uint8* str_hptr = thrust::raw_pointer_cast( &str_hvec.front() );
-        const uint8* ref_hptr = thrust::raw_pointer_cast( &ref_hvec.front() );
+        const uint8* str_hptr = nvbio::plain_view( str_hvec );
+        const uint8* ref_hptr = nvbio::plain_view( ref_hvec );
 
         typename column_storage_type<aligner_type>::type column[N];
 
@@ -259,35 +259,7 @@ struct SingleTest
             log_error(stderr, "    expected %s score %d, got: %d\n", test, ref_score, cpu_score);
             exit(1);
         }
-/*
-        // prepare enough storage for the results, 2 items per warp
-        score_dvec.resize( BLOCKDIM >> 5 );
-        temp_dvec.resize( (BLOCKDIM >> 5) * N * 2);
-        sink_dvec.resize( BLOCKDIM >> 5 );
 
-        // launch a few warps, and let both process the same alignment task
-        sw_test_warp_kernel<BLOCKDIM,256,TYPE> <<<1,BLOCKDIM>>>(
-            M,
-            thrust::raw_pointer_cast(&str_dvec.front()),
-            N,
-            thrust::raw_pointer_cast(&ref_dvec.front()),
-            thrust::raw_pointer_cast(&temp_dvec.front()),
-            scoring,
-            thrust::raw_pointer_cast(&score_dvec.front()),
-            thrust::raw_pointer_cast(&sink_dvec.front()));
-
-        cudaThreadSynchronize();
-
-        const int32 score = int32( score_dvec[0] );
-        if (score != ref_score)
-        {
-            fprintf(stderr,"  \nerror : expected %s score %d, got: %d\n", test, ref_score, score);
-            exit(1);
-        }
-
-        thrust::host_vector<uint2> sink_hvec(sink_dvec);
-        fprintf(stderr, "    sink: %d %d\n", sink_hvec[0].x, sink_hvec[0].y);
-*/
         TestBacktracker backtracker;
         backtracker.clear();
 
@@ -328,8 +300,8 @@ struct SingleTest
     {
         NVBIO_VAR_UNUSED const uint32 CHECKPOINTS = 32u;
 
-        const uint8* str_hptr = thrust::raw_pointer_cast( &str_hvec.front() );
-        const uint8* ref_hptr = thrust::raw_pointer_cast( &ref_hvec.front() );
+        const uint8* str_hptr = nvbio::plain_view( str_hvec );
+        const uint8* ref_hptr = nvbio::plain_view( ref_hvec );
 
         const int32 ref_score = ref_banded_sw<M,N,BAND_LEN>( str_hptr, ref_hptr, 0u, aligner );
 
@@ -748,8 +720,8 @@ void test(int argc, char* argv[])
         thrust::host_vector<uint8> str_hvec( M );
         thrust::host_vector<uint8> ref_hvec( N );
 
-        uint8* str_hptr = thrust::raw_pointer_cast( &str_hvec[0] );
-        uint8* ref_hptr = thrust::raw_pointer_cast( &ref_hvec[0] );
+        uint8* str_hptr = nvbio::plain_view( str_hvec );
+        uint8* ref_hptr = nvbio::plain_view( ref_hvec );
 
         string_to_dna("ACAACTA", str_hptr);
         string_to_dna("AAACACCCTAACACACTAAA", ref_hptr);
@@ -798,8 +770,8 @@ void test(int argc, char* argv[])
         thrust::host_vector<uint8> str_hvec( M );
         thrust::host_vector<uint8> ref_hvec( N );
 
-        uint8* str_hptr = thrust::raw_pointer_cast( &str_hvec[0] );
-        uint8* ref_hptr = thrust::raw_pointer_cast( &ref_hvec[0] );
+        uint8* str_hptr = nvbio::plain_view( str_hvec );
+        uint8* ref_hptr = nvbio::plain_view( ref_hvec );
         string_to_dna("TTATGTAGGTGGTCTGGTTTTTGCCTTTTAAGCTTCTGCAAAAAACAACAACAAACTTGTGGTATTACACTGACTCTACAGATCAATTTGGGGACAACTTCCATGTGTTCCACCACCAATACTGAATCTTTCAATCGACTGACGTGGTAT", str_hptr);
         string_to_dna("ATCGGATTCTTTCTTACTTGTAGGTGGTCTGGTTTTTGCCTTTTAAGCTTCTGCAAAAAACAACAACAAACTTGTGGTATTACACTGACTCTACAGATCAATTTGGGGACAACTTCCATGTGTTCCACCACCAATACTGAATCTTTCAATCGACTGACGTGGTATCTCTCTCTCCATCTAT", ref_hptr);
 
@@ -829,8 +801,8 @@ void test(int argc, char* argv[])
         thrust::host_vector<uint8> str_hvec( M );
         thrust::host_vector<uint8> ref_hvec( N );
 
-        uint8* str_hptr = thrust::raw_pointer_cast( &str_hvec[0] );
-        uint8* ref_hptr = thrust::raw_pointer_cast( &ref_hvec[0] );
+        uint8* str_hptr = nvbio::plain_view( str_hvec );
+        uint8* ref_hptr = nvbio::plain_view( ref_hvec );
 
         const char* str_ascii =
             "TAGGAGGTAACATGTATGGAGCATTTACCATAGGCCAAGCACTGTTCTAAGAACTTCGGACATGTTATCTCACTTGTATAAGTACTTAGGTGCCTACAACATAAGCAGCACCTGGTAAATTAAGTATTGAAAAAATGCAGATCG";
@@ -871,8 +843,8 @@ void test(int argc, char* argv[])
         thrust::host_vector<uint8> str_hvec( M );
         thrust::host_vector<uint8> ref_hvec( N );
 
-        uint8* str_hptr = thrust::raw_pointer_cast( &str_hvec[0] );
-        uint8* ref_hptr = thrust::raw_pointer_cast( &ref_hvec[0] );
+        uint8* str_hptr = nvbio::plain_view( str_hvec );
+        uint8* ref_hptr = nvbio::plain_view( ref_hvec );
 
         const char* str_ascii =
             "TAGGAGGTAACATGTATGGAGCATTTACCATAGGCCAAGCACTGTTCTAAGAACTTCGGACATGTTATCTCACTTGTATAAGTACTTAGGTGCCTACAACATAAGCAGCACCTGGTAAATTAAGTATTGAAAAAATGCAGATCG";

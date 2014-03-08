@@ -709,7 +709,7 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_ty
             }
 
             // we are now (M - block - BAND_LEN) columns from the last one: check whether
-            // we could theoretically reach the minimums core
+            // we could theoretically reach the minimum score
             const score_type missing_cols = score_type(M - block - BAND_LEN);
             if (max_score + missing_cols * scoring.match(255) < score_type( min_score ))
                 return false;
@@ -908,13 +908,13 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
             const score_type ftop = F_band[j] + G_e;
             const score_type htop = H_band[j] + G_o;
             F_band[j] = nvbio::max( ftop, htop );
-            const DirectionVector fdir = ftop > htop ? DELETION_EXT : SUBSTITUTION;
+            const DirectionVector fdir = ftop > htop ? INSERTION_EXT : SUBSTITUTION;
 
             // update E
             const score_type eleft = E + G_e;
             const score_type hleft = H_band[j-1] + G_o;
             E = nvbio::max( eleft, hleft );
-            const DirectionVector edir = eleft > hleft ? INSERTION_EXT : SUBSTITUTION;
+            const DirectionVector edir = eleft > hleft ? DELETION_EXT : SUBSTITUTION;
 
             const symbol_type r_j     = r_cache[ j-1 ];
             const score_type S_ij     = (r_j == q_i) ? m_i : s_i;
@@ -931,8 +931,8 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
                 i,             M,
                 hi,
                 top > left ?
-                    (top  > diagonal ? DELETION  : SUBSTITUTION) :
-                    (left > diagonal ? INSERTION : SUBSTITUTION),
+                    (top  > diagonal ? INSERTION : SUBSTITUTION) :
+                    (left > diagonal ? DELETION  : SUBSTITUTION),
                     edir,
                     fdir );
         }
@@ -1101,6 +1101,12 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
                 for (uint32 j = 1; j <= BAND_LEN; ++j)
                     sink.report( H_band[j], make_uint2( block+j, M ) );
             }
+
+            // we are now (N - block - BAND_LEN) columns from the last one: check whether
+            // we could theoretically reach the minimum score
+            const score_type missing_cols = score_type(N - block - BAND_LEN);
+            if (max_score + missing_cols * scoring.match(255) < score_type( min_score ))
+                return false;
         }
 
         // process the very last stripe

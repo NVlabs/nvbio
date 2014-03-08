@@ -76,7 +76,7 @@ struct SWScoringContext
             for (uint32 i = 0; i < N; ++i)
                 column[i] = equal<algorithm_tag,PatternBlockingTag>() ?
                     TYPE == GLOBAL ? scoring.deletion() * (i+1) : zero :
-                    TYPE != LOCAL  ? scoring.deletion() * (i+1) : zero;
+                    TYPE != LOCAL  ? scoring.insertion() * (i+1) : zero;
         }
     }
 
@@ -159,7 +159,7 @@ struct SWCheckpointedScoringContext
             for (uint32 i = 0; i < N; ++i)
                 column[i] = equal<algorithm_tag,PatternBlockingTag>() ?
                     TYPE == GLOBAL ? scoring.deletion() * (i+1) : zero :
-                    TYPE != LOCAL  ? scoring.deletion() * (i+1) : zero;
+                    TYPE != LOCAL  ? scoring.insertion() * (i+1) : zero;
         }
         else
         {
@@ -658,7 +658,7 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>
             // initialize the first band (corresponding to the 0-th row of the DP matrix)
             #pragma unroll
             for (uint32 j = 0; j <= BAND_LEN; ++j)
-                band[j] = (TYPE != LOCAL) ? G * (block + j) : zero;
+                band[j] = (TYPE != LOCAL) ? I * (block + j) : zero;
 
             // load a block of entries from each query
             #pragma unroll
@@ -706,7 +706,7 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>
 
             // initialize the first band (corresponding to the 0-th row of the DP matrix)
             for (uint32 j = 0; j <= BAND_LEN; ++j)
-                band[j] = (TYPE != LOCAL) ? G * (block + j) : zero;
+                band[j] = (TYPE != LOCAL) ? I * (block + j) : zero;
 
             // load a block of entries from each query
             const uint32 block_end = nvbio::min( block + BAND_LEN, M );
@@ -917,8 +917,8 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
             const symbol_type r_j     = r_cache[ j-1 ];
             const score_type S_ij     = (r_j == q_i) ? m_i : s_i;
             const score_type diagonal = prev      + S_ij;
-            const score_type top      = band[j]   + G;
-            const score_type left     = band[j-1] + I;
+            const score_type top      = band[j]   + I;
+            const score_type left     = band[j-1] + G;
                   score_type hi       = nvbio::max3( top, left, diagonal );
                              hi       = TYPE == LOCAL ? nvbio::max( hi, zero ) : hi; // clamp to zero
                              prev     = band[j];
@@ -929,8 +929,8 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
                 i,             M,
                 hi,
                 top > left ?
-                    (top  > diagonal ? DELETION  : SUBSTITUTION) :
-                    (left > diagonal ? INSERTION : SUBSTITUTION) );
+                    (top  > diagonal ? INSERTION : SUBSTITUTION) :
+                    (left > diagonal ? DELETION  : SUBSTITUTION) );
         }
 
         // save the last entry of the band
@@ -1086,7 +1086,7 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
             // initialize the first band (corresponding to the 0-th row of the DP matrix)
             #pragma unroll
             for (uint32 j = 0; j <= BAND_LEN; ++j)
-                band[j] = (TYPE != LOCAL) ? G * (block + j) : zero;
+                band[j] = (TYPE == GLOBAL) ? G * (block + j) : zero;
 
             // load a block of entries from the reference
             #pragma unroll
@@ -1137,6 +1137,11 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
 
             // save the previous column
             context.previous_column( block, M, temp );
+
+            // initialize the first band (corresponding to the 0-th row of the DP matrix)
+            #pragma unroll
+            for (uint32 j = 0; j <= BAND_LEN; ++j)
+                band[j] = (TYPE == GLOBAL) ? G * (block + j) : zero;
 
             // load a block of entries from each query
             const uint32 block_end = nvbio::min( block + BAND_LEN, N );

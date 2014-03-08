@@ -331,6 +331,17 @@ EditDistanceAligner<TYPE,algorithm_tag> make_edit_distance_aligner()
     return EditDistanceAligner<TYPE,algorithm_tag>();
 }
 
+template <AlignmentType TYPE>
+EditDistanceAligner<TYPE,TextBlockingTag> transpose(const EditDistanceAligner<TYPE,PatternBlockingTag>& aligner)
+{
+    return EditDistanceAligner<TYPE,TextBlockingTag>();
+}
+template <AlignmentType TYPE, typename scoring_scheme_type>
+EditDistanceAligner<TYPE,PatternBlockingTag> transpose(const EditDistanceAligner<TYPE,TextBlockingTag>& aligner)
+{
+    return EditDistanceAligner<TYPE,PatternBlockingTag>();
+}
+
 /// A Gotoh alignment algorithm, see \ref Aligner
 /// \anchor GotohAligner
 ///
@@ -391,6 +402,17 @@ GotohAligner<TYPE,scoring_scheme_type,algorithm_tag> make_gotoh_aligner(const sc
     return GotohAligner<TYPE,scoring_scheme_type,algorithm_tag>( scheme );
 }
 
+template <AlignmentType TYPE, typename scoring_scheme_type>
+GotohAligner<TYPE,scoring_scheme_type,TextBlockingTag> transpose(const GotohAligner<TYPE,scoring_scheme_type,PatternBlockingTag>& aligner)
+{
+    return GotohAligner<TYPE,scoring_scheme_type,TextBlockingTag>( aligner.scheme );
+}
+template <AlignmentType TYPE, typename scoring_scheme_type>
+GotohAligner<TYPE,scoring_scheme_type,PatternBlockingTag> transpose(const GotohAligner<TYPE,scoring_scheme_type,TextBlockingTag>& aligner)
+{
+    return GotohAligner<TYPE,scoring_scheme_type,PatternBlockingTag>( aligner.scheme );
+}
+
 /// A Smith-Waterman alignment algorithm, see \ref Aligner
 /// \anchor SmithWatermanAligner
 ///
@@ -435,6 +457,17 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 SmithWatermanAligner<TYPE,scoring_scheme_type> make_smith_waterman_aligner(const scoring_scheme_type& scheme)
 {
     return SmithWatermanAligner<TYPE,scoring_scheme_type>( scheme );
+}
+
+template <AlignmentType TYPE, typename scoring_scheme_type>
+SmithWatermanAligner<TYPE,scoring_scheme_type,TextBlockingTag> transpose(const SmithWatermanAligner<TYPE,scoring_scheme_type,PatternBlockingTag>& aligner)
+{
+    return SmithWatermanAligner<TYPE,scoring_scheme_type,TextBlockingTag>( aligner.scheme );
+}
+template <AlignmentType TYPE, typename scoring_scheme_type>
+SmithWatermanAligner<TYPE,scoring_scheme_type,PatternBlockingTag> transpose(const SmithWatermanAligner<TYPE,scoring_scheme_type,TextBlockingTag>& aligner)
+{
+    return SmithWatermanAligner<TYPE,scoring_scheme_type,PatternBlockingTag>( aligner.scheme );
 }
 
 ///@} // end of the Aligner group

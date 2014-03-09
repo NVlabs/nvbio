@@ -225,6 +225,20 @@ namespace aln {
 ///
 enum AlignmentType { GLOBAL, LOCAL, SEMI_GLOBAL };
 
+///@defgroup AlgorithmTag Algorithm Tags
+/// Algorithm tags are used to specify a DP algorithm.
+/// In order to avoid expensive memory transactions, the algorithms we designed block the
+/// matrix in stripes that are processed in registers. The blocking can happen either along
+/// the pattern or along the text. To communicate the values across stripes, the right-most
+/// column of each stripe must be stored in memory - hence the two algorithms differ for
+/// the amount of temporary storage needed (for long texts, text-blocking is preferred).
+///@{
+
+struct PatternBlockingTag {};  ///< block along the pattern
+struct TextBlockingTag {};     ///< block along the text (at the moment, this is only supported for scoring)
+
+///@} // end of AlgorithmTag group
+
 ///@defgroup AlignerTag Aligner Tags
 /// Aligner tags are used to specify the algorithmic family of an \ref Aligner "Aligner" (which can
 /// in general be a parametric object).
@@ -232,9 +246,6 @@ enum AlignmentType { GLOBAL, LOCAL, SEMI_GLOBAL };
 /// For example the SmithWatermanAligner <TYPE,scoring_scheme_type> has an
 /// aligner tag of type SmithWatermanTag.
 ///@{
-
-struct PatternBlockingTag {};  ///< block along the pattern
-struct TextBlockingTag {};     ///< block along the text
 
 struct SmithWatermanTag {}; ///< the Smith-Waterman aligner tag
 struct GotohTag {};         ///< the Gotoh aligner tag

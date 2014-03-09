@@ -241,6 +241,8 @@ template <typename T> struct transpose_tag {};
 template <>           struct transpose_tag<PatternBlockingTag> { typedef TextBlockingTag type; };
 template <>           struct transpose_tag<TextBlockingTag>    { typedef PatternBlockingTag type; };
 
+template <typename T> struct transpose_aligner {};
+
 ///@} // end of AlgorithmTag group
 
 ///@defgroup AlignerTag Aligner Tags
@@ -332,6 +334,12 @@ struct EditDistanceAligner
     typedef AlgorithmType               algorithm_tag;  ///< the \ref AlgorithmTag "Algorithm Tag"
 };
 
+template <AlignmentType T_TYPE, typename AlgorithmTag>
+struct transpose_aligner< EditDistanceAligner<T_TYPE,AlgorithmTag> >
+{
+    typedef EditDistanceAligner<T_TYPE, typename transpose_tag<AlgorithmTag>::type> type;
+};
+
 template <AlignmentType TYPE>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 EditDistanceAligner<TYPE> make_edit_distance_aligner()
@@ -403,6 +411,12 @@ struct GotohAligner
     scoring_scheme_type scheme;
 };
 
+template <AlignmentType T_TYPE, typename scoring_scheme_type, typename AlgorithmTag>
+struct transpose_aligner< GotohAligner<T_TYPE, scoring_scheme_type, AlgorithmTag> >
+{
+    typedef GotohAligner<T_TYPE, scoring_scheme_type, typename transpose_tag<AlgorithmTag>::type> type;
+};
+
 template <AlignmentType TYPE, typename scoring_scheme_type>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 GotohAligner<TYPE,scoring_scheme_type> make_gotoh_aligner(const scoring_scheme_type& scheme)
@@ -465,6 +479,12 @@ struct SmithWatermanAligner
     SmithWatermanAligner(const scoring_scheme_type _scheme) : scheme(_scheme) {}
 
     scoring_scheme_type scheme;
+};
+
+template <AlignmentType T_TYPE, typename scoring_scheme_type, typename AlgorithmTag>
+struct transpose_aligner< SmithWatermanAligner<T_TYPE, scoring_scheme_type, AlgorithmTag> >
+{
+    typedef SmithWatermanAligner<T_TYPE, scoring_scheme_type, typename transpose_tag<AlgorithmTag>::type> type;
 };
 
 template <AlignmentType TYPE, typename scoring_scheme_type>

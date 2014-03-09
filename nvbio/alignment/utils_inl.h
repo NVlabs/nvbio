@@ -37,10 +37,10 @@ namespace aln {
 // Calculate the maximum possible number of pattern gaps that could occur in a
 // given score boundary
 //
-template <AlignmentType TYPE>
+template <AlignmentType TYPE, typename algorithm_tag>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
 uint32 max_pattern_gaps(
-    const EditDistanceAligner<TYPE>&                aligner,
+    const EditDistanceAligner<TYPE,algorithm_tag>&  aligner,
 	int32                                           min_score,
     int32                                           pattern_len)
 {
@@ -51,10 +51,10 @@ uint32 max_pattern_gaps(
 // Calculate the maximum possible number of reference gaps that could occur in a
 // given score boundary
 //
-template <AlignmentType TYPE>
+template <AlignmentType TYPE, typename algorithm_tag>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
 uint32 max_text_gaps(
-    const EditDistanceAligner<TYPE>&                aligner,
+    const EditDistanceAligner<TYPE,algorithm_tag>&  aligner,
 	int32                                           min_score,
     int32                                           pattern_len)
 {
@@ -65,12 +65,12 @@ uint32 max_text_gaps(
 // Calculate the maximum possible number of pattern gaps that could occur in a
 // given score boundary
 //
-template <AlignmentType TYPE, typename scoring_scheme_type>
+template <AlignmentType TYPE, typename scoring_scheme_type, typename algorithm_tag>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
 uint32 max_pattern_gaps(
-    const SmithWatermanAligner<TYPE,scoring_scheme_type>&   scoring,
-	int32                                                   min_score,
-	int32                                                   pattern_len)
+    const SmithWatermanAligner<TYPE,scoring_scheme_type,algorithm_tag>& scoring,
+	int32                                                               min_score,
+	int32                                                               pattern_len)
 {
 	// compute the optimal score
 	int32 score = pattern_len * scoring.scheme.match(30);
@@ -92,12 +92,12 @@ uint32 max_pattern_gaps(
 // Calculate the maximum possible number of reference gaps that could occur in a
 // given score boundary
 //
-template <AlignmentType TYPE, typename scoring_scheme_type>
+template <AlignmentType TYPE, typename scoring_scheme_type, typename algorithm_tag>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
 uint32 max_text_gaps(
-    const SmithWatermanAligner<TYPE,scoring_scheme_type>&   scoring,
-	int32                                                   min_score,
-	int32                                                   pattern_len)
+    const SmithWatermanAligner<TYPE,scoring_scheme_type,algorithm_tag>& scoring,
+	int32                                                               min_score,
+	int32                                                               pattern_len)
 {
 	// compute the optimal score
 	int32 score = pattern_len * scoring.scheme.match(30);
@@ -119,12 +119,12 @@ uint32 max_text_gaps(
 // Calculate the maximum possible number of pattern gaps that could occur in a
 // given score boundary
 //
-template <AlignmentType TYPE, typename scoring_scheme_type>
+template <AlignmentType TYPE, typename scoring_scheme_type, typename algorithm_tag>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
 uint32 max_pattern_gaps(
-    const GotohAligner<TYPE,scoring_scheme_type>&   scoring,
-	int32                                           min_score,
-	int32                                           pattern_len)
+    const GotohAligner<TYPE,scoring_scheme_type,algorithm_tag>& scoring,
+	int32                                                       min_score,
+	int32                                                       pattern_len)
 {
 	// compute the optimal score
 	int32 score = pattern_len * scoring.scheme.match(30);
@@ -149,12 +149,12 @@ uint32 max_pattern_gaps(
 // Calculate the maximum possible number of reference gaps that could occur in a
 // given score boundary
 //
-template <AlignmentType TYPE, typename scoring_scheme_type>
+template <AlignmentType TYPE, typename scoring_scheme_type, typename algorithm_tag>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
 uint32 max_text_gaps(
-    const GotohAligner<TYPE,scoring_scheme_type>&   scoring,
-	int32                                           min_score,
-	int32                                           pattern_len)
+    const GotohAligner<TYPE,scoring_scheme_type,algorithm_tag>& scoring,
+	int32                                                       min_score,
+	int32                                                       pattern_len)
 {
 	// compute the optimal score
 	int32 score = pattern_len * scoring.scheme.match(30);

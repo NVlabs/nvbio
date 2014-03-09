@@ -237,6 +237,10 @@ enum AlignmentType { GLOBAL, LOCAL, SEMI_GLOBAL };
 struct PatternBlockingTag {};  ///< block along the pattern
 struct TextBlockingTag {};     ///< block along the text (at the moment, this is only supported for scoring)
 
+template <typename T> struct transpose_tag {};
+template <>           struct transpose_tag<PatternBlockingTag> { typedef TextBlockingTag type; };
+template <>           struct transpose_tag<TextBlockingTag>    { typedef PatternBlockingTag type; };
+
 ///@} // end of AlgorithmTag group
 
 ///@defgroup AlignerTag Aligner Tags

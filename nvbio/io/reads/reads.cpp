@@ -291,8 +291,8 @@ void ReadDataRAM::push_back(uint32 read_len,
                             const char *name,
                             const uint8* read,
                             const uint8* quality,
-                            QualityEncoding q_encoding,
-                            uint32 truncate_read_len,
+                            const QualityEncoding q_encoding,
+                            const uint32 truncate_read_len,
                             const ReadEncoding conversion_flags)
 {
     // truncate read
@@ -321,8 +321,6 @@ void ReadDataRAM::push_back(uint32 read_len,
             bp = complement_bp(bp);
         }
 
-        // xxx: note that we're pushing in reverse order by default
-        // this is to be consistent with reads_fastq.cpp
         if (conversion_flags & REVERSE)
         {
             stream[m_read_stream_len + read_len - i - 1] = nst_nt4_encode(bp);

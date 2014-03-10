@@ -133,11 +133,17 @@ struct FMIndexData
     typedef PackedStream<const uint32*,uint8,2,true>          stream_type;
     typedef PackedStream<      uint32*,uint8,2,true> nonconst_stream_type;
 
-    typedef SSA_index_multiple<SA_INT> SSA_type;
-    typedef SSA_type::context_type     SSA_context;
+    typedef SSA_index_multiple<SA_INT>  SSA_type;
+    typedef SSA_type::context_type      SSA_context;
 
-    typedef rank_dictionary<2u,OCC_INT,stream_type,const uint32*,const uint32*> rank_dict_type;
-    typedef fm_index<rank_dict_type, SSA_type::context_type>                    fm_index_type;
+    typedef const uint32*               occ_type;
+    typedef const uint32*               bwt_type;
+    typedef const uint32*               count_table_type;
+    typedef SSA_context                 ssa_type;
+
+    typedef rank_dictionary<2u,OCC_INT,stream_type,occ_type,count_table_type>   rank_dict_type;
+    typedef fm_index<rank_dict_type, ssa_type>                                  fm_index_type;
+    typedef fm_index<rank_dict_type, null_type>                         partial_fm_index_type;
 
              FMIndexData();                                                 ///< empty constructor
     virtual ~FMIndexData() {}                                               ///< virtual destructor
@@ -152,6 +158,29 @@ struct FMIndexData
     const uint32* rbwt_stream()   const { return m_rbwt_stream; }           ///< return the reverse BWT stream
     const uint32*  occ_stream()   const { return m_occ; }                   ///< return the occurrence table
     const uint32* rocc_stream()   const { return m_rocc; }                  ///< return the reverse occurrence table
+
+    // FM-index accessors
+    //
+    occ_type  occ_iterator() { return occ_type( occ_stream()); }
+    occ_type rocc_iterator() { return occ_type(rocc_stream()); }
+
+    bwt_type  bwt_iterator() { return bwt_type( bwt_stream()); }
+    bwt_type rbwt_iterator() { return bwt_type(rbwt_stream()); }
+
+    ssa_type  ssa_iterator() { return ssa; }
+    ssa_type rssa_iterator() { return rssa; }
+
+    count_table_type count_table_iterator() { return count_table; }
+
+    rank_dict_type  rank_dict() { return rank_dict_type(  bwt_iterator(),  occ_iterator(), count_table_iterator() ); }
+    rank_dict_type rrank_dict() { return rank_dict_type( rbwt_iterator(), rocc_iterator(), count_table_iterator() ); }
+
+    fm_index_type  index() { return fm_index_type( genome_length(),  primary,  L2,  rank_dict(),  ssa_iterator() ); }
+    fm_index_type rindex() { return fm_index_type( genome_length(), rprimary, rL2, rrank_dict(), rssa_iterator() ); }
+
+    partial_fm_index_type  partial_index() { return partial_fm_index_type( genome_length(),  primary,  L2,  rank_dict(), null_type() ); }
+    partial_fm_index_type rpartial_index() { return partial_fm_index_type( genome_length(), rprimary, rL2, rrank_dict(), null_type() ); }
+
 
     uint32             m_flags;
     uint32             seq_length;
@@ -295,6 +324,33 @@ struct FMIndexDataCUDA : public FMIndexData
     static const uint32 REVERSE = 0x04;
     static const uint32 SA      = 0x10;
 
+    // FM-index type interfaces
+    //
+    typedef cuda::ldg_pointer<uint4>                            bwt_occ_type;
+    typedef deinterleaved_iterator<2,0,bwt_occ_type>            bwt_type;
+    typedef deinterleaved_iterator<2,1,bwt_occ_type>            occ_type;
+    typedef cuda::ldg_pointer<uint32>                           count_table_type;
+    typedef cuda::ldg_pointer<uint32>                           ssa_ldg_type;
+
+    typedef rank_dictionary<
+        2u,
+        FMIndexDataCUDA::OCC_INT,
+        PackedStream<bwt_type,uint8,2u,true>,
+        occ_type,
+        count_table_type>                                       rank_dict_type;
+
+    typedef SSA_index_multiple_context<
+        FMIndexDataCUDA::SA_INT,
+        ssa_ldg_type>                                           ssa_type;
+
+    typedef fm_index<
+        rank_dict_type,
+        ssa_type>                                               fm_index_type;
+
+    typedef fm_index<
+        rank_dict_type,
+        null_type>                                              partial_fm_index_type;
+
     /// load a host-memory FM-index in device memory
     ///
     /// \param host_data                                host-memory FM-index to load
@@ -306,6 +362,28 @@ struct FMIndexDataCUDA : public FMIndexData
 
     const uint32*  bwt_occ() const { return thrust::raw_pointer_cast( &m_bwt_occ.front() ); }  ///< return the fused forward BWT & occurrence tables
     const uint32* rbwt_occ() const { return thrust::raw_pointer_cast( &m_rbwt_occ.front() ); } ///< return the fused reverse BWT & occurrence tables
+
+    /// iterators access
+    ///
+    occ_type  occ_iterator() { return occ_type(bwt_occ_type((const uint4*) bwt_occ())); }
+    occ_type rocc_iterator() { return occ_type(bwt_occ_type((const uint4*)rbwt_occ())); }
+
+    bwt_type  bwt_iterator() { return bwt_type(bwt_occ_type((const uint4*) bwt_occ())); }
+    bwt_type rbwt_iterator() { return bwt_type(bwt_occ_type((const uint4*)rbwt_occ())); }
+
+    ssa_type  ssa_iterator() { return ssa_type(ssa_ldg_type( ssa.m_ssa)); }
+    ssa_type rssa_iterator() { return ssa_type(ssa_ldg_type(rssa.m_ssa)); }
+
+    count_table_type count_table_iterator() { return count_table_type( count_table ); }
+
+    rank_dict_type  rank_dict() { return rank_dict_type(  bwt_iterator(),  occ_iterator(), count_table_iterator() ); }
+    rank_dict_type rrank_dict() { return rank_dict_type( rbwt_iterator(), rocc_iterator(), count_table_iterator() ); }
+
+    fm_index_type  index() { return fm_index_type( genome_length(),  primary,  L2,  rank_dict(),  ssa_iterator() ); }
+    fm_index_type rindex() { return fm_index_type( genome_length(), rprimary, rL2, rrank_dict(), rssa_iterator() ); }
+
+    partial_fm_index_type  partial_index() { return partial_fm_index_type( genome_length(),  primary,  L2,  rank_dict(), null_type() ); }
+    partial_fm_index_type rpartial_index() { return partial_fm_index_type( genome_length(), rprimary, rL2, rrank_dict(), null_type() ); }
 
 private:
     uint64                        m_allocated;          ///< # of allocated device memory bytes

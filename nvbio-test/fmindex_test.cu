@@ -807,46 +807,14 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
     io::FMIndexDataRAM fmi;
     if (fmi.load( index_file, io::FMIndexData::FORWARD ))
     {
-        typedef PackedStream<const uint32*,uint8,2u,true>   host_bwt_type;
-        typedef rank_dictionary<2u,
-            io::FMIndexData::OCC_INT,
-            host_bwt_type,
-            const uint32*,
-            const uint32*>                                  host_rank_dict_type;
-
-        typedef fm_index<host_rank_dict_type,null_type>     host_fmindex_type;
-
-        typedef PackedStream<io::FMIndexLdgIterators::bwt_type,uint8,2u,true> bwt_type;
-        typedef rank_dictionary<2u,
-            io::FMIndexDataCUDA::OCC_INT,
-            bwt_type,
-            io::FMIndexLdgIterators::occ_type,
-            io::FMIndexLdgIterators::count_table_type>                      rank_dict_type;
-
-        typedef fm_index<rank_dict_type,io::FMIndexLdgIterators::ssa_type>  fmindex_type;
+        typedef io::FMIndexData::partial_fm_index_type     host_fmindex_type;
+        typedef io::FMIndexDataCUDA::fm_index_type         cuda_fmindex_type;
 
         io::FMIndexDataCUDA fmi_cuda( fmi, io::FMIndexDataCUDA::FORWARD );
-        io::FMIndexLdgIterators fmi_iterators( fmi_cuda );
 
-        host_fmindex_type host_fmindex(
-            fmi.genome_length(),
-            fmi.primary,
-            fmi.L2,
-            host_rank_dict_type(
-                fmi.bwt_stream(),
-                fmi.occ_stream(),
-                fmi.count_table ),
-            null_type() );
+        host_fmindex_type host_fmindex = fmi.partial_index();
 
-        fmindex_type fmindex_cuda(
-            fmi_cuda.genome_length(),
-            fmi_cuda.primary,
-            fmi_cuda.L2,
-            rank_dict_type(
-                fmi_iterators.bwt_iterator(),
-                fmi_iterators.occ_iterator(),
-                fmi_iterators.count_table() ),
-            fmi_iterators.ssa_iterator() );
+        cuda_fmindex_type fmindex_cuda = fmi_cuda.index();
 
         io::ReadDataStream* reads_file = io::open_read_file(
             reads_name,

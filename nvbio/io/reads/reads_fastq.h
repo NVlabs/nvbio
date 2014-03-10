@@ -55,8 +55,9 @@ protected:
                               const QualityEncoding quality_encoding,
                               const uint32 max_reads,
                               const uint32 max_read_len,
+                              const ReadEncoding flags,
                               const uint32 buffer_size = 64536u)
-      : ReadDataFile(max_reads, max_read_len),
+      : ReadDataFile(max_reads, max_read_len, flags),
         m_file_name(read_file_name),
         m_quality_encoding(quality_encoding),
         m_buffer(buffer_size),
@@ -109,6 +110,7 @@ struct ReadDataFile_FASTQ_gz : public ReadDataFile_FASTQ_parser
                           const QualityEncoding qualities,
                           const uint32 max_reads,
                           const uint32 max_read_len,
+                          const ReadEncoding flags,
                           const uint32 buffer_size = 64536u);
 
     virtual FileState fillBuffer(void);
@@ -120,6 +122,22 @@ private:
 ///@} // ReadsIODetail
 ///@} // ReadsIO
 ///@} // IO
+
+inline uint8 ReadDataFile_FASTQ_parser::get(void)
+{
+    if (m_buffer_pos >= m_buffer_size)
+    {
+        // grab more data from the underlying file
+        m_file_state = fillBuffer();
+        m_buffer_pos = 0;
+
+        // if we failed to read more data, return \0
+        if (m_file_state != FILE_OK)
+            return 0;
+    }
+
+    return m_buffer[m_buffer_pos++];
+}
 
 } // namespace io
 } // namespace nvbio

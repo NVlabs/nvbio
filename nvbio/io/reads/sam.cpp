@@ -37,8 +37,9 @@ namespace io {
 
 ReadDataFile_SAM::ReadDataFile_SAM(const char *read_file_name,
                                    const uint32 max_reads,
-                                   const uint32 truncate_read_len)
-  : ReadDataFile(max_reads, truncate_read_len)
+                                   const uint32 truncate_read_len,
+                                   const ReadEncoding flags)
+  : ReadDataFile(max_reads, truncate_read_len, flags)
 {
     fp = gzopen(read_file_name, "rt");
     if (fp == Z_NULL)
@@ -331,7 +332,17 @@ int ReadDataFile_SAM::nextChunk(ReadDataRAM *output, uint32 max_reads)
 
     if (read_flags & SAMFlag_ReverseComplemented)
     {
-        conversion_flags = ReadDataRAM::REVERSE | ReadDataRAM::COMPLEMENT;
+        if ((m_flags & REVERSE) == 0)
+            conversion_flags |= REVERSE;
+        if ((m_flags & COMPLEMENT) == 0)
+            conversion_flags |= COMPLEMENT;
+    }
+    else
+    {
+        if (m_flags & REVERSE)
+            conversion_flags |= REVERSE;
+        if (m_flags & COMPLEMENT)
+            conversion_flags |= COMPLEMENT;
     }
 
     // add the read
@@ -341,7 +352,7 @@ int ReadDataFile_SAM::nextChunk(ReadDataRAM *output, uint32 max_reads)
                       (uint8*)qual,
                       Phred33,
                       m_truncate_read_len,
-                      conversion_flags);
+                      ReadEncoding( conversion_flags ));
 
     // we always input 1 read at a time here
     return 1;

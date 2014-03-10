@@ -81,6 +81,13 @@ enum QualityEncoding
     Solexa = 3,
 };
 
+// describes the quality encoding for a given read file
+enum ReadEncoding
+{
+    REVERSE    = 0x0001,
+    COMPLEMENT = 0x0002,
+};
+
 // how mates of a paired-end read are encoded
 // F = forward, R = reverse
 enum PairedEndPolicy
@@ -230,18 +237,12 @@ struct ReadDataRAM : public ReadData
 {
     ReadDataRAM();
 
-    /// conversion flags for push_back
-    enum {
-        REVERSE    = 0x0001,
-        COMPLEMENT = 0x0002,
-    };
-
     /// add a read to the end of this batch
     ///
     void push_back(const uint32 in_read_len,
                    const char *name, const uint8 *base_pairs,
                    const uint8 *quality, QualityEncoding q_encoding,
-                   uint32 truncate_read_len, uint32 conversion_flags);
+                   uint32 truncate_read_len, const ReadEncoding conversion_flags);
 
     /// signals that the batch is complete
     ///
@@ -311,7 +312,8 @@ struct ReadDataStream
 ReadDataStream *open_read_file(const char *          read_file_name,
                                const QualityEncoding qualities,
                                const uint32          max_reads = uint32(-1),
-                               const uint32          max_read_len = uint32(-1));
+                               const uint32          max_read_len = uint32(-1),
+                               const ReadEncoding    flags = REVERSE);
 
 ///@} // ReadsIO
 ///@} // IO

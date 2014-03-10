@@ -54,7 +54,8 @@ struct ReadDataFile_BAM : public ReadDataFile
     ///
     ReadDataFile_BAM(const char *read_file_name,
                      const uint32 max_reads,
-                     const uint32 max_read_len);
+                     const uint32 max_read_len,
+                     const ReadEncoding flags);
 
     /// read the next chunk
     ///

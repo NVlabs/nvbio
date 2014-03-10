@@ -42,7 +42,8 @@ namespace io {
 ReadDataStream *open_read_file(const char*           read_file_name,
                                const QualityEncoding qualities,
                                const uint32          max_reads,
-                               const uint32          truncate_read_len)
+                               const uint32          truncate_read_len,
+                               const ReadEncoding    flags)
 {
     // parse out file extension; look for .fastq.gz, .fastq suffixes
     uint32 len = uint32( strlen(read_file_name) );
@@ -66,7 +67,8 @@ ReadDataStream *open_read_file(const char*           read_file_name,
             return new ReadDataFile_FASTQ_gz(read_file_name,
                                              qualities,
                                              max_reads,
-                                             truncate_read_len);
+                                             truncate_read_len,
+                                             flags);
         }
     }
 
@@ -77,7 +79,8 @@ ReadDataStream *open_read_file(const char*           read_file_name,
             return new ReadDataFile_FASTQ_gz(read_file_name,
                                              qualities,
                                              max_reads,
-                                             truncate_read_len);
+                                             truncate_read_len,
+                                             flags);
         }
     }
 
@@ -90,7 +93,8 @@ ReadDataStream *open_read_file(const char*           read_file_name,
 
             ret = new ReadDataFile_SAM(read_file_name,
                                        max_reads,
-                                       truncate_read_len);
+                                       truncate_read_len,
+                                       flags);
 
             if (ret->init() == false)
             {
@@ -111,7 +115,8 @@ ReadDataStream *open_read_file(const char*           read_file_name,
 
             ret = new ReadDataFile_BAM(read_file_name,
                                        max_reads,
-                                       truncate_read_len);
+                                       truncate_read_len,
+                                       flags);
 
             if (ret->init() == false)
             {
@@ -128,7 +133,8 @@ ReadDataStream *open_read_file(const char*           read_file_name,
     return new ReadDataFile_FASTQ_gz(read_file_name,
                                      qualities,
                                      max_reads,
-                                     truncate_read_len);
+                                     truncate_read_len,
+                                     flags);
 }
 
 namespace { // anonymous
@@ -287,7 +293,7 @@ void ReadDataRAM::push_back(uint32 read_len,
                             const uint8* quality,
                             QualityEncoding q_encoding,
                             uint32 truncate_read_len,
-                            uint32 conversion_flags)
+                            const ReadEncoding conversion_flags)
 {
     // truncate read
     // xxx: should we do this silently?
@@ -319,11 +325,11 @@ void ReadDataRAM::push_back(uint32 read_len,
         // this is to be consistent with reads_fastq.cpp
         if (conversion_flags & REVERSE)
         {
-            stream[m_read_stream_len + i] = nst_nt4_encode(bp);
-            m_qual_vec[m_read_stream_len + i] = convert_to_phred_quality(q_encoding, quality[i]);
-        } else {
             stream[m_read_stream_len + read_len - i - 1] = nst_nt4_encode(bp);
             m_qual_vec[m_read_stream_len + read_len - i - 1] = convert_to_phred_quality(q_encoding, quality[i]);
+        } else {
+            stream[m_read_stream_len + i] = nst_nt4_encode(bp);
+            m_qual_vec[m_read_stream_len + i] = convert_to_phred_quality(q_encoding, quality[i]);
         }
     }
 

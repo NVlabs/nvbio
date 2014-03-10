@@ -64,9 +64,11 @@ struct ReadDataFile : public ReadDataStream
 
 protected:
     ReadDataFile(const uint32 max_reads,
-                 const uint32 truncate_read_len)
+                 const uint32 truncate_read_len,
+                 const ReadEncoding flags)
       : ReadDataStream(truncate_read_len),
         m_max_reads(max_reads),
+        m_flags(flags),
         m_loaded(0),
         m_file_state(FILE_NOT_READY)
     {};
@@ -87,6 +89,7 @@ protected:
     virtual int nextChunk(ReadDataRAM *output, uint32 max_reads) = 0;
 
     uint32                  m_max_reads;
+    ReadEncoding            m_flags;
     uint32                  m_loaded;
 
     // current file state

@@ -162,7 +162,7 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
                           &m_read_q[0],
                           m_quality_encoding,
                           m_truncate_read_len,
-                          0);
+                          m_flags);
 
         ++n;
     }
@@ -170,28 +170,13 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
     return n;
 }
 
-uint8 ReadDataFile_FASTQ_parser::get(void)
-{
-    if (m_buffer_pos >= m_buffer_size)
-    {
-        // grab more data from the underlying file
-        m_file_state = fillBuffer();
-        m_buffer_pos = 0;
-
-        // if we failed to read more data, return \0
-        if (m_file_state != FILE_OK)
-            return 0;
-    }
-
-    return m_buffer[m_buffer_pos++];
-}
-
 ReadDataFile_FASTQ_gz::ReadDataFile_FASTQ_gz(const char *read_file_name,
                                              const QualityEncoding qualities,
                                              const uint32 max_reads,
                                              const uint32 max_read_len,
+                                             const ReadEncoding flags,
                                              const uint32 buffer_size)
-    : ReadDataFile_FASTQ_parser(read_file_name, qualities, max_reads, max_read_len)
+    : ReadDataFile_FASTQ_parser(read_file_name, qualities, max_reads, max_read_len, flags)
 {
     m_file = gzopen(read_file_name, "r");
     if (!m_file) {

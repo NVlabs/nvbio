@@ -299,7 +299,8 @@ int main(int argc, char* argv[])
                 nvbio::io::open_read_file(argv[arg_offset+1],
                                           qencoding,
                                           max_reads,
-                                          max_read_len)
+                                          max_read_len,
+                                          REVERSE)
             );
 
             if (read_data_file1 == NULL || read_data_file1->is_ok() == false)
@@ -313,7 +314,8 @@ int main(int argc, char* argv[])
                 nvbio::io::open_read_file(argv[arg_offset+2],
                                           qencoding,
                                           max_reads,
-                                          max_read_len)
+                                          max_read_len,
+                                          REVERSE)
             );
 
             if (read_data_file2 == NULL || read_data_file2->is_ok() == false)
@@ -331,7 +333,8 @@ int main(int argc, char* argv[])
                 nvbio::io::open_read_file(argv[arg_offset+1],
                                           qencoding,
                                           max_reads,
-                                          max_read_len)
+                                          max_read_len,
+                                          REVERSE)
             );
 
             if (read_data_file == NULL || read_data_file->is_ok() == false)

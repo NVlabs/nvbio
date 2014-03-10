@@ -57,8 +57,6 @@ namespace io {
 /// - FMIndexDataMMAPServer
 /// - FMIndexDataMMAP
 /// - FMIndexDataCUDA
-/// - FMIndexIterators
-/// - FMIndexLdgIterators
 ///
 
 ///@addtogroup IO
@@ -397,116 +395,6 @@ void init_ssa(
     const FMIndexDataCUDA&              driver_data,
     FMIndexDataCUDA::SSA_device_type&   ssa,
     FMIndexDataCUDA::SSA_device_type&   rssa);
-
-#if defined(__CUDACC__)
-struct FMIndexLdgIterators
-{
-    typedef cuda::ldg_pointer<uint4>                            bwt_occ_type;
-    typedef deinterleaved_iterator<2,0,bwt_occ_type>            bwt_type;
-    typedef deinterleaved_iterator<2,1,bwt_occ_type>            occ_type;
-    typedef cuda::ldg_pointer<uint32>                           count_table_type;
-    typedef cuda::ldg_pointer<uint32>                           ssa_ldg_type;
-
-    typedef rank_dictionary<
-        2u,
-        FMIndexDataCUDA::OCC_INT,
-        PackedStream<bwt_type,uint8,2u,true>,
-        occ_type,
-        count_table_type>                                       rank_dict_type;
-
-    typedef SSA_index_multiple_context<
-        FMIndexDataCUDA::SA_INT,
-        ssa_ldg_type>                                           ssa_type;
-
-    FMIndexLdgIterators(const FMIndexDataCUDA& driver_data) : m_driver_data( driver_data ) {}
-
-    occ_type  occ_iterator() { return occ_type(bwt_occ_type((const uint4*) m_driver_data.bwt_occ())); }
-    occ_type rocc_iterator() { return occ_type(bwt_occ_type((const uint4*)m_driver_data.rbwt_occ())); }
-
-    bwt_type  bwt_iterator() { return bwt_type(bwt_occ_type((const uint4*) m_driver_data.bwt_occ())); }
-    bwt_type rbwt_iterator() { return bwt_type(bwt_occ_type((const uint4*)m_driver_data.rbwt_occ())); }
-
-    ssa_type  ssa_iterator() { return ssa_type(ssa_ldg_type( m_driver_data.ssa.m_ssa)); }
-    ssa_type rssa_iterator() { return ssa_type(ssa_ldg_type(m_driver_data.rssa.m_ssa)); }
-
-    count_table_type count_table() { return count_table_type( m_driver_data.count_table ); }
-
-    rank_dict_type  rank_dict() { return rank_dict_type(  bwt_iterator(),  occ_iterator(), count_table() ); }
-    rank_dict_type rrank_dict() { return rank_dict_type( rbwt_iterator(), rocc_iterator(), count_table() ); }
-
-    const FMIndexDataCUDA& m_driver_data;
-};
-#else
-struct FMIndexLdgIterators
-{
-    typedef cuda::ldg_pointer<uint4>                            bwt_type;
-    typedef cuda::ldg_pointer<uint4>                            occ_type;
-    typedef cuda::ldg_pointer<uint32>                           count_table_type;
-    typedef cuda::ldg_pointer<uint32>                           ssa_ldg_type;
-
-    typedef rank_dictionary<
-        2u,
-        FMIndexDataCUDA::OCC_INT,
-        PackedStream<bwt_type,uint8,2u,true>,
-        occ_type,
-        count_table_type>                                       rank_dict_type;
-
-    typedef SSA_index_multiple_context<
-        FMIndexDataCUDA::SA_INT,
-        ssa_ldg_type>                                           ssa_type;
-
-    FMIndexLdgIterators(const FMIndexDataCUDA& driver_data) : m_driver_data( driver_data ) {}
-
-    occ_type  occ_iterator() { return occ_type((const uint4*) m_driver_data.occ_stream()); }
-    occ_type rocc_iterator() { return occ_type((const uint4*)m_driver_data.rocc_stream()); }
-
-    bwt_type  bwt_iterator() { return bwt_type((const uint4*) m_driver_data.bwt_stream()); }
-    bwt_type rbwt_iterator() { return bwt_type((const uint4*)m_driver_data.rbwt_stream()); }
-
-    ssa_type  ssa_iterator() { return ssa_type(ssa_ldg_type( m_driver_data.ssa.m_ssa)); }
-    ssa_type rssa_iterator() { return ssa_type(ssa_ldg_type(m_driver_data.rssa.m_ssa)); }
-
-    count_table_type count_table() { return count_table_type( m_driver_data.count_table ); }
-
-    rank_dict_type  rank_dict() { return rank_dict_type(  bwt_iterator(),  occ_iterator(), count_table() ); }
-    rank_dict_type rrank_dict() { return rank_dict_type( rbwt_iterator(), rocc_iterator(), count_table() ); }
-
-    const FMIndexDataCUDA& m_driver_data;
-};
-#endif // __CUDACC__
-
-struct FMIndexIterators
-{
-    typedef const uint4*                occ_type;
-    typedef const uint4*                bwt_type;
-    typedef const uint32*               count_table_type;
-    typedef FMIndexData::SSA_context    ssa_type;
-
-    typedef rank_dictionary<
-        2u,
-        FMIndexDataCUDA::OCC_INT,
-        PackedStream<bwt_type,uint8,2u,true>,
-        occ_type,
-        count_table_type>               rank_dict_type;
-
-    FMIndexIterators(const FMIndexData& driver_data) : m_driver_data( driver_data ) {}
-
-    occ_type  occ_iterator() { return occ_type(m_driver_data.occ_stream()); }
-    occ_type rocc_iterator() { return occ_type(m_driver_data.rocc_stream()); }
-
-    bwt_type  bwt_iterator() { return bwt_type(m_driver_data.bwt_stream()); }
-    bwt_type rbwt_iterator() { return bwt_type(m_driver_data.rbwt_stream()); }
-
-    ssa_type  ssa_iterator() { return m_driver_data.ssa; }
-    ssa_type rssa_iterator() { return m_driver_data.rssa; }
-
-    count_table_type count_table() { return m_driver_data.count_table; }
-
-    rank_dict_type  rank_dict() { return rank_dict_type(  bwt_iterator(),  occ_iterator(), count_table() ); }
-    rank_dict_type rrank_dict() { return rank_dict_type( rbwt_iterator(), rocc_iterator(), count_table() ); }
-
-    const FMIndexData& m_driver_data;
-};
 
 ///@} // FMIndexIO
 ///@} // IO

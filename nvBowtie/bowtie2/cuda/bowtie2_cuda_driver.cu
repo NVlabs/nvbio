@@ -223,29 +223,10 @@ int driver(
 
     log_stats(stderr, "  allocated device driver data (%.2f GB - %.1fs)\n", float(driver_data.allocated()) / 1.0e9f, timer.seconds() );
 
-    typedef FMIndexDef::driver_data_iterators                               driver_data_iterators;
-    typedef driver_data_iterators::count_table_type                         count_table_type;
-    typedef driver_data_iterators::occ_type                                 occ_type;
-    typedef driver_data_iterators::bwt_type                                 bwt_type;
-    typedef driver_data_iterators::ssa_type                                 ssa_type;
-    typedef FMIndexDef::type                                                fm_index_type;
+    typedef FMIndexDef::type fm_index_type;
 
-    // instantiate iterators / bind textures
-    driver_data_iterators driver_data_it( driver_data );
-    nvbio::cuda::check_error("texture bindings"); \
-
-    fm_index_type fmi(
-        genome_length,
-        driver_data.primary,
-        driver_data.L2,
-        driver_data_it.rank_dict(),
-        driver_data_it.ssa_iterator() );
-    fm_index_type rfmi(
-        genome_length,
-        driver_data.rprimary,
-        driver_data.rL2,
-        driver_data_it.rrank_dict(),
-        driver_data_it.rssa_iterator() );
+    fm_index_type fmi  = driver_data.index();
+    fm_index_type rfmi = driver_data.rindex();
 
     Aligner aligner;
 
@@ -596,29 +577,10 @@ int driver(
 
     log_stats(stderr, "  allocated device driver data (%.2f GB)\n", float(driver_data.allocated()) / 1.0e9f );
 
-    typedef FMIndexDef::driver_data_iterators                               driver_data_iterators;
-    typedef driver_data_iterators::count_table_type                         count_table_type;
-    typedef driver_data_iterators::occ_type                                 occ_type;
-    typedef driver_data_iterators::bwt_type                                 bwt_type;
-    typedef driver_data_iterators::ssa_type                                 ssa_type;
-    typedef FMIndexDef::type                                                fm_index_type;
+    typedef FMIndexDef::type fm_index_type;
 
-    // instantiate iterators / bind textures
-    driver_data_iterators driver_data_it( driver_data );
-    nvbio::cuda::check_error("texture bindings"); \
-
-    fm_index_type fmi(
-        genome_length,
-        driver_data.primary,
-        driver_data.L2,
-        driver_data_it.rank_dict(),
-        driver_data_it.ssa_iterator() );
-    fm_index_type rfmi(
-        genome_length,
-        driver_data.rprimary,
-        driver_data.rL2,
-        driver_data_it.rrank_dict(),
-        driver_data_it.rssa_iterator() );
+    fm_index_type fmi  = driver_data.index();
+    fm_index_type rfmi = driver_data.rindex();
 
     Aligner aligner;
 

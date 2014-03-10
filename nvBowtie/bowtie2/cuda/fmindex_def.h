@@ -36,14 +36,12 @@ namespace cuda {
 
 struct FMIndexDef
 {
-    typedef TEX_SELECTOR( io::FMIndexIterators, io::FMIndexLdgIterators )   driver_data_iterators;
-    typedef driver_data_iterators::count_table_type                         count_table_type;
-    typedef driver_data_iterators::occ_type                                 occ_type;
-    typedef driver_data_iterators::bwt_type                                 bwt_type;
-    typedef driver_data_iterators::ssa_type                                 ssa_type;
-    typedef driver_data_iterators::rank_dict_type                           rank_dict_type;
-
-    typedef fm_index<rank_dict_type,ssa_type>                               type;
+    typedef io::FMIndexDataCUDA::count_table_type                         count_table_type;
+    typedef io::FMIndexDataCUDA::occ_type                                 occ_type;
+    typedef io::FMIndexDataCUDA::bwt_type                                 bwt_type;
+    typedef io::FMIndexDataCUDA::ssa_type                                 ssa_type;
+    typedef io::FMIndexDataCUDA::rank_dict_type                           rank_dict_type;
+    typedef io::FMIndexDataCUDA::fm_index_type                            type;
 };
 
 } // namespace cuda

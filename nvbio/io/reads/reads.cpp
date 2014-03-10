@@ -341,11 +341,14 @@ void ReadDataRAM::push_back(uint32 read_len,
     }
 
     // encode the read data
+    const ReadEncoding REVERSE_COMPLEMENT = ReadEncoding(REVERSE | COMPLEMENT);
+    const ReadEncoding FORWARD            = ReadEncoding(0);
+
     ReadData::read_stream_type stream(&m_read_vec[0]);
     if (conversion_flags & REVERSE)
     {
         if (conversion_flags & COMPLEMENT)
-            encode<ReadEncoding(REVERSE | COMPLEMENT)>( read_len, read, quality, q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
+            encode<REVERSE_COMPLEMENT>( read_len, read, quality, q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
         else
             encode<REVERSE>( read_len, read, quality, q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
     }
@@ -354,7 +357,7 @@ void ReadDataRAM::push_back(uint32 read_len,
         if (conversion_flags & COMPLEMENT)
             encode<COMPLEMENT>( read_len, read, quality, q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
         else
-            encode<ReadEncoding(0)>( read_len, read, quality, q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
+            encode<FORWARD>( read_len, read, quality, q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
     }
 
     // update read and bp counts

@@ -239,7 +239,7 @@ struct ReadDataRAM : public ReadData
 
     /// add a read to the end of this batch
     ///
-    void push_back(const uint32             in_read_len,
+    void push_back(uint32                   in_read_len,
                    const char*              name,
                    const uint8*             base_pairs,
                    const uint8*             quality,

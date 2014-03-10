@@ -286,6 +286,36 @@ void ReadDataRAM::end_batch(void)
     m_name_index = &m_name_index_vec[0];
 }
 
+template <ReadEncoding conversion_flags>
+void encode(
+    const uint32               read_len,
+    const uint8*               read,
+    const uint8*               quality,
+    const QualityEncoding      q_encoding,
+    const uint32               stream_offset,
+    ReadData::read_stream_type stream,
+    char*                      qual_stream)
+{
+    for(uint32 i = 0; i < read_len; i++)
+    {
+        char bp = read[i];
+
+        if (conversion_flags & COMPLEMENT)
+        {
+            bp = complement_bp(bp);
+        }
+
+        if (conversion_flags & REVERSE)
+        {
+            stream[stream_offset + read_len - i - 1] = nst_nt4_encode(bp);
+            qual_stream[stream_offset + read_len - i - 1] = convert_to_phred_quality(q_encoding, quality[i]);
+        } else {
+            stream[stream_offset + i] = nst_nt4_encode(bp);
+            qual_stream[stream_offset + i] = convert_to_phred_quality(q_encoding, quality[i]);
+        }
+    }
+}
+
 // add a read to this batch
 void ReadDataRAM::push_back(uint32 read_len,
                             const char *name,
@@ -312,23 +342,19 @@ void ReadDataRAM::push_back(uint32 read_len,
 
     // encode the read data
     ReadData::read_stream_type stream(&m_read_vec[0]);
-    for(uint32 i = 0; i < read_len; i++)
+    if (conversion_flags & REVERSE)
     {
-        char bp = read[i];
-
         if (conversion_flags & COMPLEMENT)
-        {
-            bp = complement_bp(bp);
-        }
-
-        if (conversion_flags & REVERSE)
-        {
-            stream[m_read_stream_len + read_len - i - 1] = nst_nt4_encode(bp);
-            m_qual_vec[m_read_stream_len + read_len - i - 1] = convert_to_phred_quality(q_encoding, quality[i]);
-        } else {
-            stream[m_read_stream_len + i] = nst_nt4_encode(bp);
-            m_qual_vec[m_read_stream_len + i] = convert_to_phred_quality(q_encoding, quality[i]);
-        }
+            encode<ReadEncoding(REVERSE | COMPLEMENT)>( read_len, read, quality, q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
+        else
+            encode<REVERSE>( read_len, read, quality, q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
+    }
+    else
+    {
+        if (conversion_flags & COMPLEMENT)
+            encode<COMPLEMENT>( read_len, read, quality, q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
+        else
+            encode<ReadEncoding(0)>( read_len, read, quality, q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
     }
 
     // update read and bp counts

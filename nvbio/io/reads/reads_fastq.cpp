@@ -176,7 +176,7 @@ ReadDataFile_FASTQ_gz::ReadDataFile_FASTQ_gz(const char *read_file_name,
                                              const uint32 max_read_len,
                                              const ReadEncoding flags,
                                              const uint32 buffer_size)
-    : ReadDataFile_FASTQ_parser(read_file_name, qualities, max_reads, max_read_len, flags)
+    : ReadDataFile_FASTQ_parser(read_file_name, qualities, max_reads, max_read_len, flags, buffer_size)
 {
     m_file = gzopen(read_file_name, "r");
     if (!m_file) {

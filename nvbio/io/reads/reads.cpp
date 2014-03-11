@@ -166,7 +166,8 @@ inline unsigned char nst_nt4_encode(unsigned char c)
 }
 
 // convert a quality value in one of the supported encodings to Phred
-inline unsigned char convert_to_phred_quality(const QualityEncoding encoding, const uint8 q)
+template <QualityEncoding encoding>
+inline unsigned char convert_to_phred_quality(const uint8 q)
 {
     // this table maps Solexa quality values to Phred scale
     static unsigned char s_solexa_to_phred[] = {
@@ -286,6 +287,35 @@ void ReadDataRAM::end_batch(void)
     m_name_index = &m_name_index_vec[0];
 }
 
+template <ReadEncoding conversion_flags, QualityEncoding q_encoding>
+void encode(
+    const uint32               read_len,
+    const uint8*               read,
+    const uint8*               quality,
+    const uint32               stream_offset,
+    ReadData::read_stream_type stream,
+    char*                      qual_stream)
+{
+    for(uint32 i = 0; i < read_len; i++)
+    {
+        uint8 bp = nst_nt4_encode( read[i] );
+
+        if (conversion_flags & COMPLEMENT)
+            bp = bp < 4u ? 3u - bp : 4u;
+
+        if (conversion_flags & REVERSE)
+        {
+            stream[stream_offset + read_len - i - 1] = bp;
+            qual_stream[stream_offset + read_len - i - 1] = convert_to_phred_quality<q_encoding>(quality[i]);
+        }
+        else
+        {
+            stream[stream_offset + i] = bp;
+            qual_stream[stream_offset + i] = convert_to_phred_quality<q_encoding>(quality[i]);
+        }
+    }
+}
+
 template <ReadEncoding conversion_flags>
 void encode(
     const uint32               read_len,
@@ -296,24 +326,14 @@ void encode(
     ReadData::read_stream_type stream,
     char*                      qual_stream)
 {
-    for(uint32 i = 0; i < read_len; i++)
-    {
-        char bp = read[i];
-
-        if (conversion_flags & COMPLEMENT)
-        {
-            bp = complement_bp(bp);
-        }
-
-        if (conversion_flags & REVERSE)
-        {
-            stream[stream_offset + read_len - i - 1] = nst_nt4_encode(bp);
-            qual_stream[stream_offset + read_len - i - 1] = convert_to_phred_quality(q_encoding, quality[i]);
-        } else {
-            stream[stream_offset + i] = nst_nt4_encode(bp);
-            qual_stream[stream_offset + i] = convert_to_phred_quality(q_encoding, quality[i]);
-        }
-    }
+    if (q_encoding == Phred)
+        encode<conversion_flags,Phred>( read_len, read, quality, stream_offset, stream, qual_stream );
+    else if (q_encoding == Phred33)
+        encode<conversion_flags,Phred33>( read_len, read, quality, stream_offset, stream, qual_stream );
+    else if (q_encoding == Phred64)
+        encode<conversion_flags,Phred64>( read_len, read, quality, stream_offset, stream, qual_stream );
+    else if (q_encoding == Solexa)
+        encode<conversion_flags,Solexa>( read_len, read, quality, stream_offset, stream, qual_stream );
 }
 
 // add a read to this batch

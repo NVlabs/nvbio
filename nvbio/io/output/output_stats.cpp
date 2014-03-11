@@ -185,5 +185,11 @@ void IOStats::track_alignment_statistics(AlignmentStats*        mate,
     }
 }
 
+void IOStats::track_alignment_statistics(const AlignmentData&   alignment,
+                                         const uint8            mapq)
+{
+    track_alignment_statistics( &mate1, alignment, mapq );
+}
+
 }
 }

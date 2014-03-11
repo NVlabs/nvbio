@@ -583,6 +583,8 @@ void SamOutput::end_batch(void)
 
                 mapq = process_one_alignment(alignment, mate);
 
+                // track per-alignment statistics
+                iostats.track_alignment_statistics(alignment, mapq);
                 break;
 
             case PAIRED_END:
@@ -592,11 +594,10 @@ void SamOutput::end_batch(void)
                 mapq = process_one_alignment(alignment, mate);
                 process_one_alignment(mate, alignment);
 
+                // track per-alignment statistics
+                iostats.track_alignment_statistics(alignment, mate, mapq);
                 break;
         }
-
-        // track per-alignment statistics
-        iostats.track_alignment_statistics(alignment, mate, mapq);
     }
 
     OutputFile::end_batch();

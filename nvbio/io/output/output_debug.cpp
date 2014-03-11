@@ -178,10 +178,15 @@ void DebugOutput::process_one_alignment(const AlignmentData& mate_1, const Align
         // process the second mate
         process_one_mate(al, info, mate_2, mate_1, mapq);
         output_alignment(fp_opposite_mate, al, info);
-    }
 
-    // track per-alignment statistics
-    iostats.track_alignment_statistics(anchor, opposite_mate, mapq);
+        // track per-alignment statistics
+        iostats.track_alignment_statistics(anchor, opposite_mate, mapq);
+    }
+    else
+    {
+        // track per-alignment statistics
+        iostats.track_alignment_statistics(anchor, mapq);
+    }
 }
 
 // fill out al and info for a given mate

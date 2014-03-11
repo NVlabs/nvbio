@@ -325,19 +325,17 @@ float enact_batch(
           batch_type&               batch,
     const stream_type&              stream)
 {
-    // alloc all the needed temporary storage
+    // allow to alloc all the needed temporary storage
     const uint64 temp_size = batch_type::max_temp_storage(
         stream.max_pattern_length(),
         stream.max_text_length(),
         stream.size() );
 
-    thrust::device_vector<uint8> temp_dvec( temp_size );
-
     Timer timer;
     timer.start();
 
     // enact the batch
-    batch.enact( stream, temp_size, nvbio::device_view( temp_dvec ) );
+    batch.enact( stream, temp_size, NULL );
 
     cudaDeviceSynchronize();
 
@@ -556,7 +554,7 @@ int main(int argc, char* argv[])
 
     while (1)
     {
-        io::ReadData* h_read_data = read_data_file->next( batch_size );
+        SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_size ) );
         if (h_read_data == NULL)
             break;
 

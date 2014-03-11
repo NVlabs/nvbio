@@ -326,14 +326,21 @@ void encode(
     ReadData::read_stream_type stream,
     char*                      qual_stream)
 {
-    if (q_encoding == Phred)
+    switch (q_encoding)
+    {
+    case Phred:
         encode<conversion_flags,Phred>( read_len, read, quality, stream_offset, stream, qual_stream );
-    else if (q_encoding == Phred33)
+        break;
+    case Phred33:
         encode<conversion_flags,Phred33>( read_len, read, quality, stream_offset, stream, qual_stream );
-    else if (q_encoding == Phred64)
+        break;
+    case Phred64:
         encode<conversion_flags,Phred64>( read_len, read, quality, stream_offset, stream, qual_stream );
-    else if (q_encoding == Solexa)
+        break;
+    case Solexa:
         encode<conversion_flags,Solexa>( read_len, read, quality, stream_offset, stream, qual_stream );
+        break;
+    }
 }
 
 // add a read to this batch

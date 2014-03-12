@@ -108,7 +108,8 @@ int ReadDataFile_TXT::nextChunk(ReadDataRAM *output, uint32 max)
         else
         {
             // add a character to the current read
-            m_read_bp.push_back( c );
+            if (isgraph(c))
+                m_read_bp.push_back( c );
 
             state = IN_READ;
         }

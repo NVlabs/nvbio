@@ -29,6 +29,7 @@
 
 #include <nvbio/basic/strided_iterator.h>
 #include <nvbio/basic/packedstream.h>
+#include <nvbio/basic/vector_wrapper.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
@@ -156,6 +157,8 @@ struct ReadDataView
     static const bool   HI_BITS   = false;
 
     typedef PackedStream<read_iterator,uint8,READ_BITS,HI_BITS> read_stream_type;
+    typedef typename read_stream_type::iterator                 read_stream_iterator;
+    typedef vector_wrapper<read_stream_iterator>                read_string;
 
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_iterator  name_stream()     const { return m_name_stream; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator name_index()      const { return m_name_index;  }
@@ -171,6 +174,15 @@ struct ReadDataView
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  min_read_len()            const { return m_min_read_len; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  avg_read_len()            const { return m_avg_read_len; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint2   get_range(const uint32 i) const { return make_uint2(m_read_index[i],m_read_index[i+1]); }
+
+    /// return the i-th read as a string
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE read_string get_read(const uint32 i) const
+    {
+        const uint2            read_range = get_range( i );
+        const read_stream_type reads( read_stream() );
+        return read_string( read_range.y - read_range.x, reads.begin() + read_range.x );
+    }
 
 public:
     // number of reads in this struct

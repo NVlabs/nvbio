@@ -28,6 +28,7 @@
 #include <nvbio/io/reads/reads.h>
 #include <nvbio/io/reads/reads_priv.h>
 #include <nvbio/io/reads/reads_fastq.h>
+#include <nvbio/io/reads/reads_txt.h>
 #include <nvbio/io/reads/sam.h>
 #include <nvbio/io/reads/bam.h>
 #include <nvbio/basic/console.h>
@@ -72,6 +73,7 @@ ReadDataStream *open_read_file(const char*           read_file_name,
         }
     }
 
+    // check for fastq suffix
     if (len >= strlen(".fq"))
     {
         if (strncmp(&read_file_name[len - strlen(".fq")], ".fq", strlen(".fq")) == 0)
@@ -81,6 +83,19 @@ ReadDataStream *open_read_file(const char*           read_file_name,
                                              max_reads,
                                              truncate_read_len,
                                              flags);
+        }
+    }
+
+    // check for txt suffix
+    if (len >= strlen(".txt"))
+    {
+        if (strncmp(&read_file_name[len - strlen(".txt")], ".txt", strlen(".txt")) == 0)
+        {
+            return new ReadDataFile_TXT_gz(read_file_name,
+                                           qualities,
+                                           max_reads,
+                                           truncate_read_len,
+                                           flags);
         }
     }
 

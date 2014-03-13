@@ -921,6 +921,23 @@ struct is_false_functor
     result_type operator() (const T op) const { return op ? false : true; }
 };
 
+/// A unary functor returning true if op == K
+///
+template <typename T>
+struct equal_to_functor
+{
+    typedef T    argument_type;
+    typedef bool result_type;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    equal_to_functor(const T k) : m_k( k ) {}
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const T op) const { return op == m_k; }
+
+    const T m_k;
+};
+
 /// A binary functor returning true if op1 == op2
 ///
 template <typename T>

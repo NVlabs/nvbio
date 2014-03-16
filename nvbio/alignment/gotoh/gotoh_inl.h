@@ -544,8 +544,6 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_ty
         }
 
         // save the last entry of the band
-        //temp[2*i  ] = H_band[ BAND_LEN ];
-        //temp[2*i+1] = E;
         temp[i] = make_vector<temp_scalar_type>( H_band[ BAND_LEN ], E );
 
         NVBIO_CUDA_ASSERT( H_band[ BAND_LEN ] >= Field_traits<temp_scalar_type>::min() );
@@ -932,8 +930,8 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
             if ((CHECK_N == false) || (block + j <= N))
             {
                 context.new_cell(
-                    block + j - 1, N,
                     i,             M,
+                    block + j - 1, N,
                     hi,
                     top > left ?
                         (top  > diagonal ? INSERTION : SUBSTITUTION) :
@@ -1242,7 +1240,7 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
         const uint32        window_begin,
         const uint32        window_end)
     {
-        // instantiated a local memory array
+        // instantiate a local memory array
         short2  temp[MAX_PATTERN_LEN];
         short2* temp_ptr = temp;
 

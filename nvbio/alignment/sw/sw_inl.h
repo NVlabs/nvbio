@@ -930,8 +930,8 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
             if ((CHECK_N == false) || (block + j <= N))
             {
                 context.new_cell(
-                    block + j - 1, N,
                     i,             M,
+                    block + j - 1, N,
                     hi,
                     top > left ?
                         (top  > diagonal ? INSERTION : SUBSTITUTION) :

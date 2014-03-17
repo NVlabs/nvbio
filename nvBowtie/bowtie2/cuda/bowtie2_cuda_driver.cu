@@ -98,8 +98,6 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.scoring_mode     = scoring_mode( string_option(options, "scoring", init ? "ed"  : scoring_mode( params.scoring_mode )).c_str() ); // scoring mode
     params.alignment_type   = uint_option(options, "local",            init ? 0u      : params.alignment_type == LocalAlignment ) ? LocalAlignment : EndToEndAlignment;           // local alignment
     params.keep_stats       = (bool)uint_option(options, "stats",      init ? 1u      : params.keep_stats);           // keep stats
-    params.seed_len         = uint_option(options, "seed-len",         init ? 22u     : params.seed_len);             // no greater than 32
-    params.seed_freq        = uint_option(options, "seed-freq",        init ? 15u     : params.seed_freq);            // seed interval
     params.max_hits         = uint_option(options, "max-hits",         init ? 100u    : params.max_hits);             // too big = memory exhaustion 
     params.max_dist         = uint_option(options, "max-dist",         init ? 15u     : params.max_dist);             // must be <= MAX_BAND_LEN/2
     params.max_effort_init  = uint_option(options, "max-effort-init",  init ? 15u     : params.max_effort_init);      // initial scoring effort limit
@@ -109,13 +107,20 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.max_reseed       = uint_option(options, "max-reseed",       init ? 2u      : params.max_reseed);           // max # of reseeding rounds
     params.rep_seeds        = uint_option(options, "rep-seeds",        init ? 1000u   : params.rep_seeds);            // reseeding threshold
     params.allow_sub        = uint_option(options, "N",                init ? 0u      : params.allow_sub);            // allow substitution in seed
-    params.subseed_len      = uint_option(options, "subseed-len",      init ? 0u      : params.subseed_len);          // no greater than 32
     params.mapq_filter      = uint_option(options, "mapQ-filter",      init ? 0u      : params.mapq_filter);          // filter anything below this
     params.report           = string_option(options, "report",         init ? ""      : params.report.c_str());       // generate a report file
     params.scoring_file     = string_option(options, "scoring-scheme", init ? ""      : params.scoring_file.c_str());
     params.randomized       = uint_option(options, "rand",             init ? 0u      : params.randomized);           // use randomized selection
     params.top_seed         = uint_option(options, "top",              init ? 0u      : params.top_seed);             // explore top seed entirely
     params.min_read_len     = uint_option(options, "min-read-len",     init ? 12u     : params.min_read_len);         // minimum read length
+
+    const bool local = params.alignment_type == LocalAlignment;
+
+    params.seed_len         = uint_option(options, "seed-len",         init ? (local ? 20 : 22u)        : params.seed_len);    // no greater than 32
+    params.seed_freq.type   = SimpleFunc::SqrtFunc;
+    params.seed_freq.k      = 1.0f;
+    params.seed_freq.m      = float_option(options, "seed-freq",       init ? (local ? 0.75f : 1.15)    : params.seed_freq.m); // seed interval
+    params.subseed_len      = uint_option(options, "subseed-len",      init ? 0u      : params.subseed_len);          // no greater than 32
 
     params.pe_overlap    = uint_option(options, "overlap",          init ? 1u      : params.pe_overlap);            // paired-end overlap
     params.pe_dovetail   = uint_option(options, "dovetail",         init ? 0u      : params.pe_dovetail);           // paired-end dovetail
@@ -195,7 +200,7 @@ int driver(
     log_visible(stderr, "  scoring        = %s\n", scoring_mode( params.scoring_mode ));
     log_visible(stderr, "  alignment type = %s\n", params.alignment_type == LocalAlignment ? "local" : "end-to-end");
     log_visible(stderr, "  seed length    = %u\n", params.seed_len);
-    log_visible(stderr, "  seed interval  = %u\n", params.seed_freq);
+    log_visible(stderr, "  seed interval  = (S, %.3f, %.3f)\n", params.seed_freq.k, params.seed_freq.m);
     log_visible(stderr, "  max hits       = %u\n", params.max_hits);
     log_visible(stderr, "  max edit dist  = %u (band len %u)\n", params.max_dist, band_len);
     log_visible(stderr, "  max effort     = %u\n", params.max_effort);
@@ -551,7 +556,7 @@ int driver(
                                                    pe_policy == io::PE_POLICY_RF ? "rf" :
                                                                                    "rr" );
     log_visible(stderr, "  seed length    = %u\n", params.seed_len);
-    log_visible(stderr, "  seed interval  = %u\n", params.seed_freq);
+    log_visible(stderr, "  seed interval  = (S, %.3f, %.3f)\n", params.seed_freq.k, params.seed_freq.m);
     log_visible(stderr, "  max hits       = %u\n", params.max_hits);
     log_visible(stderr, "  max edit dist  = %u (band len %u)\n", params.max_dist, band_len);
     log_visible(stderr, "  max effort     = %u\n", params.max_effort);

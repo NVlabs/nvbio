@@ -93,6 +93,26 @@ inline uint32 scoring_mode(const char* str)
         return EditDistanceMode;
 }
 
+struct SimpleFunc
+{
+    enum Type { LinearFunc = 0, LogFunc = 1, SqrtFunc };
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    SimpleFunc(const Type _type = LinearFunc, const float _k = 0.0f, const float _m = 1.0f) : type(_type), k(_k), m(_m) {}
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    int32 operator() (const int32 x) const
+    {
+        return int32( k + m * (type == LogFunc  ?  logf(float(x)) :
+                               type == SqrtFunc ? sqrtf(float(x)) :
+                                                        float(x)) );
+    }
+
+    Type  type;
+    float k;
+    float m;
+};
+
 ///
 /// A POD structure holding all of nvBowtie's parameters
 ///
@@ -105,7 +125,7 @@ struct ParamsPOD
     uint32        alignment_type;
     uint32        top_seed;
     uint32        seed_len;
-    uint32        seed_freq;
+    SimpleFunc    seed_freq;
     uint32        max_hits;
     uint32        max_dist;
     uint32        max_effort_init;

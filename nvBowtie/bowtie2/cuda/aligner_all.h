@@ -77,7 +77,11 @@ void Aligner::all(
 
     uint64 n_alignments = 0;
 
-    for (uint32 seed = 0; seed < read_data.max_read_len() / params.seed_freq; ++seed)
+    uint32 max_seeds = 0u;
+    for (uint32 s = read_data.min_read_len(); s <= read_data.max_read_len(); ++s)
+        max_seeds = nvbio::max( max_seeds, uint32( s / params.seed_freq(s) ) );
+
+    for (uint32 seed = 0; seed < max_seeds; ++seed)
     {
         // initialize the seed hit counts
         hit_deques.clear_deques();

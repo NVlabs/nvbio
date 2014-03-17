@@ -497,15 +497,17 @@ void map_kernel(
     const uint32 read_id = queues.in_queue[ thread_id ];
     NVBIO_CUDA_ASSERT( read_id < read_batch.size() );
     const uint2  read_range = read_batch.get_range( read_id );
+    const uint32 read_len   = read_range.y - read_range.x;
 
     // filter away short strings
-    if (read_range.y - read_range.x < params.min_read_len)
+    if (read_len < params.min_read_len)
     {
         hits.resize_deque( read_id, 0 );
         return;
     }
 
-    const uint32 retry_stride = params.seed_freq/(params.max_reseed+1);
+    const uint32 seed_freq    = (uint32)params.seed_freq( read_len );
+    const uint32 retry_stride = seed_freq/(params.max_reseed+1);
 
     SeedHit local_hits[512];
     typedef SeedHitDequeArrayDeviceView::hit_vector_type hit_storage_type;
@@ -516,7 +518,7 @@ void map_kernel(
     uint32 range_count = 0;
 
     // loop over seeds
-    for (uint32 pos = read_range.x + retry * retry_stride; pos + params.seed_len <= read_range.y; pos += params.seed_freq)
+    for (uint32 pos = read_range.x + retry * retry_stride; pos + params.seed_len <= read_range.y; pos += seed_freq)
     {
         seed_mapper<ALGO>::enact(
             read_batch, fmi, rfmi,
@@ -570,15 +572,17 @@ void map_kernel(
     if (thread_id >= read_batch.size()) return;
     const uint32 read_id = thread_id;
     const uint2  read_range = read_batch.get_range( read_id );
+    const uint32 read_len   = read_range.y - read_range.x;
 
     // filter away short strings
-    if (read_range.y - read_range.x < params.min_read_len)
+    if (read_len < params.min_read_len)
     {
         hits.resize_deque( read_id, 0 );
         return;
     }
 
-    const uint32 retry_stride = params.seed_freq/(params.max_reseed+1);
+    const uint32 seed_freq    = (uint32)params.seed_freq( read_len );
+    const uint32 retry_stride = seed_freq/(params.max_reseed+1);
 
     SeedHit local_hits[512];
     typedef SeedHitDequeArrayDeviceView::hit_vector_type hit_storage_type;
@@ -594,7 +598,7 @@ void map_kernel(
 
         for (uint32 i = seed_range.x; i < seed_range.y; ++i)
         {
-            const uint32 pos = read_range.x + retry * retry_stride + i * params.seed_freq;
+            const uint32 pos = read_range.x + retry * retry_stride + i * seed_freq;
             if (pos + params.seed_len > read_range.y)
                 break;
 

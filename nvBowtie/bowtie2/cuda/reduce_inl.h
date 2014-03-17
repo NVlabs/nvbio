@@ -123,6 +123,7 @@ void score_reduce_kernel(
             // set the first best score
             best.m_a2 = best.m_a1;
             best.m_a1 = io::Alignment( g_pos, 0u, score, read_rc );
+            NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_reduce( read_id ), "update best:   (parent[%u:%u])\n  score[%d], rc[%u], pos[%u]\n", thread_id, i, score, read_rc, g_pos );
         }
         else if ((score > best.m_a2.score()) && io::distinct_alignments( best.m_a1.m_align, best.m_a1.m_rc, g_pos, read_rc, read_len/2 ))
         {
@@ -130,6 +131,7 @@ void score_reduce_kernel(
 
             // set the second best score
             best.m_a2 = io::Alignment( g_pos, 0u, score, read_rc );
+            NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_reduce( read_id ), "update second: (parent[%u:%u])\n  score[%d], rc[%u], pos[%u]\n", thread_id, i, score, read_rc, g_pos );
         }
         else if (context.failure( i, read_id, top_flag, params ))
         {

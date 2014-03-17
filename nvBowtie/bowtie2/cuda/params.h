@@ -95,7 +95,7 @@ inline uint32 scoring_mode(const char* str)
 
 struct SimpleFunc
 {
-    enum Type { LinearFunc = 0, LogFunc = 1, SqrtFunc };
+    enum Type { LinearFunc = 0, LogFunc = 1, SqrtFunc = 2 };
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     SimpleFunc(const Type _type = LinearFunc, const float _k = 0.0f, const float _m = 1.0f) : type(_type), k(_k), m(_m) {}
@@ -106,6 +106,19 @@ struct SimpleFunc
         return int32( k + m * (type == LogFunc  ?  logf(float(x)) :
                                type == SqrtFunc ? sqrtf(float(x)) :
                                                         float(x)) );
+    }
+
+    const char* type_string() const
+    {
+        return type == LogFunc  ? "log" :
+               type == SqrtFunc ? "sqrt" :
+                                  "linear";
+    }
+    const char* type_symbol() const
+    {
+        return type == LogFunc  ? "G" :
+               type == SqrtFunc ? "S" :
+                                  "L";
     }
 
     Type  type;

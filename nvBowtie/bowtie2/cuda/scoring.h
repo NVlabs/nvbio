@@ -375,7 +375,7 @@ make_aligner(const scheme_type& scheme) { return make_aligner_dispatch<TYPE,sche
 
 /// load a Smith-Waterman scoring scheme from disk
 ///
-SmithWatermanScoringScheme<> load_scoring_scheme(const char* name);
+SmithWatermanScoringScheme<> load_scoring_scheme(const char* name, const AlignmentType type);
 
 ///
 /// An uber class containing both an EditDistanceScoringScheme and a SmithWatermanScoringScheme,

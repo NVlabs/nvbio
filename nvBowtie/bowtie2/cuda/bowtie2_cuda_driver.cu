@@ -289,7 +289,7 @@ int driver(
 
     // load scoring scheme from file
     if (params.scoring_file != "")
-        scoring_scheme.sw = load_scoring_scheme( params.scoring_file.c_str() );
+        scoring_scheme.sw = load_scoring_scheme( params.scoring_file.c_str(), AlignmentType( params.alignment_type ) );
 
     Stats stats( params );
 
@@ -647,7 +647,7 @@ int driver(
 
     // load scoring scheme from file
     if (params.scoring_file != "")
-        scoring_scheme.sw = load_scoring_scheme( params.scoring_file.c_str() );
+        scoring_scheme.sw = load_scoring_scheme( params.scoring_file.c_str(), AlignmentType( params.alignment_type ) );
 
     Stats stats( params );
 

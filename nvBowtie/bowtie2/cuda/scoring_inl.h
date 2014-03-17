@@ -34,7 +34,7 @@ namespace bowtie2 {
 namespace cuda {
 
 inline
-SmithWatermanScoringScheme<> load_scoring_scheme(const char* name)
+SmithWatermanScoringScheme<> load_scoring_scheme(const char* name, const AlignmentType type)
 {
     FILE* file = fopen( name, "r" );
     if (file == NULL)
@@ -49,7 +49,7 @@ SmithWatermanScoringScheme<> load_scoring_scheme(const char* name)
 
     fclose( file );
 
-    return SmithWatermanScoringScheme<>( options );
+    return SmithWatermanScoringScheme<>( options, type );
 }
 
 template <

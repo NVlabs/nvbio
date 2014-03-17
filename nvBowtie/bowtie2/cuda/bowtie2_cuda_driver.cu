@@ -189,8 +189,6 @@ int driver(
 
     // compute band length
     const uint32 band_len = Aligner::band_length( params.max_dist );
-
-    const uint32 genome_length = driver_data_host.genome_length();
     
     // print command line options
     log_visible(stderr, "  mode           = %s\n", mapping_mode( params.mode ));
@@ -542,8 +540,6 @@ int driver(
 
     // compute band length
     const uint32 band_len = Aligner::band_length( params.max_dist );
-
-    const uint32 genome_length = driver_data_host.genome_length();
 
     // print command line options
     log_visible(stderr, "  mode           = %s\n", mapping_mode( params.mode ));

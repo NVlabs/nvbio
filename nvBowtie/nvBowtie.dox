@@ -180,11 +180,12 @@
 ///      --rf                             paired mates are reverse-forward
 ///      --rr                             paired mates are reverse-reverse
 ///      --verbosity                      verbosity level
+///      --local                          perform local alignment
 ///    Seeding:
-///      --seed-len         int [22]      seed lengths
-///      --seed-freq        int [15]      interval between seeds
-///      --max-hits         int [100]     maximum amount of seed hits
-///      --max-reseed       int [2]       number of reseeding rounds
+///      --seed-len         int   [22]                  seed lengths
+///      --seed-freq        float [local ? 0.75 : 1.15] interval between seeds
+///      --max-hits         int   [100]					maximum amount of seed hits
+///      --max-reseed       int   [2]					number of reseeding rounds
 ///    Extension:
 ///      --rand                           randomized seed selection
 ///      --max-dist         int [15]      maximum edit distance

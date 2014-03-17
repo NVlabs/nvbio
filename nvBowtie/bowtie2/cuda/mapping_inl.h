@@ -310,13 +310,13 @@ struct seed_mapper<APPROX_MAPPING>
 
         // First we have to buffer the seed into shared memory.
         const uint32 seed_offs = pos & 7; // pos % 8, there are 8 bases per uint32
-        const uint32 nwords = (seed_offs + params.seed_len+8)>>3; //seed_len/8+1
+        const uint32 nwords = (seed_offs + seed_len+8)>>3; //seed_len/8+1
         const uint32 fword  = pos >> 3; // pos / 8
         for(uint32 i=0; i<nwords; ++i)
             S[i] = read_batch.read_stream()[fword + i];
 
         OffsetXform <Reader::index_type> forward_offset(seed_offs);
-        ReverseXform<Reader::index_type> reverse_offset(seed_offs+params.seed_len);
+        ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
         typedef StreamRemapper< Reader, OffsetXform <Reader::index_type> > fSeedReader;
         typedef StreamRemapper< Reader, ReverseXform<Reader::index_type> > rSeedReader;
 

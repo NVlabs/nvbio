@@ -200,7 +200,7 @@ int driver(
     log_visible(stderr, "  scoring        = %s\n", scoring_mode( params.scoring_mode ));
     log_visible(stderr, "  alignment type = %s\n", params.alignment_type == LocalAlignment ? "local" : "end-to-end");
     log_visible(stderr, "  seed length    = %u\n", params.seed_len);
-    log_visible(stderr, "  seed interval  = (S, %.3f, %.3f)\n", params.seed_freq.k, params.seed_freq.m);
+    log_visible(stderr, "  seed interval  = (%s, %.3f, %.3f)\n", params.seed_freq.type_symbol(), params.seed_freq.k, params.seed_freq.m);
     log_visible(stderr, "  max hits       = %u\n", params.max_hits);
     log_visible(stderr, "  max edit dist  = %u (band len %u)\n", params.max_dist, band_len);
     log_visible(stderr, "  max effort     = %u\n", params.max_effort);
@@ -556,7 +556,7 @@ int driver(
                                                    pe_policy == io::PE_POLICY_RF ? "rf" :
                                                                                    "rr" );
     log_visible(stderr, "  seed length    = %u\n", params.seed_len);
-    log_visible(stderr, "  seed interval  = (S, %.3f, %.3f)\n", params.seed_freq.k, params.seed_freq.m);
+    log_visible(stderr, "  seed interval  = (%s, %.3f, %.3f)\n", params.seed_freq.type_symbol(), params.seed_freq.k, params.seed_freq.m);
     log_visible(stderr, "  max hits       = %u\n", params.max_hits);
     log_visible(stderr, "  max edit dist  = %u (band len %u)\n", params.max_dist, band_len);
     log_visible(stderr, "  max effort     = %u\n", params.max_effort);

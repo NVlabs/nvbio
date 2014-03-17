@@ -324,23 +324,23 @@ struct seed_mapper<APPROX_MAPPING>
 
         // Standard seed=0, forward scan, forward index=0
         fSeedReader f_reader(reader, forward_offset);
-        flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-params.seed_len);
-        map<CHECK_EXACT> (f_reader,  (params.seed_len  )/2, params.seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-seed_len);
+        map<CHECK_EXACT> (f_reader,  (seed_len  )/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
 
         // Standard seed=0, reverse scan, reverse index=1
         rSeedReader r_reader(reader, reverse_offset);                        
         flags = SeedHit::build_flags(STANDARD, REVERSE, read_range.y-pos-1);
-        map<IGNORE_EXACT>(r_reader,  (params.seed_len+1)/2, params.seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        map<IGNORE_EXACT>(r_reader,  (seed_len+1)/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
 
         // Complement seed=1, forward scan, reverse index=1
         StreamTransform<fSeedReader, complement_functor<4> > cf_reader(f_reader, complement_functor<4>());
-        flags = SeedHit::build_flags(COMPLEMENT, REVERSE, pos-read_range.x+params.seed_len-1);
-        map<CHECK_EXACT> (cf_reader, (params.seed_len  )/2, params.seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        flags = SeedHit::build_flags(COMPLEMENT, REVERSE, pos-read_range.x+seed_len-1);
+        map<CHECK_EXACT> (cf_reader, (seed_len  )/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
         
         // Complement seed=1, reverse scan, forward  index=0
         StreamTransform<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
         flags = SeedHit::build_flags(COMPLEMENT, FORWARD, pos-read_range.x);
-        map<IGNORE_EXACT>(cr_reader, (params.seed_len+1)/2, params.seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        map<IGNORE_EXACT>(cr_reader, (seed_len+1)/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
     }
 };
 
@@ -372,13 +372,13 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
 
         // First we have to buffer the seed into shared memory.
         const uint32 seed_offs = pos & 7; // pos % 8, there are 8 bases per uint32
-        const uint32 nwords = (seed_offs + params.seed_len+8)>>3; //seed_len/8+1
+        const uint32 nwords = (seed_offs + seed_len+8)>>3; //seed_len/8+1
         const uint32 fword  = pos >> 3; // pos / 8
         for(uint32 i=0; i<nwords; ++i)
             S[i] = read_batch.read_stream()[fword + i];
 
         OffsetXform <Reader::index_type> forward_offset(seed_offs);
-        ReverseXform<Reader::index_type> reverse_offset(seed_offs+params.seed_len);
+        ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
         typedef StreamRemapper< Reader, OffsetXform <Reader::index_type> > fSeedReader;
         typedef StreamRemapper< Reader, ReverseXform<Reader::index_type> > rSeedReader;
 
@@ -386,23 +386,23 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
 
         // Standard seed=0, forward scan, forward index=0
         fSeedReader f_reader(reader, forward_offset);
-        flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-params.seed_len);
-        map<CHECK_EXACT> (f_reader,  (params.seed_len  )/2, params.seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-seed_len);
+        map<CHECK_EXACT> (f_reader,  (seed_len  )/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
 
         // Standard seed=0, reverse scan, reverse index=1
         rSeedReader r_reader(reader, reverse_offset);                        
         flags = SeedHit::build_flags(STANDARD, REVERSE, read_range.y-pos-1);
-        map<IGNORE_EXACT>(r_reader,  (params.seed_len+1)/2, params.seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        map<IGNORE_EXACT>(r_reader,  (seed_len+1)/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
 
         // Complement seed=1, forward scan, reverse index=1
         StreamTransform<fSeedReader, complement_functor<4> > cf_reader(f_reader, complement_functor<4>());
-        flags = SeedHit::build_flags(COMPLEMENT, REVERSE, pos-read_range.x+params.seed_len-1);
-        map<CHECK_EXACT> (cf_reader, (params.seed_len  )/2, params.seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        flags = SeedHit::build_flags(COMPLEMENT, REVERSE, pos-read_range.x+seed_len-1);
+        map<CHECK_EXACT> (cf_reader, (seed_len  )/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
         
         // Complement seed=1, reverse scan, forward  index=0
         StreamTransform<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
         flags = SeedHit::build_flags(COMPLEMENT, FORWARD, pos-read_range.x);
-        map<IGNORE_EXACT>(cr_reader, (params.seed_len+1)/2, params.seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        map<IGNORE_EXACT>(cr_reader, (seed_len+1)/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
     }
 };
 
@@ -506,6 +506,7 @@ void map_kernel(
         return;
     }
 
+    const uint32 seed_len     = nvbio::min( params.seed_len, read_len );
     const uint32 seed_freq    = (uint32)params.seed_freq( read_len );
     const uint32 retry_stride = seed_freq/(params.max_reseed+1);
 
@@ -518,13 +519,13 @@ void map_kernel(
     uint32 range_count = 0;
 
     // loop over seeds
-    for (uint32 pos = read_range.x + retry * retry_stride; pos + params.seed_len <= read_range.y; pos += seed_freq)
+    for (uint32 pos = read_range.x + retry * retry_stride; pos + seed_len <= read_range.y; pos += seed_freq)
     {
         seed_mapper<ALGO>::enact(
             read_batch, fmi, rfmi,
             read_range,
             pos,
-            params.seed_len,
+            seed_len,
             &S[threadIdx.x][0],
             hitheap,
             range_sum,
@@ -581,6 +582,7 @@ void map_kernel(
         return;
     }
 
+    const uint32 seed_len     = nvbio::min( params.seed_len, read_len );
     const uint32 seed_freq    = (uint32)params.seed_freq( read_len );
     const uint32 retry_stride = seed_freq/(params.max_reseed+1);
 
@@ -599,14 +601,14 @@ void map_kernel(
         for (uint32 i = seed_range.x; i < seed_range.y; ++i)
         {
             const uint32 pos = read_range.x + retry * retry_stride + i * seed_freq;
-            if (pos + params.seed_len > read_range.y)
+            if (pos + seed_len > read_range.y)
                 break;
 
             seed_mapper<ALGO>::enact(
                 read_batch, fmi, rfmi,
                 read_range,
                 pos,
-                params.seed_len,
+                seed_len,
                 &S[threadIdx.x][0],
                 hitheap,
                 range_sum,

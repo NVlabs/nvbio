@@ -236,7 +236,7 @@ struct BestAnchorScoreStream : public AlignmentStreamBase<SCORE_STREAM,AlignerTy
       #endif
 
         // setup the read info
-        context->mate         = 0u;
+        context->mate         = 0;
         context->read_rc      = read_rc;
         context->read_id      = read_id;
         context->read_range = a_read_range;
@@ -276,7 +276,7 @@ struct BestAnchorScoreStream : public AlignmentStreamBase<SCORE_STREAM,AlignerTy
         hit.sink  = context->genome_begin + sink.sink.x;
         // TODO: rewrite hit.loc
         // hit.loc = context->genome_begin;
-        NVBIO_CUDA_DEBUG_PRINT_IF( base_type::m_params.debug.show_score( context->read_id, (sink.score >= context->min_score) ), "score anchor: %d (rc[%u], pos[%u], [qid %u])\n", sink.score, context->read_rc, context->genome_begin, i );
+        NVBIO_CUDA_DEBUG_PRINT_IF( base_type::m_params.debug.show_score( context->read_id, (sink.score >= context->min_score) ), "score anchor: %d (min[%d], mate[%u], rc[%u], pos[%u], [qid %u])\n", sink.score, context->min_score, base_type::m_pipeline.anchor, context->read_rc, context->genome_begin, i );
     }
 
     const uint32 m_band_len;
@@ -382,7 +382,7 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<SCORE_STREAM,Aligner
         // check if it's even possible to reach the score threshold
         if (context->min_score > o_optimal_score)
         {
-            //NVBIO_CUDA_DEBUG_PRINT_IF( base_type::m_params.debug.show_score( context->read_id, true ), "score opposite: min-score too high: %d > %d (rc[%u], pos[%u], [qid %u])\n", context->min_score, o_optimal_score, context->read_rc, i );
+            NVBIO_CUDA_DEBUG_PRINT_IF( base_type::m_params.debug.show_score( context->read_id, false ), "score opposite: min-score too high: %d > %d (mate[%u], rc[%u], [qid %u])\n", context->min_score, o_optimal_score, base_type::m_pipeline.anchor ? 0u : 1u, context->read_rc, i );
             return false;
         }
 
@@ -460,8 +460,7 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<SCORE_STREAM,Aligner
         hit.opposite_score = (sink.score >= context->min_score) ? sink.score : scheme_type::worst_score;
         hit.opposite_loc   = context->genome_begin;
         hit.opposite_sink  = context->genome_begin + genome_sink;
-        NVBIO_CUDA_DEBUG_PRINT_IF( base_type::m_params.debug.show_score( context->read_id, (sink.score >= context->min_score) ), "score opposite: %d (rc[%u], pos[%u], [qid %u])\n", sink.score, context->read_rc, context->genome_begin, i );
-        //NVBIO_CUDA_DEBUG_PRINT_IF( base_type::m_params.debug.show_score( context->read_id, true ), "score opposite: %d (rc[%u], pos[%u], [qid %u])\n", sink.score, context->read_rc, context->genome_begin, i );
+        NVBIO_CUDA_DEBUG_PRINT_IF( base_type::m_params.debug.show_score( context->read_id, (sink.score >= context->min_score) ), "score opposite: %d (min[%d], mate[%u], rc[%u], pos[%u:%u], [qid %u])\n", sink.score, context->min_score, base_type::m_pipeline.anchor ? 0u : 1u, context->read_rc, context->genome_begin, context->genome_end, i );
     }
 };
 
@@ -489,8 +488,8 @@ void banded_score_best(
         aligner,
         params );
 
-    //typedef aln::ThreadParallelScheduler scheduler_type;
-    typedef aln::StagedThreadParallelScheduler scheduler_type;
+    typedef aln::ThreadParallelScheduler scheduler_type;
+    //typedef aln::StagedThreadParallelScheduler scheduler_type;
 
     if (band_len < 4)
     {
@@ -587,7 +586,8 @@ void opposite_score_best(
         aligner,
         params );
 
-    aln::BatchedAlignmentScore<stream_type, aln::StagedThreadParallelScheduler> batch;
+    aln::BatchedAlignmentScore<stream_type, aln::ThreadParallelScheduler> batch;
+    //aln::BatchedAlignmentScore<stream_type, aln::StagedThreadParallelScheduler> batch;
 
     batch.enact( stream, pipeline.dp_buffer_size, pipeline.dp_buffer );
 }
@@ -658,7 +658,7 @@ struct AllScoreStream : public AlignmentStreamBase<SCORE_STREAM,AlignerType,Pipe
         HitReference<HitQueuesDeviceView> hit = base_type::m_pipeline.scoring_queues.hits[ context->idx ];
 
         // setup the read info
-        context->mate         = 0u;
+        context->mate         = 0;
         context->read_rc      = hit.seed.rc;
         context->read_id      = hit.read_id;
         context->read_range   = base_type::m_pipeline.reads.get_range( context->read_id );

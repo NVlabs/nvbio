@@ -142,35 +142,57 @@ struct BatchedBandedAlignmentScore<BAND_LEN,stream_type,StagedThreadParallelSche
     typedef typename stream_type::aligner_type                      aligner_type;
     typedef typename checkpoint_storage_type<aligner_type>::type    cell_type;
 
+    /// return the per-element column storage size
+    ///
+    static uint32 column_storage(const uint32 max_pattern_len, const uint32 max_text_len)
+    {
+        const uint32 column_size = uint32( BAND_LEN * sizeof(cell_type) );
+
+        return align<4>( column_size );
+    }
+
     /// return the minimum number of bytes required by the algorithm
     ///
     static uint64 min_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
     {
-        // no need for any temporary storage, everything's kept in local memory
-        return 0u;
+        return column_storage( max_pattern_len, max_text_len ) * 1024;
     }
 
     /// return the maximum number of bytes required by the algorithm
     ///
     static uint64 max_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
     {
-        // no need for any temporary storage, everything's kept in local memory
-        return 0u;
+        return column_storage( max_pattern_len, max_text_len ) * stream_size;
     }
 
     /// enact the batch execution
     ///
     void enact(stream_type stream, uint64 temp_size = 0u, uint8* temp = NULL)
     {
+        const uint64 min_temp_size = min_temp_storage(
+            stream.max_pattern_length(),
+            stream.max_text_length(),
+            stream.size() );
+
+        thrust::device_vector<uint8> temp_dvec;
+        if (temp == NULL)
+        {
+            temp_size = nvbio::max( min_temp_size, temp_size );
+            temp_dvec.resize( temp_size );
+            temp = nvbio::device_view( temp_dvec );
+        }
+
         // set the queue capacity based on available memory
-        const uint32 queue_capacity = stream.size();
+        const uint32 max_pattern_len = stream.max_pattern_length();
+        const uint32 max_text_len    = stream.max_text_length();
+        const uint32 queue_capacity  = uint32( temp_size / column_storage( max_pattern_len, max_text_len ) );
 
         m_work_queue.set_capacity( queue_capacity );
 
         // prepare the work stream
         ScoreStream<stream_type> score_stream(
             stream,                 // the alignments stream
-            NULL,                   // no need for columns
+            temp,                   // band storage
             NULL,                   // no need for checkpoints
             queue_capacity );       // the queue capacity, used for the memory striding
 

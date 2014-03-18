@@ -328,31 +328,62 @@ int ReadDataFile_SAM::nextChunk(ReadDataRAM *output, uint32 max_reads)
         read_flags = strtol(flag, NULL, 0);
     } while(read_flags & SAMFlag_SecondaryAlignment);
 
-    uint32 conversion_flags = 0;
-
-    if (read_flags & SAMFlag_ReverseComplemented)
+    if (m_flags & FORWARD)
     {
-        if ((m_flags & REVERSE) == 0)
-            conversion_flags |= REVERSE;
-        if ((m_flags & COMPLEMENT) == 0)
-            conversion_flags |= COMPLEMENT;
-    }
-    else
-    {
-        if (m_flags & REVERSE)
-            conversion_flags |= REVERSE;
-        if (m_flags & COMPLEMENT)
-            conversion_flags |= COMPLEMENT;
-    }
+        const uint32 conversion_flags = (read_flags & SAMFlag_ReverseComplemented) ?
+            (REVERSE | COMPLEMENT) : FORWARD;
 
-    // add the read
-    output->push_back(uint32(strlen(seq)),
-                      name,
-                      (uint8*)seq,
-                      (uint8*)qual,
-                      Phred33,
-                      m_truncate_read_len,
-                      ReadEncoding( conversion_flags ));
+        // add the read
+        output->push_back(uint32(strlen(seq)),
+                          name,
+                          (uint8*)seq,
+                          (uint8*)qual,
+                          Phred33,
+                          m_truncate_read_len,
+                          ReadEncoding( conversion_flags ));
+    }
+    if (m_flags & REVERSE)
+    {
+        const uint32 conversion_flags = (read_flags & SAMFlag_ReverseComplemented) ?
+            COMPLEMENT : REVERSE;
+
+        // add the read
+        output->push_back(uint32(strlen(seq)),
+                          name,
+                          (uint8*)seq,
+                          (uint8*)qual,
+                          Phred33,
+                          m_truncate_read_len,
+                          ReadEncoding( conversion_flags ));
+    }
+    if (m_flags & FORWARD_COMPLEMENT)
+    {
+        const uint32 conversion_flags = (read_flags & SAMFlag_ReverseComplemented) ?
+            REVERSE : COMPLEMENT;
+
+        // add the read
+        output->push_back(uint32(strlen(seq)),
+                          name,
+                          (uint8*)seq,
+                          (uint8*)qual,
+                          Phred33,
+                          m_truncate_read_len,
+                          ReadEncoding( conversion_flags ));
+    }
+    if (m_flags & REVERSE_COMPLEMENT)
+    {
+        const uint32 conversion_flags = (read_flags & SAMFlag_ReverseComplemented) ?
+            FORWARD : (REVERSE | COMPLEMENT);
+
+        // add the read
+        output->push_back(uint32(strlen(seq)),
+                          name,
+                          (uint8*)seq,
+                          (uint8*)qual,
+                          Phred33,
+                          m_truncate_read_len,
+                          ReadEncoding( conversion_flags ));
+    }
 
     // we always input 1 read at a time here
     return 1;

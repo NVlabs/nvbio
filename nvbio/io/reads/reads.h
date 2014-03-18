@@ -85,8 +85,11 @@ enum QualityEncoding
 // describes the quality encoding for a given read file
 enum ReadEncoding
 {
-    REVERSE    = 0x0001,
-    COMPLEMENT = 0x0002,
+    FORWARD            = 0x0001,
+    REVERSE            = 0x0002,
+    COMPLEMENT         = 0x0004,
+    FORWARD_COMPLEMENT = 0x0004,
+    REVERSE_COMPLEMENT = 0x0008,
 };
 
 // how mates of a paired-end read are encoded

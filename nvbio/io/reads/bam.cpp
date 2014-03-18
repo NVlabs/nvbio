@@ -298,30 +298,59 @@ int ReadDataFile_BAM::nextChunk(ReadDataRAM *output, uint32 max_reads)
         data.decoded_read[c] = decode_BAM_bp(stream[c]);
     }
 
-    uint32 conversion_flags = 0;
-    if (read_flags & SAMFlag_ReverseComplemented)
+    if (m_flags & FORWARD)
     {
-        if ((m_flags & REVERSE) == 0)
-            conversion_flags |= REVERSE;
-        if ((m_flags & COMPLEMENT) == 0)
-            conversion_flags |= COMPLEMENT;
-    }
-    else
-    {
-        if (m_flags & REVERSE)
-            conversion_flags |= REVERSE;
-        if (m_flags & COMPLEMENT)
-            conversion_flags |= COMPLEMENT;
-    }
+        const uint32 conversion_flags = (read_flags & SAMFlag_ReverseComplemented) ?
+            (REVERSE | COMPLEMENT) : FORWARD;
 
-    // add the read into the batch
-    output->push_back(align.l_seq,
-                      data.read_name,
-                      data.decoded_read,
-                      data.quality,
-                      Phred,
-                      m_truncate_read_len,
-                      ReadEncoding( conversion_flags ));
+        // add the read into the batch
+        output->push_back(align.l_seq,
+                          data.read_name,
+                          data.decoded_read,
+                          data.quality,
+                          Phred,
+                          m_truncate_read_len,
+                          ReadEncoding( conversion_flags ));
+    }
+    if (m_flags & REVERSE)
+    {
+        const uint32 conversion_flags = (read_flags & SAMFlag_ReverseComplemented) ?
+            COMPLEMENT : REVERSE;
+
+        output->push_back(align.l_seq,
+                          data.read_name,
+                          data.decoded_read,
+                          data.quality,
+                          Phred,
+                          m_truncate_read_len,
+                          ReadEncoding( conversion_flags ));
+    }
+    if (m_flags & FORWARD_COMPLEMENT)
+    {
+        const uint32 conversion_flags = (read_flags & SAMFlag_ReverseComplemented) ?
+            REVERSE : COMPLEMENT;
+
+        output->push_back(align.l_seq,
+                          data.read_name,
+                          data.decoded_read,
+                          data.quality,
+                          Phred,
+                          m_truncate_read_len,
+                          ReadEncoding( conversion_flags ));
+    }
+    if (m_flags & REVERSE_COMPLEMENT)
+    {
+        const uint32 conversion_flags = (read_flags & SAMFlag_ReverseComplemented) ?
+            FORWARD : (REVERSE | COMPLEMENT);
+
+        output->push_back(align.l_seq,
+                          data.read_name,
+                          data.decoded_read,
+                          data.quality,
+                          Phred,
+                          m_truncate_read_len,
+                          ReadEncoding( conversion_flags ));
+    }
 
     // we always return 1 read at a time
     return 1;

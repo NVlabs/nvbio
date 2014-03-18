@@ -132,7 +132,6 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
                 m_error_char = c;
                 return uint32(-1);
             }
-
         }
 
         m_line++;
@@ -156,13 +155,46 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
 
         m_line++;
 
-        output->push_back(uint32( m_read_bp.size() ),
-                          &m_name[0],
-                          &m_read_bp[0],
-                          &m_read_q[0],
-                          m_quality_encoding,
-                          m_truncate_read_len,
-                          m_flags);
+        if (m_flags & FORWARD)
+        {
+            output->push_back(uint32( m_read_bp.size() ),
+                              &m_name[0],
+                              &m_read_bp[0],
+                              &m_read_q[0],
+                              m_quality_encoding,
+                              m_truncate_read_len,
+                              FORWARD );
+        }
+        if (m_flags & REVERSE)
+        {
+            output->push_back(uint32( m_read_bp.size() ),
+                              &m_name[0],
+                              &m_read_bp[0],
+                              &m_read_q[0],
+                              m_quality_encoding,
+                              m_truncate_read_len,
+                              REVERSE );
+        }
+        if (m_flags & FORWARD_COMPLEMENT)
+        {
+            output->push_back(uint32( m_read_bp.size() ),
+                              &m_name[0],
+                              &m_read_bp[0],
+                              &m_read_q[0],
+                              m_quality_encoding,
+                              m_truncate_read_len,
+                              ReadEncoding( FORWARD | COMPLEMENT ) );
+        }
+        if (m_flags & REVERSE_COMPLEMENT)
+        {
+            output->push_back(uint32( m_read_bp.size() ),
+                              &m_name[0],
+                              &m_read_bp[0],
+                              &m_read_q[0],
+                              m_quality_encoding,
+                              m_truncate_read_len,
+                              ReadEncoding( REVERSE | COMPLEMENT ) );
+        }
 
         ++n;
     }

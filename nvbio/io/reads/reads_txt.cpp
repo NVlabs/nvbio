@@ -78,13 +78,46 @@ int ReadDataFile_TXT::nextChunk(ReadDataRAM *output, uint32 max)
                         m_read_q.push_back( char(255) );
                 }
 
-                output->push_back(uint32( m_read_bp.size() ),
-                                  name,
-                                  &m_read_bp[0],
-                                  &m_read_q[0],
-                                  m_quality_encoding,
-                                  m_truncate_read_len,
-                                  m_flags);
+                if (m_flags & FORWARD)
+                {
+                    output->push_back(uint32( m_read_bp.size() ),
+                                      name,
+                                      &m_read_bp[0],
+                                      &m_read_q[0],
+                                      m_quality_encoding,
+                                      m_truncate_read_len,
+                                      FORWARD );
+                }
+                if (m_flags & REVERSE)
+                {
+                    output->push_back(uint32( m_read_bp.size() ),
+                                      name,
+                                      &m_read_bp[0],
+                                      &m_read_q[0],
+                                      m_quality_encoding,
+                                      m_truncate_read_len,
+                                      REVERSE );
+                }
+                if (m_flags & FORWARD_COMPLEMENT)
+                {
+                    output->push_back(uint32( m_read_bp.size() ),
+                                      name,
+                                      &m_read_bp[0],
+                                      &m_read_q[0],
+                                      m_quality_encoding,
+                                      m_truncate_read_len,
+                                      ReadEncoding( FORWARD | COMPLEMENT ) );
+                }
+                if (m_flags & REVERSE_COMPLEMENT)
+                {
+                    output->push_back(uint32( m_read_bp.size() ),
+                                      name,
+                                      &m_read_bp[0],
+                                      &m_read_q[0],
+                                      m_quality_encoding,
+                                      m_truncate_read_len,
+                                      ReadEncoding( REVERSE | COMPLEMENT ) );
+                }
 
                 // reset the read
                 m_read_bp.erase( m_read_bp.begin(), m_read_bp.end() );

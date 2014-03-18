@@ -74,6 +74,10 @@ protected:
     {};
 
 public:
+    /// virtual destructor
+    ///
+    virtual ~ReadDataFile() {}
+
     /// grab the next batch of reads into a host memory buffer
     ///
     virtual ReadData *next(const uint32 batch_size);

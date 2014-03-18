@@ -107,9 +107,9 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
         if (h_read_data == NULL)
             break;
 
-        reads->h_read_storage.resize( 
-            reads->h_read_storage.size() + 
-            h_read_data->m_read_stream_words/2 ); // convert from 4-bits to 2-bits per symbol
+        const uint32 required_words = util::divide_ri( reads->n_symbols + h_read_data->m_read_stream_len, SYMBOLS_PER_WORD );
+
+        reads->h_read_storage.resize( required_words );
 
         // pack the first few symbols to fill the last word
         const uint32 word_offset = reads->n_symbols & (SYMBOLS_PER_WORD-1);
@@ -167,9 +167,9 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
         }
 
         // update the read index
-        const uint32* src_index = h_read_data->read_index();
         reads->h_read_index.resize( reads->n_reads + h_read_data->size() + 1u );
 
+        const uint32* src_index = h_read_data->read_index();
         for (uint32 i = 0; i < h_read_data->size(); ++i)
             reads->h_read_index[ reads->n_reads + i ] = reads->n_symbols + src_index[i];
 

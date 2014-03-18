@@ -107,7 +107,7 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
         if (h_read_data == NULL)
             break;
 
-        const uint32 required_words = util::divide_ri( reads->n_symbols + h_read_data->m_read_stream_len, SYMBOLS_PER_WORD );
+        const uint64 required_words = util::divide_ri( reads->n_symbols + h_read_data->m_read_stream_len, SYMBOLS_PER_WORD );
 
         reads->h_read_storage.resize( required_words );
 

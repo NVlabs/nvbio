@@ -32,6 +32,7 @@
 #include <nvbio/io/reads/sam.h>
 #include <nvbio/io/reads/bam.h>
 #include <nvbio/basic/console.h>
+#include <nvbio/basic/vector_view.h>
 #include <cuda_runtime.h>
 
 #include <string.h>
@@ -294,12 +295,12 @@ void ReadDataRAM::end_batch(void)
     m_avg_read_len = (uint32) ceilf(float(m_read_stream_len) / float(m_n_reads));
 
     // set the stream pointers
-    m_read_stream = &m_read_vec[0];
-    m_qual_stream = &m_qual_vec[0];
-    m_read_index = &m_read_index_vec[0];
+    m_read_stream = nvbio::plain_view( m_read_vec );
+    m_qual_stream = nvbio::plain_view( m_qual_vec );
+    m_read_index  = nvbio::plain_view( m_read_index_vec );
 
-    m_name_stream = &m_name_vec[0];
-    m_name_index = &m_name_index_vec[0];
+    m_name_stream = nvbio::plain_view( m_name_vec );
+    m_name_index  = nvbio::plain_view( m_name_index_vec );
 }
 
 template <ReadEncoding conversion_flags, QualityEncoding q_encoding>

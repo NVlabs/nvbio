@@ -99,8 +99,8 @@ uint8 FASTQ_file::get()
 template <typename FASTQ_stream>
 FASTQ_reader<FASTQ_stream>::FASTQ_reader(FASTQ_stream& stream) :
     m_stream( &stream ),
-    m_line(0),
-    m_error(0)
+    m_error(0),
+    m_line(0)
 {}
 
 // read a batch of bp reads

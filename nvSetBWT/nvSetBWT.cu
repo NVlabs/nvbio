@@ -294,16 +294,13 @@ int main(int argc, char* argv[])
 
         // NOTE: at the moment the forward and reverse strands are not interleaved: we place
         // first all the forward and then all the reverse strands - might want to fix this.
-        if (forward)
-        {
-            if (read( reads_name, qencoding, io::ReadEncoding(0), &reads ) == false)
-                return 1;
-        }
-        if (reverse)
-        {
-            if (read( reads_name, qencoding, io::ReadEncoding(io::REVERSE | io::COMPLEMENT), &reads ) == false)
-                return 1;
-        }
+
+        uint32       encoding_flags  = 0u;
+        if (forward) encoding_flags |= io::FORWARD;
+        if (reverse) encoding_flags |= io::REVERSE_COMPLEMENT;
+
+        if (read( reads_name, qencoding, io::ReadEncoding(encoding_flags), &reads ) == false)
+            return 1;
 
         // push sentinel value
         reads.h_read_index[ reads.n_reads ] = reads.n_symbols;

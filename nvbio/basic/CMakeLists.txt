@@ -50,5 +50,6 @@ transform_iterator.h
 types.h
 vec.h
 vec_inl.h
+vector_view.h
 vector_wrapper.h
 )

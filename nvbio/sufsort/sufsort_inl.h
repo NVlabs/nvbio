@@ -891,7 +891,10 @@ struct LargeBWTSkeleton
             thrust::make_transform_iterator( h_buckets.end(),   priv::cast_functor<uint32,uint64>() ),
             h_bucket_offsets.begin() );
 
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    max bucket size: %u\n", max_bucket_size) );
+        // compute the largest non-elementary bucket
+        const uint32 largest_subbucket = max_subbucket_size( h_buckets, max_super_block_size, max_block_size );
+
+        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    max bucket size: %u (%u)\n", largest_subbucket, max_bucket_size) );
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    counting : %.1fs\n", count_timer.seconds() ) );
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"      load   : %.1fs\n", load_time) );
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"      merge  : %.1fs\n", merge_time) );
@@ -913,9 +916,6 @@ struct LargeBWTSkeleton
         float sufsort_time = 0.0f;
         float collect_time = 0.0f;
         float bin_time     = 0.0f;
-
-        // compute the largest non-elementary bucket
-        const uint32 largest_subbucket = max_subbucket_size( h_buckets, max_super_block_size, max_block_size );
 
         // reduce the scratchpads size if possible
         const uint32 optimal_block_size = 32*1024*1024;

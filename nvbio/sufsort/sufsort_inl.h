@@ -621,6 +621,99 @@ struct LargeBWTSkeleton
             typename PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64>::iterator,
             uint64*>    string_set_type;
 
+    // compute the maximum sub-bucket size
+    //
+    static uint32 max_subbucket_size(
+        const thrust::host_vector<uint32>&  h_buckets,
+        const uint32                        max_super_block_size,
+        const uint32                        limit)
+    {
+        const uint32 DOLLAR_BITS = ConfigType::DOLLAR_BITS;
+        const uint32 DOLLAR_MASK = (1u << DOLLAR_BITS) - 1u;
+
+        uint32 max_size = 0u;
+
+        // build the subbucket pointers
+        for (uint32 bucket_begin = 0, bucket_end = 0; bucket_begin < h_buckets.size(); bucket_begin = bucket_end)
+        {
+            // grow the block of buckets until we can
+            uint32 bucket_size;
+            for (bucket_size = 0; (bucket_end < h_buckets.size()) && (bucket_size + h_buckets[bucket_end] <= max_super_block_size); ++bucket_end)
+                bucket_size += h_buckets[bucket_end];
+
+            // check whether a single bucket exceeds our host buffer capacity
+            // TODO: if this is a short-string bucket, we could handle it with special care,
+            // but it requires modifying the collecting loop to output everything directly.
+            if (bucket_end == bucket_begin)
+                throw nvbio::runtime_error("bucket %u contains %u strings: buffer overflow!", bucket_begin, h_buckets[bucket_begin]);
+
+            // loop through the sub-buckets
+            for (uint32 subbucket = bucket_begin; subbucket < bucket_end; ++subbucket)
+            {
+                // only keep track of buckets that are NOT short-string buckets
+                if ((subbucket & DOLLAR_MASK) == DOLLAR_MASK)
+                {
+                    max_size = nvbio::max( max_size, h_buckets[subbucket] );
+                    if (h_buckets[subbucket] > limit)
+                        throw nvbio::runtime_error("subbucket %u contains %u strings: buffer overflow!", subbucket, h_buckets[subbucket]);
+                }
+            }
+        }
+        return max_size;
+    }
+
+    // construct the sub-bucket lists
+    //
+    static void build_subbuckets(
+        const thrust::host_vector<uint32>&  h_buckets,
+        thrust::host_vector<uint32>&        h_subbuckets,
+        const uint32                        max_super_block_size,
+        const uint32                        max_block_size)
+    {
+        const uint32 DOLLAR_BITS = ConfigType::DOLLAR_BITS;
+        const uint32 DOLLAR_MASK = (1u << DOLLAR_BITS) - 1u;
+
+        // build the subbucket pointers
+        for (uint32 bucket_begin = 0, bucket_end = 0; bucket_begin < h_buckets.size(); bucket_begin = bucket_end)
+        {
+            // grow the block of buckets until we can
+            uint32 bucket_size;
+            for (bucket_size = 0; (bucket_end < h_buckets.size()) && (bucket_size + h_buckets[bucket_end] <= max_super_block_size); ++bucket_end)
+                bucket_size += h_buckets[bucket_end];
+
+            // check whether a single bucket exceeds our host buffer capacity
+            // TODO: if this is a short-string bucket, we could handle it with special care,
+            // but it requires modifying the collecting loop to output everything directly.
+            if (bucket_end == bucket_begin)
+                throw nvbio::runtime_error("bucket %u contains %u strings: buffer overflow!", bucket_begin, h_buckets[bucket_begin]);
+
+            // build the sub-buckets
+            for (uint32 subbucket_begin = bucket_begin, subbucket_end = bucket_begin; subbucket_begin < bucket_end; subbucket_begin = subbucket_end)
+            {
+                if (h_buckets[subbucket_begin] > max_block_size)
+                {
+                    // if this is NOT a short-string bucket, we can't cope with it
+                    if ((subbucket_begin & DOLLAR_MASK) == DOLLAR_MASK)
+                        throw nvbio::runtime_error("bucket %u contains %u strings: buffer overflow!", subbucket_begin, h_buckets[subbucket_begin]);
+
+                    // this is a short-string bucket: we can handle it with special care
+                    h_subbuckets[ subbucket_end++ ] = subbucket_begin; // point to the beginning of this sub-bucket
+                }
+                else
+                {
+                    // grow the block of sub-buckets until we can
+                    uint32 subbucket_size;
+                    for (subbucket_size = 0; (subbucket_end < bucket_end) && (subbucket_size + h_buckets[subbucket_end] <= max_block_size); ++subbucket_end)
+                    {
+                        subbucket_size += h_buckets[subbucket_end];
+
+                        h_subbuckets[ subbucket_end ] = subbucket_begin; // point to the beginning of this sub-bucket
+                    }
+                }
+            }
+        }
+    }
+
     template <typename output_handler>
     static void enact(
         const string_set_type       string_set,
@@ -635,6 +728,7 @@ struct LargeBWTSkeleton
         const uint32 BUCKETING_BITS   = ConfigType::BUCKETING_BITS;
         const uint32 DOLLAR_BITS      = ConfigType::DOLLAR_BITS;
         const uint32 DOLLAR_MASK      = (1u << DOLLAR_BITS) - 1u;
+        const uint32 SLICE_SIZE       = 4;
 
         const uint32 M = 128*1024;
         const uint32 N = string_set.size();
@@ -643,17 +737,24 @@ struct LargeBWTSkeleton
 
         mgpu::ContextPtr mgpu_ctxt = mgpu::CreateCudaDevice(0); 
 
-        suffix_bucketer_type bucketer( mgpu_ctxt );
-        chunk_loader_type    chunk;
+        suffix_bucketer_type    bucketer( mgpu_ctxt );
+        chunk_loader_type       chunk;
+        string_set_handler_type string_set_handler( string_set );
+        cuda::CompressionSort   string_sorter( mgpu_ctxt );
 
         const uint32 max_super_block_size = params ?              // requires max_super_block_size*8 host memory bytes
             (params->host_memory - (128u*1024u*1024u)) / 8u :     // leave 128MB for the bucket counters
             512*1024*1024;
-        const uint32 max_block_size = params ?
+        uint32 max_block_size = params ?
             params->device_memory / 32 :                          // requires max_block_size*32 device memory bytes
             32*1024*1024;                                         // default: 1GB
 
+        const uint32 max_block_size_limit = params ?
+            params->max_device_memory / 32 :                      // requires max_block_size*32 device memory bytes
+            64*1024*1024;                                         // default: 2GB
+
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  super-block-size: %.1f M\n", float(max_super_block_size)/float(1024*1024)) );
+        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"        block-size: %.1f M\n", float(max_block_size)/float(1024*1024)) );
         thrust::host_vector<uint2>       h_suffixes( max_super_block_size );
         thrust::host_vector<uint2>       h_block_suffixes( max_block_size );
         thrust::host_vector<bucket_type> h_block_radices( max_block_size );
@@ -670,19 +771,6 @@ struct LargeBWTSkeleton
 
         // global bucket sizes
         thrust::device_vector<uint32> d_buckets( 1u << BUCKETING_BITS, 0u );
-
-        const uint32 SLICE_SIZE = 4;
-        string_set_handler_type string_set_handler( string_set );
-        string_set_handler.reserve( max_block_size, SLICE_SIZE );
-
-        cuda::CompressionSort string_sorter( mgpu_ctxt );
-        string_sorter.reserve( max_block_size );
-
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  allocated device memory: %.1f MB\n",
-            float( bucketer.allocated_device_memory() + string_set_handler.allocated_device_memory() + string_sorter.allocated_device_memory() ) / float(1024*1024) ) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    bucketer : %.1f MB\n", float( bucketer.allocated_device_memory() ) / float(1024*1024) ) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    handler  : %.1f MB\n", float( string_set_handler.allocated_device_memory() ) / float(1024*1024) ) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    sorter   : %.1f MB\n", float( string_sorter.allocated_device_memory() ) / float(1024*1024) ) );
 
         // allocate an MGPU context
         mgpu::ContextPtr mgpu = mgpu::CreateCudaDevice(0);
@@ -826,45 +914,37 @@ struct LargeBWTSkeleton
         float collect_time = 0.0f;
         float bin_time     = 0.0f;
 
-        // build the subbucket pointers
-        for (uint32 bucket_begin = 0, bucket_end = 0; bucket_begin < h_buckets.size(); bucket_begin = bucket_end)
+        const uint32 largest_subbucket = max_subbucket_size( h_buckets, max_super_block_size, max_block_size_limit );
+
+        if (max_block_size < largest_subbucket)
         {
-            // grow the block of buckets until we can
-            uint32 bucket_size;
-            for (bucket_size = 0; (bucket_end < h_buckets.size()) && (bucket_size + h_buckets[bucket_end] <= max_super_block_size); ++bucket_end)
-                bucket_size += h_buckets[bucket_end];
-
-            // check whether a single bucket exceeds our host buffer capacity
-            // TODO: if this is a short-string bucket, we could handle it with special care,
-            // but it requires modifying the collecting loop to output everything directly.
-            if (bucket_end == bucket_begin)
-                throw nvbio::runtime_error("bucket %u contains %u strings: buffer overflow!", bucket_begin, h_buckets[bucket_begin]);
-
-            // build the sub-buckets
-            for (uint32 subbucket_begin = bucket_begin, subbucket_end = bucket_begin; subbucket_begin < bucket_end; subbucket_begin = subbucket_end)
-            {
-                if (h_buckets[subbucket_begin] > max_block_size)
-                {
-                    // if this is NOT a short-string bucket, we can't cope with it
-                    if ((subbucket_begin & DOLLAR_MASK) == DOLLAR_MASK)
-                        throw nvbio::runtime_error("bucket %u contains %u strings: buffer overflow!", subbucket_begin, h_buckets[subbucket_begin]);
-
-                    // this is a short-string bucket: we can handle it with special care
-                    h_subbuckets[ subbucket_end++ ] = subbucket_begin; // point to the beginning of this sub-bucket
-                }
-                else
-                {
-                    // grow the block of sub-buckets until we can
-                    uint32 subbucket_size;
-                    for (subbucket_size = 0; (subbucket_end < bucket_end) && (subbucket_size + h_buckets[subbucket_end] <= max_block_size); ++subbucket_end)
-                    {
-                        subbucket_size += h_buckets[subbucket_end];
-
-                        h_subbuckets[ subbucket_end ] = subbucket_begin; // point to the beginning of this sub-bucket
-                    }
-                }
-            }
+            log_verbose(stderr, "  initial device scratchpads capacity exceeded - resizing\n");
+            max_block_size = util::round_i( largest_subbucket, 32u );
         }
+
+        // reserve memory for scratchpads
+        {
+            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  allocating scratchpads\n" ) );
+
+            string_set_handler.reserve( max_block_size, SLICE_SIZE );
+            string_sorter.reserve( max_block_size );
+
+            priv::alloc_storage( h_block_radices,  max_block_size );
+            priv::alloc_storage( h_block_suffixes, max_block_size );
+
+            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  allocated device memory: %.1f MB\n",
+                float( bucketer.allocated_device_memory() + string_set_handler.allocated_device_memory() + string_sorter.allocated_device_memory() ) / float(1024*1024) ) );
+            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    bucketer : %.1f MB\n", float( bucketer.allocated_device_memory() ) / float(1024*1024) ) );
+            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    handler  : %.1f MB\n", float( string_set_handler.allocated_device_memory() ) / float(1024*1024) ) );
+            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    sorter   : %.1f MB\n", float( string_sorter.allocated_device_memory() ) / float(1024*1024) ) );
+        }
+
+        // now build the sub-bucket lists
+        build_subbuckets(
+            h_buckets,
+            h_subbuckets,
+            max_super_block_size,
+            max_block_size );
 
         // build the subbucket pointers
         thrust::device_vector<uint32> d_subbuckets( h_subbuckets );
@@ -908,8 +988,8 @@ struct LargeBWTSkeleton
                     string_count,
                     suffix_len,
                     d_subbuckets.begin(),
-                    h_block_radices.begin(),
-                    h_block_suffixes.begin() );
+                    h_block_radices,
+                    h_block_suffixes );
 
                 if (suffix_count + n_collected > max_super_block_size)
                 {
@@ -993,9 +1073,8 @@ struct LargeBWTSkeleton
                         // copy the host suffixes to the device
                         const uint2* h_bucket_suffixes = &h_suffixes[0] + suffix_count + block_begin;
 
-                        priv::alloc_storage( d_bucket_suffixes, n_suffixes );
-
                         // copy the suffix list to the device
+                        priv::alloc_storage( d_bucket_suffixes, n_suffixes );
                         thrust::copy(
                             h_bucket_suffixes,
                             h_bucket_suffixes + n_suffixes,

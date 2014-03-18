@@ -323,9 +323,7 @@ int main(int argc, char* argv[])
         nvbio::Timer timer;
         timer.start();
 
-        const uint64 guard_band = 2u * uint64(1024*1024*1024);
-
-        if (input_size + guard_band < free_device)
+        if (input_size + params.max_device_memory < free_device)
         {
             log_verbose(stderr, "  using fast path\n");
 

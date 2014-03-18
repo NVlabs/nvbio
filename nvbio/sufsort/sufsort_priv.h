@@ -117,7 +117,7 @@ void alloc_storage(VectorType& vec, const uint64 size)
         }
         catch (...)
         {
-            fprintf(stderr,"alloc_storage() : allocation failed!\n");
+            log_error(stderr,"alloc_storage() : allocation failed!\n");
             throw;
         }
     }
@@ -1364,7 +1364,7 @@ struct SetSuffixBucketer
     /// collect the suffixes falling in a given set of buckets, where the buckets
     /// are defined by the first n_bits of the suffix
     ///
-    template <typename string_set_type, typename bucketmap_iterator, typename radix_iterator, typename suffix_iterator>
+    template <typename string_set_type, typename bucketmap_iterator, typename radix_vector, typename suffix_vector>
     uint32 collect(
         const string_set_type&      string_set,
         const uint32                bucket_begin,
@@ -1372,8 +1372,8 @@ struct SetSuffixBucketer
         const uint32                string_offset,
               uint32&               max_suffix_len,
         const bucketmap_iterator    bucketmap,
-              radix_iterator        output_radices,
-              suffix_iterator       output_suffixes)
+              radix_vector&         output_radices,
+              suffix_vector&        output_suffixes)
     {
         cuda::Timer timer;
 
@@ -1488,6 +1488,9 @@ struct SetSuffixBucketer
         // copy all the indices inside the range to the output
         //
 
+        alloc_storage( output_suffixes, n_suffixes );
+        alloc_storage( output_radices,  n_suffixes );
+
         timer.start();
 
         // the buffer selector had inverted semantics
@@ -1497,13 +1500,13 @@ struct SetSuffixBucketer
         thrust::copy(
             d_output.begin() + sort_buffers.selector * buffer_stride,
             d_output.begin() + sort_buffers.selector * buffer_stride + n_collected,
-            output_suffixes );
+            output_suffixes.begin() );
 
         // and copy everything to the output
         thrust::copy(
             d_radices.begin() + sort_buffers.selector * n_suffixes,
             d_radices.begin() + sort_buffers.selector * n_suffixes + n_collected,
-            output_radices );
+            output_radices.begin() );
 
         timer.stop();
         d_copy_time += timer.seconds();
@@ -1897,7 +1900,7 @@ struct HostStringSetRadices
         }
         catch (...)
         {
-            fprintf(stderr, "HostStringSetRadices::reserve() : allocation failed!\n");
+            log_error(stderr, "HostStringSetRadices::reserve() : allocation failed!\n");
             throw;
         }
     }
@@ -1961,7 +1964,7 @@ struct HostStringSetRadices
         }
         catch (...)
         {
-            fprintf(stderr, "HostStringSetRadices::init_slice() : exception caught!\n");
+            log_error(stderr, "HostStringSetRadices::init_slice() : exception caught!\n");
             throw;
         }
     }
@@ -1993,7 +1996,7 @@ struct HostStringSetRadices
         }
         catch (...)
         {
-            fprintf(stderr, "HostStringSetRadices::extract() : exception caught!\n");
+            log_error(stderr, "HostStringSetRadices::extract() : exception caught!\n");
             throw;
         }
     }
@@ -2098,7 +2101,7 @@ struct HostStringSetRadices
         }
         catch (...)
         {
-            fprintf(stderr, "HostStringSetRadices::bwt() : exception caught!\n");
+            log_error(stderr, "HostStringSetRadices::bwt() : exception caught!\n");
             throw;
         }
     }

@@ -631,7 +631,8 @@ struct LargeBWTSkeleton
         const uint32 DOLLAR_BITS = ConfigType::DOLLAR_BITS;
         const uint32 DOLLAR_MASK = (1u << DOLLAR_BITS) - 1u;
 
-        uint32 max_size = 0u;
+        uint32 max_size  = 0u;
+        uint32 max_index = 0u;
 
         // build the subbucket pointers
         for (uint32 bucket_begin = 0, bucket_end = 0; bucket_begin < h_buckets.size(); bucket_begin = bucket_end)
@@ -653,12 +654,16 @@ struct LargeBWTSkeleton
                 // only keep track of buckets that are NOT short-string buckets
                 if ((subbucket & DOLLAR_MASK) == DOLLAR_MASK)
                 {
-                    max_size = nvbio::max( max_size, h_buckets[subbucket] );
-                    if (h_buckets[subbucket] > limit)
-                        throw nvbio::runtime_error("subbucket %u contains %u strings: buffer overflow!", subbucket, h_buckets[subbucket]);
+                    if (max_size < h_buckets[subbucket])
+                    {
+                        max_size  = h_buckets[subbucket];
+                        max_index = subbucket;
+                    }
                 }
             }
         }
+        if (max_size > limit)
+            throw nvbio::runtime_error("subbucket %u contains %u strings: buffer overflow!\n  please try increasing the device memory limit to at least %u MB\n", max_index, max_size, util::divide_ri( 32u*max_size, 1024u ));
         return max_size;
     }
 
@@ -749,25 +754,18 @@ struct LargeBWTSkeleton
             params->device_memory / 32 :                          // requires max_block_size*32 device memory bytes
             32*1024*1024;                                         // default: 1GB
 
-        const uint32 max_block_size_limit = params ?
-            params->max_device_memory / 32 :                      // requires max_block_size*32 device memory bytes
-            64*1024*1024;                                         // default: 2GB
-
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  super-block-size: %.1f M\n", float(max_super_block_size)/float(1024*1024)) );
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"        block-size: %.1f M\n", float(max_block_size)/float(1024*1024)) );
         thrust::host_vector<uint2>       h_suffixes( max_super_block_size );
-        thrust::host_vector<uint2>       h_block_suffixes( max_block_size );
-        thrust::host_vector<bucket_type> h_block_radices( max_block_size );
-        thrust::host_vector<uint8>       h_block_bwt( max_block_size );
+        thrust::host_vector<uint2>       h_block_suffixes;
+        thrust::host_vector<bucket_type> h_block_radices;
+        thrust::host_vector<uint8>       h_block_bwt;
 
         // reuse some buffers
         thrust::device_vector<uint32>&   d_indices = bucketer.d_indices;
-        thrust::device_vector<uint2>     d_bucket_suffixes( max_block_size );
-        thrust::device_vector<uint8>     d_block_bwt( max_block_size );
+        thrust::device_vector<uint2>     d_bucket_suffixes;
+        thrust::device_vector<uint8>     d_block_bwt;
         //thrust::device_vector<uint8>     d_temp_storage;
-
-        // reserve enough space
-        priv::alloc_storage( d_indices, max_block_size );
 
         // global bucket sizes
         thrust::device_vector<uint32> d_buckets( 1u << BUCKETING_BITS, 0u );
@@ -779,9 +777,10 @@ struct LargeBWTSkeleton
         float output_time = 0.0f;
 
         // output the last character of each string (i.e. the symbols preceding all the dollar signs)
-        for (uint32 block_begin = 0; block_begin < N; block_begin += max_block_size)
+        const uint32 block_size = max_block_size / 4u; // this can be done in relatively small blocks
+        for (uint32 block_begin = 0; block_begin < N; block_begin += block_size)
         {
-            const uint32 block_end = nvbio::min( block_begin + max_block_size, N );
+            const uint32 block_end = nvbio::min( block_begin + block_size, N );
 
             // consume subbucket_size suffixes
             const uint32 n_suffixes = block_end - block_begin;
@@ -789,13 +788,14 @@ struct LargeBWTSkeleton
             Timer timer;
             timer.start();
 
+            priv::alloc_storage( h_block_bwt, n_suffixes );
+            priv::alloc_storage( d_block_bwt, n_suffixes );
+
             // load the BWT symbols
             string_set_handler.dollar_bwt(
                 block_begin,
                 block_end,
                 plain_view( h_block_bwt ) );
-
-            priv::alloc_storage( d_block_bwt, n_suffixes );
 
             // copy them to the device
             thrust::copy(
@@ -914,13 +914,12 @@ struct LargeBWTSkeleton
         float collect_time = 0.0f;
         float bin_time     = 0.0f;
 
-        const uint32 largest_subbucket = max_subbucket_size( h_buckets, max_super_block_size, max_block_size_limit );
+        // compute the largest non-elementary bucket
+        const uint32 largest_subbucket = max_subbucket_size( h_buckets, max_super_block_size, max_block_size );
 
-        if (max_block_size < largest_subbucket)
-        {
-            log_verbose(stderr, "  initial device scratchpads capacity exceeded - resizing\n");
+        // reduce the scratchpads size if possible
+        if (max_block_size > util::round_i( largest_subbucket, 32u ))
             max_block_size = util::round_i( largest_subbucket, 32u );
-        }
 
         // reserve memory for scratchpads
         {
@@ -929,8 +928,12 @@ struct LargeBWTSkeleton
             string_set_handler.reserve( max_block_size, SLICE_SIZE );
             string_sorter.reserve( max_block_size );
 
-            priv::alloc_storage( h_block_radices,  max_block_size );
-            priv::alloc_storage( h_block_suffixes, max_block_size );
+            priv::alloc_storage( h_block_radices,   max_block_size );
+            priv::alloc_storage( h_block_suffixes,  max_block_size );
+            priv::alloc_storage( h_block_bwt,       max_block_size );
+            priv::alloc_storage( d_block_bwt,       max_block_size );
+            priv::alloc_storage( d_indices,         max_block_size );
+            priv::alloc_storage( d_bucket_suffixes, max_block_size );
 
             NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  allocated device memory: %.1f MB\n",
                 float( bucketer.allocated_device_memory() + string_set_handler.allocated_device_memory() + string_sorter.allocated_device_memory() ) / float(1024*1024) ) );

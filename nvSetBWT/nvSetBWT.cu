@@ -198,7 +198,7 @@ int main(int argc, char* argv[])
         log_info(stderr, "  options:\n");
         log_info(stderr, "   -v       | --verbosity     int (0-6) [5]\n");
         log_info(stderr, "   -cpu-mem | --cpu-memory    int (MB)  [8192]\n");
-        log_info(stderr, "   -gpu-mem | --gpu-memory    int (MB)  [4096]\n");
+        log_info(stderr, "   -gpu-mem | --gpu-memory    int (MB)  [2048]\n");
         log_info(stderr, "   -c       | --compression   string    [1R]   (e.g. \"1\", ..., \"9\", \"1R\")\n");
         log_info(stderr, "   -F       | --skip-forward\n");
         log_info(stderr, "   -R       | --skip-reverse\n");
@@ -323,7 +323,7 @@ int main(int argc, char* argv[])
         nvbio::Timer timer;
         timer.start();
 
-        if (input_size + params.max_device_memory < free_device)
+        if (input_size + params.device_memory < free_device)
         {
             log_verbose(stderr, "  using fast path\n");
 

@@ -41,12 +41,10 @@ struct BWTParams
 {
     BWTParams() :
         host_memory(8u*1024u*1024u*1024llu),
-        device_memory(1024u*1024u*1024llu),
-        max_device_memory(2*1024u*1024u*1024llu) {}
+        device_memory(2u*1024u*1024u*1024llu) {}
 
     uint64 host_memory;
     uint64 device_memory;
-    uint64 max_device_memory;
 };
 
 namespace cuda {

@@ -359,8 +359,8 @@ void CompressionSort::sort(
         mgpu::SegSortPairsFromFlags(
             nvbio::device_view( d_keys ),
             nvbio::device_view( d_indices ),
-            d_comp_flags,
             n_active_suffixes,
+            d_comp_flags,
             *m_mgpu );
 
         NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
@@ -638,8 +638,8 @@ void CompressionSort::sort(
                 mgpu::SegSortPairsFromFlags(
                     nvbio::device_view( d_keys ),
                     nvbio::device_view( d_indices ),
-                    d_comp_flags,
                     n_active_strings,
+                    d_comp_flags,
                     *m_mgpu );
 
                 NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );

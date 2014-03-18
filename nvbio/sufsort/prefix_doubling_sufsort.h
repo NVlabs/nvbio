@@ -706,8 +706,8 @@ void PrefixDoublingSufSort::sort(
         mgpu::SegSortPairsFromFlags(
             nvbio::device_view( d_sort_keys ),
             nvbio::device_view( d_sort_indices ),
-            d_comp_flags,
             n_active_suffixes,
+            d_comp_flags,
             *m_mgpu );
 
         NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );

@@ -919,8 +919,8 @@ struct LargeBWTSkeleton
 
         // reduce the scratchpads size if possible
         const uint32 optimal_block_size = 32*1024*1024;
-        if (max_block_size >= optimal_block_size)
-            max_block_size  = optimal_block_size;
+        if (largest_subbucket <= optimal_block_size)
+            max_block_size     = optimal_block_size;
 
         // reserve memory for scratchpads
         {

@@ -63,7 +63,7 @@ endif()
 set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} ${CUDA_NVCC_DEBUG_FLAGS} --gpu-architecture=sm_35 -use_fast_math -Xcompiler -fopenmp)
 
 set(cudpp_INCLUDE_DIRS ${CMAKE_SOURCE_DIR})
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/contrib ${CMAKE_BINARY_DIR}/contrib/zlib-1.2.7 ${CMAKE_SOURCE_DIR}/contrib/crc ${CMAKE_SOURCE_DIR}/contrib/bamtools)
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/contrib ${CMAKE_BINARY_DIR}/contrib/zlib-1.2.7 ${CMAKE_SOURCE_DIR}/contrib/crc ${CMAKE_SOURCE_DIR}/contrib/bamtools ${CMAKE_SOURCE_DIR}/contrib/moderngpu/include)
 
 add_subdirectory(contrib/zlib-1.2.7)
 add_subdirectory(contrib/crc)
@@ -76,6 +76,7 @@ add_subdirectory(nvBWT)
 add_subdirectory(nvSSA)
 add_subdirectory(nvbio-test)
 add_subdirectory(nvbio-aln-diff)
+add_subdirectory(sw-benchmark)
 
 nvbio_module(nvbio-project)
 nvbio_doxygen()

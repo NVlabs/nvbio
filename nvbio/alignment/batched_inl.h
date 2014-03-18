@@ -392,7 +392,7 @@ void BatchedAlignmentScore<stream_type,WarpParallelScheduler>::enact(stream_type
         temp = nvbio::device_view( temp_dvec );
     }
 
-    const uint32 WARP_SIZE = cuda::Arch::WARP_SIZE;
+    NVBIO_VAR_UNUSED static const uint32 WARP_SIZE = cuda::Arch::WARP_SIZE;
 
     // set the queue capacity based on available memory
     const uint32 queue_capacity = align_down<WARP_SIZE>( uint32( temp_size / (align<WARP_SIZE>( stream.max_text_length() ) * sizeof(cell_type)) ) );

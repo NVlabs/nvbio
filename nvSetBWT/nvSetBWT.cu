@@ -230,12 +230,14 @@ int main(int argc, char* argv[])
     for (int i = 0; i < argc - 2; ++i)
     {
         if ((strcmp( argv[i], "-cpu-mem" )            == 0) ||
+            (strcmp( argv[i], "--cpu-mem" )           == 0) ||
             (strcmp( argv[i], "--cpu-memory" )        == 0))
         {
             params.host_memory = atoi( argv[++i] ) * uint64(1024u*1024u);
         }
         else if ((strcmp( argv[i], "-gpu-mem" )       == 0) ||
-                 (strcmp( argv[i], "-gpu-memory" )    == 0))
+                 (strcmp( argv[i], "--gpu-mem" )       == 0) ||
+                 (strcmp( argv[i], "--gpu-memory" )    == 0))
         {
             params.device_memory = atoi( argv[++i] ) * uint64(1024u*1024u);
         }

@@ -577,7 +577,7 @@ struct HostBWTConfig
     typedef typename std::iterator_traits<storage_type>::value_type word_type;
 
     static const uint32 WORD_BITS        = uint32( 8u * sizeof(word_type) );
-    static const uint32 BUCKETING_BITS   = 16;
+    static const uint32 BUCKETING_BITS   = 20;
     static const uint32 DOLLAR_BITS      = WORD_BITS <= 32 ? 4 : 5;
 
     typedef typename priv::word_selector<BUCKETING_BITS>::type bucket_type;
@@ -597,7 +597,7 @@ struct DeviceBWTConfig
     typedef typename std::iterator_traits<storage_type>::value_type word_type;
 
     static const uint32 WORD_BITS        = uint32( 8u * sizeof(word_type) );
-    static const uint32 BUCKETING_BITS   = 16;
+    static const uint32 BUCKETING_BITS   = 20;
     static const uint32 DOLLAR_BITS      = WORD_BITS <= 32 ? 4 : 5;
 
     typedef typename priv::word_selector<BUCKETING_BITS>::type bucket_type;
@@ -663,7 +663,7 @@ struct LargeBWTSkeleton
             }
         }
         if (max_size > limit)
-            throw nvbio::runtime_error("subbucket %u contains %u strings: buffer overflow!\n  please try increasing the device memory limit to at least %u MB\n", max_index, max_size, util::divide_ri( 32u*max_size, 1024u ));
+            throw nvbio::runtime_error("subbucket %u contains %u strings: buffer overflow!\n  please try increasing the device memory limit to at least %u MB\n", max_index, max_size, util::divide_ri( max_size, 1024u*1024u )*32u);
         return max_size;
     }
 
@@ -918,8 +918,8 @@ struct LargeBWTSkeleton
         const uint32 largest_subbucket = max_subbucket_size( h_buckets, max_super_block_size, max_block_size );
 
         // reduce the scratchpads size if possible
-        if (max_block_size > util::round_i( largest_subbucket, 32u ))
-            max_block_size = util::round_i( largest_subbucket, 32u );
+        if (max_block_size >= 2u*util::round_i( largest_subbucket, 32u ))
+            max_block_size /= 2u;
 
         // reserve memory for scratchpads
         {

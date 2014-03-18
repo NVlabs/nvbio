@@ -25,9 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#pragma once
-
-#include <sufsort/file_bwt_lz4.h>
+#include <nvbio/sufsort/file_bwt_lz4.h>
 #include <lz4/lz4.h>
 #include <lz4/lz4hc.h>
 

@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <sufsort/sufsort_priv.h>
+#include <nvbio/sufsort/sufsort_priv.h>
 #include <omp.h>
 
 namespace nvbio {

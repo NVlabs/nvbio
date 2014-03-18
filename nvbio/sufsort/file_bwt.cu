@@ -25,11 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#pragma once
-
-#include <sufsort/file_bwt.h>
-#include <sufsort/file_bwt_bgz.h>
-#include <sufsort/sufsort_priv.h>
+#include <nvbio/sufsort/file_bwt.h>
+#include <nvbio/sufsort/file_bwt_bgz.h>
+#include <nvbio/sufsort/sufsort_priv.h>
 #include <zlib/zlib.h>
 #include <omp.h>
 

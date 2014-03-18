@@ -195,7 +195,7 @@ uint32 copy_if(
     size_t                         temp_bytes = 0;
     thrust::device_vector<int>     d_num_selected(1);
 
-    cudaError_t error = cub::DeviceSelect::Flagged(
+    cub::DeviceSelect::Flagged(
         (void*)NULL, temp_bytes,
         d_in,
         d_flags,

@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include <sufsort/sufsort_priv.h>
+#include <nvbio/sufsort/sufsort_priv.h>
 #include <nvbio/basic/string_set.h>
 #include <nvbio/basic/thrust_view.h>
 #include <nvbio/basic/cuda/sort.h>

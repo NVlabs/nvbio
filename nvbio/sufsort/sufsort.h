@@ -81,4 +81,4 @@ void large_bwt(
 
 } // namespace nvbio
 
-#include <sufsort/sufsort_inl.h>
+#include <nvbio/sufsort/sufsort_inl.h>

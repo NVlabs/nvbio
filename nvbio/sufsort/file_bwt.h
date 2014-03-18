@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include <sufsort/sufsort_utils.h>
+#include <nvbio/sufsort/sufsort_utils.h>
 
 namespace nvbio {
 

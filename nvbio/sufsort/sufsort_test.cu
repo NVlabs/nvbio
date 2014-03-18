@@ -1,13 +1,32 @@
+/*
+ * Copyright (c) 2012-14, NVIDIA CORPORATION.  All rights reserved.
+ *
+ * NVIDIA CORPORATION and its licensors retain all intellectual property
+ * and proprietary rights in and to this software, related documentation
+ * and any modifications thereto.  Any use, reproduction, disclosure or
+ * distribution of this software and related documentation without an express
+ * license agreement from NVIDIA CORPORATION is strictly prohibited.
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
 #define NVBIO_CUDA_DEBUG
 
 #include <cub/cub.cuh>
-
-#include <sufsort/sufsort.h>
-#include <sufsort/sufsort_utils.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
 #include <algorithm>
+#include <omp.h>
+
+#include <nvbio/sufsort/sufsort.h>
+#include <nvbio/sufsort/sufsort_utils.h>
 #include <nvbio/basic/timer.h>
 #include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/string_set.h>
@@ -16,7 +35,6 @@
 #include <nvbio/fmindex/dna.h>
 #include <nvbio/fmindex/bwt.h>
 #include <thrust/device_vector.h>
-#include <omp.h>
 
 // crc init
 void crcInit();

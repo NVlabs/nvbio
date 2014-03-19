@@ -303,49 +303,45 @@ void ReadDataRAM::end_batch(void)
     m_name_index  = nvbio::plain_view( m_name_index_vec );
 }
 
-template <ReadEncoding conversion_flags, QualityEncoding q_encoding>
+// a small reverse string class
+struct reverse_string
+{
+    // constructor
+    reverse_string(const uint32 len, const uint8* vec) : m_len(len), m_vec(vec) {}
+
+    // indexing operator
+    uint8 operator[] (const uint32 i) const { return m_vec[ m_len - i - 1u ]; }
+
+    const uint32 m_len;
+    const uint8* m_vec;
+};
+
+template <ReadEncoding conversion_flags, QualityEncoding q_encoding, typename read_iterator, typename quality_iterator>
 void encode(
     const uint32               read_len,
-    const uint8*               read,
-    const uint8*               quality,
+    const read_iterator        read,
+    const quality_iterator     quality,
     const uint32               stream_offset,
     ReadData::read_stream_type stream,
     char*                      qual_stream)
 {
-    if (conversion_flags & REVERSE)
+    for (uint32 i = 0; i < read_len; i++)
     {
-        for (uint32 i = 0; i < read_len; i++)
-        {
-            const uint32 j = read_len - i - 1;
-            uint8 bp = nst_nt4_encode( read[j] );
+        uint8 bp = nst_nt4_encode( read[i] );
 
-            if (conversion_flags & COMPLEMENT)
-                bp = bp < 4u ? 3u - bp : 4u;
+        if (conversion_flags & COMPLEMENT)
+            bp = bp < 4u ? 3u - bp : 4u;
 
-            stream[stream_offset + i] = bp;
-            qual_stream[stream_offset + i] = convert_to_phred_quality<q_encoding>(quality[j]);
-        }
-    }
-    else
-    {
-        for (uint32 i = 0; i < read_len; i++)
-        {
-            uint8 bp = nst_nt4_encode( read[i] );
-
-            if (conversion_flags & COMPLEMENT)
-                bp = bp < 4u ? 3u - bp : 4u;
-
-            stream[stream_offset + i] = bp;
-            qual_stream[stream_offset + i] = convert_to_phred_quality<q_encoding>(quality[i]);
-        }
+        stream[stream_offset + i] = bp;
+        qual_stream[stream_offset + i] = convert_to_phred_quality<q_encoding>(quality[i]);
     }
 }
 
-template <ReadEncoding conversion_flags>
+template <ReadEncoding conversion_flags, typename read_iterator, typename quality_iterator>
 void encode(
     const uint32               read_len,
-    const uint8*               read,
-    const uint8*               quality,
+    const read_iterator        read,
+    const quality_iterator     quality,
     const QualityEncoding      q_encoding,
     const uint32               stream_offset,
     ReadData::read_stream_type stream,
@@ -393,15 +389,13 @@ void ReadDataRAM::push_back(uint32 read_len,
     }
 
     // encode the read data
-    const ReadEncoding REVERSE_AND_COMPLEMENT = ReadEncoding(REVERSE | COMPLEMENT);
-
     ReadData::read_stream_type stream(&m_read_vec[0]);
     if (conversion_flags & REVERSE)
     {
         if (conversion_flags & COMPLEMENT)
-            encode<REVERSE_AND_COMPLEMENT>( read_len, read, quality, q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
+            encode<COMPLEMENT>( read_len, reverse_string( read_len, read ), reverse_string( read_len, quality ), q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
         else
-            encode<REVERSE>( read_len, read, quality, q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
+            encode<FORWARD>( read_len, reverse_string( read_len, read ), reverse_string( read_len, quality ), q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
     }
     else
     {

@@ -498,7 +498,7 @@ struct packer<BIG_ENDIAN_T,2u,Symbol,InputStream,IndexType,uint64>
         const index_type word_idx = sym_idx >> 5u;
 
         const uint64 word = stream[ word_idx ];
-        const uint32 symbol_offset = BIG_ENDIAN_T ? (62u - (uint64(sym_idx & 31u) << 1)) : uint64((sym_idx & 31u) << 1);
+        const uint32 symbol_offset = BIG_ENDIAN_T ? (62u - (uint32(sym_idx & 31u) << 1)) : uint32((sym_idx & 31u) << 1);
         const uint64 symbol = (word >> symbol_offset) & SYMBOL_MASK;
 
         return Symbol( symbol );
@@ -513,7 +513,7 @@ struct packer<BIG_ENDIAN_T,2u,Symbol,InputStream,IndexType,uint64>
         const index_type word_idx = sym_idx >> 5u;
 
               uint64 word = stream[ word_idx ];
-        const uint32 symbol_offset = BIG_ENDIAN_T ? (62u - (uint64(sym_idx & 31u) << 1)) : uint64((sym_idx & 31u) << 1);
+        const uint32 symbol_offset = BIG_ENDIAN_T ? (62u - (uint32(sym_idx & 31u) << 1)) : uint32((sym_idx & 31u) << 1);
         const uint64 symbol = uint64(sym & SYMBOL_MASK) << symbol_offset;
 
         // clear all bits
@@ -535,7 +535,7 @@ struct packer<BIG_ENDIAN_T,4u,Symbol,InputStream,IndexType,uint64>
         const index_type word_idx = sym_idx >> 5u;
 
         const uint64 word = stream[ word_idx ];
-        const uint32 symbol_offset = BIG_ENDIAN_T ? (60u - (uint64(sym_idx & 15u) << 2)) : uint64((sym_idx & 15u) << 2);
+        const uint32 symbol_offset = BIG_ENDIAN_T ? (60u - (uint32(sym_idx & 15u) << 2)) : uint32((sym_idx & 15u) << 2);
         const uint64 symbol = (word >> symbol_offset) & SYMBOL_MASK;
 
         return Symbol( symbol );
@@ -550,7 +550,7 @@ struct packer<BIG_ENDIAN_T,4u,Symbol,InputStream,IndexType,uint64>
         const index_type word_idx = sym_idx >> 5u;
 
               uint64 word = stream[ word_idx ];
-        const uint32 symbol_offset = BIG_ENDIAN_T ? (60u - (uint64(sym_idx & 15u) << 2)) : uint64((sym_idx & 15u) << 2);
+        const uint32 symbol_offset = BIG_ENDIAN_T ? (60u - (uint32(sym_idx & 15u) << 2)) : uint32((sym_idx & 15u) << 2);
         const uint64 symbol = uint32(sym & SYMBOL_MASK) << symbol_offset;
 
         // clear all bits

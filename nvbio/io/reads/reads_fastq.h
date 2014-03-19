@@ -110,8 +110,7 @@ struct ReadDataFile_FASTQ_gz : public ReadDataFile_FASTQ_parser
                           const QualityEncoding qualities,
                           const uint32 max_reads,
                           const uint32 max_read_len,
-                          const ReadEncoding flags,
-                          const uint32 buffer_size = 64536u);
+                          const ReadEncoding flags);
 
     virtual FileState fillBuffer(void);
 

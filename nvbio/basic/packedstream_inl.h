@@ -534,9 +534,9 @@ struct packer<BIG_ENDIAN_T,4u,Symbol,InputStream,IndexType,uint64>
 
         const index_type word_idx = sym_idx >> 5u;
 
-        const uint32 word = stream[ word_idx ];
-        const uint32 symbol_offset = BIG_ENDIAN_T ? (60u - (uint32(sym_idx & 15u) << 2)) : uint32((sym_idx & 15u) << 2);
-        const uint32 symbol = (word >> symbol_offset) & SYMBOL_MASK;
+        const uint64 word = stream[ word_idx ];
+        const uint32 symbol_offset = BIG_ENDIAN_T ? (60u - (uint64(sym_idx & 15u) << 2)) : uint64((sym_idx & 15u) << 2);
+        const uint64 symbol = (word >> symbol_offset) & SYMBOL_MASK;
 
         return Symbol( symbol );
     }
@@ -549,9 +549,9 @@ struct packer<BIG_ENDIAN_T,4u,Symbol,InputStream,IndexType,uint64>
 
         const index_type word_idx = sym_idx >> 5u;
 
-              uint32 word = stream[ word_idx ];
-        const uint32 symbol_offset = BIG_ENDIAN_T ? (60u - (uint32(sym_idx & 15u) << 2)) : uint32((sym_idx & 15u) << 2);
-        const uint32 symbol = uint32(sym & SYMBOL_MASK) << symbol_offset;
+              uint64 word = stream[ word_idx ];
+        const uint32 symbol_offset = BIG_ENDIAN_T ? (60u - (uint64(sym_idx & 15u) << 2)) : uint64((sym_idx & 15u) << 2);
+        const uint64 symbol = uint32(sym & SYMBOL_MASK) << symbol_offset;
 
         // clear all bits
         word &= ~(SYMBOL_MASK << symbol_offset);

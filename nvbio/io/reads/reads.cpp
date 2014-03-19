@@ -360,7 +360,7 @@ void encode(
     // naive serial implementation
     for (uint32 i = 0; i < read_len; i++)
     {
-        stream[stream_offset + i] = read[i];
+        stream[i] = read[i];
         qual_stream[i] = convert_to_phred_quality<quality_encoding>(read.quality(i));
     }
   #endif

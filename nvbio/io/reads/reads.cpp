@@ -325,6 +325,89 @@ void encode(
     ReadData::read_stream_type stream,
     char*                      qual_stream)
 {
+  #if 1
+    typedef uint32 word_type;
+    const uint32 WORD_SIZE = uint32( 8u * sizeof(word_type) );
+
+    const bool   BIG_ENDIAN       = ReadData::read_stream_type::BIG_ENDIAN;
+    const uint32 SYMBOL_SIZE      = ReadData::read_stream_type::SYMBOL_SIZE;
+    const uint32 SYMBOLS_PER_WORD = WORD_SIZE / SYMBOL_SIZE;
+
+    word_type* words = stream.stream();
+
+    const uint32 word_offset = stream_offset & (SYMBOLS_PER_WORD-1);
+          uint32 word_rem    = 0;
+
+    if (word_offset)
+    {
+        // compute how many symbols we still need to encode to fill the current word
+        word_rem = SYMBOLS_PER_WORD - word_offset;
+
+        // fetch the word in question
+        word_type word = words[ stream_offset / SYMBOLS_PER_WORD ];
+
+        // loop through the word's bp's
+        for (uint32 i = 0; i < word_rem; ++i)
+        {
+            // fetch the bp
+            uint8 bp = nst_nt4_encode( read[i] );
+
+            if (conversion_flags & COMPLEMENT)
+                bp = bp < 4u ? 3u - bp : 4u;
+
+            const uint32       bit_idx = (word_offset + i) * SYMBOL_SIZE;
+            const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
+            const word_type     symbol = word_type(bp) << symbol_offset;
+
+            // set bits
+            word |= symbol;
+
+            // set the quality
+            qual_stream[stream_offset + i] = convert_to_phred_quality<q_encoding>( quality[i] );
+        }
+
+        // write out the cached word
+        words[ stream_offset / SYMBOLS_PER_WORD ] = word;
+    }
+
+    //#pragma omp parallel for
+    for (int i = word_rem; i < int( read_len ); i += SYMBOLS_PER_WORD)
+    {
+        // encode a word's worth of characters
+        word_type word = 0u;
+
+        const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, read_len - i );
+
+        // loop through the word's bp's
+        for (uint32 j = 0; j < SYMBOLS_PER_WORD; ++j)
+        {
+            if (j < n_symbols)
+            {
+                // fetch the bp
+                uint8 bp = nst_nt4_encode( read[i + j] );
+
+                if (conversion_flags & COMPLEMENT)
+                    bp = bp < 4u ? 3u - bp : 4u;
+
+                const uint32       bit_idx = j * SYMBOL_SIZE;
+                const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
+                const word_type     symbol = word_type(bp) << symbol_offset;
+
+                // set bits
+                word |= symbol;
+
+                // set the quality
+                qual_stream[stream_offset + i + j] = convert_to_phred_quality<q_encoding>( quality[i + j] );
+            }
+        }
+
+        // write out the word and advance word_idx
+        const uint32 word_idx = (stream_offset + i) / SYMBOLS_PER_WORD;
+
+        words[ word_idx ] = word;
+    }
+  #else
+    // naive serial implementation
     for (uint32 i = 0; i < read_len; i++)
     {
         uint8 bp = nst_nt4_encode( read[i] );
@@ -335,6 +418,7 @@ void encode(
         stream[stream_offset + i] = bp;
         qual_stream[stream_offset + i] = convert_to_phred_quality<q_encoding>(quality[i]);
     }
+  #endif
 }
 
 template <ReadEncoding conversion_flags, typename read_iterator, typename quality_iterator>

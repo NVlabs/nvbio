@@ -311,6 +311,9 @@ struct read_string
     // constructor
     read_string(const uint32 len, const uint8* read, const uint8* qual) : m_len(len), m_read(read), m_qual(qual) {}
 
+    // string length
+    uint32 length() const { return m_len; }
+
     // indexing operator
     uint8 operator[] (const uint32 i) const
     {
@@ -342,7 +345,6 @@ struct read_string
 //
 template <QualityEncoding quality_encoding, typename read_type>
 void encode(
-    const uint32                            read_len,
     const read_type                         read,
     ReadData::read_stream_type::iterator    stream,
     char*                                   qual_stream)
@@ -350,15 +352,15 @@ void encode(
   #if 1
 
     // use the custom PackedStream assign() method
-    assign( read_len, read, stream  );
+    assign( read.length(), read, stream  );
 
     // naive serial implementation
-    for (uint32 i = 0; i < read_len; i++)
+    for (uint32 i = 0; i < read.length(); i++)
         qual_stream[i] = convert_to_phred_quality<quality_encoding>(read.quality(i));
 
   #else
     // naive serial implementation
-    for (uint32 i = 0; i < read_len; i++)
+    for (uint32 i = 0; i < read.length(); i++)
     {
         stream[i] = read[i];
         qual_stream[i] = convert_to_phred_quality<quality_encoding>(read.quality(i));
@@ -371,7 +373,6 @@ void encode(
 template <typename read_type>
 void encode(
     const QualityEncoding                   quality_encoding,
-    const uint32                            read_len,
     const read_type                         read,
     ReadData::read_stream_type::iterator    stream,
     char*                                   qual_stream)
@@ -379,16 +380,16 @@ void encode(
     switch (quality_encoding)
     {
     case Phred:
-        encode<Phred>( read_len, read, stream, qual_stream );
+        encode<Phred>( read, stream, qual_stream );
         break;
     case Phred33:
-        encode<Phred33>( read_len, read, stream, qual_stream );
+        encode<Phred33>( read, stream, qual_stream );
         break;
     case Phred64:
-        encode<Phred64>( read_len, read, stream, qual_stream );
+        encode<Phred64>( read, stream, qual_stream );
         break;
     case Solexa:
-        encode<Solexa>( read_len, read, stream, qual_stream );
+        encode<Solexa>( read, stream, qual_stream );
         break;
     }
 }
@@ -414,16 +415,16 @@ void encode(
     if (conversion_flags & REVERSE)
     {
         if (conversion_flags & COMPLEMENT)
-            encode( quality_encoding, read_len, rc_read, stream, qual_stream );
+            encode( quality_encoding, rc_read, stream, qual_stream );
         else
-            encode( quality_encoding, read_len, r_read,  stream, qual_stream );
+            encode( quality_encoding, r_read,  stream, qual_stream );
     }
     else
     {
         if (conversion_flags & COMPLEMENT)
-            encode( quality_encoding, read_len, fc_read, stream, qual_stream );
+            encode( quality_encoding, fc_read, stream, qual_stream );
         else
-            encode( quality_encoding, read_len, f_read,  stream, qual_stream );
+            encode( quality_encoding, f_read,  stream, qual_stream );
     }
 }
 

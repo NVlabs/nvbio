@@ -366,7 +366,7 @@ void encode(
             qual_stream[stream_offset + i] = convert_to_phred_quality<q_encoding>( quality[i] );
         }
 
-        // write out the cached word
+        // write out the word
         words[ stream_offset / SYMBOLS_PER_WORD ] = word;
     }
 
@@ -401,7 +401,7 @@ void encode(
             }
         }
 
-        // write out the word and advance word_idx
+        // write out the word
         const uint32 word_idx = (stream_offset + i) / SYMBOLS_PER_WORD;
 
         words[ word_idx ] = word;

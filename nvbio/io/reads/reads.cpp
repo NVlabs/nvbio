@@ -312,20 +312,29 @@ void encode(
     ReadData::read_stream_type stream,
     char*                      qual_stream)
 {
-    for(uint32 i = 0; i < read_len; i++)
+    if (conversion_flags & REVERSE)
     {
-        uint8 bp = nst_nt4_encode( read[i] );
-
-        if (conversion_flags & COMPLEMENT)
-            bp = bp < 4u ? 3u - bp : 4u;
-
-        if (conversion_flags & REVERSE)
+        for (uint32 i = 0; i < read_len; i++)
         {
-            stream[stream_offset + read_len - i - 1] = bp;
-            qual_stream[stream_offset + read_len - i - 1] = convert_to_phred_quality<q_encoding>(quality[i]);
+            const uint32 j = read_len - i - 1;
+            uint8 bp = nst_nt4_encode( read[j] );
+
+            if (conversion_flags & COMPLEMENT)
+                bp = bp < 4u ? 3u - bp : 4u;
+
+            stream[stream_offset + i] = bp;
+            qual_stream[stream_offset + i] = convert_to_phred_quality<q_encoding>(quality[j]);
         }
-        else
+    }
+    else
+    {
+        for (uint32 i = 0; i < read_len; i++)
         {
+            uint8 bp = nst_nt4_encode( read[i] );
+
+            if (conversion_flags & COMPLEMENT)
+                bp = bp < 4u ? 3u - bp : 4u;
+
             stream[stream_offset + i] = bp;
             qual_stream[stream_offset + i] = convert_to_phred_quality<q_encoding>(quality[i]);
         }

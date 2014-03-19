@@ -105,8 +105,7 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
             // if (isgraph(c))
             if (c >= 0x21 && c <= 0x7E)
                 m_read_bp[ len++ ] = c;
-
-            if (c == '\n')
+            else if (c == '\n')
                 m_line++;
 
             // expand on demand

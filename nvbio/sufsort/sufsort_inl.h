@@ -571,51 +571,74 @@ typename string_type::index_type bwt(
     return primary;
 }
 
-template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type>
+template <uint32 BUCKETING_BITS_T, uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type>
 struct HostBWTConfig
 {
     typedef typename std::iterator_traits<storage_type>::value_type word_type;
 
-    static const uint32 WORD_BITS        = uint32( 8u * sizeof(word_type) );
-    static const uint32 BUCKETING_BITS   = 20;
-    static const uint32 DOLLAR_BITS      = WORD_BITS <= 32 ? 4 : 5;
-
-    typedef typename priv::word_selector<BUCKETING_BITS>::type bucket_type;
+    static const uint32 WORD_BITS       = uint32( 8u * sizeof(word_type) );
+    static const uint32 DOLLAR_BITS     = WORD_BITS <= 32 ? 4 : 5;
+    static const uint32 BUCKETING_BITS  = BUCKETING_BITS_T;
 
     typedef ConcatenatedStringSet<
             PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> >,
             uint64*>    string_set_type;
 
-    typedef priv::HostChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type>                          chunk_loader;
-    typedef priv::HostStringSetRadices<string_set_type,SYMBOL_SIZE,DOLLAR_BITS,WORD_BITS>       string_set_handler;
-    typedef priv::SetSuffixBucketer<SYMBOL_SIZE,BUCKETING_BITS,DOLLAR_BITS,bucket_type>         suffix_bucketer;
+    typedef priv::HostChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type>                      chunk_loader;
+    typedef priv::HostStringSetRadices<string_set_type,SYMBOL_SIZE,DOLLAR_BITS,WORD_BITS>   string_set_handler;
+
+    typedef typename priv::word_selector<BUCKETING_BITS>::type                              bucket_type;
+    typedef priv::SetSuffixBucketer<SYMBOL_SIZE,BUCKETING_BITS,DOLLAR_BITS,bucket_type>     suffix_bucketer;
 };
 
-template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type>
+template <uint32 BUCKETING_BITS_T, uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type>
 struct DeviceBWTConfig
 {
     typedef typename std::iterator_traits<storage_type>::value_type word_type;
 
-    static const uint32 WORD_BITS        = uint32( 8u * sizeof(word_type) );
-    static const uint32 BUCKETING_BITS   = 20;
-    static const uint32 DOLLAR_BITS      = WORD_BITS <= 32 ? 4 : 5;
-
-    typedef typename priv::word_selector<BUCKETING_BITS>::type bucket_type;
+    static const uint32 WORD_BITS   = uint32( 8u * sizeof(word_type) );
+    static const uint32 DOLLAR_BITS = WORD_BITS <= 32 ? 4 : 5;
+    static const uint32 BUCKETING_BITS  = BUCKETING_BITS_T;
 
     typedef ConcatenatedStringSet<
             PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> >,
             uint64*>    string_set_type;
 
-    typedef priv::DeviceChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type>                        chunk_loader;
-    typedef priv::DeviceStringSetRadices<string_set_type,SYMBOL_SIZE,DOLLAR_BITS,WORD_BITS>     string_set_handler;
-    typedef priv::SetSuffixBucketer<SYMBOL_SIZE,BUCKETING_BITS,DOLLAR_BITS,bucket_type>         suffix_bucketer;
+    typedef priv::DeviceChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type>                    chunk_loader;
+    typedef priv::DeviceStringSetRadices<string_set_type,SYMBOL_SIZE,DOLLAR_BITS,WORD_BITS> string_set_handler;
+
+    typedef typename priv::word_selector<BUCKETING_BITS>::type                              bucket_type;
+    typedef priv::SetSuffixBucketer<SYMBOL_SIZE,BUCKETING_BITS,DOLLAR_BITS,bucket_type>     suffix_bucketer;
+};
+
+// simple status class
+struct LargeBWTStatus
+{
+    enum {
+        OK          = 0,
+        LargeBucket = 1,
+    };
+
+    // default constructor
+    LargeBWTStatus() : code(OK) {}
+
+    // return whether the status is OK
+    operator bool() const { return code == OK ? true : false; }
+
+    uint32 code;
+    uint32 bucket_size;
+    uint32 bucket_index;
 };
 
 template <typename ConfigType, uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type>
 struct LargeBWTSkeleton
 {
     typedef typename std::iterator_traits<storage_type>::value_type word_type;
+    typedef typename ConfigType::string_set_handler                 string_set_handler_type;
+    typedef typename ConfigType::chunk_loader                       chunk_loader_type;
+    typedef typename chunk_loader_type::chunk_set_type              chunk_set_type;
     typedef typename ConfigType::bucket_type                        bucket_type;
+    typedef typename ConfigType::suffix_bucketer                    suffix_bucketer_type;
 
     typedef ConcatenatedStringSet<
             typename PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64>::iterator,
@@ -626,7 +649,8 @@ struct LargeBWTSkeleton
     static uint32 max_subbucket_size(
         const thrust::host_vector<uint32>&  h_buckets,
         const uint32                        max_super_block_size,
-        const uint32                        limit)
+        const uint32                        limit,
+        LargeBWTStatus*                     status)
     {
         const uint32 DOLLAR_BITS = ConfigType::DOLLAR_BITS;
         const uint32 DOLLAR_MASK = (1u << DOLLAR_BITS) - 1u;
@@ -662,8 +686,14 @@ struct LargeBWTSkeleton
                 }
             }
         }
+
         if (max_size > limit)
-            throw nvbio::runtime_error("subbucket %u contains %u strings: buffer overflow!\n  please try increasing the device memory limit to at least %u MB\n", max_index, max_size, util::divide_ri( max_size, 1024u*1024u )*32u);
+        {
+            status->code = LargeBWTStatus::LargeBucket;
+            status->bucket_size  = max_size;
+            status->bucket_index = max_index;
+        }
+
         return max_size;
     }
 
@@ -720,27 +750,23 @@ struct LargeBWTSkeleton
     }
 
     template <typename output_handler>
-    static void enact(
+    static LargeBWTStatus enact(
         const string_set_type       string_set,
         output_handler&             output,
         BWTParams*                  params)
     {
-        typedef typename ConfigType::string_set_handler     string_set_handler_type;
-        typedef typename ConfigType::chunk_loader           chunk_loader_type;
-        typedef typename chunk_loader_type::chunk_set_type  chunk_set_type;
-        typedef typename ConfigType::suffix_bucketer        suffix_bucketer_type;
+        const uint32 BUCKETING_BITS = ConfigType::BUCKETING_BITS;
+        const uint32 DOLLAR_BITS    = ConfigType::DOLLAR_BITS;
+        const uint32 DOLLAR_MASK    = (1u << DOLLAR_BITS) - 1u;
+        const uint32 SLICE_SIZE     = 4;
 
-        const uint32 BUCKETING_BITS   = ConfigType::BUCKETING_BITS;
-        const uint32 DOLLAR_BITS      = ConfigType::DOLLAR_BITS;
-        const uint32 DOLLAR_MASK      = (1u << DOLLAR_BITS) - 1u;
-        const uint32 SLICE_SIZE       = 4;
+        const uint32 M              = 128*1024;
+        const uint32 N              = string_set.size();
+        const uint32 n_chunks       = (N + M-1) / M;
 
-        const uint32 M = 128*1024;
-        const uint32 N = string_set.size();
+        LargeBWTStatus          status;
 
-        const uint32 n_chunks = (N + M-1) / M;
-
-        mgpu::ContextPtr mgpu_ctxt = mgpu::CreateCudaDevice(0); 
+        mgpu::ContextPtr        mgpu_ctxt = mgpu::CreateCudaDevice(0); 
 
         suffix_bucketer_type    bucketer( mgpu_ctxt );
         chunk_loader_type       chunk;
@@ -892,7 +918,9 @@ struct LargeBWTSkeleton
             h_bucket_offsets.begin() );
 
         // compute the largest non-elementary bucket
-        const uint32 largest_subbucket = max_subbucket_size( h_buckets, max_super_block_size, max_block_size );
+        const uint32 largest_subbucket = max_subbucket_size( h_buckets, max_super_block_size, max_block_size, &status );
+        if (!status)
+            return status;
 
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    max bucket size: %u (%u)\n", largest_subbucket, max_bucket_size) );
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    counting : %.1fs\n", count_timer.seconds() ) );
@@ -1225,6 +1253,7 @@ struct LargeBWTSkeleton
 
             global_suffix_offset += suffix_count;
         }
+        return status;
     }
 };
 
@@ -1238,32 +1267,78 @@ void bwt(
         output_handler&             output,
         BWTParams*                  params)
 {
-    typedef cuda::DeviceBWTConfig<SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type;
+    typedef cuda::DeviceBWTConfig<16,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_16; // 16-bits bucketing
+    typedef cuda::DeviceBWTConfig<20,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_20; // 20-bits bucketing
+    typedef cuda::DeviceBWTConfig<24,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_24; // 24-bits bucketing
 
-    cuda::LargeBWTSkeleton<config_type,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
+    cuda::LargeBWTStatus status;
+
+    // try 16-bit bucketing
+    if (status = cuda::LargeBWTSkeleton<config_type_16,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
         string_set,
         output,
-        params );
+        params ))
+        return;
+
+    // try 20-bit bucketing
+    if (status = cuda::LargeBWTSkeleton<config_type_20,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
+        string_set,
+        output,
+        params ))
+        return;
+
+    // try 24-bit bucketing
+    if (status = cuda::LargeBWTSkeleton<config_type_24,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
+        string_set,
+        output,
+        params ))
+        return;
+
+    if (status.code == LargeBWTStatus::LargeBucket)
+        throw nvbio::runtime_error("subbucket %u contains %u strings: buffer overflow!\n  please try increasing the device memory limit to at least %u MB\n", status.bucket_index, status.bucket_size, util::divide_ri( status.bucket_size, 1024u*1024u )*32u);
 }
 
 } // namespace cuda
 
 /// Compute the bwt of a host-side string set
 ///
-template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename word_type, typename output_handler>
+template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type, typename output_handler>
 void large_bwt(
     const ConcatenatedStringSet<
-        PackedStreamIterator< PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> >,
+        PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> >,
         uint64*>                    string_set,
         output_handler&             output,
         BWTParams*                  params)
 {
-    typedef cuda::HostBWTConfig<SYMBOL_SIZE,BIG_ENDIAN,word_type*> config_type;
+    typedef cuda::HostBWTConfig<16,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_16; // 16-bits bucketing
+    typedef cuda::HostBWTConfig<20,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_20; // 20-bits bucketing
+    typedef cuda::HostBWTConfig<24,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_24; // 24-bits bucketing
 
-    cuda::LargeBWTSkeleton<config_type,SYMBOL_SIZE,BIG_ENDIAN,word_type*>::enact(
+    cuda::LargeBWTStatus status;
+
+    // try 16-bit bucketing
+    if (status = cuda::LargeBWTSkeleton<config_type_16,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
         string_set,
         output,
-        params );
+        params ))
+        return;
+
+    // try 20-bit bucketing
+    if (status = cuda::LargeBWTSkeleton<config_type_20,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
+        string_set,
+        output,
+        params ))
+        return;
+
+    // try 24-bit bucketing
+    if (status = cuda::LargeBWTSkeleton<config_type_24,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
+        string_set,
+        output,
+        params ))
+        return;
+
+    if (status.code == cuda::LargeBWTStatus::LargeBucket)
+        throw nvbio::runtime_error("subbucket %u contains %u strings: buffer overflow!\n  please try increasing the device memory limit to at least %u MB\n", status.bucket_index, status.bucket_size, util::divide_ri( status.bucket_size, 1024u*1024u )*32u);
 }
 
 } // namespace nvbio

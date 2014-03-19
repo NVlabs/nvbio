@@ -27,6 +27,7 @@
 
 #include <nvbio/io/reads/reads_fastq.h>
 #include <nvbio/basic/types.h>
+#include <nvbio/basic/timer.h>
 
 #include <string.h>
 #include <ctype.h>
@@ -54,18 +55,11 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
         do {
             marker = get();
 
-            // check for EOF or read errors
-            if (m_file_state != FILE_OK)
-            {
-                break;
-            }
-
             // count lines
             if (marker == '\n')
-            {
                 m_line++;
-            }
-        } while (marker == '\n' || marker == ' ');
+        }
+        while (marker == '\n' || marker == ' ');
 
         // check for EOF or read errors
         if (m_file_state != FILE_OK)
@@ -81,83 +75,90 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
         }
 
         // read all the line
-        m_name.erase( m_name.begin(), m_name.end() );
-        for (uint8 c = get(); c != '\n'; c = get())
+        uint32 len = 0;
+        for (uint8 c = get(); c != '\n' && c != 0; c = get())
         {
-            if (m_file_state != FILE_OK)
-            {
-                log_error(stderr, "incomplete read!\n");
-                m_name.erase(m_name.begin(), m_name.end());
+            m_name[ len++ ] = c;
 
-                m_error_char = c;
-                return uint32(-1);
-            }
-
-            m_name.push_back(c);
+            // expand on demand
+            if (m_name.size() <= len)
+                m_name.resize( len * 2u );
         }
 
-        m_name.push_back('\0');
+        m_name[ len++ ] = '\0';
+
+        // check for errors
+        if (m_file_state != FILE_OK)
+        {
+            log_error(stderr, "incomplete read!\n");
+
+            m_error_char = 0;
+            return uint32(-1);
+        }
 
         m_line++;
 
         // start reading the bp read
-        m_read_bp.erase( m_read_bp.begin(), m_read_bp.end() );
-        for (uint8 c = get(); c != '+'; c = get())
+        len = 0;
+        for (uint8 c = get(); c != '+' && c != 0; c = get())
         {
-            if (m_file_state != FILE_OK)
-            {
-                log_error(stderr, "incomplete read!\n");
-                m_name.erase(m_name.begin(), m_name.end());
-
-                m_error_char = c;
-                return uint32(-1);
-            }
-
-            if (isgraph(c))
-                m_read_bp.push_back( c );
+            // if (isgraph(c))
+            if (c >= 0x21 && c <= 0x7E)
+                m_read_bp[ len++ ] = c;
 
             if (c == '\n')
                 m_line++;
+
+            // expand on demand
+            if (m_read_bp.size() <= len)
+            {
+                m_read_bp.resize( len * 2u );
+                m_read_q.resize(  len * 2u );
+            }
+        }
+
+        // check for errors
+        if (m_file_state != FILE_OK)
+        {
+            log_error(stderr, "incomplete read!\n");
+
+            m_error_char = 0;
+            return uint32(-1);
         }
 
         // read all the line
-        for(uint8 c = get(); c != '\n'; c = get())
-        {
-            if (m_file_state != FILE_OK)
-            {
-                log_error(stderr, "incomplete read!\n");
-                m_name.erase(m_name.begin(), m_name.end());
-                m_read_bp.erase(m_read_bp.begin(), m_read_bp.end());
+        for(uint8 c = get(); c != '\n' && c != 0; c = get()) {}
 
-                m_error_char = c;
-                return uint32(-1);
-            }
+        // check for errors
+        if (m_file_state != FILE_OK)
+        {
+            log_error(stderr, "incomplete read!\n");
+
+            m_error_char = 0;
+            return uint32(-1);
         }
 
         m_line++;
 
         // start reading the quality read
-        m_read_q.erase( m_read_q.begin(), m_read_q.end() );
-        for (uint8 c = get(); c != '\n'; c = get())
+        len = 0;
+        for (uint8 c = get(); c != '\n' && c != 0; c = get())
+            m_read_q[ len++ ] = c;
+
+        // check for errors
+        if (m_file_state != FILE_OK)
         {
-            if (m_file_state != FILE_OK)
-            {
-                log_error(stderr, "incomplete read!\n");
-                m_name.erase(m_name.begin(), m_name.end());
-                m_read_bp.erase(m_read_bp.begin(), m_read_bp.end());
+            log_error(stderr, "incomplete read!\n");
 
-                m_error_char = c;
-                return uint32(-1);
-            }
-
-            m_read_q.push_back( c );
+            m_error_char = 0;
+            return uint32(-1);
         }
 
         m_line++;
 
         if (m_flags & FORWARD)
         {
-            output->push_back(uint32( m_read_bp.size() ),
+            output->push_back( len,
                               &m_name[0],
                               &m_read_bp[0],
                               &m_read_q[0],
@@ -167,7 +168,7 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
         }
         if (m_flags & REVERSE)
         {
-            output->push_back(uint32( m_read_bp.size() ),
+            output->push_back( len,
                               &m_name[0],
                               &m_read_bp[0],
                               &m_read_q[0],
@@ -177,7 +178,7 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
         }
         if (m_flags & FORWARD_COMPLEMENT)
         {
-            output->push_back(uint32( m_read_bp.size() ),
+            output->push_back( len,
                               &m_name[0],
                               &m_read_bp[0],
                               &m_read_q[0],
@@ -187,7 +188,7 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
         }
         if (m_flags & REVERSE_COMPLEMENT)
         {
-            output->push_back(uint32( m_read_bp.size() ),
+            output->push_back( len,
                               &m_name[0],
                               &m_read_bp[0],
                               &m_read_q[0],
@@ -198,7 +199,6 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
 
         ++n;
     }
-
     return n;
 }
 
@@ -219,9 +219,12 @@ ReadDataFile_FASTQ_gz::ReadDataFile_FASTQ_gz(const char *read_file_name,
     gzbuffer(m_file, m_buffer_size);
 }
 
+static float time = 0.0f;
+
 ReadDataFile_FASTQ_parser::FileState ReadDataFile_FASTQ_gz::fillBuffer(void)
 {
     m_buffer_size = gzread(m_file, &m_buffer[0], (uint32)m_buffer.size());
+
     if (m_buffer_size <= 0)
     {
         // check for EOF separately; zlib will not always return Z_STREAM_END at EOF below
@@ -241,7 +244,6 @@ ReadDataFile_FASTQ_parser::FileState ReadDataFile_FASTQ_gz::fillBuffer(void)
             return FILE_STREAM_ERROR;
         }
     }
-
     return FILE_OK;
 }
 

@@ -63,7 +63,10 @@ protected:
         m_buffer(buffer_size),
         m_buffer_size(buffer_size),
         m_buffer_pos(buffer_size),
-        m_line(0)
+        m_line(0),
+        m_name( 1024*1024 ),
+        m_read_bp( 1024*1024 ),
+        m_read_q( 1024*1024 )
     {};
 
     // get next read chunk from file and parse it (up to max reads)

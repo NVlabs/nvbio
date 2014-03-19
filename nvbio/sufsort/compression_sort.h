@@ -523,6 +523,8 @@ void CompressionSort::sort(
     delay_list_type&                        delay_list,
     const uint32                            slice_size)
 {
+    //#define CULLED_EXTRACTION
+
     typedef uint32 index_type;
 
     try
@@ -571,12 +573,21 @@ void CompressionSort::sort(
             Timer timer;
             timer.start();
 
+          #if defined(CULLED_EXTRACTION)
             // extract the given radix word from each of the partially sorted suffixes on the host
             set.init_slice(
                 n_active_strings,
-                n_active_strings == n_strings ? (const uint32*)NULL : plain_view( d_active_slots ),
+                n_active_strings == n_strings ? (const uint32*)NULL : plain_view( d_indices ),
                 word_block_begin,
                 word_block_end );
+          #else
+            // extract the given radix word from all suffixes on the host
+            set.init_slice(
+                n_strings,
+                NULL,
+                word_block_begin,
+                word_block_end );
+          #endif
 
             NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
             timer.stop();
@@ -585,7 +596,7 @@ void CompressionSort::sort(
             // do what is essentially an MSB sort on the suffixes
             for (uint32 word_idx = word_block_begin; word_idx < word_block_end; ++word_idx)
             {
-                if (word_idx > delay_threshold && 1000 * n_active_strings <= n_strings) // TODO: add a minimum pass number
+                if (word_idx > delay_threshold && 1000 * n_active_strings <= n_strings)
                 {
                     delay_list.push_back(
                         n_active_strings,
@@ -595,11 +606,28 @@ void CompressionSort::sort(
                     return; // bail out of the sorting loop
                 }
 
+            #if defined(CULLED_EXTRACTION)
                 timer.start();
 
+                // extract only active radices, already sorted
                 set.extract(
                     n_active_strings,
-                    plain_view( d_active_slots ),
+                    plain_view( d_indices ),
+                    word_idx,
+                    word_block_begin,
+                    word_block_end,
+                    plain_view( d_keys ) );
+
+                NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
+                timer.stop();
+                extract_time += timer.seconds();
+            #else
+                timer.start();
+
+                // extract all radices, not sorted
+                set.extract(
+                    n_strings,
+                    NULL,
                     word_idx,
                     word_block_begin,
                     word_block_end,
@@ -621,6 +649,7 @@ void CompressionSort::sort(
                 NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
                 timer.stop();
                 copy_time += timer.seconds();
+            #endif
 
                 timer.start();
 

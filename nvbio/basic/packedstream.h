@@ -378,6 +378,15 @@ private:
     InputStream m_stream;
 };
 
+/// assign a sequence to a packed stream
+///
+template <typename InputIterator, typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_HOST_DEVICE
+void assign(
+    const uint32                                                                                    input_len,
+    InputIterator                                                                                   input_string,
+    PackedStreamIterator< PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> >   packed_string);
+
 /// PackedStream specialization of the stream_traits class, providing compile-time information about the
 /// corresponding string type
 ///

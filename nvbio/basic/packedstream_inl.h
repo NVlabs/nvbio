@@ -733,6 +733,88 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamRef<Stream>::operator Symbol() c
     return m_stream.get( m_index );
 }
 
+// assign a sequence to a packed stream
+//
+template <typename InputIterator, typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_HOST_DEVICE
+void assign(
+    const uint32                                                                                    input_len,
+    InputIterator                                                                                   input_string,
+    PackedStreamIterator< PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> >   packed_string)
+{
+    typedef PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> packed_stream_type;
+    typedef typename packed_stream_type::storage_type word_type;
+
+    const uint32 WORD_SIZE = uint32( 8u * sizeof(word_type) );
+
+    const bool   BIG_ENDIAN       = BIG_ENDIAN_T;
+    const uint32 SYMBOL_SIZE      = SYMBOL_SIZE_T;
+    const uint32 SYMBOLS_PER_WORD = WORD_SIZE / SYMBOL_SIZE;
+
+    word_type* words = packed_string.container().stream();
+
+    const IndexType stream_offset = packed_string.index();
+    const uint32    word_offset   = stream_offset & (SYMBOLS_PER_WORD-1);
+          uint32    word_rem      = 0;
+
+    if (word_offset)
+    {
+        // compute how many symbols we still need to encode to fill the current word
+        word_rem = SYMBOLS_PER_WORD - word_offset;
+
+        // fetch the word in question
+        word_type word = words[ stream_offset / SYMBOLS_PER_WORD ];
+
+        // loop through the word's bp's
+        for (uint32 i = 0; i < word_rem; ++i)
+        {
+            // fetch the bp
+            const uint8 bp = input_string[i];
+
+            const uint32       bit_idx = (word_offset + i) * SYMBOL_SIZE;
+            const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
+            const word_type     symbol = word_type(bp) << symbol_offset;
+
+            // set bits
+            word |= symbol;
+        }
+
+        // write out the word
+        words[ stream_offset / SYMBOLS_PER_WORD ] = word;
+    }
+
+    //#pragma omp parallel for
+    for (int i = word_rem; i < int( input_len ); i += SYMBOLS_PER_WORD)
+    {
+        // encode a word's worth of characters
+        word_type word = 0u;
+
+        const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, input_len - i );
+
+        // loop through the word's bp's
+        for (uint32 j = 0; j < SYMBOLS_PER_WORD; ++j)
+        {
+            if (j < n_symbols)
+            {
+                // fetch the bp
+                const uint8 bp = input_string[i + j];
+
+                const uint32       bit_idx = j * SYMBOL_SIZE;
+                const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
+                const word_type     symbol = word_type(bp) << symbol_offset;
+
+                // set bits
+                word |= symbol;
+            }
+        }
+
+        // write out the word
+        const uint32 word_idx = (stream_offset + i) / SYMBOLS_PER_WORD;
+
+        words[ word_idx ] = word;
+    }
+}
+
 #if defined(__CUDACC__)
 
 #if 0

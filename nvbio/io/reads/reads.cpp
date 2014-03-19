@@ -303,148 +303,127 @@ void ReadDataRAM::end_batch(void)
     m_name_index  = nvbio::plain_view( m_name_index_vec );
 }
 
-// a small reverse string class
-struct reverse_string
+// a small read class supporting REVERSE | COMPLEMENT operations
+//
+template <ReadEncoding FLAGS>
+struct read_string
 {
     // constructor
-    reverse_string(const uint32 len, const uint8* vec) : m_len(len), m_vec(vec) {}
+    read_string(const uint32 len, const uint8* read, const uint8* qual) : m_len(len), m_read(read), m_qual(qual) {}
 
     // indexing operator
-    uint8 operator[] (const uint32 i) const { return m_vec[ m_len - i - 1u ]; }
+    uint8 operator[] (const uint32 i) const
+    {
+        const uint32 index = (FLAGS & REVERSE) ? m_len - i - 1u : i;
+
+        // fetch the bp
+        const uint8 bp = nst_nt4_encode( m_read[index] );
+
+        if (FLAGS & COMPLEMENT)
+            return bp < 4u ? 3u - bp : 4u;
+
+        return bp;
+    }
+
+    // quality operator
+    uint8 quality(const uint32 i) const
+    {
+        const uint32 index = (FLAGS & REVERSE) ? m_len - i - 1u : i;
+
+        return m_qual[index];
+    }
 
     const uint32 m_len;
-    const uint8* m_vec;
+    const uint8* m_read;
+    const uint8* m_qual;
 };
 
-template <ReadEncoding conversion_flags, QualityEncoding q_encoding, typename read_iterator, typename quality_iterator>
+// encode a read according to a compile-time quality-encoding
+//
+template <QualityEncoding quality_encoding, typename read_type>
 void encode(
-    const uint32               read_len,
-    const read_iterator        read,
-    const quality_iterator     quality,
-    const uint32               stream_offset,
-    ReadData::read_stream_type stream,
-    char*                      qual_stream)
+    const uint32                            read_len,
+    const read_type                         read,
+    ReadData::read_stream_type::iterator    stream,
+    char*                                   qual_stream)
 {
   #if 1
-    typedef uint32 word_type;
-    const uint32 WORD_SIZE = uint32( 8u * sizeof(word_type) );
 
-    const bool   BIG_ENDIAN       = ReadData::read_stream_type::BIG_ENDIAN;
-    const uint32 SYMBOL_SIZE      = ReadData::read_stream_type::SYMBOL_SIZE;
-    const uint32 SYMBOLS_PER_WORD = WORD_SIZE / SYMBOL_SIZE;
+    // use the custom PackedStream assign() method
+    assign( read_len, read, stream  );
 
-    word_type* words = stream.stream();
+    // naive serial implementation
+    for (uint32 i = 0; i < read_len; i++)
+        qual_stream[i] = convert_to_phred_quality<quality_encoding>(read.quality(i));
 
-    const uint32 word_offset = stream_offset & (SYMBOLS_PER_WORD-1);
-          uint32 word_rem    = 0;
-
-    if (word_offset)
-    {
-        // compute how many symbols we still need to encode to fill the current word
-        word_rem = SYMBOLS_PER_WORD - word_offset;
-
-        // fetch the word in question
-        word_type word = words[ stream_offset / SYMBOLS_PER_WORD ];
-
-        // loop through the word's bp's
-        for (uint32 i = 0; i < word_rem; ++i)
-        {
-            // fetch the bp
-            uint8 bp = nst_nt4_encode( read[i] );
-
-            if (conversion_flags & COMPLEMENT)
-                bp = bp < 4u ? 3u - bp : 4u;
-
-            const uint32       bit_idx = (word_offset + i) * SYMBOL_SIZE;
-            const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
-            const word_type     symbol = word_type(bp) << symbol_offset;
-
-            // set bits
-            word |= symbol;
-
-            // set the quality
-            qual_stream[stream_offset + i] = convert_to_phred_quality<q_encoding>( quality[i] );
-        }
-
-        // write out the word
-        words[ stream_offset / SYMBOLS_PER_WORD ] = word;
-    }
-
-    //#pragma omp parallel for
-    for (int i = word_rem; i < int( read_len ); i += SYMBOLS_PER_WORD)
-    {
-        // encode a word's worth of characters
-        word_type word = 0u;
-
-        const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, read_len - i );
-
-        // loop through the word's bp's
-        for (uint32 j = 0; j < SYMBOLS_PER_WORD; ++j)
-        {
-            if (j < n_symbols)
-            {
-                // fetch the bp
-                uint8 bp = nst_nt4_encode( read[i + j] );
-
-                if (conversion_flags & COMPLEMENT)
-                    bp = bp < 4u ? 3u - bp : 4u;
-
-                const uint32       bit_idx = j * SYMBOL_SIZE;
-                const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
-                const word_type     symbol = word_type(bp) << symbol_offset;
-
-                // set bits
-                word |= symbol;
-
-                // set the quality
-                qual_stream[stream_offset + i + j] = convert_to_phred_quality<q_encoding>( quality[i + j] );
-            }
-        }
-
-        // write out the word
-        const uint32 word_idx = (stream_offset + i) / SYMBOLS_PER_WORD;
-
-        words[ word_idx ] = word;
-    }
   #else
     // naive serial implementation
     for (uint32 i = 0; i < read_len; i++)
     {
-        uint8 bp = nst_nt4_encode( read[i] );
-
-        if (conversion_flags & COMPLEMENT)
-            bp = bp < 4u ? 3u - bp : 4u;
-
-        stream[stream_offset + i] = bp;
-        qual_stream[stream_offset + i] = convert_to_phred_quality<q_encoding>(quality[i]);
+        stream[stream_offset + i] = read[i];
+        qual_stream[i] = convert_to_phred_quality<quality_encoding>(read.quality(i));
     }
   #endif
 }
 
-template <ReadEncoding conversion_flags, typename read_iterator, typename quality_iterator>
+// encode a read according to some compile-time flags and run-time quality-encoding
+//
+template <typename read_type>
 void encode(
-    const uint32               read_len,
-    const read_iterator        read,
-    const quality_iterator     quality,
-    const QualityEncoding      q_encoding,
-    const uint32               stream_offset,
-    ReadData::read_stream_type stream,
-    char*                      qual_stream)
+    const QualityEncoding                   quality_encoding,
+    const uint32                            read_len,
+    const read_type                         read,
+    ReadData::read_stream_type::iterator    stream,
+    char*                                   qual_stream)
 {
-    switch (q_encoding)
+    switch (quality_encoding)
     {
     case Phred:
-        encode<conversion_flags,Phred>( read_len, read, quality, stream_offset, stream, qual_stream );
+        encode<Phred>( read_len, read, stream, qual_stream );
         break;
     case Phred33:
-        encode<conversion_flags,Phred33>( read_len, read, quality, stream_offset, stream, qual_stream );
+        encode<Phred33>( read_len, read, stream, qual_stream );
         break;
     case Phred64:
-        encode<conversion_flags,Phred64>( read_len, read, quality, stream_offset, stream, qual_stream );
+        encode<Phred64>( read_len, read, stream, qual_stream );
         break;
     case Solexa:
-        encode<conversion_flags,Solexa>( read_len, read, quality, stream_offset, stream, qual_stream );
+        encode<Solexa>( read_len, read, stream, qual_stream );
         break;
+    }
+}
+
+// encode a read according to some given run-time flags and quality-encoding
+//
+void encode(
+    const ReadEncoding                      conversion_flags,
+    const QualityEncoding                   quality_encoding,
+    const uint32                            read_len,
+    const uint8*                            read,
+    const uint8*                            quality,
+    ReadData::read_stream_type::iterator    stream,
+    char*                                   qual_stream)
+{
+    const ReadEncoding REV_COMP = ReadEncoding(REVERSE | COMPLEMENT);
+
+    const read_string<REVERSE>        r_read( read_len, read, quality );
+    const read_string<REV_COMP>       rc_read( read_len, read, quality );
+    const read_string<COMPLEMENT>     fc_read( read_len, read, quality );
+    const read_string<FORWARD>        f_read( read_len, read, quality );
+
+    if (conversion_flags & REVERSE)
+    {
+        if (conversion_flags & COMPLEMENT)
+            encode( quality_encoding, read_len, rc_read, stream, qual_stream );
+        else
+            encode( quality_encoding, read_len, r_read,  stream, qual_stream );
+    }
+    else
+    {
+        if (conversion_flags & COMPLEMENT)
+            encode( quality_encoding, read_len, fc_read, stream, qual_stream );
+        else
+            encode( quality_encoding, read_len, f_read,  stream, qual_stream );
     }
 }
 
@@ -453,7 +432,7 @@ void ReadDataRAM::push_back(uint32 read_len,
                             const char *name,
                             const uint8* read,
                             const uint8* quality,
-                            const QualityEncoding q_encoding,
+                            const QualityEncoding quality_encoding,
                             const uint32 truncate_read_len,
                             const ReadEncoding conversion_flags)
 {
@@ -474,20 +453,14 @@ void ReadDataRAM::push_back(uint32 read_len,
 
     // encode the read data
     ReadData::read_stream_type stream(&m_read_vec[0]);
-    if (conversion_flags & REVERSE)
-    {
-        if (conversion_flags & COMPLEMENT)
-            encode<COMPLEMENT>( read_len, reverse_string( read_len, read ), reverse_string( read_len, quality ), q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
-        else
-            encode<FORWARD>( read_len, reverse_string( read_len, read ), reverse_string( read_len, quality ), q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
-    }
-    else
-    {
-        if (conversion_flags & COMPLEMENT)
-            encode<COMPLEMENT>( read_len, read, quality, q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
-        else
-            encode<FORWARD>( read_len, read, quality, q_encoding, m_read_stream_len, stream, &m_qual_vec[0] );
-    }
+    encode(
+        conversion_flags,
+        quality_encoding,
+        read_len,
+        read,
+        quality,
+        stream.begin() + m_read_stream_len,
+        &m_qual_vec[0] + m_read_stream_len );
 
     // update read and bp counts
     m_n_reads++;

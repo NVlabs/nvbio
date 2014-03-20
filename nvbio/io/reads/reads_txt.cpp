@@ -157,7 +157,8 @@ int ReadDataFile_TXT::nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 ma
         else
         {
             // add a character to the current read
-            if (isgraph(c))
+            //if (isgraph(c))
+            if (c >= 0x21 && c <= 0x7E)
                 m_read_bp.push_back( c );
 
             state = IN_READ;

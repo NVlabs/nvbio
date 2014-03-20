@@ -407,10 +407,10 @@ void encode(
 {
     const ReadEncoding REV_COMP = ReadEncoding(REVERSE | COMPLEMENT);
 
-    const read_string<REVERSE>        r_read( read_len, read, quality );
+    const read_string<REVERSE>         r_read( read_len, read, quality );
     const read_string<REV_COMP>       rc_read( read_len, read, quality );
     const read_string<COMPLEMENT>     fc_read( read_len, read, quality );
-    const read_string<FORWARD>        f_read( read_len, read, quality );
+    const read_string<FORWARD>         f_read( read_len, read, quality );
 
     if (conversion_flags & REVERSE)
     {
@@ -476,7 +476,8 @@ void ReadDataRAM::push_back(uint32 read_len,
     const uint32 name_offset = m_name_stream_len;
 
     m_name_vec.resize(name_offset + name_len + 1);
-    strcpy(&m_name_vec[name_offset], name);
+    //strcpy(&m_name_vec[name_offset], name);
+    memcpy(&m_name_vec[name_offset],name,name_len + 1);
 
     m_name_stream_len += name_len + 1;
     m_name_index_vec.push_back(m_name_stream_len);
@@ -526,7 +527,7 @@ ReadDataCUDA::ReadDataCUDA(const ReadData& host_data, const uint32 flags)
         m_read_stream_words = host_data.m_read_stream_words;
 
         cudaAllocAndCopyVector( m_read_stream, host_data.m_read_stream, m_read_stream_words, m_allocated );
-        cudaAllocAndCopyVector( m_read_index,  host_data.m_read_index,  m_n_reads+1, m_allocated );
+        cudaAllocAndCopyVector( m_read_index,  host_data.m_read_index,  m_n_reads+1,         m_allocated );
     }
     if (flags & QUALS)
         cudaAllocAndCopyVector( m_qual_stream, host_data.m_qual_stream, m_read_stream_len, m_allocated );

@@ -47,122 +47,89 @@ int ReadDataFile_TXT::nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 ma
 {
     const char* name = "";
 
-    enum State {
-        SPACES   = 0,
-        IN_READ  = 1
-    };
-
-    State state = SPACES;
-
     uint32 n_reads = 0;
     uint32 n_bps   = 0;
 
-    const uint32 bps_mult =
+    const uint32 read_mult =
         ((m_flags & FORWARD)            ? 1u : 0u) +
         ((m_flags & REVERSE)            ? 1u : 0u) +
         ((m_flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
         ((m_flags & REVERSE_COMPLEMENT) ? 1u : 0u);
 
-    while (1)
+    while (n_reads                                   < max_reads &&
+           n_bps + read_mult*ReadDataFile::LONG_READ < max_bps)
     {
-        const uint8 c = get();
+        // reset the read
+        m_read_bp.erase( m_read_bp.begin(), m_read_bp.end() );
 
-        // eat whitespaces and newlines
-        if (m_file_state != FILE_OK || c == '\n' || c == ' ')
+        // read an entire line
+        for (uint8 c = get(); c != '\n' && c != 0; c = get())
         {
-            // state transition: IN_READ -> SPACES
-            if (state == IN_READ)
-            {
-                //
-                // emit a read
-                //
-
-                if (m_read_q.size() < m_read_bp.size())
-                {
-                    // extend the quality score vector if needed
-                    m_read_q.resize( m_read_bp.size() );
-                    for (size_t i = m_read_q.size(); i < m_read_bp.size(); ++i)
-                        m_read_q[i] = char(255);
-                }
-
-                if (m_flags & FORWARD)
-                {
-                    output->push_back(uint32( m_read_bp.size() ),
-                                      name,
-                                      &m_read_bp[0],
-                                      &m_read_q[0],
-                                      m_quality_encoding,
-                                      m_truncate_read_len,
-                                      FORWARD );
-
-                    n_bps += (uint32)m_read_bp.size();
-                }
-                if (m_flags & REVERSE)
-                {
-                    output->push_back(uint32( m_read_bp.size() ),
-                                      name,
-                                      &m_read_bp[0],
-                                      &m_read_q[0],
-                                      m_quality_encoding,
-                                      m_truncate_read_len,
-                                      REVERSE );
-
-                    n_bps += (uint32)m_read_bp.size();
-                }
-                if (m_flags & FORWARD_COMPLEMENT)
-                {
-                    output->push_back(uint32( m_read_bp.size() ),
-                                      name,
-                                      &m_read_bp[0],
-                                      &m_read_q[0],
-                                      m_quality_encoding,
-                                      m_truncate_read_len,
-                                      ReadEncoding( FORWARD | COMPLEMENT ) );
-
-                    n_bps += (uint32)m_read_bp.size();
-                }
-                if (m_flags & REVERSE_COMPLEMENT)
-                {
-                    output->push_back(uint32( m_read_bp.size() ),
-                                      name,
-                                      &m_read_bp[0],
-                                      &m_read_q[0],
-                                      m_quality_encoding,
-                                      m_truncate_read_len,
-                                      ReadEncoding( REVERSE | COMPLEMENT ) );
-
-                    n_bps += (uint32)m_read_bp.size();
-                }
-
-                // reset the read
-                m_read_bp.erase( m_read_bp.begin(), m_read_bp.end() );
-
-                ++n_reads;
-
-                // bail-out if we reached our reads quota
-                if (n_reads == max_reads ||
-                    n_bps + ReadDataFile::LONG_READ*bps_mult > max_bps)
-                    break;
-            }
-
-            // check for EOF
-            if (m_file_state != FILE_OK)
-                break;
-
-            if (c == '\n')
-                ++m_line;
-
-            state = SPACES;
-        }
-        else
-        {
-            // add a character to the current read
-            //if (isgraph(c))
             if (c >= 0x21 && c <= 0x7E)
                 m_read_bp.push_back( c );
-
-            state = IN_READ;
         }
+
+        ++m_line;
+
+        if (m_read_q.size() < m_read_bp.size())
+        {
+            // extend the quality score vector if needed
+            const size_t old_size = m_read_q.size();
+            m_read_q.resize( m_read_bp.size() );
+            for (size_t i = old_size; i < m_read_bp.size(); ++i)
+                m_read_q[i] = char(255);
+        }
+
+        if (m_read_bp.size())
+        {
+            if (m_flags & FORWARD)
+            {
+                output->push_back(uint32( m_read_bp.size() ),
+                                  name,
+                                  &m_read_bp[0],
+                                  &m_read_q[0],
+                                  m_quality_encoding,
+                                  m_truncate_read_len,
+                                  FORWARD );
+            }
+            if (m_flags & REVERSE)
+            {
+                output->push_back(uint32( m_read_bp.size() ),
+                                  name,
+                                  &m_read_bp[0],
+                                  &m_read_q[0],
+                                  m_quality_encoding,
+                                  m_truncate_read_len,
+                                  REVERSE );
+            }
+            if (m_flags & FORWARD_COMPLEMENT)
+            {
+                output->push_back(uint32( m_read_bp.size() ),
+                                  name,
+                                  &m_read_bp[0],
+                                  &m_read_q[0],
+                                  m_quality_encoding,
+                                  m_truncate_read_len,
+                                  ReadEncoding( FORWARD | COMPLEMENT ) );
+            }
+            if (m_flags & REVERSE_COMPLEMENT)
+            {
+                output->push_back(uint32( m_read_bp.size() ),
+                                  name,
+                                  &m_read_bp[0],
+                                  &m_read_q[0],
+                                  m_quality_encoding,
+                                  m_truncate_read_len,
+                                  ReadEncoding( REVERSE | COMPLEMENT ) );
+            }
+
+            n_bps   += read_mult * (uint32)m_read_bp.size();
+            n_reads += read_mult;
+        }
+
+        // check for end-of-file
+        if (m_file_state != FILE_OK)
+            break;
     }
     return n_reads;
 }

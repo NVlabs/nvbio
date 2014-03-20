@@ -33,6 +33,7 @@
 #include <nvbio/io/reads/bam.h>
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/vector_view.h>
+#include <nvbio/basic/timer.h>
 #include <cuda_runtime.h>
 
 #include <string.h>
@@ -274,9 +275,9 @@ inline unsigned char complement_bp(unsigned char bp)
 ReadDataRAM::ReadDataRAM()
   : ReadData()
 {
-    // xxx: these values are magic, need to document!
-    m_read_vec.reserve( 8*1024*1024 );
-    m_qual_vec.reserve( 64*1024*1024 );
+    // old mechanism employed before introducing reserve()
+    //m_read_vec.reserve( 8*1024*1024 );
+    //m_qual_vec.reserve( 64*1024*1024 );
 
     m_read_index_vec.reserve( 16*1024 );
     m_read_index_vec.resize( 1u );
@@ -287,12 +288,46 @@ ReadDataRAM::ReadDataRAM()
     m_name_index_vec[0] = 0u;
 }
 
+#if defined(PRESIZED_VECTORS)
+  #define PRESIZE_VECTORS(vec, x) vec.resize(x)
+  #define ADJUST_VECTORS(vec, x)  vec.resize(x)
+  #define RESIZE_VECTORS(vec, x)  if (vec.size() < x) vec.resize(x)
+#else
+  #define PRESIZE_VECTORS(vec, x)
+  #define ADJUST_VECTORS(vec, x)
+  #define RESIZE_VECTORS(vec, x)  vec.resize(x)
+#endif
+
+// reserve enough storage for a given number of reads and bps
+//
+void ReadDataRAM::reserve(const uint32 n_reads, const uint32 n_bps)
+{
+    // a default read id length used to reserve enough space upfront and avoid frequent allocations
+    const uint32 AVG_NAME_LENGTH = 250;
+
+    const uint32 bps_per_word = 32u / ReadData::READ_BITS;
+
+    m_read_vec.reserve( n_bps / bps_per_word );
+    m_qual_vec.reserve( n_bps );
+    m_read_index_vec.reserve( n_reads+1 );
+    m_name_index_vec.reserve( AVG_NAME_LENGTH * n_reads );
+    m_name_index_vec.reserve( n_reads+1 );
+
+    // pre-size the vectors
+    PRESIZE_VECTORS( m_read_vec, n_bps / bps_per_word );
+    PRESIZE_VECTORS( m_qual_vec, n_bps );
+}
+
 // signals that the batch is complete
 void ReadDataRAM::end_batch(void)
 {
     assert(m_read_stream_words == (m_read_stream_len + 7) / 8);
 
     m_avg_read_len = (uint32) ceilf(float(m_read_stream_len) / float(m_n_reads));
+
+    // adjust the vector sizes
+    ADJUST_VECTORS( m_read_vec, m_read_stream_words );
+    ADJUST_VECTORS( m_qual_vec, m_read_stream_len );
 
     // set the stream pointers
     m_read_stream = nvbio::plain_view( m_read_vec );
@@ -445,10 +480,13 @@ void ReadDataRAM::push_back(uint32 read_len,
 
     // resize the reads & quality buffers
     {
-        const uint32 bps_per_word = 32 / ReadData::READ_BITS;
-        const uint32 words = (m_read_stream_len + read_len + bps_per_word - 1) / bps_per_word;
-        m_read_vec.resize(words);
-        m_qual_vec.resize(m_read_stream_len + read_len);
+        static const uint32 bps_per_word = 32u / ReadData::READ_BITS;
+        const uint32 stream_len = m_read_stream_len + read_len;
+        const uint32 words      = (stream_len + bps_per_word - 1) / bps_per_word;
+
+        RESIZE_VECTORS( m_read_vec, words );
+        RESIZE_VECTORS( m_qual_vec, stream_len );
+
         m_read_stream_words = words;
     }
 
@@ -546,38 +584,43 @@ ReadDataCUDA::~ReadDataCUDA()
 }
 
 // grab the next batch of reads into a host memory buffer
-ReadData *ReadDataFile::next(const uint32 batch_size)
+ReadData *ReadDataFile::next(const uint32 batch_size, const uint32 batch_bps)
 {
-    const uint32 to_load = std::min(m_max_reads - m_loaded, batch_size);
-    uint32 m;
+    const uint32 reads_to_load = std::min(m_max_reads - m_loaded, batch_size);
 
-    if (!is_ok() || to_load == 0)
+    if (!is_ok() || reads_to_load == 0)
         return NULL;
+
+    // a default average read length used to reserve enough space
+    const uint32 AVG_READ_LENGTH = 100;
 
     ReadDataRAM *reads = new ReadDataRAM();
+    reads->reserve(
+        batch_size,
+        batch_bps == uint32(-1) ? batch_size * AVG_READ_LENGTH : batch_bps ); // try to use a default read length
 
-    m = 0;
-    while (m < to_load)
+    while (reads->size() < reads_to_load &&
+           reads->bps()  < batch_bps)
     {
         // load 100 at a time if possible
-        const uint32 q = std::min(to_load - m, uint32(100));
-        int n;
+        const uint32 chunk_reads = nvbio::min(reads_to_load - reads->size(), uint32(100));
+        const uint32 chunk_bps   = batch_bps - reads->bps();
 
-        n = nextChunk(reads, q);
-        assert(n <= (int) q);
+        const int n = nextChunk(reads, chunk_reads, chunk_bps);
+        assert(n <= (int) chunk_reads);
         if (n == 0)
-        {
             break;
-        }
 
-        m += n;
-        assert(m <= to_load);
+        assert(reads->size() <= reads_to_load);
     }
 
-    if (m == 0)
+    if (reads->size() == 0)
+    {
+        delete reads;
         return NULL;
+    }
 
-    m_loaded += m;
+    m_loaded += reads->size();
 
     reads->end_batch();
 

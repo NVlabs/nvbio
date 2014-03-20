@@ -270,8 +270,11 @@ bool ReadDataFile_SAM::parseHeaderLine(char *start)
 }
 
 // fetch the next chunk of reads (up to max_reads) from the file and push it into output
-int ReadDataFile_SAM::nextChunk(ReadDataRAM *output, uint32 max_reads)
+int ReadDataFile_SAM::nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 max_bps)
 {
+    if (max_bps < ReadDataFile::LONG_READ)
+        return 0;
+
     char *name;
     char *flag;
     char *rname;

@@ -166,8 +166,11 @@ inline unsigned char decode_BAM_bp(uint8 bp)
 }
 
 // grab the next chunk of reads from the file, up to max_reads
-int ReadDataFile_BAM::nextChunk(ReadDataRAM *output, uint32 max_reads)
+int ReadDataFile_BAM::nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 max_bps)
 {
+    if (max_bps < ReadDataFile::LONG_READ)
+        return 0;
+
     // error code for gzread
     static const int error = -1;
 
@@ -211,7 +214,7 @@ int ReadDataFile_BAM::nextChunk(ReadDataRAM *output, uint32 max_reads)
     if (gzeof(fp))
     {
         m_file_state = FILE_EOF;
-        return false;
+        return 0;
     }
 
     // parse and skip all non-primary reads
@@ -257,7 +260,7 @@ int ReadDataFile_BAM::nextChunk(ReadDataRAM *output, uint32 max_reads)
     {
         log_error(stderr, "error processing BAM file (could not fetch read name)\n");
         m_file_state = FILE_STREAM_ERROR;
-        return false;
+        return 0;
     }
 
     // skip the cigar
@@ -272,7 +275,7 @@ int ReadDataFile_BAM::nextChunk(ReadDataRAM *output, uint32 max_reads)
     {
         log_error(stderr, "error processing BAM file (could not fetch sequence data)\n");
         m_file_state = FILE_STREAM_ERROR;
-        return false;
+        return 0;
     }
 
     // read in the quality data
@@ -281,7 +284,7 @@ int ReadDataFile_BAM::nextChunk(ReadDataRAM *output, uint32 max_reads)
     {
         log_error(stderr, "error processing BAM file (could not fetch quality data)\n");
         m_file_state = FILE_STREAM_ERROR;
-        return false;
+        return 0;
     }
 
     // skip the rest of the read block

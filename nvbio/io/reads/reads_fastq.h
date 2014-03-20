@@ -71,7 +71,7 @@ protected:
 
     // get next read chunk from file and parse it (up to max reads)
     // this can cause m_file_state to change
-    virtual int nextChunk(ReadDataRAM *output, uint32 max);
+    virtual int nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 max_bps);
 
     // fill m_buffer with data from the file, return the new file state
     // this should only report EOF when no more bytes could be read

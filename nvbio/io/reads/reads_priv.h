@@ -45,6 +45,8 @@ namespace io {
 ///
 struct ReadDataFile : public ReadDataStream
 {
+    static const uint32 LONG_READ = 32*1024;
+
     /// enum describing various possible file states
     ///
     typedef enum {
@@ -80,7 +82,7 @@ public:
 
     /// grab the next batch of reads into a host memory buffer
     ///
-    virtual ReadData *next(const uint32 batch_size);
+    virtual ReadData *next(const uint32 batch_size, const uint32 batch_bps);
 
     /// returns true if the stream is ready to read from
     ///
@@ -90,7 +92,7 @@ public:
     };
 
 protected:
-    virtual int nextChunk(ReadDataRAM *output, uint32 max_reads) = 0;
+    virtual int nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 max_bps) = 0;
 
     uint32                  m_max_reads;
     ReadEncoding            m_flags;

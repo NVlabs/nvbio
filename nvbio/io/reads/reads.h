@@ -252,6 +252,10 @@ struct ReadDataRAM : public ReadData
 {
     ReadDataRAM();
 
+    /// reserve enough storage for a given number of reads and bps
+    ///
+    void reserve(const uint32 n_reads, const uint32 n_bps);
+
     /// add a read to the end of this batch
     ///
     void push_back(uint32                   in_read_len,
@@ -314,7 +318,7 @@ struct ReadDataStream
 
     /// next batch
     ///
-    virtual ReadData* next(const uint32 batch_size) = 0;
+    virtual ReadData* next(const uint32 batch_size, const uint32 batch_bps = uint32(-1)) = 0;
 
     /// is the stream ok?
     ///

@@ -44,12 +44,20 @@ namespace io {
 ///@addtogroup ReadsIODetail
 ///@{
 
-int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
+int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 max_bps)
 {
-    uint32 n = 0;
+    uint32 n_reads = 0;
+    uint32 n_bps   = 0;
     uint8  marker;
 
-    while (n < max)
+    const uint32 bps_mult =
+        ((m_flags & FORWARD) ? 1u : 0u) +
+        ((m_flags & REVERSE) ? 1u : 0u) +
+        ((m_flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
+        ((m_flags & REVERSE_COMPLEMENT) ? 1u : 0u);
+
+    while (n_reads < max_reads &&
+           n_bps + ReadDataFile::LONG_READ*bps_mult < max_bps)
     {
         // consume spaces & newlines
         do {
@@ -164,6 +172,8 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
                               m_quality_encoding,
                               m_truncate_read_len,
                               FORWARD );
+
+            n_bps += len;
         }
         if (m_flags & REVERSE)
         {
@@ -174,6 +184,8 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
                               m_quality_encoding,
                               m_truncate_read_len,
                               REVERSE );
+
+            n_bps += len;
         }
         if (m_flags & FORWARD_COMPLEMENT)
         {
@@ -184,6 +196,8 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
                               m_quality_encoding,
                               m_truncate_read_len,
                               ReadEncoding( FORWARD | COMPLEMENT ) );
+
+            n_bps += len;
         }
         if (m_flags & REVERSE_COMPLEMENT)
         {
@@ -194,11 +208,13 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max)
                               m_quality_encoding,
                               m_truncate_read_len,
                               ReadEncoding( REVERSE | COMPLEMENT ) );
+
+            n_bps += len;
         }
 
-        ++n;
+        ++n_reads;
     }
-    return n;
+    return n_reads;
 }
 
 ReadDataFile_FASTQ_gz::ReadDataFile_FASTQ_gz(const char *read_file_name,

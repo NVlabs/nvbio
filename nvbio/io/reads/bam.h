@@ -59,7 +59,7 @@ struct ReadDataFile_BAM : public ReadDataFile
 
     /// read the next chunk
     ///
-    virtual int nextChunk(ReadDataRAM *output, uint32 max_reads);
+    virtual int nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 max_bps);
 
     /// initialize the stream
     ///

@@ -86,7 +86,7 @@ struct ReadDataFile_SAM : public ReadDataFile
                      const uint32 max_read_len,
                      const ReadEncoding flags);
 
-    virtual int nextChunk(ReadDataRAM *output, uint32 max_reads);
+    virtual int nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 max_bps);
 
     bool init(void);
 

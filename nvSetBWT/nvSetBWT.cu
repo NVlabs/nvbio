@@ -95,6 +95,7 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
     }
 
     const uint32 batch_size = 512*1024;
+    const uint32 batch_bps  = batch_size * 100;
 
     float io_time = 0.0f;
 
@@ -103,7 +104,7 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
         nvbio::Timer timer;
         timer.start();
 
-        SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_size ) );
+        SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_size, batch_bps ) );
         if (h_read_data == NULL)
             break;
 

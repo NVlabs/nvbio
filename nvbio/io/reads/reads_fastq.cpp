@@ -51,8 +51,8 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max_reads, 
     uint8  marker;
 
     const uint32 bps_mult =
-        ((m_flags & FORWARD) ? 1u : 0u) +
-        ((m_flags & REVERSE) ? 1u : 0u) +
+        ((m_flags & FORWARD)            ? 1u : 0u) +
+        ((m_flags & REVERSE)            ? 1u : 0u) +
         ((m_flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
         ((m_flags & REVERSE_COMPLEMENT) ? 1u : 0u);
 

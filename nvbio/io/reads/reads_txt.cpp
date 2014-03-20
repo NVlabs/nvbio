@@ -58,8 +58,8 @@ int ReadDataFile_TXT::nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 ma
     uint32 n_bps   = 0;
 
     const uint32 bps_mult =
-        ((m_flags & FORWARD) ? 1u : 0u) +
-        ((m_flags & REVERSE) ? 1u : 0u) +
+        ((m_flags & FORWARD)            ? 1u : 0u) +
+        ((m_flags & REVERSE)            ? 1u : 0u) +
         ((m_flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
         ((m_flags & REVERSE_COMPLEMENT) ? 1u : 0u);
 

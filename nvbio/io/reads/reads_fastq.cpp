@@ -50,14 +50,14 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max_reads, 
     uint32 n_bps   = 0;
     uint8  marker;
 
-    const uint32 bps_mult =
+    const uint32 read_mult =
         ((m_flags & FORWARD)            ? 1u : 0u) +
         ((m_flags & REVERSE)            ? 1u : 0u) +
         ((m_flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
         ((m_flags & REVERSE_COMPLEMENT) ? 1u : 0u);
 
-    while (n_reads < max_reads &&
-           n_bps + ReadDataFile::LONG_READ*bps_mult < max_bps)
+    while (n_reads + read_mult                         <= max_reads &&
+           n_bps   + read_mult*ReadDataFile::LONG_READ <= max_bps)
     {
         // consume spaces & newlines
         do {
@@ -172,8 +172,6 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max_reads, 
                               m_quality_encoding,
                               m_truncate_read_len,
                               FORWARD );
-
-            n_bps += len;
         }
         if (m_flags & REVERSE)
         {
@@ -184,8 +182,6 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max_reads, 
                               m_quality_encoding,
                               m_truncate_read_len,
                               REVERSE );
-
-            n_bps += len;
         }
         if (m_flags & FORWARD_COMPLEMENT)
         {
@@ -196,8 +192,6 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max_reads, 
                               m_quality_encoding,
                               m_truncate_read_len,
                               ReadEncoding( FORWARD | COMPLEMENT ) );
-
-            n_bps += len;
         }
         if (m_flags & REVERSE_COMPLEMENT)
         {
@@ -208,11 +202,10 @@ int ReadDataFile_FASTQ_parser::nextChunk(ReadDataRAM *output, uint32 max_reads, 
                               m_quality_encoding,
                               m_truncate_read_len,
                               ReadEncoding( REVERSE | COMPLEMENT ) );
-
-            n_bps += len;
         }
 
-        ++n_reads;
+        n_bps   += read_mult * len;
+        n_reads += read_mult;
     }
     return n_reads;
 }

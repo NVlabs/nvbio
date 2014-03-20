@@ -65,6 +65,7 @@ int ReadDataFile_TXT::nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 ma
         // read an entire line
         for (uint8 c = get(); c != '\n' && c != 0; c = get())
         {
+            // if (isgraph(c))
             if (c >= 0x21 && c <= 0x7E)
                 m_read_bp.push_back( c );
         }

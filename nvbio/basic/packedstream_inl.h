@@ -788,6 +788,8 @@ void assign(
     const bool   BIG_ENDIAN       = BIG_ENDIAN_T;
     const uint32 SYMBOL_SIZE      = SYMBOL_SIZE_T;
     const uint32 SYMBOLS_PER_WORD = WORD_SIZE / SYMBOL_SIZE;
+    const uint32 SYMBOL_COUNT     = 1u << SYMBOL_SIZE;
+    const uint32 SYMBOL_MASK      = SYMBOL_COUNT - 1u;
 
     word_type* words = packed_string.container().stream();
 
@@ -812,6 +814,9 @@ void assign(
             const uint32       bit_idx = (word_offset + i) * SYMBOL_SIZE;
             const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
             const word_type     symbol = word_type(bp) << symbol_offset;
+
+            // clear all bits
+            word &= ~(uint64(SYMBOL_MASK) << symbol_offset);
 
             // set bits
             word |= symbol;

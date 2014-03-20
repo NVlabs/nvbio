@@ -56,8 +56,8 @@ int ReadDataFile_TXT::nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 ma
         ((m_flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
         ((m_flags & REVERSE_COMPLEMENT) ? 1u : 0u);
 
-    while (n_reads                                   < max_reads &&
-           n_bps + read_mult*ReadDataFile::LONG_READ < max_bps)
+    while (n_reads + read_mult                       <= max_reads &&
+           n_bps + read_mult*ReadDataFile::LONG_READ <= max_bps)
     {
         // reset the read
         m_read_bp.erase( m_read_bp.begin(), m_read_bp.end() );

@@ -68,6 +68,7 @@ include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/contrib ${CMAKE_BINA
 add_subdirectory(contrib/zlib-1.2.7)
 add_subdirectory(contrib/crc)
 add_subdirectory(contrib/bamtools)
+add_subdirectory(contrib/moderngpu)
 
 add_subdirectory(nvbio)
 add_subdirectory(nvBowtie)

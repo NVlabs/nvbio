@@ -52,7 +52,7 @@ void list_files(const char* pattern, std::vector<std::string>& out_list)
     std::string base_input_name(pattern);
     size_t last_slash = base_input_name.rfind(dirsep);
     std::string base_path = base_input_name.substr( 0, last_slash+1 );
-    fprintf(stderr, "directory  : \"%s\"\n", base_path.c_str());
+    log_info(stderr, "directory  : \"%s\"\n", base_path.c_str());
 
     typedef std::pair<nvbio::uint32, std::string> sortkey;
     std::vector<sortkey> files;
@@ -64,7 +64,7 @@ void list_files(const char* pattern, std::vector<std::string>& out_list)
     intptr_t find_handle = _findfirst( base_input_name.c_str(), &file_info );
     if (find_handle == -1)
     {
-        fprintf(stderr, "unable to locate \"%s\"", base_input_name.c_str());
+        log_error(stderr, "unable to locate \"%s\"", base_input_name.c_str());
         exit(1);
     }
 

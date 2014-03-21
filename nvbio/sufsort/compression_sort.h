@@ -411,12 +411,11 @@ void CompressionSort::sort(
             d_copy_flags.begin(),
             priv::remove_singletons() );
 
-        const uint32 n_partials = thrust::transform_reduce(
-            d_copy_flags.begin() + 1u,
-            d_copy_flags.begin() + 1u + n_active_suffixes,
-            priv::cast_functor<uint8,uint32>(),
-            0u,
-            thrust::plus<uint32>() );
+        const uint32 n_partials = priv::reduce(
+            n_active_suffixes,
+            thrust::make_transform_iterator( d_copy_flags.begin() + 1u, priv::cast_functor<uint8,uint32>() ),
+            thrust::plus<uint32>(),
+            d_temp_storage );
 
         // check if the number of "unique" keys is small enough to justify reducing the active set
         //if (2u*n_segments >= n_active_suffixes)
@@ -436,32 +435,35 @@ void CompressionSort::sort(
             thrust::device_vector<uint32>& d_temp_indices = d_keys;
 
             // now keep only the indices we are interested in
-            priv::copy_if(
+            if (uint32 n_active = priv::copy_if(
                 n_active_suffixes,
                 d_indices.begin(),
                 d_copy_flags.begin() + 1u,
                 d_temp_indices.begin(),
-                d_temp_storage );
+                d_temp_storage ) != n_partials)
+                throw nvbio::runtime_error("mismatching number of partial indices %u != %u\n", n_active, n_partials);
 
             d_indices.swap( d_temp_indices );
 
             // as well as their slots
-            priv::copy_if(
+            if (uint32 n_active = priv::copy_if(
                 n_active_suffixes,
                 d_active_slots.begin(),
                 d_copy_flags.begin() + 1u,
                 d_temp_indices.begin(),
-                d_temp_storage );
+                d_temp_storage ) != n_partials)
+                throw nvbio::runtime_error("mismatching number of partial slots %u != %u\n", n_active, n_partials);
 
             d_active_slots.swap( d_temp_indices );
 
             // and the segment flags
-            priv::copy_if(
+            if (uint32 n_active = priv::copy_if(
                 n_active_suffixes,
                 d_segment_flags.begin(),
                 d_copy_flags.begin() + 1u,
                 d_temp_flags.begin(),
-                d_temp_storage );
+                d_temp_storage ) != n_partials)
+                throw nvbio::runtime_error("mismatching number of partial flags %u != %u\n", n_active, n_partials);
 
             d_segment_flags.swap( d_temp_flags );
 

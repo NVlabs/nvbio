@@ -243,11 +243,11 @@ void CompressionSort::sort(
     delay_list_type&                        delay_list)
 {
     typedef typename string_type::index_type index_type;
-    const uint32 SYMBOL_SIZE = string_type::SYMBOL_SIZE;
+    NVBIO_VAR_UNUSED const uint32 SYMBOL_SIZE = string_type::SYMBOL_SIZE;
 
     typedef uint32 word_type;
-    const uint32   WORD_BITS = uint32( 8u * sizeof(uint32) );
-    const uint32 DOLLAR_BITS = 4;
+    NVBIO_VAR_UNUSED const uint32   WORD_BITS = uint32( 8u * sizeof(uint32) );
+    NVBIO_VAR_UNUSED const uint32 DOLLAR_BITS = 4;
 
     // reserve temporary storage
     reserve( n_suffixes );

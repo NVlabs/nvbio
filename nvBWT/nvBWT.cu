@@ -35,15 +35,16 @@
 #include <vector>
 #include <algorithm>
 #include <crc/crc.h>
+#include <nvbio/basic/console.h>
 #include <nvbio/basic/bnt.h>
 #include <nvbio/basic/numbers.h>
 #include <nvbio/basic/timer.h>
-#include <nvbio/fmindex/dna.h>
 #include <nvbio/basic/packedstream.h>
+#include <nvbio/basic/thrust_view.h>
+#include <nvbio/fmindex/dna.h>
 #include <nvbio/fmindex/bwt.h>
 #include <nvbio/fasta/fasta.h>
-#include <libdivsufsortxx/divsufsortxx.h>
-#include "fake_vector.h"
+#include <nvbio/sufsort/sufsort.h>
 #include "filelist.h"
 
 
@@ -63,11 +64,11 @@ using namespace nvbio;
 #define WORD_PACKING 1
 
 #if (SA_REP == _32_32)
-typedef int32 SA_storage_type;
-typedef int32 SA_facade_type;
+typedef uint32 SA_storage_type;
+typedef uint32 SA_facade_type;
 #elif (SA_REP == _64_64)
-typedef int64 SA_storage_type;
-typedef int64 SA_facade_type;
+typedef uint64 SA_storage_type;
+typedef uint64 SA_facade_type;
 #else
 typedef uint32 SA_storage_type;
 typedef int64  SA_facade_type;
@@ -208,126 +209,83 @@ bool save_stream(FILE* output_file, const uint64 seq_words, const StreamType* st
 {
     for (uint64 words = 0; words < seq_words; words += 1024)
     {
-        const uint32 n_words = (uint32)min( uint64(1024u), seq_words - words );
+        const uint32 n_words = (uint32)nvbio::min( uint64(1024u), uint64(seq_words - words) );
         if (fwrite( stream + words, sizeof(StreamType), n_words, output_file ) != n_words)
             return false;
     }
     return true;
 }
 
-template <typename StreamType>
-int perform(
+int build(
     const char*  input_name,
     const char*  output_name,
     const char*  pac_name,
     const char*  rpac_name,
     const char*  bwt_name,
     const char*  rbwt_name,
-    const uint32 lib,
     const uint64 max_length)
 {
     std::vector<std::string> sortednames;
     list_files(input_name, sortednames);
-/*
-    std::string base_input_name = input_name;
 
-    std::string base_path = base_input_name.substr( 0, base_input_name.rfind('\\')+1 );
-    fprintf(stderr, "directory  : \"%s\"\n", base_path.c_str());
-
-    uint32 n_inputs = 0;
-    std::string inputnames[1024];
-
-    _finddata_t file_info;
-    intptr_t find_handle = _findfirst( base_input_name.c_str(), &file_info );
-    if (find_handle == -1)
-    {
-        fprintf(stderr, "unable to locate \"%s\"", base_input_name.c_str());
-        exit(1);
-    }
-
-    inputnames[ n_inputs++ ] = base_path + std::string( file_info.name );
-    while (_findnext( find_handle, &file_info ) != -1)
-        inputnames[ n_inputs++ ] = base_path + std::string( file_info.name );
-
-    // sort files...
-    std::pair<uint32,uint32> nums[1024];
-    for (uint32 i = 0; i < n_inputs; ++i)
-    {
-        size_t pos2 = inputnames[i].rfind('.');
-        size_t pos1 = inputnames[i].rfind('.', pos2-1);
-
-        std::string numstring = inputnames[i].substr( pos1+1, pos2 - pos1 - 1 );
-
-        nums[i].first  = atoi( numstring.c_str() );
-        nums[i].second = i;
-    }
-    std::sort( nums, nums + n_inputs );
-*/
     uint32 n_inputs = (uint32)sortednames.size();
-    fprintf(stderr, "\ncounting bps... started\n");
+    log_info(stderr, "\ncounting bps... started\n");
     // count entire sequence length
     Counter counter;
 
     for (uint32 i = 0; i < n_inputs; ++i)
     {
-        fprintf(stderr, "  counting \"%s\"\n", sortednames[i].c_str());
+        log_info(stderr, "  counting \"%s\"\n", sortednames[i].c_str());
 
         FASTA_inc_reader fasta( sortednames[i].c_str() );
         if (fasta.valid() == false)
         {
-            fprintf(stderr, "  error: unable to open file\n");
+            log_error(stderr, "  unable to open file\n");
             exit(1);
         }
 
         while (fasta.read( 1024, counter ) == 1024);
     }
-    fprintf(stderr, "counting bps... done\n");
+    log_info(stderr, "counting bps... done\n");
 
     const uint64 seq_length   = nvbio::min( (uint64)counter.m_size, (uint64)max_length );
-    const uint32 bps_per_word = sizeof(StreamType)*4u;
-    const uint32 words_per_32 = sizeof(uint32)/sizeof(StreamType);
+    const uint32 bps_per_word = sizeof(uint32)*4u;
     const uint64 seq_words    = (seq_length + bps_per_word - 1u) / bps_per_word;
-    const uint64 seq_words32  = (seq_words  + words_per_32 - 1u) / words_per_32;
-    const uint64 sa_words     = lib == BWTSW ? 0u : seq_length+1u;
 
-    fprintf(stderr, "\nstats:\n");
-    fprintf(stderr, "  reads           : %u\n", counter.m_reads );
-    fprintf(stderr, "  sequence length : %llu bps (%.1f MB)\n",
+    log_info(stderr, "\nstats:\n");
+    log_info(stderr, "  reads           : %u\n", counter.m_reads );
+    log_info(stderr, "  sequence length : %llu bps (%.1f MB)\n",
         seq_length,
-        float(seq_words32*sizeof(uint32))/float(1024*1024));
-    fprintf(stderr, "  buffer size     : %.1f MB\n",
-        float(sa_words*sizeof(SA_storage_type) + 2*seq_words32*sizeof(uint32))/1.0e6f );
+        float(seq_words*sizeof(uint32))/float(1024*1024));
+    log_info(stderr, "  buffer size     : %.1f MB\n",
+        2*seq_words*sizeof(uint32)/1.0e6f );
 
     // allocate the actual storage
-    uint8* buffer = (uint8*)malloc( sa_words*sizeof(SA_storage_type) + (2*seq_words32)*sizeof(uint32) );
-    if (buffer == NULL)
-    {
-        fprintf(stderr, "  error: unable to allocate buffer!\n");
-        exit(1);
-    }
+    thrust::host_vector<uint32> h_base_storage( seq_words );
+    thrust::host_vector<uint32> h_bwt_storage( seq_words );
 
-    SA_storage_type* bwt_temp    = (SA_storage_type*)( &buffer[0] );
-    StreamType*      base_stream = (StreamType*)((SA_storage_type*)( &buffer[0] ) + sa_words);
-    uint32*          bwt_stream  = ((uint32*)base_stream) + seq_words32;
+    uint32* h_base_stream = nvbio::plain_view( h_base_storage );
+    uint32* h_bwt_stream  = nvbio::plain_view( h_bwt_storage );
 
-    typedef PackedStream<StreamType*,uint8,2,true,SA_facade_type> stream_type;
-    typedef PackedStream<uint32*,uint8,2,true,SA_facade_type> bwt_stream_type;
-    stream_type     stream( base_stream );
-    bwt_stream_type bwt( bwt_stream );
+    typedef PackedStream<const uint32*,uint8,2,true,SA_facade_type> const_stream_type;
+    typedef PackedStream<      uint32*,uint8,2,true,SA_facade_type>       stream_type;
 
-    fprintf(stderr, "\nbuffering bps... started\n");
+    stream_type h_stream( h_base_stream );
+    stream_type h_bwt( h_bwt_stream );
+
+    log_info(stderr, "\nbuffering bps... started\n");
     // read all files
     {
-        Writer<StreamType> writer( base_stream, counter.m_reads, seq_length );
+        Writer<uint32> writer( h_base_stream, counter.m_reads, seq_length );
 
         for (uint32 i = 0; i < n_inputs; ++i)
         {
-            fprintf(stderr, "  buffering \"%s\"\n", sortednames[i].c_str());
+            log_info(stderr, "  buffering \"%s\"\n", sortednames[i].c_str());
 
             FASTA_inc_reader fasta( sortednames[i].c_str() );
             if (fasta.valid() == false)
             {
-                fprintf(stderr, "  error: unable to open file!\n");
+                log_error(stderr, "  unable to open file!\n");
                 exit(1);
             }
 
@@ -336,301 +294,196 @@ int perform(
 
         save_bns( writer.m_bntseq, output_name );
     }
-    fprintf(stderr, "buffering bps... done\n");
+    log_info(stderr, "buffering bps... done\n");
     {
-        const uint32 crc = crcCalc( stream.begin(), uint32(seq_length) );
-        fprintf(stderr, "  crc: %u\n", crc);
+        const uint32 crc = crcCalc( h_stream.begin(), uint32(seq_length) );
+        log_info(stderr, "  crc: %u\n", crc);
     }
 
     // writing
     if (pac_name)
     {
-        fprintf(stderr, "\nwriting \"%s\"... started\n", pac_name);
-        if (sizeof(StreamType) == 4)
+        log_info(stderr, "\nwriting \"%s\"... started\n", pac_name);
+
+        const uint32 bps_per_byte = 4u;
+        const uint64 seq_bytes    = (seq_length + bps_per_byte - 1u) / bps_per_byte;
+
+        //
+        // .pac file
+        //
+
+        FILE* output_file = fopen( pac_name, "wb" );
+        if (output_file == NULL)
         {
-            //
-            // .wpac file
-            //
-
-            FILE* output_file = fopen( pac_name, "wb" );
-            if (output_file == NULL)
-            {
-                fprintf(stderr, "  error: could not open output file \"%s\"!\n", pac_name );
-                exit(1);
-            }
-
-            fwrite( &seq_length, sizeof(uint64), 1, output_file );
-            if (save_stream( output_file, seq_words, base_stream ) == false)
-            {
-                free( buffer );
-                fprintf(stderr, "error: writing failed!\n");
-                exit(1);
-            }
-
-            fclose( output_file );
+            log_error(stderr, "  could not open output file \"%s\"!\n", pac_name );
+            exit(1);
         }
-        else
+
+        if (save_stream( output_file, seq_bytes, (uint8*)h_base_stream ) == false)
         {
-            //
-            // .pac file
-            //
+            log_error(stderr, "  writing failed!\n");
+            exit(1);
+        }
+		// the following code makes the pac file size always (l_pac/4+1+1)
+        if (seq_length % 4 == 0)
+        {
+		    const uint8 ct = 0;
+		    fwrite( &ct, 1, 1, output_file );
+        }
+        {
+            const uint8 ct = seq_length % 4;
+	        fwrite( &ct, 1, 1, output_file );
+        }
 
-            FILE* output_file = fopen( pac_name, "wb" );
+        fclose( output_file );
+
+        //
+        // .rpac file
+        //
+
+        output_file = fopen( rpac_name, "wb" );
+        if (output_file == NULL)
+        {
+            log_error(stderr, "  could not open output file \"%s\"!\n", rpac_name );
+            exit(1);
+        }
+
+        // reuse the bwt storage to build the reverse
+        uint32* h_rbase_stream = h_bwt_stream;
+        stream_type h_rstream( h_rbase_stream );
+
+        // reverse the string
+        for (uint32 i = 0; i < seq_length; ++i)
+            h_rstream[i] = h_stream[ seq_length - i - 1u ];
+
+        if (save_stream( output_file, seq_bytes, (uint8*)h_rbase_stream ) == false)
+        {
+            log_error(stderr, "  writing failed!\n");
+            exit(1);
+        }
+		// the following code makes the pac file size always (l_pac/4+1+1)
+        if (seq_length % 4 == 0)
+        {
+		    const uint8 ct = 0;
+		    fwrite( &ct, 1, 1, output_file );
+        }
+        {
+            const uint8 ct = seq_length % 4;
+	        fwrite( &ct, 1, 1, output_file );
+        }
+
+        fclose( output_file );
+
+        log_info(stderr, "writing \"%s\"... done\n", pac_name);
+    }
+
+    try
+    {
+        BWTParams params;
+        uint32    primary;
+
+        thrust::device_vector<uint32> d_base_storage( h_base_storage );
+        thrust::device_vector<uint32> d_bwt_storage( seq_words );
+
+        const_stream_type d_string( nvbio::plain_view( d_base_storage ) );
+              stream_type d_bwt( nvbio::plain_view( d_bwt_storage ) );
+
+        Timer timer;
+
+        log_info(stderr, "\nbuilding forward BWT... started\n");
+        timer.start();
+
+        primary = cuda::bwt(
+            seq_length,
+            d_string.begin(),
+            d_bwt.begin(),
+            &params );
+
+        timer.stop();
+        log_info(stderr, "building forward BWT... done: %um:%us\n", uint32(timer.seconds()/60), uint32(timer.seconds())%60);
+
+        // save it to disk
+        {
+            // copy to the host
+            h_bwt_storage = d_bwt_storage;
+
+            const uint32 cumFreq[4] = { 0, 0, 0, 0 };
+            log_info(stderr, "\nwriting \"%s\"... started\n", bwt_name);
+            FILE* output_file = fopen( bwt_name, "wb" );
             if (output_file == NULL)
             {
-                fprintf(stderr, "  error: could not open output file \"%s\"!\n", pac_name );
+                log_error(stderr, "  could not open output file \"%s\"!\n", bwt_name );
                 exit(1);
             }
-
-            if (save_stream( output_file, seq_words, base_stream ) == false)
+            fwrite( &primary, sizeof(uint32), 1, output_file );
+            fwrite( cumFreq,  sizeof(uint32), 4, output_file );
+            if (save_stream( output_file, seq_words, h_bwt_stream ) == false)
             {
-                free( buffer );
-                fprintf(stderr, "error: writing failed!\n");
+                log_error(stderr, "  writing failed!\n");
                 exit(1);
             }
-    		// the following code makes the pac file size always (l_pac/4+1+1)
-            if (seq_length % 4 == 0)
-            {
-			    const uint8 ct = 0;
-			    fwrite( &ct, 1, 1, output_file );
-            }
-            {
-                const uint8 ct = seq_length % 4;
-		        fwrite( &ct, 1, 1, output_file );
-            }
+            log_info(stderr, "writing \"%s\"... done\n", bwt_name);
+        }
 
-            fclose( output_file );
+        // reverse the string in h_base_storage
+        {
+            // reuse the bwt storage to build the reverse
+            uint32* h_rbase_stream = h_bwt_stream;
+            stream_type h_rstream( h_rbase_stream );
 
-            //
-            // .rpac file
-            //
-
-            output_file = fopen( rpac_name, "wb" );
-            if (output_file == NULL)
-            {
-                fprintf(stderr, "  error: could not open output file \"%s\"!\n", rpac_name );
-                exit(1);
-            }
-
-            StreamType* rbase_stream = (StreamType*)bwt_stream;
-
-            typedef PackedStream<StreamType*,uint8,2,true,SA_facade_type> stream_type;
-            stream_type stream( base_stream );
-            stream_type rstream( rbase_stream );
-
+            // reverse the string
             for (uint32 i = 0; i < seq_length; ++i)
-                rstream[i] = stream[ seq_length - i - 1u ];
+                h_rstream[i] = h_stream[ seq_length - i - 1u ];
 
-            if (save_stream( output_file, seq_words, rbase_stream ) == false)
+            // and now swap the vectors
+            h_bwt_storage.swap( h_base_storage );
+            std::swap( h_base_stream, h_bwt_stream );
+
+            // and copy back the new string to the device
+            d_base_storage = h_base_storage;
+        }
+
+        log_info(stderr, "\nbuilding reverse BWT... started\n");
+        timer.start();
+
+        primary = cuda::bwt(
+            seq_length,
+            d_string.begin(),
+            d_bwt.begin(),
+            &params );
+
+        timer.stop();
+        log_info(stderr, "building reverse BWT... done: %um:%us\n", uint32(timer.seconds()/60), uint32(timer.seconds())%60);
+
+        // save it to disk
+        {
+            // copy to the host
+            h_bwt_storage = d_bwt_storage;
+
+            const uint32 cumFreq[4] = { 0, 0, 0, 0 };
+            log_info(stderr, "\nwriting \"%s\"... started\n", rbwt_name);
+            FILE* output_file = fopen( rbwt_name, "wb" );
+            if (output_file == NULL)
             {
-                free( buffer );
-                fprintf(stderr, "error: writing failed!\n");
+                log_error(stderr, "  could not open output file \"%s\"!\n", rbwt_name );
                 exit(1);
             }
-    		// the following code makes the pac file size always (l_pac/4+1+1)
-            if (seq_length % 4 == 0)
-            {
-			    const uint8 ct = 0;
-			    fwrite( &ct, 1, 1, output_file );
-            }
-            {
-                const uint8 ct = seq_length % 4;
-		        fwrite( &ct, 1, 1, output_file );
-            }
-
+            fwrite( &primary, sizeof(uint32), 1, output_file );
+            fwrite( cumFreq,  sizeof(uint32), 4, output_file );
             fclose( output_file );
+            if (save_stream( output_file, seq_words, h_bwt_stream ) == false)
+            {
+                log_error(stderr, "  writing failed!\n");
+                exit(1);
+            }
+            log_info(stderr, "writing \"%s\"... done\n", rbwt_name);
         }
-        fprintf(stderr, "writing \"%s\"... done\n", pac_name);
     }
-
-    uint32 primary;
-
-    Timer timer;
-
-    if (lib == BWTSW)
+    catch (...)
     {
-        fprintf(stderr, "\nbuilding BWT... started\n");
-        timer.start();
-
-        bwt_bwtgen( pac_name, bwt_name );
-
-        timer.stop();
-        fprintf(stderr, "building BWT... done: %um:%us\n", uint32(timer.seconds()/60), uint32(timer.seconds())%60);
-
-        fprintf(stderr, "\nbuilding reverse BWT... started\n");
-        timer.start();
-
-        bwt_bwtgen( rpac_name, rbwt_name );
-
-        timer.stop();
-        fprintf(stderr, "building reverse BWT... done: %um:%us\n", uint32(timer.seconds()/60), uint32(timer.seconds())%60);
+        log_info(stderr,"error: unknown exception!\n");
+        exit(1);
     }
-    else
-    {
-        fake_vector<SA_facade_type,SA_storage_type> bwt_vec( bwt_temp );
-
-        fprintf(stderr, "\nbuilding BWT... started\n");
-        timer.start();
-
-        try
-        {
-            if (lib == DIVSUFSORT)
-            {
-                primary = (uint32)divsufsortxx::constructBWT(
-                    stream.begin(), stream.begin() + SA_facade_type(seq_length),
-                    bwt.begin(), bwt.begin() + SA_facade_type(seq_length),
-                #if SA_REP == _32_64
-                    bwt_vec.begin(),
-                    bwt_vec.begin() + seq_length,
-                #else
-                    bwt_temp,
-                    bwt_temp + seq_length,
-                #endif
-                    4 );
-            }
-            else
-            {
-                primary = (uint32)saisxx_bwt(
-                    stream.begin(),
-                    bwt.begin(),
-                    bwt_vec.begin(),
-                    SA_facade_type(seq_length),
-                    SA_facade_type(4) );
-            }
-        }
-        catch (fake_vector_out_of_range)
-        {
-            fprintf(stderr,"error: value out of range!\n");
-            exit(1);
-        }
-        catch (...)
-        {
-            fprintf(stderr,"error: unknown exception!\n");
-            exit(1);
-        }
-
-        uint32 cumFreq[4] = { 0, 0, 0, 0 };
-
-        timer.stop();
-        fprintf(stderr, "building BWT... done: %um:%us\n", uint32(timer.seconds()/60), uint32(timer.seconds())%60);
-        fprintf(stderr, "  primary: %u\n", primary);
-        {
-            const uint32 crc = crcCalc( bwt.begin(), uint32(seq_length) );
-            fprintf(stderr, "  crc: %u\n", crc);
-        }
-
-        FILE* output_file = fopen( bwt_name, "wb" );
-        if (output_file == NULL)
-        {
-            fprintf(stderr, "  error: could not open output file \"%s\"!\n", bwt_name );
-            exit(1);
-        }
-
-        fprintf(stderr, "\nwriting \"%s\"... started\n", bwt_name);
-        fwrite( &primary, sizeof(uint32), 1, output_file );
-        fwrite( cumFreq,  sizeof(uint32), 4, output_file );
-        if (save_stream( output_file, seq_words32, bwt_stream ) == false)
-        {
-            free( buffer );
-            fprintf(stderr, "error: writing failed!\n");
-            exit(1);
-        }
-        fprintf(stderr, "writing \"%s\"... done\n", bwt_name);
-        fclose( output_file );
-
-        fprintf(stderr, "\nbuffering bps... started\n");
-        // read all files again
-        {
-            Writer<StreamType> writer( base_stream, counter.m_reads, seq_length );
-
-            for (uint32 i = 0; i < n_inputs; ++i)
-            {
-                fprintf(stderr, "  buffering \"%s\"\n", sortednames[i].c_str());
-
-                FASTA_inc_reader fasta( sortednames[i].c_str() );
-                if (fasta.valid() == false)
-                {
-                    fprintf(stderr, "  error: unable to open file!\n");
-                    exit(1);
-                }
-
-                while (fasta.read( 1024, writer ) == 1024);
-            }
-        }
-        fprintf(stderr, "buffering bps... done\n");
-
-        typedef StreamRemapper< stream_type, reverse_functor<SA_facade_type> > rstream_type;
-
-        rstream_type rstream( stream, reverse_functor<SA_facade_type>( SA_facade_type(seq_length) ) );
-
-        fprintf(stderr, "\nbuilding reverse BWT... started\n");
-        timer.start();
-
-        try {
-            if (lib == DIVSUFSORT)
-            {
-                primary = (uint32)divsufsortxx::constructBWT(
-                    rstream.begin(), rstream.begin() + SA_facade_type(seq_length),
-                    bwt.begin(), bwt.begin() + SA_facade_type(seq_length),
-                #if (SA_REP == _32_64)
-                    bwt_vec.begin(),
-                    bwt_vec.begin() + seq_length,
-                #else
-                    bwt_temp,
-                    bwt_temp + seq_length,
-                #endif
-                    4 );
-            }
-            else
-            {
-                primary = (uint32)saisxx_bwt(
-                    rstream.begin(),
-                    bwt.begin(),
-                    bwt_vec.begin(),
-                    SA_facade_type(seq_length),
-                    SA_facade_type(4) );
-            }
-        }
-        catch (fake_vector_out_of_range)
-        {
-            fprintf(stderr,"error: value out of range!\n");
-            exit(1);
-        }
-        catch (...)
-        {
-            fprintf(stderr,"error: unknown exception!\n");
-            exit(1);
-        }
-
-        timer.stop();
-        fprintf(stderr, "building reverse BWT... done: %um:%us\n", uint32(timer.seconds()/60), uint32(timer.seconds())%60);
-        fprintf(stderr, "  primary: %u\n", primary);
-        {
-            const uint32 crc = crcCalc( bwt.begin(), uint32(seq_length) );
-            fprintf(stderr, "  crc: %u\n", crc);
-        }
-
-        fopen( rbwt_name, "wb" );
-        if (output_file == NULL)
-        {
-            fprintf(stderr, "  error: could not open output file \"%s\"!\n", rbwt_name );
-            exit(1);
-        }
-
-        fprintf(stderr, "\nwriting \"%s\"... started\n", rbwt_name);
-        fwrite( &primary, sizeof(uint32), 1, output_file );
-        fwrite( cumFreq,  sizeof(uint32), 4, output_file );
-        if (save_stream( output_file, seq_words32, bwt_stream ) == false)
-        {
-            free( buffer );
-            fprintf(stderr, "error: writing failed!\n");
-            exit(1);
-        }
-        fprintf(stderr, "writing \"%s\"... done\n", rbwt_name);
-        fclose( output_file );
-    }
-
-    free( buffer );
     return 0;
 }
 
@@ -640,21 +493,17 @@ int main(int argc, char* argv[])
 
     if (argc < 2)
     {
-        fprintf(stderr, "please specify input and output file names, e.g:\n");
-        fprintf(stderr, "  nvBWT [options] myinput.*.fa output-prefix\n");
-        fprintf(stderr, "  options:\n");
-        fprintf(stderr, "    -m     max_length\n");
-        fprintf(stderr, "    -lib   divsufsort|sais|bwtsw\n");
-        fprintf(stderr, "    -p     byte|word\n");
+        log_info(stderr, "please specify input and output file names, e.g:\n");
+        log_info(stderr, "  nvBWT [options] myinput.*.fa output-prefix\n");
+        log_info(stderr, "  options:\n");
+        log_info(stderr, "    -m     max_length\n");
     }
-    fprintf(stderr, "arch       : %lu bit\n", sizeof(void*)*8u);
-    fprintf(stderr, "SA storage : %lu bits\n", sizeof(SA_storage_type)*8u);
-    fprintf(stderr, "SA facade  : %lu bits\n", sizeof(SA_facade_type)*8u);
+    log_info(stderr, "arch       : %lu bit\n", sizeof(void*)*8u);
+    log_info(stderr, "SA storage : %lu bits\n", sizeof(SA_storage_type)*8u);
+    log_info(stderr, "SA facade  : %lu bits\n", sizeof(SA_facade_type)*8u);
 
     const char* file_names[2] = { NULL, NULL };
     uint64 max_length = uint64(-1);
-    uint32 lib        = BWTSW;
-    uint32 packing    = BYTE_PACKING;
 
     uint32 n_files = 0;
     for (int32 i = 1; i < argc; ++i)
@@ -666,48 +515,25 @@ int main(int argc, char* argv[])
             max_length = atoi( argv[i+1] );
             ++i;
         }
-        else if (strcmp( arg, "-lib" ) == 0)
-        {
-            if (strcmp( argv[i+1], "sais" ) == 0)
-                lib = SAIS;
-            else if (strcmp( argv[i+1], "bwtsw" ) == 0)
-                lib = BWTSW;
-            else
-                lib = DIVSUFSORT;
-            ++i;
-        }
-        else if (strcmp( arg, "-p" ) == 0)
-        {
-            if (strcmp( argv[i+1], "word" ) == 0)
-                packing = WORD_PACKING;
-            else
-                packing = BYTE_PACKING;
-            ++i;
-        }
         else
             file_names[ n_files++ ] = argv[i];
     }
 
     const char* input_name  = file_names[0];
     const char* output_name = file_names[1];
-    std::string pac_string  = std::string( output_name ) + (packing == WORD_PACKING ? ".wpac" : ".pac");
+    std::string pac_string  = std::string( output_name ) + ".pac";
     const char* pac_name    = pac_string.c_str();
-    std::string rpac_string = std::string( output_name ) + (packing == WORD_PACKING ? ".rwpac" : ".rpac");
+    std::string rpac_string = std::string( output_name ) + ".rpac";
     const char* rpac_name   = rpac_string.c_str();
     std::string bwt_string  = std::string( output_name ) + ".bwt";
     const char* bwt_name    = bwt_string.c_str();
     std::string rbwt_string = std::string( output_name ) + ".rbwt";
     const char* rbwt_name   = rbwt_string.c_str();
 
-    fprintf(stderr, "lib        : %s\n", lib == BWTSW ? "bwtsw" : lib == DIVSUFSORT ? "divsufsort" : "sais");
-    fprintf(stderr, "packing    : %s\n", packing == BYTE_PACKING ? "byte" : "word");
-    fprintf(stderr, "max length : %lld\n", max_length);
-    fprintf(stderr, "input      : \"%s\"\n", input_name);
-    fprintf(stderr, "output     : \"%s\"\n", output_name);
+    log_info(stderr, "max length : %lld\n", max_length);
+    log_info(stderr, "input      : \"%s\"\n", input_name);
+    log_info(stderr, "output     : \"%s\"\n", output_name);
 
-    if (packing == BYTE_PACKING)
-        return perform<uint8>( input_name, output_name, pac_name, rpac_name, bwt_name, rbwt_name, lib, max_length );
-    else if (packing == WORD_PACKING)
-        return perform<uint32>( input_name, output_name, pac_name, rpac_name, bwt_name, rbwt_name, lib, max_length );
+    return build( input_name, output_name, pac_name, rpac_name, bwt_name, rbwt_name, max_length );
 }
 

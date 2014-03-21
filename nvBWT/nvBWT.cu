@@ -499,6 +499,7 @@ int main(int argc, char* argv[])
         log_info(stderr, "  nvBWT [options] myinput.*.fa output-prefix\n");
         log_info(stderr, "  options:\n");
         log_info(stderr, "    -m     max_length\n");
+        exit(0);
     }
     log_info(stderr, "arch       : %lu bit\n", sizeof(void*)*8u);
     log_info(stderr, "SA storage : %lu bits\n", sizeof(SA_storage_type)*8u);

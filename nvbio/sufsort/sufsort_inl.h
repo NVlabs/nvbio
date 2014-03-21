@@ -178,10 +178,12 @@ typename string_type::index_type bwt(
     BWTParams*                              params)
 {
     typedef typename string_type::index_type index_type;
+    typedef uint32 word_type;
 
     NVBIO_VAR_UNUSED const uint32 SYMBOL_SIZE    = string_type::SYMBOL_SIZE;
     NVBIO_VAR_UNUSED const uint32 BUCKETING_BITS = 20;
     NVBIO_VAR_UNUSED const uint32 DOLLAR_BITS    = 4;
+    NVBIO_VAR_UNUSED const uint32 WORD_BITS      = uint32( 8u * sizeof(uint32) );
 
     const uint32     M = 256*1024;
     const index_type N = string_len;
@@ -189,9 +191,6 @@ typename string_type::index_type bwt(
     const uint32 n_chunks = (N + M-1) / M;
 
     priv::StringSuffixBucketer<SYMBOL_SIZE,BUCKETING_BITS,DOLLAR_BITS> bucketer;
-
-    typedef uint32 word_type;
-    const uint32   WORD_BITS = uint32( 8u * sizeof(uint32) );
 
     size_t free, total;
     cudaMemGetInfo(&free, &total);
@@ -265,7 +264,7 @@ typename string_type::index_type bwt(
     thrust::host_vector<uint32> h_bucket_offsets( d_buckets.size() );
     thrust::host_vector<uint32> h_subbuckets( d_buckets.size() );
 
-    const uint32 max_bucket_size = thrust::reduce(
+    NVBIO_VAR_UNUSED const uint32 max_bucket_size = thrust::reduce(
         d_buckets.begin(),
         d_buckets.end(),
         0u,

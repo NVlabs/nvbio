@@ -50,39 +50,47 @@ template <typename OutputIterator>
 struct DelayList
 {
     DelayList(
-        OutputIterator delay_output,
-        OutputIterator delay_slots) :
-        m_delayed( 0 ),
-        m_offset( 0 ),
-        m_delay_output( delay_output ),
-        m_delay_slots( delay_slots ) {}
+        OutputIterator _indices,
+        OutputIterator _slots) :
+        count( 0 ),
+        offset( 0 ),
+        indices( _indices ),
+        slots( _slots ) {}
 
-    void set_offset(const uint32 offset) { m_offset = offset; }
+    /// reset the list
+    ///
+    void clear() { count = 0; }
 
+    /// set the offset to apply to the slots in the next batch
+    ///
+    void set_offset(const uint32 _offset) { offset = _offset; }
+
+    /// push back a set of slots
+    ///
     template <typename InputIterator>
     void push_back(
-        const uint32    n_delayed,
-        InputIterator   delay_indices,
-        InputIterator   delay_slots)
+        const uint32    in_count,
+        InputIterator   in_indices,
+        InputIterator   in_slots)
     {
         thrust::copy(
-            delay_indices,
-            delay_indices + n_delayed,
-            m_delay_output + m_delayed );
+            in_indices,
+            in_indices + in_count,
+            indices + count );
 
         thrust::transform(
-            delay_slots,
-            delay_slots + n_delayed,
-            m_delay_slots + m_delayed,
-            priv::offset_functor( m_offset ) );
+            in_slots,
+            in_slots + in_count,
+            slots + count,
+            priv::offset_functor( offset ) );
 
-        m_delayed += n_delayed;
+        count += in_count;
     }
 
-    uint32         m_delayed;
-    uint32         m_offset;
-    OutputIterator m_delay_output;
-    OutputIterator m_delay_slots;
+    uint32         count;
+    uint32         offset;
+    OutputIterator indices;
+    OutputIterator slots;
 };
 
 ///
@@ -127,16 +135,14 @@ struct CompressionSort
     ///
     /// All the other parameters are temporary device buffers
     ///
-    template <typename string_type, typename output_iterator, typename delay_iterator>
+    template <typename string_type, typename output_iterator, typename delay_list_type>
     void sort(
         const typename string_type::index_type  string_len,
         const string_type                       string,
         const uint32                            n_suffixes,
         output_iterator                         d_suffixes,
-              uint32&                           n_delayed,
-        const uint32                            delay_offset,
-        delay_iterator                          delay_suffixes,
-        delay_iterator                          delay_slots);
+        const uint32                            delay_threshold,
+        delay_list_type&                        delay_list);
 
     /// Sort a given batch of strings using Iterative Compression Sorting - an algorithm inspired by
     /// Tero Karras and Timo Aila's "Flexible Parallel Sorting through Iterative Key Compression".
@@ -227,16 +233,14 @@ private:
 // \param n_suffixes           number of suffixes to sort
 // \param d_suffixes           device vector of input/output suffixes
 //
-template <typename string_type, typename output_iterator, typename delay_iterator>
+template <typename string_type, typename output_iterator, typename delay_list_type>
 void CompressionSort::sort(
     const typename string_type::index_type  string_len,
     const string_type                       string,
     const uint32                            n_suffixes,
     output_iterator                         d_suffixes,
-          uint32&                           n_delayed,
-    const uint32                            delay_offset,
-    delay_iterator                          delay_suffixes,
-    delay_iterator                          delay_slots)
+    const uint32                            delay_threshold,
+    delay_list_type&                        delay_list)
 {
     typedef typename string_type::index_type index_type;
     const uint32 SYMBOL_SIZE = string_type::SYMBOL_SIZE;
@@ -292,41 +296,12 @@ void CompressionSort::sort(
     {
         Timer timer;
 
-        if (1000 * n_active_suffixes <= n_suffixes) // TODO: add a minimum pass number
+        if (word_idx > delay_threshold && 1000 * n_active_suffixes <= n_suffixes) // TODO: add a minimum pass number
         {
-            /*
-            timer.start();
-
-            // if the set is small enough, switch to a comparison-based sort
-            thrust::stable_sort(
+            delay_list.push_back(
+                n_active_suffixes,
                 d_indices.begin(),
-                d_indices.begin() + n_active_suffixes,
-                priv::string_suffix_less<SYMBOL_SIZE,string_type>( string_len, string ) );
-
-            NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
-            timer.stop();
-            stablesort_time += timer.seconds();
-
-            // scatter the partially sorted indices to the output in their proper place
-            thrust::scatter(
-                d_indices.begin(),
-                d_indices.begin() + n_active_suffixes,
-                d_active_slots.begin(),
-                d_suffixes );
-                */
-
-            thrust::copy(
-                d_indices.begin(),
-                d_indices.begin() + n_active_suffixes,
-                delay_suffixes + n_delayed );
-
-            thrust::transform(
-                d_active_slots.begin(),
-                d_active_slots.begin() + n_active_suffixes,
-                delay_slots + n_delayed,
-                priv::offset_functor( delay_offset ) );
-
-            n_delayed += n_active_suffixes;
+                d_active_slots.begin() );
 
             break; // bail out of the sorting loop
         }

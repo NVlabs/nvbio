@@ -291,7 +291,7 @@ struct offset_functor
 
 /// A functor dividing all integers by the given constant
 ///
-struct divide_functor
+struct add_divide_functor
 {
     typedef uint32 argument_type;
     typedef uint32 result_type;
@@ -299,13 +299,14 @@ struct divide_functor
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    divide_functor(const uint32 _k) : k(_k) {}
+    add_divide_functor(const uint32 _a, const uint32 _k) : a(_a), k(_k) {}
 
     /// return the length of the i-th string
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 operator() (const uint32 i) const { return i / k; }
+    uint32 operator() (const uint32 i) const { return (i + a) / k; }
 
+    const uint32 a;
     const uint32 k;
 };
 
@@ -2320,7 +2321,7 @@ __global__ void packed_device_copy_kernel(
     typedef typename PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type>::storage_type word_type;
     const uint32 SYMBOLS_PER_WORD = (8u*sizeof(word_type))/SYMBOL_SIZE;
 
-    const uint32 word_offset = uint32( offset & (SYMBOLS_PER_WORD-1) );
+    const uint32 word_offset = uint32( (offset + output.index()) & (SYMBOLS_PER_WORD-1) );
     const uint32 elem_begin = thread_id ? (thread_id+0) * SYMBOLS_PER_WORD - word_offset : 0u;
     const uint32 elem_end   = nvbio::min( (thread_id+1) * SYMBOLS_PER_WORD - word_offset, n );
 
@@ -2463,8 +2464,8 @@ struct device_scatter_dispatch<
         const uint32 SYMBOLS_PER_WORD = (8u*sizeof(word_type))/SYMBOL_SIZE;
 
         const uint32 n_ranges = uint32( thrust::reduce_by_key(
-            thrust::make_transform_iterator( slots,     divide_functor( SYMBOLS_PER_WORD ) ),
-            thrust::make_transform_iterator( slots + n, divide_functor( SYMBOLS_PER_WORD ) ),
+            thrust::make_transform_iterator( slots,     add_divide_functor( output.index(), SYMBOLS_PER_WORD ) ),
+            thrust::make_transform_iterator( slots + n, add_divide_functor( output.index(), SYMBOLS_PER_WORD ) ),
             thrust::make_counting_iterator<uint32>(1u),
             d_keys.begin(),
             d_ranges.begin(),

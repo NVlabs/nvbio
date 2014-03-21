@@ -205,7 +205,7 @@ typename string_type::index_type bwt(
         string_len );
 
     const uint32 max_block_size = 32*1024*1024;                 // requires max_block_size*21 device memory bytes
-    const uint32 DELAY_BUFFER   = 512*1024;
+    const uint32 DELAY_BUFFER   = 1024*1024;
 
     NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  super-block-size: %.1f M\n", float(max_super_block_size)/float(1024*1024)) );
     thrust::host_vector<uint32> h_super_suffixes( max_super_block_size, 0u );
@@ -215,10 +215,14 @@ typename string_type::index_type bwt(
     NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  device-alloc(%.1f GB)... started\n", float(max_block_size*21u)/float(1024*1024*1024)) );
     NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    free: %.1f GB\n", float(free)/float(1024*1024*1024)) );
 
-    thrust::device_vector<uint32> d_super_suffixes( max_block_size );
+    thrust::device_vector<uint32> d_subbucket_suffixes( max_block_size );
     thrust::device_vector<uint32> d_delayed_suffixes( max_block_size );
     thrust::device_vector<uint32> d_delayed_slots( max_block_size );
     thrust::device_vector<uint8>  d_block_bwt( max_block_size );
+
+    DelayList<thrust::device_vector<uint32>::iterator> delay_list(
+        d_delayed_suffixes.begin(),
+        d_delayed_slots.begin() );
 
     int current_device;
     cudaGetDevice( &current_device );
@@ -381,15 +385,13 @@ typename string_type::index_type bwt(
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    copy    : %.1fs\n", bucketer.d_copy_time) );
 
         //
-        // at this point we have a large collection of localized suffixes to sort in d_super_suffixes;
+        // at this point we have a large collection of localized suffixes to sort in d_subbucket_suffixes;
         // we'll do it looping on multiple sub-buckets, on the GPU
         //
 
         const uint32 SYMBOLS_PER_WORD = priv::symbols_per_word<SYMBOL_SIZE, WORD_BITS,DOLLAR_BITS>();
 
         suffix_count = 0u;
-
-        uint32 delay_count = 0;
 
         for (uint32 subbucket_begin = bucket_begin, subbucket_end = bucket_begin; subbucket_begin < bucket_end; subbucket_begin = subbucket_end)
         {
@@ -410,30 +412,24 @@ typename string_type::index_type bwt(
             thrust::copy(
                 h_super_suffixes.begin() + suffix_count,
                 h_super_suffixes.begin() + suffix_count + n_suffixes,
-                d_super_suffixes.begin() );
+                d_subbucket_suffixes.begin() );
 
         #if defined(COMPRESSION_SORTING)
+            delay_list.set_offset( subbucket_begin + 1u ); // +1u due to the implicit 0-th suffix
+
             compression_sort.sort(
-                string_len,
-                string,
-                n_suffixes,
-                d_super_suffixes.begin(),
-                delay_count,
-                suffix_count,
-                d_delayed_suffixes.begin(),
-                d_delayed_slots.begin() );
+                string_len,                     // the main string length
+                string,                         // the main string
+                n_suffixes,                     // number of suffixes to sort
+                d_subbucket_suffixes.begin(),   // the suffixes to sort
+                16u,                            // number of words to sort before possibly delaying
+                delay_list );                   // the delay list
         #else // if defined(COMPRESSION_SORTING)
             // and sort the corresponding suffixes
             thrust::stable_sort(
-                d_super_suffixes.begin(),
-                d_super_suffixes.begin() + n_suffixes,
+                d_subbucket_suffixes.begin(),
+                d_subbucket_suffixes.begin() + n_suffixes,
                 priv::string_suffix_less<SYMBOL_SIZE,string_type>( N, string ) );
-
-            //mgpu::MergesortKeys(
-            //    nvbio::device_view( d_super_suffixes ),
-            //    n_suffixes,
-            //    priv::string_suffix_less<SYMBOL_SIZE,string_type>( N, string ),
-            //    *mgpu_context );
         #endif
             NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
             timer.stop();
@@ -441,8 +437,8 @@ typename string_type::index_type bwt(
 
             // compute the bwt of the block
             thrust::transform(
-                d_super_suffixes.begin(),
-                d_super_suffixes.begin() + n_suffixes,
+                d_subbucket_suffixes.begin(),
+                d_subbucket_suffixes.begin() + n_suffixes,
                 d_block_bwt.begin(),
                 priv::string_bwt_functor<string_type>( N, string ) );
 
@@ -471,19 +467,27 @@ typename string_type::index_type bwt(
             timer.stop();
             bwt_copy_time += timer.seconds();
 
+            #if defined(COMPRESSION_SORTING)
             // process delayed suffixes
-            if (delay_count &&
-                (delay_count >= DELAY_BUFFER ||
+            if (delay_list.count &&
+                (delay_list.count >= DELAY_BUFFER ||
                  subbucket_end == bucket_end))
             {
-                //fprintf(stderr,"  process %u hard keys\n", delay_count);
                 timer.start();
 
                 // and sort the corresponding suffixes
-                thrust::stable_sort(
-                    d_delayed_suffixes.begin(),
-                    d_delayed_suffixes.begin() + delay_count,
-                    priv::string_suffix_less<SYMBOL_SIZE,string_type>( N, string ) );
+                //thrust::stable_sort(
+                //    delay_list.indices,
+                //    delay_list.indices + delay_list.count,
+                //    priv::string_suffix_less<SYMBOL_SIZE,string_type>( N, string ) );
+                DiscardDelayList discard_list;
+                compression_sort.sort(
+                    string_len,
+                    string,
+                    delay_list.count,
+                    delay_list.indices,
+                    uint32(-1),
+                    discard_list );
 
                 NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
                 timer.stop();
@@ -493,38 +497,40 @@ typename string_type::index_type bwt(
 
                 // compute the bwt of the block
                 thrust::transform(
-                    d_delayed_suffixes.begin(),
-                    d_delayed_suffixes.begin() + delay_count,
+                    delay_list.indices,
+                    delay_list.indices + delay_list.count,
                     d_block_bwt.begin(),
                     priv::string_bwt_functor<string_type>( N, string ) );
 
                 // check if there is a $ sign
                 const uint32 block_primary = uint32( thrust::find(
                     d_block_bwt.begin(),
-                    d_block_bwt.begin() + delay_count,
+                    d_block_bwt.begin() + delay_list.count,
                     255u ) - d_block_bwt.begin() );
 
-                if (block_primary < delay_count)
+                if (block_primary < delay_list.count)
                 {
                     // keep track of the global primary position
-                    primary = global_suffix_offset + d_delayed_slots[ block_primary ] + 1u;
+                    primary = d_delayed_slots[ block_primary ];
                 }
 
                 timer.start();
 
                 // and scatter the resulting symbols in the proper place
                 priv::device_scatter(
-                    delay_count,
+                    delay_list.count,
                     d_block_bwt.begin(),
-                    d_delayed_slots.begin(),
-                    output + global_suffix_offset );
+                    delay_list.slots,
+                    output );
 
                 NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
                 timer.stop();
                 bwt_scatter_time += timer.seconds();
 
-                delay_count = 0;
+                // clear the list
+                delay_list.clear();
             }
+            #endif
 
             suffix_count += subbucket_size;
         }

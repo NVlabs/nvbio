@@ -176,10 +176,10 @@ int sufsort_test(int argc, char* argv[])
     // Now set the number of threads
     omp_set_num_threads( threads );
 
-    fprintf(stderr, "nvbio/sufsort test... started (%u threads)\n", threads);
+    log_info(stderr, "nvbio/sufsort test... started (%u threads)\n", threads);
     #pragma omp parallel
     {
-        fprintf(stderr, "  running on multiple threads\n");
+        log_info(stderr, "  running on multiple threads\n");
     }
     const uint32 N           = 100;
     const uint32 SYMBOL_SIZE = 2;
@@ -187,7 +187,7 @@ int sufsort_test(int argc, char* argv[])
 
     if (0)
     {
-        fprintf(stderr, "\nread \"sort.dat\"... started\n");
+        log_info(stderr, "\nread \"sort.dat\"... started\n");
         FILE* file = fopen("./sort.dat", "rb");
         uint32 n_active_strings;
         fread( &n_active_strings, sizeof(uint32), 1u, file );
@@ -198,7 +198,7 @@ int sufsort_test(int argc, char* argv[])
         fread( nvbio::plain_view( h_indices ),    sizeof(uint32), n_active_strings, file );
         fread( nvbio::plain_view( h_temp_flags ), sizeof(uint32), (n_active_strings + 31)/32, file );
         fclose( file );
-        fprintf(stderr, "read \"sort.dat\"... done: %u entries\n", n_active_strings);
+        log_info(stderr, "read \"sort.dat\"... done: %u entries\n", n_active_strings);
 
         int current_device;
         cudaGetDevice( &current_device );
@@ -214,8 +214,8 @@ int sufsort_test(int argc, char* argv[])
         mgpu::SegSortPairsFromFlags(
             nvbio::device_view( d_keys ),
             nvbio::device_view( d_indices ),
-            d_comp_flags,
             n_active_strings,
+            d_comp_flags,
             *mgpu_ctxt );
 
         NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
@@ -231,9 +231,9 @@ int sufsort_test(int argc, char* argv[])
         const index_type N_symbols  = 8u*1024u*1024u;
         const index_type N_words    = (N_symbols + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
 
-        fprintf(stderr, "  gpu sa test\n");
-        fprintf(stderr, "    %5.1f M symbols\n",  (1.0e-6f*float(N_symbols)));
-        fprintf(stderr, "    %5.2f GB\n",         (float(N_words)*sizeof(uint32))/float(1024*1024*1024));
+        log_info(stderr, "  gpu sa test\n");
+        log_info(stderr, "    %5.1f M symbols\n",  (1.0e-6f*float(N_symbols)));
+        log_info(stderr, "    %5.2f GB\n",         (float(N_words)*sizeof(uint32))/float(1024*1024*1024));
 
         thrust::host_vector<uint32> h_string( N_words );
 
@@ -254,7 +254,7 @@ int sufsort_test(int argc, char* argv[])
 
             packed_stream_type d_packed_string( nvbio::plain_view( d_string ) );
 
-            fprintf(stderr, "\n  sa... started (LCP: %u)\n", lcp*16u);
+            log_info(stderr, "\n  sa... started (LCP: %u)\n", lcp*16u);
 
             Timer timer;
             timer.start();
@@ -268,18 +268,18 @@ int sufsort_test(int argc, char* argv[])
             cudaDeviceSynchronize();
             timer.stop();
 
-            fprintf(stderr, "  sa... done: %.2fs (%.1fM suffixes/s)\n", timer.seconds(), 1.0e-6f*float(N_symbols)/float(timer.seconds()));
+            log_info(stderr, "  sa... done: %.2fs (%.1fM suffixes/s)\n", timer.seconds(), 1.0e-6f*float(N_symbols)/float(timer.seconds()));
 
             if (1)
             {
-                fprintf(stderr, "  sa-is... started\n");
+                log_info(stderr, "  sa-is... started\n");
                 timer.start();
 
                 std::vector<int32> sa_ref( N_symbols+1 );
                 gen_sa( N_symbols, packed_stream_type( nvbio::plain_view( h_string ) ), &sa_ref[0] );
 
                 timer.stop();
-                fprintf(stderr, "  sa-is... done: %.2fs (%.1fM suffixes/s)\n", timer.seconds(), 1.0e-6f*float(N_symbols)/float(timer.seconds()));
+                log_info(stderr, "  sa-is... done: %.2fs (%.1fM suffixes/s)\n", timer.seconds(), 1.0e-6f*float(N_symbols)/float(timer.seconds()));
 
                 thrust::host_vector<uint32> h_sa( d_sa );
                 for (uint32 i = 0; i < N_symbols; ++i)
@@ -300,7 +300,7 @@ int sufsort_test(int argc, char* argv[])
             log_warning(stderr, "  unable to open \"howto\" file\n");
         else
         {
-            fprintf(stderr, "\n  loading \"howto\" text benchmark\n");
+            log_info(stderr, "\n  loading \"howto\" text benchmark\n");
             fseek( file, 0, SEEK_END );
             const uint32 N_symbols = uint32( ftell( file ) );
             thrust::host_vector<uint8> h_text( N_symbols );
@@ -313,7 +313,7 @@ int sufsort_test(int argc, char* argv[])
 
             cudaDeviceSynchronize();
 
-            fprintf(stderr, "  sa... started (%u bytes)\n", N_symbols);
+            log_info(stderr, "  sa... started (%u bytes)\n", N_symbols);
 
             Timer timer;
             timer.start();
@@ -327,11 +327,11 @@ int sufsort_test(int argc, char* argv[])
             cudaDeviceSynchronize();
             timer.stop();
 
-            fprintf(stderr, "  sa... done: %.2fs (%.1fM suffixes/s)\n", timer.seconds(), 1.0e-6f*float(N_symbols)/float(timer.seconds()));
+            log_info(stderr, "  sa... done: %.2fs (%.1fM suffixes/s)\n", timer.seconds(), 1.0e-6f*float(N_symbols)/float(timer.seconds()));
 
             if (1)
             {
-                fprintf(stderr, "  sa-is... started\n");
+                log_info(stderr, "  sa-is... started\n");
                 timer.start();
 
                 std::vector<int32> sa_ref( N_symbols+1 );
@@ -339,7 +339,7 @@ int sufsort_test(int argc, char* argv[])
                 saisxx( nvbio::plain_view( h_text ), &sa_ref[0] + 1, int32(N_symbols), 256 );
 
                 timer.stop();
-                fprintf(stderr, "  sa-is... done: %.2fs (%.1fM suffixes/s)\n", timer.seconds(), 1.0e-6f*float(N_symbols)/float(timer.seconds()));
+                log_info(stderr, "  sa-is... done: %.2fs (%.1fM suffixes/s)\n", timer.seconds(), 1.0e-6f*float(N_symbols)/float(timer.seconds()));
 
                 thrust::host_vector<uint32> h_sa( d_sa );
                 for (uint32 i = 0; i < N_symbols; ++i)
@@ -386,11 +386,11 @@ int sufsort_test(int argc, char* argv[])
 
         cudaDeviceSynchronize();
 
-        fprintf(stderr, "  gpu SA test\n");
-        fprintf(stderr, "    %5.1f M strings\n",  (1.0e-6f*float(N_strings)));
-        fprintf(stderr, "    %5.1f M suffixes\n", (1.0e-6f*float(N_strings*(N+1))));
-        fprintf(stderr, "    %5.1f G symbols\n",  (1.0e-9f*float(uint64(N_strings)*(N+1)*(N+1)/2)));
-        fprintf(stderr, "    %5.2f GB\n",         (float(N_words)*sizeof(uint32))/float(1024*1024*1024));
+        log_info(stderr, "  gpu SA test\n");
+        log_info(stderr, "    %5.1f M strings\n",  (1.0e-6f*float(N_strings)));
+        log_info(stderr, "    %5.1f M suffixes\n", (1.0e-6f*float(N_strings*(N+1))));
+        log_info(stderr, "    %5.1f G symbols\n",  (1.0e-9f*float(uint64(N_strings)*(N+1)*(N+1)/2)));
+        log_info(stderr, "    %5.2f GB\n",         (float(N_words)*sizeof(uint32))/float(1024*1024*1024));
 
         // copy a sparse string set into a packed concatenated one
         {
@@ -406,10 +406,10 @@ int sufsort_test(int argc, char* argv[])
             cudaDeviceSynchronize();
             timer.stop();
 
-            fprintf(stderr, "  sorting time: %.2fs\n", timer.seconds()/float(N_tests));
-            fprintf(stderr, "    %5.1f M strings/s\n",  (1.0e-6f*float(N_strings))               * (float(N_tests)/timer.seconds()));
-            fprintf(stderr, "    %5.1f M suffixes/s\n", (1.0e-6f*float(N_strings*(N+1)))         * (float(N_tests)/timer.seconds()));
-            fprintf(stderr, "    %5.1f G symbols/s\n",  (1.0e-9f*float(uint64(N_strings)*(N+1)*(N+1)/2)) * (float(N_tests)/timer.seconds()));
+            log_info(stderr, "  sorting time: %.2fs\n", timer.seconds()/float(N_tests));
+            log_info(stderr, "    %5.1f M strings/s\n",  (1.0e-6f*float(N_strings))               * (float(N_tests)/timer.seconds()));
+            log_info(stderr, "    %5.1f M suffixes/s\n", (1.0e-6f*float(N_strings*(N+1)))         * (float(N_tests)/timer.seconds()));
+            log_info(stderr, "    %5.1f G symbols/s\n",  (1.0e-9f*float(uint64(N_strings)*(N+1)*(N+1)/2)) * (float(N_tests)/timer.seconds()));
         }
     }
     if (TEST_MASK & kGPU_BWT_FUNCTIONAL)
@@ -422,7 +422,7 @@ int sufsort_test(int argc, char* argv[])
 
         char char_string[N_symbols+1];
 
-        fprintf(stderr, "  gpu bwt test\n");
+        log_info(stderr, "  gpu bwt test\n");
 
         thrust::host_vector<uint32>  h_string( N_words );
         thrust::host_vector<uint32>  h_bwt( N_words+1 );
@@ -438,7 +438,7 @@ int sufsort_test(int argc, char* argv[])
             N_symbols,
             char_string );
 
-        fprintf(stderr, "    str     : %s\n", char_string );
+        log_info(stderr, "    str     : %s\n", char_string );
         {
             // generate the SA using SA-IS
             int32 sa[N_symbols+1];
@@ -452,8 +452,8 @@ int sufsort_test(int argc, char* argv[])
                 N_symbols,
                 char_string );
 
-            fprintf(stderr, "    primary : %u\n", primary_ref );
-            fprintf(stderr, "    bwt     : %s\n", char_string );
+            log_info(stderr, "    primary : %u\n", primary_ref );
+            log_info(stderr, "    bwt     : %s\n", char_string );
         }
 
         thrust::device_vector<uint32>  d_string( h_string );
@@ -464,7 +464,7 @@ int sufsort_test(int argc, char* argv[])
         packed_stream_type d_packed_string( nvbio::plain_view( d_string ) );
         packed_stream_type d_packed_bwt( nvbio::plain_view( d_bwt ) );
 
-        fprintf(stderr, "  bwt... started\n");
+        log_info(stderr, "  bwt... started\n");
 
         Timer timer;
         timer.start();
@@ -477,7 +477,7 @@ int sufsort_test(int argc, char* argv[])
 
         timer.stop();
 
-        fprintf(stderr, "  bwt... done: %.2fs\n", timer.seconds());
+        log_info(stderr, "  bwt... done: %.2fs\n", timer.seconds());
 
         h_bwt = d_bwt;
         {
@@ -522,19 +522,19 @@ int sufsort_test(int argc, char* argv[])
         const uint32 N_symbols = d_fmi.genome_length();
         const uint32 N_words   = d_fmi.seq_words;
 
-        fprintf(stderr, "  gpu bwt test\n");
-        fprintf(stderr, "    %5.1f G symbols\n",  (1.0e-6f*float(N_symbols)));
-        fprintf(stderr, "    %5.2f GB\n",         (float(N_words)*sizeof(uint32))/float(1024*1024*1024));
+        log_info(stderr, "  gpu bwt test\n");
+        log_info(stderr, "    %5.1f G symbols\n",  (1.0e-6f*float(N_symbols)));
+        log_info(stderr, "    %5.2f GB\n",         (float(N_words)*sizeof(uint32))/float(1024*1024*1024));
 
-        thrust::device_vector<uint32>  d_bwt( N_words+1 );
+        thrust::device_vector<uint32> d_bwt_storage( N_words+1 );
 
         const_packed_stream_type d_packed_string( d_fmi.genome_stream() );
-              packed_stream_type d_packed_bwt( nvbio::plain_view( d_bwt ) );
+              packed_stream_type d_packed_bwt( nvbio::plain_view( d_bwt_storage ) );
 
         const uint32 primary_ref = cuda::find_primary( N_symbols, d_packed_string.begin() );
-        fprintf(stderr, "    primary: %u\n", primary_ref);
+        log_info(stderr, "    primary: %u\n", primary_ref);
 
-        fprintf(stderr, "  bwt... started\n");
+        log_info(stderr, "  bwt... started\n");
 
         Timer timer;
         timer.start();
@@ -547,7 +547,7 @@ int sufsort_test(int argc, char* argv[])
 
         timer.stop();
 
-        fprintf(stderr, "  bwt... done: %.2fs\n", timer.seconds());
+        log_info(stderr, "  bwt... done: %.2fs\n", timer.seconds());
 
         bool check = primary == primary_ref;
         if (check == false)
@@ -556,6 +556,24 @@ int sufsort_test(int argc, char* argv[])
             log_error(stderr, "    primary : %u\n", primary );
             return 0u;
         }
+
+        log_info(stderr, "  testing correctness... started\n");
+        thrust::host_vector<uint32> h_bwt_storage( d_bwt_storage );
+        const_packed_stream_type h_packed_bwt( nvbio::plain_view( h_bwt_storage ) );
+        const_packed_stream_type h_ref_bwt( h_fmi.bwt_stream() );
+        for (uint32 i = 0; i < N_symbols; ++i)
+        {
+            const uint8 c0 = h_ref_bwt[i];
+            const uint8 c1 = h_packed_bwt[i];
+
+            if (c0 != c1)
+            {
+                log_error(stderr, "mismatching results!\n" );
+                log_error(stderr, "    at %u, expected %c, got %c\n", i, dna_to_char(c0), dna_to_char(c1) );
+                return 0u;
+            }
+        }
+        log_info(stderr, "  testing correctness... done\n");
     }
     if (TEST_MASK & kGPU_BWT)
     {
@@ -565,9 +583,9 @@ int sufsort_test(int argc, char* argv[])
         const uint64 N_symbols  = 4llu*1024u*1024u*1024u - 1u;
         const uint64 N_words    = (N_symbols + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
 
-        fprintf(stderr, "  gpu bwt test\n");
-        fprintf(stderr, "    %5.1f G symbols\n",  (1.0e-9f*float(N_symbols)));
-        fprintf(stderr, "    %5.2f GB\n",         (float(N_words)*sizeof(uint32))/float(1024*1024*1024));
+        log_info(stderr, "  gpu bwt test\n");
+        log_info(stderr, "    %5.1f G symbols\n",  (1.0e-9f*float(N_symbols)));
+        log_info(stderr, "    %5.2f GB\n",         (float(N_words)*sizeof(uint32))/float(1024*1024*1024));
 
         thrust::host_vector<uint32>  h_string( N_words );
 
@@ -587,7 +605,7 @@ int sufsort_test(int argc, char* argv[])
         packed_stream_type d_packed_string( nvbio::plain_view( d_string ) );
         packed_stream_type d_packed_bwt( nvbio::plain_view( d_bwt ) );
 
-        fprintf(stderr, "  bwt... started\n");
+        log_info(stderr, "  bwt... started\n");
 
         Timer timer;
         timer.start();
@@ -600,7 +618,7 @@ int sufsort_test(int argc, char* argv[])
 
         timer.stop();
 
-        fprintf(stderr, "  bwt... done: %.2fs\n", timer.seconds());
+        log_info(stderr, "  bwt... done: %.2fs\n", timer.seconds());
     }
     if (TEST_MASK & kGPU_BWT_SET)
     {
@@ -617,10 +635,10 @@ int sufsort_test(int argc, char* argv[])
         const uint32 N_strings  = gpu_bwt_size*1000*1000;
         const uint64 N_words    = (uint64(N_strings)*N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
 
-        fprintf(stderr, "  gpu set-bwt test\n");
-        fprintf(stderr, "    %5.1f M strings\n",  (1.0e-6f*float(N_strings)));
-        fprintf(stderr, "    %5.1f G suffixes\n", (1.0e-9f*float(uint64(N_strings)*uint64(N+1))));
-        fprintf(stderr, "    %5.2f GB\n",         (float(N_words)*sizeof(uint32))/float(1024*1024*1024));
+        log_info(stderr, "  gpu set-bwt test\n");
+        log_info(stderr, "    %5.1f M strings\n",  (1.0e-6f*float(N_strings)));
+        log_info(stderr, "    %5.1f G suffixes\n", (1.0e-9f*float(uint64(N_strings)*uint64(N+1))));
+        log_info(stderr, "    %5.2f GB\n",         (float(N_words)*sizeof(uint32))/float(1024*1024*1024));
 
         thrust::host_vector<uint32>  h_string( N_words );
         thrust::host_vector<uint64>  h_offsets( N_strings+1 );
@@ -643,7 +661,7 @@ int sufsort_test(int argc, char* argv[])
             d_packed_string.begin(),
             nvbio::plain_view( d_offsets ) );
 
-        fprintf(stderr, "  bwt... started\n");
+        log_info(stderr, "  bwt... started\n");
 
         Timer timer;
 
@@ -677,7 +695,7 @@ int sufsort_test(int argc, char* argv[])
             timer.stop();
         }
 
-        fprintf(stderr, "  bwt... done: %.2fs\n", timer.seconds());
+        log_info(stderr, "  bwt... done: %.2fs\n", timer.seconds());
     }
     if (TEST_MASK & kCPU_BWT_SET)
     {
@@ -690,10 +708,10 @@ int sufsort_test(int argc, char* argv[])
         const uint32 N_strings  = cpu_bwt_size*1000*1000;
         const uint64 N_words    = (uint64(N_strings)*N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
 
-        fprintf(stderr, "  cpu set-bwt test\n");
-        fprintf(stderr, "    %5.1f M strings\n",  (1.0e-6f*float(N_strings)));
-        fprintf(stderr, "    %5.1f G suffixes\n", (1.0e-9f*float(uint64(N_strings)*uint64(N+1))));
-        fprintf(stderr, "    %5.2f GB\n",         (float(N_words)*sizeof(uint32))/float(1024*1024*1024));
+        log_info(stderr, "  cpu set-bwt test\n");
+        log_info(stderr, "    %5.1f M strings\n",  (1.0e-6f*float(N_strings)));
+        log_info(stderr, "    %5.1f G suffixes\n", (1.0e-9f*float(uint64(N_strings)*uint64(N+1))));
+        log_info(stderr, "    %5.2f GB\n",         (float(N_words)*sizeof(uint32))/float(1024*1024*1024));
 
         thrust::host_vector<uint32>  h_string( N_words );
         thrust::host_vector<uint64>  h_offsets( N_strings+1 );
@@ -711,7 +729,7 @@ int sufsort_test(int argc, char* argv[])
             h_packed_string.begin(),
             nvbio::plain_view( h_offsets ) );
 
-        fprintf(stderr, "  bwt... started\n");
+        log_info(stderr, "  bwt... started\n");
 
         Timer timer;
 
@@ -745,9 +763,9 @@ int sufsort_test(int argc, char* argv[])
             timer.stop();
         }
 
-        fprintf(stderr, "  bwt... done: %.2fs\n", timer.seconds());
+        log_info(stderr, "  bwt... done: %.2fs\n", timer.seconds());
     }
-    fprintf(stderr, "nvbio/sufsort test... done\n");
+    log_info(stderr, "nvbio/sufsort test... done\n");
     return 0;
 }
 

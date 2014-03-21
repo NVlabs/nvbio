@@ -295,6 +295,10 @@ typename string_type::index_type bwt(
         // build the sub-buckets
         for (uint32 subbucket_begin = bucket_begin, subbucket_end = bucket_begin; subbucket_begin < bucket_end; subbucket_begin = subbucket_end)
         {
+            // check if this bucket is too large
+            if (h_buckets[subbucket_begin] > max_block_size)
+                throw nvbio::runtime_error("bucket %u contains %u strings: buffer overflow!", subbucket_begin, h_buckets[subbucket_begin]);
+
             // grow the block of sub-buckets until we can
             uint32 subbucket_size;
             for (subbucket_size = 0; (subbucket_end < bucket_end) && (subbucket_size + h_buckets[subbucket_end] < max_block_size); ++subbucket_end)
@@ -359,9 +363,16 @@ typename string_type::index_type bwt(
             // dispatch each suffix to their respective bucket
             for (uint32 i = 0; i < n_collected; ++i)
             {
+                const uint32 loc    = h_block_suffixes[i];
                 const uint32 bucket = h_block_radices[i];
-                const uint32 slot   = h_bucket_offsets[bucket]++;
-                h_super_suffixes[ slot - global_suffix_offset ] = h_block_suffixes[i];
+                const uint64 slot   = h_bucket_offsets[bucket]++; // this could be done in parallel using atomics
+
+                NVBIO_CUDA_DEBUG_ASSERT(
+                    slot >= global_suffix_offset,
+                    slot <  global_suffix_offset + max_super_block_size,
+                    "[%u] = %u placed at %llu - %llu (%u)\n", i, loc, slot, global_suffix_offset, bucket );
+
+                h_super_suffixes[ slot - global_suffix_offset ] = loc;
             }
 
             suffix_count += n_collected;
@@ -380,7 +391,7 @@ typename string_type::index_type bwt(
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    setup   : %.1fs\n", bucketer.d_setup_time) );
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    flatten : %.1fs\n", bucketer.d_flatten_time) );
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    b-sort  : %.1fs\n", bucketer.d_collect_sort_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    search  : %.1fs\n", bucketer.d_search_time) );
+        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    search  : %.1fs\n", bucketer.d_remap_time) );
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    copy    : %.1fs\n", bucketer.d_copy_time) );
 
         //
@@ -421,7 +432,8 @@ typename string_type::index_type bwt(
                 string,                         // the main string
                 n_suffixes,                     // number of suffixes to sort
                 d_subbucket_suffixes.begin(),   // the suffixes to sort
-                16u,                            // number of words to sort before possibly delaying
+                16u,                            // minimum number of words to sort before possibly delaying
+                1000u,                          // maximum number of words to sort before delaying
                 delay_list );                   // the delay list
         #else // if defined(COMPRESSION_SORTING)
             // and sort the corresponding suffixes
@@ -485,6 +497,7 @@ typename string_type::index_type bwt(
                     string,
                     delay_list.count,
                     delay_list.indices,
+                    uint32(-1),
                     uint32(-1),
                     discard_list );
 

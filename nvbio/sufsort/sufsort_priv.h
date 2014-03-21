@@ -1669,7 +1669,7 @@ struct StringSuffixBucketer
 {
     typedef uint32 word_type;
 
-    StringSuffixBucketer() : d_setup_time(0.0f), d_flatten_time(0.0f), d_count_sort_time(0.0f), d_collect_sort_time(0.0f), d_search_time(0.0f), d_copy_time(0.0f) {}
+    StringSuffixBucketer() : d_setup_time(0.0f), d_flatten_time(0.0f), d_count_sort_time(0.0f), d_collect_sort_time(0.0f), d_remap_time(0.0f), d_copy_time(0.0f), d_filter_time(0.0f) {}
 
     /// count the number of suffixes falling in each bucket, where the buckets
     /// are defined by the first n_bits of the suffix
@@ -1754,7 +1754,7 @@ struct StringSuffixBucketer
         cuda::Timer timer;
 
         const uint32 n_suffixes = string_length;
-        const uint32 n_buckets  = 1u << (N_BITS);
+        const uint32 n_buckets  = 1u << N_BITS;
 
         // initialize the temporary and output vectors
         alloc_storage( d_indices, n_suffixes * 2u );
@@ -1772,102 +1772,107 @@ struct StringSuffixBucketer
             thrust::make_counting_iterator<uint32>(0u) + n_suffixes,
             d_radices.begin() );
 
-        // remap the radices
-        thrust::gather(
-            d_radices.begin(),
-            d_radices.begin() + n_suffixes,
-            bucketmap,
-            d_radices.begin() );
-
         timer.stop();
         d_flatten_time += timer.seconds();
 
         timer.start();
 
-        // setup the indices
-        thrust::copy(
-            thrust::make_counting_iterator<uint32>(0u),
-            thrust::make_counting_iterator<uint32>(n_suffixes),
-            d_indices.begin() );
+        // determine if a radix is in the given bucket range
+        const priv::in_range_functor in_range = priv::in_range_functor( bucket_begin, bucket_end );
 
-        // sort the radices so as to make binning easy
-        cuda::SortBuffers<word_type*,uint32*>   sort_buffers;
-        cuda::SortEnactor                       sort_enactor;
-
-        sort_buffers.selector  = 0;
-        sort_buffers.keys[0]   = nvbio::device_view( d_radices );
-        sort_buffers.keys[1]   = nvbio::device_view( d_radices ) + n_suffixes;
-        sort_buffers.values[0] = nvbio::device_view( d_indices );
-        sort_buffers.values[1] = nvbio::device_view( d_indices ) + n_suffixes;
-        sort_enactor.sort( n_suffixes, sort_buffers, 0u, N_BITS );
-        //thrust::sort_by_key( d_radices.begin(), d_radices.begin() + n_suffixes, d_indices.begin() );
+        // retain only suffixes whose radix is between the specified buckets
+        const uint32 n_collected = copy_if(
+            n_suffixes,
+            thrust::make_zip_iterator( thrust::make_tuple( thrust::make_counting_iterator<uint32>(0u), d_radices.begin() ) ),
+            thrust::make_transform_iterator( d_radices.begin(), in_range ),
+            thrust::make_zip_iterator( thrust::make_tuple( d_indices.begin(), d_radices.begin() ) ) + n_suffixes,
+            d_temp_storage );
 
         timer.stop();
-        d_collect_sort_time += timer.seconds();
-
-        // compute the number of effectively used buckets looking at the last non-empty one
-        //const uint32 n_used_buckets = d_radices[ sort_buffers.selector * n_suffixes + n_suffixes-1 ] + 1u;
+        d_filter_time += timer.seconds();
 
         timer.start();
 
-        // find the pointer to bucket_begin
-        const uint32 range_begin = uint32( thrust::lower_bound(
-            d_radices.begin() + sort_buffers.selector * n_suffixes,
-            d_radices.begin() + sort_buffers.selector * n_suffixes + n_suffixes,
-            bucket_begin ) - (d_radices.begin() + sort_buffers.selector * n_suffixes) );
-
-        // find the pointer to bucket_end
-        const uint32 range_end = uint32( thrust::lower_bound(
-            d_radices.begin() + sort_buffers.selector * n_suffixes,
-            d_radices.begin() + sort_buffers.selector * n_suffixes + n_suffixes,
-            bucket_end ) - (d_radices.begin() + sort_buffers.selector * n_suffixes) );
+        // remap the collected radices
+        thrust::gather(
+            d_radices.begin() + n_suffixes,
+            d_radices.begin() + n_suffixes + n_collected,
+            bucketmap,
+            d_radices.begin() + n_suffixes );
 
         timer.stop();
-        d_search_time += timer.seconds();
+        d_remap_time += timer.seconds();
+
+        timer.start();
+
+        // sort the radices so as to make binning easy
+        cuda::SortBuffers<word_type*,uint64*>   sort_buffers;
+        cuda::SortEnactor                       sort_enactor;
+
+        sort_buffers.selector  = 0;
+      //#define SORT_BY_BUCKETS
+      #if defined(SORT_BY_BUCKETS)
+        sort_buffers.keys[0]   = nvbio::device_view( d_radices ) + n_suffixes;
+        sort_buffers.keys[1]   = nvbio::device_view( d_radices );
+        sort_buffers.values[0] = (uint64*)nvbio::device_view( d_indices ) + buffer_stride;
+        sort_buffers.values[1] = (uint64*)nvbio::device_view( d_indices );
+        sort_enactor.sort( n_collected, sort_buffers, 0u, N_BITS );
+      #endif
+
+        timer.stop();
+        d_collect_sort_time += timer.seconds();
 
         //
         // copy all the indices inside the range to the output
         //
 
+        //alloc_storage( output_suffixes, n_suffixes );
+        //alloc_storage( output_radices,  n_suffixes );
+
         timer.start();
 
+        // the buffer selector had inverted semantics
+        sort_buffers.selector = 1 - sort_buffers.selector;
+
         // use a device-staging buffer to add the offset to the indices
-        alloc_storage( d_output, range_end - range_begin );
+        alloc_storage( d_output, n_collected );
 
         thrust::transform(
-            d_indices.begin() + sort_buffers.selector * n_suffixes + range_begin,
-            d_indices.begin() + sort_buffers.selector * n_suffixes + range_end,
+            d_indices.begin() + sort_buffers.selector * n_suffixes,
+            d_indices.begin() + sort_buffers.selector * n_suffixes + n_collected,
             d_output.begin(),
             offset_functor( string_offset ) );
 
         // and copy everything to the output
         thrust::copy(
             d_output.begin(),
-            d_output.begin() + (range_end - range_begin),
+            d_output.begin() + n_collected,
             output_indices );
 
         // and copy everything to the output
         thrust::copy(
-            d_radices.begin() + sort_buffers.selector * n_suffixes + range_begin,
-            d_radices.begin() + sort_buffers.selector * n_suffixes + range_end,
+            d_radices.begin() + sort_buffers.selector * n_suffixes,
+            d_radices.begin() + sort_buffers.selector * n_suffixes + n_collected,
             output_radices );
 
         timer.stop();
         d_copy_time += timer.seconds();
 
-        return range_end - range_begin;
+        return n_collected;
     }
 
     thrust::device_vector<uint32>       d_indices;
     thrust::device_vector<word_type>    d_radices;
     thrust::device_vector<uint32>       d_buckets;
     thrust::device_vector<uint32>       d_output;
+    thrust::device_vector<uint8>        d_temp_storage;
     float                               d_setup_time;
     float                               d_flatten_time;
     float                               d_count_sort_time;
     float                               d_collect_sort_time;
-    float                               d_search_time;
+    float                               d_remap_time;
     float                               d_copy_time;
+    float                               d_filter_time;
 };
 
 //

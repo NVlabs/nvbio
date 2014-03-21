@@ -49,6 +49,9 @@
 #include <nvbio/sufsort/sufsort.h>
 #include "filelist.h"
 
+#if defined(MTRAND)
+#include "mtrand.h"
+#endif
 
 using namespace nvbio;
 
@@ -58,13 +61,6 @@ using namespace nvbio;
 
 #define SA_REP _64_64
 
-#define DIVSUFSORT 0
-#define SAIS       1
-#define BWTSW      2
-
-#define BYTE_PACKING 0
-#define WORD_PACKING 1
-
 #if (SA_REP == _32_32)
 typedef uint32 SA_storage_type;
 typedef uint32 SA_facade_type;
@@ -73,7 +69,7 @@ typedef uint64 SA_storage_type;
 typedef uint64 SA_facade_type;
 #else
 typedef uint32 SA_storage_type;
-typedef int64  SA_facade_type;
+typedef uint64 SA_facade_type;
 #endif
 
 void bwt_bwtgen(const char *fn_pac, const char *fn_bwt);
@@ -97,13 +93,20 @@ unsigned char nst_nt4_table[256] = {
 	4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4
 };
 
-#ifdef WIN32
-inline void  srand_bp(const unsigned int s) { srand(s); }
-inline float frand() { return float(rand()) / float(RAND_MAX); }
-inline uint8 rand_bp() { return uint8( frand() * 4 ); }
+MTRand_open mt_rand;
+
+#if defined(MTRAND)
+inline void  srand_bp(const unsigned int s) { mt_rand.seed(s); }
+inline uint8 rand_bp() { return uint8( mt_rand() * 4 ); }
 #else
-inline void  srand_bp(const unsigned int s) { srand48(s); }
-inline uint8 rand_bp() { return uint8( lrand48() & 3u ); }
+  #ifdef WIN32
+    inline void  srand_bp(const unsigned int s) { srand(s); }
+    inline float frand() { return float(rand()) / float(RAND_MAX); }
+    inline uint8 rand_bp() { return uint8( frand() * 4 ); }
+  #else
+    inline void  srand_bp(const unsigned int s) { srand48(s); }
+    inline uint8 rand_bp() { return uint8( drand48() * 4 ); }
+  #endif
 #endif
 
 struct Counter
@@ -272,7 +275,7 @@ int build(
     typedef PackedStream<const uint32*,uint8,2,true,SA_facade_type> const_stream_type;
     typedef PackedStream<      uint32*,uint8,2,true,SA_facade_type>       stream_type;
 
-    stream_type h_stream( h_base_stream );
+    stream_type h_string( h_base_stream );
     stream_type h_bwt( h_bwt_stream );
 
     log_info(stderr, "\nbuffering bps... started\n");
@@ -298,7 +301,7 @@ int build(
     }
     log_info(stderr, "buffering bps... done\n");
     {
-        const uint32 crc = crcCalc( h_stream.begin(), uint32(seq_length) );
+        const uint32 crc = crcCalc( h_string.begin(), uint32(seq_length) );
         log_info(stderr, "  crc: %u\n", crc);
     }
 
@@ -352,11 +355,11 @@ int build(
 
         // reuse the bwt storage to build the reverse
         uint32* h_rbase_stream = h_bwt_stream;
-        stream_type h_rstream( h_rbase_stream );
+        stream_type h_rstring( h_rbase_stream );
 
         // reverse the string
         for (uint32 i = 0; i < seq_length; ++i)
-            h_rstream[i] = h_stream[ seq_length - i - 1u ];
+            h_rstring[i] = h_string[ seq_length - i - 1u ];
 
         if (save_stream( output_file, seq_bytes, (uint8*)h_rbase_stream ) == false)
         {
@@ -389,6 +392,33 @@ int build(
 
         const_stream_type d_string( nvbio::plain_view( d_base_storage ) );
               stream_type d_bwt( nvbio::plain_view( d_bwt_storage ) );
+
+        /*
+        const uint32 suffixes[] = {
+            3061511669
+            3063145414
+            3061511670
+            3063145415
+            3061511671
+            3063145416
+            3061511672
+            3063145417
+            3061511673
+            3063145418
+        };
+        const uint32 suf0 = suffixes[0];
+        const uint32 suf1 = suffixes[1];
+        for (uint32 j = 0; j < 1000000; ++j)
+        {
+            const char c0 = dna_to_char( h_string[suf0 + j] );
+            const char c1 = dna_to_char( h_string[suf1 + j] );
+            if (c0 != c1)
+            {
+                fprintf(stderr, "%08u: %c%c\n", j, c0, c1);
+                break;
+            }
+        }
+        */
 
         Timer timer;
 
@@ -432,11 +462,11 @@ int build(
         {
             // reuse the bwt storage to build the reverse
             uint32* h_rbase_stream = h_bwt_stream;
-            stream_type h_rstream( h_rbase_stream );
+            stream_type h_rstring( h_rbase_stream );
 
             // reverse the string
             for (uint32 i = 0; i < seq_length; ++i)
-                h_rstream[i] = h_stream[ seq_length - i - 1u ];
+                h_rstring[i] = h_string[ seq_length - i - 1u ];
 
             // and now swap the vectors
             h_bwt_storage.swap( h_base_storage );

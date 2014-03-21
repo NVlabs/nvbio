@@ -141,7 +141,8 @@ struct CompressionSort
         const string_type                       string,
         const uint32                            n_suffixes,
         output_iterator                         d_suffixes,
-        const uint32                            delay_threshold,
+        const uint32                            delay_min_threshold,
+        const uint32                            delay_max_threshold,
         delay_list_type&                        delay_list);
 
     /// Sort a given batch of strings using Iterative Compression Sorting - an algorithm inspired by
@@ -239,7 +240,8 @@ void CompressionSort::sort(
     const string_type                       string,
     const uint32                            n_suffixes,
     output_iterator                         d_suffixes,
-    const uint32                            delay_threshold,
+    const uint32                            delay_min_threshold,
+    const uint32                            delay_max_threshold,
     delay_list_type&                        delay_list)
 {
     typedef typename string_type::index_type index_type;
@@ -294,9 +296,8 @@ void CompressionSort::sort(
     //
     for (uint32 word_idx = 0; true; ++word_idx)
     {
-        Timer timer;
-
-        if (word_idx > delay_threshold && 1000 * n_active_suffixes <= n_suffixes) // TODO: add a minimum pass number
+        if ((word_idx >= delay_min_threshold && 1000 * n_active_suffixes <= n_suffixes) ||
+            (word_idx >= delay_max_threshold))
         {
             delay_list.push_back(
                 n_active_suffixes,
@@ -306,6 +307,7 @@ void CompressionSort::sort(
             break; // bail out of the sorting loop
         }
 
+        Timer timer;
         timer.start();
 
         // extract the given radix word from each of the partially sorted suffixes and merge it with the existing keys

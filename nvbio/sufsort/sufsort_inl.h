@@ -415,7 +415,7 @@ typename string_type::index_type bwt(
                 d_subbucket_suffixes.begin() );
 
         #if defined(COMPRESSION_SORTING)
-            delay_list.set_offset( subbucket_begin + 1u ); // +1u due to the implicit 0-th suffix
+            delay_list.set_offset( global_suffix_offset + suffix_count + 1u ); // +1u due to the implicit 0-th suffix
 
             compression_sort.sort(
                 string_len,                     // the main string length

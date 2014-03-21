@@ -455,6 +455,7 @@ int build(
                 log_error(stderr, "  writing failed!\n");
                 exit(1);
             }
+            fclose( output_file );
             log_info(stderr, "writing \"%s\"... done\n", bwt_name);
         }
 
@@ -504,12 +505,12 @@ int build(
             }
             fwrite( &primary, sizeof(uint32), 1, output_file );
             fwrite( cumFreq,  sizeof(uint32), 4, output_file );
-            fclose( output_file );
             if (save_stream( output_file, seq_words, h_bwt_stream ) == false)
             {
                 log_error(stderr, "  writing failed!\n");
                 exit(1);
             }
+            fclose( output_file );
             log_info(stderr, "writing \"%s\"... done\n", rbwt_name);
         }
     }

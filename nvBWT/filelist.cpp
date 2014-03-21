@@ -36,14 +36,8 @@
 #include <glob.h>
 #endif
 #include <string.h>
-#include <nvbio/basic/bnt.h>
-#include <nvbio/basic/numbers.h>
-#include <nvbio/basic/timer.h>
-#include <nvbio/fmindex/dna.h>
-#include <nvbio/basic/packedstream.h>
-#include <nvbio/fmindex/bwt.h>
-#include <nvbio/fasta/fasta.h>
-#include "fake_vector.h"
+#include <nvbio/basic/types.h>
+
 
 /* Appends sorted list of files matching pattern to out_list.
  * Should work on linux or windows */

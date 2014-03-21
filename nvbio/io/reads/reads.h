@@ -82,12 +82,11 @@ enum QualityEncoding
     Solexa = 3,
 };
 
-// describes the quality encoding for a given read file
+// a set of flags describing the types of supported read strands
 enum ReadEncoding
 {
     FORWARD            = 0x0001,
     REVERSE            = 0x0002,
-    COMPLEMENT         = 0x0004,
     FORWARD_COMPLEMENT = 0x0004,
     REVERSE_COMPLEMENT = 0x0008,
 };
@@ -250,6 +249,16 @@ struct ReadData : public ReadDataView<uint32*,uint32*,char*,char*>
 ///
 struct ReadDataRAM : public ReadData
 {
+    /// a set of flags describing the operators to apply to a given strand
+    ///
+    enum StrandOp
+    {
+        NO_OP                 = 0x0000,     ///< default, no operator applied
+        REVERSE_OP            = 0x0001,     ///< reverse operator
+        COMPLEMENT_OP         = 0x0002,     ///< complement operator
+        REVERSE_COMPLEMENT_OP = 0x0003,     ///< convenience definition, same as StrandOp( REVERSE_OP | COMPLEMENT_OP )
+    };
+
     ReadDataRAM();
 
     /// reserve enough storage for a given number of reads and bps
@@ -258,13 +267,21 @@ struct ReadDataRAM : public ReadData
 
     /// add a read to the end of this batch
     ///
-    void push_back(uint32                   in_read_len,
+    /// \param read_len                     input read length
+    /// \param name                         read name
+    /// \param base_pairs                   list of base pairs
+    /// \param quality                      list of base qualities
+    /// \param quality_encoding             quality encoding scheme
+    /// \param truncate_read_len            truncate the read if longer than this
+    /// \param conversion_flags             conversion operators applied to the strand
+    ///
+    void push_back(uint32                   read_len,
                    const char*              name,
                    const uint8*             base_pairs,
                    const uint8*             quality,
-                   const QualityEncoding    q_encoding,
+                   const QualityEncoding    quality_encoding,
                    const uint32             truncate_read_len,
-                   const ReadEncoding       conversion_flags);
+                   const StrandOp           conversion_flags);
 
     /// signals that the batch is complete
     ///
@@ -330,6 +347,16 @@ struct ReadDataStream
 
 
 /// factory method to open a read file
+///
+/// \param read_file_name       the file to open
+/// \param qualities            the encoding of the qualities
+/// \param max_reads            maximum number of reads to input
+/// \param max_read_len         maximum read length - reads will be truncated
+/// \param flags                a set of flags indicating which strands to encode
+///                             in the batch for each read.
+///                             For example, passing FORWARD | REVERSE_COMPLEMENT
+///                             will result in a stream containing BOTH the forward
+///                             and reverse-complemented strands.
 ///
 ReadDataStream *open_read_file(const char *          read_file_name,
                                const QualityEncoding qualities,

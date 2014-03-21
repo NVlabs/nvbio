@@ -340,7 +340,7 @@ void ReadDataRAM::end_batch(void)
 
 // a small read class supporting REVERSE | COMPLEMENT operations
 //
-template <ReadEncoding FLAGS>
+template <ReadDataRAM::StrandOp FLAGS>
 struct read_string
 {
     // constructor
@@ -352,12 +352,12 @@ struct read_string
     // indexing operator
     uint8 operator[] (const uint32 i) const
     {
-        const uint32 index = (FLAGS & REVERSE) ? m_len - i - 1u : i;
+        const uint32 index = (FLAGS & ReadDataRAM::REVERSE_OP) ? m_len - i - 1u : i;
 
         // fetch the bp
         const uint8 bp = nst_nt4_encode( m_read[index] );
 
-        if (FLAGS & COMPLEMENT)
+        if (FLAGS & ReadDataRAM::COMPLEMENT_OP)
             return bp < 4u ? 3u - bp : 4u;
 
         return bp;
@@ -432,7 +432,7 @@ void encode(
 // encode a read according to some given run-time flags and quality-encoding
 //
 void encode(
-    const ReadEncoding                      conversion_flags,
+    const ReadDataRAM::StrandOp             conversion_flags,
     const QualityEncoding                   quality_encoding,
     const uint32                            read_len,
     const uint8*                            read,
@@ -440,23 +440,22 @@ void encode(
     ReadData::read_stream_type::iterator    stream,
     char*                                   qual_stream)
 {
-    const ReadEncoding REV_COMP = ReadEncoding(REVERSE | COMPLEMENT);
 
-    const read_string<REVERSE>         r_read( read_len, read, quality );
-    const read_string<REV_COMP>       rc_read( read_len, read, quality );
-    const read_string<COMPLEMENT>     fc_read( read_len, read, quality );
-    const read_string<FORWARD>         f_read( read_len, read, quality );
+    const read_string<ReadDataRAM::REVERSE_OP>              r_read( read_len, read, quality );
+    const read_string<ReadDataRAM::REVERSE_COMPLEMENT_OP>   rc_read( read_len, read, quality );
+    const read_string<ReadDataRAM::COMPLEMENT_OP>           fc_read( read_len, read, quality );
+    const read_string<ReadDataRAM::NO_OP>                   f_read( read_len, read, quality );
 
-    if (conversion_flags & REVERSE)
+    if (conversion_flags & ReadDataRAM::REVERSE_OP)
     {
-        if (conversion_flags & COMPLEMENT)
+        if (conversion_flags & ReadDataRAM::COMPLEMENT_OP)
             encode( quality_encoding, rc_read, stream, qual_stream );
         else
             encode( quality_encoding, r_read,  stream, qual_stream );
     }
     else
     {
-        if (conversion_flags & COMPLEMENT)
+        if (conversion_flags & ReadDataRAM::COMPLEMENT_OP)
             encode( quality_encoding, fc_read, stream, qual_stream );
         else
             encode( quality_encoding, f_read,  stream, qual_stream );
@@ -470,7 +469,7 @@ void ReadDataRAM::push_back(uint32 read_len,
                             const uint8* quality,
                             const QualityEncoding quality_encoding,
                             const uint32 truncate_read_len,
-                            const ReadEncoding conversion_flags)
+                            const StrandOp conversion_flags)
 {
     // truncate read
     // xxx: should we do this silently?

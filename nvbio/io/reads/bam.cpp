@@ -303,8 +303,8 @@ int ReadDataFile_BAM::nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 ma
 
     if (m_flags & FORWARD)
     {
-        const uint32 conversion_flags = (read_flags & SAMFlag_ReverseComplemented) ?
-            (REVERSE | COMPLEMENT) : FORWARD;
+        const ReadDataRAM::StrandOp op = (read_flags & SAMFlag_ReverseComplemented) ?
+            ReadDataRAM::REVERSE_COMPLEMENT_OP : ReadDataRAM::NO_OP;
 
         // add the read into the batch
         output->push_back(align.l_seq,
@@ -313,12 +313,12 @@ int ReadDataFile_BAM::nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 ma
                           data.quality,
                           Phred,
                           m_truncate_read_len,
-                          ReadEncoding( conversion_flags ));
+                          op );
     }
     if (m_flags & REVERSE)
     {
-        const uint32 conversion_flags = (read_flags & SAMFlag_ReverseComplemented) ?
-            COMPLEMENT : REVERSE;
+        const ReadDataRAM::StrandOp op = (read_flags & SAMFlag_ReverseComplemented) ?
+            ReadDataRAM::COMPLEMENT_OP : ReadDataRAM::REVERSE_OP;
 
         output->push_back(align.l_seq,
                           data.read_name,
@@ -326,12 +326,12 @@ int ReadDataFile_BAM::nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 ma
                           data.quality,
                           Phred,
                           m_truncate_read_len,
-                          ReadEncoding( conversion_flags ));
+                          op );
     }
     if (m_flags & FORWARD_COMPLEMENT)
     {
-        const uint32 conversion_flags = (read_flags & SAMFlag_ReverseComplemented) ?
-            REVERSE : COMPLEMENT;
+        const ReadDataRAM::StrandOp op = (read_flags & SAMFlag_ReverseComplemented) ?
+            ReadDataRAM::REVERSE_OP : ReadDataRAM::COMPLEMENT_OP;
 
         output->push_back(align.l_seq,
                           data.read_name,
@@ -339,12 +339,12 @@ int ReadDataFile_BAM::nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 ma
                           data.quality,
                           Phred,
                           m_truncate_read_len,
-                          ReadEncoding( conversion_flags ));
+                          op );
     }
     if (m_flags & REVERSE_COMPLEMENT)
     {
-        const uint32 conversion_flags = (read_flags & SAMFlag_ReverseComplemented) ?
-            FORWARD : (REVERSE | COMPLEMENT);
+        const ReadDataRAM::StrandOp op = (read_flags & SAMFlag_ReverseComplemented) ?
+            ReadDataRAM::NO_OP : ReadDataRAM::REVERSE_COMPLEMENT_OP;
 
         output->push_back(align.l_seq,
                           data.read_name,
@@ -352,7 +352,7 @@ int ReadDataFile_BAM::nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 ma
                           data.quality,
                           Phred,
                           m_truncate_read_len,
-                          ReadEncoding( conversion_flags ));
+                          op );
     }
 
     // we always return 1 read at a time

@@ -178,15 +178,15 @@ typename string_type::index_type bwt(
     BWTParams*                              params)
 {
     typedef typename string_type::index_type index_type;
-    const uint32 SYMBOL_SIZE = string_type::SYMBOL_SIZE;
+
+    NVBIO_VAR_UNUSED const uint32 SYMBOL_SIZE    = string_type::SYMBOL_SIZE;
+    NVBIO_VAR_UNUSED const uint32 BUCKETING_BITS = 20;
+    NVBIO_VAR_UNUSED const uint32 DOLLAR_BITS    = 4;
 
     const uint32     M = 256*1024;
     const index_type N = string_len;
 
     const uint32 n_chunks = (N + M-1) / M;
-
-    const uint32 BUCKETING_BITS = 20;
-    const uint32 DOLLAR_BITS    = 4;
 
     priv::StringSuffixBucketer<SYMBOL_SIZE,BUCKETING_BITS,DOLLAR_BITS> bucketer;
 
@@ -389,7 +389,7 @@ typename string_type::index_type bwt(
         // we'll do it looping on multiple sub-buckets, on the GPU
         //
 
-        const uint32 SYMBOLS_PER_WORD = priv::symbols_per_word<SYMBOL_SIZE, WORD_BITS,DOLLAR_BITS>();
+        NVBIO_VAR_UNUSED const uint32 SYMBOLS_PER_WORD = priv::symbols_per_word<SYMBOL_SIZE, WORD_BITS,DOLLAR_BITS>();
 
         suffix_count = 0u;
 
@@ -658,8 +658,8 @@ struct LargeBWTSkeleton
         const uint32                        limit,
         LargeBWTStatus*                     status)
     {
-        const uint32 DOLLAR_BITS = ConfigType::DOLLAR_BITS;
-        const uint32 DOLLAR_MASK = (1u << DOLLAR_BITS) - 1u;
+        NVBIO_VAR_UNUSED const uint32 DOLLAR_BITS = ConfigType::DOLLAR_BITS;
+        NVBIO_VAR_UNUSED const uint32 DOLLAR_MASK = (1u << DOLLAR_BITS) - 1u;
 
         uint32 max_size  = 0u;
         uint32 max_index = 0u;
@@ -711,8 +711,8 @@ struct LargeBWTSkeleton
         const uint32                        max_super_block_size,
         const uint32                        max_block_size)
     {
-        const uint32 DOLLAR_BITS = ConfigType::DOLLAR_BITS;
-        const uint32 DOLLAR_MASK = (1u << DOLLAR_BITS) - 1u;
+        NVBIO_VAR_UNUSED const uint32 DOLLAR_BITS = ConfigType::DOLLAR_BITS;
+        NVBIO_VAR_UNUSED const uint32 DOLLAR_MASK = (1u << DOLLAR_BITS) - 1u;
 
         // build the subbucket pointers
         for (uint32 bucket_begin = 0, bucket_end = 0; bucket_begin < h_buckets.size(); bucket_begin = bucket_end)
@@ -761,10 +761,10 @@ struct LargeBWTSkeleton
         output_handler&             output,
         BWTParams*                  params)
     {
-        const uint32 BUCKETING_BITS = ConfigType::BUCKETING_BITS;
-        const uint32 DOLLAR_BITS    = ConfigType::DOLLAR_BITS;
-        const uint32 DOLLAR_MASK    = (1u << DOLLAR_BITS) - 1u;
-        const uint32 SLICE_SIZE     = 4;
+        NVBIO_VAR_UNUSED const uint32 BUCKETING_BITS = ConfigType::BUCKETING_BITS;
+        NVBIO_VAR_UNUSED const uint32 DOLLAR_BITS    = ConfigType::DOLLAR_BITS;
+        NVBIO_VAR_UNUSED const uint32 DOLLAR_MASK    = (1u << DOLLAR_BITS) - 1u;
+        NVBIO_VAR_UNUSED const uint32 SLICE_SIZE     = 4;
 
         const uint32 M              = 128*1024;
         const uint32 N              = string_set.size();

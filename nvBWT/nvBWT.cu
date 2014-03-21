@@ -25,8 +25,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// nvBWT.cpp : Defines the entry point for the console application.
+// nvSetBWT.cu
 //
+
+#define NVBIO_CUDA_DEBUG
 
 #include <stdio.h>
 #include <stdlib.h>

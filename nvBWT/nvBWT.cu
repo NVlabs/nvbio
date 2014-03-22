@@ -93,9 +93,9 @@ unsigned char nst_nt4_table[256] = {
 	4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4
 };
 
+#if defined(MTRAND)
 MTRand_open mt_rand;
 
-#if defined(MTRAND)
 inline void  srand_bp(const unsigned int s) { mt_rand.seed(s); }
 inline uint8 rand_bp() { return uint8( mt_rand() * 4 ); }
 #else

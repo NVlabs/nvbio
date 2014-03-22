@@ -37,7 +37,7 @@
 #endif
 #include <string.h>
 #include <nvbio/basic/types.h>
-
+#include <nvbio/basic/console.h>
 
 /* Appends sorted list of files matching pattern to out_list.
  * Should work on linux or windows */

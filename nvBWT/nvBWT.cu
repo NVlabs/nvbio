@@ -51,25 +51,6 @@
 
 using namespace nvbio;
 
-#define _32_32 0
-#define _64_64 1
-#define _32_64 2
-
-#define SA_REP _64_64
-
-#if (SA_REP == _32_32)
-typedef uint32 SA_storage_type;
-typedef uint32 SA_facade_type;
-#elif (SA_REP == _64_64)
-typedef uint64 SA_storage_type;
-typedef uint64 SA_facade_type;
-#else
-typedef uint32 SA_storage_type;
-typedef uint64 SA_facade_type;
-#endif
-
-void bwt_bwtgen(const char *fn_pac, const char *fn_bwt);
-
 unsigned char nst_nt4_table[256] = {
 	4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4, 
 	4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4, 
@@ -121,12 +102,12 @@ struct Counter
     uint64 m_size;
     uint32 m_reads;
 };
-template <typename StorageType>
+
 struct Writer
 {
-    typedef PackedStream<StorageType*,uint8,2,true,SA_facade_type> stream_type;
+    typedef PackedStream<uint32*,uint8,2,true,uint64> stream_type;
 
-    Writer(StorageType* storage, const uint32 reads, const uint64 max_size) :
+    Writer(uint32* storage, const uint32 reads, const uint64 max_size) :
         m_max_size(max_size), m_size(0), m_stream( storage )
     {
         m_bntseq.seed = 11;
@@ -164,7 +145,7 @@ struct Writer
         {
             const uint8 c = nst_nt4_table[s];
 
-            m_stream[ SA_facade_type(m_size) ] = c < 4 ? c : rand_bp();
+            m_stream[ m_size ] = c < 4 ? c : rand_bp();
 
             if (c >= 4) // we have an N
             {
@@ -271,8 +252,8 @@ int build(
     uint32* h_base_stream = nvbio::plain_view( h_base_storage );
     uint32* h_bwt_stream  = nvbio::plain_view( h_bwt_storage );
 
-    typedef PackedStream<const uint32*,uint8,2,true,SA_facade_type> const_stream_type;
-    typedef PackedStream<      uint32*,uint8,2,true,SA_facade_type>       stream_type;
+    typedef PackedStream<const uint32*,uint8,2,true,uint64> const_stream_type;
+    typedef PackedStream<      uint32*,uint8,2,true,uint64>       stream_type;
 
     stream_type h_string( h_base_stream );
     stream_type h_bwt( h_bwt_stream );
@@ -280,7 +261,7 @@ int build(
     log_info(stderr, "\nbuffering bps... started\n");
     // read all files
     {
-        Writer<uint32> writer( h_base_stream, counter.m_reads, seq_length );
+        Writer writer( h_base_stream, counter.m_reads, seq_length );
 
         for (uint32 i = 0; i < n_inputs; ++i)
         {
@@ -533,9 +514,6 @@ int main(int argc, char* argv[])
         log_info(stderr, "    -m     max_length\n");
         exit(0);
     }
-    log_info(stderr, "arch       : %lu bit\n", sizeof(void*)*8u);
-    log_info(stderr, "SA storage : %lu bits\n", sizeof(SA_storage_type)*8u);
-    log_info(stderr, "SA facade  : %lu bits\n", sizeof(SA_facade_type)*8u);
 
     const char* file_names[2] = { NULL, NULL };
     uint64 max_length = uint64(-1);

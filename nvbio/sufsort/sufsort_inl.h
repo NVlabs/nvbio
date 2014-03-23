@@ -30,6 +30,8 @@
 #include <nvbio/sufsort/sufsort_priv.h>
 #include <nvbio/sufsort/compression_sort.h>
 #include <nvbio/sufsort/prefix_doubling_sufsort.h>
+#include <nvbio/sufsort/blockwise_sufsort.h>
+#include <nvbio/sufsort/dcs.h>
 #include <nvbio/basic/string_set.h>
 #include <nvbio/basic/thrust_view.h>
 #include <nvbio/basic/cuda/sort.h>
@@ -166,6 +168,108 @@ void suffix_sort(
     NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    compact  : %5.1f ms\n", 1.0e3f * sufsort.compact_time) );
 }
 
+// a utility SuffixHandler to rank the sorted suffixes
+//
+template <typename string_type, typename output_iterator>
+struct StringBWTHandler
+{
+    static const uint32 NULL_PRIMARY = uint32(-1); // TODO: switch to index_type
+
+    // constructor
+    //
+    StringBWTHandler(
+        const uint32        _string_len,
+        const string_type   _string,
+        output_iterator     _output) :
+        string_len( _string_len ),
+        string( _string ),
+        primary(NULL_PRIMARY),
+        n_output(0),
+        output(_output) {}
+
+    // process the next batch of suffixes
+    //
+    void process_batch(
+        const uint32  n_suffixes,
+        const uint32* d_suffixes)
+    {
+        priv::alloc_storage( d_block_bwt, n_suffixes );
+
+        // compute the bwt of the block
+        thrust::transform(
+            thrust::device_ptr<const uint32>( d_suffixes ),
+            thrust::device_ptr<const uint32>( d_suffixes ) + n_suffixes,
+            d_block_bwt.begin(),
+            priv::string_bwt_functor<string_type>( string_len, string ) );
+
+        // check if there is a $ sign
+        const uint32 block_primary = uint32( thrust::find(
+            d_block_bwt.begin(),
+            d_block_bwt.begin() + n_suffixes,
+            255u ) - d_block_bwt.begin() );
+
+        if (block_primary < n_suffixes)
+        {
+            // keep track of the global primary position
+            primary = n_output + block_primary + 1u;                // +1u for the implicit empty suffix
+        }
+
+        // and copy the transformed block to the output
+        priv::device_copy(
+            n_suffixes,
+            d_block_bwt.begin(),
+            output,
+            n_output + 1u );                                        // +1u for the implicit empty suffix
+
+        n_output += n_suffixes;
+    }
+
+    // process a sparse set of suffixes
+    //
+    void process_scattered(
+        const uint32  n_suffixes,
+        const uint32* d_suffixes,
+        const uint32* d_slots)
+    {
+        priv::alloc_storage( d_block_bwt, n_suffixes );
+
+        // compute the bwt of the block
+        thrust::transform(
+            thrust::device_ptr<const uint32>( d_suffixes ),
+            thrust::device_ptr<const uint32>( d_suffixes ) + n_suffixes,
+            d_block_bwt.begin(),
+            priv::string_bwt_functor<string_type>( string_len, string ) );
+
+        // check if there is a $ sign
+        const uint32 block_primary = uint32( thrust::find(
+            d_block_bwt.begin(),
+            d_block_bwt.begin() + n_suffixes,
+            255u ) - d_block_bwt.begin() );
+
+        if (block_primary < n_suffixes)
+        {
+            // keep track of the global primary position
+            primary = thrust::device_ptr<const uint32>( d_slots )[ block_primary ] + 1u; // +1u for the implicit empty suffix
+        }
+
+        // and scatter the resulting symbols in the proper place
+        priv::device_scatter(
+            n_suffixes,
+            d_block_bwt.begin(),
+            thrust::make_transform_iterator(
+                thrust::device_ptr<const uint32>( d_slots ),
+                priv::offset_functor(1u) ),                                              // +1u for the implicit empty suffix
+            output );
+    }
+
+    const uint32                    string_len;
+    const string_type               string;
+    uint32                          primary;
+    uint32                          n_output;
+    output_iterator                 output;
+    thrust::device_vector<uint32>   d_block_bwt;
+};
+
 /// Compute the bwt of a device-side string
 ///
 /// \return         position of the primary suffix / $ symbol
@@ -178,395 +282,51 @@ typename string_type::index_type bwt(
     BWTParams*                              params)
 {
     typedef typename string_type::index_type index_type;
-    typedef uint32 word_type;
 
-    NVBIO_VAR_UNUSED const uint32 SYMBOL_SIZE    = string_type::SYMBOL_SIZE;
-    NVBIO_VAR_UNUSED const uint32 BUCKETING_BITS = 20;
-    NVBIO_VAR_UNUSED const uint32 DOLLAR_BITS    = 4;
-    NVBIO_VAR_UNUSED const uint32 WORD_BITS      = uint32( 8u * sizeof(uint32) );
+    // build a table for our Difference Cover
+    log_verbose(stderr, "  building DCS... started\n");
 
-    const uint32     M = 256*1024;
-    const index_type N = string_len;
+    DCS dcs;
 
-    const uint32 n_chunks = (N + M-1) / M;
+    blockwise_build(
+        dcs,
+        string_len,
+        string,
+        params );
 
-    priv::StringSuffixBucketer<SYMBOL_SIZE,BUCKETING_BITS,DOLLAR_BITS> bucketer;
+    log_verbose(stderr, "  building DCS... done\n");
 
-    size_t free, total;
-    cudaMemGetInfo(&free, &total);
-
-    //const size_t max_super_block_mem  = free - max_block_size*16u - 512u*1024u*1024u;
-    //const uint32 max_super_block_size = uint32( max_super_block_mem / 4u );
-    const uint32 max_super_block_size = nvbio::min(             // requires max_super_block_size*4 host memory bytes
-        index_type( params ?
-            (params->host_memory - (128u*1024u*1024u)) / 4u :   // leave 128MB for the bucket counters
-            512*1024*1024 ),
-        string_len );
-
-    const uint32 max_block_size = 32*1024*1024;                 // requires max_block_size*21 device memory bytes
-    const uint32 DELAY_BUFFER   = 1024*1024;
-
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  super-block-size: %.1f M\n", float(max_super_block_size)/float(1024*1024)) );
-    thrust::host_vector<uint32> h_super_suffixes( max_super_block_size, 0u );
-    thrust::host_vector<uint32> h_block_suffixes( max_block_size );
-    thrust::host_vector<uint32> h_block_radices( max_block_size );
-
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  device-alloc(%.1f GB)... started\n", float(max_block_size*21u)/float(1024*1024*1024)) );
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    free: %.1f GB\n", float(free)/float(1024*1024*1024)) );
-
-    thrust::device_vector<uint32> d_subbucket_suffixes( max_block_size );
-    thrust::device_vector<uint32> d_delayed_suffixes( max_block_size );
-    thrust::device_vector<uint32> d_delayed_slots( max_block_size );
-    thrust::device_vector<uint8>  d_block_bwt( max_block_size );
-
-    DelayList<thrust::device_vector<uint32>::iterator> delay_list(
-        d_delayed_suffixes.begin(),
-        d_delayed_slots.begin() );
-
-    int current_device;
-    cudaGetDevice( &current_device );
-    mgpu::ContextPtr mgpu_ctxt = mgpu::CreateCudaDevice( current_device ); 
-
-  #define COMPRESSION_SORTING
-  #if defined(COMPRESSION_SORTING)
-    CompressionSort compression_sort( mgpu_ctxt );
-    compression_sort.reserve( max_block_size );
-  #endif
-
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  device-alloc(%.1f GB)... done\n", float(max_super_block_size*8u + max_block_size*16u)/float(1024*1024*1024)) );
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  bucket counting\n") );
-
-    // global bucket sizes
-    thrust::device_vector<uint32> d_buckets( 1u << (BUCKETING_BITS), 0u );
-
-    for (uint32 chunk_id = 0; chunk_id < n_chunks; ++chunk_id)
-    {
-        const index_type chunk_begin = chunk_id * M;
-        const index_type chunk_end   = nvbio::min( chunk_begin + M, N );
-        const uint32     chunk_size  = uint32( chunk_end - chunk_begin );
-
-        // assemble the device chunk string
-        const string_type d_chunk = string + chunk_begin;
-
-        // count the chunk's buckets
-        bucketer.count( chunk_size, N - chunk_begin, d_chunk );
-
-        // and merge them in with the global buckets
-        thrust::transform(
-            bucketer.d_buckets.begin(),
-            bucketer.d_buckets.end(),
-            d_buckets.begin(),
-            d_buckets.begin(),
-            thrust::plus<uint32>() );
-    }
-
-    thrust::host_vector<uint32> h_buckets( d_buckets );
-    thrust::host_vector<uint32> h_bucket_offsets( d_buckets.size() );
-    thrust::host_vector<uint32> h_subbuckets( d_buckets.size() );
-
-    NVBIO_VAR_UNUSED const uint32 max_bucket_size = thrust::reduce(
-        d_buckets.begin(),
-        d_buckets.end(),
-        0u,
-        thrust::maximum<uint32>() );
-
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    max bucket size: %u\n", max_bucket_size) );
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"      c-sort  : %.1fs\n", bucketer.d_count_sort_time) );
-
-    //
-    // at this point, we have to do multiple passes through the input string set,
-    // collecting in each pass as many buckets as we can fit in memory at once
-    //
-
-    // scan the bucket offsets so as to have global positions
-    thrust::exclusive_scan(
-        h_buckets.begin(),
-        h_buckets.end(),
-        h_bucket_offsets.begin() );
-
-    // build the subbucket pointers
-    for (uint32 bucket_begin = 0, bucket_end = 0; bucket_begin < h_buckets.size(); bucket_begin = bucket_end)
-    {
-        // grow the block of buckets until we can
-        uint32 bucket_size;
-        for (bucket_size = 0; (bucket_end < h_buckets.size()) && (bucket_size + h_buckets[bucket_end] < max_super_block_size); ++bucket_end)
-            bucket_size += h_buckets[bucket_end];
-
-        // build the sub-buckets
-        for (uint32 subbucket_begin = bucket_begin, subbucket_end = bucket_begin; subbucket_begin < bucket_end; subbucket_begin = subbucket_end)
-        {
-            // check if this bucket is too large
-            if (h_buckets[subbucket_begin] > max_block_size)
-                throw nvbio::runtime_error("bucket %u contains %u strings: buffer overflow!", subbucket_begin, h_buckets[subbucket_begin]);
-
-            // grow the block of sub-buckets until we can
-            uint32 subbucket_size;
-            for (subbucket_size = 0; (subbucket_end < bucket_end) && (subbucket_size + h_buckets[subbucket_end] < max_block_size); ++subbucket_end)
-            {
-                subbucket_size += h_buckets[subbucket_end];
-
-                h_subbuckets[ subbucket_end ] = subbucket_begin; // point to the beginning of this sub-bucket
-            }
-        }
-    }
-
-    // build the subbucket pointers
-    thrust::device_vector<uint32> d_subbuckets( h_subbuckets );
-
-    NVBIO_VAR_UNUSED float sufsort_time     = 0.0f;
-    NVBIO_VAR_UNUSED float collect_time     = 0.0f;
-    NVBIO_VAR_UNUSED float bwt_copy_time    = 0.0f;
-    NVBIO_VAR_UNUSED float bwt_scatter_time = 0.0f;
-
-    index_type global_suffix_offset = 0;
-
-    const index_type NULL_PRIMARY = index_type(-1);
-    index_type primary = NULL_PRIMARY;
+    log_verbose(stderr, "  DCS-based sorting... started\n");
 
     // encode the first BWT symbol explicitly
-    priv::device_copy( 1u, string + N-1, output, index_type(0u) );
+    priv::device_copy( 1u, string + string_len-1, output, index_type(0u) );
 
-    for (uint32 bucket_begin = 0, bucket_end = 0; bucket_begin < h_buckets.size(); bucket_begin = bucket_end)
-    {
-        // grow the block of buckets until we can
-        uint32 bucket_size;
-        for (bucket_size = 0; (bucket_end < h_buckets.size()) && (bucket_size + h_buckets[bucket_end] < max_super_block_size); ++bucket_end)
-            bucket_size += h_buckets[bucket_end];
+    // and build the rest of the BWT
+    StringBWTHandler<string_type,output_iterator> bwt_handler(
+        string_len,
+        string,
+        output );
 
-        uint32 suffix_count = 0;
+    blockwise_suffix_sort(
+        string_len,
+        string,
+        string_len,
+        thrust::make_counting_iterator<uint32>(0u),
+        bwt_handler,
+        &dcs,
+        params );
 
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  collect buckets[%u:%u] (%u suffixes)\n", bucket_begin, bucket_end, bucket_size) );
-        Timer collect_timer;
-        collect_timer.start();
+    log_verbose(stderr, "  DCS-based sorting all... done\n");
 
-        for (uint32 chunk_id = 0; chunk_id < n_chunks; ++chunk_id)
-        {
-            const index_type chunk_begin = chunk_id * M;
-            const index_type chunk_end   = nvbio::min( chunk_begin + M, N );
-            const uint32     chunk_size  = uint32( chunk_end - chunk_begin );
-
-            // assemble the device chunk string
-            const string_type d_chunk = string + chunk_begin;
-
-            // collect the chunk's suffixes within the bucket range
-            const uint32 n_collected = bucketer.collect(
-                chunk_size,
-                N - chunk_begin,
-                d_chunk,
-                bucket_begin,
-                bucket_end,
-                chunk_begin,
-                d_subbuckets.begin(),
-                h_block_radices.begin(),
-                h_block_suffixes.begin() );
-
-            // dispatch each suffix to their respective bucket
-            for (uint32 i = 0; i < n_collected; ++i)
-            {
-                const uint32 loc    = h_block_suffixes[i];
-                const uint32 bucket = h_block_radices[i];
-                const uint64 slot   = h_bucket_offsets[bucket]++; // this could be done in parallel using atomics
-
-                NVBIO_CUDA_DEBUG_ASSERT(
-                    slot >= global_suffix_offset,
-                    slot <  global_suffix_offset + max_super_block_size,
-                    "[%u] = %u placed at %llu - %llu (%u)\n", i, loc, slot, global_suffix_offset, bucket );
-
-                h_super_suffixes[ slot - global_suffix_offset ] = loc;
-            }
-
-            suffix_count += n_collected;
-
-            if (suffix_count > max_super_block_size)
-            {
-                log_error(stderr,"buffer size exceeded! (%u/%u)\n", suffix_count, max_block_size);
-                exit(1);
-            }
-        }
-        NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
-        collect_timer.stop();
-        collect_time += collect_timer.seconds();
-
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  collect : %.1fs, %.1f M suffixes/s\n", collect_time, 1.0e-6f*float(global_suffix_offset + suffix_count)/collect_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    setup   : %.1fs\n", bucketer.d_setup_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    flatten : %.1fs\n", bucketer.d_flatten_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    b-sort  : %.1fs\n", bucketer.d_collect_sort_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    search  : %.1fs\n", bucketer.d_remap_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    copy    : %.1fs\n", bucketer.d_copy_time) );
-
-        //
-        // at this point we have a large collection of localized suffixes to sort in d_subbucket_suffixes;
-        // we'll do it looping on multiple sub-buckets, on the GPU
-        //
-
-        NVBIO_VAR_UNUSED const uint32 SYMBOLS_PER_WORD = priv::symbols_per_word<SYMBOL_SIZE, WORD_BITS,DOLLAR_BITS>();
-
-        suffix_count = 0u;
-
-        for (uint32 subbucket_begin = bucket_begin, subbucket_end = bucket_begin; subbucket_begin < bucket_end; subbucket_begin = subbucket_end)
-        {
-            // grow the block of sub-buckets until we can
-            uint32 subbucket_size;
-            for (subbucket_size = 0; (subbucket_end < bucket_end) && (subbucket_size + h_buckets[subbucket_end] < max_block_size); ++subbucket_end)
-                subbucket_size += h_buckets[subbucket_end];
-
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"\r  sufsort buckets[%u:%u] (%u suffixes, %.1f M suffixes/s)        ", subbucket_begin, subbucket_end, subbucket_size, 1.0e-6f*float(global_suffix_offset + suffix_count)/sufsort_time ) );
-
-            // consume subbucket_size suffixes
-            const uint32 n_suffixes = subbucket_size;
-
-            Timer timer;
-            timer.start();
-
-            // initialize the device sorting indices
-            thrust::copy(
-                h_super_suffixes.begin() + suffix_count,
-                h_super_suffixes.begin() + suffix_count + n_suffixes,
-                d_subbucket_suffixes.begin() );
-
-        #if defined(COMPRESSION_SORTING)
-            delay_list.set_offset( global_suffix_offset + suffix_count + 1u ); // +1u due to the implicit 0-th suffix
-
-            compression_sort.sort(
-                string_len,                     // the main string length
-                string,                         // the main string
-                n_suffixes,                     // number of suffixes to sort
-                d_subbucket_suffixes.begin(),   // the suffixes to sort
-                16u,                            // minimum number of words to sort before possibly delaying
-                1000u,                          // maximum number of words to sort before delaying
-                delay_list );                   // the delay list
-        #else // if defined(COMPRESSION_SORTING)
-            // and sort the corresponding suffixes
-            thrust::stable_sort(
-                d_subbucket_suffixes.begin(),
-                d_subbucket_suffixes.begin() + n_suffixes,
-                priv::string_suffix_less<SYMBOL_SIZE,string_type>( N, string ) );
-        #endif
-            NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
-            timer.stop();
-            sufsort_time += timer.seconds();
-
-            // compute the bwt of the block
-            thrust::transform(
-                d_subbucket_suffixes.begin(),
-                d_subbucket_suffixes.begin() + n_suffixes,
-                d_block_bwt.begin(),
-                priv::string_bwt_functor<string_type>( N, string ) );
-
-            // check if there is a $ sign
-            const uint32 block_primary = uint32( thrust::find(
-                d_block_bwt.begin(),
-                d_block_bwt.begin() + n_suffixes,
-                255u ) - d_block_bwt.begin() );
-
-            if (block_primary < n_suffixes)
-            {
-                // keep track of the global primary position
-                primary = global_suffix_offset + suffix_count + block_primary + 1u;
-            }
-
-            timer.start();
-
-            // and copy the transformed block to the output
-            priv::device_copy(
-                n_suffixes,
-                d_block_bwt.begin(),
-                output,
-                global_suffix_offset + suffix_count + 1u );
-
-            NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
-            timer.stop();
-            bwt_copy_time += timer.seconds();
-
-            #if defined(COMPRESSION_SORTING)
-            // process delayed suffixes
-            if (delay_list.count &&
-                (delay_list.count >= DELAY_BUFFER ||
-                 subbucket_end == bucket_end))
-            {
-                timer.start();
-
-                // and sort the corresponding suffixes
-                //thrust::stable_sort(
-                //    delay_list.indices,
-                //    delay_list.indices + delay_list.count,
-                //    priv::string_suffix_less<SYMBOL_SIZE,string_type>( N, string ) );
-                DiscardDelayList discard_list;
-                compression_sort.sort(
-                    string_len,
-                    string,
-                    delay_list.count,
-                    delay_list.indices,
-                    uint32(-1),
-                    uint32(-1),
-                    discard_list );
-
-                NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
-                timer.stop();
-                sufsort_time += timer.seconds();
-                compression_sort.stablesort_time += timer.seconds();
-                //fprintf(stderr,"    %.1f s\n", timer.seconds());
-
-                // compute the bwt of the block
-                thrust::transform(
-                    delay_list.indices,
-                    delay_list.indices + delay_list.count,
-                    d_block_bwt.begin(),
-                    priv::string_bwt_functor<string_type>( N, string ) );
-
-                // check if there is a $ sign
-                const uint32 block_primary = uint32( thrust::find(
-                    d_block_bwt.begin(),
-                    d_block_bwt.begin() + delay_list.count,
-                    255u ) - d_block_bwt.begin() );
-
-                if (block_primary < delay_list.count)
-                {
-                    // keep track of the global primary position
-                    primary = d_delayed_slots[ block_primary ];
-                }
-
-                timer.start();
-
-                // and scatter the resulting symbols in the proper place
-                priv::device_scatter(
-                    delay_list.count,
-                    d_block_bwt.begin(),
-                    delay_list.slots,
-                    output );
-
-                NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
-                timer.stop();
-                bwt_scatter_time += timer.seconds();
-
-                // clear the list
-                delay_list.clear();
-            }
-            #endif
-
-            suffix_count += subbucket_size;
-        }
-
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"\r  sufsort : %.1fs (%.1f M suffixes/s)                     \n", sufsort_time, 1.0e-6f*float(global_suffix_offset + suffix_count)/sufsort_time) );
-
-      #if defined(COMPRESSION_SORTING)
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    extract  : %.1fs\n", compression_sort.extract_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    r-sort   : %.1fs\n", compression_sort.radixsort_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    s-sort   : %.1fs\n", compression_sort.stablesort_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    compress : %.1fs\n", compression_sort.compress_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    compact  : %.1fs\n", compression_sort.compact_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    bwt-copy : %.1fs\n", bwt_copy_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    bwt-scat : %.1fs\n", bwt_scatter_time) );
-      #endif
-
-        global_suffix_offset += suffix_count;
-    }
-
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"\n    primary at %llu\n", primary) );
+    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"\n    primary at %llu\n", bwt_handler.primary) );
 
     // shift back all symbols following the primary
     {
-        for (index_type block_begin = primary; block_begin < string_len; block_begin += max_block_size)
+        const uint32 max_block_size = 32*1024*1024;
+
+        priv::alloc_storage( bwt_handler.d_block_bwt, max_block_size );
+
+        for (index_type block_begin = bwt_handler.primary; block_begin < string_len; block_begin += max_block_size)
         {
             const index_type block_end = nvbio::min( block_begin + max_block_size, string_len );
 
@@ -574,19 +334,19 @@ typename string_type::index_type bwt(
             priv::device_copy(
                 block_end - block_begin,
                 output + block_begin + 1u,
-                d_block_bwt.begin(),
+                bwt_handler.d_block_bwt.begin(),
                 uint32(0) );
 
             // and copy the shifted block to the output
             priv::device_copy(
                 block_end - block_begin,
-                d_block_bwt.begin(),
+                bwt_handler.d_block_bwt.begin(),
                 output,
                 block_begin );
         }
     }
 
-    return primary;
+    return bwt_handler.primary;
 }
 
 template <uint32 BUCKETING_BITS_T, uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type>

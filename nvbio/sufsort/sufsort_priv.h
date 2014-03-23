@@ -185,7 +185,7 @@ void inclusive_scan(
 }
 
 template <typename InputIterator, typename FlagsIterator, typename OutputIterator>
-uint32 copy_if(
+uint32 copy_flagged(
     const uint32                  n,
     InputIterator                 d_in,
     FlagsIterator                 d_flags,
@@ -213,6 +213,39 @@ uint32 copy_if(
         d_out,
         nvbio::plain_view( d_num_selected ),
         int(n) );
+
+    return uint32( d_num_selected[0] );
+};
+
+template <typename InputIterator, typename OutputIterator, typename Predicate>
+uint32 copy_if(
+    const uint32                  n,
+    InputIterator                 d_in,
+    OutputIterator                d_out,
+    const Predicate               pred,
+    thrust::device_vector<uint8>& d_temp_storage)
+{
+    size_t                         temp_bytes = 0;
+    thrust::device_vector<int>     d_num_selected(1);
+
+    cub::DeviceSelect::If(
+        (void*)NULL, temp_bytes,
+        d_in,
+        d_out,
+        nvbio::plain_view( d_num_selected ),
+        int(n),
+        pred );
+
+    temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
+    alloc_storage( d_temp_storage, temp_bytes );
+
+    cub::DeviceSelect::If(
+        (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
+        d_in,
+        d_out,
+        nvbio::plain_view( d_num_selected ),
+        int(n),
+        pred );
 
     return uint32( d_num_selected[0] );
 };
@@ -1413,7 +1446,7 @@ struct SetSuffixBucketer
         const priv::in_range_functor in_range = priv::in_range_functor( bucket_begin, bucket_end );
 
         // retain only suffixes whose radix is between the specified buckets
-        const uint32 n_collected = copy_if(
+        const uint32 n_collected = copy_flagged(
             n_suffixes,
             thrust::make_zip_iterator( thrust::make_tuple( thrust::make_counting_iterator<uint32>(0u), d_radices.begin() ) ),
             thrust::make_transform_iterator( d_radices.begin(), in_range ),
@@ -1674,13 +1707,16 @@ struct StringSuffixBucketer
     /// count the number of suffixes falling in each bucket, where the buckets
     /// are defined by the first n_bits of the suffix
     ///
-    template <typename string_type>
-    void count(const uint32 string_length, const uint64 extended_length, const string_type& string)
+    template <typename suffix_iterator, typename string_type>
+    void count(
+        const uint32            n_suffixes,
+        const suffix_iterator   suffixes,
+        const uint32            string_length,
+        const string_type&      string)
     {
         cuda::Timer timer;
 
-        const uint32 n_suffixes = string_length;
-        const uint32 n_buckets  = 1u << (N_BITS);
+        const uint32 n_buckets = 1u << (N_BITS);
 
         // initialize the temporary and output vectors
         alloc_storage( d_indices, n_suffixes * 2u );
@@ -1691,11 +1727,11 @@ struct StringSuffixBucketer
 
         // extract the first radix word from each of the suffixes
         flatten_string_suffixes<SYMBOL_SIZE, N_BITS,DOLLAR_BITS>(
-            extended_length,
+            string_length,
             string,
             0u,                     // load the first word
-            thrust::make_counting_iterator<uint32>(0u),
-            thrust::make_counting_iterator<uint32>(0u) + n_suffixes,
+            suffixes,
+            suffixes + n_suffixes,
             d_radices.begin() );
 
         timer.stop();
@@ -1739,21 +1775,20 @@ struct StringSuffixBucketer
     /// collect the suffixes falling in a given set of buckets, where the buckets
     /// are defined by the first n_bits of the suffix
     ///
-    template <typename string_type, typename bucketmap_iterator, typename output_iterator>
+    template <typename suffix_iterator, typename string_type, typename bucketmap_iterator, typename output_iterator>
     uint32 collect(
-        const uint32                string_length,
-        const uint64                extended_length,
+        const uint32                n_suffixes,
+        const suffix_iterator       suffixes,
+        const uint64                string_length,
         const string_type&          string,
         const uint32                bucket_begin,
         const uint32                bucket_end,
-        const uint32                string_offset,
         const bucketmap_iterator    bucketmap,
               output_iterator       output_radices,
               output_iterator       output_indices)
     {
         cuda::Timer timer;
 
-        const uint32 n_suffixes = string_length;
         const uint32 n_buckets  = 1u << N_BITS;
 
         // initialize the temporary and output vectors
@@ -1765,11 +1800,11 @@ struct StringSuffixBucketer
 
         // extract the first radix word from each of the suffixes
         flatten_string_suffixes<SYMBOL_SIZE,N_BITS,DOLLAR_BITS>(
-            extended_length,
+            string_length,
             string,
             0u,                     // load the first word
-            thrust::make_counting_iterator<uint32>(0u),
-            thrust::make_counting_iterator<uint32>(0u) + n_suffixes,
+            suffixes,
+            suffixes + n_suffixes,
             d_radices.begin() );
 
         timer.stop();
@@ -1781,9 +1816,9 @@ struct StringSuffixBucketer
         const priv::in_range_functor in_range = priv::in_range_functor( bucket_begin, bucket_end );
 
         // retain only suffixes whose radix is between the specified buckets
-        const uint32 n_collected = copy_if(
+        const uint32 n_collected = copy_flagged(
             n_suffixes,
-            thrust::make_zip_iterator( thrust::make_tuple( thrust::make_counting_iterator<uint32>(0u), d_radices.begin() ) ),
+            thrust::make_zip_iterator( thrust::make_tuple( suffixes, d_radices.begin() ) ),
             thrust::make_transform_iterator( d_radices.begin(), in_range ),
             thrust::make_zip_iterator( thrust::make_tuple( d_indices.begin(), d_radices.begin() ) ) + n_suffixes,
             d_temp_storage );
@@ -1834,19 +1869,10 @@ struct StringSuffixBucketer
         // the buffer selector had inverted semantics
         sort_buffers.selector = 1 - sort_buffers.selector;
 
-        // use a device-staging buffer to add the offset to the indices
-        alloc_storage( d_output, n_collected );
-
-        thrust::transform(
-            d_indices.begin() + sort_buffers.selector * n_suffixes,
-            d_indices.begin() + sort_buffers.selector * n_suffixes + n_collected,
-            d_output.begin(),
-            offset_functor( string_offset ) );
-
         // and copy everything to the output
         thrust::copy(
-            d_output.begin(),
-            d_output.begin() + n_collected,
+            d_indices.begin() + sort_buffers.selector * n_suffixes,
+            d_indices.begin() + sort_buffers.selector * n_suffixes + n_collected,
             output_indices );
 
         // and copy everything to the output

@@ -316,7 +316,7 @@ typename string_type::index_type bwt(
         &dcs,
         params );
 
-    log_verbose(stderr, "  DCS-based sorting all... done\n");
+    log_verbose(stderr, "  DCS-based sorting... done\n");
 
     NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"\n    primary at %llu\n", bwt_handler.primary) );
 

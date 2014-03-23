@@ -443,11 +443,13 @@ void blockwise_build(
             block_begin + block_size,
             string_len );
 
+        const priv::DCS_predicate<DCS::Q> in_dcs( nvbio::plain_view( dcs.d_bitmask ) );
+
         sample_size += priv::copy_if(
             uint32( block_end - block_begin ),
             thrust::make_counting_iterator<uint32>(0u) + block_begin,
             d_sample.begin() + sample_size,
-            priv::DCS_predicate<DCS::Q>( nvbio::plain_view( dcs.d_bitmask ) ),
+            in_dcs,
             d_temp_storage );
     }
 

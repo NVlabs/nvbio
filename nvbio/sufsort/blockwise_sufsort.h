@@ -53,7 +53,7 @@ namespace cuda {
 /// \return         position of the primary suffix / $ symbol
 ///
 template <typename string_type, typename suffix_iterator, typename output_handler>
-typename void blockwise_suffix_sort(
+void blockwise_suffix_sort(
     const typename string_type::index_type  string_len,
     string_type                             string,
     const typename string_type::index_type  n_suffixes,

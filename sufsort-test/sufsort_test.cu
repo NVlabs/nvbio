@@ -194,43 +194,6 @@ int sufsort_test(int argc, char* argv[])
     const uint32 SYMBOL_SIZE = 2;
     const uint32 SYMBOLS_PER_WORD = (8u*sizeof(uint32)) / SYMBOL_SIZE;
 
-    if (0)
-    {
-        log_info(stderr, "\nread \"sort.dat\"... started\n");
-        FILE* file = fopen("./sort.dat", "rb");
-        uint32 n_active_strings;
-        fread( &n_active_strings, sizeof(uint32), 1u, file );
-        thrust::host_vector<uint32> h_keys( n_active_strings+4 );
-        thrust::host_vector<uint32> h_indices( n_active_strings+4 );
-        thrust::host_vector<uint8>  h_temp_flags( n_active_strings+32 );
-        fread( nvbio::plain_view( h_keys ),       sizeof(uint32), n_active_strings, file );
-        fread( nvbio::plain_view( h_indices ),    sizeof(uint32), n_active_strings, file );
-        fread( nvbio::plain_view( h_temp_flags ), sizeof(uint32), (n_active_strings + 31)/32, file );
-        fclose( file );
-        log_info(stderr, "read \"sort.dat\"... done: %u entries\n", n_active_strings);
-
-        int current_device;
-        cudaGetDevice( &current_device );
-        mgpu::ContextPtr mgpu_ctxt = mgpu::CreateCudaDevice( current_device );
-
-        thrust::device_vector<uint32> d_keys( h_keys );
-        thrust::device_vector<uint32> d_indices( h_indices );
-        thrust::device_vector<uint8>  d_temp_flags( h_temp_flags );
-
-        uint32* d_comp_flags = (uint32*)nvbio::device_view( d_temp_flags );
-
-        // sort within segments
-        mgpu::SegSortPairsFromFlags(
-            nvbio::device_view( d_keys ),
-            nvbio::device_view( d_indices ),
-            n_active_strings,
-            d_comp_flags,
-            *mgpu_ctxt );
-
-        NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
-        cuda::check_error("CompressionSort::sort() : seg_sort");
-    }
-
     if (TEST_MASK & kGPU_SA)
     {
         typedef uint32                                                  index_type;
@@ -641,8 +604,9 @@ int sufsort_test(int argc, char* argv[])
         typedef mod_packed_stream_type::iterator                            mod_packed_stream_iterator;
         typedef ConcatenatedStringSet<mod_packed_stream_iterator,uint64*>   string_set;
 
-        const uint32 N_strings  = gpu_bwt_size*1000*1000;
-        const uint64 N_words    = (uint64(N_strings)*N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
+        const uint32 N_strings   = gpu_bwt_size*1000*1000;
+        const uint64 N_words     = util::divide_ri( uint64(N_strings)*(N+0), SYMBOLS_PER_WORD );
+        const uint64 N_bwt_words = util::divide_ri( uint64(N_strings)*(N+1), SYMBOLS_PER_WORD );
 
         log_info(stderr, "  gpu set-bwt test\n");
         log_info(stderr, "    %5.1f M strings\n",  (1.0e-6f*float(N_strings)));
@@ -676,7 +640,7 @@ int sufsort_test(int argc, char* argv[])
 
         if (store_output)
         {
-            thrust::device_vector<uint32> d_bwt( N_words );
+            thrust::device_vector<uint32> d_bwt( N_bwt_words );
             packed_stream_type            d_packed_bwt( (word_type*)nvbio::plain_view( d_bwt ) );
 
             DeviceBWTHandler<packed_stream_iterator> output_handler( d_packed_bwt.begin() );
@@ -714,8 +678,9 @@ int sufsort_test(int argc, char* argv[])
         typedef packed_stream_type::iterator                            packed_stream_iterator;
         typedef ConcatenatedStringSet<packed_stream_iterator,uint64*>   string_set;
 
-        const uint32 N_strings  = cpu_bwt_size*1000*1000;
-        const uint64 N_words    = (uint64(N_strings)*N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
+        const uint32 N_strings   = cpu_bwt_size*1000*1000;
+        const uint64 N_words     = util::divide_ri( uint64(N_strings)*(N+0), SYMBOLS_PER_WORD );
+        const uint64 N_bwt_words = util::divide_ri( uint64(N_strings)*(N+1), SYMBOLS_PER_WORD );
 
         log_info(stderr, "  cpu set-bwt test\n");
         log_info(stderr, "    %5.1f M strings\n",  (1.0e-6f*float(N_strings)));
@@ -744,7 +709,7 @@ int sufsort_test(int argc, char* argv[])
 
         if (store_output)
         {
-            thrust::host_vector<uint32>  h_bwt( N_words );
+            thrust::host_vector<uint32>  h_bwt( N_bwt_words );
             packed_stream_type           h_packed_bwt( (word_type*)nvbio::plain_view( h_bwt ) );
 
             HostBWTHandler<packed_stream_iterator> output_handler( h_packed_bwt.begin() );
@@ -779,6 +744,8 @@ int sufsort_test(int argc, char* argv[])
 }
 
 } // namespace nvbio
+
+using namespace nvbio;
 
 int main(int argc, char* argv[])
 {

@@ -31,8 +31,15 @@
 
 namespace nvbio {
 
-/// open a BWT file
+///@addtogroup Sufsort
+///@{
+
+/// open a string-set BWT file
+///
+/// \return     a handler that can be used by the string-set BWT construction functions
 ///
 BaseBWTHandler* open_bwt_file(const char* output_name, const char* params);
+
+///@}
 
 } // namespace nvbio

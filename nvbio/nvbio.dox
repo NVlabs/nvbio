@@ -45,10 +45,16 @@
 /// - \subpage basic_page
 /// - \subpage alignment_page
 /// - \subpage fmindex_page
+/// - \subpage sufsort_page
 /// - \subpage tries_page
 /// - \subpage io_page
 /// - \subpage fasta_page
 /// - \subpage fastq_page
+///
+/// \section DesignConceptsSection Design Concepts
+///\par
+/// - \subpage host_device_page
+/// - \subpage generic_programming_page
 ///
 /// \section PerformanceSection Performance
 ///\par
@@ -58,14 +64,9 @@
 ///
 /// <img src="benchmark-fm-index-speedup.png" style="position:relative; bottom:-10px; border:0px;" width="75%" height="75%"/>
 ///\n
-/// <img src="benchmark-sw.png" style="position:relative; bottom:-10px; border:0px;" width="70%" height="75%"/>
+/// <img src="benchmark-sw.png" style="position:relative; bottom:-10px; border:0px;" width="75%" height="75%"/>
 ///\n
-/// <img src="benchmark-bwt.png" style="position:relative; bottom:-10px; border:0px;" width="70%" height="75%"/>
-///
-/// \section DesignConceptsSection Design Concepts
-///\par
-/// - \subpage host_device_page
-/// - \subpage generic_programming_page
+/// <img src="benchmark-bwt.png" style="position:relative; bottom:-10px; border:0px;" width="75%" height="75%"/>
 ///
 /// \section DependenciesSection Dependencies
 ///\par

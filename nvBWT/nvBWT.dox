@@ -52,3 +52,11 @@
 /// my-index.amb
 ///\endverbatim
 ///
+/// \section PerformanceSection Performance
+///\par
+/// nvBWT runs the BWT construction on the GPU, using newly developed parallel algorithms.
+/// Here's a graph showing its superior performance compared to two other popular CPU based
+/// BWT builders:
+///
+/// <img src="benchmark-bwt.png" style="position:relative; bottom:-10px; border:0px;" width="70%" height="75%"/>
+///

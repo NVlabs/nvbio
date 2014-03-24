@@ -243,3 +243,14 @@
 /// ./nvBowtie hg19 my_reads.fastq my_reads.bam
 ///\endverbatim
 ///
+/// \section PerformanceSection Performance
+///\par
+/// Here's a graph showing nvBowtie's performance compared to bowtie2 on an Illumina HiSeq 2000
+/// dataset (the first 10M reads of ERR161544) and an IonProton run, using both end-to-end and
+/// local alignment.
+/// All bowtie2 tests were run using 12 CPU threads, and default aligment options:
+///
+/// <img src="benchmark-nvbowtie-speedup.png" style="position:relative; bottom:-10px; border:0px;" width="70%" height="80%"/>
+///
+/// The alignment results show 99.98% agreement at high MAPQ.
+///

@@ -373,33 +373,6 @@ int build(
         const_stream_type d_string( nvbio::plain_view( d_base_storage ) );
               stream_type d_bwt( nvbio::plain_view( d_bwt_storage ) );
 
-        /*
-        const uint32 suffixes[] = {
-            3061511669
-            3063145414
-            3061511670
-            3063145415
-            3061511671
-            3063145416
-            3061511672
-            3063145417
-            3061511673
-            3063145418
-        };
-        const uint32 suf0 = suffixes[0];
-        const uint32 suf1 = suffixes[1];
-        for (uint32 j = 0; j < 1000000; ++j)
-        {
-            const char c0 = dna_to_char( h_string[suf0 + j] );
-            const char c1 = dna_to_char( h_string[suf1 + j] );
-            if (c0 != c1)
-            {
-                fprintf(stderr, "%08u: %c%c\n", j, c0, c1);
-                break;
-            }
-        }
-        */
-
         Timer timer;
 
         log_info(stderr, "\nbuilding forward BWT... started\n");

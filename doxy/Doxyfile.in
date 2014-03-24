@@ -935,6 +935,10 @@ HTML_EXTRA_FILES      += images/tree.png
 HTML_EXTRA_FILES      += images/browse-icon.png 
 HTML_EXTRA_FILES      += images/groups-icon.png 
 HTML_EXTRA_FILES      += images/download-icon.png 
+HTML_EXTRA_FILES      += images/benchmark-fm-index.png 
+HTML_EXTRA_FILES      += images/benchmark-fm-index-speedup.png 
+HTML_EXTRA_FILES      += images/benchmark-sw.png 
+HTML_EXTRA_FILES      += images/benchmark-bwt.png 
 
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output. 
 # Doxygen will adjust the colors in the stylesheet and background images 

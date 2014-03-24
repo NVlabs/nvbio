@@ -35,7 +35,7 @@
 ///\n
 /// <b>NVBIO</b> is a library of reusable components designed to accelerate bioinformatics applications
 /// using <i>CUDA</i>. Though it is specifically designed to unleash the power of <i>NVIDIA</i> <b>GPU</b>s,
-/// most if its components are completely cross-platform and can be used both from host C++ and device
+/// most of its components are completely cross-platform and can be used both from host C++ and device
 /// CUDA code.
 ///
 /// \section ModulesSection Modules
@@ -49,6 +49,20 @@
 /// - \subpage io_page
 /// - \subpage fasta_page
 /// - \subpage fastq_page
+///
+/// \section PerformanceSection Performance
+///\par
+/// NVBIO is designed for performance. Here's a couple benchmarks showing the
+/// superior speed of its FM-index search, Smith-Waterman and BWT construction
+/// algorithms.
+///
+/// <img src="benchmark-fm-index.png" style="position:relative; bottom:-10px; border:0px;"/>
+///\n
+/// <img src="benchmark-fm-index-speedup.png" style="position:relative; bottom:-10px; border:0px;"/>
+///\n
+/// <img src="benchmark-sw.png" style="position:relative; bottom:-10px; border:0px;"/>
+///\n
+/// <img src="benchmark-bwt.png" style="position:relative; bottom:-10px; border:0px;"/>
 ///
 /// \section DesignConceptsSection Design Concepts
 ///\par

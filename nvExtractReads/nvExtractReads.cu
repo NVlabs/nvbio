@@ -94,6 +94,17 @@ bool read(const char* reads_name, FILE* output_file, const io::QualityEncoding q
 
 int main(int argc, char* argv[])
 {
+    if (argc < 2)
+    {
+        log_info(stderr, "nvExtractReads [options] input output\n");
+        log_info(stderr, "  extract a set of reads to a plain ASCII file with one read per line (.txt)\n\n");
+        log_info(stderr, "options:\n");
+        log_info(stderr, "  --verbosity\n");
+        log_info(stderr, "  -F | --skip-forward          skip forward strand\n");
+        log_info(stderr, "  -R | --skip-reverse          skip forward strand\n");
+        exit(0);
+    }
+
     const char* reads_name  = argv[argc-2];
     const char* out_name    = argv[argc-1];
     bool  forward           = true;
@@ -107,11 +118,13 @@ int main(int argc, char* argv[])
         {
             set_verbosity( Verbosity( atoi( argv[++i] ) ) );
         }
-        else if (strcmp( argv[i], "-F" ) == 0)  // skip forward strand
+        else if (strcmp( argv[i], "-F" )             == 0 ||
+                 strcmp( argv[i], "--skip-forward" ) == 0)  // skip forward strand
         {
             forward = false;
         }
-        else if (strcmp( argv[i], "-R" ) == 0)  // skip reverse strand
+        else if (strcmp( argv[i], "-R" ) == 0 ||
+                 strcmp( argv[i], "--skip-reverse" ) == 0)  // skip reverse strand
         {
             reverse = false;
         }
@@ -126,18 +139,12 @@ int main(int argc, char* argv[])
 
     log_visible(stderr,"nvExtractReads... started\n");
 
-    // NOTE: at the moment the forward and reverse strands are not interleaved: we place
-    // first all the forward and then all the reverse strands - might want to fix this.
-    if (forward)
-    {
-        if (read( reads_name, output_file, qencoding, io::ReadEncoding(0) ) == false)
-            return 1;
-    }
-    if (reverse)
-    {
-        if (read( reads_name, output_file, qencoding, io::ReadEncoding(io::REVERSE | io::COMPLEMENT) ) == false)
-            return 1;
-    }
+    uint32       encoding_flags  = 0u;
+    if (forward) encoding_flags |= io::FORWARD;
+    if (reverse) encoding_flags |= io::REVERSE_COMPLEMENT;
+
+    if (read( reads_name, output_file, qencoding, io::ReadEncoding(encoding_flags) ) == false)
+        return 1;
 
     fclose( output_file );
 

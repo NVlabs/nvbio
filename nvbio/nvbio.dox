@@ -53,16 +53,14 @@
 /// \section PerformanceSection Performance
 ///\par
 /// NVBIO is designed for performance. Here's a couple benchmarks showing the
-/// superior speed of its FM-index search, Smith-Waterman and BWT construction
+/// superior speed of its FM-index search, DP alignment and BWT construction
 /// algorithms.
 ///
-/// <img src="benchmark-fm-index.png" style="position:relative; bottom:-10px; border:0px;"/>
+/// <img src="benchmark-fm-index-speedup.png" style="position:relative; bottom:-10px; border:0px;" width="75%" height="75%"/>
 ///\n
-/// <img src="benchmark-fm-index-speedup.png" style="position:relative; bottom:-10px; border:0px;"/>
+/// <img src="benchmark-sw.png" style="position:relative; bottom:-10px; border:0px;" width="70%" height="75%"/>
 ///\n
-/// <img src="benchmark-sw.png" style="position:relative; bottom:-10px; border:0px;"/>
-///\n
-/// <img src="benchmark-bwt.png" style="position:relative; bottom:-10px; border:0px;"/>
+/// <img src="benchmark-bwt.png" style="position:relative; bottom:-10px; border:0px;" width="70%" height="75%"/>
 ///
 /// \section DesignConceptsSection Design Concepts
 ///\par

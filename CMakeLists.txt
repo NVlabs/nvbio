@@ -80,6 +80,7 @@ add_subdirectory(nvSetBWT)
 add_subdirectory(nvSSA)
 add_subdirectory(nvbio-test)
 add_subdirectory(nvbio-aln-diff)
+add_subdirectory(sufsort-test)
 add_subdirectory(sw-benchmark)
 
 nvbio_module(nvbio-project)

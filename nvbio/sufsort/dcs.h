@@ -117,7 +117,7 @@ template <uint32 Q> // DC cover period
 struct DCS_predicate
 {
     typedef uint32 argument_type;
-    typedef bool   result_type;
+    typedef uint32 result_type;
 
     /// constructor
     ///
@@ -127,7 +127,7 @@ struct DCS_predicate
     /// return whether the given integer is the DC
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    bool operator() (const uint32 suffix) const { return (dc_bitmask[ suffix % Q ] != 0); }
+    result_type operator() (const uint32 suffix) const { return (dc_bitmask[ suffix % Q ] != 0); }
 
     const uint8* dc_bitmask;
 };

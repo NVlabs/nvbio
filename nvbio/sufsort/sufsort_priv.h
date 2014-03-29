@@ -2400,8 +2400,12 @@ struct device_copy_dispatch<
         const output_iterator       output,
         const index_type            offset)
     {
+        typedef typename PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type>::storage_type word_type;
+        const uint32 SYMBOLS_PER_WORD = (8u*sizeof(word_type))/SYMBOL_SIZE;
+
         const uint32 blockdim = 128;
-        const uint32 n_blocks = (n + blockdim-1) / blockdim;
+        const uint32 n_words  = util::divide_ri( n, SYMBOLS_PER_WORD ) + 1u;
+        const uint32 n_blocks = (n_words + blockdim-1) / blockdim;
         packed_device_copy_kernel<<<n_blocks,blockdim>>>( n, input, output, offset );
     }
 };

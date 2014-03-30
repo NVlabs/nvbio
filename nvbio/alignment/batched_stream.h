@@ -276,6 +276,9 @@ struct BandedScoreUnit :
         const uint32                    window_end,
         sink_type&                      sink)
     {
+        // fetch this job's temporary storage
+        column_type column = score_stream.column( queue_slot );
+
         // score the current DP matrix window
         return banded_alignment_score<BAND_LEN>(
             score_stream.stream.aligner(),
@@ -286,10 +289,8 @@ struct BandedScoreUnit :
             window_begin,
             window_end,
             sink,
-            checkpoint );
+            column );
     }
-
-    cell_type checkpoint[BAND_LEN]; // as the band is small, we can keep it in local memory
 };
 
 ///@} // end of private group

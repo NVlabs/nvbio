@@ -117,7 +117,7 @@ typename string_type::index_type find_primary(
     const string_type                       string);
 
 /// Sort all the suffixes of a given string.
-/// This function using an adaptation of Larsson and Sadanake's algorith, and requires
+/// This function uses an adaptation of Larsson and Sadanake's algorithm, and requires
 /// roughly 16b of device memory per symbol.
 ///
 /// \tparam string_type             an iterator to the string

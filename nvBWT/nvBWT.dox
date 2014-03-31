@@ -58,5 +58,5 @@
 /// Here's a graph showing its superior performance compared to two other popular CPU based
 /// BWT builders:
 ///
-/// <img src="benchmark-bwt.png" style="position:relative; bottom:-10px; border:0px;" width="70%" height="75%"/>
+/// <img src="benchmark-bwt.png" style="position:relative; bottom:-10px; border:0px;" width="80%" height="80%"/>
 ///

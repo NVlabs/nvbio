@@ -42,6 +42,6 @@
 /// ./nvFM-server my-index index &
 ///\endverbatim
 ///\par
-/// At this point the server will be accessible by other processes (such as \ref nvBowtiePage)
+/// At this point the server will be accessible by other processes (such as \ref nvbowtie_page)
 /// as <i>index</i>.
 ///

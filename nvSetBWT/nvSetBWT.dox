@@ -1,0 +1,128 @@
+/*
+ * nvbio
+ * Copyright (c) 2011-2014, NVIDIA CORPORATION. All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *    * Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    * Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
+ *    * Neither the name of the NVIDIA CORPORATION nor the
+ *      names of its contributors may be used to endorse or promote products
+ *      derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL NVIDIA CORPORATION BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+///\page nvsetbwt_page nvSetBWT
+///\htmlonly
+/// <img src="nvidia_cubes.png" style="position:relative; bottom:-10px; border:0px;"/>
+///\endhtmlonly
+///\par
+///\n
+/// <b>nvSetBWT</b> is an application built on top of \ref nvbio_page to build the BWT of
+/// a <i>set</i> of strings, typically reads.
+///\par
+/// Given an input fastq or text file with one read per line, it will create a file
+/// containing the BWT of their forward and reverse-complemented strands.
+/// Alongside with the main BWT file, a file containing the mapping between the primary
+/// dollar tokens and their position in the BWT will be generated.
+/// e.g.
+///
+///\verbatim
+/// ./nvSetBWT my-reads.fastq my-reads.bwt
+///\endverbatim
+///\par
+/// will generate the following files:
+///
+///\verbatim
+/// my-reads.bwt
+/// my-reads.pri
+///\endverbatim
+///
+///\section OptionsSection Options
+///\par
+/// nvSetBWT supports the following command options:
+///
+///\verbatim
+///   nvSetBWT [options] input_file output_file
+///   options:
+///    -v       | --verbosity     int (0-6) [5]
+///    -cpu-mem | --cpu-memory    int (MB)  [8192]
+///    -gpu-mem | --gpu-memory    int (MB)  [2048]
+///    -c       | --compression   string    [1R]   (e.g. \"1\", ..., \"9\", \"1R\")
+///    -F       | --skip-forward
+///    -R       | --skip-reverse
+///\endverbatim
+///
+///\section FormatsSection File Formats
+///\par
+/// The output BWT can be saved in one of the following formats:
+///
+///\verbatim
+/// .txt        ASCII
+/// .txt.gz     ASCII, gzip compressed
+/// .txt.bgz    ASCII, block-gzip compressed
+/// .bwt        2-bit packed binary
+/// .bwt.gz     2-bit packed binary, gzip compressed
+/// .bwt.bgz    2-bit packed binary, block-gzip compressed
+/// .bwt4       4-bit packed binary
+/// .bwt4.gz    4-bit packed binary, gzip compressed
+/// .bwt4.bgz   4-bit packed binary, block-gzip compressed
+///\endverbatim
+///\par
+/// The accompanying primary map file (.pri|.pri.gz|.pri.bgz), is a plain list of (position,string-id) pairs,
+/// either in ASCII or binary form.
+/// The ASCII file has the form:
+///
+///\verbatim
+///  #PRI
+///  position[1] string[1]
+///  ...
+///  position[n] string[n]
+///\endverbatim
+///\par
+/// The binary file has the format:
+///
+///\verbatim
+///  char[4] header = "PRIB";
+///  struct { uint64 position; uint32 string_id; } pairs[n];
+///\endverbatim
+///
+///\section DetailsSection Details
+///\par
+/// nvSetBWT implements novel a variant of the algorithms described in: \n
+/// <i>GPU-Accelerated BWT Construction for Large Collection of Short Reads</i> \n
+/// C.M. Liu, R.Luo, T-W. Lam \n
+/// http://arxiv.org/abs/1401.7457
+///\par
+/// In more detail, it implements a GPU-parallel version of the same Blockwise Suffix Sorting skeleton,
+/// replacing the core block sorter with a new high performance MSD radix sorter. As the new
+/// block sorter sifts unique keys incrementally, it is less sensitive to read length (as its
+/// performance is linear in the LCP length, rather than the total read length).
+///\par
+/// Moreover, nvSetBWT specializes the algorithms according to the string-set size: if it can fit
+/// entirely in GPU memory, it will move all data there and proceed without ever needing to go
+/// through host memory again.
+/// On a Tesla K40, this allows to process sets containing up to 50Gbps at a greater speed.
+///\par
+/// Larger sets can still be processed <i>out-of-core</i>. The size of the data-set and the processing
+/// speed are essentially limited by the amount of available host memory. In fact, the Blockwise Suffix
+/// Sorting skeleton partitions the suffixes in buckets, and performs many parallel scans through the entire
+/// data set to collect all suffixes belonging to each bucket: the size of the buckets, and the number
+/// of scans are directly determined by the amount of available host memory.\n
+/// The amount of memory reserved as working space can be determined with the <i>--cpu-memory [MB]</i> option.\n
+/// For example, in order to process 100Gbp data-sets we recommend a minimum of 48-64GB of memory: 25GB to
+/// hold the data set, and 20GB or 32GB of working space.
+///

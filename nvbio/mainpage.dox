@@ -77,6 +77,7 @@
 /// - \subpage nvbwt_page - a tool to perform BWT-based reference indexing
 /// - \subpage nvssa_page - a tool to build auxiliary Sampled Suffix Arrays needed for reference indexing
 /// - \subpage nvfm_server_page - a shared memory FM-index server
+/// - \subpage nvsetbwt_page - a tool to perform BWT-based read indexing
 ///
 /// \section Dependencies
 ///\par

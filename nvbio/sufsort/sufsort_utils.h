@@ -215,6 +215,273 @@ struct DiscardBWTHandler : public BaseBWTHandler
         const uint32* d_indices) {}
 };
 
+/// a utility StringSuffixHandler to compute the BWT of the sorted suffixes
+///
+template <typename string_type, typename output_iterator>
+struct StringBWTHandler
+{
+    typedef typename string_type::index_type index_type;
+
+    static const uint32 NULL_PRIMARY = uint32(-1); // TODO: switch to index_type
+
+    // constructor
+    //
+    StringBWTHandler(
+        const uint32        _string_len,
+        const string_type   _string,
+        output_iterator     _output) :
+        string_len  ( _string_len ),
+        string      ( _string ),
+        primary     ( NULL_PRIMARY ),
+        n_output    ( 0 ),
+        output      ( _output ) {}
+
+    // process the next batch of suffixes
+    //
+    void process_batch(
+        const uint32  n_suffixes,
+        const uint32* d_suffixes)
+    {
+        priv::alloc_storage( d_block_bwt, n_suffixes );
+
+        // compute the bwt of the block
+        thrust::transform(
+            thrust::device_ptr<const uint32>( d_suffixes ),
+            thrust::device_ptr<const uint32>( d_suffixes ) + n_suffixes,
+            d_block_bwt.begin(),
+            priv::string_bwt_functor<string_type>( string_len, string ) );
+
+        // check if there is a $ sign
+        const uint32 block_primary = uint32( thrust::find(
+            d_block_bwt.begin(),
+            d_block_bwt.begin() + n_suffixes,
+            255u ) - d_block_bwt.begin() );
+
+        if (block_primary < n_suffixes)
+        {
+            // keep track of the global primary position
+            primary = n_output + block_primary + 1u;                // +1u for the implicit empty suffix
+        }
+
+        // and copy the transformed block to the output
+        priv::device_copy(
+            n_suffixes,
+            d_block_bwt.begin(),
+            output,
+            n_output + 1u );                                        // +1u for the implicit empty suffix
+
+        // advance the output counter
+        n_output += n_suffixes;
+    }
+
+    // process a sparse set of suffixes
+    //
+    void process_scattered(
+        const uint32  n_suffixes,
+        const uint32* d_suffixes,
+        const uint32* d_slots)
+    {
+        priv::alloc_storage( d_block_bwt, n_suffixes );
+
+        // compute the bwt of the block
+        thrust::transform(
+            thrust::device_ptr<const uint32>( d_suffixes ),
+            thrust::device_ptr<const uint32>( d_suffixes ) + n_suffixes,
+            d_block_bwt.begin(),
+            priv::string_bwt_functor<string_type>( string_len, string ) );
+
+        // check if there is a $ sign
+        const uint32 block_primary = uint32( thrust::find(
+            d_block_bwt.begin(),
+            d_block_bwt.begin() + n_suffixes,
+            255u ) - d_block_bwt.begin() );
+
+        if (block_primary < n_suffixes)
+        {
+            // keep track of the global primary position
+            primary = thrust::device_ptr<const uint32>( d_slots )[ block_primary ] + 1u; // +1u for the implicit empty suffix
+        }
+
+        // and scatter the resulting symbols in the proper place
+        priv::device_scatter(
+            n_suffixes,
+            d_block_bwt.begin(),
+            thrust::make_transform_iterator(
+                thrust::device_ptr<const uint32>( d_slots ),
+                priv::offset_functor(1u) ),                                              // +1u for the implicit empty suffix
+            output );
+    }
+
+    // remove the dollar symbol
+    //
+    void remove_dollar()
+    {
+        // shift back all symbols following the primary
+        const uint32 max_block_size = 32*1024*1024;
+
+        priv::alloc_storage( d_block_bwt, max_block_size );
+
+        for (index_type block_begin = primary; block_begin < string_len; block_begin += max_block_size)
+        {
+            const index_type block_end = nvbio::min( block_begin + max_block_size, string_len );
+
+            // copy all symbols to a temporary buffer
+            priv::device_copy(
+                block_end - block_begin,
+                output + block_begin + 1u,
+                d_block_bwt.begin(),
+                uint32(0) );
+
+            // and copy the shifted block to the output
+            priv::device_copy(
+                block_end - block_begin,
+                d_block_bwt.begin(),
+                output,
+                block_begin );
+        }
+    }
+
+    const index_type                string_len;
+    const string_type               string;
+    uint32                          primary;
+    uint32                          n_output;
+    output_iterator                 output;
+    thrust::device_vector<uint32>   d_block_bwt;
+};
+
+/// a utility StringSuffixHandler to retain a Sampled Suffix Array
+///
+template <typename output_iterator>
+struct StringSSAHandler
+{
+    // constructor
+    //
+    StringSSAHandler(
+        const uint32        _string_len,
+        const uint32        _mod,
+        output_iterator     _output) :
+        string_len  ( _string_len ),
+        mod         ( _mod ),
+        n_output    ( 1 ),
+        output      ( _output )
+    {
+        // encode the implicit empty suffix directly
+        output[0] = uint32(-1);
+    }
+
+    // process the next batch of suffixes
+    //
+    void process_batch(
+        const uint32  n_suffixes,
+        const uint32* d_suffixes)
+    {
+        priv::alloc_storage( h_suffixes, n_suffixes );
+
+        thrust::copy(
+            thrust::device_ptr<const uint32>(d_suffixes),
+            thrust::device_ptr<const uint32>(d_suffixes) + n_suffixes,
+            h_suffixes.begin() );
+
+        // copy_if
+        #pragma omp parallel for
+        for (int i = 0; i < int( n_suffixes ); ++i)
+        {
+            if (((i + n_output) & (mod-1)) == 0)
+                output[(i + n_output) / mod] = h_suffixes[i];
+        }
+
+        // advance the output counter
+        n_output += n_suffixes;
+    }
+
+    // process a sparse set of suffixes
+    //
+    void process_scattered(
+        const uint32  n_suffixes,
+        const uint32* d_suffixes,
+        const uint32* d_slots)
+    {
+        priv::alloc_storage( h_slots,    n_suffixes );
+        priv::alloc_storage( h_suffixes, n_suffixes );
+
+        thrust::copy(
+            thrust::device_ptr<const uint32>(d_slots),
+            thrust::device_ptr<const uint32>(d_slots) + n_suffixes,
+            h_slots.begin() );
+
+        thrust::copy(
+            thrust::device_ptr<const uint32>(d_suffixes),
+            thrust::device_ptr<const uint32>(d_suffixes) + n_suffixes,
+            h_suffixes.begin() );
+
+        // scatter_if
+        #pragma omp parallel for
+        for (int i = 0; i < int( n_suffixes ); ++i)
+        {
+            const uint32 slot = h_slots[i] + 1u;    // +1 for the implicit empty suffix
+            if ((slot & (mod-1)) == 0)
+                output[slot / mod] = h_suffixes[i];
+        }
+    }
+
+    const uint32                    string_len;
+    const uint32                    mod;
+    uint32                          n_output;
+    output_iterator                 output;
+    thrust::host_vector<uint32>     h_slots;
+    thrust::host_vector<uint32>     h_suffixes;
+};
+
+/// a utility StringSuffixHandler to retain the BWT and a Sampled Suffix Array
+///
+template <typename string_type, typename output_bwt_iterator, typename output_ssa_iterator>
+struct StringBWTSSAHandler
+{
+    StringBWTSSAHandler(
+        const uint32        _string_len,
+        const string_type   _string,
+        const uint32        _mod,
+        output_bwt_iterator _bwt,
+        output_ssa_iterator _ssa) :
+        bwt_handler( _string_len, _string, _bwt ),
+        ssa_handler( _string_len, _mod, _ssa ) {}
+
+    // process the next batch of suffixes
+    //
+    void process_batch(
+        const uint32  n_suffixes,
+        const uint32* d_suffixes)
+    {
+        bwt_handler.process_batch( n_suffixes, d_suffixes );
+        ssa_handler.process_batch( n_suffixes, d_suffixes );
+    }
+
+    // process a sparse set of suffixes
+    //
+    void process_scattered(
+        const uint32  n_suffixes,
+        const uint32* d_suffixes,
+        const uint32* d_slots)
+    {
+        bwt_handler.process_scattered( n_suffixes, d_suffixes, d_slots );
+        ssa_handler.process_scattered( n_suffixes, d_suffixes, d_slots );
+    }
+
+    // return the primary
+    //
+    uint32 primary() const { return bwt_handler.primary; }
+
+    // remove the dollar symbol
+    //
+    void remove_dollar()
+    {
+        bwt_handler.remove_dollar();
+    }
+
+    StringBWTHandler<string_type,output_bwt_iterator> bwt_handler;
+    StringSSAHandler<output_ssa_iterator>             ssa_handler;
+};
+
 ///@}
 
 } // namespace nvbio

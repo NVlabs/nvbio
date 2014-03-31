@@ -28,6 +28,7 @@
 #pragma once
 
 #include <nvbio/sufsort/sufsort_priv.h>
+#include <nvbio/sufsort/sufsort_utils.h>
 #include <nvbio/sufsort/compression_sort.h>
 #include <nvbio/sufsort/prefix_doubling_sufsort.h>
 #include <nvbio/sufsort/blockwise_sufsort.h>
@@ -168,107 +169,43 @@ void suffix_sort(
     NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    compact  : %5.1f ms\n", 1.0e3f * sufsort.compact_time) );
 }
 
-// a utility SuffixHandler to rank the sorted suffixes
+// Sort all the suffixes of a given string
 //
-template <typename string_type, typename output_iterator>
-struct StringBWTHandler
+template <typename string_type, typename output_handler>
+void blockwise_suffix_sort(
+    const typename string_type::index_type  string_len,
+    string_type                             string,
+    output_handler                          output,
+    BWTParams*                              params)
 {
-    static const uint32 NULL_PRIMARY = uint32(-1); // TODO: switch to index_type
+    typedef typename string_type::index_type index_type;
 
-    // constructor
-    //
-    StringBWTHandler(
-        const uint32        _string_len,
-        const string_type   _string,
-        output_iterator     _output) :
-        string_len( _string_len ),
-        string( _string ),
-        primary(NULL_PRIMARY),
-        n_output(0),
-        output(_output) {}
+    // build a table for our Difference Cover
+    log_verbose(stderr, "  building DCS... started\n");
 
-    // process the next batch of suffixes
-    //
-    void process_batch(
-        const uint32  n_suffixes,
-        const uint32* d_suffixes)
-    {
-        priv::alloc_storage( d_block_bwt, n_suffixes );
+    DCS dcs;
 
-        // compute the bwt of the block
-        thrust::transform(
-            thrust::device_ptr<const uint32>( d_suffixes ),
-            thrust::device_ptr<const uint32>( d_suffixes ) + n_suffixes,
-            d_block_bwt.begin(),
-            priv::string_bwt_functor<string_type>( string_len, string ) );
+    blockwise_build(
+        dcs,
+        string_len,
+        string,
+        params );
 
-        // check if there is a $ sign
-        const uint32 block_primary = uint32( thrust::find(
-            d_block_bwt.begin(),
-            d_block_bwt.begin() + n_suffixes,
-            255u ) - d_block_bwt.begin() );
+    log_verbose(stderr, "  building DCS... done\n");
 
-        if (block_primary < n_suffixes)
-        {
-            // keep track of the global primary position
-            primary = n_output + block_primary + 1u;                // +1u for the implicit empty suffix
-        }
+    log_verbose(stderr, "  DCS-based sorting... started\n");
 
-        // and copy the transformed block to the output
-        priv::device_copy(
-            n_suffixes,
-            d_block_bwt.begin(),
-            output,
-            n_output + 1u );                                        // +1u for the implicit empty suffix
+    blockwise_suffix_sort(
+        string_len,
+        string,
+        string_len,
+        thrust::make_counting_iterator<uint32>(0u),
+        output,
+        &dcs,
+        params );
 
-        n_output += n_suffixes;
-    }
-
-    // process a sparse set of suffixes
-    //
-    void process_scattered(
-        const uint32  n_suffixes,
-        const uint32* d_suffixes,
-        const uint32* d_slots)
-    {
-        priv::alloc_storage( d_block_bwt, n_suffixes );
-
-        // compute the bwt of the block
-        thrust::transform(
-            thrust::device_ptr<const uint32>( d_suffixes ),
-            thrust::device_ptr<const uint32>( d_suffixes ) + n_suffixes,
-            d_block_bwt.begin(),
-            priv::string_bwt_functor<string_type>( string_len, string ) );
-
-        // check if there is a $ sign
-        const uint32 block_primary = uint32( thrust::find(
-            d_block_bwt.begin(),
-            d_block_bwt.begin() + n_suffixes,
-            255u ) - d_block_bwt.begin() );
-
-        if (block_primary < n_suffixes)
-        {
-            // keep track of the global primary position
-            primary = thrust::device_ptr<const uint32>( d_slots )[ block_primary ] + 1u; // +1u for the implicit empty suffix
-        }
-
-        // and scatter the resulting symbols in the proper place
-        priv::device_scatter(
-            n_suffixes,
-            d_block_bwt.begin(),
-            thrust::make_transform_iterator(
-                thrust::device_ptr<const uint32>( d_slots ),
-                priv::offset_functor(1u) ),                                              // +1u for the implicit empty suffix
-            output );
-    }
-
-    const uint32                    string_len;
-    const string_type               string;
-    uint32                          primary;
-    uint32                          n_output;
-    output_iterator                 output;
-    thrust::device_vector<uint32>   d_block_bwt;
-};
+    log_verbose(stderr, "  DCS-based sorting... done\n");
+}
 
 // Compute the bwt of a device-side string
 //
@@ -321,30 +258,7 @@ typename string_type::index_type bwt(
     NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"\n    primary at %llu\n", bwt_handler.primary) );
 
     // shift back all symbols following the primary
-    {
-        const uint32 max_block_size = 32*1024*1024;
-
-        priv::alloc_storage( bwt_handler.d_block_bwt, max_block_size );
-
-        for (index_type block_begin = bwt_handler.primary; block_begin < string_len; block_begin += max_block_size)
-        {
-            const index_type block_end = nvbio::min( block_begin + max_block_size, string_len );
-
-            // copy all symbols to a temporary buffer
-            priv::device_copy(
-                block_end - block_begin,
-                output + block_begin + 1u,
-                bwt_handler.d_block_bwt.begin(),
-                uint32(0) );
-
-            // and copy the shifted block to the output
-            priv::device_copy(
-                block_end - block_begin,
-                bwt_handler.d_block_bwt.begin(),
-                output,
-                block_begin );
-        }
-    }
+    bwt_handler.remove_dollar();
 
     return bwt_handler.primary;
 }

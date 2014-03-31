@@ -136,6 +136,45 @@ void suffix_sort(
     output_iterator                                         output,
     BWTParams*                                              params);
 
+/// Sort all the suffixes of a given string using an adaptation of the Blockwise Suffix Sorting
+/// algorithm by J.Kärkkäinen, and can hence work in a confined amount of host and device memory
+/// (as specified by \ref BWTParams).
+///
+/// \tparam string_type             an iterator to the string
+/// \tparam output_handler          an handler for the sorted suffixes
+///\verbatim
+///struct StringSuffixHandler
+///{
+///    // process the next contiguous batch of suffixes
+///    //
+///    void process_batch(
+///        const uint32  n_suffixes,
+///        const uint32* d_suffixes);
+///
+///    // process a sparse set of suffixes; this method is required because sometimes,
+///    // in order to achieve higher parallelism, the blockwise suffix sorter will
+///    // delay the full sorting of a few <i>hard</i> suffixes in a block and resolve 
+///    // it at a later time (overwriting previously output indices)
+///    //
+///    void process_scattered(
+///        const uint32  n_suffixes,
+///        const uint32* d_suffixes,
+///        const uint32* d_slots)
+///};
+///\endverbatim
+///
+/// \param string_len               the length of the given string
+/// \param string                   a device-side string
+/// \param output                   the handler for the sorted suffixes
+/// \param params                   construction parameters
+///
+template <typename string_type, typename output_handler>
+void blockwise_suffix_sort(
+    const typename string_type::index_type  string_len,
+    string_type                             string,
+    output_handler                          output,
+    BWTParams*                              params);
+
 /// Compute the bwt of a device-side string.
 /// This function computes the bwt using an adaptation of the Blockwise Suffix Sorting
 /// by J.Kärkkäinen, and can hence work in a confined amount of host and device memory

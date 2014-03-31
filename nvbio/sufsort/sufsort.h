@@ -172,7 +172,7 @@ template <typename string_type, typename output_handler>
 void blockwise_suffix_sort(
     const typename string_type::index_type  string_len,
     string_type                             string,
-    output_handler                          output,
+    output_handler&                         output,
     BWTParams*                              params);
 
 /// Compute the bwt of a device-side string.

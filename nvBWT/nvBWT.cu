@@ -46,6 +46,7 @@
 #include <nvbio/fmindex/dna.h>
 #include <nvbio/fmindex/bwt.h>
 #include <nvbio/fasta/fasta.h>
+#include <nvbio/io/fmi.h>
 #include <nvbio/sufsort/sufsort.h>
 #include "filelist.h"
 
@@ -208,6 +209,8 @@ int build(
     const char*  rpac_name,
     const char*  bwt_name,
     const char*  rbwt_name,
+    const char*  sa_name,
+    const char*  rsa_name,
     const uint64 max_length)
 {
     std::vector<std::string> sortednames;
@@ -245,9 +248,13 @@ int build(
     log_info(stderr, "  buffer size     : %.1f MB\n",
         2*seq_words*sizeof(uint32)/1.0e6f );
 
+    const uint32 sa_intv = nvbio::io::FMIndexData::SA_INT;
+    const uint32 ssa_len = (seq_length + sa_intv) / sa_intv;
+
     // allocate the actual storage
     thrust::host_vector<uint32> h_base_storage( seq_words );
     thrust::host_vector<uint32> h_bwt_storage( seq_words );
+    thrust::host_vector<uint32> h_ssa( ssa_len );
 
     uint32* h_base_stream = nvbio::plain_view( h_base_storage );
     uint32* h_bwt_stream  = nvbio::plain_view( h_bwt_storage );
@@ -377,13 +384,25 @@ int build(
 
         log_info(stderr, "\nbuilding forward BWT... started\n");
         timer.start();
+        {
+            StringBWTSSAHandler<const_stream_type::iterator,stream_type::iterator,uint32*> output(
+                seq_length,                         // string length
+                d_string.begin(),                   // string
+                sa_intv,                            // SSA sampling interval
+                d_bwt.begin(),                      // output bwt iterator
+                nvbio::plain_view( h_ssa ) );       // output ssa iterator
 
-        primary = cuda::bwt(
-            seq_length,
-            d_string.begin(),
-            d_bwt.begin(),
-            &params );
+            cuda::blockwise_suffix_sort(
+                seq_length,
+                d_string.begin(),
+                output,
+                &params );
 
+            // remove the dollar symbol
+            output.remove_dollar();
+
+            primary = output.primary();
+        }
         timer.stop();
         log_info(stderr, "building forward BWT... done: %um:%us\n", uint32(timer.seconds()/60), uint32(timer.seconds())%60);
         log_info(stderr, "  primary: %u\n", primary);
@@ -411,6 +430,25 @@ int build(
             fclose( output_file );
             log_info(stderr, "writing \"%s\"... done\n", bwt_name);
         }
+        {
+            log_info(stderr, "\nwriting \"%s\"... started\n", sa_name);
+            FILE* output_file = fopen( sa_name, "wb" );
+            if (output_file == NULL)
+            {
+                log_error(stderr, "  could not open output file \"%s\"!\n", sa_name );
+                exit(1);
+            }
+
+            const uint32 L2[4] = { 0, 0, 0, 0 };
+
+            fwrite( &primary,       sizeof(uint32),     1u,         output_file );
+            fwrite( &L2,            sizeof(uint32),     4u,         output_file );
+            fwrite( &sa_intv,       sizeof(uint32),     1u,         output_file );
+            fwrite( &seq_length,    sizeof(uint32),     1u,         output_file );
+            fwrite( &h_ssa[1],      sizeof(uint32),     ssa_len-1,  output_file );
+            fclose( output_file );
+            log_info(stderr, "writing \"%s\"... done\n", sa_name);
+        }
 
         // reverse the string in h_base_storage
         {
@@ -432,13 +470,25 @@ int build(
 
         log_info(stderr, "\nbuilding reverse BWT... started\n");
         timer.start();
+        {
+            StringBWTSSAHandler<const_stream_type::iterator,stream_type::iterator,uint32*> output(
+                seq_length,                         // string length
+                d_string.begin(),                   // string
+                sa_intv,                            // SSA sampling interval
+                d_bwt.begin(),                      // output bwt iterator
+                nvbio::plain_view( h_ssa ) );       // output ssa iterator
 
-        primary = cuda::bwt(
-            seq_length,
-            d_string.begin(),
-            d_bwt.begin(),
-            &params );
+            cuda::blockwise_suffix_sort(
+                seq_length,
+                d_string.begin(),
+                output,
+                &params );
 
+            // remove the dollar symbol
+            output.remove_dollar();
+
+            primary = output.primary();
+        }
         timer.stop();
         log_info(stderr, "building reverse BWT... done: %um:%us\n", uint32(timer.seconds()/60), uint32(timer.seconds())%60);
         log_info(stderr, "  primary: %u\n", primary);
@@ -465,6 +515,25 @@ int build(
             }
             fclose( output_file );
             log_info(stderr, "writing \"%s\"... done\n", rbwt_name);
+        }
+        {
+            log_info(stderr, "\nwriting \"%s\"... started\n", rsa_name);
+            FILE* output_file = fopen( rsa_name, "wb" );
+            if (output_file == NULL)
+            {
+                log_error(stderr, "  could not open output file \"%s\"!\n", rsa_name );
+                exit(1);
+            }
+
+            const uint32 L2[4] = { 0, 0, 0, 0 };
+
+            fwrite( &primary,       sizeof(uint32),     1u,         output_file );
+            fwrite( &L2,            sizeof(uint32),     4u,         output_file );
+            fwrite( &sa_intv,       sizeof(uint32),     1u,         output_file );
+            fwrite( &seq_length,    sizeof(uint32),     1u,         output_file );
+            fwrite( &h_ssa[1],      sizeof(uint32),     ssa_len-1,  output_file );
+            fclose( output_file );
+            log_info(stderr, "writing \"%s\"... done\n", rsa_name);
         }
     }
     catch (...)
@@ -515,11 +584,15 @@ int main(int argc, char* argv[])
     const char* bwt_name    = bwt_string.c_str();
     std::string rbwt_string = std::string( output_name ) + ".rbwt";
     const char* rbwt_name   = rbwt_string.c_str();
+    std::string sa_string   = std::string( output_name ) + ".sa";
+    const char* sa_name     = sa_string.c_str();
+    std::string rsa_string  = std::string( output_name ) + ".rsa";
+    const char* rsa_name    = rsa_string.c_str();
 
     log_info(stderr, "max length : %lld\n", max_length);
     log_info(stderr, "input      : \"%s\"\n", input_name);
     log_info(stderr, "output     : \"%s\"\n", output_name);
 
-    return build( input_name, output_name, pac_name, rpac_name, bwt_name, rbwt_name, max_length );
+    return build( input_name, output_name, pac_name, rpac_name, bwt_name, rbwt_name, sa_name, rsa_name, max_length );
 }
 

@@ -48,6 +48,8 @@
 /// my-index.rpac
 /// my-index.bwt
 /// my-index.rbwt
+/// my-index.sa
+/// my-index.rsa
 /// my-index.ann
 /// my-index.amb
 ///\endverbatim

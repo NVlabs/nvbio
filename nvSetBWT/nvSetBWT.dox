@@ -102,7 +102,7 @@
 ///
 ///\section DetailsSection Details
 ///\par
-/// nvSetBWT implements novel a variant of the algorithms described in: \n
+/// nvSetBWT implements a novel variant of the algorithms described in: \n
 /// <i>GPU-Accelerated BWT Construction for Large Collection of Short Reads</i> \n
 /// C.M. Liu, R.Luo, T-W. Lam \n
 /// http://arxiv.org/abs/1401.7457

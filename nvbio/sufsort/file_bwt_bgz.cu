@@ -28,7 +28,9 @@
 #include <nvbio/sufsort/file_bwt_bgz.h>
 #include <nvbio/basic/exceptions.h>
 #include <zlib/zlib.h>
+#ifdef _OPENMP
 #include <omp.h>
+#endif
 
 namespace nvbio {
 

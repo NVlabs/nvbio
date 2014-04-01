@@ -29,8 +29,9 @@
 #include <nvbio/sufsort/file_bwt_bgz.h>
 #include <nvbio/sufsort/sufsort_priv.h>
 #include <zlib/zlib.h>
+#ifdef _OPENMP
 #include <omp.h>
-
+#endif
 
 namespace nvbio {
 

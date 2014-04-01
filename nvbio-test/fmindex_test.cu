@@ -36,7 +36,9 @@
 //#define NVBIO_CUDA_DEBUG
 //#define NVBIO_CUDA_ASSERTS
 
+#ifdef _OPENMP
 #include <omp.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
@@ -801,8 +803,10 @@ void count_kernel(
 //
 void backtrack_test(const char* index_file, const char* reads_name, const uint32 n_reads)
 {
+#ifdef _OPENMP
     // Now set the number of threads
     omp_set_num_threads( omp_get_num_procs() );
+#endif
 
     io::FMIndexDataRAM fmi;
     if (fmi.load( index_file, io::FMIndexData::FORWARD ))

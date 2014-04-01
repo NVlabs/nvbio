@@ -31,7 +31,9 @@
 #define NVBIO_CUDA_DEBUG
 
 #include <cub/cub.cuh>
+#ifdef _OPENMP
 #include <omp.h>
+#endif
 
 #include <nvbio/sufsort/sufsort.h>
 #include <nvbio/sufsort/sufsort_utils.h>
@@ -282,12 +284,14 @@ int main(int argc, char* argv[])
         cudaMemGetInfo(&free_device, &total_device);
         log_stats(stderr, "  device has %ld of %ld MB free\n", free_device/1024/1024, total_device/1024/1024);
 
+#ifdef _OPENMP
         // now set the number of CPU threads
         omp_set_num_threads( omp_get_num_procs() );
         #pragma omp parallel
         {
             log_verbose(stderr, "  running on multiple threads (%d)\n", omp_get_thread_num());
         }
+#endif
 
         Reads reads;
 

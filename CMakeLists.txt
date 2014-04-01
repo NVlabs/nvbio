@@ -62,6 +62,13 @@ if (MSVC_IDE)
   #set(CMAKE_SUPPRESS_REGENERATION ON)
 endif()
 
+if (APPLE AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  find_program(CLANG_BIN clang)
+  set(CUDA_NVCC_FLAGS " -ccbin ${CLANG_BIN} -Xcompiler -stdlib=libstdc++")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -stdlib=libstdc++")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++")
+endif()
+
 set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} ${CUDA_NVCC_DEBUG_FLAGS} --gpu-architecture=sm_35 -use_fast_math)
 
 set(cudpp_INCLUDE_DIRS ${CMAKE_SOURCE_DIR})

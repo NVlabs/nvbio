@@ -62,11 +62,11 @@
 /// superior speed of its FM-index search, DP alignment and BWT construction
 /// algorithms.
 ///
-/// <img src="benchmark-fm-index-speedup.png" style="position:relative; bottom:-10px; border:0px;" width="75%" height="75%"/>
+/// <img src="benchmark-fm-index-speedup.png" style="position:relative; bottom:-10px; border:0px;" width="48%" height="48%"/>
 ///\n
-/// <img src="benchmark-sw.png" style="position:relative; bottom:-10px; border:0px;" width="75%" height="75%"/>
+/// <img src="benchmark-sw.png" style="position:relative; bottom:-10px; border:0px;" width="48%" height="48%"/>
 ///\n
-/// <img src="benchmark-bwt.png" style="position:relative; bottom:-10px; border:0px;" width="75%" height="75%"/>
+/// <img src="benchmark-bwt.png" style="position:relative; bottom:-10px; border:0px;" width="48%" height="48%"/>
 ///
 /// \section DependenciesSection Dependencies
 ///\par

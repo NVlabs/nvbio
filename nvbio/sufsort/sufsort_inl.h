@@ -193,6 +193,7 @@ void blockwise_suffix_sort(
 
     log_verbose(stderr, "  building DCS... done\n");
 
+    // and do the Difference Cover based sorting
     log_verbose(stderr, "  DCS-based sorting... started\n");
 
     blockwise_suffix_sort(
@@ -220,37 +221,18 @@ typename string_type::index_type bwt(
 {
     typedef typename string_type::index_type index_type;
 
-    // build a table for our Difference Cover
-    log_verbose(stderr, "  building DCS... started\n");
-
-    DCS dcs;
-
-    blockwise_build(
-        dcs,
-        string_len,
-        string,
-        params );
-
-    log_verbose(stderr, "  building DCS... done\n");
-
-    log_verbose(stderr, "  DCS-based sorting... started\n");
-
-    // and build the rest of the BWT
+    // build a BWT handler
     StringBWTHandler<string_type,output_iterator> bwt_handler(
         string_len,
         string,
         output );
 
+    // and pass it to the blockwise suffix sorter
     blockwise_suffix_sort(
         string_len,
         string,
-        string_len,
-        thrust::make_counting_iterator<uint32>(0u),
         bwt_handler,
-        &dcs,
         params );
-
-    log_verbose(stderr, "  DCS-based sorting... done\n");
 
     NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"\n    primary at %llu\n", bwt_handler.primary) );
 

@@ -227,14 +227,18 @@ struct StringBWTHandler
     // constructor
     //
     StringBWTHandler(
-        const uint32        _string_len,
+        const index_type    _string_len,
         const string_type   _string,
         output_iterator     _output) :
         string_len  ( _string_len ),
         string      ( _string ),
         primary     ( NULL_PRIMARY ),
         n_output    ( 0 ),
-        output      ( _output ) {}
+        output      ( _output )
+    {
+        // encode the first BWT symbol explicitly
+        priv::device_copy( 1u, string + string_len-1, output, index_type(0u) );
+    }
 
     // process the next batch of suffixes
     //

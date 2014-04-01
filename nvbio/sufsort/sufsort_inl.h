@@ -235,9 +235,6 @@ typename string_type::index_type bwt(
 
     log_verbose(stderr, "  DCS-based sorting... started\n");
 
-    // encode the first BWT symbol explicitly
-    priv::device_copy( 1u, string + string_len-1, output, index_type(0u) );
-
     // and build the rest of the BWT
     StringBWTHandler<string_type,output_iterator> bwt_handler(
         string_len,

@@ -142,7 +142,7 @@ void suffix_sort(
 ///
 /// \tparam string_type             an iterator to the string
 /// \tparam output_handler          an handler for the sorted suffixes
-///\verbatim
+///\code
 ///struct StringSuffixHandler
 ///{
 ///    // process the next contiguous batch of suffixes
@@ -161,7 +161,7 @@ void suffix_sort(
 ///        const uint32* d_suffixes,
 ///        const uint32* d_slots)
 ///};
-///\endverbatim
+///\endcode
 ///
 /// \param string_len               the length of the given string
 /// \param string                   a device-side string

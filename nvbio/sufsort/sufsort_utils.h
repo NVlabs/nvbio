@@ -386,8 +386,10 @@ struct StringSSAHandler
         #pragma omp parallel for
         for (int i = 0; i < int( n_suffixes ); ++i)
         {
-            if (((i + n_output) & (mod-1)) == 0)
-                output[(i + n_output) / mod] = h_suffixes[i];
+            const uint32 slot = i + n_output;
+
+            if ((slot & (mod-1)) == 0)
+                output[slot / mod] = h_suffixes[i];
         }
 
         // advance the output counter
@@ -419,6 +421,7 @@ struct StringSSAHandler
         for (int i = 0; i < int( n_suffixes ); ++i)
         {
             const uint32 slot = h_slots[i] + 1u;    // +1 for the implicit empty suffix
+
             if ((slot & (mod-1)) == 0)
                 output[slot / mod] = h_suffixes[i];
         }

@@ -34,7 +34,7 @@
 #include <thrust/transform_scan.h>
 #include <thrust/sort.h>
 
-///\page sufsort_page Sufsort
+///\page sufsort_page Sufsort Module
 ///\htmlonly
 /// <img src="nvidia_cubes.png" style="position:relative; bottom:-10px; border:0px;"/>
 ///\endhtmlonly

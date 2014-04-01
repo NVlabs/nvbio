@@ -201,6 +201,15 @@ namespace nvbio {
 /// </td></tr>
 /// </table>
 ///
+/// \section PerformanceSection Performance
+///
+/// The graphs below show the performance of exact and approximate matching using the FM-index on the CPU and GPU,
+/// searching for 32bp fragments inside the whole human genome. Approximate matching is performed with the hamming_backtrack()
+/// function, in this case allowing up to 1 mismatch per fragment:
+///
+/// <img src="benchmark-fm-index.png" style="position:relative; bottom:-10px; border:0px;" width="50%" height="50%"/>
+/// <img src="benchmark-fm-index-speedup.png" style="position:relative; bottom:-10px; border:0px;" width="50%" height="50%"/>
+///
 /// \section TechnicalOverviewSection Technical Overview
 ///
 /// A complete list of the classes and functions in this module is given in the \ref FMIndex documentation.

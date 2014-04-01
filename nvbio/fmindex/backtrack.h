@@ -32,8 +32,30 @@
 
 namespace nvbio {
 
+///@addtogroup FMIndex
+///@{
+
 ///
-/// backtrack using the Hamming distance
+/// perform approximate matching using the Hamming distance by backtracking
+///
+/// \tparam String      a string iterator
+/// \tparam Stack       an uint4 array to be used as a backtracking stack
+/// \tparam Delegate    a delegate functor used to process hits, must implement the following interface:
+///\code
+/// struct Delegate
+/// {
+///     // process a series of hits identified by their SA range
+///     void operator() (const uint2 range);
+/// }
+///\endcode
+///
+/// \param fmi          the FM-index
+/// \param pattern      the search pattern
+/// \param len          the pattern length
+/// \param seed         the length of the seed to search with exact matching
+/// \param mismatches   the maximum number of mismatches allowed
+/// \param stack        the stack storage
+/// \param delegate     the delegate functor invoked on hits
 ///
 template <typename FMIndex, typename String, typename Stack, typename Delegate>
 NVBIO_HOST_DEVICE
@@ -144,5 +166,7 @@ void hamming_backtrack(
         }
     }
 }
+
+///@} FMIndex
 
 } // namespace nvbio

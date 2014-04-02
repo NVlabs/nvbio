@@ -80,13 +80,13 @@ unsigned char nst_nt4_table[256] = {
 // generate random base pairs using rand()
 inline void  srand_bp(const unsigned int s) { srand(s); }
 inline float frand() { return float(rand()) / float(RAND_MAX); }
-inline uint8 rand_bp() { return uint8( frand() * 4 ); }
+inline uint8 rand_bp() { return uint8( frand() * 4 ) & 3; }
 
 #elif (GENERATOR == RAND48)
 
 // generate random base pairs using rand48()
 inline void  srand_bp(const unsigned int s) { srand48(s); }
-inline uint8 rand_bp() { return uint8( drand48() * 4 ); }
+inline uint8 rand_bp() { return uint8( drand48() * 4 ) & 3; }
 
 #endif
 
@@ -382,6 +382,13 @@ int build(
         cumFreq[1] = writer.m_freq[1] + cumFreq[0];
         cumFreq[2] = writer.m_freq[2] + cumFreq[1];
         cumFreq[3] = writer.m_freq[3] + cumFreq[2];
+
+        if (cumFreq[3] != seq_length)
+        {
+            log_error(stderr, "  mismatching symbol frequencies!\n");
+            log_error(stderr, "    (%u, %u, %u, %u)\n", cumFreq[0], cumFreq[1], cumFreq[2], cumFreq[3]);
+            exit(1);
+        }
     }
     log_info(stderr, "buffering bps... done\n");
     {

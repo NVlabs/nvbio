@@ -50,6 +50,9 @@
 #include <nvbio/sufsort/sufsort.h>
 #include "filelist.h"
 
+// PAC File Type
+enum PacType { BPAC = 0, WPAC = 1 };
+
 using namespace nvbio;
 
 unsigned char nst_nt4_table[256] = {
@@ -212,11 +215,41 @@ bool save_stream(FILE* output_file, const uint64 seq_words, const StreamType* st
     return true;
 }
 
+//
+// .wpac file
+//
+void save_wpac(const uint32 seq_length, const uint32* string_storage, const char* pac_name)
+{
+    log_info(stderr, "\nwriting \"%s\"... started\n", pac_name);
+
+    const uint32 seq_words = uint32( (seq_length+15)/16 );
+
+    FILE* output_file = fopen( pac_name, "wb" );
+    if (output_file == NULL)
+    {
+        log_error(stderr, "  could not open output file \"%s\"!\n", pac_name );
+        exit(1);
+    }
+
+    // write the sequence length as a uint64
+    const uint64 len = seq_length;
+    fwrite( &len, sizeof(len), 1u, output_file );
+
+    // save the uint32 stream
+    if (save_stream( output_file, seq_words, string_storage ) == false)
+    {
+        log_error(stderr, "  writing failed!\n");
+        exit(1);
+    }
+
+    fclose( output_file );
+    log_info(stderr, "writing \"%s\"... done\n", pac_name);
+}
 
 //
 // .pac file
 //
-void save_pac(const uint32 seq_length, const uint32* string_storage, const char* pac_name)
+void save_bpac(const uint32 seq_length, const uint32* string_storage, const char* pac_name)
 {
     typedef io::FMIndexData::stream_type                stream_type;
     typedef PackedStream<uint8*,uint8,2,true,int64> pac_stream_type;
@@ -241,6 +274,7 @@ void save_pac(const uint32 seq_length, const uint32* string_storage, const char*
     for (uint32 i = 0; i < seq_length; ++i)
         pac_string[i] = string[i];
 
+    // save the uint8 stream
     if (save_stream( output_file, seq_bytes, nvbio::plain_view( pac_storage ) ) == false)
     {
         log_error(stderr, "  writing failed!\n");
@@ -259,6 +293,17 @@ void save_pac(const uint32 seq_length, const uint32* string_storage, const char*
 
     fclose( output_file );
     log_info(stderr, "writing \"%s\"... done\n", pac_name);
+}
+
+//
+// .pac | .wpac file
+//
+void save_pac(const uint32 seq_length, const uint32* string_storage, const char* pac_name, const PacType pac_type)
+{
+    if (pac_type == BPAC)
+        save_bpac( seq_length, string_storage, pac_name );
+    else
+        save_wpac( seq_length, string_storage, pac_name );
 }
 
 //
@@ -315,7 +360,8 @@ int build(
     const char*  rbwt_name,
     const char*  sa_name,
     const char*  rsa_name,
-    const uint64 max_length)
+    const uint64 max_length,
+    const PacType pac_type)
 {
     std::vector<std::string> sortednames;
     list_files(input_name, sortednames);
@@ -457,7 +503,7 @@ int build(
                 log_info(stderr, "  crc: %u\n", crc);
             }
 
-            save_pac( seq_length, nvbio::plain_view( h_string_storage ),                           pac_name );
+            save_pac( seq_length, nvbio::plain_view( h_string_storage ),                           pac_name, pac_type );
             save_bwt( seq_length, seq_words, primary, cumFreq, nvbio::plain_view( h_bwt_storage ), bwt_name );
             save_ssa( seq_length, sa_intv, ssa_len, primary, cumFreq, nvbio::plain_view( h_ssa ),  sa_name );
         }
@@ -517,7 +563,7 @@ int build(
                 log_info(stderr, "  crc: %u\n", crc);
             }
 
-            save_pac( seq_length, nvbio::plain_view( h_string_storage ),                           rpac_name );
+            save_pac( seq_length, nvbio::plain_view( h_string_storage ),                           rpac_name, pac_type );
             save_bwt( seq_length, seq_words, primary, cumFreq, nvbio::plain_view( h_bwt_storage ), rbwt_name );
             save_ssa( seq_length, sa_intv, ssa_len, primary, cumFreq, nvbio::plain_view( h_ssa ),  rsa_name );
         }
@@ -540,11 +586,14 @@ int main(int argc, char* argv[])
         log_info(stderr, "  nvBWT [options] myinput.*.fa output-prefix\n");
         log_info(stderr, "  options:\n");
         log_info(stderr, "    -m     max_length\n");
+        log_info(stderr, "    -b     byte packing\n");
+        log_info(stderr, "    -w     word packing\n");
         exit(0);
     }
 
     const char* file_names[2] = { NULL, NULL };
-    uint64 max_length = uint64(-1);
+    uint64  max_length = uint64(-1);
+    PacType pac_type = BPAC;
 
     uint32 n_files = 0;
     for (int32 i = 1; i < argc; ++i)
@@ -556,15 +605,23 @@ int main(int argc, char* argv[])
             max_length = atoi( argv[i+1] );
             ++i;
         }
+        else if (strcmp( arg, "-b" ) == 0)
+        {
+            pac_type = BPAC;
+        }
+        else if (strcmp( arg, "-w" ) == 0)
+        {
+            pac_type = WPAC;
+        }
         else
             file_names[ n_files++ ] = argv[i];
     }
 
     const char* input_name  = file_names[0];
     const char* output_name = file_names[1];
-    std::string pac_string  = std::string( output_name ) + ".pac";
+    std::string pac_string  = std::string( output_name ) + (pac_type == BPAC ? ".pac" : ".wpac");
     const char* pac_name    = pac_string.c_str();
-    std::string rpac_string = std::string( output_name ) + ".rpac";
+    std::string rpac_string = std::string( output_name ) + (pac_type == BPAC ? ".rpac" : ".rwpac");
     const char* rpac_name   = rpac_string.c_str();
     std::string bwt_string  = std::string( output_name ) + ".bwt";
     const char* bwt_name    = bwt_string.c_str();
@@ -579,6 +636,6 @@ int main(int argc, char* argv[])
     log_info(stderr, "input      : \"%s\"\n", input_name);
     log_info(stderr, "output     : \"%s\"\n", output_name);
 
-    return build( input_name, output_name, pac_name, rpac_name, bwt_name, rbwt_name, sa_name, rsa_name, max_length );
+    return build( input_name, output_name, pac_name, rpac_name, bwt_name, rbwt_name, sa_name, rsa_name, max_length, pac_type );
 }
 

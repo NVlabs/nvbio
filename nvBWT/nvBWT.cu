@@ -218,6 +218,9 @@ bool save_stream(FILE* output_file, const uint64 seq_words, const StreamType* st
 //
 void save_pac(const uint32 seq_length, const uint32* string_storage, const char* pac_name)
 {
+    typedef io::FMIndexData::stream_type                stream_type;
+    typedef PackedStream<uint8*,uint8,2,true>       pac_stream_type;
+
     log_info(stderr, "\nwriting \"%s\"... started\n", pac_name);
 
     const uint32 bps_per_byte = 4u;
@@ -230,7 +233,15 @@ void save_pac(const uint32 seq_length, const uint32* string_storage, const char*
         exit(1);
     }
 
-    if (save_stream( output_file, seq_bytes, (uint8*)string_storage ) == false)
+    // copy the uint32 packed stream into a uint8 pac stream
+    thrust::host_vector<uint8> pac_storage( seq_bytes );
+    pac_stream_type pac_string( nvbio::plain_view( pac_storage ) );
+        stream_type     string( string_storage );
+
+    for (uint32 i = 0; i < seq_length; ++i)
+        pac_string[i] = string[i];
+
+    if (save_stream( output_file, seq_bytes, nvbio::plain_view( pac_storage ) ) == false)
     {
         log_error(stderr, "  writing failed!\n");
         exit(1);

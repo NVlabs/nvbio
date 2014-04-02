@@ -177,6 +177,12 @@ struct DCS_string_suffix_less
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     result_type operator() (const uint64 suffix_idx1, const uint64 suffix_idx2) const
     {
+      //#define DCS_CHECKS
+      #if defined(DCS_CHECKS)
+        const string_suffix_less<SYMBOL_SIZE,string_type> less( string_len, string );
+        const bool r  = less( suffix_idx1, suffix_idx2 );
+      #endif
+
         const uint32 WORD_BITS   = 32u; // use 32-bit words
         const uint32 DOLLAR_BITS = 4u;  // 4 is the minimum number needed to encode up to 16 symbols per word
         const uint32 SYMBOLS_PER_WORD = symbols_per_word<SYMBOL_SIZE,WORD_BITS,DOLLAR_BITS>();
@@ -204,7 +210,15 @@ struct DCS_string_suffix_less
         // check whether the suffixes are shorter than Q - this should never happen...
         if (suffix_len1 < DCS::Q ||
             suffix_len2 < DCS::Q)
+        {
+            #if defined(DCS_CHECKS)
+            const bool r2 = suffix_len1 < suffix_len2;
+            if (r != r2)
+                printf("short suffixes %u, %u\n", suffix_len1, suffix_len2 );
+            #endif
+
             return suffix_len1 < suffix_len2;
+        }
 
         // compare the DCS ranks
         {
@@ -223,11 +237,8 @@ struct DCS_string_suffix_less
             const uint32 rank_i = dcs.ranks[ pos_i ];
             const uint32 rank_j = dcs.ranks[ pos_j ];
 
-            /*
-            const string_suffix_less<SYMBOL_SIZE,string_type> less( string_len, string );
-
-            bool r  = less( suffix_idx1, suffix_idx2 );
-            bool r2 = rank_i < rank_j;
+            #if defined(DCS_CHECKS)
+            const bool r2 = rank_i < rank_j;
             if (r != r2)
             {
                 printf("(%u,%u) : %u != %u, l[%u], pos[%u,%u], rank[%u,%u]\n",
@@ -240,8 +251,8 @@ struct DCS_string_suffix_less
                     (uint32)rank_i,
                     (uint32)rank_j);
             }
-            return r;
-            */
+            #endif
+
             return rank_i < rank_j;
         }
     }

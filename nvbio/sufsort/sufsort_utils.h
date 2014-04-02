@@ -350,7 +350,7 @@ struct StringBWTHandler
     uint32                          primary;
     uint32                          n_output;
     output_iterator                 output;
-    thrust::device_vector<uint32>   d_block_bwt;
+    thrust::device_vector<uint8>    d_block_bwt;
 };
 
 /// a utility StringSuffixHandler to retain a Sampled Suffix Array

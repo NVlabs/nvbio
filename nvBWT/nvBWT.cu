@@ -106,7 +106,7 @@ struct Counter
 
 struct Writer
 {
-    typedef PackedStream<uint32*,uint8,2,true,uint64> stream_type;
+    typedef io::FMIndexData::nonconst_stream_type       stream_type;
 
     Writer(uint32* storage, const uint32 reads, const uint64 max_size) :
         m_max_size(max_size), m_size(0), m_stream( storage )
@@ -116,6 +116,9 @@ struct Writer
         m_bntseq.anns_info.resize( reads );
 
         srand_bp( m_bntseq.seed );
+
+        for (uint32 i = 0; i < 4; ++i)
+            m_freq[i] = 0;
     }
 
     void begin_read()
@@ -146,7 +149,12 @@ struct Writer
         {
             const uint8 c = nst_nt4_table[s];
 
-            m_stream[ m_size ] = c < 4 ? c : rand_bp();
+            const uint8 sc = c < 4 ? c : rand_bp();
+
+            m_stream[ m_size ] = sc;
+
+            // keep track of the symbol frequencies
+            ++m_freq[sc];
 
             if (c >= 4) // we have an N
             {
@@ -188,6 +196,8 @@ struct Writer
 
     BNTSeq      m_bntseq;
     uint8       m_lasts;
+
+    uint32      m_freq[4];
 };
 
 template <typename StreamType>
@@ -200,6 +210,89 @@ bool save_stream(FILE* output_file, const uint64 seq_words, const StreamType* st
             return false;
     }
     return true;
+}
+
+
+//
+// .pac file
+//
+void save_pac(const uint32 seq_length, const uint32* string_storage, const char* pac_name)
+{
+    log_info(stderr, "\nwriting \"%s\"... started\n", pac_name);
+
+    const uint32 bps_per_byte = 4u;
+    const uint64 seq_bytes    = (seq_length + bps_per_byte - 1u) / bps_per_byte;
+
+    FILE* output_file = fopen( pac_name, "wb" );
+    if (output_file == NULL)
+    {
+        log_error(stderr, "  could not open output file \"%s\"!\n", pac_name );
+        exit(1);
+    }
+
+    if (save_stream( output_file, seq_bytes, (uint8*)string_storage ) == false)
+    {
+        log_error(stderr, "  writing failed!\n");
+        exit(1);
+    }
+	// the following code makes the pac file size always (l_pac/4+1+1)
+    if (seq_length % 4 == 0)
+    {
+	    const uint8 ct = 0;
+	    fwrite( &ct, 1, 1, output_file );
+    }
+    {
+        const uint8 ct = seq_length % 4;
+        fwrite( &ct, 1, 1, output_file );
+    }
+
+    fclose( output_file );
+    log_info(stderr, "writing \"%s\"... done\n", pac_name);
+}
+
+//
+// .bwt file
+//
+void save_bwt(const uint32 seq_length, const uint32 seq_words, const uint32 primary, const uint32* cumFreq, const uint32* h_bwt_storage, const char* bwt_name)
+{
+    log_info(stderr, "\nwriting \"%s\"... started\n", bwt_name);
+    FILE* output_file = fopen( bwt_name, "wb" );
+    if (output_file == NULL)
+    {
+        log_error(stderr, "  could not open output file \"%s\"!\n", bwt_name );
+        exit(1);
+    }
+    fwrite( &primary, sizeof(uint32), 1, output_file );
+    fwrite( cumFreq,  sizeof(uint32), 4, output_file );
+    if (save_stream( output_file, seq_words, h_bwt_storage ) == false)
+    {
+        log_error(stderr, "  writing failed!\n");
+        exit(1);
+    }
+    fclose( output_file );
+    log_info(stderr, "writing \"%s\"... done\n", bwt_name);
+}
+
+//
+// .sa file
+//
+void save_ssa(const uint32 seq_length, const uint32 sa_intv, const uint32 ssa_len, const uint32 primary, const uint32* cumFreq, const uint32* h_ssa, const char* sa_name)
+{
+    log_info(stderr, "\nwriting \"%s\"... started\n", sa_name);
+    FILE* output_file = fopen( sa_name, "wb" );
+    if (output_file == NULL)
+    {
+        log_error(stderr, "  could not open output file \"%s\"!\n", sa_name );
+        exit(1);
+    }
+
+    fwrite( &primary,       sizeof(uint32),     1u,         output_file );
+    fwrite( &cumFreq,       sizeof(uint32),     4u,         output_file );
+    fwrite( &sa_intv,       sizeof(uint32),     1u,         output_file );
+    fwrite( &seq_length,    sizeof(uint32),     1u,         output_file );
+    fwrite( &h_ssa[1],      sizeof(uint32),     ssa_len-1,  output_file );
+    fclose( output_file );
+    log_info(stderr, "writing \"%s\"... done\n", sa_name);
 }
 
 int build(
@@ -252,23 +345,21 @@ int build(
     const uint32 ssa_len = (seq_length + sa_intv) / sa_intv;
 
     // allocate the actual storage
-    thrust::host_vector<uint32> h_base_storage( seq_words );
-    thrust::host_vector<uint32> h_bwt_storage( seq_words );
+    thrust::host_vector<uint32> h_string_storage( seq_words+1 );
+    thrust::host_vector<uint32> h_bwt_storage( seq_words+1 );
     thrust::host_vector<uint32> h_ssa( ssa_len );
 
-    uint32* h_base_stream = nvbio::plain_view( h_base_storage );
-    uint32* h_bwt_stream  = nvbio::plain_view( h_bwt_storage );
+    typedef io::FMIndexData::stream_type                const_stream_type;
+    typedef io::FMIndexData::nonconst_stream_type             stream_type;
 
-    typedef PackedStream<const uint32*,uint8,2,true,uint64> const_stream_type;
-    typedef PackedStream<      uint32*,uint8,2,true,uint64>       stream_type;
+    stream_type h_string( nvbio::plain_view( h_string_storage ) );
 
-    stream_type h_string( h_base_stream );
-    stream_type h_bwt( h_bwt_stream );
+    uint32 cumFreq[4] = { 0, 0, 0, 0 };
 
     log_info(stderr, "\nbuffering bps... started\n");
     // read all files
     {
-        Writer writer( h_base_stream, counter.m_reads, seq_length );
+        Writer writer( nvbio::plain_view( h_string_storage ), counter.m_reads, seq_length );
 
         for (uint32 i = 0; i < n_inputs; ++i)
         {
@@ -285,6 +376,12 @@ int build(
         }
 
         save_bns( writer.m_bntseq, output_name );
+
+        // compute the cumulative symbol frequencies
+        cumFreq[0] = writer.m_freq[0];
+        cumFreq[1] = writer.m_freq[1] + cumFreq[0];
+        cumFreq[2] = writer.m_freq[2] + cumFreq[1];
+        cumFreq[3] = writer.m_freq[3] + cumFreq[2];
     }
     log_info(stderr, "buffering bps... done\n");
     {
@@ -292,93 +389,16 @@ int build(
         log_info(stderr, "  crc: %u\n", crc);
     }
 
-    // writing
-    if (pac_name)
-    {
-        log_info(stderr, "\nwriting \"%s\"... started\n", pac_name);
-
-        const uint32 bps_per_byte = 4u;
-        const uint64 seq_bytes    = (seq_length + bps_per_byte - 1u) / bps_per_byte;
-
-        //
-        // .pac file
-        //
-
-        FILE* output_file = fopen( pac_name, "wb" );
-        if (output_file == NULL)
-        {
-            log_error(stderr, "  could not open output file \"%s\"!\n", pac_name );
-            exit(1);
-        }
-
-        if (save_stream( output_file, seq_bytes, (uint8*)h_base_stream ) == false)
-        {
-            log_error(stderr, "  writing failed!\n");
-            exit(1);
-        }
-		// the following code makes the pac file size always (l_pac/4+1+1)
-        if (seq_length % 4 == 0)
-        {
-		    const uint8 ct = 0;
-		    fwrite( &ct, 1, 1, output_file );
-        }
-        {
-            const uint8 ct = seq_length % 4;
-	        fwrite( &ct, 1, 1, output_file );
-        }
-
-        fclose( output_file );
-
-        //
-        // .rpac file
-        //
-
-        output_file = fopen( rpac_name, "wb" );
-        if (output_file == NULL)
-        {
-            log_error(stderr, "  could not open output file \"%s\"!\n", rpac_name );
-            exit(1);
-        }
-
-        // reuse the bwt storage to build the reverse
-        uint32* h_rbase_stream = h_bwt_stream;
-        stream_type h_rstring( h_rbase_stream );
-
-        // reverse the string
-        for (uint32 i = 0; i < seq_length; ++i)
-            h_rstring[i] = h_string[ seq_length - i - 1u ];
-
-        if (save_stream( output_file, seq_bytes, (uint8*)h_rbase_stream ) == false)
-        {
-            log_error(stderr, "  writing failed!\n");
-            exit(1);
-        }
-		// the following code makes the pac file size always (l_pac/4+1+1)
-        if (seq_length % 4 == 0)
-        {
-		    const uint8 ct = 0;
-		    fwrite( &ct, 1, 1, output_file );
-        }
-        {
-            const uint8 ct = seq_length % 4;
-	        fwrite( &ct, 1, 1, output_file );
-        }
-
-        fclose( output_file );
-
-        log_info(stderr, "writing \"%s\"... done\n", pac_name);
-    }
-
     try
     {
         BWTParams params;
         uint32    primary;
 
-        thrust::device_vector<uint32> d_base_storage( h_base_storage );
-        thrust::device_vector<uint32> d_bwt_storage( seq_words );
+        thrust::device_vector<uint32> d_string_storage( h_string_storage );
+        thrust::device_vector<uint32> d_bwt_storage( seq_words+1 );
 
-        const_stream_type d_string( nvbio::plain_view( d_base_storage ) );
-              stream_type d_bwt( nvbio::plain_view( d_bwt_storage ) );
+        const_stream_type d_string( nvbio::plain_view( d_string_storage ) );
+              stream_type d_bwt(    nvbio::plain_view( d_bwt_storage ) );
 
         Timer timer;
 
@@ -407,53 +427,27 @@ int build(
         log_info(stderr, "building forward BWT... done: %um:%us\n", uint32(timer.seconds()/60), uint32(timer.seconds())%60);
         log_info(stderr, "  primary: %u\n", primary);
 
-        // save it to disk
+        // save everything to disk
         {
             // copy to the host
-            h_bwt_storage = d_bwt_storage;
-
-            const uint32 cumFreq[4] = { 0, 0, 0, 0 };
-            log_info(stderr, "\nwriting \"%s\"... started\n", bwt_name);
-            FILE* output_file = fopen( bwt_name, "wb" );
-            if (output_file == NULL)
+            thrust::copy( d_bwt_storage.begin(),
+                          d_bwt_storage.begin() + seq_words,
+                          h_bwt_storage.begin() );
             {
-                log_error(stderr, "  could not open output file \"%s\"!\n", bwt_name );
-                exit(1);
-            }
-            fwrite( &primary, sizeof(uint32), 1, output_file );
-            fwrite( cumFreq,  sizeof(uint32), 4, output_file );
-            if (save_stream( output_file, seq_words, h_bwt_stream ) == false)
-            {
-                log_error(stderr, "  writing failed!\n");
-                exit(1);
-            }
-            fclose( output_file );
-            log_info(stderr, "writing \"%s\"... done\n", bwt_name);
-        }
-        {
-            log_info(stderr, "\nwriting \"%s\"... started\n", sa_name);
-            FILE* output_file = fopen( sa_name, "wb" );
-            if (output_file == NULL)
-            {
-                log_error(stderr, "  could not open output file \"%s\"!\n", sa_name );
-                exit(1);
+                const_stream_type h_bwt( nvbio::plain_view( h_bwt_storage ) );
+                const uint32 crc = crcCalc( h_bwt.begin(), uint32(seq_length) );
+                log_info(stderr, "  crc: %u\n", crc);
             }
 
-            const uint32 L2[4] = { 0, 0, 0, 0 };
-
-            fwrite( &primary,       sizeof(uint32),     1u,         output_file );
-            fwrite( &L2,            sizeof(uint32),     4u,         output_file );
-            fwrite( &sa_intv,       sizeof(uint32),     1u,         output_file );
-            fwrite( &seq_length,    sizeof(uint32),     1u,         output_file );
-            fwrite( &h_ssa[1],      sizeof(uint32),     ssa_len-1,  output_file );
-            fclose( output_file );
-            log_info(stderr, "writing \"%s\"... done\n", sa_name);
+            save_pac( seq_length, nvbio::plain_view( h_string_storage ),                           pac_name );
+            save_bwt( seq_length, seq_words, primary, cumFreq, nvbio::plain_view( h_bwt_storage ), bwt_name );
+            save_ssa( seq_length, sa_intv, ssa_len, primary, cumFreq, nvbio::plain_view( h_ssa ),  sa_name );
         }
 
-        // reverse the string in h_base_storage
+        // reverse the string in h_string_storage
         {
             // reuse the bwt storage to build the reverse
-            uint32* h_rbase_stream = h_bwt_stream;
+            uint32* h_rbase_stream = nvbio::plain_view( h_bwt_storage );
             stream_type h_rstring( h_rbase_stream );
 
             // reverse the string
@@ -461,11 +455,11 @@ int build(
                 h_rstring[i] = h_string[ seq_length - i - 1u ];
 
             // and now swap the vectors
-            h_bwt_storage.swap( h_base_storage );
-            std::swap( h_base_stream, h_bwt_stream );
+            h_bwt_storage.swap( h_string_storage );
+            h_string = stream_type( nvbio::plain_view( h_string_storage ) );
 
             // and copy back the new string to the device
-            d_base_storage = h_base_storage;
+            d_string_storage = h_string_storage;
         }
 
         log_info(stderr, "\nbuilding reverse BWT... started\n");
@@ -493,47 +487,21 @@ int build(
         log_info(stderr, "building reverse BWT... done: %um:%us\n", uint32(timer.seconds()/60), uint32(timer.seconds())%60);
         log_info(stderr, "  primary: %u\n", primary);
 
-        // save it to disk
+        // save everything to disk
         {
             // copy to the host
-            h_bwt_storage = d_bwt_storage;
-
-            const uint32 cumFreq[4] = { 0, 0, 0, 0 };
-            log_info(stderr, "\nwriting \"%s\"... started\n", rbwt_name);
-            FILE* output_file = fopen( rbwt_name, "wb" );
-            if (output_file == NULL)
+            thrust::copy( d_bwt_storage.begin(),
+                          d_bwt_storage.begin() + seq_words,
+                          h_bwt_storage.begin() );
             {
-                log_error(stderr, "  could not open output file \"%s\"!\n", rbwt_name );
-                exit(1);
-            }
-            fwrite( &primary, sizeof(uint32), 1, output_file );
-            fwrite( cumFreq,  sizeof(uint32), 4, output_file );
-            if (save_stream( output_file, seq_words, h_bwt_stream ) == false)
-            {
-                log_error(stderr, "  writing failed!\n");
-                exit(1);
-            }
-            fclose( output_file );
-            log_info(stderr, "writing \"%s\"... done\n", rbwt_name);
-        }
-        {
-            log_info(stderr, "\nwriting \"%s\"... started\n", rsa_name);
-            FILE* output_file = fopen( rsa_name, "wb" );
-            if (output_file == NULL)
-            {
-                log_error(stderr, "  could not open output file \"%s\"!\n", rsa_name );
-                exit(1);
+                const_stream_type h_bwt( nvbio::plain_view( h_bwt_storage ) );
+                const uint32 crc = crcCalc( h_bwt.begin(), uint32(seq_length) );
+                log_info(stderr, "  crc: %u\n", crc);
             }
 
-            const uint32 L2[4] = { 0, 0, 0, 0 };
-
-            fwrite( &primary,       sizeof(uint32),     1u,         output_file );
-            fwrite( &L2,            sizeof(uint32),     4u,         output_file );
-            fwrite( &sa_intv,       sizeof(uint32),     1u,         output_file );
-            fwrite( &seq_length,    sizeof(uint32),     1u,         output_file );
-            fwrite( &h_ssa[1],      sizeof(uint32),     ssa_len-1,  output_file );
-            fclose( output_file );
-            log_info(stderr, "writing \"%s\"... done\n", rsa_name);
+            save_pac( seq_length, nvbio::plain_view( h_string_storage ),                           rpac_name );
+            save_bwt( seq_length, seq_words, primary, cumFreq, nvbio::plain_view( h_bwt_storage ), rbwt_name );
+            save_ssa( seq_length, sa_intv, ssa_len, primary, cumFreq, nvbio::plain_view( h_ssa ),  rsa_name );
         }
     }
     catch (...)

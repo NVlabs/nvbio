@@ -33,6 +33,7 @@
 #include <vector>
 #include <algorithm>
 #ifdef _OPENMP
+#include <crc/crc.h>
 #include <omp.h>
 #endif
 
@@ -46,9 +47,6 @@
 #include <nvbio/fmindex/dna.h>
 #include <nvbio/fmindex/bwt.h>
 #include <thrust/device_vector.h>
-
-// crc init
-void crcInit();
 
 namespace nvbio {
 
@@ -144,6 +142,11 @@ int sufsort_test(int argc, char* argv[])
         else if (strcmp( argv[i], "-no-output" ) == 0)
         {
             store_output = false;
+        }
+        else if ((strcmp( argv[i], "-genome" ) == 0) ||
+                 (strcmp( argv[i], "-index" )  == 0))
+        {
+            index_name = argv[++i];
         }
         else if (strcmp( argv[i], "-tests" ) == 0)
         {
@@ -513,6 +516,11 @@ int sufsort_test(int argc, char* argv[])
 
         const uint32 primary_ref = cuda::find_primary( N_symbols, d_packed_string.begin() );
         log_info(stderr, "    primary: %u\n", primary_ref);
+        {
+            const_packed_stream_type h_packed_string( h_fmi.genome_stream() );
+            const uint32 crc = crcCalc( h_packed_string, N_symbols );
+            log_info(stderr, "    crc    : %u\n", crc);
+        }
 
         log_info(stderr, "  bwt... started\n");
 
@@ -554,6 +562,10 @@ int sufsort_test(int argc, char* argv[])
             }
         }
         log_info(stderr, "  testing correctness... done\n");
+        {
+            const uint32 crc = crcCalc( h_packed_bwt, N_symbols );
+            log_info(stderr, "    crc: %u\n", crc);
+        }
     }
     if (TEST_MASK & kGPU_BWT)
     {

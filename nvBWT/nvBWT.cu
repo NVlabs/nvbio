@@ -219,7 +219,7 @@ bool save_stream(FILE* output_file, const uint64 seq_words, const StreamType* st
 void save_pac(const uint32 seq_length, const uint32* string_storage, const char* pac_name)
 {
     typedef io::FMIndexData::stream_type                stream_type;
-    typedef PackedStream<uint8*,uint8,2,true>       pac_stream_type;
+    typedef PackedStream<uint8*,uint8,2,true,int64> pac_stream_type;
 
     log_info(stderr, "\nwriting \"%s\"... started\n", pac_name);
 

@@ -362,7 +362,8 @@ int build(
     const char*  sa_name,
     const char*  rsa_name,
     const uint64 max_length,
-    const PacType pac_type)
+    const PacType pac_type,
+    const bool    compute_crc)
 {
     std::vector<std::string> sortednames;
     list_files(input_name, sortednames);
@@ -449,6 +450,8 @@ int build(
         }
     }
     log_info(stderr, "buffering bps... done\n");
+
+    if (compute_crc)
     {
         const uint32 crc = crcCalc( h_string.begin(), uint32(seq_length) );
         log_info(stderr, "  crc: %u\n", crc);
@@ -498,6 +501,8 @@ int build(
             thrust::copy( d_bwt_storage.begin(),
                           d_bwt_storage.begin() + seq_words,
                           h_bwt_storage.begin() );
+
+            if (compute_crc)
             {
                 const_stream_type h_bwt( nvbio::plain_view( h_bwt_storage ) );
                 const uint32 crc = crcCalc( h_bwt.begin(), uint32(seq_length) );
@@ -558,6 +563,8 @@ int build(
             thrust::copy( d_bwt_storage.begin(),
                           d_bwt_storage.begin() + seq_words,
                           h_bwt_storage.begin() );
+
+            if (compute_crc)
             {
                 const_stream_type h_bwt( nvbio::plain_view( h_bwt_storage ) );
                 const uint32 crc = crcCalc( h_bwt.begin(), uint32(seq_length) );
@@ -621,33 +628,50 @@ int main(int argc, char* argv[])
         log_info(stderr, "please specify input and output file names, e.g:\n");
         log_info(stderr, "  nvBWT [options] myinput.*.fa output-prefix\n");
         log_info(stderr, "  options:\n");
+        log_info(stderr, "    -v     verbosity\n");
         log_info(stderr, "    -m     max_length\n");
         log_info(stderr, "    -b     byte packing\n");
         log_info(stderr, "    -w     word packing\n");
+        log_info(stderr, "    -crc   compute crcs\n");
         exit(0);
     }
 
     const char* file_names[2] = { NULL, NULL };
     uint64  max_length = uint64(-1);
     PacType pac_type = BPAC;
+    bool    crc      = false;
 
     uint32 n_files = 0;
     for (int32 i = 1; i < argc; ++i)
     {
         const char* arg = argv[i];
 
-        if (strcmp( arg, "-m" ) == 0)
+        if ((strcmp( arg, "-m" )                    == 0) ||
+            (strcmp( arg, "--max-length" )          == 0))
         {
             max_length = atoi( argv[i+1] );
             ++i;
         }
-        else if (strcmp( arg, "-b" ) == 0)
+        else if ((strcmp( argv[i], "-v" )           == 0) ||
+                 (strcmp( argv[i], "-verbosity" )   == 0) ||
+                 (strcmp( argv[i], "--verbosity" )  == 0))
+        {
+            set_verbosity( Verbosity( atoi( argv[++i] ) ) );
+        }
+        else if ((strcmp( arg, "-b" )               == 0) ||
+                 (strcmp( arg, "--byte-packing" )   == 0))
         {
             pac_type = BPAC;
         }
-        else if (strcmp( arg, "-w" ) == 0)
+        else if ((strcmp( arg, "-w" )               == 0) ||
+                 (strcmp( arg, "--word-packing" )   == 0))
         {
             pac_type = WPAC;
+        }
+        else if ((strcmp( arg, "-c" )               == 0) ||
+                 (strcmp( arg, "--crc" )            == 0))
+        {
+            crc = true;
         }
         else
             file_names[ n_files++ ] = argv[i];
@@ -676,6 +700,6 @@ int main(int argc, char* argv[])
     cudaMemGetInfo(&free, &total);
     NVBIO_CUDA_DEBUG_STATEMENT( log_info(stderr,"device mem : total: %.1f GB, free: %.1f GB\n", float(total)/float(1024*1024*1024), float(free)/float(1024*1024*1024)) );
 
-    return build( input_name, output_name, pac_name, rpac_name, bwt_name, rbwt_name, sa_name, rsa_name, max_length, pac_type );
+    return build( input_name, output_name, pac_name, rpac_name, bwt_name, rbwt_name, sa_name, rsa_name, max_length, pac_type, crc );
 }
 

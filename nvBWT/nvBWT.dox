@@ -62,3 +62,17 @@
 ///
 /// <img src="benchmark-bwt.png" style="position:relative; bottom:-10px; border:0px;" width="80%" height="80%"/>
 ///
+///\section OptionsSection Options
+///\par
+/// nvBWT supports the following command options:
+///
+///\verbatim
+///   nvBWT [options] input_file output-prefix
+///   options:
+///    -v       | --verbosity     int (0-6) [5]
+///    -m       | --max-length    int       [inf]   // clamp input length
+///    -b       | --byte-packing                    // output a byte-encoded .pac file
+///    -w       | --word-packing                    // output a word-encoded .wpac file (more efficient)
+///    -c       | --crc                             // compute CRCs
+///\endverbatim
+///

@@ -38,6 +38,7 @@
 #include <algorithm>
 #include <crc/crc.h>
 #include <nvbio/basic/console.h>
+#include <nvbio/basic/exceptions.h>
 #include <nvbio/basic/bnt.h>
 #include <nvbio/basic/numbers.h>
 #include <nvbio/basic/timer.h>
@@ -568,9 +569,44 @@ int build(
             save_ssa( seq_length, sa_intv, ssa_len, primary, cumFreq, nvbio::plain_view( h_ssa ),  rsa_name );
         }
     }
+    catch (nvbio::cuda_error e)
+    {
+        log_error(stderr, "caught a nvbio::cuda_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::bad_alloc e)
+    {
+        log_error(stderr, "caught a nvbio::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::logic_error e)
+    {
+        log_error(stderr, "caught a nvbio::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::runtime_error e)
+    {
+        log_error(stderr, "caught a nvbio::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::bad_alloc e)
+    {
+        log_error(stderr, "caught a std::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::logic_error e)
+    {
+        log_error(stderr, "caught a std::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::runtime_error e)
+    {
+        log_error(stderr, "caught a std::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
     catch (...)
     {
-        log_info(stderr,"error: unknown exception!\n");
+        log_error(stderr,"unknown exception caught!\n");
         exit(1);
     }
     return 0;

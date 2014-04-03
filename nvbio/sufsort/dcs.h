@@ -154,13 +154,13 @@ struct DCS
 
     /// constructor
     ///
-    template <uint32 Q>
+    template <uint32 QT>
     void init();
 
     /// estimate sample size
     ///
-    template <uint32 Q>
-    static uint32 estimated_sample_size(const uint64 string_len) { return (string_len * DCTable<Q>::N) / Q + 1u; }
+    template <uint32 QT>
+    static uint32 estimated_sample_size(const uint64 string_len) { return (string_len * DCTable<QT>::N) / QT + 1u; }
 
     /// estimate sample size
     ///

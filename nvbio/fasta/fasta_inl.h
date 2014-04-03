@@ -35,14 +35,17 @@ inline
 FASTA_inc_reader::FASTA_inc_reader(const char* filename, const uint32 buffer_size)
     : m_buffer( buffer_size ), m_buffer_size( 0 ), m_buffer_pos( 0 )
 {
-    m_file = fopen( filename, "r" );
+    m_file = gzopen( filename, "r" );
+    if (m_file)
+        gzbuffer( m_file, buffer_size );
 }
 // destructor
 //
 inline
 FASTA_inc_reader::~FASTA_inc_reader()
 {
-    fclose( m_file );
+    if (m_file)
+        gzclose( m_file );
 }
 
 // read a batch of bp reads
@@ -121,7 +124,7 @@ uint8 FASTA_inc_reader::get()
 {
     if (m_buffer_pos >= m_buffer_size)
     {
-        m_buffer_size = uint32( fread( &m_buffer[0], sizeof(uint8), m_buffer.size(), m_file ) );
+        m_buffer_size = uint32( gzread( m_file, &m_buffer[0], m_buffer.size() ) );
         m_buffer_pos  = 0;
     }
     return (m_buffer_pos < m_buffer_size) ? m_buffer[ m_buffer_pos++ ] : 255u;
@@ -133,7 +136,9 @@ inline
 FASTA_reader::FASTA_reader(const char* filename, const uint32 buffer_size)
     : m_buffer( buffer_size ), m_buffer_size( 0 ), m_buffer_pos( 0 )
 {
-    m_file = fopen( filename, "r" );
+    m_file = gzopen( filename, "r" );
+    if (m_file)
+        gzbuffer( m_file, buffer_size );
 }
 
 // destructor
@@ -141,7 +146,8 @@ FASTA_reader::FASTA_reader(const char* filename, const uint32 buffer_size)
 inline
 FASTA_reader::~FASTA_reader()
 {
-    fclose( m_file );
+    if (m_file)
+        gzclose( m_file );
 }
 
 // read a batch of bp reads
@@ -224,7 +230,7 @@ uint8 FASTA_reader::get()
 {
     if (m_buffer_pos >= m_buffer_size)
     {
-        m_buffer_size = uint32( fread( &m_buffer[0], sizeof(uint8), m_buffer.size(), m_file ) );
+        m_buffer_size = uint32( gzread( m_file, &m_buffer[0], m_buffer.size() ) );
         m_buffer_pos  = 0;
     }
     return (m_buffer_pos < m_buffer_size) ? m_buffer[ m_buffer_pos++ ] : 255u;

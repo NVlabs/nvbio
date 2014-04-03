@@ -70,7 +70,7 @@ void blockwise_suffix_sort(
     NVBIO_VAR_UNUSED const uint32 DOLLAR_BITS    = 4;
     NVBIO_VAR_UNUSED const uint32 WORD_BITS      = uint32( 8u * sizeof(uint32) );
 
-    const uint32     M = 256*1024;
+    const uint32     M = 1024*1024;     // requires M * 16 device memory bytes
     const index_type N = n_suffixes;
 
     const uint32 n_chunks = (n_suffixes + M-1) / M;

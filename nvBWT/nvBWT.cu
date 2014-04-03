@@ -672,6 +672,10 @@ int main(int argc, char* argv[])
     log_info(stderr, "input      : \"%s\"\n", input_name);
     log_info(stderr, "output     : \"%s\"\n", output_name);
 
+    size_t free, total;
+    cudaMemGetInfo(&free, &total);
+    NVBIO_CUDA_DEBUG_STATEMENT( log_info(stderr,"device mem : total: %.1f GB, free: %.1f GB\n", float(total)/float(1024*1024*1024), float(free)/float(1024*1024*1024)) );
+
     return build( input_name, output_name, pac_name, rpac_name, bwt_name, rbwt_name, sa_name, rsa_name, max_length, pac_type );
 }
 

@@ -1890,7 +1890,6 @@ struct StringSuffixBucketer
     thrust::device_vector<uint32>       d_indices;
     thrust::device_vector<word_type>    d_radices;
     thrust::device_vector<uint32>       d_buckets;
-    thrust::device_vector<uint32>       d_output;
     thrust::device_vector<uint8>        d_temp_storage;
     float                               d_setup_time;
     float                               d_flatten_time;

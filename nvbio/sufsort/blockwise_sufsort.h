@@ -327,7 +327,7 @@ void blockwise_suffix_sort(
             delay_list.set_offset( global_suffix_offset + suffix_count );
 
             const uint32 min_delay_pass = dcs == NULL ? 16u   : nvbio::max( util::divide_ri( dcs->Q, SYMBOLS_PER_WORD ), 8u );
-            const uint32 max_delay_pass = dcs == NULL ? 1000u : nvbio::max( util::divide_ri( dcs->Q, SYMBOLS_PER_WORD ), 8u );
+            const uint32 max_delay_pass = dcs == NULL ? 1000u : nvbio::max( util::divide_ri( dcs->Q, SYMBOLS_PER_WORD ), 24u );
 
             compression_sort.sort(
                 string_len,                     // the main string length

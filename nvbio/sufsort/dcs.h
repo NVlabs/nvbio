@@ -37,17 +37,82 @@
 
 namespace nvbio {
 
+
+// Precomputed Difference Covers
+template <uint32 Q> struct DCTable {};
+
+// Precomputed DC-64
+template <> struct DCTable<64>
+{
+    static const uint32 N = 9;          // DC quorum
+
+    static const uint32* S()
+    {
+        static const uint32 dc[9] = { 1, 2, 3, 6, 15, 17, 35, 43, 60 };
+        return dc;
+    }
+};
+// Precomputed DC-128
+template <> struct DCTable<128>
+{
+    static const uint32 N = 16;         // DC quorum
+
+    static const uint32* S()
+    {
+        static const uint32 dc[16] = { 0, 1, 2, 5, 10, 15, 26, 37, 48, 59, 70, 76, 82, 88, 89, 90 };
+        return dc;
+    }
+};
+// Precomputed DC-256
+template <> struct DCTable<256>
+{
+    static const uint32 N = 22;         // DC quorum
+
+    static const uint32* S()
+    {
+        static const uint32 dc[22] = { 0, 1, 2, 3, 7, 14, 21, 28, 43, 58, 73, 88, 103, 118, 133, 141, 149, 157, 165, 166, 167, 168 };
+        return dc;
+    }
+};
+// Precomputed DC-512
+template <> struct DCTable<512>
+{
+    static const uint32 N = 28;         // DC quorum
+
+    static const uint32* S()
+    {
+        static const uint32 dc[28] = { 0, 1, 2, 3, 4, 9, 18, 27, 36, 45, 64, 83, 102, 121, 140, 159, 178, 197, 216, 226, 236, 246, 256, 266, 267, 268, 269, 270 };
+        return dc;
+    }
+};
+// Precomputed DC-1024
+template <> struct DCTable<1024>
+{
+    static const uint32 N = 40;         // DC quorum
+
+    static const uint32* S()
+    {
+        static const uint32 dc[40] = { 0, 1, 2, 3, 4, 5, 6, 13, 26, 39, 52, 65, 78, 91, 118, 145, 172, 199, 226, 253, 280, 307, 334, 361, 388, 415, 442, 456, 470, 484, 498, 512, 526, 540, 541, 542, 543, 544, 545, 546 };
+        return dc;
+    }
+};
+
+
 /// A data structure to hold a Difference Cover Sample
 ///
 struct DCSView
 {
     DCSView(
+        const uint32  _Q        = 0,
+        const uint32  _N        = 0,
         const uint32  _size     = 0,
               uint32* _dc       = NULL,
               uint32* _lut      = NULL,
               uint32* _pos      = NULL,
               uint8*  _bitmask  = NULL,
               uint32* _ranks    = NULL) :
+        Q       ( _Q ),
+        N       ( _N ),
         dc      ( _dc ),
         lut     ( _lut ),
         pos     ( _pos ),
@@ -61,6 +126,8 @@ struct DCSView
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint32 index(const uint32 i) const;
 
+    const uint32    Q;
+    const uint32    N;
     uint32*         dc;
     uint32*         lut;
     uint32*         pos;
@@ -73,14 +140,22 @@ struct DCSView
 ///
 struct DCS
 {
-    static const uint32 Q = 64;         // DC period
-    static const uint32 N = 9;          // DC quorum
-
-    typedef DCSView     plain_view_type;
+    typedef DCSView plain_view_type;
 
     /// constructor
     ///
-    DCS();
+    template <uint32 Q>
+    void init();
+
+    /// estimate sample size
+    ///
+    template <uint32 Q>
+    static uint32 estimated_sample_size(const uint64 string_len) { return (string_len * DCTable<Q>::N) / Q + 1u; }
+
+    uint32 estimate_sample_size(const uint64 string_len) const { return (string_len * N) / Q + 1u; }
+
+    uint32                        Q;            ///< difference cover period
+    uint32                        N;            ///< difference cover quorum
 
     thrust::device_vector<uint32> d_dc;         ///< difference cover table
     thrust::device_vector<uint32> d_lut;        ///< the (i,j) -> l LUT
@@ -94,6 +169,8 @@ struct DCS
 inline DCSView plain_view(DCS& dcs)
 {
     return DCSView(
+        dcs.Q,
+        dcs.N,
         uint32( dcs.d_ranks.size() ),
         nvbio::plain_view( dcs.d_dc ),
         nvbio::plain_view( dcs.d_lut ),
@@ -113,7 +190,6 @@ namespace priv {
 
 /// A functor to evaluate whether an index is in a Difference Cover Sample
 ///
-template <uint32 Q> // DC cover period
 struct DCS_predicate
 {
     typedef uint32 argument_type;
@@ -122,13 +198,14 @@ struct DCS_predicate
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    DCS_predicate(const uint8* _dc_bitmask) : dc_bitmask(_dc_bitmask) {}
+    DCS_predicate(const uint32 _Q, const uint8* _dc_bitmask) : Q(_Q), dc_bitmask(_dc_bitmask) {}
 
     /// return whether the given integer is the DC
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    result_type operator() (const uint32 suffix) const { return (dc_bitmask[ suffix % Q ] != 0); }
+    result_type operator() (const uint32 suffix) const { return (dc_bitmask[ suffix & (Q-1) ] != 0); }
 
+    const uint32 Q;
     const uint8* dc_bitmask;
 };
 
@@ -177,6 +254,8 @@ struct DCS_string_suffix_less
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     result_type operator() (const uint64 suffix_idx1, const uint64 suffix_idx2) const
     {
+        const uint32 Q = dcs.Q;
+
       //#define DCS_CHECKS
       #if defined(DCS_CHECKS)
         const string_suffix_less<SYMBOL_SIZE,string_type> less( string_len, string );
@@ -189,7 +268,7 @@ struct DCS_string_suffix_less
 
         const uint32 suffix_len1 = string_len - suffix_idx1;
         const uint32 suffix_len2 = string_len - suffix_idx2;
-        const uint32 q_words = (DCS::Q + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
+        const uint32 q_words = (Q + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
         const uint32 n_words = nvbio::min(
             uint32( nvbio::min(
                 suffix_len1,
@@ -208,8 +287,8 @@ struct DCS_string_suffix_less
         }
 
         // check whether the suffixes are shorter than Q - this should never happen...
-        if (suffix_len1 < DCS::Q ||
-            suffix_len2 < DCS::Q)
+        if (suffix_len1 < Q ||
+            suffix_len2 < Q)
         {
             #if defined(DCS_CHECKS)
             const bool r2 = suffix_len1 < suffix_len2;
@@ -222,11 +301,11 @@ struct DCS_string_suffix_less
 
         // compare the DCS ranks
         {
-            const uint32 i_mod_Q = suffix_idx1 % DCS::Q;
-            const uint32 j_mod_Q = suffix_idx2 % DCS::Q;
+            const uint32 i_mod_Q = suffix_idx1 & (Q-1);
+            const uint32 j_mod_Q = suffix_idx2 & (Q-1);
 
             // lookup the smallest number l such that (i + l) and (j + l) are in the DCS
-            const uint32 l = dcs.lut[ i_mod_Q * DCS::Q + j_mod_Q ];
+            const uint32 l = dcs.lut[ i_mod_Q * Q + j_mod_Q ];
 
             // by construction (suffix_idx1 + l) and (suffix_idx2 + l) are both in the DCS,
             // we just need to find exactly where...

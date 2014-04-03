@@ -29,6 +29,53 @@
 
 namespace nvbio {
 
+///
+/// Routune for calculating the elements of a difference cover using the
+/// technique of Colbourn and Ling.
+///
+/// See http://citeseer.ist.psu.edu/211575.html
+///
+/// \param  r           the r parameter, determining the DC size as in Corollary 2.3
+/// \param  samples     output vector of DC samples
+///
+inline
+void calculateColbournAndLingDC(const uint32 r, uint32& maxv, std::vector<uint32>& samples)
+{
+	maxv = 24*r*r + 36*r + 13; // Corollary 2.3
+
+    uint32 numsamp = 6*r + 4;
+
+    // allocate enough storage
+    samples.resize( numsamp );
+
+    // initialize samples to 0
+    for (uint32 i = 0; i < numsamp; ++i)
+        samples[i] = 0;
+
+	// fill in the 1^r part of the B series
+	for (uint32 i = 1; i < r+1; i++)
+		samples[i] = samples[i-1] + 1;
+
+	// fill in the (r + 1)^1 part
+	samples[r+1] = samples[r] + r + 1;
+
+    // fill in the (2r + 1)^r part
+	for (uint32 i = r+2; i < r+2+r; i++)
+		samples[i] = samples[i-1] + 2*r + 1;
+
+    // fill in the (4r + 3)^(2r + 1) part
+	for (uint32 i = r+2+r; i < r+2+r+2*r+1; i++)
+		samples[i] = samples[i-1] + 4*r + 3;
+
+    // fill in the (2r + 2)^(r + 1) part
+	for (uint32 i = r+2+r+2*r+1; i < r+2+r+2*r+1+r+1; i++)
+		samples[i] = samples[i-1] + 2*r + 2;
+
+	// fill in the last 1^r part
+	for (uint32 i = r+2+r+2*r+1+r+1; i < r+2+r+2*r+1+r+1+r; i++)
+		samples[i] = samples[i-1] + 1;
+}
+
 // a utility SuffixHandler to rank the sorted suffixes
 //
 struct DCSSuffixRanker
@@ -72,8 +119,8 @@ struct DCSSuffixRanker
             thrust::device_ptr<uint32>( dcs.ranks ) );
     }
 
-    const DCSView   dcs;
-    uint32          n_output;
+    const DCSView dcs;
+    uint32        n_output;
 };
 
 // return the sampled position of a given suffix index
@@ -81,19 +128,22 @@ struct DCSSuffixRanker
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 uint32 DCSView::index(const uint32 i) const
 {
-    const uint32 block_i = i / DCS::Q;
-    const uint32 mod_i   = i % DCS::Q;
+    const uint32 block_i = i / Q;
+    const uint32 mod_i   = i & (Q-1);
 
-    return block_i * DCS::N + pos[ mod_i ];
+    return block_i * N + pos[ mod_i ];
 }
 
 // constructor
 //
-inline DCS::DCS()
+template <uint32 QT>
+void DCS::init()
 {
     // build a table for our Difference Cover
-    //const uint32 h_dc[]  = { 1, 2, 3, 6, 13, 28, 37, 39, 45, 53, 66, 94 };   // q = 111
-    const uint32  h_dc[] = { 1, 2, 3, 6, 15, 17, 35, 43, 60 };                // q = 64
+    const uint32* h_dc = DCTable<QT>::S();
+
+    Q = QT;
+    N = DCTable<QT>::N;
 
     thrust::host_vector<uint8>    h_bitmask( Q, 0u );
     thrust::host_vector<uint32>   h_lut( Q*Q, 0u );
@@ -120,8 +170,8 @@ inline DCS::DCS()
         {
             for (uint32 l = 0; l < Q; ++l)
             {
-                if (h_bitmask[ (i + l) % Q ] &&
-                    h_bitmask[ (j + l) % Q ])
+                if (h_bitmask[ (i + l) & (Q-1) ] &&
+                    h_bitmask[ (j + l) & (Q-1) ])
                 {
                     h_lut[ i * Q + j ] = l;
                     break;

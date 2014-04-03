@@ -300,8 +300,8 @@ void blockwise_suffix_sort(
         #if defined(COMPRESSION_SORTING)
             delay_list.set_offset( global_suffix_offset + suffix_count );
 
-            const uint32 min_delay_pass = dcs == NULL ? 16u   : nvbio::max( util::divide_ri( DCS::Q, SYMBOLS_PER_WORD ), 8u );
-            const uint32 max_delay_pass = dcs == NULL ? 1000u : nvbio::max( util::divide_ri( DCS::Q, SYMBOLS_PER_WORD ), 8u );
+            const uint32 min_delay_pass = dcs == NULL ? 16u   : nvbio::max( util::divide_ri( dcs->Q, SYMBOLS_PER_WORD ), 8u );
+            const uint32 max_delay_pass = dcs == NULL ? 1000u : nvbio::max( util::divide_ri( dcs->Q, SYMBOLS_PER_WORD ), 8u );
 
             compression_sort.sort(
                 string_len,                     // the main string length
@@ -430,7 +430,7 @@ void blockwise_build(
     typedef typename string_type::index_type index_type;
 
     // build the list of DC sample suffixes
-    const uint32 estimated_sample_size = (uint64( string_len ) * DCS::N) / DCS::Q + 1u;
+    const uint32 estimated_sample_size = dcs.estimate_sample_size( string_len );
     thrust::device_vector<uint32> d_sample( estimated_sample_size );
     thrust::device_vector<uint8>  d_temp_storage;
 
@@ -443,7 +443,7 @@ void blockwise_build(
             block_begin + block_size,
             string_len );
 
-        const priv::DCS_predicate<DCS::Q> in_dcs( nvbio::plain_view( dcs.d_bitmask ) );
+        const priv::DCS_predicate in_dcs( dcs.Q, nvbio::plain_view( dcs.d_bitmask ) );
 
         sample_size += priv::copy_if(
             uint32( block_end - block_begin ),
@@ -454,7 +454,7 @@ void blockwise_build(
     }
 
     // alloc enough space for the DC ranks
-    dcs.d_ranks.resize( util::round_i( sample_size, DCS::N ), 0u );
+    dcs.d_ranks.resize( util::round_i( sample_size, dcs.N ), 0u );
 
     // and sort the corresponding suffixes
     DCSSuffixRanker ranker( nvbio::plain_view( dcs ) );

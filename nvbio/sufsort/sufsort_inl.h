@@ -180,10 +180,30 @@ void blockwise_suffix_sort(
 {
     typedef typename string_type::index_type index_type;
 
-    // build a table for our Difference Cover
-    log_verbose(stderr, "  building DCS... started\n");
+    // find a suitable Difference Cover...
+    const uint32 needed_bytes_64  = DCS::estimated_sample_size<64>( string_len ) * 8u;
+    const uint32 needed_bytes_128 = DCS::estimated_sample_size<128>( string_len ) * 8u;
+    const uint32 needed_bytes_256 = DCS::estimated_sample_size<256>( string_len ) * 8u;
+    const uint32 needed_bytes_512 = DCS::estimated_sample_size<512>( string_len ) * 8u;
+
+    size_t free, total;
+    cudaMemGetInfo(&free, &total);
 
     DCS dcs;
+
+    if (free >= 2*needed_bytes_64)
+        dcs.init<64>();
+    else if (free >= 2*needed_bytes_128)
+        dcs.init<128>();
+    else if (free >= 2*needed_bytes_256)
+        dcs.init<256>();
+    else if (free >= 2*needed_bytes_512)
+        dcs.init<512>();
+    else
+        dcs.init<1024>();
+
+    // build a table for our Difference Cover
+    log_verbose(stderr, "  building DCS-%u... started\n", dcs.Q);
 
     blockwise_build(
         dcs,
@@ -191,7 +211,7 @@ void blockwise_suffix_sort(
         string,
         params );
 
-    log_verbose(stderr, "  building DCS... done\n");
+    log_verbose(stderr, "  building DCS-%u... done\n", dcs.Q);
 
     // and do the Difference Cover based sorting
     log_verbose(stderr, "  DCS-based sorting... started\n");

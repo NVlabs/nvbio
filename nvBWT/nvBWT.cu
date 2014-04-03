@@ -628,18 +628,20 @@ int main(int argc, char* argv[])
         log_info(stderr, "please specify input and output file names, e.g:\n");
         log_info(stderr, "  nvBWT [options] myinput.*.fa output-prefix\n");
         log_info(stderr, "  options:\n");
-        log_info(stderr, "    -v     verbosity\n");
-        log_info(stderr, "    -m     max_length\n");
-        log_info(stderr, "    -b     byte packing\n");
-        log_info(stderr, "    -w     word packing\n");
-        log_info(stderr, "    -crc   compute crcs\n");
+        log_info(stderr, "    -v | --verbosity      select verbosity\n");
+        log_info(stderr, "    -m | --max-length     clamp input to max_length\n");
+        log_info(stderr, "    -b | --byte-packing   output byte packed .pac\n");
+        log_info(stderr, "    -w | --word-packing   output word packed .wpac\n");
+        log_info(stderr, "    -c | --crc            compute crcs\n");
+        log_info(stderr, "    -d | --device         cuda device\n");
         exit(0);
     }
 
     const char* file_names[2] = { NULL, NULL };
-    uint64  max_length = uint64(-1);
-    PacType pac_type = BPAC;
-    bool    crc      = false;
+    uint64  max_length  = uint64(-1);
+    PacType pac_type    = BPAC;
+    bool    crc         = false;
+    int     cuda_device = -1;
 
     uint32 n_files = 0;
     for (int32 i = 1; i < argc; ++i)
@@ -649,8 +651,7 @@ int main(int argc, char* argv[])
         if ((strcmp( arg, "-m" )                    == 0) ||
             (strcmp( arg, "--max-length" )          == 0))
         {
-            max_length = atoi( argv[i+1] );
-            ++i;
+            max_length = atoi( argv[++i] );
         }
         else if ((strcmp( argv[i], "-v" )           == 0) ||
                  (strcmp( argv[i], "-verbosity" )   == 0) ||
@@ -672,6 +673,11 @@ int main(int argc, char* argv[])
                  (strcmp( arg, "--crc" )            == 0))
         {
             crc = true;
+        }
+        else if ((strcmp( arg, "-d" )               == 0) ||
+                 (strcmp( arg, "--device" )         == 0))
+        {
+            cuda_device = max_length = atoi( argv[++i] );
         }
         else
             file_names[ n_files++ ] = argv[i];
@@ -695,6 +701,47 @@ int main(int argc, char* argv[])
     log_info(stderr, "max length : %lld\n", max_length);
     log_info(stderr, "input      : \"%s\"\n", input_name);
     log_info(stderr, "output     : \"%s\"\n", output_name);
+
+    int device_count;
+    cudaGetDeviceCount(&device_count);
+    log_verbose(stderr, "  cuda devices : %d\n", device_count);
+
+    // inspect and select cuda devices
+    if (device_count)
+    {
+        if (cuda_device == -1)
+        {
+            int            best_device = 0;
+            cudaDeviceProp best_device_prop;
+            cudaGetDeviceProperties( &best_device_prop, best_device );
+
+            for (int device = 0; device < device_count; ++device)
+            {
+                cudaDeviceProp device_prop;
+                cudaGetDeviceProperties( &device_prop, device );
+                log_verbose(stderr, "  device %d has compute capability %d.%d\n", device, device_prop.major, device_prop.minor);
+                log_verbose(stderr, "    SM count          : %u\n", device_prop.multiProcessorCount);
+                log_verbose(stderr, "    SM clock rate     : %u Mhz\n", device_prop.clockRate / 1000);
+                log_verbose(stderr, "    memory clock rate : %.1f Ghz\n", float(device_prop.memoryClockRate) * 1.0e-6f);
+
+                if (device_prop.major >= best_device_prop.major &&
+                    device_prop.minor >= best_device_prop.minor)
+                {
+                    best_device_prop = device_prop;
+                    best_device      = device;
+                }
+            }
+            cuda_device = best_device;
+        }
+        log_verbose(stderr, "  chosen device %d\n", cuda_device);
+        {
+            cudaDeviceProp device_prop;
+            cudaGetDeviceProperties( &device_prop, cuda_device );
+            log_verbose(stderr, "    device name        : %s\n", device_prop.name);
+            log_verbose(stderr, "    compute capability : %d.%d\n", device_prop.major, device_prop.minor);
+        }
+        cudaSetDevice( cuda_device );
+    }
 
     size_t free, total;
     cudaMemGetInfo(&free, &total);

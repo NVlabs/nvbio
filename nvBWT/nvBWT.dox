@@ -69,10 +69,11 @@
 ///\verbatim
 ///   nvBWT [options] input_file output-prefix
 ///   options:
-///    -v       | --verbosity     int (0-6) [5]
+///    -v       | --verbosity     int (0-6) [5]		// select the verbosity level
 ///    -m       | --max-length    int       [inf]   // clamp input length
 ///    -b       | --byte-packing                    // output a byte-encoded .pac file
 ///    -w       | --word-packing                    // output a word-encoded .wpac file (more efficient)
 ///    -c       | --crc                             // compute CRCs
+///    -d		| --device							// select a cuda device
 ///\endverbatim
 ///

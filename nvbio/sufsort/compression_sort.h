@@ -191,6 +191,20 @@ struct CompressionSort
         }
     }
 
+    /// return the amount of needed device memory
+    ///
+    static uint64 needed_device_memory(const uint32 n)
+    {
+        return
+            (n+4)   * sizeof(uint32) +
+            (n+4)   * sizeof(uint32) +
+            (n+4)   * sizeof(uint32) +
+            (n+4)   * sizeof(uint32) +
+            (n+32)  * sizeof(uint8) +
+            (n+32)  * sizeof(uint8) +
+            (n+32)  * sizeof(uint8);
+    }
+
     /// return the amount of used device memory
     ///
     uint64 allocated_device_memory() const

@@ -75,8 +75,7 @@ void blockwise_suffix_sort(
 
     const uint32 n_chunks = (n_suffixes + M-1) / M;
 
-    priv::StringSuffixBucketer<SYMBOL_SIZE,BUCKETING_BITS,DOLLAR_BITS> bucketer;
-
+    // check the amount of available device memory
     size_t free, total;
     cudaMemGetInfo(&free, &total);
 
@@ -88,15 +87,40 @@ void blockwise_suffix_sort(
             512*1024*1024 ),
         string_len );
 
-    const uint32 max_block_size = 32*1024*1024;                 // requires max_block_size*21 device memory bytes
-    const uint32 DELAY_BUFFER   = 1024*1024;
+    // determine the amount of available device memory
+    const uint64 max_device_memory = params ?
+        nvbio::min( uint64( free ), uint64( params->device_memory ) ) :
+                    uint64( free );
+
+    // determine the maximum block size
+    uint32 max_block_size    = 0;
+    uint32 needed_device_mem = 0;
+
+    // start from a work-optimal block size and progressively halve it until we fit our memory budget
+    for (max_block_size = 32*1024*1024; max_block_size >= 1024*1024; max_block_size /= 2)
+    {
+        const uint32 n_buckets = 1u << (BUCKETING_BITS);
+
+        // compute the amount of needed device memory
+        needed_device_mem = CompressionSort::needed_device_memory( max_block_size ) +   // CompressionSort requirements
+                            max_block_size*(sizeof(uint32)*3+sizeof(uint8))         +   // d_subbucket_suffixes + d_delayed_suffixes + d_delayed_slots + d_block_bwt
+                            n_buckets * sizeof(uint32) * 3                          +   // d_buckets + d_subbuckets + bucketer.d_buckets
+                            128*1024*1024;                                              // scraps
+
+        // check whether we fit in our budget
+        if (needed_device_mem <= max_device_memory)
+            break;
+    }
+
+    const uint32 DELAY_BUFFER = 1024*1024;
 
     NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  super-block-size: %.1f M\n", float(max_super_block_size)/float(1024*1024)) );
+    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"        block-size: %.1f M\n", float(max_block_size)/float(1024*1024)) );
     thrust::host_vector<uint32> h_super_suffixes( max_super_block_size, 0u );
     thrust::host_vector<uint32> h_block_suffixes( max_block_size );
     thrust::host_vector<uint32> h_block_radices( max_block_size );
 
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  device-alloc(%.1f GB)... started\n", float(max_block_size*21u)/float(1024*1024*1024)) );
+    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  device-alloc(%.1f GB)... started\n", float(needed_device_mem)/float(1024*1024*1024)) );
     NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    free: %.1f GB\n", float(free)/float(1024*1024*1024)) );
 
     thrust::device_vector<uint32> d_subbucket_suffixes( max_block_size );
@@ -118,7 +142,9 @@ void blockwise_suffix_sort(
     compression_sort.reserve( max_block_size );
   #endif
 
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  device-alloc(%.1f GB)... done\n", float(max_super_block_size*8u + max_block_size*16u)/float(1024*1024*1024)) );
+    priv::StringSuffixBucketer<SYMBOL_SIZE,BUCKETING_BITS,DOLLAR_BITS> bucketer;
+
+    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  device-alloc(%.1f GB)... done\n", float(needed_device_mem)/float(1024*1024*1024)) );
     NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  bucket counting\n") );
 
     // global bucket sizes

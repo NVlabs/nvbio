@@ -152,6 +152,8 @@ struct DCS
     template <uint32 Q>
     static uint32 estimated_sample_size(const uint64 string_len) { return (string_len * DCTable<Q>::N) / Q + 1u; }
 
+    /// estimate sample size
+    ///
     uint32 estimate_sample_size(const uint64 string_len) const { return (string_len * N) / Q + 1u; }
 
     uint32                        Q;            ///< difference cover period

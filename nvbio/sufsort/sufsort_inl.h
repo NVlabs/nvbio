@@ -181,10 +181,10 @@ void blockwise_suffix_sort(
     typedef typename string_type::index_type index_type;
 
     // find a suitable Difference Cover...
-    const uint32 needed_bytes_64  = DCS::estimated_sample_size<64>( string_len ) * 8u;
-    const uint32 needed_bytes_128 = DCS::estimated_sample_size<128>( string_len ) * 8u;
-    const uint32 needed_bytes_256 = DCS::estimated_sample_size<256>( string_len ) * 8u;
-    const uint32 needed_bytes_512 = DCS::estimated_sample_size<512>( string_len ) * 8u;
+    const size_t needed_bytes_64  = size_t( DCS::estimated_sample_size<64>( string_len ) ) * 8u;
+    const size_t needed_bytes_128 = size_t( DCS::estimated_sample_size<128>( string_len ) ) * 8u;
+    const size_t needed_bytes_256 = size_t( DCS::estimated_sample_size<256>( string_len ) ) * 8u;
+    const size_t needed_bytes_512 = size_t( DCS::estimated_sample_size<512>( string_len ) ) * 8u;
 
     size_t free, total;
     cudaMemGetInfo(&free, &total);

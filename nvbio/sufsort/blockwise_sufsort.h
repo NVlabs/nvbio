@@ -430,7 +430,9 @@ void blockwise_build(
     typedef typename string_type::index_type index_type;
 
     // build the list of DC sample suffixes
-    const uint32 estimated_sample_size = dcs.estimate_sample_size( string_len );
+    const index_type estimated_sample_size = index_type( dcs.estimate_sample_size( string_len ) );
+    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  allocating DCS: %.1f MB\n", float(size_t( estimated_sample_size )*8u)/float(1024*1024)) );
+
     thrust::device_vector<uint32> d_sample( estimated_sample_size );
     thrust::device_vector<uint8>  d_temp_storage;
 

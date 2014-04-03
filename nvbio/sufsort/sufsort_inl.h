@@ -181,10 +181,11 @@ void blockwise_suffix_sort(
     typedef typename string_type::index_type index_type;
 
     // find a suitable Difference Cover...
-    const size_t needed_bytes_64  = size_t( DCS::estimated_sample_size<64>( string_len ) ) * 8u;
-    const size_t needed_bytes_128 = size_t( DCS::estimated_sample_size<128>( string_len ) ) * 8u;
-    const size_t needed_bytes_256 = size_t( DCS::estimated_sample_size<256>( string_len ) ) * 8u;
-    const size_t needed_bytes_512 = size_t( DCS::estimated_sample_size<512>( string_len ) ) * 8u;
+    const size_t needed_bytes_64   = size_t( DCS::estimated_sample_size<64>( string_len ) ) * 8u;
+    const size_t needed_bytes_128  = size_t( DCS::estimated_sample_size<128>( string_len ) ) * 8u;
+    const size_t needed_bytes_256  = size_t( DCS::estimated_sample_size<256>( string_len ) ) * 8u;
+    const size_t needed_bytes_512  = size_t( DCS::estimated_sample_size<512>( string_len ) ) * 8u;
+    const size_t needed_bytes_1024 = size_t( DCS::estimated_sample_size<1024>( string_len ) ) * 8u;
 
     size_t free, total;
     cudaMemGetInfo(&free, &total);
@@ -199,8 +200,10 @@ void blockwise_suffix_sort(
         dcs.init<256>();
     else if (free >= 2*needed_bytes_512)
         dcs.init<512>();
-    else
+    else if (free >= 2*needed_bytes_1024)
         dcs.init<1024>();
+    else
+        dcs.init<2048>();
 
     // build a table for our Difference Cover
     log_verbose(stderr, "  building DCS-%u... started\n", dcs.Q);

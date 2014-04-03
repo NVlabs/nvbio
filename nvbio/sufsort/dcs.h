@@ -96,7 +96,17 @@ template <> struct DCTable<1024>
         return dc;
     }
 };
+// Precomputed DC-2048
+template <> struct DCTable<2048>
+{
+    static const uint32 N = 58;         // DC quorum
 
+    static const uint32* S()
+    {
+        static const uint32 dc[58] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 19, 38, 57, 76, 95, 114, 133, 152, 171, 190, 229, 268, 307, 346, 385, 424, 463, 502, 541, 580, 619, 658, 697, 736, 775, 814, 853, 892, 931, 951, 971, 991, 1011, 1031, 1051, 1071, 1091, 1111, 1131, 1132, 1133, 1134, 1135, 1136, 1137, 1138, 1139, 1140 };
+        return dc;
+    }
+};
 
 /// A data structure to hold a Difference Cover Sample
 ///

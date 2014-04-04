@@ -376,7 +376,7 @@ void CompressionSort::sort(
 
         // perform a scan to "compress" the keys in place, removing holes between them and reducing their entropy;
         // this operation will produce a 1-based vector of contiguous values of the kind (1, 1, 2, 3, 3, 3, ... )
-        priv::inclusive_scan(
+        cuda::inclusive_scan(
             n_active_suffixes,
             thrust::make_transform_iterator( d_segment_flags.begin(), priv::cast_functor<uint8,uint32>() ),
             d_keys.begin(),
@@ -427,7 +427,7 @@ void CompressionSort::sort(
             d_copy_flags.begin(),
             priv::remove_singletons() );
 
-        const uint32 n_partials = priv::reduce(
+        const uint32 n_partials = cuda::reduce(
             n_active_suffixes,
             thrust::make_transform_iterator( d_copy_flags.begin() + 1u, priv::cast_functor<uint8,uint32>() ),
             thrust::plus<uint32>(),
@@ -451,7 +451,7 @@ void CompressionSort::sort(
             thrust::device_vector<uint32>& d_temp_indices = d_keys;
 
             // now keep only the indices we are interested in
-            if (uint32 n_active = priv::copy_flagged(
+            if (uint32 n_active = cuda::copy_flagged(
                 n_active_suffixes,
                 d_indices.begin(),
                 d_copy_flags.begin() + 1u,
@@ -462,7 +462,7 @@ void CompressionSort::sort(
             d_indices.swap( d_temp_indices );
 
             // as well as their slots
-            if (uint32 n_active = priv::copy_flagged(
+            if (uint32 n_active = cuda::copy_flagged(
                 n_active_suffixes,
                 d_active_slots.begin(),
                 d_copy_flags.begin() + 1u,
@@ -473,7 +473,7 @@ void CompressionSort::sort(
             d_active_slots.swap( d_temp_indices );
 
             // and the segment flags
-            if (uint32 n_active = priv::copy_flagged(
+            if (uint32 n_active = cuda::copy_flagged(
                 n_active_suffixes,
                 d_segment_flags.begin(),
                 d_copy_flags.begin() + 1u,
@@ -690,7 +690,7 @@ void CompressionSort::sort(
 
                 // perform a scan to "compress" the keys in place, removing holes between them and reducing their entropy;
                 // this operation will produce a 1-based vector of contiguous values of the kind (1, 1, 2, 3, 3, 3, ... )
-                priv::inclusive_scan(
+                cuda::inclusive_scan(
                     n_active_strings,
                     thrust::make_transform_iterator( d_segment_flags.begin(), priv::cast_functor<uint8,uint32>() ),
                     d_keys.begin(),
@@ -758,7 +758,7 @@ void CompressionSort::sort(
                     priv::remove_singletons() );
 
 
-                const uint32 n_partials = priv::reduce(
+                const uint32 n_partials = cuda::reduce(
                     n_active_strings,
                     thrust::make_transform_iterator( d_copy_flags.begin() + 1u, priv::cast_functor<uint8,uint32>() ),
                     thrust::plus<uint32>(),
@@ -791,7 +791,7 @@ void CompressionSort::sort(
                     thrust::device_vector<uint32>& d_temp_indices = d_keys;
 
                     // now keep only the indices we are interested in
-                    priv::copy_flagged(
+                    cuda::copy_flagged(
                         n_active_strings,
                         d_indices.begin(),
                         d_copy_flags.begin() + 1u,
@@ -801,7 +801,7 @@ void CompressionSort::sort(
                     d_indices.swap( d_temp_indices );
 
                     // as well as their slots
-                    priv::copy_flagged(
+                    cuda::copy_flagged(
                         n_active_strings,
                         d_active_slots.begin(),
                         d_copy_flags.begin() + 1u,
@@ -811,7 +811,7 @@ void CompressionSort::sort(
                     d_active_slots.swap( d_temp_indices );
 
                     // and the segment flags
-                    priv::copy_flagged(
+                    cuda::copy_flagged(
                         n_active_strings,
                         d_segment_flags.begin(),
                         d_copy_flags.begin() + 1u,

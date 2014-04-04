@@ -473,7 +473,7 @@ void blockwise_build(
 
         const priv::DCS_predicate in_dcs( dcs.Q, nvbio::plain_view( dcs.d_bitmask ) );
 
-        sample_size += priv::copy_if(
+        sample_size += cuda::copy_if(
             uint32( block_end - block_begin ),
             thrust::make_counting_iterator<uint32>(0u) + block_begin,
             d_sample.begin() + sample_size,

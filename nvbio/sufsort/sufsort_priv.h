@@ -35,6 +35,7 @@
 #include <nvbio/basic/cuda/sort.h>
 #include <nvbio/basic/cuda/timer.h>
 #include <nvbio/basic/cuda/ldg.h>
+#include <nvbio/basic/cuda/primitives.h>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <thrust/adjacent_difference.h>
@@ -122,133 +123,6 @@ void alloc_storage(VectorType& vec, const uint64 size)
         }
     }
 }
-
-template <typename InputIterator, typename BinaryOp>
-typename std::iterator_traits<InputIterator>::value_type reduce(
-    const uint32                  n,
-    InputIterator                 d_in,
-    BinaryOp                      op,
-    thrust::device_vector<uint8>& d_temp_storage)
-{
-    typedef typename std::iterator_traits<InputIterator>::value_type value_type;
-
-    thrust::device_vector<value_type> d_out(1);
-
-    size_t temp_bytes = 0;
-
-    cub::DeviceReduce::Reduce(
-        (void*)NULL, temp_bytes,
-        d_in,
-        d_out.begin(),
-        int(n),
-        op );
-
-    temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
-    alloc_storage( d_temp_storage, temp_bytes );
-
-    cub::DeviceReduce::Reduce(
-        (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
-        d_in,
-        d_out.begin(),
-        int(n),
-        op );
-
-    return d_out[0];
-}
-
-template <typename InputIterator, typename OutputIterator, typename BinaryOp>
-void inclusive_scan(
-    const uint32                  n,
-    InputIterator                 d_in,
-    OutputIterator                d_out,
-    BinaryOp                      op,
-    thrust::device_vector<uint8>& d_temp_storage)
-{
-    size_t temp_bytes = 0;
-
-    cub::DeviceScan::InclusiveScan(
-        (void*)NULL, temp_bytes,
-        d_in,
-        d_out,
-        op,
-        int(n) );
-
-    temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
-    alloc_storage( d_temp_storage, temp_bytes );
-
-    cub::DeviceScan::InclusiveScan(
-        (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
-        d_in,
-        d_out,
-        op,
-        int(n) );
-}
-
-template <typename InputIterator, typename FlagsIterator, typename OutputIterator>
-uint32 copy_flagged(
-    const uint32                  n,
-    InputIterator                 d_in,
-    FlagsIterator                 d_flags,
-    OutputIterator                d_out,
-    thrust::device_vector<uint8>& d_temp_storage)
-{
-    size_t                         temp_bytes = 0;
-    thrust::device_vector<int>     d_num_selected(1);
-
-    cub::DeviceSelect::Flagged(
-        (void*)NULL, temp_bytes,
-        d_in,
-        d_flags,
-        d_out,
-        nvbio::plain_view( d_num_selected ),
-        int(n) );
-
-    temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
-    alloc_storage( d_temp_storage, temp_bytes );
-
-    cub::DeviceSelect::Flagged(
-        (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
-        d_in,
-        d_flags,
-        d_out,
-        nvbio::plain_view( d_num_selected ),
-        int(n) );
-
-    return uint32( d_num_selected[0] );
-};
-
-template <typename InputIterator, typename OutputIterator, typename Predicate>
-uint32 copy_if(
-    const uint32                  n,
-    InputIterator                 d_in,
-    OutputIterator                d_out,
-    const Predicate               pred,
-    thrust::device_vector<uint8>& d_temp_storage)
-{
-    size_t                         temp_bytes = 0;
-    thrust::device_vector<int>     d_num_selected(1);
-
-    cub::DeviceSelect::If(
-        (void*)NULL, temp_bytes,
-        d_in,
-        d_out,
-        nvbio::plain_view( d_num_selected ),
-        int(n),
-        pred );
-
-    temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
-    alloc_storage( d_temp_storage, temp_bytes );
-
-    cub::DeviceSelect::If(
-        (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
-        d_in,
-        d_out,
-        nvbio::plain_view( d_num_selected ),
-        int(n),
-        pred );
-
-    return uint32( d_num_selected[0] );
-};
 
 /// set the last n bits to 0
 ///
@@ -1173,7 +1047,7 @@ struct SetSuffixFlattener
         // building the map: (global suffix index -> string index)
         alloc_storage( cum_lengths, n );
 
-        priv::inclusive_scan(
+        cuda::inclusive_scan(
             n,
             thrust::make_transform_iterator( thrust::make_counting_iterator(0u), length_functor<string_set_type>( string_set, empty_suffixes ) ),
             cum_lengths.begin(),
@@ -1235,7 +1109,7 @@ struct SetSuffixFlattener
         const string_set_type&  string_set, const bool empty_suffixes = true)
     {
         // compute the maximum string length in the set
-        return reduce(
+        return cuda::reduce(
             uint32( string_set.size() ),
             thrust::make_transform_iterator(
                 thrust::make_counting_iterator<uint32>(0u),
@@ -1255,7 +1129,7 @@ struct SetSuffixFlattener
         // TODO: this function is conservative, in the sense it returns the maximum *string* length;
         // however, each suffix might be shorter than the string it belongs to.
         return indices_end <= indices_begin ? 0u :
-            reduce(
+            cuda::reduce(
                 indices_end - indices_begin,
                 thrust::make_transform_iterator(
                     thrust::make_permutation_iterator( string_ids.begin(), indices_begin ),
@@ -1446,7 +1320,7 @@ struct SetSuffixBucketer
         const priv::in_range_functor in_range = priv::in_range_functor( bucket_begin, bucket_end );
 
         // retain only suffixes whose radix is between the specified buckets
-        const uint32 n_collected = copy_flagged(
+        const uint32 n_collected = cuda::copy_flagged(
             n_suffixes,
             thrust::make_zip_iterator( thrust::make_tuple( thrust::make_counting_iterator<uint32>(0u), d_radices.begin() ) ),
             thrust::make_transform_iterator( d_radices.begin(), in_range ),
@@ -1816,7 +1690,7 @@ struct StringSuffixBucketer
         const priv::in_range_functor in_range = priv::in_range_functor( bucket_begin, bucket_end );
 
         // retain only suffixes whose radix is between the specified buckets
-        const uint32 n_collected = copy_flagged(
+        const uint32 n_collected = cuda::copy_flagged(
             n_suffixes,
             thrust::make_zip_iterator( thrust::make_tuple( suffixes, d_radices.begin() ) ),
             thrust::make_transform_iterator( d_radices.begin(), in_range ),

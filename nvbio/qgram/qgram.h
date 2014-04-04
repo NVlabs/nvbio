@@ -67,7 +67,7 @@
 namespace nvbio {
 
 ///
-///@defgroup QGramIndex QGramIndex Module
+///@defgroup QGramIndex Q-Gram Index Module
 /// This module contains a series of classes and functions to build a compact Q-Gram Index over
 /// a string T, with memory consumption and query time proportional to O(unique(T)) and O(log(unique(T))) respectively,
 /// where unique(T) is the number of unique q-grams in T.

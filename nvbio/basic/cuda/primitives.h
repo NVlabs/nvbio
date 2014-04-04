@@ -276,6 +276,52 @@ uint32 copy_if(
     return uint32( d_num_selected[0] );
 };
 
+/// device-wide run-length encode
+///
+/// \param n                    number of input items
+/// \param d_in                 a device input iterator
+/// \param d_out                a device output iterator
+/// \param d_counts             a device output count iterator
+/// \param pred                 a unary predicate functor
+/// \param d_temp_storage       some temporary storage
+///
+/// \return                     the number of copied items
+///
+template <typename InputIterator, typename OutputIterator, typename CountIterator, typename Predicate>
+uint32 runlength_encode(
+    const uint32                  n,
+    InputIterator                 d_in,
+    OutputIterator                d_out,
+    CountIterator                 d_counts,
+    thrust::device_vector<uint8>& d_temp_storage)
+{
+    size_t                         temp_bytes = 0;
+    thrust::device_vector<int>     d_num_selected(1);
+
+    cub::DeviceReduce::RunLengthEncode(
+        (void*)NULL, temp_bytes,
+        d_in,
+        d_out,
+        d_counts,
+        nvbio::plain_view( d_num_selected ),
+        int(n),
+        pred );
+
+    temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
+    alloc_temp_storage( d_temp_storage, temp_bytes );
+
+    cub::DeviceReduce::RunLengthEncode(
+        (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
+        d_in,
+        d_out,
+        d_counts,
+        nvbio::plain_view( d_num_selected ),
+        int(n),
+        pred );
+
+    return uint32( d_num_selected[0] );
+};
+
 ///@} // end of the Primitives group
 ///@} // end of the Basic group
 

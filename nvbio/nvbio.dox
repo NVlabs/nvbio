@@ -45,6 +45,7 @@
 /// - \subpage basic_page
 /// - \subpage alignment_page
 /// - \subpage fmindex_page
+/// - \subpage qgram_page
 /// - \subpage sufsort_page
 /// - \subpage tries_page
 /// - \subpage io_page

@@ -44,7 +44,13 @@
 /// <img src="nvidia_cubes.png" style="position:relative; bottom:-10px; border:0px;"/>
 ///\endhtmlonly
 ///\par
-/// This module contains a series of functions to operate on Q-Grams and build a compact Q-Gram Index
+/// This module contains a series of functions to operate on Q-Grams and build a compact Q-Gram Index over
+/// a string T, with memory consumption and query time proportional to O(unique(T)) and O(log(unique(T))) respectively,
+/// where unique(T) is the number of unique q-grams in T.
+/// This is achieved by keeping a plain sorted list of the unique q-grams in T, together with an index of their occurrences
+/// in the original string T.
+/// This data-structure offers better construction speed and memory consumption than the \ref QGroupIndex, though the
+/// query time is asymptotically higher.
 ///
 ///
 /// \section TechnicalOverviewSection Technical Overview
@@ -56,12 +62,14 @@ namespace nvbio {
 
 ///
 ///@defgroup QGramIndex QGramIndex Module
-/// This module contains a series of functions to build a Q-Gram Index, as described
-/// in: \n
+/// This module contains a series of classes and functions to build a compact Q-Gram Index over
+/// a string T, with memory consumption and query time proportional to O(unique(T)) and O(log(unique(T))) respectively,
+/// where unique(T) is the number of unique q-grams in T.
+/// This is achieved by keeping a plain sorted list of the unique q-grams in T, together with an index of their occurrences
+/// in the original string T.
+/// This data-structure offers better construction speed and memory consumption than the \ref QGroupIndex, though the
+/// query time is asymptotically higher.
 ///
-/// <i>Massively parallel read mapping on GPUs with PEANUT</i> \n
-/// Johannes Koester and Sven Rahmann \n
-/// http://arxiv.org/pdf/1403.1706v1.pdf
 ///@{
 ///
 

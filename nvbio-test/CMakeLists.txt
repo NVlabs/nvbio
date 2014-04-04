@@ -11,7 +11,7 @@ fastq_test.cpp
 fmindex_test.cu
 nvbio-test.cpp
 packedstream_test.cpp
-qgroup_test.cu
+qgram_test.cu
 rank_test.cu
 string_set_test.cu
 sum_tree_test.cpp

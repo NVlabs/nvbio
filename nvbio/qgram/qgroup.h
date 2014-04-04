@@ -27,6 +27,7 @@
 
 #pragma once
 
+#include <nvbio/qgram/qgram.h>
 #include <nvbio/basic/types.h>
 #include <nvbio/basic/numbers.h>
 #include <nvbio/basic/packedstream.h>
@@ -99,7 +100,7 @@ struct QGroupIndexView
     /// return the slots of P corresponding to the given qgram g
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 slots(const uint64 g)
+    uint2 range(const uint64 g)
     {
         const uint32 i = uint32( g / WORD_SIZE );
         const uint32 j = uint32( g % WORD_SIZE );
@@ -219,49 +220,8 @@ QGroupIndexView plain_view(QGroupIndexDevice& qgroup)
         nvbio::plain_view( qgroup.P ) );
 }
 
-/// A utility functor to extract the i-th q-gram out of a string
-///
-/// \tparam SYMBOL_SIZE         the size of the symbols, in bits
-/// \tparam string_type         the string iterator type
-///
-template <uint32 SYMBOL_SIZE, typename string_type>
-struct string_qgram_functor
-{
-    static const uint32 WORD_SIZE        = 32;
-
-    /// constructor
-    ///
-    /// \param _string_len       string length
-    /// \param _string           string iterator
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    string_qgram_functor(const uint32 _Q, const uint32 _string_len, const string_type _string) :
-        Q(_Q),
-        string_len(_string_len),
-        string(_string) {}
-
-    /// functor operator
-    ///
-    /// \param i        position along the string
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint64 operator() (const uint32 i) const
-    {
-        const uint32 SYMBOL_MASK = (1u << SYMBOL_SIZE) - 1u;
-
-        uint64 qgram = 0u;
-        for (uint32 j = 0; j < Q; ++j)
-            qgram |= uint64(i+j < string_len ? (string[i + j] & SYMBOL_MASK) : 0u) << (j*SYMBOL_SIZE);
-
-        return qgram;
-    }
-
-    const uint32        Q;          ///< q-gram size
-    const uint32        string_len; ///< string length
-    const string_type   string;     ///< string iterator
-};
-
 ///@} // end of the QGroupIndex group
 
 } // namespace nvbio
 
-#include <nvbio/qgroup/qgroup_inl.h>
+#include <nvbio/qgram/qgroup_inl.h>

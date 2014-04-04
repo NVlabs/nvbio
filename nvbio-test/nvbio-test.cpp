@@ -52,7 +52,7 @@ int rank_test(int argc, char* argv[]);
 int work_queue_test(int argc, char* argv[]);
 int string_set_test(int argc, char* argv[]);
 int sum_tree_test();
-int qgroup_test(int argc, char* argv[]);
+int qgram_test(int argc, char* argv[]);
 
 namespace cuda { void scan_test(); }
 namespace aln { void test(int argc, char* argv[]); }
@@ -77,7 +77,7 @@ enum Tests {
     kWorkQueue      = 8192u,
     kAlignment      = 16384u,
     kRank           = 32768u,
-    kQGroup         = 65536u,
+    kQGram          = 65536u,
     kALL            = 0xFFFFFFFFu
 };
 
@@ -123,8 +123,8 @@ int main(int argc, char* argv[])
                 tests = kRank;
             else if (strcmp( argv[arg], "-fm-index" ) == 0)
                 tests = kFMIndex;
-            else if (strcmp( argv[arg], "-qgroup" ) == 0)
-                tests = kQGroup;
+            else if (strcmp( argv[arg], "-qgram" ) == 0)
+                tests = kQGram;
             else if (strcmp( argv[arg], "-alloc" ) == 0)
                 tests = kAlloc;
             else if (strcmp( argv[arg], "-syncblocks" ) == 0)
@@ -194,7 +194,7 @@ int main(int argc, char* argv[])
     if (tests & kBWT)           bwt_test();
     if (tests & kRank)          rank_test( argc, argv+arg );
     if (tests & kFMIndex)       fmindex_test( argc, argv+arg );
-    if (tests & kQGroup)        qgroup_test( argc, argv+arg );
+    if (tests & kQGram)         qgram_test( argc, argv+arg );
 
     cudaDeviceReset();
 	return 0;

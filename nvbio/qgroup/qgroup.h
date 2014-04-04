@@ -104,6 +104,10 @@ struct QGroupIndexView
         const uint32 i = uint32( g / WORD_SIZE );
         const uint32 j = uint32( g % WORD_SIZE );
 
+        // check whether the j-th bit of I[i] is set
+        if ((I[i] & (1u << j)) == 0u)
+            return make_uint2( 0u, 0u );
+
         // compute j' such that bit j is the j'-th set bit in I[i]
         const uint32 j_prime = popc( I[i] & ((2u << j) - 1u) );
 

@@ -150,7 +150,8 @@ struct QGroupDevice
     typedef PackedStream<uint32*,uint8,1u,false,int64>          bitstream_type;
     typedef QGroupView                                          view_type;
 
-    /// build a q-group index from a given string
+    /// build a q-group index from a given string T; the amount of storage required
+    /// is basically O( A^q + |T|*32 ) bits, where A is the alphabet size.
     ///
     /// \tparam SYMBOL_SIZE     the size of the symbols, in bits
     /// \tparam string_type     the string iterator type

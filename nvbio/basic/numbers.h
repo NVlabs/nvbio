@@ -30,6 +30,7 @@
 #include <cmath>
 #include <limits>
 #include <nvbio/basic/types.h>
+#include <nvbio/basic/popcount.h>
 #include <nvbio/basic/iterator.h>
 #include <vector_types.h>
 #include <vector_functions.h>
@@ -837,6 +838,20 @@ struct leading_bits
     result_type operator() (const argument_type op) const { return op >> (BITS - n_bits); }
 
     const uint32 n_bits;
+};
+
+/// A functor to compute the popcount of a word
+///
+template <typename word_type>
+struct popc_functor
+{
+    typedef word_type argument_type;
+    typedef uint32    result_type;
+
+    /// functor implementation
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const argument_type op) const { return popc( op ); }
 };
 
 /// Return the first M hi-bits of an N-bit word

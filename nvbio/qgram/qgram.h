@@ -104,7 +104,7 @@ struct QGramIndexView
     /// return the slots of P corresponding to the given qgram g
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 range(const uint64 g)
+    uint2 range(const uint64 g) const
     {
         // find the slot where stored our q-gram
         const uint32 i = uint32( nvbio::lower_bound(
@@ -252,6 +252,39 @@ struct string_qgram_functor
     const uint32        Q;          ///< q-gram size
     const uint32        string_len; ///< string length
     const string_type   string;     ///< string iterator
+};
+
+/// define a simple q-gram search functor
+///
+template <uint32 SYMBOL_SIZE, typename qgram_index_type, typename string_type>
+struct string_qgram_search_functor
+{
+    typedef uint32          argument_type;
+    typedef uint2           result_type;
+
+    /// constructor
+    ///
+    string_qgram_search_functor(
+        const qgram_index_type _qgram_index,
+        const uint32           _string_len,
+        const string_type      _string) :
+        qgram_index ( _qgram_index ),
+        string_len  ( _string_len ),
+        string      ( _string ) {}
+
+    /// functor operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint2 operator() (const uint32 i) const
+    {
+        const string_qgram_functor<SYMBOL_SIZE,string_type> qgram( qgram_index.Q, string_len, string );
+
+        return qgram_index.range( qgram(i) );
+    }
+
+    const qgram_index_type  qgram_index;
+    const uint32            string_len;
+    const string_type       string;
 };
 
 ///@} // end of the QGramIndex group

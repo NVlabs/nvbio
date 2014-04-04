@@ -100,7 +100,7 @@ struct QGroupIndexView
     /// return the slots of P corresponding to the given qgram g
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 range(const uint64 g)
+    uint2 range(const uint64 g) const
     {
         const uint32 i = uint32( g / WORD_SIZE );
         const uint32 j = uint32( g % WORD_SIZE );

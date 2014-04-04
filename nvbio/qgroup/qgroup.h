@@ -224,14 +224,14 @@ template <uint32 SYMBOL_SIZE, typename string_type>
 struct string_qgram_functor
 {
     static const uint32 WORD_SIZE        = 32;
-    static const uint32 SYMBOLS_PER_WORD = WORD_SIZE / SYMBOL_SIZE;
 
     /// constructor
     ///
     /// \param _string_len       string length
     /// \param _string           string iterator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    string_qgram_functor(const uint32 _string_len, const string_type _string) :
+    string_qgram_functor(const uint32 _Q, const uint32 _string_len, const string_type _string) :
+        Q(_Q),
         string_len(_string_len),
         string(_string) {}
 
@@ -242,13 +242,16 @@ struct string_qgram_functor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint64 operator() (const uint32 i) const
     {
+        const uint32 SYMBOL_MASK = (1u << SYMBOL_SIZE) - 1u;
+
         uint64 qgram = 0u;
-        for (uint32 j = 0; j < SYMBOLS_PER_WORD; ++j)
-            qgram |= uint64(i+j < string_len ? string[i + j] : 0u) << (j*SYMBOL_SIZE);
+        for (uint32 j = 0; j < Q; ++j)
+            qgram |= uint64(i+j < string_len ? (string[i + j] & SYMBOL_MASK) : 0u) << (j*SYMBOL_SIZE);
 
         return qgram;
     }
 
+    const uint32        Q;          ///< q-gram size
     const uint32        string_len; ///< string length
     const string_type   string;     ///< string iterator
 };

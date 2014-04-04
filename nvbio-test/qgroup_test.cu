@@ -102,8 +102,8 @@ int qgroup_test(int argc, char* argv[])
     Timer timer;
     timer.start();
 
-    qgroup_index.build<io::ReadData::READ_BITS>(
-        8u,
+    qgroup_index.build<2u>(     // implicitly convert N to A
+        16u,
         string_len,
         string );
 

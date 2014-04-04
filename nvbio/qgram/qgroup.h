@@ -110,7 +110,7 @@ struct QGroupIndexView
             return make_uint2( 0u, 0u );
 
         // compute j' such that bit j is the j'-th set bit in I[i]
-        const uint32 j_prime = popc( I[i] & ((2u << j) - 1u) );
+        const uint32 j_prime = popc( I[i] & ((1u << j) - 1u) );
 
         return make_uint2(
             SS[ S[i] + j_prime ],

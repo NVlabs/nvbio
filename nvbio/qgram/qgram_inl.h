@@ -45,12 +45,6 @@ void QGramIndexDevice::build(
 
     Q = q;
 
-    const uint32 ALPHABET_SIZE = 1u << SYMBOL_SIZE;
-
-    uint64 n_qgrams = 1;
-    for (uint32 i = 0; i < q; ++i)
-        n_qgrams *= ALPHABET_SIZE;
-
     qgrams.resize( string_len );
     index.resize( string_len );
 
@@ -99,6 +93,10 @@ void QGramIndexDevice::build(
 
     // shrink the q-gram vector
     qgrams.resize( n_unique_qgrams );
+
+    const uint32 n_slots = slots[ n_unique_qgrams ];
+    if (n_slots != string_len)
+        throw runtime_error( "mismatching number of q-grams: inserted %u q-grams, got: %u\n" );
 }
 
 } // namespace nvbio

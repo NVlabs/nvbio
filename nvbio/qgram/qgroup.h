@@ -70,7 +70,7 @@ namespace nvbio {
 ///@{
 ///
 
-/// A plain view of a q-group index
+/// A plain view of a q-group index (see \ref QGroupIndex)
 ///
 struct QGroupIndexView
 {
@@ -125,7 +125,7 @@ struct QGroupIndexView
     vector_type   P;
 };
 
-/// A host-side q-group index
+/// A host-side q-group index (see \ref QGroupIndex)
 ///
 struct QGroupIndexHost
 {
@@ -158,7 +158,7 @@ struct QGroupIndexHost
     vector_type   P;
 };
 
-/// A device-side q-group index
+/// A device-side q-group index (see \ref QGroupIndex)
 ///
 struct QGroupIndexDevice
 {

@@ -79,7 +79,7 @@ namespace nvbio {
 ///@{
 ///
 
-/// A plain view of a q-group index
+/// A plain view of a q-gram index (see \ref QGramIndex)
 ///
 struct QGramIndexView
 {
@@ -127,7 +127,7 @@ struct QGramIndexView
     index_vector_type   index;
 };
 
-/// A host-side q-group index
+/// A host-side q-gram index (see \ref QGramIndex)
 ///
 struct QGramIndexHost
 {
@@ -157,7 +157,7 @@ struct QGramIndexHost
     index_vector_type   index;
 };
 
-/// A device-side q-group index
+/// A device-side q-gram index (see \ref QGramIndex)
 ///
 struct QGramIndexDevice
 {
@@ -165,7 +165,7 @@ struct QGramIndexDevice
     typedef thrust::device_vector<uint32>   index_vector_type;
     typedef QGramIndexView                  view_type;
 
-    /// build a q-group index from a given string T; the amount of storage required
+    /// build a q-gram index from a given string T; the amount of storage required
     /// is basically O( A^q + |T|*32 ) bits, where A is the alphabet size.
     ///
     /// \tparam SYMBOL_SIZE     the size of the symbols, in bits

@@ -57,11 +57,11 @@ int qgroup_test(int argc, char* argv[])
             reads = argv[++i];
     }
 
-    fprintf(stderr, "qgroup test... started\n");
+    log_info(stderr, "q-group test... started\n");
 
     const io::QualityEncoding qencoding = io::Phred33;
 
-    fprintf(stderr, "loading reads... started\n");
+    log_info(stderr, "  loading reads... started\n");
 
     SharedPointer<io::ReadDataStream> read_data_file(
         io::open_read_file(
@@ -85,7 +85,9 @@ int qgroup_test(int argc, char* argv[])
     // build its device version
     io::ReadDataCUDA d_read_data( *h_read_data );
 
-    fprintf(stderr, "loading reads... done\n");
+    log_info(stderr, "  loading reads... done\n");
+
+    log_info(stderr, "  building q-group... started\n");
 
     // fetch the actual string
     typedef io::ReadData::const_read_stream_type string_type;
@@ -108,7 +110,9 @@ int qgroup_test(int argc, char* argv[])
     timer.stop();
     const float time = timer.seconds();
 
-    fprintf(stderr, "qgroup test... done: %.1f M qgrams/s\n", 1.0e-6f * float( string_len ) / time );
+    log_info(stderr, "  building q-group... done: %.1f M qgrams/s\n", 1.0e-6f * float( string_len ) / time);
+
+    log_info(stderr, "q-group test... done\n" );
     return 0;
 }
 

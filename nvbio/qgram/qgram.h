@@ -32,6 +32,7 @@
 #include <nvbio/basic/algorithms.h>
 #include <nvbio/basic/cuda/primitives.h>
 #include <nvbio/basic/thrust_view.h>
+#include <nvbio/basic/exceptions.h>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <thrust/sort.h>
@@ -119,6 +120,11 @@ struct QGramIndexView
         // return the range
         return make_uint2( slots[i], slots[i+1] );
     }
+
+    /// functor operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint2 operator() (const uint32 g) const { return range( g ); }
 
     uint32              Q;
     uint32              n_unique_qgrams;
@@ -221,7 +227,7 @@ QGramIndexView plain_view(QGramIndexDevice& qgram)
 template <uint32 SYMBOL_SIZE, typename string_type>
 struct string_qgram_functor
 {
-    static const uint32 WORD_SIZE        = 32;
+    static const uint32 WORD_SIZE = 32;
 
     /// constructor
     ///

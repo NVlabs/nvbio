@@ -117,6 +117,11 @@ struct QGroupIndexView
             SS[ S[i] + j_prime + 1u ] );
     }
 
+    /// functor operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint2 operator() (const uint32 g) const { return range( g ); }
+
     uint32        Q;
     uint32        n_unique_qgrams;
     vector_type   I;

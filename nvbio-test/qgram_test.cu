@@ -136,8 +136,20 @@ int qgram_test(int argc, char* argv[])
     const uint32      genome_len = fmi_cuda.genome_length();
     const genome_type genome( fmi_cuda.genome_stream() );
 
+    // build the q-grams
+    thrust::device_vector<uint64> d_qgrams( n_queries );
+    thrust::transform(
+        thrust::make_counting_iterator<uint32>(0u),
+        thrust::make_counting_iterator<uint32>(0u) + n_queries,
+        d_qgrams.begin(),
+        string_qgram_functor<2u,genome_type>( 16u, genome_len, genome ) );
+
+    // sort the q-grams
+    thrust::device_vector<uint64> d_sorted_qgrams( d_qgrams );
+    thrust::sort( d_sorted_qgrams.begin(), d_sorted_qgrams.end() );
+
     // prepare a vector to store the query results
-    thrust::device_vector<uint2> d_ranges( n_queries );
+    thrust::device_vector<uint2>  d_ranges( n_queries );
 
     // and start testing...
     {
@@ -156,7 +168,7 @@ int qgram_test(int argc, char* argv[])
 
         cudaDeviceSynchronize();
         timer.stop();
-        float time = timer.seconds();
+        const float time = timer.seconds();
 
         log_info(stderr, "  building q-gram index... done\n");
         log_info(stderr, "    unique q-grams : %.2f M q-grams\n", 1.0e-6f * float( qgram_index.n_unique_qgrams ));
@@ -167,21 +179,30 @@ int qgram_test(int argc, char* argv[])
 
         timer.start();
 
-        // build a q-gram search functor
-        const string_qgram_search_functor<2u,QGramIndexDevice::view_type,genome_type> qgram_search(
-            nvbio::plain_view( qgram_index ), genome_len, genome );
-
         // and search the genome q-grams in the index
         thrust::transform(
-            thrust::make_counting_iterator<uint32>(0u),
-            thrust::make_counting_iterator<uint32>(0u) + n_queries,
+            d_qgrams.begin(),
+            d_qgrams.begin() + n_queries,
             d_ranges.begin(),
-            qgram_search );
+            nvbio::plain_view( qgram_index ) );
 
         cudaDeviceSynchronize();
         timer.stop();
+        const float unsorted_time = timer.seconds();
 
-        time = timer.seconds();
+        // and now repeat the same operation with the sorted q-grams
+        timer.start();
+
+        // and search the genome q-grams in the index
+        thrust::transform(
+            d_sorted_qgrams.begin(),
+            d_sorted_qgrams.begin() + n_queries,
+            d_ranges.begin(),
+            nvbio::plain_view( qgram_index ) );
+
+        cudaDeviceSynchronize();
+        timer.stop();
+        const float sorted_time = timer.seconds();
 
         const uint32 n_occurrences = thrust::reduce(
             thrust::make_transform_iterator( d_ranges.begin(), range_size() ),
@@ -192,12 +213,13 @@ int qgram_test(int argc, char* argv[])
             thrust::make_transform_iterator( d_ranges.begin(), valid_range() ) + n_queries );
 
         log_info(stderr, "  querying q-gram index... done\n");
-        log_info(stderr, "    throughput     : %.2f B q-grams/s\n", (1.0e-9f * float( n_queries )) / time);
-        log_info(stderr, "    matches        : %.2f M\n", 1.0e-6f * float( n_matches ) );
-        log_info(stderr, "    occurrences    : %.2f M\n", 1.0e-6f * float( n_occurrences ) );
+        log_info(stderr, "    unsorted throughput : %.2f B q-grams/s\n", (1.0e-9f * float( n_queries )) / unsorted_time);
+        log_info(stderr, "    sorted   throughput : %.2f B q-grams/s\n", (1.0e-9f * float( n_queries )) / sorted_time);
+        log_info(stderr, "    matches             : %.2f M\n", 1.0e-6f * float( n_matches ) );
+        log_info(stderr, "    occurrences         : %.2f M\n", 1.0e-6f * float( n_occurrences ) );
     }
     {
-        log_info(stderr, "  building q-gram index... started\n");
+        log_info(stderr, "  building q-group index... started\n");
 
         // build the q-group index
         QGroupIndexDevice qgroup_index;
@@ -212,7 +234,7 @@ int qgram_test(int argc, char* argv[])
 
         cudaDeviceSynchronize();
         timer.stop();
-        float time = timer.seconds();
+        const float time = timer.seconds();
 
         log_info(stderr, "  building q-group index... done\n");
         log_info(stderr, "    unique q-grams : %.2f M q-grams\n", 1.0e-6f * float( qgroup_index.n_unique_qgrams ));
@@ -223,21 +245,30 @@ int qgram_test(int argc, char* argv[])
 
         timer.start();
 
-        // build a q-gram search functor
-        const string_qgram_search_functor<2u,QGroupIndexDevice::view_type,genome_type> qgram_search(
-            nvbio::plain_view( qgroup_index ), genome_len, genome );
-
         // and search the genome q-grams in the index
         thrust::transform(
-            thrust::make_counting_iterator<uint32>(0u),
-            thrust::make_counting_iterator<uint32>(0u) + n_queries,
+            d_qgrams.begin(),
+            d_qgrams.begin() + n_queries,
             d_ranges.begin(),
-            qgram_search );
+            nvbio::plain_view( qgroup_index ) );
 
         cudaDeviceSynchronize();
         timer.stop();
+        const float unsorted_time = timer.seconds();
 
-        time = timer.seconds();
+        // and now repeat the same operation with the sorted q-grams
+        timer.start();
+
+        // and search the genome q-grams in the index
+        thrust::transform(
+            d_sorted_qgrams.begin(),
+            d_sorted_qgrams.begin() + n_queries,
+            d_ranges.begin(),
+            nvbio::plain_view( qgroup_index ) );
+
+        cudaDeviceSynchronize();
+        timer.stop();
+        const float sorted_time = timer.seconds();
 
         const uint32 n_occurrences = thrust::reduce(
             thrust::make_transform_iterator( d_ranges.begin(), range_size() ),
@@ -248,9 +279,10 @@ int qgram_test(int argc, char* argv[])
             thrust::make_transform_iterator( d_ranges.begin(), valid_range() ) + n_queries );
 
         log_info(stderr, "  querying q-group index... done\n");
-        log_info(stderr, "    throughput     : %.2f B q-grams/s\n", (1.0e-9f * float( n_queries )) / time);
-        log_info(stderr, "    matches        : %.2f M\n", 1.0e-6f * float( n_matches ) );
-        log_info(stderr, "    occurrences    : %.2f M\n", 1.0e-6f * float( n_occurrences ) );
+        log_info(stderr, "    unsorted throughput : %.2f B q-grams/s\n", (1.0e-9f * float( n_queries )) / unsorted_time);
+        log_info(stderr, "    sorted   throughput : %.2f B q-grams/s\n", (1.0e-9f * float( n_queries )) / sorted_time);
+        log_info(stderr, "    matches             : %.2f M\n", 1.0e-6f * float( n_matches ) );
+        log_info(stderr, "    occurrences         : %.2f M\n", 1.0e-6f * float( n_occurrences ) );
     }
 
     log_info(stderr, "q-gram test... done\n" );

@@ -147,8 +147,8 @@ struct QGramIndexHost
 ///
 struct QGramIndexDevice
 {
-    typedef thrust::host_vector<uint64>     qgram_vector_type;
-    typedef thrust::host_vector<uint32>     index_vector_type;
+    typedef thrust::device_vector<uint64>   qgram_vector_type;
+    typedef thrust::device_vector<uint32>   index_vector_type;
     typedef QGramIndexView                  view_type;
 
     /// build a q-group index from a given string T; the amount of storage required

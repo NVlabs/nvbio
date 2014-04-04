@@ -287,7 +287,7 @@ uint32 copy_if(
 ///
 /// \return                     the number of copied items
 ///
-template <typename InputIterator, typename OutputIterator, typename CountIterator, typename Predicate>
+template <typename InputIterator, typename OutputIterator, typename CountIterator>
 uint32 runlength_encode(
     const uint32                  n,
     InputIterator                 d_in,

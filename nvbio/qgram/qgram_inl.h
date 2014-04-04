@@ -53,7 +53,6 @@ void QGramIndexDevice::build(
 
     qgrams.resize( string_len );
     index.resize( string_len );
-    slots.resize( string_len + 1u );
 
     thrust::device_vector<uint32> d_all_qgrams( string_len );
 
@@ -77,21 +76,29 @@ void QGramIndexDevice::build(
         index.begin() );
 
     // copy only the unique q-grams and count them
+    thrust::device_vector<uint32> d_counts( string_len + 1u );
+
     n_unique_qgrams = cuda::runlength_encode(
         string_len,
         d_all_qgrams.begin(),
         qgrams.begin(),
-        slots.begin(),
+        d_counts.begin(),
         d_temp_storage );
 
-    // scan their counts
+    // now we know how many unique q-grams there are
+    slots.resize( n_unique_qgrams + 1u );
+
+    // scan the counts to get the slots
     cuda::exclusive_scan(
         n_unique_qgrams + 1u,
-        slots.begin(),
+        d_counts.begin(),
         slots.begin(),
         thrust::plus<uint32>(),
         uint32(0),
         d_temp_storage );
+
+    // shrink the q-gram vector
+    qgrams.resize( n_unique_qgrams );
 }
 
 } // namespace nvbio

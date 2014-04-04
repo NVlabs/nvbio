@@ -131,6 +131,20 @@ struct QGroupHost
     typedef PackedStream<uint32*,uint8,1u,false,int64>          bitstream_type;
     typedef QGroupView                                          view_type;
 
+    /// return the amount of device memory used
+    ///
+    uint64 used_host_memory() const
+    {
+        return I.size() * sizeof(uint32) +
+               S.size() * sizeof(uint32) +
+               SS.size() * sizeof(uint32) +
+               P.size() * sizeof(uint32);
+    }
+
+    /// return the amount of device memory used
+    ///
+    uint64 used_device_memory() const { return 0u; }
+
     uint32        Q;
     uint32        n_used_qgrams;
     vector_type   I;
@@ -165,6 +179,20 @@ struct QGroupDevice
         const uint32        q,
         const uint32        string_len,
         const string_type   string);
+
+    /// return the amount of device memory used
+    ///
+    uint64 used_host_memory() const { return 0u; }
+
+    /// return the amount of device memory used
+    ///
+    uint64 used_device_memory() const
+    {
+        return I.size() * sizeof(uint32) +
+               S.size() * sizeof(uint32) +
+               SS.size() * sizeof(uint32) +
+               P.size() * sizeof(uint32);
+    }
 
     uint32        Q;
     uint32        n_used_qgrams;

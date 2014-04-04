@@ -47,17 +47,17 @@
 /// This module contains a series of functions to operate on q-grams as well as two q-gram index
 /// data-structures together with very high throughput parallel construction algorithms:
 ///
-/// - the \ref QGroupIndex, replicating the data-structure described in:\n
+/// - the \ref QGroupIndex "Q-Group Index", replicating the data-structure described in:\n
 ///   <i>Massively parallel read mapping on GPUs with PEANUT</i> \n
 ///   Johannes Koester and Sven Rahmann \n
 ///   http://arxiv.org/pdf/1403.1706v1.pdf
 ///
-/// - the compact \ref QGramIndex, which can be built over a string T, with memory consumption and query time proportional
+/// - the compact \ref QGramIndex "Q-Gram Index", which can be built over a string T, with memory consumption and query time proportional
 ///   to O(unique(T)) and O(log(unique(T))) respectively, where unique(T) is the number of unique q-grams in T.
 ///   This is achieved by keeping a plain sorted list of the unique q-grams in T, together with an index of their occurrences
 ///   in the original string T.
 ///   This data-structure offers up to 5x higher construction speed and a potentially unbounded improvement in memory consumption 
-///   compared to the \ref QGroupIndex, though the query time is asymptotically higher.
+///   compared to the \ref QGroupIndex "Q-Group Index", though the query time is asymptotically higher.
 ///
 /// \section TechnicalOverviewSection Technical Overview
 ///\par
@@ -74,7 +74,7 @@ namespace nvbio {
 /// This is achieved by keeping a plain sorted list of the unique q-grams in T, together with an index of their occurrences
 /// in the original string T.
 /// This data-structure offers up to 5x higher construction speed and a potentially unbounded improvement in memory consumption 
-/// compared to the \ref QGroupIndex, though the query time is asymptotically higher.
+/// compared to the \ref QGroupIndex "Q-Group Index", though the query time is asymptotically higher.
 ///
 ///@{
 ///

@@ -46,6 +46,26 @@
 
 namespace nvbio {
 
+// return the size of a given range
+struct range_size
+{
+    typedef uint2  argument_type;
+    typedef uint32 result_type;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 operator() (const uint2 range) const { return range.y - range.x; }
+};
+
+// return 1 for non-empty ranges, 0 otherwise
+struct valid_range
+{
+    typedef uint2  argument_type;
+    typedef uint32 result_type;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 operator() (const uint2 range) const { return range.y - range.x > 0 ? 1u : 0u; }
+};
+
 int qgram_test(int argc, char* argv[])
 {
     uint32 len       = 10000000;
@@ -163,8 +183,18 @@ int qgram_test(int argc, char* argv[])
 
         time = timer.seconds();
 
+        const uint32 n_occurrences = thrust::reduce(
+            thrust::make_transform_iterator( d_ranges.begin(), range_size() ),
+            thrust::make_transform_iterator( d_ranges.begin(), range_size() ) + n_queries );
+
+        const uint32 n_matches = thrust::reduce(
+            thrust::make_transform_iterator( d_ranges.begin(), valid_range() ),
+            thrust::make_transform_iterator( d_ranges.begin(), valid_range() ) + n_queries );
+
         log_info(stderr, "  querying q-gram index... done\n");
         log_info(stderr, "    throughput     : %.2f B q-grams/s\n", (1.0e-9f * float( n_queries )) / time);
+        log_info(stderr, "    matches        : %.2f M\n", 1.0e-6f * float( n_matches ) );
+        log_info(stderr, "    occurrences    : %.2f M\n", 1.0e-6f * float( n_occurrences ) );
     }
     {
         log_info(stderr, "  building q-gram index... started\n");
@@ -209,8 +239,18 @@ int qgram_test(int argc, char* argv[])
 
         time = timer.seconds();
 
+        const uint32 n_occurrences = thrust::reduce(
+            thrust::make_transform_iterator( d_ranges.begin(), range_size() ),
+            thrust::make_transform_iterator( d_ranges.begin(), range_size() ) + n_queries );
+
+        const uint32 n_matches = thrust::reduce(
+            thrust::make_transform_iterator( d_ranges.begin(), valid_range() ),
+            thrust::make_transform_iterator( d_ranges.begin(), valid_range() ) + n_queries );
+
         log_info(stderr, "  querying q-group index... done\n");
         log_info(stderr, "    throughput     : %.2f B q-grams/s\n", (1.0e-9f * float( n_queries )) / time);
+        log_info(stderr, "    matches        : %.2f M\n", 1.0e-6f * float( n_matches ) );
+        log_info(stderr, "    occurrences    : %.2f M\n", 1.0e-6f * float( n_occurrences ) );
     }
 
     log_info(stderr, "q-gram test... done\n" );

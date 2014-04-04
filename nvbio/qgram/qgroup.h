@@ -114,7 +114,7 @@ struct QGroupIndexView
 
         return make_uint2(
             SS[ S[i] + j_prime ],
-            SS[ S[i] + j_prime ] + 1u );
+            SS[ S[i] + j_prime + 1u ] );
     }
 
     uint32        Q;

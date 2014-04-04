@@ -93,7 +93,7 @@ int qgroup_test(int argc, char* argv[])
     const uint32      string_len = d_read_data.bps();
     const string_type string     = string_type( d_read_data.read_stream() );
 
-    log_info(stderr, "  building q-group... started\n");
+    log_info(stderr, "  building q-group index... started\n");
     log_info(stderr, "    symbols: %.1f M symbols\n", 1.0e-6f * float(string_len));
 
     // build the Q-Group
@@ -111,7 +111,7 @@ int qgroup_test(int argc, char* argv[])
     timer.stop();
     const float time = timer.seconds();
 
-    log_info(stderr, "  building q-group... done\n");
+    log_info(stderr, "  building q-group index... done\n");
     log_info(stderr, "    unique q-grams : %.2f M q-grams\n", 1.0e-6f * float( qgroup_index.n_unique_qgrams ));
     log_info(stderr, "    throughput     : %.1f M q-grams/s\n", 1.0e-6f * float( string_len ) / time);
     log_info(stderr, "    memory usage   : %.1f MB\n", float( qgroup_index.used_device_memory() ) / float(1024*1024) );

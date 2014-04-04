@@ -304,8 +304,7 @@ uint32 runlength_encode(
         d_out,
         d_counts,
         nvbio::plain_view( d_num_selected ),
-        int(n),
-        pred );
+        int(n) );
 
     temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
     alloc_temp_storage( d_temp_storage, temp_bytes );
@@ -316,8 +315,7 @@ uint32 runlength_encode(
         d_out,
         d_counts,
         nvbio::plain_view( d_num_selected ),
-        int(n),
-        pred );
+        int(n) );
 
     return uint32( d_num_selected[0] );
 };

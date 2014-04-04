@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// qgroup_test.cu
+// qgram_test.cu
 //
 //#define CUFMI_CUDA_DEBUG
 //#define CUFMI_CUDA_ASSERTS
@@ -40,11 +40,12 @@
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/shared_pointer.h>
 #include <nvbio/io/reads/reads.h>
-#include <nvbio/qgroup/qgroup.h>
+#include <nvbio/qgram/qgram.h>
+#include <nvbio/qgram/qgroup.h>
 
 namespace nvbio {
 
-int qgroup_test(int argc, char* argv[])
+int qgram_test(int argc, char* argv[])
 {
     uint32 len   = 10000000;
     char*  reads = "./data/SRR493095_1.fastq.gz";
@@ -57,7 +58,7 @@ int qgroup_test(int argc, char* argv[])
             reads = argv[++i];
     }
 
-    log_info(stderr, "q-group test... started\n");
+    log_info(stderr, "q-gram test... started\n");
 
     const io::QualityEncoding qencoding = io::Phred33;
 
@@ -93,30 +94,56 @@ int qgroup_test(int argc, char* argv[])
     const uint32      string_len = d_read_data.bps();
     const string_type string     = string_type( d_read_data.read_stream() );
 
-    log_info(stderr, "  building q-group index... started\n");
     log_info(stderr, "    symbols: %.1f M symbols\n", 1.0e-6f * float(string_len));
 
-    // build the Q-Group
-    QGroupIndexDevice qgroup_index;
+    {
+        log_info(stderr, "  building q-gram index... started\n");
 
-    Timer timer;
-    timer.start();
+        // build the q-gram index
+        QGramIndexDevice qgram_index;
 
-    qgroup_index.build<2u>(     // implicitly convert N to A
-        16u,
-        string_len,
-        string );
+        Timer timer;
+        timer.start();
 
-    cudaDeviceSynchronize();
-    timer.stop();
-    const float time = timer.seconds();
+        qgram_index.build<2u>(     // implicitly convert N to A
+            16u,
+            string_len,
+            string );
 
-    log_info(stderr, "  building q-group index... done\n");
-    log_info(stderr, "    unique q-grams : %.2f M q-grams\n", 1.0e-6f * float( qgroup_index.n_unique_qgrams ));
-    log_info(stderr, "    throughput     : %.1f M q-grams/s\n", 1.0e-6f * float( string_len ) / time);
-    log_info(stderr, "    memory usage   : %.1f MB\n", float( qgroup_index.used_device_memory() ) / float(1024*1024) );
+        cudaDeviceSynchronize();
+        timer.stop();
+        const float time = timer.seconds();
 
-    log_info(stderr, "q-group test... done\n" );
+        log_info(stderr, "  building q-gram index... done\n");
+        log_info(stderr, "    unique q-grams : %.2f M q-grams\n", 1.0e-6f * float( qgram_index.n_unique_qgrams ));
+        log_info(stderr, "    throughput     : %.1f M q-grams/s\n", 1.0e-6f * float( string_len ) / time);
+        log_info(stderr, "    memory usage   : %.1f MB\n", float( qgram_index.used_device_memory() ) / float(1024*1024) );
+    }
+    {
+        log_info(stderr, "  building q-gram index... started\n");
+
+        // build the q-group index
+        QGroupIndexDevice qgroup_index;
+
+        Timer timer;
+        timer.start();
+
+        qgroup_index.build<2u>(     // implicitly convert N to A
+            16u,
+            string_len,
+            string );
+
+        cudaDeviceSynchronize();
+        timer.stop();
+        const float time = timer.seconds();
+
+        log_info(stderr, "  building q-group index... done\n");
+        log_info(stderr, "    unique q-grams : %.2f M q-grams\n", 1.0e-6f * float( qgroup_index.n_unique_qgrams ));
+        log_info(stderr, "    throughput     : %.1f M q-grams/s\n", 1.0e-6f * float( string_len ) / time);
+        log_info(stderr, "    memory usage   : %.1f MB\n", float( qgroup_index.used_device_memory() ) / float(1024*1024) );
+    }
+
+    log_info(stderr, "q-gram test... done\n" );
     return 0;
 }
 

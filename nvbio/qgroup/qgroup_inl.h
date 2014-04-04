@@ -37,7 +37,7 @@ namespace qgroup {
 template <uint32 SYMBOL_SIZE, typename string_type>
 struct qgroup_setup_I
 {
-    typedef QGroupDevice::bitstream_type                    bitstream_type;
+    typedef QGroupIndexDevice::bitstream_type                    bitstream_type;
     typedef string_qgram_functor<SYMBOL_SIZE,string_type>   qgram_functor_type;
 
     // constructor
@@ -73,7 +73,7 @@ struct qgroup_setup_I
 template <uint32 SYMBOL_SIZE, typename string_type>
 struct qgroup_setup_SS
 {
-    typedef QGroupDevice::bitstream_type                    bitstream_type;
+    typedef QGroupIndexDevice::bitstream_type               bitstream_type;
     typedef string_qgram_functor<SYMBOL_SIZE,string_type>   qgram_functor_type;
 
     static const uint32 WORD_SIZE = 32;
@@ -127,7 +127,7 @@ struct qgroup_setup_SS
 template <uint32 SYMBOL_SIZE, typename string_type>
 struct qgroup_setup_P
 {
-    typedef QGroupDevice::bitstream_type                    bitstream_type;
+    typedef QGroupIndexDevice::bitstream_type               bitstream_type;
     typedef string_qgram_functor<SYMBOL_SIZE,string_type>   qgram_functor_type;
 
     static const uint32 WORD_SIZE = 32;
@@ -191,7 +191,7 @@ struct qgroup_setup_P
 // \param string           the string iterator
 //
 template <uint32 SYMBOL_SIZE, typename string_type>
-void QGroupDevice::build(
+void QGroupIndexDevice::build(
     const uint32        q,
     const uint32        string_len,
     const string_type   string)

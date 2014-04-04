@@ -29,6 +29,7 @@
 
 #include <nvbio/basic/types.h>
 #include <nvbio/basic/console.h>
+#include <nvbio/basic/thrust_view.h>
 #include <thrust/device_vector.h>
 #include <cub/cub.cuh>
 
@@ -146,6 +147,46 @@ void inclusive_scan(
         d_in,
         d_out,
         op,
+        int(n) );
+}
+
+/// device-wide exclusive scan
+///
+/// \param n                    number of items to reduce
+/// \param d_in                 a device input iterator
+/// \param d_out                a device output iterator
+/// \param op                   the binary reduction operator
+/// \param identity             the identity element
+/// \param d_temp_storage       some temporary storage
+///
+template <typename InputIterator, typename OutputIterator, typename BinaryOp, typename Identity>
+void exclusive_scan(
+    const uint32                  n,
+    InputIterator                 d_in,
+    OutputIterator                d_out,
+    BinaryOp                      op,
+    Identity                      identity,
+    thrust::device_vector<uint8>& d_temp_storage)
+{
+    size_t temp_bytes = 0;
+
+    cub::DeviceScan::ExclusiveScan(
+        (void*)NULL, temp_bytes,
+        d_in,
+        d_out,
+        op,
+        identity,
+        int(n) );
+
+    temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
+    alloc_temp_storage( d_temp_storage, temp_bytes );
+
+    cub::DeviceScan::ExclusiveScan(
+        (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
+        d_in,
+        d_out,
+        op,
+        identity,
         int(n) );
 }
 

@@ -249,16 +249,16 @@ void QGroupDevice::build(
         d_temp_storage );
 
     // fetch the number of used qgrams
-    n_used_qgrams = S[n_qblocks];
+    n_unique_qgrams = S[n_qblocks];
 
     //
     // setup SS
     //
-    SS.resize( n_used_qgrams + 1u );
+    SS.resize( n_unique_qgrams + 1u );
 
     thrust::fill(
         SS.begin(),
-        SS.begin() + n_used_qgrams + 1u,
+        SS.begin() + n_unique_qgrams + 1u,
         uint32(0) );
 
     const setup_SS_type setup_SS(
@@ -274,7 +274,7 @@ void QGroupDevice::build(
 
     // compute the exclusive prefix sum of SS
     cuda::exclusive_scan(
-        n_used_qgrams + 1u,
+        n_unique_qgrams + 1u,
         SS.begin(),
         SS.begin(),
         thrust::plus<uint32>(),

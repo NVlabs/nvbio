@@ -83,14 +83,14 @@ struct QGroupView
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     QGroupView(
-        const uint32 _Q             = 0,
-        const uint32 _n_used_qgrams = 0,
-        vector_type  _I             = NULL,
-        vector_type  _S             = NULL,
-        vector_type  _SS            = NULL,
-        vector_type  _P             = NULL) :
+        const uint32 _Q                 = 0,
+        const uint32 _n_unique_qgrams   = 0,
+        vector_type  _I                 = NULL,
+        vector_type  _S                 = NULL,
+        vector_type  _SS                = NULL,
+        vector_type  _P                 = NULL) :
         Q               (_Q),
-        n_used_qgrams   (_n_used_qgrams),
+        n_unique_qgrams (_n_unique_qgrams),
         I               (_I),
         S               (_S),
         SS              (_SS),
@@ -113,7 +113,7 @@ struct QGroupView
     }
 
     uint32        Q;
-    uint32        n_used_qgrams;
+    uint32        n_unique_qgrams;
     vector_type   I;
     vector_type   S;
     vector_type   SS;
@@ -146,7 +146,7 @@ struct QGroupHost
     uint64 used_device_memory() const { return 0u; }
 
     uint32        Q;
-    uint32        n_used_qgrams;
+    uint32        n_unique_qgrams;
     vector_type   I;
     vector_type   S;
     vector_type   SS;
@@ -195,7 +195,7 @@ struct QGroupDevice
     }
 
     uint32        Q;
-    uint32        n_used_qgrams;
+    uint32        n_unique_qgrams;
     vector_type   I;
     vector_type   S;
     vector_type   SS;
@@ -208,7 +208,7 @@ QGroupView plain_view(QGroupDevice& qgroup)
 {
     return QGroupView(
         qgroup.Q,
-        qgroup.n_used_qgrams,
+        qgroup.n_unique_qgrams,
         nvbio::plain_view( qgroup.I ),
         nvbio::plain_view( qgroup.S ),
         nvbio::plain_view( qgroup.SS ),

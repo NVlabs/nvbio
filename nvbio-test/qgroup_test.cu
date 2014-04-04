@@ -96,12 +96,19 @@ int qgroup_test(int argc, char* argv[])
     // build the Q-Group
     QGroupDevice qgroup;
 
+    Timer timer;
+    timer.start();
+
     qgroup.build<io::ReadData::READ_BITS>(
         8u,
         string_len,
         string );
 
-    fprintf(stderr, "qgroup test... done\n");
+    cudaDeviceSynchronize();
+    timer.stop();
+    const float time = timer.seconds();
+
+    fprintf(stderr, "qgroup test... done: %.1f M qgrams/s\n", 1.0e-6f * float( string_len ) / time );
     return 0;
 }
 

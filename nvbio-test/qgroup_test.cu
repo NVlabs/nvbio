@@ -76,7 +76,7 @@ int qgroup_test(int argc, char* argv[])
         return 1u;
     }
 
-    const uint32 batch_size = 512*1024;
+    const uint32 batch_size = uint32(-1);
     const uint32 batch_bps  = len;
 
     // load a batch of reads
@@ -87,13 +87,14 @@ int qgroup_test(int argc, char* argv[])
 
     log_info(stderr, "  loading reads... done\n");
 
-    log_info(stderr, "  building q-group... started\n");
-
     // fetch the actual string
     typedef io::ReadData::const_read_stream_type string_type;
 
     const uint32      string_len = d_read_data.bps();
     const string_type string     = string_type( d_read_data.read_stream() );
+
+    log_info(stderr, "  building q-group... started\n");
+    log_info(stderr, "    symbols: %.1f M symbols\n", 1.0e-6f * float(string_len));
 
     // build the Q-Group
     QGroupDevice qgroup;

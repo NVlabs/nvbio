@@ -123,13 +123,13 @@ struct QGramIndexViewCore
             make_uint2( lut[ g >> QLS ], lut[ (g >> QLS) + 1 ] ) :
             make_uint2( 0u, n_unique_qgrams );
 
-        // find the slot where stored our q-gram
+        // find the slot where our q-gram is stored
         const uint32 i = uint32( nvbio::lower_bound(
             g,
             qgrams + lut_range.x,
             (lut_range.y - lut_range.x) ) - qgrams );
 
-        // check whether we find what we were looking for
+        // check whether we found what we are looking for
         if (i >= n_unique_qgrams || g != qgrams[i])
             return make_uint2( 0u, 0u );
 

@@ -211,7 +211,8 @@ struct QGramIndexDevice
     {
         return qgrams.size() * sizeof(uint64) +
                slots.size()  * sizeof(uint32) +
-               index.size()  * sizeof(uint32);
+               index.size()  * sizeof(uint32) +
+               lut.size()    * sizeof(uint32);
     }
 
     uint32              Q;                  ///< the q-gram size

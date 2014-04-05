@@ -68,18 +68,20 @@ struct valid_range
 
 int qgram_test(int argc, char* argv[])
 {
-    uint32 len       = 10000000;
+    uint32 n_qgrams  = 10000000;
     uint32 n_queries = 10000000;
     char*  reads = "./data/SRR493095_1.fastq.gz";
     char*  index = "./data/human.NCBI36/Homo_sapiens.NCBI36.53.dna.toplevel.fa";
 
     for (int i = 0; i < argc; ++i)
     {
-        if (strcmp( argv[i], "-length" ) == 0)
-            len = atoi( argv[++i] )*1000;
-        if (strcmp( argv[i], "-reads" ) == 0)
+        if (strcmp( argv[i], "-qgrams" ) == 0)
+            n_qgrams = atoi( argv[++i] )*1000;
+        else if (strcmp( argv[i], "-queries" ) == 0)
+            n_queries = atoi( argv[++i] )*1000;
+        else if (strcmp( argv[i], "-reads" ) == 0)
             reads = argv[++i];
-        if (strcmp( argv[i], "-index" ) == 0)
+        else if (strcmp( argv[i], "-index" ) == 0)
             index = argv[++i];
     }
 
@@ -103,7 +105,7 @@ int qgram_test(int argc, char* argv[])
     }
 
     const uint32 batch_size = uint32(-1);
-    const uint32 batch_bps  = len;
+    const uint32 batch_bps  = n_qgrams;
 
     // load a batch of reads
     SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_size, batch_bps ) );

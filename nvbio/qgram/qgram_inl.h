@@ -35,18 +35,20 @@ namespace nvbio {
 // \param string_len       the size of the string
 // \param string           the string iterator
 //
-template <uint32 SYMBOL_SIZE, typename string_type>
+template <typename string_type>
 void QGramIndexDevice::build(
     const uint32        q,
+    const uint32        symbol_sz,
     const uint32        string_len,
     const string_type   string,
     const uint32        qlut)
 {
     thrust::device_vector<uint8> d_temp_storage;
 
-    Q   = q;
-    QL  = qlut;
-    QLS = (Q - QL) * SYMBOL_SIZE;
+    symbol_size = symbol_sz;
+    Q           = q;
+    QL          = qlut;
+    QLS         = (Q - QL) * symbol_size;
 
     qgrams.resize( string_len );
     index.resize( string_len );
@@ -58,7 +60,7 @@ void QGramIndexDevice::build(
         thrust::make_counting_iterator<uint32>(0u),
         thrust::make_counting_iterator<uint32>(0u) + string_len,
         d_all_qgrams.begin(),
-        string_qgram_functor<SYMBOL_SIZE,string_type>( Q, string_len, string ) );
+        string_qgram_functor<string_type>( Q, symbol_size, string_len, string ) );
 
     // build the list of q-gram indices
     thrust::copy(
@@ -107,7 +109,7 @@ void QGramIndexDevice::build(
 
     if (QL)
     {
-        const uint32 ALPHABET_SIZE = 1u << SYMBOL_SIZE;
+        const uint32 ALPHABET_SIZE = 1u << symbol_size;
 
         uint64 lut_size = 1;
         for (uint32 i = 0; i < QL; ++i)

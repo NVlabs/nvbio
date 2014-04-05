@@ -93,6 +93,7 @@ struct QGramIndexView
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     QGramIndexView(
         const uint32        _Q                 = 0,
+        const uint32        _symbol_size       = 0,
         const uint32        _n_unique_qgrams   = 0,
         qgram_vector_type   _qgrams            = NULL,
         index_vector_type   _slots             = NULL,
@@ -100,6 +101,7 @@ struct QGramIndexView
         const uint32        _QLS               = 0,
         index_vector_type   _lut               = NULL) :
         Q               ( _Q ),
+        symbol_size     ( _symbol_size ),
         n_unique_qgrams ( _n_unique_qgrams ),
         qgrams          ( _qgrams ),
         slots           ( _slots ),
@@ -136,6 +138,7 @@ struct QGramIndexView
     uint2 operator() (const uint32 g) const { return range( g ); }
 
     uint32              Q;                  ///< the q-gram size
+    uint32              symbol_size;        ///< symbol size
     uint32              n_unique_qgrams;    ///< the number of unique q-grams in the original string
     qgram_vector_type   qgrams;             ///< the sorted list of unique q-grams
     index_vector_type   slots;              ///< slots[i] stores the first occurrence of q-grams[i] in index
@@ -185,18 +188,19 @@ struct QGramIndexDevice
     /// build a q-gram index from a given string T; the amount of storage required
     /// is basically O( A^q + |T|*32 ) bits, where A is the alphabet size.
     ///
-    /// \tparam SYMBOL_SIZE     the size of the symbols, in bits
     /// \tparam string_type     the string iterator type
     ///
     /// \param q                the q parameter
+    /// \param symbol_sz        the size of the symbols, in bits
     /// \param string_len       the size of the string
     /// \param string           the string iterator
     /// \param qlut             the number of symbols to include in the LUT (of size O( A^qlut ))
     ///                         used to accelerate q-gram searches
     ///
-    template <uint32 SYMBOL_SIZE, typename string_type>
+    template <typename string_type>
     void build(
         const uint32        q,
+        const uint32        symbol_sz,
         const uint32        string_len,
         const string_type   string,
         const uint32        qlut = 0);
@@ -216,6 +220,7 @@ struct QGramIndexDevice
     }
 
     uint32              Q;                  ///< the q-gram size
+    uint32              symbol_size;        ///< symbol size
     uint32              n_unique_qgrams;    ///< the number of unique q-grams in the original string
     qgram_vector_type   qgrams;             ///< the sorted list of unique q-grams
     index_vector_type   slots;              ///< slots[i] stores the first occurrence of q-grams[i] in index
@@ -232,6 +237,7 @@ QGramIndexView plain_view(QGramIndexDevice& qgram)
 {
     return QGramIndexView(
         qgram.Q,
+        qgram.symbol_size,
         qgram.n_unique_qgrams,
         nvbio::plain_view( qgram.qgrams ),
         nvbio::plain_view( qgram.slots ),
@@ -242,10 +248,9 @@ QGramIndexView plain_view(QGramIndexDevice& qgram)
 
 /// A utility functor to extract the i-th q-gram out of a string
 ///
-/// \tparam SYMBOL_SIZE         the size of the symbols, in bits
 /// \tparam string_type         the string iterator type
 ///
-template <uint32 SYMBOL_SIZE, typename string_type>
+template <typename string_type>
 struct string_qgram_functor
 {
     static const uint32 WORD_SIZE = 32;
@@ -255,10 +260,12 @@ struct string_qgram_functor
     /// \param _string_len       string length
     /// \param _string           string iterator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    string_qgram_functor(const uint32 _Q, const uint32 _string_len, const string_type _string) :
-        Q(_Q),
-        string_len(_string_len),
-        string(_string) {}
+    string_qgram_functor(const uint32 _Q, const uint32 _symbol_size, const uint32 _string_len, const string_type _string) :
+        Q           ( _Q ),
+        symbol_size ( _symbol_size ),
+        symbol_mask ( (1u << _symbol_size) - 1u ),
+        string_len  ( _string_len ),
+        string      ( _string ) {}
 
     /// functor operator
     ///
@@ -267,23 +274,23 @@ struct string_qgram_functor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint64 operator() (const uint32 i) const
     {
-        const uint32 SYMBOL_MASK = (1u << SYMBOL_SIZE) - 1u;
-
         uint64 qgram = 0u;
         for (uint32 j = 0; j < Q; ++j)
-            qgram |= uint64(i+j < string_len ? (string[i + j] & SYMBOL_MASK) : 0u) << (j*SYMBOL_SIZE);
+            qgram |= uint64(i+j < string_len ? (string[i + j] & symbol_mask) : 0u) << (j*symbol_size);
 
         return qgram;
     }
 
     const uint32        Q;          ///< q-gram size
+    const uint32        symbol_size;///< symbol size
+    const uint32        symbol_mask;///< symbol size
     const uint32        string_len; ///< string length
     const string_type   string;     ///< string iterator
 };
 
 /// define a simple q-gram search functor
 ///
-template <uint32 SYMBOL_SIZE, typename qgram_index_type, typename string_type>
+template <typename qgram_index_type, typename string_type>
 struct string_qgram_search_functor
 {
     typedef uint32          argument_type;
@@ -304,7 +311,7 @@ struct string_qgram_search_functor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint2 operator() (const uint32 i) const
     {
-        const string_qgram_functor<SYMBOL_SIZE,string_type> qgram( qgram_index.Q, string_len, string );
+        const string_qgram_functor<string_type> qgram( qgram_index.Q, qgram_index.symbol_size, string_len, string );
 
         return qgram_index.range( qgram(i) );
     }

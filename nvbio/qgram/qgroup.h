@@ -85,12 +85,14 @@ struct QGroupIndexView
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     QGroupIndexView(
         const uint32 _Q                 = 0,
+        const uint32 _symbol_size       = 0,
         const uint32 _n_unique_qgrams   = 0,
         vector_type  _I                 = NULL,
         vector_type  _S                 = NULL,
         vector_type  _SS                = NULL,
         vector_type  _P                 = NULL) :
         Q               (_Q),
+        symbol_size     (_symbol_size),
         n_unique_qgrams (_n_unique_qgrams),
         I               (_I),
         S               (_S),
@@ -123,6 +125,7 @@ struct QGroupIndexView
     uint2 operator() (const uint32 g) const { return range( g ); }
 
     uint32        Q;
+    uint32        symbol_size;
     uint32        n_unique_qgrams;
     vector_type   I;
     vector_type   S;
@@ -177,16 +180,17 @@ struct QGroupIndexDevice
     /// build a q-group index from a given string T; the amount of storage required
     /// is basically O( A^q + |T|*32 ) bits, where A is the alphabet size.
     ///
-    /// \tparam SYMBOL_SIZE     the size of the symbols, in bits
     /// \tparam string_type     the string iterator type
     ///
     /// \param q                the q parameter
+    /// \param symbol_sz        the size of the symbols, in bits
     /// \param string_len       the size of the string
     /// \param string           the string iterator
     ///
-    template <uint32 SYMBOL_SIZE, typename string_type>
+    template <typename string_type>
     void build(
         const uint32        q,
+        const uint32        symbol_sz,
         const uint32        string_len,
         const string_type   string);
 
@@ -205,6 +209,7 @@ struct QGroupIndexDevice
     }
 
     uint32        Q;
+    uint32        symbol_size;
     uint32        n_unique_qgrams;
     vector_type   I;
     vector_type   S;
@@ -218,6 +223,7 @@ QGroupIndexView plain_view(QGroupIndexDevice& qgroup)
 {
     return QGroupIndexView(
         qgroup.Q,
+        qgroup.symbol_size,
         qgroup.n_unique_qgrams,
         nvbio::plain_view( qgroup.I ),
         nvbio::plain_view( qgroup.S ),

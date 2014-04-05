@@ -144,7 +144,7 @@ int qgram_test(int argc, char* argv[])
         thrust::make_counting_iterator<uint32>(0u),
         thrust::make_counting_iterator<uint32>(0u) + n_queries,
         d_qgrams.begin(),
-        string_qgram_functor<2u,genome_type>( 16u, genome_len, genome ) );
+        string_qgram_functor<genome_type>( 16u, 2u, genome_len, genome ) );
 
     // sort the q-grams
     thrust::device_vector<uint64> d_sorted_qgrams( d_qgrams );
@@ -163,8 +163,9 @@ int qgram_test(int argc, char* argv[])
         Timer timer;
         timer.start();
 
-        qgram_index.build<2u>(     // implicitly convert N to A
-            16u,
+        qgram_index.build(
+            16u,            // q-gram size
+            2u,             // implicitly convert N to A
             string_len,
             string,
             12u );
@@ -230,8 +231,9 @@ int qgram_test(int argc, char* argv[])
         Timer timer;
         timer.start();
 
-        qgroup_index.build<2u>(     // implicitly convert N to A
-            16u,
+        qgroup_index.build(
+            16u,            // q-gram size
+            2u,             // implicitly convert N to A
             string_len,
             string );
 

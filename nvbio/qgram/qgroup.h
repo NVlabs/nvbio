@@ -79,6 +79,7 @@ struct QGroupIndexView
     typedef uint32*                                             vector_type;
     typedef PackedStream<const uint32*,uint8,1u,false,int64>    const_bitstream_type;
     typedef PackedStream<uint32*,uint8,1u,false,int64>          bitstream_type;
+    typedef uint32                                              coord_type;
 
     /// constructor
     ///
@@ -124,6 +125,11 @@ struct QGroupIndexView
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint2 operator() (const uint32 g) const { return range( g ); }
 
+    /// locate a given occurrence of a q-gram
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 locate(const uint32 i) const { return P[i]; }
+
     uint32        Q;
     uint32        symbol_size;
     uint32        n_unique_qgrams;
@@ -142,6 +148,7 @@ struct QGroupIndexHost
     typedef thrust::host_vector<uint32>                         vector_type;
     typedef PackedStream<const uint32*,uint8,1u,false,int64>    const_bitstream_type;
     typedef PackedStream<uint32*,uint8,1u,false,int64>          bitstream_type;
+    typedef uint32                                              coord_type;
     typedef QGroupIndexView                                     view_type;
 
     /// return the amount of device memory used
@@ -175,6 +182,7 @@ struct QGroupIndexDevice
     typedef thrust::device_vector<uint32>                       vector_type;
     typedef PackedStream<const uint32*,uint8,1u,false,int64>    const_bitstream_type;
     typedef PackedStream<uint32*,uint8,1u,false,int64>          bitstream_type;
+    typedef uint32                                              coord_type;
     typedef QGroupIndexView                                     view_type;
 
     /// build a q-group index from a given string T; the amount of storage required

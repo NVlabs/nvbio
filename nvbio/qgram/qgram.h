@@ -33,6 +33,7 @@
 #include <nvbio/basic/cuda/primitives.h>
 #include <nvbio/basic/thrust_view.h>
 #include <nvbio/basic/exceptions.h>
+#include <nvbio/basic/iterator.h>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <thrust/sort.h>
@@ -81,31 +82,35 @@ namespace nvbio {
 ///@{
 ///
 
-/// A plain view of a q-gram index (see \ref QGramIndex)
+/// The base q-gram index core class (see \ref QGramIndex)
 ///
-struct QGramIndexView
+template <typename QGramVectorType, typename IndexVectorType, typename CoordVectorType>
+struct QGramIndexViewCore
 {
-    typedef uint64*                         qgram_vector_type;
-    typedef uint32*                         index_vector_type;
+    typedef QGramVectorType                                                 qgram_vector_type;
+    typedef IndexVectorType                                                 index_vector_type;
+    typedef CoordVectorType                                                 coord_vector_type;
+    typedef typename std::iterator_traits<coord_vector_type>::value_type    coord_type;
 
-    /// constructor
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    QGramIndexView(
-        const uint32        _Q                 = 0,
-        const uint32        _symbol_size       = 0,
-        const uint32        _n_unique_qgrams   = 0,
-        qgram_vector_type   _qgrams            = NULL,
-        index_vector_type   _slots             = NULL,
-        index_vector_type   _index             = NULL,
-        const uint32        _QLS               = 0,
-        index_vector_type   _lut               = NULL) :
+    QGramIndexViewCore() {}
+
+    QGramIndexViewCore(
+        const uint32                _Q,
+        const uint32                _symbol_size,
+        const uint32                _n_unique_qgrams,
+        const qgram_vector_type     _qgrams,
+        const index_vector_type     _slots,
+        const coord_vector_type     _index,
+        const uint32                _QL,
+        const uint32                _QLS,
+        const index_vector_type     _lut) :
         Q               ( _Q ),
         symbol_size     ( _symbol_size ),
         n_unique_qgrams ( _n_unique_qgrams ),
         qgrams          ( _qgrams ),
         slots           ( _slots ),
         index           ( _index ),
+        QL              ( _QL ),
         QLS             ( _QLS ),
         lut             ( _lut ) {}
 
@@ -132,6 +137,11 @@ struct QGramIndexView
         return make_uint2( slots[i], slots[i+1] );
     }
 
+    /// locate a given occurrence of a q-gram
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    coord_type locate(const uint32 i) const { return index[i]; }
+
     /// functor operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
@@ -142,20 +152,57 @@ struct QGramIndexView
     uint32              n_unique_qgrams;    ///< the number of unique q-grams in the original string
     qgram_vector_type   qgrams;             ///< the sorted list of unique q-grams
     index_vector_type   slots;              ///< slots[i] stores the first occurrence of q-grams[i] in index
-    index_vector_type   index;              ///< the list of occurrences of all (partially-sorted) q-grams in the original string
+    coord_vector_type   index;              ///< the list of occurrences of all (partially-sorted) q-grams in the original string
+
+    uint32              QL;                 ///< the number of LUT symbols 
     uint32              QLS;                ///< the number of leading bits of a q-gram to lookup in the LUT
     index_vector_type   lut;                ///< a LUT used to accelerate q-gram searches
 };
 
+/// The base q-gram index core class (see \ref QGramIndex)
+///
+template <typename QGramVectorType, typename IndexVectorType, typename CoordVectorType>
+struct QGramIndexCore
+{
+    typedef QGramVectorType                                                 qgram_vector_type;
+    typedef IndexVectorType                                                 index_vector_type;
+    typedef CoordVectorType                                                 coord_vector_type;
+    typedef coord_vector_type::value_type                                   coord_type;
+
+    QGramIndexCore() {}
+
+    uint32              Q;                  ///< the q-gram size
+    uint32              symbol_size;        ///< symbol size
+    uint32              n_unique_qgrams;    ///< the number of unique q-grams in the original string
+    qgram_vector_type   qgrams;             ///< the sorted list of unique q-grams
+    index_vector_type   slots;              ///< slots[i] stores the first occurrence of q-grams[i] in index
+    coord_vector_type   index;              ///< the list of occurrences of all (partially-sorted) q-grams in the original string
+
+    uint32              QL;                 ///< the number of LUT symbols 
+    uint32              QLS;                ///< the number of leading bits of a q-gram to lookup in the LUT
+    index_vector_type   lut;                ///< a LUT used to accelerate q-gram searches
+};
+
+typedef QGramIndexViewCore<uint64*,uint32*,uint32*> QGramIndexView;
+typedef QGramIndexViewCore<uint64*,uint32*,uint2*>  QGramSetIndexView;
+
 /// A host-side q-gram index (see \ref QGramIndex)
 ///
-struct QGramIndexHost
+struct QGramIndexHost : public QGramIndexCore<
+    thrust::host_vector<uint64>,
+    thrust::host_vector<uint32>,
+    thrust::host_vector<uint32> >
 {
-    static const uint32 WORD_SIZE = 32;
+    typedef QGramIndexCore<
+        thrust::host_vector<uint64>,
+        thrust::host_vector<uint32>,
+        thrust::host_vector<uint32> >               core_type;
 
-    typedef thrust::host_vector<uint64>     qgram_vector_type;
-    typedef thrust::host_vector<uint32>     index_vector_type;
-    typedef QGramIndexView                  view_type;
+    typedef core_type::qgram_vector_type            qgram_vector_type;
+    typedef core_type::index_vector_type            index_vector_type;
+    typedef core_type::coord_vector_type            coord_vector_type;
+    typedef core_type::coord_type                   coord_type;
+    typedef QGramIndexView                          view_type;
 
     /// return the amount of device memory used
     ///
@@ -163,27 +210,32 @@ struct QGramIndexHost
     {
         return qgrams.size() * sizeof(uint64) +
                slots.size()  * sizeof(uint32) +
-               index.size()  * sizeof(uint32);
+               index.size()  * sizeof(coord_type) + 
+               lut.size()    * sizeof(uint32);
     }
 
     /// return the amount of device memory used
     ///
     uint64 used_device_memory() const { return 0u; }
-
-    uint32              Q;
-    uint32              n_unique_qgrams;
-    qgram_vector_type   qgrams;
-    index_vector_type   slots;
-    index_vector_type   index;
 };
 
-/// A device-side q-gram index (see \ref QGramIndex)
+/// A device-side q-gram index for strings (see \ref QGramIndex)
 ///
-struct QGramIndexDevice
+struct QGramIndexDevice : public QGramIndexCore<
+    thrust::device_vector<uint64>,
+    thrust::device_vector<uint32>,
+    thrust::device_vector<uint32> >
 {
-    typedef thrust::device_vector<uint64>   qgram_vector_type;
-    typedef thrust::device_vector<uint32>   index_vector_type;
-    typedef QGramIndexView                  view_type;
+    typedef QGramIndexCore<
+        thrust::device_vector<uint64>,
+        thrust::device_vector<uint32>,
+        thrust::device_vector<uint32> >             core_type;
+
+    typedef core_type::qgram_vector_type            qgram_vector_type;
+    typedef core_type::index_vector_type            index_vector_type;
+    typedef core_type::coord_vector_type            coord_vector_type;
+    typedef core_type::coord_type                   coord_type;
+    typedef QGramIndexView                          view_type;
 
     /// build a q-gram index from a given string T; the amount of storage required
     /// is basically O( A^q + |T|*32 ) bits, where A is the alphabet size.
@@ -215,20 +267,61 @@ struct QGramIndexDevice
     {
         return qgrams.size() * sizeof(uint64) +
                slots.size()  * sizeof(uint32) +
-               index.size()  * sizeof(uint32) +
+               index.size()  * sizeof(coord_type) +
                lut.size()    * sizeof(uint32);
     }
+};
 
-    uint32              Q;                  ///< the q-gram size
-    uint32              symbol_size;        ///< symbol size
-    uint32              n_unique_qgrams;    ///< the number of unique q-grams in the original string
-    qgram_vector_type   qgrams;             ///< the sorted list of unique q-grams
-    index_vector_type   slots;              ///< slots[i] stores the first occurrence of q-grams[i] in index
-    index_vector_type   index;              ///< the list of occurrences of all (partially-sorted) q-grams in the original string
+/// A device-side q-gram index for string-sets (see \ref QGramIndex)
+///
+struct QGramSetIndexDevice : public QGramIndexCore<
+    thrust::device_vector<uint64>,
+    thrust::device_vector<uint32>,
+    thrust::device_vector<uint2> >
+{
+    typedef QGramIndexCore<
+        thrust::device_vector<uint64>,
+        thrust::device_vector<uint32>,
+        thrust::device_vector<uint2> >              core_type;
 
-    uint32              QL;                 ///< the q-gram length cached in the LUT
-    uint32              QLS;                ///< the number of leading bits of a q-gram to lookup in the LUT
-    index_vector_type   lut;                ///< a LUT used to accelerate q-gram searches
+    typedef core_type::qgram_vector_type            qgram_vector_type;
+    typedef core_type::index_vector_type            index_vector_type;
+    typedef core_type::coord_vector_type            coord_vector_type;
+    typedef core_type::coord_type                   coord_type;
+    typedef QGramIndexView                          view_type;
+
+    /// build a q-gram index from a given string T; the amount of storage required
+    /// is basically O( A^q + |T|*32 ) bits, where A is the alphabet size.
+    ///
+    /// \tparam string_type     the string iterator type
+    ///
+    /// \param q                the q parameter
+    /// \param symbol_sz        the size of the symbols, in bits
+    /// \param string_len       the size of the string
+    /// \param string           the string iterator
+    /// \param qlut             the number of symbols to include in the LUT (of size O( A^qlut ))
+    ///                         used to accelerate q-gram searches
+    ///
+    template <typename string_set_type>
+    void build(
+        const uint32            q,
+        const uint32            symbol_sz,
+        const string_set_type   string,
+        const uint32            qlut = 0);
+
+    /// return the amount of device memory used
+    ///
+    uint64 used_host_memory() const { return 0u; }
+
+    /// return the amount of device memory used
+    ///
+    uint64 used_device_memory() const
+    {
+        return qgrams.size() * sizeof(uint64) +
+               slots.size()  * sizeof(uint32) +
+               index.size()  * sizeof(coord_type) +
+               lut.size()    * sizeof(uint32);
+    }
 };
 
 /// return the plain view of a QGramIndex
@@ -242,6 +335,23 @@ QGramIndexView plain_view(QGramIndexDevice& qgram)
         nvbio::plain_view( qgram.qgrams ),
         nvbio::plain_view( qgram.slots ),
         nvbio::plain_view( qgram.index ),
+        qgram.QL,
+        qgram.QLS,
+        nvbio::plain_view( qgram.lut ) );
+}
+
+/// return the plain view of a QGramIndex
+///
+QGramSetIndexView plain_view(QGramSetIndexDevice& qgram)
+{
+    return QGramSetIndexView(
+        qgram.Q,
+        qgram.symbol_size,
+        qgram.n_unique_qgrams,
+        nvbio::plain_view( qgram.qgrams ),
+        nvbio::plain_view( qgram.slots ),
+        nvbio::plain_view( qgram.index ),
+        qgram.QL,
         qgram.QLS,
         nvbio::plain_view( qgram.lut ) );
 }
@@ -253,12 +363,13 @@ QGramIndexView plain_view(QGramIndexDevice& qgram)
 template <typename string_type>
 struct string_qgram_functor
 {
-    static const uint32 WORD_SIZE = 32;
-
     /// constructor
     ///
+    /// \param _Q                the q-gram length
+    /// \param _symbol_size      the size of the symbols, in bits
     /// \param _string_len       string length
     /// \param _string           string iterator
+    ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     string_qgram_functor(const uint32 _Q, const uint32 _symbol_size, const uint32 _string_len, const string_type _string) :
         Q           ( _Q ),
@@ -281,11 +392,59 @@ struct string_qgram_functor
         return qgram;
     }
 
-    const uint32        Q;          ///< q-gram size
-    const uint32        symbol_size;///< symbol size
-    const uint32        symbol_mask;///< symbol size
-    const uint32        string_len; ///< string length
-    const string_type   string;     ///< string iterator
+    const uint32        Q;              ///< q-gram size
+    const uint32        symbol_size;    ///< symbol size
+    const uint32        symbol_mask;    ///< symbol size
+    const uint32        string_len;     ///< string length
+    const string_type   string;         ///< string iterator
+};
+
+/// A utility functor to extract the i-th q-gram out of a string-set
+///
+/// \tparam string_set_type         the string-set type
+///
+template <typename string_set_type>
+struct string_set_qgram_functor
+{
+    typedef typename string_set_type::string_type string_type;
+
+    /// constructor
+    ///
+    /// \param _Q                the q-gram length
+    /// \param _symbol_size      the size of the symbols, in bits
+    /// \param _string_set       the string-set
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    string_set_qgram_functor(const uint32 _Q, const uint32 _symbol_size, const string_set_type _string_set) :
+        Q           ( _Q ),
+        symbol_size ( _symbol_size ),
+        symbol_mask ( (1u << _symbol_size) - 1u ),
+        string_set  ( _string_set ) {}
+
+    /// functor operator
+    ///
+    /// \param id       string-set coordinate
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint64 operator() (const uint2 id) const
+    {
+        const uint32 string_id  = id.x;
+        const uint32 string_pos = id.y;
+        const string_type string = string_set[ string_id ];
+
+        const uint32 string_len = string.length();
+
+        uint64 qgram = 0u;
+        for (uint32 j = 0; j < Q; ++j)
+            qgram |= uint64(string_pos + j < string_len ? (string[string_pos + j] & symbol_mask) : 0u) << (j*symbol_size);
+
+        return qgram;
+    }
+
+    const uint32            Q;              ///< q-gram size
+    const uint32            symbol_size;    ///< symbol size
+    const uint32            symbol_mask;    ///< symbol size
+    const string_set_type   string_set;     ///< string-set
 };
 
 /// define a simple q-gram search functor

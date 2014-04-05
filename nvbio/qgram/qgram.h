@@ -37,6 +37,7 @@
 #include <thrust/device_vector.h>
 #include <thrust/sort.h>
 #include <thrust/for_each.h>
+#include <thrust/binary_search.h>
 #include <thrust/iterator/constant_iterator.h>
 #include <thrust/iterator/counting_iterator.h>
 
@@ -95,23 +96,31 @@ struct QGramIndexView
         const uint32        _n_unique_qgrams   = 0,
         qgram_vector_type   _qgrams            = NULL,
         index_vector_type   _slots             = NULL,
-        index_vector_type   _index             = NULL) :
-        Q               (_Q),
-        n_unique_qgrams (_n_unique_qgrams),
-        qgrams          (_qgrams),
-        slots           (_slots),
-        index           (_index) {}
+        index_vector_type   _index             = NULL,
+        const uint32        _QLS               = 0,
+        index_vector_type   _lut               = NULL) :
+        Q               ( _Q ),
+        n_unique_qgrams ( _n_unique_qgrams ),
+        qgrams          ( _qgrams ),
+        slots           ( _slots ),
+        index           ( _index ),
+        QLS             ( _QLS ),
+        lut             ( _lut ) {}
 
     /// return the slots of P corresponding to the given qgram g
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint2 range(const uint64 g) const
     {
+        const uint2 lut_range = lut ?
+            make_uint2( lut[ g >> QLS ], lut[ (g >> QLS) + 1 ] ) :
+            make_uint2( 0u, n_unique_qgrams );
+
         // find the slot where stored our q-gram
         const uint32 i = uint32( nvbio::lower_bound(
             g,
-            qgrams,
-            n_unique_qgrams ) - qgrams );
+            qgrams + lut_range.x,
+            (lut_range.y - lut_range.x) ) - qgrams );
 
         // check whether we find what we were looking for
         if (i >= n_unique_qgrams || g != qgrams[i])
@@ -126,11 +135,13 @@ struct QGramIndexView
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint2 operator() (const uint32 g) const { return range( g ); }
 
-    uint32              Q;
-    uint32              n_unique_qgrams;
-    qgram_vector_type   qgrams;
-    index_vector_type   slots;
-    index_vector_type   index;
+    uint32              Q;                  ///< the q-gram size
+    uint32              n_unique_qgrams;    ///< the number of unique q-grams in the original string
+    qgram_vector_type   qgrams;             ///< the sorted list of unique q-grams
+    index_vector_type   slots;              ///< slots[i] stores the first occurrence of q-grams[i] in index
+    index_vector_type   index;              ///< the list of occurrences of all (partially-sorted) q-grams in the original string
+    uint32              QLS;                ///< the number of leading bits of a q-gram to lookup in the LUT
+    index_vector_type   lut;                ///< a LUT used to accelerate q-gram searches
 };
 
 /// A host-side q-gram index (see \ref QGramIndex)
@@ -180,12 +191,15 @@ struct QGramIndexDevice
     /// \param q                the q parameter
     /// \param string_len       the size of the string
     /// \param string           the string iterator
+    /// \param qlut             the number of symbols to include in the LUT (of size O( A^qlut ))
+    ///                         used to accelerate q-gram searches
     ///
     template <uint32 SYMBOL_SIZE, typename string_type>
     void build(
         const uint32        q,
         const uint32        string_len,
-        const string_type   string);
+        const string_type   string,
+        const uint32        qlut = 0);
 
     /// return the amount of device memory used
     ///
@@ -200,11 +214,15 @@ struct QGramIndexDevice
                index.size()  * sizeof(uint32);
     }
 
-    uint32              Q;
-    uint32              n_unique_qgrams;
-    qgram_vector_type   qgrams;
-    index_vector_type   slots;
-    index_vector_type   index;
+    uint32              Q;                  ///< the q-gram size
+    uint32              n_unique_qgrams;    ///< the number of unique q-grams in the original string
+    qgram_vector_type   qgrams;             ///< the sorted list of unique q-grams
+    index_vector_type   slots;              ///< slots[i] stores the first occurrence of q-grams[i] in index
+    index_vector_type   index;              ///< the list of occurrences of all (partially-sorted) q-grams in the original string
+
+    uint32              QL;                 ///< the q-gram length cached in the LUT
+    uint32              QLS;                ///< the number of leading bits of a q-gram to lookup in the LUT
+    index_vector_type   lut;                ///< a LUT used to accelerate q-gram searches
 };
 
 /// return the plain view of a QGramIndex
@@ -216,7 +234,9 @@ QGramIndexView plain_view(QGramIndexDevice& qgram)
         qgram.n_unique_qgrams,
         nvbio::plain_view( qgram.qgrams ),
         nvbio::plain_view( qgram.slots ),
-        nvbio::plain_view( qgram.index ) );
+        nvbio::plain_view( qgram.index ),
+        qgram.QLS,
+        nvbio::plain_view( qgram.lut ) );
 }
 
 /// A utility functor to extract the i-th q-gram out of a string

@@ -39,11 +39,14 @@ template <uint32 SYMBOL_SIZE, typename string_type>
 void QGramIndexDevice::build(
     const uint32        q,
     const uint32        string_len,
-    const string_type   string)
+    const string_type   string,
+    const uint32        qlut)
 {
     thrust::device_vector<uint8> d_temp_storage;
 
-    Q = q;
+    Q   = q;
+    QL  = qlut;
+    QLS = (Q - QL) * SYMBOL_SIZE;
 
     qgrams.resize( string_len );
     index.resize( string_len );
@@ -97,6 +100,42 @@ void QGramIndexDevice::build(
     const uint32 n_slots = slots[ n_unique_qgrams ];
     if (n_slots != string_len)
         throw runtime_error( "mismatching number of q-grams: inserted %u q-grams, got: %u\n" );
+
+    //
+    // build a LUT
+    //
+
+    if (QL)
+    {
+        const uint32 ALPHABET_SIZE = 1u << SYMBOL_SIZE;
+
+        uint64 lut_size = 1;
+        for (uint32 i = 0; i < QL; ++i)
+            lut_size *= ALPHABET_SIZE;
+
+        // build a set of spaced q-grams
+        thrust::device_vector<uint64> lut_qgrams( lut_size );
+        thrust::transform(
+            thrust::make_counting_iterator<uint32>(0),
+            thrust::make_counting_iterator<uint32>(0) + lut_size,
+            lut_qgrams.begin(),
+            shift_left<uint64>( QLS ) );
+
+        // and now search them
+        lut.resize( lut_size+1 );
+
+        thrust::lower_bound(
+            qgrams.begin(),
+            qgrams.begin() + n_unique_qgrams,
+            lut_qgrams.begin(),
+            lut_qgrams.begin() + lut_size,
+            lut.begin() );
+
+        // and write a sentinel value
+        lut[ lut_size ] = n_unique_qgrams;
+    }
+    else
+        lut.resize(0);
 }
 
 } // namespace nvbio

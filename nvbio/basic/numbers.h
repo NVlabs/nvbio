@@ -840,6 +840,56 @@ struct leading_bits
     const uint32 n_bits;
 };
 
+/// A left shift functor
+///
+template <typename word_type>
+struct shift_left
+{
+    typedef word_type argument_type;
+    typedef word_type result_type;
+
+    /// constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    shift_left(const uint32 _shift) : shift(_shift) {}
+
+    /// functor operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const argument_type i) const
+    {
+        // shift i by d bits
+        return result_type(i) << shift;
+    }
+
+    const uint32 shift;
+};
+
+/// A right shift functor
+///
+template <typename word_type>
+struct shift_right
+{
+    typedef word_type argument_type;
+    typedef word_type result_type;
+
+    /// constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    shift_right(const uint32  _shift) : shift(_shift) {}
+
+    /// functor operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const argument_type i) const
+    {
+        // shift i by d bits
+        return result_type(i) >> shift;
+    }
+
+    const uint32 shift;
+};
+
 /// A functor to compute the popcount of a word
 ///
 template <typename word_type>

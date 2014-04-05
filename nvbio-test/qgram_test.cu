@@ -164,7 +164,8 @@ int qgram_test(int argc, char* argv[])
         qgram_index.build<2u>(     // implicitly convert N to A
             16u,
             string_len,
-            string );
+            string,
+            12u );
 
         cudaDeviceSynchronize();
         timer.stop();

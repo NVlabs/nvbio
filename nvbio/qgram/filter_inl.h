@@ -175,7 +175,7 @@ void QGramFilter::enact(
     // scan their size to determine the slots
     cuda::inclusive_scan(
         n_queries,
-        thrust::make_transform_iterator( m_ranges.begin(), range_size() ),
+        thrust::make_transform_iterator( m_ranges.begin(), qgram::range_size() ),
         m_slots.begin(),
         thrust::plus<uint32>(),
         d_temp_storage );

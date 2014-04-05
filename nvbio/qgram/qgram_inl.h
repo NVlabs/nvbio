@@ -53,7 +53,7 @@ void QGramIndexDevice::build(
     qgrams.resize( string_len );
     index.resize( string_len );
 
-    thrust::device_vector<uint32> d_all_qgrams( string_len );
+    thrust::device_vector<uint64> d_all_qgrams( string_len );
 
     // build the list of q-grams
     thrust::transform(
@@ -230,7 +230,7 @@ void QGramSetIndexDevice::build(
     qgrams.resize( n_qgrams );
     index.resize( n_qgrams );
 
-    thrust::device_vector<uint32> d_all_qgrams( n_qgrams );
+    thrust::device_vector<uint64> d_all_qgrams( n_qgrams );
 
     // build the list of q-gram indices
     thrust::transform(

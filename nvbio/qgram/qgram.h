@@ -60,9 +60,11 @@
 ///   <i>Massively parallel read mapping on GPUs with PEANUT</i> \n
 ///   Johannes Koester and Sven Rahmann \n
 ///   http://arxiv.org/pdf/1403.1706v1.pdf
+///   this data-structure requires O(A^q) bits of storage in the alphabet-size <i>A</i> and the q-gram length <i>q</i>,
+///   and provides O(1) query time; \n \n
 ///
 /// - the compact \ref QGramIndex "Q-Gram Index", which can be built over a string T, with memory consumption and query time proportional
-///   to O(unique(T)) and O(log(unique(T))) respectively, where unique(T) is the number of unique q-grams in T.
+///   to O(unique(T)) and O(log(unique(T))) respectively, where <i>unique(T)</i> is the number of unique q-grams in T.
 ///   This is achieved by keeping a plain sorted list of the unique q-grams in T, together with an index of their occurrences
 ///   in the original string T.
 ///   This data-structure offers up to 5x higher construction speed and a potentially unbounded improvement in memory consumption 
@@ -86,7 +88,7 @@
 /// // copy the string to the device
 /// thrust::device_vector<uint8> d_string( h_string );
 ///
-/// // build the q-gram index on the device
+/// // build a q-gram index on the device
 /// QGramIndexDevice qgram_index;
 ///
 /// qgram_index.build(
@@ -120,7 +122,7 @@
 ///     nvbio::plain_view( d_string ),
 ///     nvbio::plain_view( d_string_offsets ) );
 ///
-/// // build the q-gram index on the device
+/// // build a q-gram index on the device
 /// QGramSetIndexDevice qgram_index;
 ///
 /// qgram_index.build(
@@ -177,15 +179,19 @@
 /// larger q-gram indices, and much larger batches of queries. Moreover, it's often beneficial to
 /// sort the query q-grams upfront, as in:
 ///\code
+/// // keep track of the original q-gram indices before sorting
 /// thrust::device_vector<uint32> d_query_indices( n_query_qgrams );
 /// thrust::copy(
 ///   thrust::make_counting_iterator<uint32>(0u),
 ///   thrust::make_counting_iterator<uint32>(0u) + n_query_qgrams,
 ///   d_query_indices.begin() );
+///
+/// // now sort the q-grams and their original indices
 /// thrust::sort_by_key( d_query_qgrams.begin(), d_query_qgrams.begin() + n_query_qgrams, d_query_indices.begin() );
 ///\endcode
 ///
 ///\section Q-Gram Filtering
+///\par
 /// The previous example was only showing how to get the <i>ranges</i> of matching q-grams inside an index: it didn't
 /// show how to get the actual list of hits.
 /// One way to go about it is to ask the q-gram index, which given an entry inside each non-empty range, can provide
@@ -210,8 +216,9 @@
 /// const uint32  n_hits = qgram_filter.n_hits();
 /// const uint2*  d_hits = qgram_filter.hits();
 ///   // d_hits is a device pointer to a list of <i>(qgram-pos,query-pos)</i> pairs,
-///   // where <i>qgram-pos</i> is the index of the hit into the string used to build qgram-index,
-///   // and <i>query-pos</i> corresponds to one of the input query q-gram indices.
+///   // where <i>qgram-pos</i> is the index of the hit into the string used to build,
+///   // qgram-index and <i>query-pos</i> corresponds to one of the input query q-gram
+///   // indices.
 ///\endcode
 ///
 /// \section TechnicalOverviewSection Technical Overview
@@ -237,7 +244,7 @@ namespace nvbio {
 ///@defgroup QGramIndex Q-Gram Index Module
 /// This module contains a series of classes and functions to build a compact Q-Gram Index over
 /// a string T, with memory consumption and query time proportional to O(unique(T)) and O(log(unique(T))) respectively,
-/// where unique(T) is the number of unique q-grams in T.
+/// where <i>unique(T)</i> is the number of unique q-grams in T.
 /// This is achieved by keeping a plain sorted list of the unique q-grams in T, together with an index of their occurrences
 /// in the original string T.
 /// This data-structure offers up to 5x higher construction speed and a potentially unbounded improvement in memory consumption 

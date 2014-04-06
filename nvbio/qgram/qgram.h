@@ -190,7 +190,7 @@
 /// thrust::sort_by_key( d_query_qgrams.begin(), d_query_qgrams.begin() + n_query_qgrams, d_query_indices.begin() );
 ///\endcode
 ///
-///\section QGramFilterSection Filtering
+///\section QGramFilterSection Q-Gram Filtering
 ///\par
 /// The previous example was only showing how to get the <i>ranges</i> of matching q-grams inside an index: it didn't
 /// show how to get the actual list of hits.

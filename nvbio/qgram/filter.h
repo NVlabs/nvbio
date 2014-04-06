@@ -63,7 +63,7 @@ namespace nvbio {
 ///
 struct QGramFilter
 {
-    /// enact the q-gram filter
+    /// enact the q-gram filter on a q-gram index and a set of indexed query q-grams
     ///
     /// \param qgram_index      the q-gram index
     /// \param n_queries        the number of query q-grams

@@ -137,7 +137,7 @@
 /// There's various ways to accomplish this, and here we'll show a couple.
 /// The simplest query one can do is locating for a given q-gram the range of indexed q-grams
 /// which match it exactly.
-/// This can be done using as follows:
+/// This can be done as follows:
 ///\code
 /// // consider a sample string - we'll want to find all matching locations between all
 /// // q-grams in this string and all q-grams in the index

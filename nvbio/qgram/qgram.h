@@ -64,7 +64,7 @@
 ///   and provides O(1) query time; \n \n
 ///
 /// - the compact \ref QGramIndex "Q-Gram Index", which can be built over a string T, with memory consumption and query time proportional
-///   to O(unique(T)) and O(log(unique(T))) respectively, where <i>unique(T)</i> is the number of unique q-grams in T.
+///   to O(|T|) and O(log(unique(T))) respectively, where <i>unique(T)</i> is the number of unique q-grams in T.
 ///   This is achieved by keeping a plain sorted list of the unique q-grams in T, together with an index of their occurrences
 ///   in the original string T.
 ///   This data-structure offers up to 5x higher construction speed and a potentially unbounded improvement in memory consumption 
@@ -249,7 +249,7 @@ namespace nvbio {
 ///
 ///@defgroup QGramIndex Q-Gram Index Module
 /// This module contains a series of classes and functions to build a compact Q-Gram Index over
-/// a string T, with memory consumption and query time proportional to O(unique(T)) and O(log(unique(T))) respectively,
+/// a string T, with memory consumption and query time proportional to O(|T|) and O(log(unique(T))) respectively,
 /// where <i>unique(T)</i> is the number of unique q-grams in T.
 /// This is achieved by keeping a plain sorted list of the unique q-grams in T, together with an index of their occurrences
 /// in the original string T.

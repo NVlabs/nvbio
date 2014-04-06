@@ -68,6 +68,30 @@ struct valid_range
     uint32 operator() (const uint2 range) const { return range.y - range.x > 0 ? 1u : 0u; }
 };
 
+// query stats
+//
+struct Stats
+{
+    Stats() :
+        build_time(0),
+        unsorted_time(0),
+        sorted_time(0),
+        filter_time(0),
+        queries(0),
+        matches(0),
+        occurrences(0) {}
+
+    float   build_time;
+    float   unsorted_time;
+    float   sorted_time;
+    float   filter_time;
+    uint64  queries;
+    uint64  matches;
+    uint64  occurrences;
+};
+
+// build a set of q-grams from a given string, together with their sorted counterpart
+//
 template <typename genome_string>
 void build_qgrams(
     const uint32                    Q,
@@ -98,27 +122,7 @@ void build_qgrams(
     thrust::sort_by_key( d_sorted_qgrams.begin(), d_sorted_qgrams.end(), d_sorted_indices.begin() );
 }
 
-struct Stats
-{
-    Stats() :
-        build_time(0),
-        unsorted_time(0),
-        sorted_time(0),
-        filter_time(0),
-        queries(0),
-        matches(0),
-        occurrences(0) {}
-
-    float   build_time;
-    float   unsorted_time;
-    float   sorted_time;
-    float   filter_time;
-    uint64  queries;
-    uint64  matches;
-    uint64  occurrences;
-};
-
-// build a q-gram index
+// build a q-gram index from a string
 //
 template <typename string_type>
 void test_qgram_index_build(
@@ -152,7 +156,7 @@ void test_qgram_index_build(
     log_info(stderr, "  querying q-gram index... started\n");
 }
 
-// build a q-gram set index
+// build a q-gram set-index from a string-set
 //
 template <typename string_type>
 void test_qgram_set_index_build(
@@ -194,7 +198,7 @@ void test_qgram_set_index_build(
     log_info(stderr, "    memory usage   : %.1f MB\n", float( qgram_index.used_device_memory() ) / float(1024*1024) );
 }
 
-// build a q-group index
+// build a q-group index from a string
 //
 template <typename string_type>
 void test_qgroup_index_build(
@@ -227,6 +231,8 @@ void test_qgroup_index_build(
     log_info(stderr, "  querying q-group index... started\n");
 }
 
+// test a generic q-gram index query, both using plain queries and with a q-gram filter
+//
 template <typename qgram_index_type, typename genome_string>
 void test_qgram_index_query(
           qgram_index_type& qgram_index,
@@ -261,7 +267,7 @@ void test_qgram_index_query(
     Timer timer;
     timer.start();
 
-    // and search the genome q-grams in the index
+    // search the query q-grams in the index
     thrust::transform(
         d_qgrams.begin(),
         d_qgrams.begin() + n_queries,
@@ -272,10 +278,9 @@ void test_qgram_index_query(
     timer.stop();
     const float unsorted_time = timer.seconds();
 
-    // and now repeat the same operation with the sorted q-grams
     timer.start();
 
-    // and search the genome q-grams in the index
+    // and now repeat the same operation with the sorted q-grams
     thrust::transform(
         d_sorted_qgrams.begin(),
         d_sorted_qgrams.begin() + n_queries,
@@ -308,11 +313,14 @@ void test_qgram_index_query(
 
     log_info(stderr, "  q-gram filter... started\n");
 
+    //
+    // search the sorted query q-grams with a q-gram filter
+    //
+
     QGramFilter qgram_filter;
 
     timer.start();
 
-    // and search the genome q-grams in the index
     qgram_filter.enact(
         nvbio::plain_view( qgram_index ),
         n_queries,
@@ -329,6 +337,8 @@ void test_qgram_index_query(
     log_info(stderr, "    throughput : %.2f B q-grams/s\n", (1.0e-9f * float( stats.queries )) / stats.filter_time);
 }
 
+// main test entry point
+//
 int qgram_test(int argc, char* argv[])
 {
     uint32 n_qgrams      = 10000000;
@@ -412,6 +422,8 @@ int qgram_test(int argc, char* argv[])
 
     // test q-gram index
     {
+        log_visible(stderr, "  testing q-gram index... started\n");
+
         QGramIndexDevice qgram_index;
 
         test_qgram_index_build(
@@ -434,10 +446,14 @@ int qgram_test(int argc, char* argv[])
                 genome,
                 stats );
         }
+
+        log_visible(stderr, "  testing q-gram index... done\n");
     }
 
     // test q-gram set-index
     {
+        log_visible(stderr, "  testing q-gram set-index... started\n");
+
         QGramSetIndexDevice qgram_index;
 
         test_qgram_set_index_build(
@@ -462,10 +478,14 @@ int qgram_test(int argc, char* argv[])
                 genome,
                 stats );
         }
+
+        log_visible(stderr, "  testing q-gram set-index... done\n");
     }
 
     // test q-group index
     {
+        log_visible(stderr, "  testing q-group index... started\n");
+
         QGroupIndexDevice qgram_index;
 
         test_qgroup_index_build(
@@ -488,6 +508,8 @@ int qgram_test(int argc, char* argv[])
                 genome,
                 stats );
         }
+
+        log_visible(stderr, "  testing q-group index... done\n");
     }
 
     log_info(stderr, "q-gram test... done\n" );

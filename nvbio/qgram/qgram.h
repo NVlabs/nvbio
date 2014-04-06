@@ -50,7 +50,7 @@
 /// This module contains a series of functions to operate on q-grams as well as two q-gram index
 /// data-structures together with very high throughput parallel construction algorithms.
 ///
-///\section Q-Gram Indices
+///\section QGramIndicesSection Q-Gram Indices
 ///\par
 /// Q-gram indices are data-structures providing fast searching of exact or approximate <i>q-grams</i> (or k-mers),
 /// i.e. short strings of text containing <i>q</i> symbols.
@@ -131,7 +131,7 @@
 ///     string_set );               // the string-set we want to index
 ///\endcode
 ///
-///\section Q-Gram Index Queries
+///\section QGramIndexQueriesSection Q-Gram Index Queries
 ///\par
 /// Once a q-gram index is built, it would be interesting to perform some queries on it.
 /// There's various ways to accomplish this, and here we'll show a couple.
@@ -190,7 +190,7 @@
 /// thrust::sort_by_key( d_query_qgrams.begin(), d_query_qgrams.begin() + n_query_qgrams, d_query_indices.begin() );
 ///\endcode
 ///
-///\section Q-Gram Filtering
+///\section QGramFilterSection Filtering
 ///\par
 /// The previous example was only showing how to get the <i>ranges</i> of matching q-grams inside an index: it didn't
 /// show how to get the actual list of hits.

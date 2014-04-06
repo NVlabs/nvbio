@@ -198,11 +198,13 @@ void QGramFilter::enact(
             nvbio::plain_view( m_ranges ),
             indices ) );
 
+    /*
     // now sort the results by (id, diagonal)
     thrust::device_ptr<uint64> output_ptr( (uint64*)nvbio::plain_view( m_output ) );
     thrust::sort(
         output_ptr,
         output_ptr + n_occurrences );
+        */
 }
 
 } // namespace nvbio

@@ -53,7 +53,7 @@ void QGramIndexDevice::build(
     qgrams.resize( string_len );
     index.resize( string_len );
 
-    thrust::device_vector<uint64> d_all_qgrams( string_len );
+    thrust::device_vector<qgram_type> d_all_qgrams( string_len );
 
     // build the list of q-grams
     thrust::transform(
@@ -116,12 +116,12 @@ void QGramIndexDevice::build(
             lut_size *= ALPHABET_SIZE;
 
         // build a set of spaced q-grams
-        thrust::device_vector<uint64> lut_qgrams( lut_size );
+        thrust::device_vector<qgram_type> lut_qgrams( lut_size );
         thrust::transform(
             thrust::make_counting_iterator<uint32>(0),
             thrust::make_counting_iterator<uint32>(0) + lut_size,
             lut_qgrams.begin(),
-            shift_left<uint64>( QLS ) );
+            shift_left<qgram_type>( QLS ) );
 
         // and now search them
         lut.resize( lut_size+1 );
@@ -230,7 +230,7 @@ void QGramSetIndexDevice::build(
     qgrams.resize( n_qgrams );
     index.resize( n_qgrams );
 
-    thrust::device_vector<uint64> d_all_qgrams( n_qgrams );
+    thrust::device_vector<qgram_type> d_all_qgrams( n_qgrams );
 
     // build the list of q-gram indices
     thrust::transform(
@@ -294,12 +294,12 @@ void QGramSetIndexDevice::build(
             lut_size *= ALPHABET_SIZE;
 
         // build a set of spaced q-grams
-        thrust::device_vector<uint64> lut_qgrams( lut_size );
+        thrust::device_vector<qgram_type> lut_qgrams( lut_size );
         thrust::transform(
             thrust::make_counting_iterator<uint32>(0),
             thrust::make_counting_iterator<uint32>(0) + lut_size,
             lut_qgrams.begin(),
-            shift_left<uint64>( QLS ) );
+            shift_left<qgram_type>( QLS ) );
 
         // and now search them
         lut.resize( lut_size+1 );

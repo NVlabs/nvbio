@@ -123,12 +123,13 @@ struct QGroupIndexView
     /// functor operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 operator() (const uint32 g) const { return range( g ); }
+    uint2 operator() (const uint64 g) const { return range( g ); }
 
     /// locate a given occurrence of a q-gram
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint32 locate(const uint32 i) const { return P[i]; }
+
 
     uint32        Q;
     uint32        symbol_size;

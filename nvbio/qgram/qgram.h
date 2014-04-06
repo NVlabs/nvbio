@@ -90,7 +90,12 @@ struct QGramIndexViewCore
     typedef QGramVectorType                                                 qgram_vector_type;
     typedef IndexVectorType                                                 index_vector_type;
     typedef CoordVectorType                                                 coord_vector_type;
+    typedef typename std::iterator_traits<qgram_vector_type>::value_type    qgram_type;
     typedef typename std::iterator_traits<coord_vector_type>::value_type    coord_type;
+
+    // unary functor typedefs
+    typedef qgram_type  argument_type;
+    typedef uint2       result_type;
 
     QGramIndexViewCore() {}
 
@@ -117,7 +122,7 @@ struct QGramIndexViewCore
     /// return the slots of P corresponding to the given qgram g
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 range(const uint64 g) const
+    uint2 range(const qgram_type g) const
     {
         const uint2 lut_range = lut ?
             make_uint2( lut[ g >> QLS ], lut[ (g >> QLS) + 1 ] ) :
@@ -130,22 +135,23 @@ struct QGramIndexViewCore
             (lut_range.y - lut_range.x) ) - qgrams );
 
         // check whether we found what we are looking for
-        if (i >= n_unique_qgrams || g != qgrams[i])
+        if ((i >= n_unique_qgrams) || (g != qgrams[i]))
             return make_uint2( 0u, 0u );
 
         // return the range
         return make_uint2( slots[i], slots[i+1] );
     }
 
+    /// functor operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint2 operator() (const qgram_type g) const { return range( g ); }
+
     /// locate a given occurrence of a q-gram
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     coord_type locate(const uint32 i) const { return index[i]; }
 
-    /// functor operator
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 operator() (const uint32 g) const { return range( g ); }
 
     uint32              Q;                  ///< the q-gram size
     uint32              symbol_size;        ///< symbol size
@@ -167,6 +173,7 @@ struct QGramIndexCore
     typedef QGramVectorType                                                 qgram_vector_type;
     typedef IndexVectorType                                                 index_vector_type;
     typedef CoordVectorType                                                 coord_vector_type;
+    typedef typename qgram_vector_type::value_type                          qgram_type;
     typedef typename coord_vector_type::value_type                          coord_type;
 
     QGramIndexCore() {}
@@ -201,6 +208,7 @@ struct QGramIndexHost : public QGramIndexCore<
     typedef core_type::qgram_vector_type            qgram_vector_type;
     typedef core_type::index_vector_type            index_vector_type;
     typedef core_type::coord_vector_type            coord_vector_type;
+    typedef core_type::qgram_type                   qgram_type;
     typedef core_type::coord_type                   coord_type;
     typedef QGramIndexView                          view_type;
 
@@ -208,7 +216,7 @@ struct QGramIndexHost : public QGramIndexCore<
     ///
     uint64 used_host_memory() const
     {
-        return qgrams.size() * sizeof(uint64) +
+        return qgrams.size() * sizeof(qgram_type) +
                slots.size()  * sizeof(uint32) +
                index.size()  * sizeof(coord_type) + 
                lut.size()    * sizeof(uint32);
@@ -234,6 +242,7 @@ struct QGramIndexDevice : public QGramIndexCore<
     typedef core_type::qgram_vector_type            qgram_vector_type;
     typedef core_type::index_vector_type            index_vector_type;
     typedef core_type::coord_vector_type            coord_vector_type;
+    typedef core_type::qgram_type                   qgram_type;
     typedef core_type::coord_type                   coord_type;
     typedef QGramIndexView                          view_type;
 
@@ -265,7 +274,7 @@ struct QGramIndexDevice : public QGramIndexCore<
     ///
     uint64 used_device_memory() const
     {
-        return qgrams.size() * sizeof(uint64) +
+        return qgrams.size() * sizeof(qgram_type) +
                slots.size()  * sizeof(uint32) +
                index.size()  * sizeof(coord_type) +
                lut.size()    * sizeof(uint32);
@@ -287,6 +296,7 @@ struct QGramSetIndexDevice : public QGramIndexCore<
     typedef core_type::qgram_vector_type            qgram_vector_type;
     typedef core_type::index_vector_type            index_vector_type;
     typedef core_type::coord_vector_type            coord_vector_type;
+    typedef core_type::qgram_type                   qgram_type;
     typedef core_type::coord_type                   coord_type;
     typedef QGramIndexView                          view_type;
 
@@ -317,7 +327,7 @@ struct QGramSetIndexDevice : public QGramIndexCore<
     ///
     uint64 used_device_memory() const
     {
-        return qgrams.size() * sizeof(uint64) +
+        return qgrams.size() * sizeof(qgram_type) +
                slots.size()  * sizeof(uint32) +
                index.size()  * sizeof(coord_type) +
                lut.size()    * sizeof(uint32);

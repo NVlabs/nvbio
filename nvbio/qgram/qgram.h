@@ -48,7 +48,13 @@
 ///\endhtmlonly
 ///\par
 /// This module contains a series of functions to operate on q-grams as well as two q-gram index
-/// data-structures together with very high throughput parallel construction algorithms:
+/// data-structures together with very high throughput parallel construction algorithms.
+///
+///\section Q-Gram Indices
+///\par
+/// Q-gram indices are data-structures providing fast searching of exact or approximate <i>q-grams</i> (or k-mers),
+/// i.e. short strings of text containing <i>q</i> symbols.
+/// This module provides two such data-structures:
 ///
 /// - the \ref QGroupIndex "Q-Group Index", replicating the data-structure described in:\n
 ///   <i>Massively parallel read mapping on GPUs with PEANUT</i> \n
@@ -62,12 +68,170 @@
 ///   This data-structure offers up to 5x higher construction speed and a potentially unbounded improvement in memory consumption 
 ///   compared to the \ref QGroupIndex "Q-Group Index", though the query time is asymptotically higher.
 ///
+///\par
+/// Q-gram indices can be built on strings, or on string sets (in which case we call them <i>set-indices</i>).
+/// The difference relies on the format of the coordinates associated to their q-grams: for strings, the coordinates
+/// are simple linear indices, whereas for string-sets the coordinates are <i>(string-id,string-position)</i> index pairs.
+///\par
+/// The following code sample shows how to build a QGramIndex over a simple string:
+///\code
+/// // consider a DNA string in ASCII format
+/// const char*  a_string = "ACGTACGTACGTACGTACGTACGTACGTACGT";
+/// const uint32 string_len = strlen( a_string );
+///
+/// // convert the string to a 2-bit DNA alphabet
+/// thrust::host_vector<uint8> h_string( string_len );
+/// string_to_dna( a_string, string_len, h_string.begin() );
+///
+/// // copy the string to the device
+/// thrust::device_vector<uint8> d_string( h_string );
+///
+/// // build the q-gram index on the device
+/// QGramIndexDevice qgram_index;
+///
+/// qgram_index.build(
+///     20u,                        // q-group size
+///     2u,                         // the alphabet size, in bits
+///     string_len,                 // the length of the string we want to index
+///     d_string.begin() );         // the string we want to index
+///\endcode
+///\par
+/// The next example shows how to do the same with a string-set:
+///\code
+/// // consider a DNA string in ASCII format
+/// const char*  a_string = "ACGTACGTACGTACGTACGTACGTACGTTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTTACGTACGTACGTACGTACGTACGTACGTACGT";
+/// const uint32 string_len = strlen( a_string );
+///
+/// // convert the string to a 2-bit DNA alphabet
+/// thrust::host_vector<uint8> h_string( string_len );
+/// string_to_dna( a_string, string_len, h_string.begin() );
+///
+/// // copy the string to the device
+/// const uint32 n_strings = 2u;
+/// thrust::device_vector<uint8>  d_string( h_string );
+/// thrust::device_vector<uint32> d_string_offsets( n_strings+1 );
+/// d_string_offsets[0] = 0;        // offset to the first string
+/// d_string_offsets[1] = 20;       // offset to the second string
+/// d_string_offsets[2] = 40;       // end of the last string
+///
+/// typedef ConcatenatedStringSet<uint8*,uint32*> string_set_type;
+/// const string_set_type string_set(
+///     n_strings,
+///     nvbio::plain_view( d_string ),
+///     nvbio::plain_view( d_string_offsets ) );
+///
+/// // build the q-gram index on the device
+/// QGramSetIndexDevice qgram_index;
+///
+/// qgram_index.build(
+///     20u,                        // q-group size
+///     2u,                         // the alphabet size, in bits
+///     string_set );               // the string-set we want to index
+///\endcode
+///
+///\section Q-Gram Index Queries
+///\par
+/// Once a q-gram index is built, it would be interesting to perform some queries on it.
+/// There's various ways to accomplish this, and here we'll show a couple.
+/// The simplest query one can do is locating for a given q-gram the range of indexed q-grams
+/// which match it exactly.
+/// This can be done using as follows:
+///\code
+/// // consider a sample string - we'll want to find all matching locations between all
+/// // q-grams in this string and all q-grams in the index
+/// const char* a_query_string = "CGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTA"
+/// const uint32 query_string_len = strlen( a_query_string );
+///
+/// // convert the string to a 2-bit DNA alphabet
+/// thrust::host_vector<uint8> h_string( query_string_len );
+/// string_to_dna( a_query_string, query_string_len, h_query_string.begin() );
+///
+/// // copy the string to the device
+/// thrust::device_vector<uint8> d_query_string( h_query_string );
+///
+/// const uint32 q = 20u;
+/// const uint32 n_query_qgrams = query_string_len - q
+///
+/// // build the set of query q-grams
+/// thrust::device_vector<uint64> d_query_qgrams( n_query_qgrams );
+/// thrust::transform(
+///     thrust::make_counting_iterator<uint32>(0u),
+///     thrust::make_counting_iterator<uint32>(0u) + n_query_qgrams,
+///     d_query_qgrams.begin(),
+///     string_qgram_functor<uint8*>( q, 2u, query_string_len, nvbio::plain_view( d_query_string ) ) );
+///
+/// // find the above q-gram
+/// thrust::device_vector<uint32> d_ranges( query_string_len - 20 );
+///
+/// // use the plain-view of the q-gram index itself as a search functor, that we "apply"
+/// // to our query q-grams to obtain the corresponding match ranges
+/// thrust::transform(
+///     d_query_qgrams.begin(),
+///     d_query_qgrams.begin() + n_query_qgrams,
+///     d_ranges.begin(),
+///     nvbio::plain_view( qgram_index ) );
+///\endcode
+///
+///\par
+/// This of course was just a toy example; in reality, you'll want to this kind of operations with much
+/// larger q-gram indices, and much larger batches of queries. Moreover, it's often beneficial to
+/// sort the query q-grams upfront, as in:
+///\code
+/// thrust::device_vector<uint32> d_query_indices( n_query_qgrams );
+/// thrust::copy(
+///   thrust::make_counting_iterator<uint32>(0u),
+///   thrust::make_counting_iterator<uint32>(0u) + n_query_qgrams,
+///   d_query_indices.begin() );
+/// thrust::sort_by_key( d_query_qgrams.begin(), d_query_qgrams.begin() + n_query_qgrams, d_query_indices.begin() );
+///\endcode
+///
+///\section Q-Gram Filtering
+/// The previous example was only showing how to get the <i>ranges</i> of matching q-grams inside an index: it didn't
+/// show how to get the actual list of hits.
+/// One way to go about it is to ask the q-gram index, which given an entry inside each non-empty range, can provide
+/// its location.
+/// This can be done using the qgram_locate_functor.
+/// However, if one is interested in getting the complete list of hits, things are more difficult, as the process
+/// involves a data-expansion (as each range might expand to a variable number of hits).
+///\par
+/// The QGramFilter provides a convenient way to do this:
+///\code
+/// // suppose we have the previous vectors d_query_qgrams and d_query_indices
+/// ...
+///
+/// // find all hits using a q-gram filter
+/// QGramFilter qgram_filter;
+/// qgram_filter.enact(
+///     qgram_index,
+///     n_query_qgrams,
+///     d_query_qgrams.begin(),
+///     d_query_indices.begin() );
+///
+/// const uint32  n_hits = qgram_filter.n_hits();
+/// const uint2*  d_hits = qgram_filter.hits();
+///   // d_hits is a device pointer to a list of <i>(qgram-pos,query-pos)</i> pairs,
+///   // where <i>qgram-pos</i> is the index of the hit into the string used to build qgram-index,
+///   // and <i>query-pos</i> corresponds to one of the input query q-gram indices.
+///\endcode
+///
 /// \section TechnicalOverviewSection Technical Overview
 ///\par
 /// A complete list of the classes and functions in this module is given in the \ref QGramIndex documentation.
 ///
 
 namespace nvbio {
+
+///
+///@defgroup QGram Q-Gram Module
+/// This module contains a series of classes and functions to operate on q-grams and q-gram indices.
+/// It implements the following data-structures:
+///
+/// - the \ref QGroupIndex "Q-Group Index"
+/// - the \ref QGramIndex "Q-Gram Index"
+/// - the \ref QGramFilter "Q-Gram Filter"
+///
+///@{
+///
 
 ///
 ///@defgroup QGramIndex Q-Gram Index Module
@@ -366,6 +530,29 @@ QGramSetIndexView plain_view(QGramSetIndexDevice& qgram)
         nvbio::plain_view( qgram.lut ) );
 }
 
+/// a functor to locate the hit corresponding to a given range slot inside a q-gram index
+///
+template <typename qgram_index_type>
+struct qgram_locate_functor
+{
+    typedef uint32  argument_type;
+    typedef uint32  result_type;
+
+    /// constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    qgram_locate_functor(const qgram_index_type _index) : index(_index) {}
+
+    /// unary functor operator : locate the hit corresponding to a given range slot
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const uint32 slot) const { return index.locate( slot ); }
+
+    const qgram_index_type index;   ///< the q-gram index
+};
+
+///@} // end of the QGramIndex group
+
 /// A utility functor to extract the i-th q-gram out of a string
 ///
 /// \tparam string_type         the string iterator type
@@ -496,7 +683,7 @@ struct string_qgram_search_functor
     const string_type       string;
 };
 
-///@} // end of the QGramIndex group
+///@} // end of the QGram group
 
 } // namespace nvbio
 

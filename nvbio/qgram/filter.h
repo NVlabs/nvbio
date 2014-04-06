@@ -44,10 +44,8 @@
 
 namespace nvbio {
 
-///
-///@addgroup QGramIndex
+///@addtogroup QGram
 ///@{
-///
 
 ///
 /// This class implements a q-gram filter which can be used to find and filter matches
@@ -56,11 +54,11 @@ namespace nvbio {
 /// The q-gram index can be either a simple string index or a string-set index.
 ///
 /// For string q-gram indices, the filter will return an ordered set of <i>(qgram-pos,query-pos)</i>
-/// pairs, where <i>qgram-pos</i> is an index into the string used to build qgram-index, and <i>query-pos</i>
-/// corresponds to one of the input query q-gram indices.
+/// pairs, where <i>qgram-pos</i> is the index of the hit into the string used to build qgram-index,
+/// and <i>query-pos</i> corresponds to one of the input query q-gram indices.
 ///
 /// For string-set q-gram indices, the filter will return an ordered set of <i>(string-id,query-diagonal)</i>
-/// pairs, where <i>string-id</i> is an index into the string-set used to build qgram-index, and
+/// pairs, where <i>string-id</i> is the index of the hit into the string-set used to build qgram-index, and
 /// <i>query-diagonal</i> corresponds to the matching diagonal of the input query text.
 ///
 struct QGramFilter
@@ -79,6 +77,14 @@ struct QGramFilter
         const query_iterator    queries,
         const index_iterator    indices);
 
+    /// return the number of matching hits
+    ///
+    uint32 n_hits() const { return m_output.size(); }
+
+    /// return the output list of hits
+    ///
+    const uint2* hits() const { return nvbio::plain_view( m_output ); }
+
     // TODO: generalize to the host
     thrust::device_vector<uint2>  m_ranges;
     thrust::device_vector<uint32> m_slots;
@@ -86,7 +92,7 @@ struct QGramFilter
     thrust::device_vector<uint8>  d_temp_storage;
 };
 
-///@} // end of the QGramIndex group
+///@} // end of the QGram group
 
 } // namespace nvbio
 

@@ -55,7 +55,7 @@
 /// Q-gram indices are data-structures providing fast searching of exact or approximate <i>q-grams</i> (or k-mers),
 /// i.e. short strings of text containing <i>q</i> symbols.
 /// This module provides two such data-structures:
-///
+///\par
 /// - the \ref QGroupIndex "Q-Group Index", replicating the data-structure described in:\n
 ///   <i>Massively parallel read mapping on GPUs with PEANUT</i> \n
 ///   Johannes Koester and Sven Rahmann \n
@@ -206,7 +206,7 @@
 /// However, if one is interested in getting the complete list of hits, things are more difficult, as the process
 /// involves a data-expansion (as each range might expand to a variable number of hits).
 ///\par
-/// The QGramFilter provides a convenient way to do this:
+/// The \ref QGramFilter provides a convenient way to do this:
 ///\code
 /// // suppose we have the previous vectors d_query_qgrams and d_query_indices
 /// ...

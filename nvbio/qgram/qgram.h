@@ -154,13 +154,19 @@
 /// const uint32 q = 20u;
 /// const uint32 n_query_qgrams = query_string_len - q
 ///
-/// // build the set of query q-grams
+/// // build the set of query q-grams: this can be done using the string_qgram_functor
+/// // to extract them; note that we need at least 20 x 2 = 40 bits per q-gram, hence we
+/// // store them in a uint64 vector
 /// thrust::device_vector<uint64> d_query_qgrams( n_query_qgrams );
 /// thrust::transform(
 ///     thrust::make_counting_iterator<uint32>(0u),
 ///     thrust::make_counting_iterator<uint32>(0u) + n_query_qgrams,
 ///     d_query_qgrams.begin(),
-///     string_qgram_functor<uint8*>( q, 2u, query_string_len, nvbio::plain_view( d_query_string ) ) );
+///     string_qgram_functor<uint8*>(
+///         q,                                          // q-gram length
+///         2u,                                         // bits per symbol
+///         query_string_len,                           // string length
+///         nvbio::plain_view( d_query_string ) ) );    // string
 ///
 /// // find the above q-gram
 /// thrust::device_vector<uint32> d_ranges( query_string_len - 20 );

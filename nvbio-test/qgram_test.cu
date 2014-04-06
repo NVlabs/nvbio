@@ -448,6 +448,11 @@ int qgram_test(int argc, char* argv[])
         }
 
         log_visible(stderr, "  testing q-gram index... done\n");
+        const float genome_ratio = float(genome_len)/float(stats.queries);
+        log_info(stderr, "    sorted throughput: %.2f M reads/s\n", 1.0e-6f * float(n_strings)  / (stats.sorted_time * genome_ratio) );
+        log_info(stderr, "    sorted throughput: %.2f M bases/s\n", 1.0e-6f * float(string_len) / (stats.sorted_time * genome_ratio) );
+        log_info(stderr, "    filter throughput: %.2f M reads/s\n", 1.0e-6f * float(n_strings)  / (stats.filter_time * genome_ratio) );
+        log_info(stderr, "    filter throughput: %.2f M bases/s\n", 1.0e-6f * float(string_len) / (stats.filter_time * genome_ratio) );
     }
 
     // test q-gram set-index
@@ -480,6 +485,11 @@ int qgram_test(int argc, char* argv[])
         }
 
         log_visible(stderr, "  testing q-gram set-index... done\n");
+        const float genome_ratio = float(genome_len)/float(stats.queries);
+        log_info(stderr, "    sorted throughput: %.2f M reads/s\n", 1.0e-6f * float(n_strings)  / (stats.sorted_time * genome_ratio) );
+        log_info(stderr, "    sorted throughput: %.2f M bases/s\n", 1.0e-6f * float(string_len) / (stats.sorted_time * genome_ratio) );
+        log_info(stderr, "    filter throughput: %.2f M reads/s\n", 1.0e-6f * float(n_strings)  / (stats.filter_time * genome_ratio) );
+        log_info(stderr, "    filter throughput: %.2f M bases/s\n", 1.0e-6f * float(string_len) / (stats.filter_time * genome_ratio) );
     }
 
     // test q-group index
@@ -510,6 +520,11 @@ int qgram_test(int argc, char* argv[])
         }
 
         log_visible(stderr, "  testing q-group index... done\n");
+        const float genome_ratio = float(genome_len)/float(stats.queries);
+        log_info(stderr, "    sorted throughput: %.2f M reads/s\n", 1.0e-6f * float(n_strings)  / (stats.sorted_time * genome_ratio) );
+        log_info(stderr, "    sorted throughput: %.2f M bases/s\n", 1.0e-6f * float(string_len) / (stats.sorted_time * genome_ratio) );
+        log_info(stderr, "    filter throughput: %.2f M reads/s\n", 1.0e-6f * float(n_strings)  / (stats.filter_time * genome_ratio) );
+        log_info(stderr, "    filter throughput: %.2f M bases/s\n", 1.0e-6f * float(string_len) / (stats.filter_time * genome_ratio) );
     }
 
     log_info(stderr, "q-gram test... done\n" );

@@ -563,10 +563,15 @@ int FMIndexDataRAM::load(
     const uint32 OCC_INT = FMIndexData::OCC_INT;
     const uint32 SA_INT  = FMIndexData::SA_INT;
 
+    const uint32 has_genome = (flags & GENOME)  ? 1u : 0;
+    const uint32 has_fw     = (flags & FORWARD) ? 1u : 0;
+    const uint32 has_rev    = (flags & REVERSE) ? 1u : 0;
+    const uint32 has_sa     = (flags & SA)      ? 1u : 0;
+
     const uint64 memory_footprint =
-        (wpac_file_name ? 3 : 2)*sizeof(uint32)*seq_words +
-        2*sizeof(uint32)*4*uint64(seq_length+OCC_INT-1)/OCC_INT +
-        2*sizeof(uint32)*uint64(seq_length+SA_INT)/SA_INT;
+        (has_genome + has_fw + has_rev) * sizeof(uint32)*seq_words +
+        (has_fw + has_rev)              * sizeof(uint32)*4*uint64(seq_length+OCC_INT-1)/OCC_INT +
+        has_sa * (has_fw + has_rev)     * sizeof(uint32)*uint64(seq_length+SA_INT)/SA_INT;
 
     log_visible(stderr, "  memory   : %.1f MB\n", float(memory_footprint)/float(1024*1024));
 
@@ -574,35 +579,55 @@ int FMIndexDataRAM::load(
     stream_type rbwt( m_rbwt_stream );
 
     occ_words = ((seq_length+OCC_INT-1) / OCC_INT) * 4;
-    m_rocc_vec.resize( occ_words, 0u );
 
-    uint32  cnt[ 4 ];
-    uint32  rcnt[ 4 ];
-
-    log_info(stderr, "building occurrence tables... started\n");
-    if (flags & FORWARD)
+    if ((flags & FORWARD) ||
+        (flags & REVERSE))
     {
-        m_occ_vec.resize( occ_words, 0u );
-        m_occ = &m_occ_vec[0];
+        log_info(stderr, "building occurrence tables... started\n");
 
-        build_occurrence_table<OCC_INT>(
-            bwt.begin(),
-            bwt.begin() + seq_length,
-            m_occ,
-            cnt );
+        uint32 cnt[ 4 ];
+        uint32 rcnt[ 4 ];
+
+        if (flags & FORWARD)
+        {
+            m_occ_vec.resize( occ_words, 0u );
+            m_occ = &m_occ_vec[0];
+
+            build_occurrence_table<OCC_INT>(
+                bwt.begin(),
+                bwt.begin() + seq_length,
+                m_occ,
+                cnt );
+        }
+        if (flags & REVERSE)
+        {
+            m_rocc_vec.resize( occ_words, 0u );
+            m_rocc = &m_rocc_vec[0];
+
+            build_occurrence_table<OCC_INT>(
+                rbwt.begin(),
+                rbwt.begin() + seq_length,
+                m_rocc,
+                rcnt );
+        }
+
+        // compute the L2 tables
+        L2[0] = 0;
+        for (uint32 c = 0; c < 4; ++c)
+            L2[c+1] = L2[c] + cnt[c];
+
+        rL2[0] = 0;
+        for (uint32 c = 0; c < 4; ++c)
+            rL2[c+1] = rL2[c] + rcnt[c];
+
+        log_info(stderr, "building occurrence tables... done\n");
     }
-    if (flags & REVERSE)
+    else
     {
-        m_rocc_vec.resize( occ_words, 0u );
-        m_rocc = &m_rocc_vec[0];
-
-        build_occurrence_table<OCC_INT>(
-            rbwt.begin(),
-            rbwt.begin() + seq_length,
-            m_rocc,
-            rcnt );
+        // zero out the L2 tables
+        for (uint32 c = 0; c < 5; ++c)
+            L2[c] = rL2[c] = 0;
     }
-    log_info(stderr, "building occurrence tables... done\n");
 
     // read ssa
     if (flags & SA)
@@ -630,14 +655,6 @@ int FMIndexDataRAM::load(
         }
         sa_words = (seq_length + SA_INT) / SA_INT;
     }
-
-    L2[0] = 0;
-    for (uint32 c = 0; c < 4; ++c)
-        L2[c+1] = L2[c] + cnt[c];
-
-    rL2[0] = 0;
-    for (uint32 c = 0; c < 4; ++c)
-        rL2[c+1] = rL2[c] + rcnt[c];
 
     gen_bwt_count_table( count_table );
 

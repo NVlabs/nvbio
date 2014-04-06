@@ -45,8 +45,8 @@
 ///\endhtmlonly
 ///\par
 /// This module contains a series of functions to build a Q-Group Index, as described
-/// in: \n
-///
+/// in:
+///\par
 /// <i>Massively parallel read mapping on GPUs with PEANUT</i> \n
 /// Johannes Koester and Sven Rahmann \n
 /// http://arxiv.org/pdf/1403.1706v1.pdf
@@ -65,8 +65,8 @@ namespace nvbio {
 ///
 ///@defgroup QGroupIndex Q-Group Index Module
 /// This module contains a series of functions to build a Q-Group Index, as described
-/// in: \n
-///
+/// in:
+///\par
 /// <i>Massively parallel read mapping on GPUs with PEANUT</i> \n
 /// Johannes Koester and Sven Rahmann \n
 /// http://arxiv.org/pdf/1403.1706v1.pdf

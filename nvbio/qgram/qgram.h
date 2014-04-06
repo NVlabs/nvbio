@@ -229,7 +229,7 @@
 ///
 /// \section TechnicalOverviewSection Technical Overview
 ///\par
-/// A complete list of the classes and functions in this module is given in the \ref QGramIndex documentation.
+/// A complete list of the classes and functions in this module is given in the \ref QGram documentation.
 ///
 
 namespace nvbio {
@@ -238,7 +238,7 @@ namespace nvbio {
 ///@defgroup QGram Q-Gram Module
 /// This module contains a series of classes and functions to operate on q-grams and q-gram indices.
 /// It implements the following data-structures:
-///
+///\par
 /// - the \ref QGroupIndex "Q-Group Index"
 /// - the \ref QGramIndex "Q-Gram Index"
 /// - the \ref QGramFilter "Q-Gram Filter"

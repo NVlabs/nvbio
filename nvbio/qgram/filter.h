@@ -52,11 +52,11 @@ namespace nvbio {
 /// between an arbitrary set of indexed query q-grams, representing q-grams of a given
 /// text, and a \ref QGramIndex "q-gram index".
 /// The q-gram index can be either a simple string index or a string-set index.
-///
+///\par
 /// For string q-gram indices, the filter will return an ordered set of <i>(qgram-pos,query-pos)</i>
 /// pairs, where <i>qgram-pos</i> is the index of the hit into the string used to build qgram-index,
 /// and <i>query-pos</i> corresponds to one of the input query q-gram indices.
-///
+///\par
 /// For string-set q-gram indices, the filter will return an ordered set of <i>(string-id,query-diagonal)</i>
 /// pairs, where <i>string-id</i> is the index of the hit into the string-set used to build qgram-index, and
 /// <i>query-diagonal</i> corresponds to the matching diagonal of the input query text.

@@ -47,9 +47,26 @@
 ///\htmlonly
 /// <img src="nvidia_cubes.png" style="position:relative; bottom:-10px; border:0px;"/>
 ///\endhtmlonly
+///\n
 ///\par
+///\n
 /// This module contains a series of functions to operate on q-grams as well as two q-gram index
-/// data-structures together with very high throughput parallel construction algorithms.
+/// data-structures together with very high throughput parallel construction algorithms and
+/// efficient q-gram counting primitives.
+///
+///\section Performance
+///\par
+/// The following graph shows the performance of NVBIO's <i>q-gram counting</i> queries. The benchmark
+/// consists in building a q-gram index on the 22-mers obtained sampling a set of 1M x 150bp reads (SRR493095)
+/// every 10 bases, and streaming the whole human genome hg19 against it to find all matching q-grams.
+/// Specifically, the graph shows throughput of the following three stages:
+///\par
+///  - <i>ranking</i>: the process of finding the range of hits matching each query q-gram in the q-gram index
+///  - <i>locating</i>: the process of enumerating all found hits as (read-id,text-diagonal) pairs
+///  - <i>counting</i>: the process of bucketing the found hits by diagonal (separately for each read) and counting
+///                     the occurrences in each bucket
+///\par
+/// <img src="benchmark-qgram-counting.png" style="position:relative; bottom:-10px; border:0px;" width="85%" height="85%"/>
 ///
 ///\section QGramIndicesSection Q-Gram Indices
 ///\par
@@ -198,7 +215,13 @@
 ///         query_string_len,                           // string length
 ///         nvbio::plain_view( d_query_string ) ) );    // string
 ///
-/// // find the above q-gram
+/// // now sort the q-grams and their original indices, this improves coherence and throughput
+/// thrust::sort_by_key(
+///     d_query_qgrams.begin(),
+///     d_query_qgrams.begin() + n_query_qgrams,
+///     d_query_indices.begin() );
+///
+/// // find the above q-grams
 /// nvbio::vector<device_tag,uint32> d_ranges( query_string_len - 20 );
 ///
 /// // use the plain-view of the q-gram index itself as a search functor, that we "apply"
@@ -212,15 +235,7 @@
 ///
 ///\par
 /// This of course was just a toy example; in reality, you'll want to this kind of operations with much
-/// larger q-gram indices, and much larger batches of queries. Moreover, it's often beneficial to
-/// sort the query q-grams upfront, as in:
-///\code
-/// // now sort the q-grams and their original indices
-/// thrust::sort_by_key(
-///     d_query_qgrams.begin(),
-///     d_query_qgrams.begin() + n_query_qgrams,
-///     d_query_indices.begin() );
-///\endcode
+/// larger q-gram indices and much larger batches of queries.
 ///
 ///\section QGramFilterSection Q-Gram Filtering
 ///\par

@@ -59,7 +59,7 @@
 /// The following graph shows the performance of NVBIO's <i>q-gram counting</i> queries. The benchmark
 /// consists in building a q-gram index on the 22-mers obtained sampling a set of 1M x 150bp reads (SRR493095)
 /// every 10 bases, and streaming the whole human genome hg19 against it to find all matching q-grams.
-/// Specifically, the graph shows throughput of the following three stages:
+/// Specifically, the graph shows the throughput of the following three stages:
 ///\par
 ///  - <i>ranking</i>: the process of finding the range of hits matching each query q-gram in the q-gram index
 ///  - <i>locating</i>: the process of enumerating all found hits as (read-id,text-diagonal) pairs
@@ -237,7 +237,7 @@
 /// This of course was just a toy example; in reality, you'll want to this kind of operations with much
 /// larger q-gram indices and much larger batches of queries.
 ///
-///\section QGramFilterSection Q-Gram Filtering
+///\section QGramCountingSection Q-Gram Counting
 ///\par
 /// The previous example was only showing how to get the <i>ranges</i> of matching q-grams inside an index: it didn't
 /// show how to get the actual list of hits.
@@ -269,6 +269,17 @@
 ///   // where <i>qgram-pos</i> is the index of the hit into the string used to build,
 ///   // qgram-index and <i>query-pos</i> corresponds to one of the input query q-gram
 ///   // indices.
+///\endcode
+///
+/// Finally, the generated hits can be sorted and merged by diagonal bucket, effectively
+/// performing so called <i>q-gram counting</i>:
+///\code
+/// // sort all hits and merge them by closest diagonal
+/// qgram_filter.merge( 16u );  // the merging interval defining the size of each bucket
+///
+/// const uint32  n_hits   = qgram_filter.n_hits(); // the number of merged hits
+/// const uint2*  d_hits   = qgram_filter.hits();   // a device pointer to the hits merged by diagonal
+/// const uint16* d_counts = qgram_filter.counts(); // a device pointer to the hit counts by diagonal
 ///\endcode
 ///
 /// \section TechnicalOverviewSection Technical Overview

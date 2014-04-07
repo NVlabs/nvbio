@@ -109,10 +109,88 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc4(const uint32 mask)
 //
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 find_nthbit8(const uint32 mask, const uint32 n)
 {
-    const uint32 popc04 = popc4( mask );
-    return n <= popc04 ?
-        find_nthbit4( mask, n ) :
-        find_nthbit4( mask >> 4u, n - popc04 ) + 4u;
+    const uint32 popc_half = popc4( mask );
+    uint32 _mask;
+    uint32 _n;
+    uint32 _r;
+
+    if (n <= popc_half)
+    {
+        _mask = mask;
+        _n    = n;
+        _r    = 0u;
+    }
+    else
+    {
+        _mask = mask >> 4u;
+        _n    = n - popc_half;
+        _r    = 4u;
+    }
+    return find_nthbit4( _mask, _n ) + _r;
+}
+
+// find the n-th bit set in a 16-bit mask (n in [1,16])
+//
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 find_nthbit16(const uint32 mask, const uint32 n)
+{
+    const uint32 popc_half = popc( mask & 0xFu );
+
+    uint32 _mask;
+    uint32 _n;
+    uint32 _r;
+
+    if (n <= popc_half)
+    {
+        _mask = mask;
+        _n    = n;
+        _r    = 0u;
+    }
+    else
+    {
+        _mask = mask >> 8u;
+        _n    = n - popc_half;
+        _r    = 8u;
+    }
+    return find_nthbit8( _mask, _n ) + _r;
+}
+
+// find the n-th bit set in a 32-bit mask (n in [1,32])
+//
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 find_nthbit(const uint32 mask, const uint32 n)
+{
+    const uint32 popc_half = popc( mask & 0xFFu );
+
+    uint32 _mask;
+    uint32 _n;
+    uint32 _r;
+
+    if (n <= popc_half)
+    {
+        _mask = mask;
+        _n    = n;
+        _r    = 0u;
+    }
+    else
+    {
+        _mask = mask >> 16u;
+        _n    = n - popc_half;
+        _r    = 16u;
+    }
+    return find_nthbit16( _mask, _n ) + _r;
+}
+
+// find the n-th bit set in a 8-bit mask (n in [1,8])
+//
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 find_nthbit(const uint8 mask, const uint32 n)
+{
+    return find_nthbit8( mask, n );
+}
+
+// find the n-th bit set in a 16-bit mask (n in [1,16])
+//
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 find_nthbit(const uint16 mask, const uint32 n)
+{
+    return find_nthbit16( mask, n );
 }
 
 #if defined(NVBIO_DEVICE_COMPILATION)

@@ -43,7 +43,7 @@
 #include <nvbio/basic/timer.h>
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/vector_wrapper.h>
-#include <nvbio/fmindex/dna.h>
+#include <nvbio/basic/dna.h>
 #include <nvbio/basic/cached_iterator.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/deinterleaved_iterator.h>

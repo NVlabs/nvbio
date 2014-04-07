@@ -78,16 +78,21 @@
 ///\par
 /// The following code sample shows how to build a QGramIndex over a simple string:
 ///\code
+/// #include <nvbio/qgram/qgram.h>
+/// #include <nvbio/basic/vector.h>
+/// #include <nvbio/basic/dna.h>
+/// ...
+///
 /// // consider a DNA string in ASCII format
 /// const char*  a_string = "ACGTACGTACGTACGTACGTACGTACGTACGT";
 /// const uint32 string_len = strlen( a_string );
 ///
 /// // convert the string to a 2-bit DNA alphabet
-/// thrust::host_vector<uint8> h_string( string_len );
+/// nvbio::vector<host_tag,uint8> h_string( string_len );
 /// string_to_dna( a_string, string_len, h_string.begin() );
 ///
 /// // copy the string to the device
-/// thrust::device_vector<uint8> d_string( h_string );
+/// nvbio::vector<device_tag,uint8> d_string( h_string );
 ///
 /// // build a q-gram index on the device
 /// QGramIndexDevice qgram_index;
@@ -101,18 +106,24 @@
 ///\par
 /// The next example shows how to do the same with a string-set:
 ///\code
+/// #include <nvbio/qgram/qgram.h>
+/// #include <nvbio/basic/vector.h>
+/// #include <nvbio/basic/string_set.h>
+/// #include <nvbio/basic/dna.h>
+/// ...
+///
 /// // consider a DNA string in ASCII format
 /// const char*  a_string = "ACGTACGTACGTACGTACGTACGTACGTTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTTACGTACGTACGTACGTACGTACGTACGTACGT";
 /// const uint32 string_len = strlen( a_string );
 ///
 /// // convert the string to a 2-bit DNA alphabet
-/// thrust::host_vector<uint8> h_string( string_len );
+/// nvbio::vector<host_tag,uint8> h_string( string_len );
 /// string_to_dna( a_string, string_len, h_string.begin() );
 ///
 /// // copy the string to the device
 /// const uint32 n_strings = 2u;
-/// thrust::device_vector<uint8>  d_string( h_string );
-/// thrust::device_vector<uint32> d_string_offsets( n_strings+1 );
+/// nvbio::vector<device_tag,uint8>  d_string( h_string );
+/// nvbio::vector<device_tag,uint32> d_string_offsets( n_strings+1 );
 /// d_string_offsets[0] = 0;                // offset to the first string
 /// d_string_offsets[1] = 20;               // offset to the second string
 /// d_string_offsets[2] = 40;               // end of the last string
@@ -136,7 +147,7 @@
 ///
 /// \par
 /// <b>Note:</b> sometimes you might not want to index all the q-grams in your string-set,
-/// but rather extract one every N bases, or perhaps using some custom logic of your own.
+/// but rather extract one every N bases, or perhaps use some custom logic of your own.
 /// Through \ref SeedFunctor "Seeding Functors", nvbio provides a mechanism to customize
 /// the seeding logic. For example, the following code will extract a seed every 10 bases:
 ///\code
@@ -161,22 +172,25 @@
 /// const uint32 query_string_len = strlen( a_query_string );
 ///
 /// // convert the string to a 2-bit DNA alphabet
-/// thrust::host_vector<uint8> h_string( query_string_len );
+/// nvbio::vector<host_tag,uint8> h_string( query_string_len );
 /// string_to_dna( a_query_string, query_string_len, h_query_string.begin() );
 ///
 /// // copy the string to the device
-/// thrust::device_vector<uint8> d_query_string( h_query_string );
+/// nvbio::vector<device_tag,uint8> d_query_string( h_query_string );
 ///
 /// const uint32 q = 20u;
-/// const uint32 n_query_qgrams = query_string_len - q
+///
+/// // extract a set of query q-gram indices, say one every 3 bases
+/// nvbio::vector<device_tag,uint32> d_query_indices;
+/// const uint32 n_query_qgrams = enumerate_string_seeds( query_string_len, uniform_seed_functor( q, 3u ), d_query_indices );
 ///
 /// // build the set of query q-grams: this can be done using the string_qgram_functor
 /// // to extract them; note that we need at least 20 x 2 = 40 bits per q-gram, hence we
 /// // store them in a uint64 vector
-/// thrust::device_vector<uint64> d_query_qgrams( n_query_qgrams );
+/// nvbio::vector<device_tag,uint64> d_query_qgrams( n_query_qgrams );
 /// thrust::transform(
-///     thrust::make_counting_iterator<uint32>(0u),
-///     thrust::make_counting_iterator<uint32>(0u) + n_query_qgrams,
+///     d_query_indices.begin(),
+///     d_query_indices.begin() + n_query_qgrams,
 ///     d_query_qgrams.begin(),
 ///     string_qgram_functor<uint8*>(
 ///         q,                                          // q-gram length
@@ -185,7 +199,7 @@
 ///         nvbio::plain_view( d_query_string ) ) );    // string
 ///
 /// // find the above q-gram
-/// thrust::device_vector<uint32> d_ranges( query_string_len - 20 );
+/// nvbio::vector<device_tag,uint32> d_ranges( query_string_len - 20 );
 ///
 /// // use the plain-view of the q-gram index itself as a search functor, that we "apply"
 /// // to our query q-grams to obtain the corresponding match ranges
@@ -201,13 +215,6 @@
 /// larger q-gram indices, and much larger batches of queries. Moreover, it's often beneficial to
 /// sort the query q-grams upfront, as in:
 ///\code
-/// // keep track of the original q-gram indices before sorting
-/// thrust::device_vector<uint32> d_query_indices( n_query_qgrams );
-/// thrust::copy(
-///     thrust::make_counting_iterator<uint32>(0u),
-///     thrust::make_counting_iterator<uint32>(0u) + n_query_qgrams,
-///     d_query_indices.begin() );
-///
 /// // now sort the q-grams and their original indices
 /// thrust::sort_by_key(
 ///     d_query_qgrams.begin(),
@@ -227,6 +234,9 @@
 ///\par
 /// The \ref QGramFilter provides a convenient way to do this:
 ///\code
+/// #include <nvbio/qgram/filter.h>
+/// ...
+///
 /// // suppose we have the previous vectors d_query_qgrams and d_query_indices
 /// ...
 ///
@@ -263,15 +273,16 @@ namespace nvbio {
 /// - the \ref QGramFilter "Q-Gram Filter"
 ///
 /// It also defines convenience functions to extract seeds out of strings and string-sets:
-/// - extract_seeds()
+/// - enumerate_string_seeds()
+/// - enumerate_string_set_seeds()
 /// - uniform_seeds_functor
 ///
 ///@{
 ///
 
-/// extract a set of seed coordinates out of a string-set, according to a given seeding functor
+
+/// extract a set of seed coordinates out of a string, according to a given seeding functor
 ///
-/// \tparam string_set_type     the string-set type
 /// \tparam seed_functor        a class providing the following interface:
 ///\anchor SeedFunctor
 ///\code
@@ -289,12 +300,27 @@ namespace nvbio {
 ///\endcode
 /// \tparam index_vector_type   a dynamic vector of uint2 coordinates
 ///
+/// \param seeder               the seeding functor
+/// \param indices              the vector of output uint32 indices
+///
+template <typename seed_functor, typename index_vector_type>
+uint32 enumerate_string_seeds(
+    const uint32                string_len,
+    const seed_functor          seeder,
+          index_vector_type&    indices);
+
+/// extract a set of seed coordinates out of a string-set, according to a given seeding functor
+///
+/// \tparam string_set_type     the string-set type
+/// \tparam seed_functor        a \ref SeedFunctor "Seeding Functor"
+/// \tparam index_vector_type   a dynamic vector of uint2 coordinates
+///
 /// \param string_set           the string set to seed
 /// \param seeder               the seeding functor
 /// \param indices              the vector of output uint2 indices
 ///
 template <typename string_set_type, typename seed_functor, typename index_vector_type>
-uint32 extract_seeds(
+uint32 enumerate_string_set_seeds(
     const string_set_type       string_set,
     const seed_functor          seeder,
           index_vector_type&    indices);

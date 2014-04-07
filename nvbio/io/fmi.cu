@@ -30,7 +30,7 @@
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/bnt.h>
 #include <nvbio/basic/exceptions.h>
-#include <nvbio/fmindex/dna.h>
+#include <nvbio/basic/dna.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/fmindex/bwt.h>
 #include <nvbio/fmindex/ssa.h>

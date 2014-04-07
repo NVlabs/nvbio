@@ -194,6 +194,29 @@ struct localize_functor
     const uint32*           cum_lengths;
 };
 
+// A functor to return the coordinates given by a seed_functor
+//
+template <typename seed_functor>
+struct string_seed_functor
+{
+    typedef uint32 argument_type;
+    typedef uint2  result_type;
+
+    // constructor
+    //
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    string_seed_functor(const uint32 _string_len, const seed_functor _seeder) :
+        string_len(_string_len), seeder(_seeder) {}
+
+    // return the coordinate of the i-th seed
+    //
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint2 operator() (const uint32 idx) const { return seeder.seed( string_len, idx ); }
+
+    const uint32            string_len;
+    const seed_functor      seeder;
+};
+
 // A functor to return the localized coordinates given by a seed_functor
 //
 template <typename string_set_type, typename seed_functor>
@@ -208,7 +231,7 @@ struct localized_seed_functor
     localized_seed_functor(const string_set_type _string_set, const seed_functor _seeder, const uint32* _cum_qgrams) :
         string_set(_string_set), seeder(_seeder), cum_qgrams(_cum_qgrams) {}
 
-    // return the length of the i-th string
+    // return the localized coordinate of the i-th seed
     //
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint2 operator() (const uint32 global_idx) const
@@ -254,7 +277,7 @@ void QGramSetIndexDevice::build(
     const uint32 n_strings = string_set.size();
 
     // extract the list of q-gram coordinates
-    const uint32 n_qgrams = extract_seeds(
+    const uint32 n_qgrams = enumerate_string_set_seeds(
         string_set,
         seeder,
         index );
@@ -431,10 +454,34 @@ QGramSetIndexDevice& QGramSetIndexDevice::operator= (const QGramIndexCore<System
     return *this;
 }
 
+// extract a set of seed coordinates out of a string, according to a given seeding functor
+//
+template <typename seed_functor, typename index_vector_type>
+uint32 enumerate_string_seeds(
+    const uint32                string_len,
+    const seed_functor          seeder,
+          index_vector_type&    indices)
+{
+    // fetch the total number of output q-grams
+    const uint32 n_qgrams = seeder( string_len );
+
+    // reserve enough storage
+    indices.resize( n_qgrams );
+
+    // build the list of q-gram indices
+    thrust::transform(
+        thrust::make_counting_iterator<uint32>(0u),
+        thrust::make_counting_iterator<uint32>(0u) + n_qgrams,
+        indices.begin(),
+        string_seed_functor<seed_functor>( string_len, seeder ) );
+
+    return n_qgrams;
+}
+
 // extract a set of seed coordinates out of a string-set, according to a given seeding functor
 //
 template <typename string_set_type, typename seed_functor, typename index_vector_type>
-uint32 extract_seeds(
+uint32 enumerate_string_set_seeds(
     const string_set_type       string_set,
     const seed_functor          seeder,
           index_vector_type&    indices)
@@ -459,6 +506,7 @@ uint32 extract_seeds(
     // fetch the total nunber of q-grams to output
     const uint32 n_qgrams = cum_qgrams[ n_strings-1 ];
 
+    // reserve enough storage
     indices.resize( n_qgrams );
 
     // build the list of q-gram indices

@@ -51,7 +51,7 @@
 #include <nvbio/basic/options.h>
 #include <nvbio/basic/threads.h>
 #include <nvbio/basic/html.h>
-#include <nvbio/fmindex/dna.h>
+#include <nvbio/basic/dna.h>
 #include <nvbio/fmindex/bwt.h>
 #include <nvbio/fmindex/ssa.h>
 #include <nvbio/fmindex/fmindex.h>

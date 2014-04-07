@@ -39,7 +39,7 @@
 #include <nvbio/basic/packedstream_loader.h>
 #include <nvbio/basic/vector_wrapper.h>
 #include <nvbio/basic/shared_pointer.h>
-#include <nvbio/fmindex/dna.h>
+#include <nvbio/basic/dna.h>
 #include <nvbio/alignment/alignment.h>
 #include <nvbio/alignment/batched.h>
 #include <nvbio/alignment/sink.h>

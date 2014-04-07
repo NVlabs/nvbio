@@ -52,7 +52,7 @@
 #include <nvbio/basic/shared_pointer.h>
 #include <nvbio/io/reads/reads.h>
 #include <nvbio/fasta/fasta.h>
-#include <nvbio/fmindex/dna.h>
+#include <nvbio/basic/dna.h>
 #include <nvbio/alignment/alignment.h>
 #include <nvbio/alignment/batched.h>
 #include <nvbio/alignment/sink.h>

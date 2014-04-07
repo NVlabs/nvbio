@@ -30,7 +30,7 @@
 #include <nvbio/io/alignments.h>
 #include <nvbio/io/fmi.h>
 
-#include <nvbio/fmindex/dna.h>
+#include <nvbio/basic/dna.h>
 
 namespace nvbio {
 namespace io {

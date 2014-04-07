@@ -1,6 +1,5 @@
 addsources(
 bwt.h
-dna.h
 fmindex_device.h
 fmindex.h
 fmindex_inl.h

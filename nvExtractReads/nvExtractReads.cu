@@ -31,7 +31,7 @@
 #include <nvbio/basic/timer.h>
 #include <nvbio/basic/shared_pointer.h>
 #include <nvbio/io/reads/reads.h>
-#include <nvbio/fmindex/dna.h>
+#include <nvbio/basic/dna.h>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <stdio.h>

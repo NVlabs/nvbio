@@ -44,7 +44,7 @@
 #include <nvbio/basic/timer.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/thrust_view.h>
-#include <nvbio/fmindex/dna.h>
+#include <nvbio/basic/dna.h>
 #include <nvbio/fmindex/bwt.h>
 #include <nvbio/fasta/fasta.h>
 #include <nvbio/io/fmi.h>

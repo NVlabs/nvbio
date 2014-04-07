@@ -44,7 +44,7 @@
 #include <nvbio/basic/string_set.h>
 #include <nvbio/basic/cuda/ldg.h>
 #include <nvbio/io/fmi.h>
-#include <nvbio/fmindex/dna.h>
+#include <nvbio/basic/dna.h>
 #include <nvbio/fmindex/bwt.h>
 #include <thrust/device_vector.h>
 

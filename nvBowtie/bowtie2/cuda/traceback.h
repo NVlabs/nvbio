@@ -34,7 +34,7 @@
 #include <nvbio/basic/exceptions.h>
 #include <nvbio/io/alignments.h>
 #include <nvbio/io/utils.h>
-#include <nvbio/fmindex/dna.h> // for dna_to_char
+#include <nvbio/basic/dna.h> // for dna_to_char
 
 namespace nvbio {
 namespace bowtie2 {

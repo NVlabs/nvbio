@@ -71,30 +71,4 @@ T* plain_view(thrust::host_vector<T>& vec) { return vec.size() ? thrust::raw_poi
 template <typename T>
 const T* plain_view(const thrust::host_vector<T>& vec) { return vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL; }
 
-
-#if 0
-    /// a host/device wrapper to dereference thrust vectors
-    ///
-    template <typename T>
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    typename thrust::device_vector<T>::reference dereference(thrust::device_vector<T>& vec, const uint32 i)
-    {
-      #if !defined(__CUDA_ARCH__)
-        return vec[i];
-      #endif
-    }
-
-    /// a host/device wrapper to dereference generic pointers
-    ///
-    template <typename T>
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    const T& dereference(const T* vec, const uint32 i) { return vec[i]; }
-
-    /// a host/device wrapper to dereference generic pointers
-    ///
-    template <typename T>
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    T& dereference(T* vec, const uint32 i) { return vec[i]; }
-#endif
-
 } // namespace nvbio

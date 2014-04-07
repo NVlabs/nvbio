@@ -68,7 +68,7 @@ void alloc_temp_storage(VectorType& vec, const uint64 size)
         }
         catch (...)
         {
-            log_error(stderr,"alloc_temp_storage() : allocation failed!\n");
+            log_error(stderr,"alloc_temp_storage() : allocation failed! (%llu entries / %llu bytes)\n", size, size * sizeof(typename VectorType::value_type));
             throw;
         }
     }

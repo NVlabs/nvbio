@@ -197,7 +197,7 @@ struct localize_functor
 // build a q-group index from a given string set
 //
 // \param q                the q parameter
-// \param string           the string iterator
+// \param string-set       the string-set
 //
 template <typename string_set_type>
 void QGramSetIndexDevice::build(
@@ -316,6 +316,74 @@ void QGramSetIndexDevice::build(
     }
     else
         lut.resize(0);
+}
+
+// copy operator
+//
+template <typename SystemTag>
+QGramIndexHost& QGramIndexHost::operator= (const QGramIndexCore<SystemTag,uint64,uint32,uint32>& src)
+{
+    Q               = src.Q;
+    symbol_size     = src.symbol_size;
+    n_unique_qgrams = src.n_unique_qgrams;
+    qgrams          = src.qgrams;
+    slots           = src.slots;
+    index           = src.index;
+    QL              = src.QL;
+    QLS             = src.QLS;
+    lut             = src.lut;
+    return *this;
+}
+
+// copy operator
+//
+template <typename SystemTag>
+QGramIndexDevice& QGramIndexDevice::operator= (const QGramIndexCore<SystemTag,uint64,uint32,uint32>& src)
+{
+    Q               = src.Q;
+    symbol_size     = src.symbol_size;
+    n_unique_qgrams = src.n_unique_qgrams;
+    qgrams          = src.qgrams;
+    slots           = src.slots;
+    index           = src.index;
+    QL              = src.QL;
+    QLS             = src.QLS;
+    lut             = src.lut;
+    return *this;
+}
+
+// copy operator
+//
+template <typename SystemTag>
+QGramSetIndexHost& QGramSetIndexHost::operator= (const QGramIndexCore<SystemTag,uint64,uint32,uint2>& src)
+{
+    Q               = src.Q;
+    symbol_size     = src.symbol_size;
+    n_unique_qgrams = src.n_unique_qgrams;
+    qgrams          = src.qgrams;
+    slots           = src.slots;
+    index           = src.index;
+    QL              = src.QL;
+    QLS             = src.QLS;
+    lut             = src.lut;
+    return *this;
+}
+
+// copy operator
+//
+template <typename SystemTag>
+QGramSetIndexDevice& QGramSetIndexDevice::operator= (const QGramIndexCore<SystemTag,uint64,uint32,uint2>& src)
+{
+    Q               = src.Q;
+    symbol_size     = src.symbol_size;
+    n_unique_qgrams = src.n_unique_qgrams;
+    qgrams          = src.qgrams;
+    slots           = src.slots;
+    index           = src.index;
+    QL              = src.QL;
+    QLS             = src.QLS;
+    lut             = src.lut;
+    return *this;
 }
 
 } // namespace nvbio

@@ -34,6 +34,7 @@
 #include <nvbio/basic/thrust_view.h>
 #include <nvbio/basic/exceptions.h>
 #include <nvbio/basic/iterator.h>
+#include <nvbio/basic/vector.h>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <thrust/sort.h>
@@ -188,12 +189,15 @@
 /// // keep track of the original q-gram indices before sorting
 /// thrust::device_vector<uint32> d_query_indices( n_query_qgrams );
 /// thrust::copy(
-///   thrust::make_counting_iterator<uint32>(0u),
-///   thrust::make_counting_iterator<uint32>(0u) + n_query_qgrams,
-///   d_query_indices.begin() );
+///     thrust::make_counting_iterator<uint32>(0u),
+///     thrust::make_counting_iterator<uint32>(0u) + n_query_qgrams,
+///     d_query_indices.begin() );
 ///
 /// // now sort the q-grams and their original indices
-/// thrust::sort_by_key( d_query_qgrams.begin(), d_query_qgrams.begin() + n_query_qgrams, d_query_indices.begin() );
+/// thrust::sort_by_key(
+///     d_query_qgrams.begin(),
+///     d_query_qgrams.begin() + n_query_qgrams,
+///     d_query_indices.begin() );
 ///\endcode
 ///
 ///\section QGramFilterSection Q-Gram Filtering
@@ -203,8 +207,8 @@
 /// One way to go about it is to ask the q-gram index, which given an entry inside each non-empty range, can provide
 /// its location.
 /// This can be done using the qgram_locate_functor.
-/// However, if one is interested in getting the complete list of hits, things are more difficult, as the process
-/// involves a data-expansion (as each range might expand to a variable number of hits).
+/// However, if one is interested in getting the complete list of hits things are more difficult, as the process
+/// involves a variable rate data-expansion (as each range might expand to a variable number of hits).
 ///\par
 /// The \ref QGramFilter provides a convenient way to do this:
 ///\code
@@ -212,7 +216,7 @@
 /// ...
 ///
 /// // find all hits using a q-gram filter
-/// QGramFilter qgram_filter;
+/// QGramFilterDevice qgram_filter;
 /// qgram_filter.enact(
 ///     qgram_index,
 ///     n_query_qgrams,
@@ -344,16 +348,43 @@ struct QGramIndexViewCore
 
 /// The base q-gram index core class (see \ref QGramIndex)
 ///
-template <typename QGramVectorType, typename IndexVectorType, typename CoordVectorType>
+template <typename SystemTag, typename QGramType, typename IndexType, typename CoordType>
 struct QGramIndexCore
 {
-    typedef QGramVectorType                                                 qgram_vector_type;
-    typedef IndexVectorType                                                 index_vector_type;
-    typedef CoordVectorType                                                 coord_vector_type;
-    typedef typename qgram_vector_type::value_type                          qgram_type;
-    typedef typename coord_vector_type::value_type                          coord_type;
+    typedef SystemTag                                                       system_tag;
+
+    typedef QGramType                                                       qgram_type;
+    typedef IndexType                                                       index_type;
+    typedef CoordType                                                       coord_type;
+    typedef nvbio::vector<system_tag,qgram_type>                            qgram_vector_type;
+    typedef nvbio::vector<system_tag,index_type>                            index_vector_type;
+    typedef nvbio::vector<system_tag,coord_type>                            coord_vector_type;
 
     QGramIndexCore() {}
+
+    /// return the amount of device memory used
+    ///
+    uint64 used_host_memory() const
+    {
+        return equal<system_tag,host_tag>() ?
+               qgrams.size() * sizeof(qgram_type) +
+               slots.size()  * sizeof(uint32)     +
+               index.size()  * sizeof(coord_type) + 
+               lut.size()    * sizeof(uint32) :
+               0u;
+    }
+
+    /// return the amount of device memory used
+    ///
+    uint64 used_device_memory() const
+    {
+        return equal<system_tag,device_tag>() ?
+               qgrams.size() * sizeof(qgram_type) +
+               slots.size()  * sizeof(uint32)     +
+               index.size()  * sizeof(coord_type) + 
+               lut.size()    * sizeof(uint32) :
+               0u;
+    }
 
     uint32              Q;                  ///< the q-gram size
     uint32              symbol_size;        ///< symbol size
@@ -372,15 +403,11 @@ typedef QGramIndexViewCore<uint64*,uint32*,uint2*>  QGramSetIndexView;
 
 /// A host-side q-gram index (see \ref QGramIndex)
 ///
-struct QGramIndexHost : public QGramIndexCore<
-    thrust::host_vector<uint64>,
-    thrust::host_vector<uint32>,
-    thrust::host_vector<uint32> >
+struct QGramIndexHost : public QGramIndexCore<host_tag,uint64,uint32,uint32>
 {
-    typedef QGramIndexCore<
-        thrust::host_vector<uint64>,
-        thrust::host_vector<uint32>,
-        thrust::host_vector<uint32> >               core_type;
+    typedef host_tag                                system_tag;
+
+    typedef QGramIndexCore<host_tag,uint64,uint32,uint32>   core_type;
 
     typedef core_type::qgram_vector_type            qgram_vector_type;
     typedef core_type::index_vector_type            index_vector_type;
@@ -389,32 +416,23 @@ struct QGramIndexHost : public QGramIndexCore<
     typedef core_type::coord_type                   coord_type;
     typedef QGramIndexView                          view_type;
 
-    /// return the amount of device memory used
+    /// copy operator
     ///
-    uint64 used_host_memory() const
-    {
-        return qgrams.size() * sizeof(qgram_type) +
-               slots.size()  * sizeof(uint32) +
-               index.size()  * sizeof(coord_type) + 
-               lut.size()    * sizeof(uint32);
-    }
-
-    /// return the amount of device memory used
-    ///
-    uint64 used_device_memory() const { return 0u; }
+    template <typename SystemTag>
+    QGramIndexHost& operator= (const QGramIndexCore<SystemTag,uint64,uint32,uint32>& src);
 };
 
 /// A device-side q-gram index for strings (see \ref QGramIndex)
 ///
-struct QGramIndexDevice : public QGramIndexCore<
-    thrust::device_vector<uint64>,
-    thrust::device_vector<uint32>,
-    thrust::device_vector<uint32> >
+struct QGramIndexDevice : public QGramIndexCore<device_tag,uint64,uint32,uint32>
 {
+    typedef device_tag                              system_tag;
+
     typedef QGramIndexCore<
-        thrust::device_vector<uint64>,
-        thrust::device_vector<uint32>,
-        thrust::device_vector<uint32> >             core_type;
+        device_tag,
+        uint64,
+        uint32,
+        uint32>                                     core_type;
 
     typedef core_type::qgram_vector_type            qgram_vector_type;
     typedef core_type::index_vector_type            index_vector_type;
@@ -443,32 +461,48 @@ struct QGramIndexDevice : public QGramIndexCore<
         const string_type   string,
         const uint32        qlut = 0);
 
-    /// return the amount of device memory used
+    /// copy operator
     ///
-    uint64 used_host_memory() const { return 0u; }
-
-    /// return the amount of device memory used
-    ///
-    uint64 used_device_memory() const
-    {
-        return qgrams.size() * sizeof(qgram_type) +
-               slots.size()  * sizeof(uint32) +
-               index.size()  * sizeof(coord_type) +
-               lut.size()    * sizeof(uint32);
-    }
+    template <typename SystemTag>
+    QGramIndexDevice& operator= (const QGramIndexCore<SystemTag,uint64,uint32,uint32>& src);
 };
 
 /// A device-side q-gram index for string-sets (see \ref QGramIndex)
 ///
-struct QGramSetIndexDevice : public QGramIndexCore<
-    thrust::device_vector<uint64>,
-    thrust::device_vector<uint32>,
-    thrust::device_vector<uint2> >
+struct QGramSetIndexHost : public QGramIndexCore<host_tag,uint64,uint32,uint2>
 {
+    typedef host_tag                                system_tag;
+
     typedef QGramIndexCore<
-        thrust::device_vector<uint64>,
-        thrust::device_vector<uint32>,
-        thrust::device_vector<uint2> >              core_type;
+        host_tag,
+        uint64,
+        uint32,
+        uint2>                                      core_type;
+
+    typedef core_type::qgram_vector_type            qgram_vector_type;
+    typedef core_type::index_vector_type            index_vector_type;
+    typedef core_type::coord_vector_type            coord_vector_type;
+    typedef core_type::qgram_type                   qgram_type;
+    typedef core_type::coord_type                   coord_type;
+    typedef QGramIndexView                          view_type;
+
+    /// copy operator
+    ///
+    template <typename SystemTag>
+    QGramSetIndexHost& operator= (const QGramIndexCore<SystemTag,uint64,uint32,uint2>& src);
+};
+
+/// A device-side q-gram index for string-sets (see \ref QGramIndex)
+///
+struct QGramSetIndexDevice : public QGramIndexCore<device_tag,uint64,uint32,uint2>
+{
+    typedef device_tag                              system_tag;
+
+    typedef QGramIndexCore<
+        device_tag,
+        uint64,
+        uint32,
+        uint2>                                      core_type;
 
     typedef core_type::qgram_vector_type            qgram_vector_type;
     typedef core_type::index_vector_type            index_vector_type;
@@ -496,26 +530,18 @@ struct QGramSetIndexDevice : public QGramIndexCore<
         const string_set_type   string,
         const uint32            qlut = 0);
 
-    /// return the amount of device memory used
+    /// copy operator
     ///
-    uint64 used_host_memory() const { return 0u; }
-
-    /// return the amount of device memory used
-    ///
-    uint64 used_device_memory() const
-    {
-        return qgrams.size() * sizeof(qgram_type) +
-               slots.size()  * sizeof(uint32) +
-               index.size()  * sizeof(coord_type) +
-               lut.size()    * sizeof(uint32);
-    }
+    template <typename SystemTag>
+    QGramSetIndexDevice& operator= (const QGramIndexCore<SystemTag,uint64,uint32,uint2>& src);
 };
 
 /// return the plain view of a QGramIndex
 ///
-QGramIndexView plain_view(QGramIndexDevice& qgram)
+template <typename SystemTag, typename QT, typename IT, typename CT>
+QGramIndexViewCore<QT*,IT*,CT*> plain_view(QGramIndexCore<SystemTag,QT,IT,CT>& qgram)
 {
-    return QGramIndexView(
+    return QGramIndexViewCore<QT*,IT*,CT*>(
         qgram.Q,
         qgram.symbol_size,
         qgram.n_unique_qgrams,
@@ -529,9 +555,10 @@ QGramIndexView plain_view(QGramIndexDevice& qgram)
 
 /// return the plain view of a QGramIndex
 ///
-QGramSetIndexView plain_view(QGramSetIndexDevice& qgram)
+template <typename SystemTag, typename QT, typename IT, typename CT>
+QGramIndexViewCore<const QT*,const IT*,const CT*> plain_view(const QGramIndexCore<SystemTag,QT,IT,CT>& qgram)
 {
-    return QGramSetIndexView(
+    return QGramIndexViewCore<const QT*,const IT*,const CT*>(
         qgram.Q,
         qgram.symbol_size,
         qgram.n_unique_qgrams,

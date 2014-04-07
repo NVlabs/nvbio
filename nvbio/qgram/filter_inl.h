@@ -154,7 +154,66 @@ struct filter_results< qgram_index_type, index_iterator, uint2 >
 // \param indices          the query indices
 //
 template <typename qgram_index_type, typename query_iterator, typename index_iterator>
-void QGramFilter::enact(
+void QGramFilter<host_tag>::enact(
+    const qgram_index_type& qgram_index,
+    const uint32            n_queries,
+    const query_iterator    queries,
+    const index_iterator    indices)
+{
+    typedef typename qgram_index_type::coord_type coord_type;
+
+    m_ranges.resize( n_queries );
+    m_slots.resize( n_queries );
+
+    // search the q-grams in the index, obtaining a set of ranges
+    thrust::transform(
+        queries,
+        queries + n_queries,
+        m_ranges.begin(),
+        qgram_index );
+
+    // scan their size to determine the slots
+    thrust::inclusive_scan(
+        thrust::make_transform_iterator( m_ranges.begin(), qgram::range_size() ),
+        thrust::make_transform_iterator( m_ranges.begin(), qgram::range_size() ) + n_queries,
+        m_slots.begin() );
+
+    // determine the total number of occurrences
+    const uint32 n_occurrences = m_slots[ n_queries-1 ];
+
+    // resize the output buffer
+    m_output.resize( n_occurrences );
+
+    // and fill it
+    thrust::transform(
+        thrust::make_counting_iterator<uint32>(0u),
+        thrust::make_counting_iterator<uint32>(0u) + n_occurrences,
+        m_output.begin(),
+        qgram::filter_results<qgram_index_type,index_iterator,coord_type>(
+            qgram_index,
+            n_queries,
+            nvbio::plain_view( m_slots ),
+            nvbio::plain_view( m_ranges ),
+            indices ) );
+
+    /*
+    // now sort the results by (id, diagonal)
+    thrust::device_ptr<uint64> output_ptr( (uint64*)nvbio::plain_view( m_output ) );
+    thrust::sort(
+        output_ptr,
+        output_ptr + n_occurrences );
+        */
+}
+
+// enact the q-gram filter
+//
+// \param qgram_index      the q-gram index
+// \param n_queries        the number of query q-grams
+// \param queries          the query q-grams
+// \param indices          the query indices
+//
+template <typename qgram_index_type, typename query_iterator, typename index_iterator>
+void QGramFilter<device_tag>::enact(
     const qgram_index_type& qgram_index,
     const uint32            n_queries,
     const query_iterator    queries,

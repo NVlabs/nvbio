@@ -151,6 +151,8 @@ struct QGroupIndexHost
 {
     static const uint32 WORD_SIZE = 32;
 
+    typedef host_tag                                            system_tag;
+
     typedef thrust::host_vector<uint32>                         vector_type;
     typedef PackedStream<const uint32*,uint8,1u,false,int64>    const_bitstream_type;
     typedef PackedStream<uint32*,uint8,1u,false,int64>          bitstream_type;
@@ -184,6 +186,8 @@ struct QGroupIndexHost
 struct QGroupIndexDevice
 {
     static const uint32 WORD_SIZE = 32;
+
+    typedef device_tag                                          system_tag;
 
     typedef thrust::device_vector<uint32>                       vector_type;
     typedef PackedStream<const uint32*,uint8,1u,false,int64>    const_bitstream_type;

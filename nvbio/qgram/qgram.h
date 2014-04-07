@@ -247,8 +247,42 @@ namespace nvbio {
 /// - the \ref QGramIndex "Q-Gram Index"
 /// - the \ref QGramFilter "Q-Gram Filter"
 ///
+/// It also defines convenience functions to extract seeds out of strings and string-sets:
+/// - extract_seeds()
+/// - uniform_seeds_functor
+///
 ///@{
 ///
+
+/// extract a set of seed coordinates out of a string-set, according to a given seeding functor
+///
+/// \tparam string_set_type     the string-set type
+/// \tparam seed_functor        a class providing the following interface:
+///\anchor SeedFunctor
+///\code
+/// struct seed_functor
+/// {
+///     typedef uint32  argument_type;
+///     typedef uint32  result_type;
+///
+///     // return the number of seeds produced for a given string length
+///     uint32 operator() (const uint32 length) const;
+///
+///     // return the coordinate of the i-th seed produced for a given string length
+///     uint32 seed(const uint32 length, const uint32 i) const;
+/// };
+///\endcode
+/// \tparam index_vector_type   a dynamic vector of uint2 coordinates
+///
+/// \param string_set           the string set to seed
+/// \param seeder               the seeding functor
+/// \param indices              the vector of output uint2 indices
+///
+template <typename string_set_type, typename seed_functor, typename index_vector_type>
+uint32 extract_seeds(
+    const string_set_type       string_set,
+    const seed_functor          seeder,
+          index_vector_type&    indices);
 
 ///
 ///@defgroup QGramIndex Q-Gram Index Module
@@ -278,8 +312,10 @@ struct QGramIndexViewCore
     typedef qgram_type  argument_type;
     typedef uint2       result_type;
 
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     QGramIndexViewCore() {}
 
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     QGramIndexViewCore(
         const uint32                _Q,
         const uint32                _symbol_size,
@@ -441,8 +477,7 @@ struct QGramIndexDevice : public QGramIndexCore<device_tag,uint64,uint32,uint32>
     typedef core_type::coord_type                   coord_type;
     typedef QGramIndexView                          view_type;
 
-    /// build a q-gram index from a given string T; the amount of storage required
-    /// is basically O( A^q + |T|*32 ) bits, where A is the alphabet size.
+    /// build a q-gram index from a given string T
     ///
     /// \tparam string_type     the string iterator type
     ///
@@ -511,15 +546,13 @@ struct QGramSetIndexDevice : public QGramIndexCore<device_tag,uint64,uint32,uint
     typedef core_type::coord_type                   coord_type;
     typedef QGramIndexView                          view_type;
 
-    /// build a q-gram index from a given string T; the amount of storage required
-    /// is basically O( A^q + |T|*32 ) bits, where A is the alphabet size.
+    /// build a q-gram index from a given string-set T
     ///
-    /// \tparam string_type     the string iterator type
+    /// \tparam string_set_type     the string-set type
     ///
     /// \param q                the q parameter
     /// \param symbol_sz        the size of the symbols, in bits
-    /// \param string_len       the size of the string
-    /// \param string           the string iterator
+    /// \param string_set       the string-set
     /// \param qlut             the number of symbols to include in the LUT (of size O( A^qlut ))
     ///                         used to accelerate q-gram searches
     ///
@@ -527,7 +560,27 @@ struct QGramSetIndexDevice : public QGramIndexCore<device_tag,uint64,uint32,uint
     void build(
         const uint32            q,
         const uint32            symbol_sz,
-        const string_set_type   string,
+        const string_set_type   string_set,
+        const uint32            qlut = 0);
+
+    /// build a q-gram index from a given string-set T using a \ref SeedFunctor "Seeding Functor"
+    ///
+    /// \tparam string_set_type     the string-set type
+    /// \tparam seed_functor        the \ref SeedFunctor "Seeding Functor" type
+    ///
+    /// \param q                the q parameter
+    /// \param symbol_sz        the size of the symbols, in bits
+    /// \param string_set       the string-set
+    /// \param seeder           the seeding functor
+    /// \param qlut             the number of symbols to include in the LUT (of size O( A^qlut ))
+    ///                         used to accelerate q-gram searches
+    ///
+    template <typename string_set_type, typename seed_functor>
+    void build(
+        const uint32            q,
+        const uint32            symbol_sz,
+        const string_set_type   string_set,
+        const seed_functor      seeder,
         const uint32            qlut = 0);
 
     /// copy operator
@@ -592,6 +645,39 @@ struct qgram_locate_functor
 };
 
 ///@} // end of the QGramIndex group
+
+/// a \ref SeedFunctor "Seeding Functor" returning seeds sampled at regular intervals
+///
+struct uniform_seeds_functor
+{
+    typedef uint32  argument_type;
+    typedef uint32  result_type;
+
+    /// constructor
+    ///
+    /// \param _interval        the sampling interval
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uniform_seeds_functor(const uint32 _Q, const uint32 _interval) : Q(_Q), interval(_interval) {}
+
+    /// return the number of seeds for a given string length
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 operator() (const uint32 length) const
+    {
+        uint32 n = 0;
+        for (uint32 pos = 0; pos + Q < length; pos += interval)
+            ++n;
+        return n;
+    }
+
+    /// return the coordinate of the i-th seed
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 seed(const uint32 length, const uint32 i) const { return i * interval; }
+
+    const uint32 Q;         ///< the seed length
+    const uint32 interval;  ///< the sampling interval
+};
 
 /// A utility functor to extract the i-th q-gram out of a string
 ///

@@ -91,6 +91,7 @@ struct Stats
     uint64  queries;
     uint64  matches;
     uint64  occurrences;
+    uint64  merged;
 };
 
 // build a set of q-grams from a given string, together with their sorted counterpart
@@ -346,9 +347,12 @@ void test_qgram_index_query(
     const float merge_time = timer.seconds();
     stats.merge_time += merge_time;
 
+    stats.merged += qgram_filter.n_hits();
+
     log_verbose(stderr, "  q-gram filter... done\n");
-    log_verbose(stderr, "    filter throughput : %.2f M q-grams/s\n", (1.0e-6f * float( stats.queries )) / stats.filter_time);
-    log_verbose(stderr, "    merge  throughput : %.2f M q-grams/s\n", (1.0e-6f * float( stats.queries )) / stats.merge_time);
+    log_verbose(stderr, "    filter throughput  : %.2f M q-grams/s\n", (1.0e-6f * float( stats.queries )) / stats.filter_time);
+    log_verbose(stderr, "    merge  throughput  : %.2f M q-grams/s\n", (1.0e-6f * float( stats.queries )) / stats.merge_time);
+    log_verbose(stderr, "    merged occurrences : %.3f B (%.1f %%)\n", 1.0e-9f * float( stats.merged ), 100.0f * float(stats.merged)/float(stats.occurrences));
 }
 
 enum QGramTest

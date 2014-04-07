@@ -665,7 +665,7 @@ struct uniform_seeds_functor
     uint32 operator() (const uint32 length) const
     {
         uint32 n = 0;
-        for (uint32 pos = 0; pos + Q < length; pos += interval)
+        for (uint32 pos = 0; pos + Q <= length; pos += interval)
             ++n;
         return n;
     }

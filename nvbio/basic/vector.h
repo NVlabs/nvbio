@@ -47,12 +47,12 @@ struct vector {};
 template <typename T>
 struct vector<host_tag,T> : public thrust::host_vector<T>
 {
-    typedef host_tag                    system_tag;
+    typedef host_tag                            system_tag;
 
-    typedef thrust::host_vector<T>      base_type;
-    typedef base_type::const_iterator   const_iterator;
-    typedef base_type::iterator         iterator;
-    typedef base_type::value_type       value_type;
+    typedef thrust::host_vector<T>              base_type;
+    typedef typename base_type::const_iterator  const_iterator;
+    typedef typename base_type::iterator        iterator;
+    typedef typename base_type::value_type      value_type;
 
     /// constructor
     ///
@@ -69,12 +69,12 @@ struct vector<host_tag,T> : public thrust::host_vector<T>
 template <typename T>
 struct vector<device_tag,T> : public thrust::device_vector<T>
 {
-    typedef device_tag                  system_tag;
+    typedef device_tag                          system_tag;
 
-    typedef thrust::device_vector<T>    base_type;
-    typedef base_type::const_iterator   const_iterator;
-    typedef base_type::iterator         iterator;
-    typedef base_type::value_type       value_type;
+    typedef thrust::device_vector<T>            base_type;
+    typedef typename base_type::const_iterator  const_iterator;
+    typedef typename base_type::iterator        iterator;
+    typedef typename base_type::value_type      value_type;
 
     /// constructor
     ///

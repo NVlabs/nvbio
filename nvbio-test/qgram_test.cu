@@ -81,7 +81,8 @@ struct Stats
         merge_time(0),
         queries(0),
         matches(0),
-        occurrences(0) {}
+        occurrences(0),
+        merged(0) {}
 
     float   build_time;
     float   unsorted_time;

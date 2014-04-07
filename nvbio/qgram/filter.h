@@ -116,13 +116,13 @@ struct QGramFilter<host_tag>
 
     /// return the output list of hit counts (only valid if merge() has been called)
     ///
-    const uint32* counts() const { return nvbio::plain_view( m_counts ); }
+    const uint16* counts() const { return nvbio::plain_view( m_counts ); }
 
     uint32                      n_occurrences;
     thrust::host_vector<uint2>  m_ranges;
     thrust::host_vector<uint32> m_slots;
     thrust::host_vector<uint2>  m_output;
-    thrust::host_vector<uint32> m_counts;
+    thrust::host_vector<uint16> m_counts;
 };
 
 ////
@@ -176,13 +176,13 @@ struct QGramFilter<device_tag>
 
     /// return the output list of hit counts (only valid if merge() has been called)
     ///
-    const uint32* counts() const { return nvbio::plain_view( m_counts ); }
+    const uint16* counts() const { return nvbio::plain_view( m_counts ); }
 
     uint32                        n_occurrences;
     thrust::device_vector<uint2>  m_ranges;
     thrust::device_vector<uint32> m_slots;
     thrust::device_vector<uint2>  m_output;
-    thrust::device_vector<uint32> m_counts;
+    thrust::device_vector<uint16> m_counts;
     thrust::device_vector<uint8>  d_temp_storage;
 };
 

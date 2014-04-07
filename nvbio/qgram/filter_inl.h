@@ -223,6 +223,9 @@ void QGramFilter<host_tag>::enact(
 //
 void QGramFilter<host_tag>::merge(const uint32 interval)
 {
+    if (n_occurrences == 0)
+        return;
+
     // snap the diagonals to the closest one
     thrust::transform(
         m_output.begin(),
@@ -236,20 +239,23 @@ void QGramFilter<host_tag>::merge(const uint32 interval)
         output_ptr,
         output_ptr + n_occurrences );
 
-    // and run-length encode them
-    thrust::host_vector<uint2> output( n_occurrences );
-
+    // realloc the counts vector
+    m_counts.clear();
     m_counts.resize( n_occurrences );
+    {
+        // and run-length encode them
+        thrust::host_vector<uint2> output( n_occurrences );
 
-    n_occurrences = uint32( thrust::reduce_by_key(
-        m_output.begin(),
-        m_output.begin() + n_occurrences,
-        thrust::make_constant_iterator<uint32>(1u),
-        output.begin(),
-        m_counts.begin() ).first - output.begin() );
+        n_occurrences = uint32( thrust::reduce_by_key(
+            m_output.begin(),
+            m_output.begin() + n_occurrences,
+            thrust::make_constant_iterator<uint32>(1u),
+            output.begin(),
+            m_counts.begin() ).first - output.begin() );
 
-    // swap the outputs
-    m_output.swap( output );
+        // swap the outputs
+        m_output.swap( output );
+    }
 
     // and shrink the output vectors
     m_output.resize( n_occurrences );
@@ -313,6 +319,9 @@ void QGramFilter<device_tag>::enact(
 //
 void QGramFilter<device_tag>::merge(const uint32 interval)
 {
+    if (n_occurrences == 0)
+        return;
+
     // snap the diagonals to the closest one
     thrust::transform(
         m_output.begin(),
@@ -326,20 +335,23 @@ void QGramFilter<device_tag>::merge(const uint32 interval)
         output_ptr,
         output_ptr + n_occurrences );
 
-    // and run-length encode them
-    thrust::device_vector<uint2> output( n_occurrences );
-
+    // realloc the counts vector
+    m_counts.clear();
     m_counts.resize( n_occurrences );
+    {
+        // and run-length encode them
+        thrust::device_vector<uint2> output( n_occurrences );
 
-    n_occurrences = cuda::runlength_encode(
-        n_occurrences,
-        m_output.begin(),
-        output.begin(),
-        m_counts.begin(),
-        d_temp_storage );
+        n_occurrences = cuda::runlength_encode(
+            n_occurrences,
+            m_output.begin(),
+            output.begin(),
+            m_counts.begin(),
+            d_temp_storage );
 
-    // swap the outputs
-    m_output.swap( output );
+        // swap the outputs
+        m_output.swap( output );
+    }
 
     // and shrink the output vectors
     m_output.resize( n_occurrences );

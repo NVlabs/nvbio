@@ -113,9 +113,9 @@
 /// const uint32 n_strings = 2u;
 /// thrust::device_vector<uint8>  d_string( h_string );
 /// thrust::device_vector<uint32> d_string_offsets( n_strings+1 );
-/// d_string_offsets[0] = 0;        // offset to the first string
-/// d_string_offsets[1] = 20;       // offset to the second string
-/// d_string_offsets[2] = 40;       // end of the last string
+/// d_string_offsets[0] = 0;                // offset to the first string
+/// d_string_offsets[1] = 20;               // offset to the second string
+/// d_string_offsets[2] = 40;               // end of the last string
 ///
 /// typedef ConcatenatedStringSet<uint8*,uint32*> string_set_type;
 /// const string_set_type string_set(
@@ -126,10 +126,25 @@
 /// // build a q-gram index on the device
 /// QGramSetIndexDevice qgram_index;
 ///
+/// const uint32 q = 20u;
+///
 /// qgram_index.build(
-///     20u,                        // q-group size
-///     2u,                         // the alphabet size, in bits
-///     string_set );               // the string-set we want to index
+///     q,                                  // q-group size
+///     2u,                                 // the alphabet size, in bits
+///     string_set );                       // the string-set we want to index
+///\endcode
+///
+/// \par
+/// <b>Note:</b> sometimes you might not want to index all the q-grams in your string-set,
+/// but rather extract one every N bases, or perhaps using some custom logic of your own.
+/// Through \ref SeedFunctor "Seeding Functors", nvbio provides a mechanism to customize
+/// the seeding logic. For example, the following code will extract a seed every 10 bases:
+///\code
+/// qgram_index.build(
+///     q,                                  // q-group size
+///     2u,                                 // the alphabet size, in bits
+///     string_set,                         // the string-set we want to index
+///     uniform_seeds_functor( q, 10u ) );  // extract a q-gram every 10 bases
 ///\endcode
 ///
 ///\section QGramIndexQueriesSection Q-Gram Index Queries

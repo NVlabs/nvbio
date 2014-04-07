@@ -191,6 +191,7 @@ void test_qgram_set_index_build(
         Q,              // q-gram size
         2u,             // implicitly convert N to A
         string_set,
+        uniform_seeds_functor( Q, 10u ),
         12u );
 
     cudaDeviceSynchronize();
@@ -524,8 +525,8 @@ int qgram_test(int argc, char* argv[])
             log_info(stderr, "    sorted throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.sorted_time * genome_ratio) );
             log_info(stderr, "    filter throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.filter_time * genome_ratio) );
             log_info(stderr, "    filter throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.filter_time * genome_ratio) );
-            log_info(stderr, "    merged throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.merge_time  * genome_ratio) );
-            log_info(stderr, "    merged throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.merge_time  * genome_ratio) );
+            log_info(stderr, "    merge  throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.merge_time  * genome_ratio) );
+            log_info(stderr, "    merge  throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.merge_time  * genome_ratio) );
         }
         if (host_test)
         {
@@ -554,8 +555,8 @@ int qgram_test(int argc, char* argv[])
             log_info(stderr, "    sorted throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.sorted_time * genome_ratio) );
             log_info(stderr, "    filter throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.filter_time * genome_ratio) );
             log_info(stderr, "    filter throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.filter_time * genome_ratio) );
-            log_info(stderr, "    merged throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.merge_time  * genome_ratio) );
-            log_info(stderr, "    merged throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.merge_time  * genome_ratio) );
+            log_info(stderr, "    merge  throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.merge_time  * genome_ratio) );
+            log_info(stderr, "    merge  throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.merge_time  * genome_ratio) );
         }
     }
 
@@ -597,8 +598,8 @@ int qgram_test(int argc, char* argv[])
             log_info(stderr, "    sorted throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.sorted_time * genome_ratio) );
             log_info(stderr, "    filter throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.filter_time * genome_ratio) );
             log_info(stderr, "    filter throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.filter_time * genome_ratio) );
-            log_info(stderr, "    merged throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.merge_time  * genome_ratio) );
-            log_info(stderr, "    merged throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.merge_time  * genome_ratio) );
+            log_info(stderr, "    merge  throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.merge_time  * genome_ratio) );
+            log_info(stderr, "    merge  throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.merge_time  * genome_ratio) );
         }
         if (host_test)
         {
@@ -627,8 +628,8 @@ int qgram_test(int argc, char* argv[])
             log_info(stderr, "    sorted throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.sorted_time * genome_ratio) );
             log_info(stderr, "    filter throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.filter_time * genome_ratio) );
             log_info(stderr, "    filter throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.filter_time * genome_ratio) );
-            log_info(stderr, "    merged throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.merge_time  * genome_ratio) );
-            log_info(stderr, "    merged throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.merge_time  * genome_ratio) );
+            log_info(stderr, "    merge  throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.merge_time  * genome_ratio) );
+            log_info(stderr, "    merge  throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.merge_time  * genome_ratio) );
         }
     }
 
@@ -668,8 +669,8 @@ int qgram_test(int argc, char* argv[])
             log_info(stderr, "    sorted throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.sorted_time * genome_ratio) );
             log_info(stderr, "    filter throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.filter_time * genome_ratio) );
             log_info(stderr, "    filter throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.filter_time * genome_ratio) );
-            log_info(stderr, "    merged throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.merge_time  * genome_ratio) );
-            log_info(stderr, "    merged throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.merge_time  * genome_ratio) );
+            log_info(stderr, "    merge  throughput: %7.2f K reads/s\n", 1.0e-3f * float(n_strings)  / (stats.merge_time  * genome_ratio) );
+            log_info(stderr, "    merge  throughput: %7.3f M bases/s\n", 1.0e-6f * float(string_len) / (stats.merge_time  * genome_ratio) );
         }
     }
 

@@ -98,6 +98,14 @@ struct QGramFilter<host_tag>
         const query_iterator    queries,
         const index_iterator    indices);
 
+    /// merge hits falling within the same diagonal interval; this method will
+    /// replace the vector of hits with a compacted list of hits snapped to the
+    /// closest sample diagonal (i.e. multiple of the given interval), together
+    /// with a counts vector providing the number of hits falling on the same
+    /// spot
+    ///
+    void merge(const uint32 interval);
+
     /// return the number of matching hits
     ///
     uint32 n_hits() const { return m_output.size(); }
@@ -106,10 +114,15 @@ struct QGramFilter<host_tag>
     ///
     const uint2* hits() const { return nvbio::plain_view( m_output ); }
 
-    // TODO: generalize to the host
+    /// return the output list of hit counts (only valid if merge() has been called)
+    ///
+    const uint32* counts() const { return nvbio::plain_view( m_counts ); }
+
+    uint32                      n_occurrences;
     thrust::host_vector<uint2>  m_ranges;
     thrust::host_vector<uint32> m_slots;
     thrust::host_vector<uint2>  m_output;
+    thrust::host_vector<uint32> m_counts;
 };
 
 ////
@@ -145,18 +158,31 @@ struct QGramFilter<device_tag>
         const query_iterator    queries,
         const index_iterator    indices);
 
+    /// merge hits falling within the same diagonal interval; this method will
+    /// replace the vector of hits with a compacted list of hits snapped to the
+    /// closest sample diagonal (i.e. multiple of the given interval), together
+    /// with a counts vector providing the number of hits falling on the same
+    /// spot
+    ///
+    void merge(const uint32 interval);
+
     /// return the number of matching hits
     ///
-    uint32 n_hits() const { return m_output.size(); }
+    uint32 n_hits() const { return n_occurrences; }
 
     /// return the output list of hits
     ///
     const uint2* hits() const { return nvbio::plain_view( m_output ); }
 
-    // TODO: generalize to the host
+    /// return the output list of hit counts (only valid if merge() has been called)
+    ///
+    const uint32* counts() const { return nvbio::plain_view( m_counts ); }
+
+    uint32                        n_occurrences;
     thrust::device_vector<uint2>  m_ranges;
     thrust::device_vector<uint32> m_slots;
     thrust::device_vector<uint2>  m_output;
+    thrust::device_vector<uint32> m_counts;
     thrust::device_vector<uint8>  d_temp_storage;
 };
 

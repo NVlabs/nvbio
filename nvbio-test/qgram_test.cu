@@ -78,6 +78,7 @@ struct Stats
         unsorted_time(0),
         sorted_time(0),
         filter_time(0),
+        merge_time(0),
         queries(0),
         matches(0),
         occurrences(0) {}
@@ -86,6 +87,7 @@ struct Stats
     float   unsorted_time;
     float   sorted_time;
     float   filter_time;
+    float   merge_time;
     uint64  queries;
     uint64  matches;
     uint64  occurrences;
@@ -333,11 +335,20 @@ void test_qgram_index_query(
     cudaDeviceSynchronize();
     timer.stop();
     const float filter_time = timer.seconds();
-
     stats.filter_time += filter_time;
 
+    timer.start();
+
+    qgram_filter.merge( 16u );
+
+    cudaDeviceSynchronize();
+    timer.stop();
+    const float merge_time = timer.seconds();
+    stats.merge_time += merge_time;
+
     log_verbose(stderr, "  q-gram filter... done\n");
-    log_verbose(stderr, "    throughput : %.2f B q-grams/s\n", (1.0e-9f * float( stats.queries )) / stats.filter_time);
+    log_verbose(stderr, "    filter throughput : %.2f M q-grams/s\n", (1.0e-6f * float( stats.queries )) / stats.filter_time);
+    log_verbose(stderr, "    merge  throughput : %.2f M q-grams/s\n", (1.0e-6f * float( stats.queries )) / stats.merge_time);
 }
 
 enum QGramTest

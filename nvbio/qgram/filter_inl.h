@@ -41,6 +41,28 @@ struct range_size
     uint32 operator() (const uint2 range) const { return range.y - range.x; }
 };
 
+// given a (qgram-pos, text-pos) pair, return the closest regularly-spaced diagonal
+struct closest_diagonal
+{
+    typedef uint2  argument_type;
+    typedef uint2  result_type;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    closest_diagonal(const uint32 _interval) : interval(_interval) {}
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const uint2 range) const
+    {
+        uint32 rounded_diag = util::round_z( range.y, interval );
+        if (range.y - rounded_diag >= interval/2)
+            rounded_diag++;
+
+        return make_uint2( range.x, rounded_diag );
+    }
+
+    const uint32 interval;
+};
+
 template <typename qgram_index_type, typename index_iterator, typename coord_type>
 struct filter_results {};
 
@@ -179,7 +201,7 @@ void QGramFilter<host_tag>::enact(
         m_slots.begin() );
 
     // determine the total number of occurrences
-    const uint32 n_occurrences = m_slots[ n_queries-1 ];
+    n_occurrences = m_slots[ n_queries-1 ];
 
     // resize the output buffer
     m_output.resize( n_occurrences );
@@ -195,14 +217,43 @@ void QGramFilter<host_tag>::enact(
             nvbio::plain_view( m_slots ),
             nvbio::plain_view( m_ranges ),
             indices ) );
+}
 
-    /*
+// merge hits falling within the same diagonal interval
+//
+void QGramFilter<host_tag>::merge(const uint32 interval)
+{
+    // snap the diagonals to the closest one
+    thrust::transform(
+        m_output.begin(),
+        m_output.begin() + n_occurrences,
+        m_output.begin(),
+        qgram::closest_diagonal( interval ) );
+
     // now sort the results by (id, diagonal)
-    thrust::device_ptr<uint64> output_ptr( (uint64*)nvbio::plain_view( m_output ) );
+    uint64* output_ptr( (uint64*)nvbio::plain_view( m_output ) );
     thrust::sort(
         output_ptr,
         output_ptr + n_occurrences );
-        */
+
+    // and run-length encode them
+    thrust::host_vector<uint2> output( n_occurrences );
+
+    m_counts.resize( n_occurrences );
+
+    n_occurrences = uint32( thrust::reduce_by_key(
+        m_output.begin(),
+        m_output.begin() + n_occurrences,
+        thrust::make_constant_iterator<uint32>(1u),
+        output.begin(),
+        m_counts.begin() ).first - output.begin() );
+
+    // swap the outputs
+    m_output.swap( output );
+
+    // and shrink the output vectors
+    m_output.resize( n_occurrences );
+    m_counts.resize( n_occurrences );
 }
 
 // enact the q-gram filter
@@ -240,7 +291,7 @@ void QGramFilter<device_tag>::enact(
         d_temp_storage );
 
     // determine the total number of occurrences
-    const uint32 n_occurrences = m_slots[ n_queries-1 ];
+    n_occurrences = m_slots[ n_queries-1 ];
 
     // resize the output buffer
     m_output.resize( n_occurrences );
@@ -256,14 +307,43 @@ void QGramFilter<device_tag>::enact(
             nvbio::plain_view( m_slots ),
             nvbio::plain_view( m_ranges ),
             indices ) );
+}
 
-    /*
+// merge hits falling within the same diagonal interval
+//
+void QGramFilter<device_tag>::merge(const uint32 interval)
+{
+    // snap the diagonals to the closest one
+    thrust::transform(
+        m_output.begin(),
+        m_output.begin() + n_occurrences,
+        m_output.begin(),
+        qgram::closest_diagonal( interval ) );
+
     // now sort the results by (id, diagonal)
     thrust::device_ptr<uint64> output_ptr( (uint64*)nvbio::plain_view( m_output ) );
     thrust::sort(
         output_ptr,
         output_ptr + n_occurrences );
-        */
+
+    // and run-length encode them
+    thrust::device_vector<uint2> output( n_occurrences );
+
+    m_counts.resize( n_occurrences );
+
+    n_occurrences = cuda::runlength_encode(
+        n_occurrences,
+        m_output.begin(),
+        output.begin(),
+        m_counts.begin(),
+        d_temp_storage );
+
+    // swap the outputs
+    m_output.swap( output );
+
+    // and shrink the output vectors
+    m_output.resize( n_occurrences );
+    m_counts.resize( n_occurrences );
 }
 
 } // namespace nvbio

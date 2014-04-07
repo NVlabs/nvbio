@@ -72,7 +72,7 @@
 ///   compared to the \ref QGroupIndex "Q-Group Index", though the query time is asymptotically higher.
 ///
 ///\par
-/// Q-gram indices can be built on strings, or on string sets (in which case we call them <i>set-indices</i>).
+/// Q-gram indices can be built both on strings and on string sets (in which case we call them <i>set-indices</i>).
 /// The difference relies on the format of the coordinates associated to their q-grams: for strings, the coordinates
 /// are simple linear indices, whereas for string-sets the coordinates are <i>(string-id,string-position)</i> index pairs.
 ///\par

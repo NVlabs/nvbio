@@ -244,3 +244,98 @@ template <typename A, typename B, uint32 N> struct binary_switch { typedef B typ
 template <typename A, typename B> struct binary_switch<A,B,0> { typedef A type; };
 
 } // namespace nvbio
+
+//
+// add basic C++ operators to CUDA vector types - it's not nice, but we need it to apply
+// basic algorithms requiring their presence
+//
+
+/// uint2 operator==
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator==(const uint2 op1, const uint2 op2) { return op1.x == op2.x && op1.y == op2.y; }
+
+/// uint2 operator!=
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!=(const uint2 op1, const uint2 op2) { return op1.x != op2.x || op1.y != op2.y; }
+
+/// uint3 operator==
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator==(const uint3 op1, const uint3 op2) { return op1.x == op2.x && op1.y == op2.y && op1.z == op2.z; }
+
+/// uint3 operator!=
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!=(const uint3 op1, const uint3 op2) { return op1.x != op2.x || op1.y != op2.y || op1.z != op2.z; }
+
+/// uint4 operator==
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator==(const uint4 op1, const uint4 op2) { return op1.x == op2.x && op1.y == op2.y && op1.z == op2.z && op1.w == op2.w; }
+
+/// uint4 operator!=
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!=(const uint4 op1, const uint4 op2) { return op1.x != op2.x || op1.y != op2.y || op1.z != op2.z || op1.w != op2.w; }
+
+/// int2 operator==
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator==(const int2 op1, const int2 op2) { return op1.x == op2.x && op1.y == op2.y; }
+
+/// int2 operator!=
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!=(const int2 op1, const int2 op2) { return op1.x != op2.x || op1.y != op2.y; }
+
+/// int3 operator==
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator==(const int3 op1, const int3 op2) { return op1.x == op2.x && op1.y == op2.y && op1.z == op2.z; }
+
+/// int3 operator!=
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!=(const int3 op1, const int3 op2) { return op1.x != op2.x || op1.y != op2.y || op1.z != op2.z; }
+
+/// int4 operator==
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator==(const int4 op1, const int4 op2) { return op1.x == op2.x && op1.y == op2.y && op1.z == op2.z && op1.w == op2.w; }
+
+/// int4 operator!=
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!=(const int4 op1, const int4 op2) { return op1.x != op2.x || op1.y != op2.y || op1.z != op2.z || op1.w != op2.w; }
+
+/// float2 operator==
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator==(const float2 op1, const float2 op2) { return op1.x == op2.x && op1.y == op2.y; }
+
+/// float2 operator!=
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!=(const float2 op1, const float2 op2) { return op1.x != op2.x || op1.y != op2.y; }
+
+/// float3 operator==
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator==(const float3 op1, const float3 op2) { return op1.x == op2.x && op1.y == op2.y && op1.z == op2.z; }
+
+/// float3 operator!=
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!=(const float3 op1, const float3 op2) { return op1.x != op2.x || op1.y != op2.y || op1.z != op2.z; }
+
+/// float4 operator==
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator==(const float4 op1, const float4 op2) { return op1.x == op2.x && op1.y == op2.y && op1.z == op2.z && op1.w == op2.w; }
+
+/// float4 operator!=
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!=(const float4 op1, const float4 op2) { return op1.x != op2.x || op1.y != op2.y || op1.z != op2.z || op1.w != op2.w; }

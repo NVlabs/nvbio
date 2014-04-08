@@ -52,14 +52,14 @@
 ///\n
 /// This module contains a series of functions to operate on q-grams as well as two q-gram index
 /// data-structures together with very high throughput parallel construction algorithms and
-/// efficient q-gram counting primitives. Notice that the throughput increases with the size of the
-/// set, until it stabilizes around ~32M q-grams.
+/// efficient q-gram counting primitives.
 ///
 ///\section Performance
 ///\par
 /// The first graph shows the throughput of NVBIO's <i>q-gram indexing</i> algorithms on a K40 GPU.
 /// The benchmark consists in building a q-gram index on differently sized subsets of the 8-, 16- and
-/// 20-mers obtained from a set of 1M x 150bp reads (SRR493095).
+/// 20-mers obtained from a set of 1M x 150bp reads (SRR493095). Notice that the throughput increases
+/// with the size of the set, until it stabilizes around ~32M q-grams.
 ///\par
 /// <img src="benchmark-qgram-indexing.png" style="position:relative; bottom:-10px; border:0px;" width="85%" height="85%"/>
 ///\par

@@ -53,7 +53,8 @@ void QGramIndexDevice::build(
     qgrams.resize( string_len );
     index.resize( string_len );
 
-    thrust::device_vector<qgram_type> d_all_qgrams( string_len );
+    thrust::device_vector<qgram_type> d_all_qgrams( align<32>( string_len ) * 2u );
+    thrust::device_vector<uint32>     d_temp_index( string_len );
 
     // build the list of q-grams
     thrust::transform(
@@ -68,18 +69,39 @@ void QGramIndexDevice::build(
         thrust::make_counting_iterator<uint32>(0u) + string_len,
         index.begin() );
 
-    // sort them
-    thrust::sort_by_key(
-        d_all_qgrams.begin(),
-        d_all_qgrams.begin() + string_len,
-        index.begin() );
+    // create the ping-pong sorting buffers
+    cub::DoubleBuffer<qgram_type>  key_buffers;
+    cub::DoubleBuffer<uint32>      value_buffers;
+
+    key_buffers.selector       = 0;
+    value_buffers.selector     = 0;
+    key_buffers.d_buffers[0]   = nvbio::plain_view( d_all_qgrams );
+    key_buffers.d_buffers[1]   = nvbio::plain_view( d_all_qgrams ) + align<32>( string_len );
+    value_buffers.d_buffers[0] = nvbio::plain_view( index );
+    value_buffers.d_buffers[1] = nvbio::plain_view( d_temp_index );
+
+    size_t temp_storage_bytes = 0;
+
+    // gauge the amount of temp storage we need
+    cub::DeviceRadixSort::SortPairs( NULL, temp_storage_bytes, key_buffers, value_buffers, string_len, 0u, Q * symbol_size );
+
+    // resize the temp storage vector
+    d_temp_storage.clear();
+    d_temp_storage.resize( temp_storage_bytes );
+
+    // do the real run
+    cub::DeviceRadixSort::SortPairs( nvbio::plain_view( d_temp_storage ), temp_storage_bytes, key_buffers, value_buffers, string_len, 0u, Q * symbol_size );
+
+    // swap the index vector if needed
+    if (value_buffers.selector)
+        index.swap( d_temp_index );
 
     // copy only the unique q-grams and count them
     thrust::device_vector<uint32> d_counts( string_len + 1u );
 
     n_unique_qgrams = cuda::runlength_encode(
         string_len,
-        d_all_qgrams.begin(),
+        key_buffers.d_buffers[ key_buffers.selector ],
         qgrams.begin(),
         d_counts.begin(),
         d_temp_storage );
@@ -282,7 +304,8 @@ void QGramSetIndexDevice::build(
         seeder,
         index );
 
-    thrust::device_vector<qgram_type> d_all_qgrams( n_qgrams );
+    thrust::device_vector<qgram_type> d_all_qgrams( align<32>( n_qgrams ) * 2u );
+    thrust::device_vector<uint2>      d_temp_index( n_qgrams );
 
     // build the list of q-grams
     thrust::transform(
@@ -291,11 +314,32 @@ void QGramSetIndexDevice::build(
         d_all_qgrams.begin(),
         string_set_qgram_functor<string_set_type>( Q, symbol_size, string_set ) );
 
-    // sort them
-    thrust::sort_by_key(
-        d_all_qgrams.begin(),
-        d_all_qgrams.begin() + n_qgrams,
-        index.begin() );
+    // create the ping-pong sorting buffers
+    cub::DoubleBuffer<qgram_type>  key_buffers;
+    cub::DoubleBuffer<uint2>       value_buffers;
+
+    key_buffers.selector       = 0;
+    value_buffers.selector     = 0;
+    key_buffers.d_buffers[0]   = nvbio::plain_view( d_all_qgrams );
+    key_buffers.d_buffers[1]   = nvbio::plain_view( d_all_qgrams ) + align<32>( n_qgrams );
+    value_buffers.d_buffers[0] = nvbio::plain_view( index );
+    value_buffers.d_buffers[1] = nvbio::plain_view( d_temp_index );
+
+    size_t temp_storage_bytes = 0;
+
+    // gauge the amount of temp storage we need
+    cub::DeviceRadixSort::SortPairs( NULL, temp_storage_bytes, key_buffers, value_buffers, n_qgrams, 0u, Q * symbol_size );
+
+    // resize the temp storage vector
+    d_temp_storage.clear();
+    d_temp_storage.resize( temp_storage_bytes );
+
+    // do the real run
+    cub::DeviceRadixSort::SortPairs( nvbio::plain_view( d_temp_storage ), temp_storage_bytes, key_buffers, value_buffers, n_qgrams, 0u, Q * symbol_size );
+
+    // swap the index vector if needed
+    if (value_buffers.selector)
+        index.swap( d_temp_index );
 
     // reserve enough storage for the output q-grams
     qgrams.resize( n_qgrams );
@@ -305,7 +349,7 @@ void QGramSetIndexDevice::build(
 
     n_unique_qgrams = cuda::runlength_encode(
         n_qgrams,
-        d_all_qgrams.begin(),
+        key_buffers.d_buffers[ key_buffers.selector ],
         qgrams.begin(),
         d_counts.begin(),
         d_temp_storage );
@@ -545,7 +589,7 @@ void generate_qgrams(
 {
     thrust::transform(
         indices,
-        indices,
+        indices + n_qgrams,
         qgrams,
         string_qgram_functor<string_type>( q, symbol_size, string_len, string ) );
 }
@@ -574,7 +618,7 @@ void generate_qgrams(
 {
     thrust::transform(
         indices,
-        indices,
+        indices + n_qgrams,
         qgrams,
         string_set_qgram_functor<string_set_type>( q, symbol_size, string_set ) );
 }

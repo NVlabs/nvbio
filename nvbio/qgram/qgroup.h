@@ -77,19 +77,21 @@ namespace nvbio {
 
 /// A plain view of a q-group index (see \ref QGroupIndex)
 ///
-struct QGroupIndexView
+template <typename index_iterator>
+struct QGroupIndexViewCore
 {
     static const uint32 WORD_SIZE = 32;
 
-    typedef uint32*                                             vector_type;
-    typedef PackedStream<const uint32*,uint8,1u,false,int64>    const_bitstream_type;
-    typedef PackedStream<uint32*,uint8,1u,false,int64>          bitstream_type;
+    typedef index_iterator                                      vector_type;
     typedef uint32                                              coord_type;
+
+    typedef QGroupIndexViewCore<index_iterator>                 plain_view_type;
+    typedef QGroupIndexViewCore<index_iterator>                 const_plain_view_type;
 
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    QGroupIndexView(
+    QGroupIndexViewCore(
         const uint32 _Q                 = 0,
         const uint32 _symbol_size       = 0,
         const uint32 _n_unique_qgrams   = 0,
@@ -145,6 +147,9 @@ struct QGroupIndexView
     vector_type   P;
 };
 
+typedef QGroupIndexViewCore<uint32*>       QGroupIndexView;
+typedef QGroupIndexViewCore<const uint32*> ConstQGroupIndexView;
+
 /// A host-side q-group index (see \ref QGroupIndex)
 ///
 struct QGroupIndexHost
@@ -154,10 +159,9 @@ struct QGroupIndexHost
     typedef host_tag                                            system_tag;
 
     typedef thrust::host_vector<uint32>                         vector_type;
-    typedef PackedStream<const uint32*,uint8,1u,false,int64>    const_bitstream_type;
-    typedef PackedStream<uint32*,uint8,1u,false,int64>          bitstream_type;
     typedef uint32                                              coord_type;
-    typedef QGroupIndexView                                     view_type;
+    typedef QGroupIndexView                                     plain_view_type;
+    typedef ConstQGroupIndexView                                const_plain_view_type;
 
     /// return the amount of device memory used
     ///
@@ -190,8 +194,6 @@ struct QGroupIndexDevice
     typedef device_tag                                          system_tag;
 
     typedef thrust::device_vector<uint32>                       vector_type;
-    typedef PackedStream<const uint32*,uint8,1u,false,int64>    const_bitstream_type;
-    typedef PackedStream<uint32*,uint8,1u,false,int64>          bitstream_type;
     typedef uint32                                              coord_type;
     typedef QGroupIndexView                                     view_type;
 
@@ -235,8 +237,19 @@ struct QGroupIndexDevice
     vector_type   P;
 };
 
+/// return the plain view of a QGroupIndexView, i.e. the object itself
+///
+inline
+QGroupIndexView plain_view(const QGroupIndexView qgram) { return qgram; }
+
+/// return the plain view of a QGroupIndexView, i.e. the object itself
+///
+inline
+ConstQGroupIndexView plain_view(const ConstQGroupIndexView qgram) { return qgram; }
+
 /// return the plain view of a QGroupIndex
 ///
+inline
 QGroupIndexView plain_view(QGroupIndexDevice& qgroup)
 {
     return QGroupIndexView(
@@ -248,6 +261,26 @@ QGroupIndexView plain_view(QGroupIndexDevice& qgroup)
         nvbio::plain_view( qgroup.SS ),
         nvbio::plain_view( qgroup.P ) );
 }
+
+/// return the plain view of a QGroupIndex
+///
+inline
+ConstQGroupIndexView plain_view(const QGroupIndexDevice& qgroup)
+{
+    return ConstQGroupIndexView(
+        qgroup.Q,
+        qgroup.symbol_size,
+        qgroup.n_unique_qgrams,
+        nvbio::plain_view( qgroup.I ),
+        nvbio::plain_view( qgroup.S ),
+        nvbio::plain_view( qgroup.SS ),
+        nvbio::plain_view( qgroup.P ) );
+}
+
+template<> struct plain_view_subtype<QGroupIndexHost>         { typedef QGroupIndexView type; };
+template<> struct plain_view_subtype<QGroupIndexDevice>       { typedef QGroupIndexView type; };
+template<> struct plain_view_subtype<const QGroupIndexHost>   { typedef ConstQGroupIndexView type; };
+template<> struct plain_view_subtype<const QGroupIndexDevice> { typedef ConstQGroupIndexView type; };
 
 ///@} // end of the QGroupIndex group
 ///@} // end of the QGram group

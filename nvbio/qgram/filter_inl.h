@@ -29,16 +29,27 @@
 
 namespace nvbio {
 
+template <typename T>   struct device_iterator_type             { typedef T type; };
+template <typename T>   struct device_iterator_type<T*>         { typedef thrust::device_ptr<T> type; };
+template <typename T>   struct device_iterator_type<const T*>   { typedef thrust::device_ptr<const T> type; };
+
+template <typename T>
+typename device_iterator_type<T>::type device_iterator(const T it)
+{
+    // wrap the plain iterator
+    return typename device_iterator_type<T>::type( it );
+}
+
 namespace qgram {
 
 // return the size of a given range
 struct range_size
 {
     typedef uint2  argument_type;
-    typedef uint32 result_type;
+    typedef uint64 result_type;
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 operator() (const uint2 range) const { return range.y - range.x; }
+    uint64 operator() (const uint2 range) const { return range.y - range.x; }
 };
 
 // given a (qgram-pos, text-pos) pair, return the closest regularly-spaced diagonal
@@ -69,14 +80,14 @@ struct filter_results {};
 template <typename qgram_index_type, typename index_iterator>
 struct filter_results< qgram_index_type, index_iterator, uint32 >
 {
-    typedef uint32  argument_type;
+    typedef uint64  argument_type;
     typedef uint2   result_type;
 
     // constructor
     filter_results(
         const qgram_index_type  _qgram_index,
         const uint32            _n_queries,
-        const uint32*           _slots,
+        const uint64*           _slots,
         const uint2*            _ranges,
         const index_iterator    _index) :
     qgram_index ( _qgram_index ),
@@ -87,7 +98,7 @@ struct filter_results< qgram_index_type, index_iterator, uint32 >
 
     // functor operator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 operator() (const uint32 output_index) const
+    uint2 operator() (const uint64 output_index) const
     {
         // find the text q-gram slot corresponding to this output index
         const uint32 slot = uint32( upper_bound(
@@ -100,7 +111,7 @@ struct filter_results< qgram_index_type, index_iterator, uint32 >
 
         // locate the hit q-gram position
         const uint2  range       = ranges[ slot ];
-        const uint32 base_slot   = slot ? slots[ slot-1 ] : 0u;
+        const uint64 base_slot   = slot ? slots[ slot-1 ] : 0u;
         const uint32 local_index = output_index - base_slot;
 
         const uint32 qgram_pos = qgram_index.locate( range.x + local_index );
@@ -111,7 +122,7 @@ struct filter_results< qgram_index_type, index_iterator, uint32 >
 
     const qgram_index_type  qgram_index;
     const uint32            n_queries;
-    const uint32*           slots;
+    const uint64*           slots;
     const uint2*            ranges;
     const index_iterator    index;
 };
@@ -119,14 +130,14 @@ struct filter_results< qgram_index_type, index_iterator, uint32 >
 template <typename qgram_index_type, typename index_iterator>
 struct filter_results< qgram_index_type, index_iterator, uint2 >
 {
-    typedef uint32  argument_type;
+    typedef uint64  argument_type;
     typedef uint2   result_type;
 
     // constructor
     filter_results(
         const qgram_index_type  _qgram_index,
         const uint32            _n_queries,
-        const uint32*           _slots,
+        const uint64*           _slots,
         const uint2*            _ranges,
         const index_iterator    _index) :
     qgram_index ( _qgram_index ),
@@ -137,7 +148,7 @@ struct filter_results< qgram_index_type, index_iterator, uint2 >
 
     // functor operator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 operator() (const uint32 output_index) const
+    uint2 operator() (const uint64 output_index) const
     {
         // find the text q-gram slot corresponding to this output index
         const uint32 slot = uint32( upper_bound(
@@ -161,7 +172,7 @@ struct filter_results< qgram_index_type, index_iterator, uint2 >
 
     const qgram_index_type  qgram_index;
     const uint32            n_queries;
-    const uint32*           slots;
+    const uint64*           slots;
     const uint2*            ranges;
     const index_iterator    index;
 };
@@ -176,7 +187,7 @@ struct filter_results< qgram_index_type, index_iterator, uint2 >
 // \param indices          the query indices
 //
 template <typename qgram_index_type, typename query_iterator, typename index_iterator>
-void QGramFilter<host_tag>::enact(
+uint64 QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>::rank(
     const qgram_index_type& qgram_index,
     const uint32            n_queries,
     const query_iterator    queries,
@@ -184,6 +195,13 @@ void QGramFilter<host_tag>::enact(
 {
     typedef typename qgram_index_type::coord_type coord_type;
 
+    // save the query
+    m_n_queries   = n_queries;
+    m_queries     = queries;
+    m_indices     = indices;
+    m_qgram_index = nvbio::plain_view( qgram_index );
+
+    // alloc enough storage for the results
     m_ranges.resize( n_queries );
     m_slots.resize( n_queries );
 
@@ -192,7 +210,7 @@ void QGramFilter<host_tag>::enact(
         queries,
         queries + n_queries,
         m_ranges.begin(),
-        qgram_index );
+        m_qgram_index );
 
     // scan their size to determine the slots
     thrust::inclusive_scan(
@@ -201,65 +219,85 @@ void QGramFilter<host_tag>::enact(
         m_slots.begin() );
 
     // determine the total number of occurrences
-    n_occurrences = m_slots[ n_queries-1 ];
+    m_n_occurrences = m_slots[ n_queries-1 ];
+    return m_n_occurrences;
+}
 
-    // resize the output buffer
-    m_output.resize( n_occurrences );
+// enumerate all hits in a given range
+//
+template <typename qgram_index_type, typename query_iterator, typename index_iterator>
+template <typename hits_iterator>
+void QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>::locate(
+    const uint64            begin,
+    const uint64            end,
+    hits_iterator           hits)
+{
+    typedef typename qgram_index_type::coord_type coord_type;
 
     // and fill it
     thrust::transform(
-        thrust::make_counting_iterator<uint32>(0u),
-        thrust::make_counting_iterator<uint32>(0u) + n_occurrences,
-        m_output.begin(),
-        qgram::filter_results<qgram_index_type,index_iterator,coord_type>(
-            qgram_index,
-            n_queries,
+        thrust::make_counting_iterator<uint64>(0u) + begin,
+        thrust::make_counting_iterator<uint64>(0u) + end,
+        hits,
+        qgram::filter_results<qgram_index_view,index_iterator,coord_type>(
+            m_qgram_index,
+            m_n_queries,
             nvbio::plain_view( m_slots ),
             nvbio::plain_view( m_ranges ),
-            indices ) );
+            m_indices ) );
 }
 
-// merge hits falling within the same diagonal interval
+// merge hits falling within the same diagonal interval; this method will
+// replace the vector of hits with a compacted list of hits snapped to the
+// closest sample diagonal (i.e. multiple of the given interval), together
+// with a counts vector providing the number of hits falling on the same
+// spot
 //
-void QGramFilter<host_tag>::merge(const uint32 interval)
+// \param  interval        the merging interval
+// \param  n_hits          the number of input hits
+// \param  hits            the input hits
+// \param  merged_hits     the output merged hits
+// \param  merged_counts   the output merged counts
+// \return                 the number of merged hits
+//
+template <typename qgram_index_type, typename query_iterator, typename index_iterator>
+template <typename hits_iterator, typename count_iterator>
+uint32 QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>::merge(
+    const uint32            interval,
+    const uint32            n_hits,
+    const hits_iterator     hits,
+          hits_iterator     merged_hits,
+          count_iterator    merged_counts)
 {
-    if (n_occurrences == 0)
-        return;
-
     // snap the diagonals to the closest one
     thrust::transform(
-        m_output.begin(),
-        m_output.begin() + n_occurrences,
-        m_output.begin(),
+        hits,
+        hits + n_hits,
+        hits,
         qgram::closest_diagonal( interval ) );
 
+    // copy the hits to a temporary sorting buffer
+    m_hits.resize( n_hits );
+    thrust::copy(
+        hits,
+        hits + n_hits,
+        m_hits.begin() );
+
     // now sort the results by (id, diagonal)
-    uint64* output_ptr( (uint64*)nvbio::plain_view( m_output ) );
+    uint64* hits_ptr( (uint64*)nvbio::plain_view( m_hits ) );
     thrust::sort(
-        output_ptr,
-        output_ptr + n_occurrences );
+        hits_ptr,
+        hits_ptr + n_hits );
 
-    // realloc the counts vector
-    m_counts.clear();
-    m_counts.resize( n_occurrences );
-    {
-        // and run-length encode them
-        thrust::host_vector<uint2> output( n_occurrences );
-
-        n_occurrences = uint32( thrust::reduce_by_key(
-            m_output.begin(),
-            m_output.begin() + n_occurrences,
+    // and run-length encode them
+    const uint32 n_merged = uint32( thrust::reduce_by_key(
+            m_hits.begin(),
+            m_hits.begin() + n_hits,
             thrust::make_constant_iterator<uint32>(1u),
-            output.begin(),
-            m_counts.begin() ).first - output.begin() );
+            merged_hits,
+            merged_counts ).first - merged_hits );
 
-        // swap the outputs
-        m_output.swap( output );
-    }
-
-    // and shrink the output vectors
-    m_output.resize( n_occurrences );
-    m_counts.resize( n_occurrences );
+    return n_merged;
 }
 
 // enact the q-gram filter
@@ -270,7 +308,7 @@ void QGramFilter<host_tag>::merge(const uint32 interval)
 // \param indices          the query indices
 //
 template <typename qgram_index_type, typename query_iterator, typename index_iterator>
-void QGramFilter<device_tag>::enact(
+uint64 QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>::rank(
     const qgram_index_type& qgram_index,
     const uint32            n_queries,
     const query_iterator    queries,
@@ -278,15 +316,22 @@ void QGramFilter<device_tag>::enact(
 {
     typedef typename qgram_index_type::coord_type coord_type;
 
+    // save the query
+    m_n_queries   = n_queries;
+    m_queries     = queries;
+    m_indices     = indices;
+    m_qgram_index = nvbio::plain_view( qgram_index );
+
+    // alloc enough storage for the results
     m_ranges.resize( n_queries );
     m_slots.resize( n_queries );
 
     // search the q-grams in the index, obtaining a set of ranges
     thrust::transform(
-        queries,
-        queries + n_queries,
+        device_iterator( queries ),
+        device_iterator( queries ) + n_queries,
         m_ranges.begin(),
-        qgram_index );
+        m_qgram_index );
 
     // scan their size to determine the slots
     cuda::inclusive_scan(
@@ -297,65 +342,85 @@ void QGramFilter<device_tag>::enact(
         d_temp_storage );
 
     // determine the total number of occurrences
-    n_occurrences = m_slots[ n_queries-1 ];
+    m_n_occurrences = m_slots[ n_queries-1 ];
+    return m_n_occurrences;
+}
 
-    // resize the output buffer
-    m_output.resize( n_occurrences );
+// enumerate all hits in a given range
+//
+template <typename qgram_index_type, typename query_iterator, typename index_iterator>
+template <typename hits_iterator>
+void QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>::locate(
+    const uint64            begin,
+    const uint64            end,
+    hits_iterator           hits)
+{
+    typedef typename qgram_index_type::coord_type coord_type;
 
     // and fill it
     thrust::transform(
-        thrust::make_counting_iterator<uint32>(0u),
-        thrust::make_counting_iterator<uint32>(0u) + n_occurrences,
-        m_output.begin(),
-        qgram::filter_results<qgram_index_type,index_iterator,coord_type>(
-            qgram_index,
-            n_queries,
+        thrust::make_counting_iterator<uint64>(0u) + begin,
+        thrust::make_counting_iterator<uint64>(0u) + end,
+        device_iterator( hits ),
+        qgram::filter_results<qgram_index_view,index_iterator,coord_type>(
+            m_qgram_index,
+            m_n_queries,
             nvbio::plain_view( m_slots ),
             nvbio::plain_view( m_ranges ),
-            indices ) );
+            m_indices ) );
 }
 
-// merge hits falling within the same diagonal interval
+// merge hits falling within the same diagonal interval; this method will
+// replace the vector of hits with a compacted list of hits snapped to the
+// closest sample diagonal (i.e. multiple of the given interval), together
+// with a counts vector providing the number of hits falling on the same
+// spot
 //
-void QGramFilter<device_tag>::merge(const uint32 interval)
+// \param  interval        the merging interval
+// \param  n_hits          the number of input hits
+// \param  hits            the input hits
+// \param  merged_hits     the output merged hits
+// \param  merged_counts   the output merged counts
+// \return                 the number of merged hits
+//
+template <typename qgram_index_type, typename query_iterator, typename index_iterator>
+template <typename hits_iterator, typename count_iterator>
+uint32 QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>::merge(
+    const uint32            interval,
+    const uint32            n_hits,
+    const hits_iterator     hits,
+          hits_iterator     merged_hits,
+          count_iterator    merged_counts)
 {
-    if (n_occurrences == 0)
-        return;
-
     // snap the diagonals to the closest one
     thrust::transform(
-        m_output.begin(),
-        m_output.begin() + n_occurrences,
-        m_output.begin(),
+        device_iterator( hits ),
+        device_iterator( hits ) + n_hits,
+        device_iterator( hits ),
         qgram::closest_diagonal( interval ) );
 
+    // copy the hits to a temporary sorting buffer
+    m_hits.resize( n_hits );
+    thrust::copy(
+        device_iterator( hits ),
+        device_iterator( hits ) + n_hits,
+        m_hits.begin() );
+
     // now sort the results by (id, diagonal)
-    thrust::device_ptr<uint64> output_ptr( (uint64*)nvbio::plain_view( m_output ) );
+    thrust::device_ptr<uint64> hits_ptr( (uint64*)nvbio::plain_view( m_hits ) );
     thrust::sort(
-        output_ptr,
-        output_ptr + n_occurrences );
+        hits_ptr,
+        hits_ptr + n_hits );
 
-    // realloc the counts vector
-    m_counts.clear();
-    m_counts.resize( n_occurrences );
-    {
-        // and run-length encode them
-        thrust::device_vector<uint2> output( n_occurrences );
+    // and run-length encode them
+    const uint32 n_merged = cuda::runlength_encode(
+        n_hits,
+        m_hits.begin(),
+        merged_hits,
+        merged_counts,
+        d_temp_storage );
 
-        n_occurrences = cuda::runlength_encode(
-            n_occurrences,
-            m_output.begin(),
-            output.begin(),
-            m_counts.begin(),
-            d_temp_storage );
-
-        // swap the outputs
-        m_output.swap( output );
-    }
-
-    // and shrink the output vectors
-    m_output.resize( n_occurrences );
-    m_counts.resize( n_occurrences );
+    return n_merged;
 }
 
 } // namespace nvbio

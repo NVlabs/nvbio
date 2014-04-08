@@ -256,30 +256,58 @@
 /// ...
 ///
 /// // find all hits using a q-gram filter
-/// QGramFilterDevice qgram_filter;
-/// qgram_filter.enact(
+/// QGramFilterDevice<QGramSetIndexDevice,uint64*,uint32*> qgram_filter;
+/// const uint32 n_hits = qgram_filter.rank(
 ///     qgram_index,
 ///     n_query_qgrams,
-///     d_query_qgrams.begin(),
-///     d_query_indices.begin() );
+///     nvbio::plain_view( d_query_qgrams ),
+///     nvbio::plain_view( d_query_indices ) );
 ///
-/// const uint32  n_hits = qgram_filter.n_hits();
-/// const uint2*  d_hits = qgram_filter.hits();
-///   // d_hits is a device pointer to a list of <i>(qgram-pos,query-pos)</i> pairs,
-///   // where <i>qgram-pos</i> is the index of the hit into the string used to build,
-///   // qgram-index and <i>query-pos</i> corresponds to one of the input query q-gram
-///   // indices.
+/// //
+/// // loop through large batches of hits and locate them
+/// //
+/// const uint32 batch_size = 16*1024*1024;             // 16M hits per batch
+///
+/// // reserve enough storage for each batch
+/// nvbio::vector<device_tag,uint2> hits( batch_size );
+///
+/// for (uint32 hits_begin = 0; hits_begin < n_hits; hits_begin += batch_size)
+/// {
+///     const uint32 hits_end = nvbio::min( hits_begin + batch_size, n_hits );
+/// 
+///     // locate all hits in the range [hits_begin, hits_end)
+///     qgram_filter.locate(
+///         hits_begin,
+///         hits_end,
+///         hits.begin() );
+/// }
 ///\endcode
 ///
 /// Finally, the generated hits can be sorted and merged by diagonal bucket, effectively
 /// performing so called <i>q-gram counting</i>:
 ///\code
-/// // sort all hits and merge them by closest diagonal
-/// qgram_filter.merge( 16u );  // the merging interval defining the size of each bucket
+/// nvbio::vector<device_tag,uint2>  hits( batch_size );
+/// nvbio::vector<device_tag,uint2>  merged_hits( batch_size );
+/// nvbio::vector<device_tag,uint16> merged_counts( batch_size );
 ///
-/// const uint32  n_hits   = qgram_filter.n_hits(); // the number of merged hits
-/// const uint2*  d_hits   = qgram_filter.hits();   // a device pointer to the hits merged by diagonal
-/// const uint16* d_counts = qgram_filter.counts(); // a device pointer to the hit counts by diagonal
+/// for (uint32 hits_begin = 0; hits_begin < n_hits; hits_begin += batch_size)
+/// {
+///     const uint32 hits_end = nvbio::min( hits_begin + batch_size, n_hits );
+/// 
+///     // locate all hits in the range [hits_begin, hits_end)
+///     qgram_filter.locate(
+///         hits_begin,
+///         hits_end,
+///         hits.begin() );
+///
+///     // merge all hits within the same diagonal interval
+///     const uint32 n_merged = qgram_filter.merge(
+///         16u,                // merging interval
+///         hits_end - hits_begin,
+///         hits.begin(),
+///         merged_hits.begin(),
+///         merged_counts.begin() );
+/// }
 ///\endcode
 ///
 /// \section TechnicalOverviewSection Technical Overview
@@ -375,6 +403,9 @@ struct QGramIndexViewCore
     typedef typename std::iterator_traits<qgram_vector_type>::value_type    qgram_type;
     typedef typename std::iterator_traits<coord_vector_type>::value_type    coord_type;
 
+    typedef QGramIndexViewCore<QGramVectorType,IndexVectorType,CoordVectorType> plain_view_type;
+    typedef QGramIndexViewCore<QGramVectorType,IndexVectorType,CoordVectorType> const_plain_view_type;
+
     // unary functor typedefs
     typedef qgram_type  argument_type;
     typedef uint2       result_type;
@@ -463,6 +494,9 @@ struct QGramIndexCore
     typedef nvbio::vector<system_tag,index_type>                            index_vector_type;
     typedef nvbio::vector<system_tag,coord_type>                            coord_vector_type;
 
+    typedef QGramIndexViewCore<QGramType*,IndexType*,CoordType*>                    plain_view_type;
+    typedef QGramIndexViewCore<const QGramType*,const IndexType*,const CoordType*>  const_plain_view_type;
+
     QGramIndexCore() {}
 
     /// return the amount of device memory used
@@ -501,8 +535,10 @@ struct QGramIndexCore
     index_vector_type   lut;                ///< a LUT used to accelerate q-gram searches
 };
 
-typedef QGramIndexViewCore<uint64*,uint32*,uint32*> QGramIndexView;
-typedef QGramIndexViewCore<uint64*,uint32*,uint2*>  QGramSetIndexView;
+typedef QGramIndexViewCore<uint64*,uint32*,uint32*>                   QGramIndexView;
+typedef QGramIndexViewCore<uint64*,uint32*,uint2*>                    QGramSetIndexView;
+typedef QGramIndexViewCore<const uint64*,const uint32*,const uint32*> ConstQGramIndexView;
+typedef QGramIndexViewCore<const uint64*,const uint32*,const uint2*>  ConstQGramSetIndexView;
 
 /// A host-side q-gram index (see \ref QGramIndex)
 ///
@@ -517,7 +553,8 @@ struct QGramIndexHost : public QGramIndexCore<host_tag,uint64,uint32,uint32>
     typedef core_type::coord_vector_type            coord_vector_type;
     typedef core_type::qgram_type                   qgram_type;
     typedef core_type::coord_type                   coord_type;
-    typedef QGramIndexView                          view_type;
+    typedef core_type::plain_view_type              plain_view_type;
+    typedef core_type::const_plain_view_type        const_plain_view_type;
 
     /// copy operator
     ///
@@ -542,7 +579,8 @@ struct QGramIndexDevice : public QGramIndexCore<device_tag,uint64,uint32,uint32>
     typedef core_type::coord_vector_type            coord_vector_type;
     typedef core_type::qgram_type                   qgram_type;
     typedef core_type::coord_type                   coord_type;
-    typedef QGramIndexView                          view_type;
+    typedef core_type::plain_view_type              plain_view_type;
+    typedef core_type::const_plain_view_type        const_plain_view_type;
 
     /// build a q-gram index from a given string T
     ///
@@ -586,7 +624,8 @@ struct QGramSetIndexHost : public QGramIndexCore<host_tag,uint64,uint32,uint2>
     typedef core_type::coord_vector_type            coord_vector_type;
     typedef core_type::qgram_type                   qgram_type;
     typedef core_type::coord_type                   coord_type;
-    typedef QGramIndexView                          view_type;
+    typedef core_type::plain_view_type              plain_view_type;
+    typedef core_type::const_plain_view_type        const_plain_view_type;
 
     /// copy operator
     ///
@@ -611,7 +650,8 @@ struct QGramSetIndexDevice : public QGramIndexCore<device_tag,uint64,uint32,uint
     typedef core_type::coord_vector_type            coord_vector_type;
     typedef core_type::qgram_type                   qgram_type;
     typedef core_type::coord_type                   coord_type;
-    typedef QGramIndexView                          view_type;
+    typedef core_type::plain_view_type              plain_view_type;
+    typedef core_type::const_plain_view_type        const_plain_view_type;
 
     /// build a q-gram index from a given string-set T
     ///
@@ -655,6 +695,21 @@ struct QGramSetIndexDevice : public QGramIndexCore<device_tag,uint64,uint32,uint
     template <typename SystemTag>
     QGramSetIndexDevice& operator= (const QGramIndexCore<SystemTag,uint64,uint32,uint2>& src);
 };
+
+template<> struct plain_view_subtype<QGramIndexHost>         { typedef QGramIndexView type; };
+template<> struct plain_view_subtype<QGramIndexDevice>       { typedef QGramIndexView type; };
+template<> struct plain_view_subtype<const QGramIndexHost>   { typedef ConstQGramIndexView type; };
+template<> struct plain_view_subtype<const QGramIndexDevice> { typedef ConstQGramIndexView type; };
+
+template<> struct plain_view_subtype<QGramSetIndexHost>         { typedef QGramSetIndexView type; };
+template<> struct plain_view_subtype<QGramSetIndexDevice>       { typedef QGramSetIndexView type; };
+template<> struct plain_view_subtype<const QGramSetIndexHost>   { typedef ConstQGramSetIndexView type; };
+template<> struct plain_view_subtype<const QGramSetIndexDevice> { typedef ConstQGramSetIndexView type; };
+
+/// return the plain view of a QGramIndexView, i.e. the object itself
+///
+template <typename SystemTag, typename QT, typename IT, typename CT>
+QGramIndexViewCore<QT,IT,CT> plain_view(const QGramIndexViewCore<QT,IT,CT> qgram) { return qgram; }
 
 /// return the plain view of a QGramIndex
 ///

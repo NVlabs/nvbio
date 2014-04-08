@@ -260,7 +260,12 @@
 /// ...
 ///
 /// // find all hits using a q-gram filter
-/// QGramFilterDevice<QGramSetIndexDevice, const uint64*, const uint32*> qgram_filter;
+/// typedef QGramFilterDevice<QGramSetIndexDevice, const uint64*, const uint32*> qgram_filter_type;
+/// typedef qgram_filter_type::hit_type                                          hit_type;
+/// typedef qgram_filter_type::diagonal_type                                     diagonal_type;
+///
+/// qgram_filter_type qgram_filter;
+///
 /// const uint32 n_hits = qgram_filter.rank(
 ///     qgram_index,
 ///     n_query_qgrams,
@@ -273,7 +278,7 @@
 /// const uint32 batch_size = 16*1024*1024;             // 16M hits per batch
 ///
 /// // reserve enough storage for each batch
-/// nvbio::vector<device_tag,uint2> hits( batch_size );
+/// nvbio::vector<device_tag,hit_type> hits( batch_size );
 ///
 /// for (uint32 hits_begin = 0; hits_begin < n_hits; hits_begin += batch_size)
 /// {
@@ -286,13 +291,19 @@
 ///         hits.begin() );
 /// }
 ///\endcode
+///\par
+/// <b>Note:</b> the hit coordinates are different according to the type of q-gram index;
+/// - for simple string indices, the coordinates are <i>(index-pos,query-idx)</i> uint2 pairs
+/// - for string-set indices, the coordinates are <i>(index-id,index-pos,query-idx)</i> tuples represented as a uint4,
+///   where <i>index-id</i> and <i>index-pos</i> are the index into the string-set used to built the q-gram index.
 ///
+///\par
 /// Finally, the generated hits can be sorted and merged by diagonal bucket, effectively
-/// performing so called <i>q-gram counting</i>:
+/// performing so called <i>q-gram counting</i>.
 ///\code
-/// nvbio::vector<device_tag,uint2>  hits( batch_size );
-/// nvbio::vector<device_tag,uint2>  merged_hits( batch_size );
-/// nvbio::vector<device_tag,uint16> merged_counts( batch_size );
+/// nvbio::vector<device_tag,hit_type>      hits( batch_size );
+/// nvbio::vector<device_tag,diagonal_type> merged_hits( batch_size );
+/// nvbio::vector<device_tag,uint16>        merged_counts( batch_size );
 ///
 /// for (uint32 hits_begin = 0; hits_begin < n_hits; hits_begin += batch_size)
 /// {

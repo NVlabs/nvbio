@@ -57,9 +57,13 @@ namespace nvbio {
 /// pairs, where <i>qgram-pos</i> is the index of the hit into the string used to build qgram-index,
 /// and <i>query-pos</i> corresponds to one of the input query q-gram indices.
 ///\par
-/// For string-set q-gram indices, the filter will return an ordered set of <i>(string-id,query-diagonal)</i>
-/// pairs, where <i>string-id</i> is the index of the hit into the string-set used to build qgram-index, and
-/// <i>query-diagonal</i> corresponds to the matching diagonal of the input query text.
+/// For string-set q-gram indices, the filter will return an ordered set of <i>(string-id,string-pos,text-pos)</i>
+/// pairs (encoded as uint4), where <i>string-id</i> is the index of the hit into the string-set used to build qgram-index,
+/// and <i>text-pos</i> corresponds to one of the input query q-gram indices.
+///
+/// \tparam qgram_index_type    the type of the qgram-index
+/// \tparam query_iterator      the type of the query q-gram iterator
+/// \tparam index_iterator      the type of the query index iterator
 ///
 template <typename system_tag, typename qgram_index_type, typename query_iterator, typename index_iterator>
 struct QGramFilter {};
@@ -75,9 +79,13 @@ struct QGramFilter {};
 /// pairs, where <i>qgram-pos</i> is the index of the hit into the string used to build qgram-index,
 /// and <i>query-pos</i> corresponds to one of the input query q-gram indices.
 ///\par
-/// For string-set q-gram indices, the filter will return an ordered set of <i>(string-id,query-diagonal)</i>
-/// pairs, where <i>string-id</i> is the index of the hit into the string-set used to build qgram-index, and
-/// <i>query-diagonal</i> corresponds to the matching diagonal of the input query text.
+/// For string-set q-gram indices, the filter will return an ordered set of <i>(string-id,string-pos,text-pos)</i>
+/// pairs (encoded as uint4), where <i>string-id</i> is the index of the hit into the string-set used to build qgram-index,
+/// and <i>text-pos</i> corresponds to one of the input query q-gram indices.
+///\par
+/// Furthermore, the filter offers the ability to <i>merge</i> hits by diagonal bucket: in this case,
+/// the output type will be either a simple uint32 linear coordinate describing the diagonal,
+/// or a (string-id,diagonal) for string-set indices.
 ///
 /// \tparam qgram_index_type    the type of the qgram-index
 /// \tparam query_iterator      the type of the query q-gram iterator
@@ -89,6 +97,14 @@ struct QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>
     typedef host_tag            system_tag;
 
     typedef typename plain_view_subtype<const qgram_index_type>::type qgram_index_view;
+
+    typedef typename qgram_index_type::coord_type coord_type;   ///< the coordinate type of the q-gram index, uint32|uint2
+
+    /// the type of the hits will be either a uint2, if qgram_index_type is a string index,
+    /// or a uint4 if it is a string-set index (the last entry of the uint4 is unused)
+    ///
+    typedef typename if_equal<coord_type, uint32, uint2, uint4>::type   hit_type;
+    typedef typename if_equal<coord_type, uint32, uint32, uint2>::type  diagonal_type;
 
     /// enact the q-gram filter on a q-gram index and a set of indexed query q-grams;\n
     /// <b>note:</b> the q-gram index and the query q-gram and index iterators will be
@@ -110,17 +126,22 @@ struct QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>
 
     /// enumerate all hits in a given range
     ///
+    /// \tparam hits_iterator         a hit_type iterator
+    ///
     template <typename hits_iterator>
     void locate(
         const uint64    begin,
         const uint64    end,
         hits_iterator   hits);
 
-    /// merge hits falling within the same diagonal interval; this method will
-    /// replace the vector of hits with a compacted list of hits snapped to the
-    /// closest sample diagonal (i.e. multiple of the given interval), together
-    /// with a counts vector providing the number of hits falling on the same
-    /// spot
+    /// merge hits falling within the same diagonal interval; given a vector of hits,
+    /// this method will return a compacted list of hits snapped to the closest sample
+    /// diagonal (i.e. multiple of the given interval), together with a counts vector
+    /// providing their multiplicity, i.e. the number of hits falling on the same spot
+    ///
+    /// \tparam hits_iterator         a hit_iterator iterator
+    /// \tparam output_iterator       a diagonal_type iterator
+    /// \tparam counts_iterator       a uint8|uint16|uint32|uint64 iterator
     ///
     /// \param  interval        the merging interval
     /// \param  n_hits          the number of input hits
@@ -129,22 +150,22 @@ struct QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>
     /// \param  merged_counts   the output merged counts
     /// \return                 the number of merged hits
     ///
-    template <typename hits_iterator, typename count_iterator>
+    template <typename hits_iterator, typename output_iterator, typename count_iterator>
     uint32 merge(
         const uint32            interval,
         const uint32            n_hits,
         const hits_iterator     hits,
-              hits_iterator     merged_hits,
+              output_iterator   merged_hits,
               count_iterator    merged_counts);
 
-    uint32                          m_n_queries;
-    query_iterator                  m_queries;
-    index_iterator                  m_indices;
-    qgram_index_view                m_qgram_index;
-    uint64                          m_n_occurrences;
-    thrust::host_vector<uint2>      m_ranges;
-    thrust::host_vector<uint64>     m_slots;
-    thrust::host_vector<uint2>      m_hits;
+    uint32                              m_n_queries;
+    query_iterator                      m_queries;
+    index_iterator                      m_indices;
+    qgram_index_view                    m_qgram_index;
+    uint64                              m_n_occurrences;
+    thrust::host_vector<uint2>          m_ranges;
+    thrust::host_vector<uint64>         m_slots;
+    thrust::host_vector<diagonal_type>  m_diags;
 };
 
 ////
@@ -153,13 +174,17 @@ struct QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>
 /// text, and a \ref QGramIndex "q-gram index".
 /// The q-gram index can be either a simple string index or a string-set index.
 ///\par
-/// For string q-gram indices, the filter will return an ordered set of <i>(qgram-pos,query-pos)</i>
+/// For string q-gram indices, the filter will return an ordered set of <i>(qgram-pos,text-pos)</i>
 /// pairs, where <i>qgram-pos</i> is the index of the hit into the string used to build qgram-index,
-/// and <i>query-pos</i> corresponds to one of the input query q-gram indices.
+/// and <i>text-pos</i> corresponds to one of the input query q-gram indices.
 ///\par
-/// For string-set q-gram indices, the filter will return an ordered set of <i>(string-id,query-diagonal)</i>
-/// pairs, where <i>string-id</i> is the index of the hit into the string-set used to build qgram-index, and
-/// <i>query-diagonal</i> corresponds to the matching diagonal of the input query text.
+/// For string-set q-gram indices, the filter will return an ordered set of <i>(string-id,string-pos,text-pos)</i>
+/// pairs (encoded as uint4), where <i>string-id</i> is the index of the hit into the string-set used to build qgram-index,
+/// and <i>text-pos</i> corresponds to one of the input query q-gram indices.
+///\par
+/// Furthermore, the filter offers the ability to <i>merge</i> hits by diagonal bucket: in this case,
+/// the output type will be either a simple uint32 linear coordinate describing the diagonal,
+/// or a (string-id,diagonal) for string-set indices.
 ///
 template <typename qgram_index_type, typename query_iterator, typename index_iterator>
 struct QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>
@@ -167,6 +192,14 @@ struct QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>
     typedef device_tag          system_tag;
 
     typedef typename plain_view_subtype<const qgram_index_type>::type qgram_index_view;
+
+    typedef typename qgram_index_type::coord_type coord_type;   ///< the coordinate type of the q-gram index, uint32|uint2
+
+    /// the type of the hits will be either a uint2, if qgram_index_type is a string index,
+    /// or a uint4 if it is a string-set index (the last entry of the uint4 is unused)
+    ///
+    typedef typename if_equal<coord_type, uint32, uint2, uint4>::type   hit_type;
+    typedef typename if_equal<coord_type, uint32, uint32, uint2>::type  diagonal_type;
 
     /// enact the q-gram filter on a q-gram index and a set of indexed query q-grams;\n
     /// <b>note:</b> the q-gram index and the query q-gram and index iterators will be
@@ -186,17 +219,22 @@ struct QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>
 
     /// enumerate all hits in a given range
     ///
+    /// \typename hits_iterator         a uint2 iterator
+    ///
     template <typename hits_iterator>
     void locate(
         const uint64            begin,
         const uint64            end,
         hits_iterator           hits);
 
-    /// merge hits falling within the same diagonal interval; this method will
-    /// replace the vector of hits with a compacted list of hits snapped to the
-    /// closest sample diagonal (i.e. multiple of the given interval), together
-    /// with a counts vector providing the number of hits falling on the same
-    /// spot
+    /// merge hits falling within the same diagonal interval; given a vector of hits,
+    /// this method will return a compacted list of hits snapped to the closest sample
+    /// diagonal (i.e. multiple of the given interval), together with a counts vector
+    /// providing their multiplicity, i.e. the number of hits falling on the same spot
+    ///
+    /// \tparam hits_iterator         a hit_iterator iterator
+    /// \tparam output_iterator       a diagonal_type iterator
+    /// \tparam counts_iterator       a uint8|uint16|uint32|uint64 iterator
     ///
     /// \param  interval        the merging interval
     /// \param  n_hits          the number of input hits
@@ -205,23 +243,23 @@ struct QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>
     /// \param  merged_counts   the output merged counts
     /// \return                 the number of merged hits
     ///
-    template <typename hits_iterator, typename count_iterator>
+    template <typename hits_iterator, typename output_iterator, typename count_iterator>
     uint32 merge(
         const uint32            interval,
         const uint32            n_hits,
         const hits_iterator     hits,
-              hits_iterator     merged_hits,
+              output_iterator   merged_hits,
               count_iterator    merged_counts);
 
-    uint32                          m_n_queries;
-    query_iterator                  m_queries;
-    index_iterator                  m_indices;
-    qgram_index_view                m_qgram_index;
-    uint64                          m_n_occurrences;
-    thrust::device_vector<uint2>    m_ranges;
-    thrust::device_vector<uint64>   m_slots;
-    thrust::device_vector<uint2>    m_hits;
-    thrust::device_vector<uint8>    d_temp_storage;
+    uint32                                  m_n_queries;
+    query_iterator                          m_queries;
+    index_iterator                          m_indices;
+    qgram_index_view                        m_qgram_index;
+    uint64                                  m_n_occurrences;
+    thrust::device_vector<uint2>            m_ranges;
+    thrust::device_vector<uint64>           m_slots;
+    thrust::device_vector<diagonal_type>    m_diags;
+    thrust::device_vector<uint8>            d_temp_storage;
 };
 
 template <typename qgram_index_type, typename query_iterator, typename index_iterator>

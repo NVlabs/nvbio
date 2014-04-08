@@ -53,10 +53,15 @@ struct range_size
 };
 
 // given a (qgram-pos, text-pos) pair, return the closest regularly-spaced diagonal
-struct closest_diagonal
+template <typename hit_type>
+struct closest_diagonal {};
+
+// given a (qgram-pos, text-pos) pair, return the closest regularly-spaced diagonal
+template <>
+struct closest_diagonal<uint2>
 {
     typedef uint2  argument_type;
-    typedef uint2  result_type;
+    typedef uint32 result_type;
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     closest_diagonal(const uint32 _interval) : interval(_interval) {}
@@ -64,7 +69,35 @@ struct closest_diagonal
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     result_type operator() (const uint2 range) const
     {
-        uint32 rounded_diag = util::round_z( range.y, interval );
+        const uint32 diag = /*qgram_index_string_size + */ range.y - range.x;
+        uint32 rounded_diag = util::round_z( diag, interval );
+        if (range.y - rounded_diag >= interval/2)
+            rounded_diag++;
+
+        return rounded_diag;
+    }
+
+    const uint32 interval;
+};
+
+// given a (qgram-id, q-gram-pos, text-pos) pair, return the closest regularly-spaced diagonal
+// note:
+//  in this case the output type is a (qgram-id,diag) uint2
+//
+template <>
+struct closest_diagonal<uint4>
+{
+    typedef uint4  argument_type;
+    typedef uint2  result_type;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    closest_diagonal(const uint32 _interval) : interval(_interval) {}
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const uint4 range) const
+    {
+        const uint32 diag = /*qgram_index.string_length(range.x) + */ range.z - range.y;
+        uint32 rounded_diag = util::round_z( diag, interval );
         if (range.y - rounded_diag >= interval/2)
             rounded_diag++;
 
@@ -98,7 +131,7 @@ struct filter_results< qgram_index_type, index_iterator, uint32 >
 
     // functor operator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 operator() (const uint64 output_index) const
+    result_type operator() (const uint64 output_index) const
     {
         // find the text q-gram slot corresponding to this output index
         const uint32 slot = uint32( upper_bound(
@@ -131,7 +164,7 @@ template <typename qgram_index_type, typename index_iterator>
 struct filter_results< qgram_index_type, index_iterator, uint2 >
 {
     typedef uint64  argument_type;
-    typedef uint2   result_type;
+    typedef uint4   result_type;
 
     // constructor
     filter_results(
@@ -148,7 +181,7 @@ struct filter_results< qgram_index_type, index_iterator, uint2 >
 
     // functor operator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 operator() (const uint64 output_index) const
+    result_type operator() (const uint64 output_index) const
     {
         // find the text q-gram slot corresponding to this output index
         const uint32 slot = uint32( upper_bound(
@@ -167,7 +200,7 @@ struct filter_results< qgram_index_type, index_iterator, uint2 >
         const uint2 qgram_pos = qgram_index.locate( range.x + local_index );
 
         // and write out the pair (string-id,text-diagonal)
-        return make_uint2( qgram_pos.x, /*qgram_index.length(qgram_pos.x) + */ text_pos - qgram_pos.y );
+        return make_uint4( qgram_pos.x, qgram_pos.y, text_pos, 0u );
     }
 
     const qgram_index_type  qgram_index;
@@ -261,38 +294,35 @@ void QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>::lo
 // \return                 the number of merged hits
 //
 template <typename qgram_index_type, typename query_iterator, typename index_iterator>
-template <typename hits_iterator, typename count_iterator>
+template <typename hits_iterator, typename output_iterator, typename count_iterator>
 uint32 QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>::merge(
     const uint32            interval,
     const uint32            n_hits,
     const hits_iterator     hits,
-          hits_iterator     merged_hits,
+          output_iterator   merged_hits,
           count_iterator    merged_counts)
 {
+    m_diags.resize( n_hits );
+
     // snap the diagonals to the closest one
     thrust::transform(
         hits,
         hits + n_hits,
-        hits,
-        qgram::closest_diagonal( interval ) );
+        m_diags.begin(),
+        qgram::closest_diagonal<hit_type>( interval ) );
 
-    // copy the hits to a temporary sorting buffer
-    m_hits.resize( n_hits );
-    thrust::copy(
-        hits,
-        hits + n_hits,
-        m_hits.begin() );
+    // now sort the results by diagonal (which can be either a uint32 or a uint2)
+    typedef typename if_equal<diagonal_type, uint32, uint32, uint64>::type primitive_type;
 
-    // now sort the results by (id, diagonal)
-    uint64* hits_ptr( (uint64*)nvbio::plain_view( m_hits ) );
+    primitive_type* raw_diags( (primitive_type*)nvbio::plain_view( m_diags ) );
     thrust::sort(
-        hits_ptr,
-        hits_ptr + n_hits );
+        raw_diags,
+        raw_diags + n_hits );
 
     // and run-length encode them
     const uint32 n_merged = uint32( thrust::reduce_by_key(
-            m_hits.begin(),
-            m_hits.begin() + n_hits,
+            m_diags.begin(),
+            m_diags.begin() + n_hits,
             thrust::make_constant_iterator<uint32>(1u),
             merged_hits,
             merged_counts ).first - merged_hits );
@@ -384,38 +414,36 @@ void QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>::
 // \return                 the number of merged hits
 //
 template <typename qgram_index_type, typename query_iterator, typename index_iterator>
-template <typename hits_iterator, typename count_iterator>
+template <typename hits_iterator, typename output_iterator, typename count_iterator>
 uint32 QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>::merge(
     const uint32            interval,
     const uint32            n_hits,
     const hits_iterator     hits,
-          hits_iterator     merged_hits,
+          output_iterator   merged_hits,
           count_iterator    merged_counts)
 {
+    // copy the hits to a temporary sorting buffer
+    m_diags.resize( n_hits );
+
     // snap the diagonals to the closest one
     thrust::transform(
         device_iterator( hits ),
         device_iterator( hits ) + n_hits,
-        device_iterator( hits ),
-        qgram::closest_diagonal( interval ) );
+        m_diags.begin(),
+        qgram::closest_diagonal<hit_type>( interval ) );
 
-    // copy the hits to a temporary sorting buffer
-    m_hits.resize( n_hits );
-    thrust::copy(
-        device_iterator( hits ),
-        device_iterator( hits ) + n_hits,
-        m_hits.begin() );
+    // now sort the results by diagonal (which can be either a uint32 or a uint2)
+    typedef typename if_equal<diagonal_type, uint32, uint32, uint64>::type primitive_type;
 
-    // now sort the results by (id, diagonal)
-    thrust::device_ptr<uint64> hits_ptr( (uint64*)nvbio::plain_view( m_hits ) );
+    thrust::device_ptr<primitive_type> raw_diags( (primitive_type*)nvbio::plain_view( m_diags ) );
     thrust::sort(
-        hits_ptr,
-        hits_ptr + n_hits );
+        raw_diags,
+        raw_diags + n_hits );
 
     // and run-length encode them
     const uint32 n_merged = cuda::runlength_encode(
         n_hits,
-        m_hits.begin(),
+        m_diags.begin(),
         merged_hits,
         merged_counts,
         d_temp_storage );

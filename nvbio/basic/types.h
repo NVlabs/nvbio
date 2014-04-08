@@ -218,14 +218,28 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Out binary_cast(const In in)
 template <uint32 C>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool is_pow2() { return (C & (C-1)) == 0u; }
 
-template <typename T1, typename T2>
-struct same_type { static const bool pred = false; };
+/// same_type meta-function
+///
+template <typename T1, typename T2> struct same_type { static const bool pred = false; };
+template <typename T>               struct same_type<T,T> { static const bool pred = true; };
 
-template <typename T>
-struct same_type<T,T> { static const bool pred = true; };
-
+/// equal meta-function
+///
 template <typename A, typename B>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool equal() { return same_type<A,B>::pred; }
+
+/// if_true meta-function
+///
+template <bool predicate, typename T, typename F> struct if_true {};
+template <typename T, typename F> struct if_true<true,T,F>  { typedef T type; };
+template <typename T, typename F> struct if_true<false,T,F> { typedef F type; };
+
+/// if_equal meta-function
+///
+template <typename A, typename B, typename T, typename F> struct if_equal
+{
+    typedef typename if_true< same_type<A,B>::pred, T, F >::type    type;
+};
 
 // round up to next multiple of N, where N is a power of 2.
 template <uint32 N, typename I> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE

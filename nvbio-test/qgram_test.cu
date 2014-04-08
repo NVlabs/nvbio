@@ -326,12 +326,17 @@ void test_qgram_index_query(
 
     const uint32 batch_size = 16*1024*1024;
 
-    // prepare storage for the output hits
-    nvbio::vector<system_tag,uint2>  hits( batch_size );
-    nvbio::vector<system_tag,uint2>  merged_hits( batch_size );
-    nvbio::vector<system_tag,uint16> merged_counts( batch_size );
+    typedef QGramFilter<system_tag,qgram_index_type,const uint64*,const uint32*> qgram_filter_type;
 
-    QGramFilter<system_tag,qgram_index_type,const uint64*,const uint32*> qgram_filter;
+    typedef typename qgram_filter_type::hit_type        hit_type;
+    typedef typename qgram_filter_type::diagonal_type   diagonal_type;
+
+    // prepare storage for the output hits
+    nvbio::vector<system_tag,hit_type>      hits( batch_size );
+    nvbio::vector<system_tag,diagonal_type> merged_hits( batch_size );
+    nvbio::vector<system_tag,uint16>        merged_counts( batch_size );
+
+    qgram_filter_type qgram_filter;
 
     timer.start();
 

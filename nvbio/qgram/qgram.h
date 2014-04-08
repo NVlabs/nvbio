@@ -165,7 +165,7 @@
 /// \par
 /// <b>Note:</b> sometimes you might not want to index all the q-grams in your string-set,
 /// but rather extract one every N bases, or perhaps use some custom logic of your own.
-/// Through \ref SeedFunctor "Seeding Functors", nvbio provides a mechanism to customize
+/// Through \ref SeedFunctor "Seeding Functors", NVBIO provides a mechanism to customize
 /// the seeding logic. For example, the following code will extract a seed every 10 bases:
 ///\code
 /// qgram_index.build(

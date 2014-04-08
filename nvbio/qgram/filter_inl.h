@@ -167,7 +167,7 @@ struct filter_results< qgram_index_type, index_iterator, uint2 >
         const uint2 qgram_pos = qgram_index.locate( range.x + local_index );
 
         // and write out the pair (string-id,text-diagonal)
-        return make_uint2( qgram_pos.x, text_pos - qgram_pos.y );
+        return make_uint2( qgram_pos.x, /*qgram_index.length(qgram_pos.x) + */ text_pos - qgram_pos.y );
     }
 
     const qgram_index_type  qgram_index;

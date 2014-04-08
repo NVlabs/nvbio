@@ -331,7 +331,7 @@ void test_qgram_index_query(
     nvbio::vector<system_tag,uint2>  merged_hits( batch_size );
     nvbio::vector<system_tag,uint16> merged_counts( batch_size );
 
-    QGramFilter<system_tag,qgram_index_type,uint64*,uint32*> qgram_filter;
+    QGramFilter<system_tag,qgram_index_type,const uint64*,const uint32*> qgram_filter;
 
     timer.start();
 

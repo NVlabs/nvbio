@@ -145,7 +145,7 @@
 /// d_string_offsets[1] = 20;               // offset to the second string
 /// d_string_offsets[2] = 40;               // end of the last string
 ///
-/// typedef ConcatenatedStringSet<uint8*,uint32*> string_set_type;
+/// typedef ConcatenatedStringSet<const uint8*,const uint32*> string_set_type;
 /// const string_set_type string_set(
 ///     n_strings,
 ///     nvbio::plain_view( d_string ),
@@ -253,7 +253,7 @@
 /// ...
 ///
 /// // find all hits using a q-gram filter
-/// QGramFilterDevice<QGramSetIndexDevice,uint64*,uint32*> qgram_filter;
+/// QGramFilterDevice<QGramSetIndexDevice, const uint64*, const uint32*> qgram_filter;
 /// const uint32 n_hits = qgram_filter.rank(
 ///     qgram_index,
 ///     n_query_qgrams,

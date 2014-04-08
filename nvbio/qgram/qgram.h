@@ -208,6 +208,7 @@
 /// generate_qgrams(
 ///   q, 2u,                                                    // q-gram length, alphabet size
 ///   query_string_len, nvbio::plain_view( d_query_string ),    // input string
+///   n_query_qgrams,                                           // the number of q-grams
 ///   d_query_indices.begin(),                                  // input q-gram coordinates
 ///   d_query_qgrams.begin() );                                 // output q-grams
 ///

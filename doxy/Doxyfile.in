@@ -941,6 +941,7 @@ HTML_EXTRA_FILES      += images/benchmark-sw.png
 HTML_EXTRA_FILES      += images/benchmark-bwt.png 
 HTML_EXTRA_FILES      += images/benchmark-nvbowtie-speedup.png 
 HTML_EXTRA_FILES      += images/benchmark-qgram-counting.png 
+HTML_EXTRA_FILES      += images/benchmark-qgram-indexing.png 
 
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output. 
 # Doxygen will adjust the colors in the stylesheet and background images 

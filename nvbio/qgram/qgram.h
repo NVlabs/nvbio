@@ -56,7 +56,13 @@
 ///
 ///\section Performance
 ///\par
-/// The following graph shows the performance of NVBIO's <i>q-gram counting</i> queries. The benchmark
+/// The first graph shows the performance of NVBIO's <i>q-gram indexing</i> on a K40 GPU.
+/// The benchmark consists in building a q-gram index on all the 8-, 16- and 20-mers obtained from
+/// a set of 1M x 150bp reads (SRR493095).
+///\par
+/// <img src="benchmark-qgram-indexing.png" style="position:relative; bottom:-10px; border:0px;" width="85%" height="85%"/>
+///\par
+/// The next graph shows the performance of NVBIO's <i>q-gram counting</i> queries. The benchmark
 /// consists in building a q-gram index on the 22-mers obtained sampling a set of 1M x 150bp reads (SRR493095)
 /// every 10 bases, and streaming the whole human genome hg19 against it to find all matching q-grams.
 /// Specifically, the graph shows the throughput of the following three stages:

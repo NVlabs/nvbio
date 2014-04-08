@@ -56,7 +56,7 @@
 ///
 ///\section Performance
 ///\par
-/// The first graph shows the performance of NVBIO's <i>q-gram indexing</i> on a K40 GPU.
+/// The first graph shows the throughput of NVBIO's <i>q-gram indexing</i> algorithms on a K40 GPU.
 /// The benchmark consists in building a q-gram index on all the 8-, 16- and 20-mers obtained from
 /// a set of 1M x 150bp reads (SRR493095).
 ///\par

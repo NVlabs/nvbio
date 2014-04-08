@@ -46,6 +46,9 @@
 #include <nvbio/qgram/qgram.h>
 #include <nvbio/qgram/qgroup.h>
 #include <nvbio/qgram/filter.h>
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 namespace nvbio {
 

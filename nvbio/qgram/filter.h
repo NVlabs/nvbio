@@ -165,7 +165,7 @@ struct QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>
     /// return the global ranks of the output hits (i.e. the range <i>[ranks[i], ranks[i+1])</i>
     /// identifies the position of the hits corresponding to the i-th query in the locate output)
     ///
-    const uint32* ranks() const { return nvbio::plain_view( m_slots ); }
+    const uint64* ranks() const { return nvbio::plain_view( m_slots ); }
 
     uint32                              m_n_queries;
     query_iterator                      m_queries;
@@ -267,7 +267,7 @@ struct QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>
     /// return the global ranks of the output hits (i.e. the range <i>[ranks[i], ranks[i+1])</i>
     /// identifies the position of the hits corresponding to the i-th query in the locate output)
     ///
-    const uint32* ranks() const { return nvbio::plain_view( m_slots ); }
+    const uint64* ranks() const { return nvbio::plain_view( m_slots ); }
 
     uint32                                  m_n_queries;
     query_iterator                          m_queries;

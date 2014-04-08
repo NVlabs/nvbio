@@ -205,15 +205,11 @@
 /// // to extract them; note that we need at least 20 x 2 = 40 bits per q-gram, hence we
 /// // store them in a uint64 vector
 /// nvbio::vector<device_tag,uint64> d_query_qgrams( n_query_qgrams );
-/// thrust::transform(
-///     d_query_indices.begin(),
-///     d_query_indices.begin() + n_query_qgrams,
-///     d_query_qgrams.begin(),
-///     string_qgram_functor<uint8*>(
-///         q,                                          // q-gram length
-///         2u,                                         // bits per symbol
-///         query_string_len,                           // string length
-///         nvbio::plain_view( d_query_string ) ) );    // string
+/// generate_qgrams(
+///   q, 2u,                                                    // q-gram length, alphabet size
+///   query_string_len, nvbio::plain_view( d_query_string ),    // input string
+///   d_query_indices.begin(),                                  // input q-gram coordinates
+///   d_query_qgrams.begin() );                                 // output q-grams
 ///
 /// // now sort the q-grams and their original indices, this improves coherence and throughput
 /// thrust::sort_by_key(
@@ -329,6 +325,7 @@ namespace nvbio {
 /// It also defines convenience functions to extract seeds out of strings and string-sets:
 /// - enumerate_string_seeds()
 /// - enumerate_string_set_seeds()
+/// - generate_qgrams()
 /// - uniform_seeds_functor
 ///
 ///@{
@@ -378,6 +375,52 @@ uint32 enumerate_string_set_seeds(
     const string_set_type       string_set,
     const seed_functor          seeder,
           index_vector_type&    indices);
+
+/// generate the q-grams corresponding to a list of q-gram coordinates
+///
+/// \tparam string_type         a string iterator
+/// \tparam index_iterator      a q-gram coordinate iterator
+/// \tparam qgram_iterator      a q-gram iterator
+///
+/// \param q                    the q-gram length
+/// \param symbol_size          the symbol size, in bits
+/// \param string_len           the input string length
+/// \param string               the input string
+/// \param n_qgrams             the number of q-grams to generate
+/// \param indices              the input q-gram coordinates
+/// \param indices              the output q-grams
+///
+template <typename string_type, typename index_iterator, typename qgram_iterator>
+void generate_qgrams(
+    const uint32                q,
+    const uint32                symbol_size,
+    const uint32                string_len,
+    const string_type           string,
+    const uint32                n_qgrams,
+    const index_iterator        indices,
+          qgram_iterator        qgrams);
+
+/// generate the q-grams corresponding to a list of q-gram coordinates
+///
+/// \tparam string_type         a string iterator
+/// \tparam index_iterator      a q-gram coordinate iterator
+/// \tparam qgram_iterator      a q-gram iterator
+///
+/// \param q                    the q-gram length
+/// \param symbol_size          the symbol size, in bits
+/// \param string_set           the input string-set
+/// \param n_qgrams             the number of q-grams to generate
+/// \param indices              the input q-gram coordinates
+/// \param indices              the output q-grams
+///
+template <typename string_set_type, typename index_iterator, typename qgram_iterator>
+void generate_qgrams(
+    const uint32                q,
+    const uint32                symbol_size,
+    const string_set_type       string_set,
+    const uint32                n_qgrams,
+    const index_iterator        indices,
+          qgram_iterator        qgrams);
 
 ///
 ///@defgroup QGramIndex Q-Gram Index Module

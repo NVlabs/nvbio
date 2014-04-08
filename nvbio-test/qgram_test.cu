@@ -113,11 +113,7 @@ void build_qgrams(
 {
     // build the q-grams
     qgrams.resize( n_queries );
-    thrust::transform(
-        thrust::make_counting_iterator<uint32>(genome_offset),
-        thrust::make_counting_iterator<uint32>(genome_offset) + n_queries,
-        qgrams.begin(),
-        string_qgram_functor<genome_string>( Q, 2u, genome_len, genome ) );
+    generate_qgrams( Q, 2u, genome_len, genome, n_queries, thrust::make_counting_iterator<uint32>(genome_offset), qgrams.begin() );
 
     // sort the q-grams
     sorted_qgrams = qgrams;

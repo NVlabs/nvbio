@@ -39,9 +39,10 @@
 
 #include <nvbio/sufsort/sufsort.h>
 #include <nvbio/sufsort/sufsort_utils.h>
+#include <nvbio/basic/exceptions.h>
 #include <nvbio/basic/timer.h>
-#include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/string_set.h>
+#include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/cuda/ldg.h>
 #include <nvbio/io/fmi.h>
 #include <nvbio/basic/dna.h>
@@ -828,7 +829,50 @@ int main(int argc, char* argv[])
 
     argc = argc >= arg ? argc-arg : 0;
 
-    nvbio::sufsort_test( argc, argv+arg );
+    try
+    {
+        nvbio::sufsort_test( argc, argv+arg );
+    }
+    catch (nvbio::cuda_error e)
+    {
+        log_error(stderr, "caught a nvbio::cuda_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::bad_alloc e)
+    {
+        log_error(stderr, "caught a nvbio::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::logic_error e)
+    {
+        log_error(stderr, "caught a nvbio::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::runtime_error e)
+    {
+        log_error(stderr, "caught a nvbio::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::bad_alloc e)
+    {
+        log_error(stderr, "caught a std::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::logic_error e)
+    {
+        log_error(stderr, "caught a std::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::runtime_error e)
+    {
+        log_error(stderr, "caught a std::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (...)
+    {
+        log_error(stderr,"unknown exception caught!\n");
+        exit(1);
+    }
 
     cudaDeviceReset();
 	return 0;

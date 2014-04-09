@@ -54,25 +54,32 @@ namespace cuda {
 /// passed by the user, which can be safely reused across function calls.
 ///@{
 
-/// make sure a given buffer is big enough
+/// make sure a given buffer is as big as size;
+/// <b>note:</b> upon reallocations, the contents of the buffer are invalidated
 ///
 template <typename VectorType>
-void alloc_temp_storage(VectorType& vec, const uint64 size)
-{
-    if (vec.size() < size)
-    {
-        try
-        {
-            vec.clear();
-            vec.resize( size );
-        }
-        catch (...)
-        {
-            log_error(stderr,"alloc_temp_storage() : allocation failed! (%llu entries / %llu bytes)\n", size, size * sizeof(typename VectorType::value_type));
-            throw;
-        }
-    }
-}
+void alloc_temp_storage(VectorType& vec, const uint64 size);
+
+/// return true if any item in the range [0,n) evaluates to true
+///
+template <typename PredicateIterator>
+bool any(
+    const uint32 n,
+    const PredicateIterator pred);
+
+/// return true if all items in the range [0,n) evaluate to true
+///
+template <typename PredicateIterator>
+bool all(
+    const uint32 n,
+    const PredicateIterator pred);
+
+/// return true if the items in the range [0,n) are sorted
+///
+template <typename Iterator>
+bool is_sorted(
+    const uint32    n,
+    const Iterator  values);
 
 /// device-wide reduce
 ///
@@ -86,33 +93,7 @@ typename std::iterator_traits<InputIterator>::value_type reduce(
     const uint32                  n,
     InputIterator                 d_in,
     BinaryOp                      op,
-    thrust::device_vector<uint8>& d_temp_storage)
-{
-    typedef typename std::iterator_traits<InputIterator>::value_type value_type;
-
-    thrust::device_vector<value_type> d_out(1);
-
-    size_t temp_bytes = 0;
-
-    cub::DeviceReduce::Reduce(
-        (void*)NULL, temp_bytes,
-        d_in,
-        d_out.begin(),
-        int(n),
-        op );
-
-    temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
-    alloc_temp_storage( d_temp_storage, temp_bytes );
-
-    cub::DeviceReduce::Reduce(
-        (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
-        d_in,
-        d_out.begin(),
-        int(n),
-        op );
-
-    return d_out[0];
-}
+    thrust::device_vector<uint8>& d_temp_storage);
 
 /// device-wide inclusive scan
 ///
@@ -128,27 +109,7 @@ void inclusive_scan(
     InputIterator                 d_in,
     OutputIterator                d_out,
     BinaryOp                      op,
-    thrust::device_vector<uint8>& d_temp_storage)
-{
-    size_t temp_bytes = 0;
-
-    cub::DeviceScan::InclusiveScan(
-        (void*)NULL, temp_bytes,
-        d_in,
-        d_out,
-        op,
-        int(n) );
-
-    temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
-    alloc_temp_storage( d_temp_storage, temp_bytes );
-
-    cub::DeviceScan::InclusiveScan(
-        (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
-        d_in,
-        d_out,
-        op,
-        int(n) );
-}
+    thrust::device_vector<uint8>& d_temp_storage);
 
 /// device-wide exclusive scan
 ///
@@ -166,29 +127,7 @@ void exclusive_scan(
     OutputIterator                d_out,
     BinaryOp                      op,
     Identity                      identity,
-    thrust::device_vector<uint8>& d_temp_storage)
-{
-    size_t temp_bytes = 0;
-
-    cub::DeviceScan::ExclusiveScan(
-        (void*)NULL, temp_bytes,
-        d_in,
-        d_out,
-        op,
-        identity,
-        int(n) );
-
-    temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
-    alloc_temp_storage( d_temp_storage, temp_bytes );
-
-    cub::DeviceScan::ExclusiveScan(
-        (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
-        d_in,
-        d_out,
-        op,
-        identity,
-        int(n) );
-}
+    thrust::device_vector<uint8>& d_temp_storage);
 
 /// device-wide copy of flagged items
 ///
@@ -206,32 +145,7 @@ uint32 copy_flagged(
     InputIterator                 d_in,
     FlagsIterator                 d_flags,
     OutputIterator                d_out,
-    thrust::device_vector<uint8>& d_temp_storage)
-{
-    size_t                         temp_bytes = 0;
-    thrust::device_vector<int>     d_num_selected(1);
-
-    cub::DeviceSelect::Flagged(
-        (void*)NULL, temp_bytes,
-        d_in,
-        d_flags,
-        d_out,
-        nvbio::plain_view( d_num_selected ),
-        int(n) );
-
-    temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
-    alloc_temp_storage( d_temp_storage, temp_bytes );
-
-    cub::DeviceSelect::Flagged(
-        (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
-        d_in,
-        d_flags,
-        d_out,
-        nvbio::plain_view( d_num_selected ),
-        int(n) );
-
-    return uint32( d_num_selected[0] );
-};
+    thrust::device_vector<uint8>& d_temp_storage);
 
 /// device-wide copy of predicated items
 ///
@@ -249,32 +163,7 @@ uint32 copy_if(
     InputIterator                 d_in,
     OutputIterator                d_out,
     const Predicate               pred,
-    thrust::device_vector<uint8>& d_temp_storage)
-{
-    size_t                         temp_bytes = 0;
-    thrust::device_vector<int>     d_num_selected(1);
-
-    cub::DeviceSelect::If(
-        (void*)NULL, temp_bytes,
-        d_in,
-        d_out,
-        nvbio::plain_view( d_num_selected ),
-        int(n),
-        pred );
-
-    temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
-    alloc_temp_storage( d_temp_storage, temp_bytes );
-
-    cub::DeviceSelect::If(
-        (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
-        d_in,
-        d_out,
-        nvbio::plain_view( d_num_selected ),
-        int(n),
-        pred );
-
-    return uint32( d_num_selected[0] );
-};
+    thrust::device_vector<uint8>& d_temp_storage);
 
 /// device-wide run-length encode
 ///
@@ -293,35 +182,12 @@ uint32 runlength_encode(
     InputIterator                 d_in,
     OutputIterator                d_out,
     CountIterator                 d_counts,
-    thrust::device_vector<uint8>& d_temp_storage)
-{
-    size_t                         temp_bytes = 0;
-    thrust::device_vector<int>     d_num_selected(1);
-
-    cub::DeviceReduce::RunLengthEncode(
-        (void*)NULL, temp_bytes,
-        d_in,
-        d_out,
-        d_counts,
-        nvbio::plain_view( d_num_selected ),
-        int(n) );
-
-    temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
-    alloc_temp_storage( d_temp_storage, temp_bytes );
-
-    cub::DeviceReduce::RunLengthEncode(
-        (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
-        d_in,
-        d_out,
-        d_counts,
-        nvbio::plain_view( d_num_selected ),
-        int(n) );
-
-    return uint32( d_num_selected[0] );
-};
+    thrust::device_vector<uint8>& d_temp_storage);
 
 ///@} // end of the Primitives group
 ///@} // end of the Basic group
 
 } // namespace cuda
 } // namespace nvbio
+
+#include <nvbio/basic/cuda/primitives_inl.h>

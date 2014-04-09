@@ -44,17 +44,17 @@ namespace nvbio {
 /// both from the host and device CUDA code.
 ///
 /// \section RankDictionarySection Rank Dictionaries
-///
+///\par
 /// A rank_dictionary is a data structure that, given a text T, allows to count the number
 /// of occurrences of any given character c in a given prefix T[0,i] in O(1) time.
-///
+///\par
 /// rank_dictionary is <i>storage-free</i>, in the sense it doesn't directly hold any allocated
 /// data - hence it can be instantiated both on host and device data-structures, and it can
 /// be conveniently passed as a kernel parameter (provided its template parameters are also
 /// PODs).
-///
+///\par
 /// It supports the following functions:
-///
+///\par
 /// <table>
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">
 /// <b>Function</b>
@@ -94,33 +94,31 @@ namespace nvbio {
 /// </table>
 ///
 /// \section SSASection Sampled Suffix Arrays
-///
+///\par
 /// A <i>Sampled Suffix Array</i> is a succint suffix array which has been sampled at a subset of
 /// its indices. Ferragina & Manzini showed that given such a data structure and the BWT of the
 /// original text it is possible to reconstruct the missing locations.
 /// Two such data structures have been proposed, with different tradeoffs:
-///
 ///  - one storing only the entries that are a multiple of K, { SA[i] | SA[i] % K = 0 }
 ///  - one storing only the entries whose index is a multiple of K, { SA[i] | i % K = 0 }
-///
+///\par
 /// NVBIO provides both:
-///
+///\par
 ///  - SSA_value_multiple
 ///  - SSA_index_multiple
-///
+///\par
 /// Unlike for the rank_dictionary, which is a storage-free class, these classes own the (internal) storage
 /// needed to represent the underlying data structures, which resides on the host.
 /// Similarly, the module provides some counterparts that hold the corresponding storage for the device:
-///
+///\par
 ///  - SSA_value_multiple_device
 ///  - SSA_index_multiple_device
-///
+///\par
 /// While these classes hold device data, they are meant to be used from the host and cannot be directly
 /// passed to CUDA kernels.
 /// Plain views (see \ref host_device_page), or <i>contexts</i>, can be obtained with the usual plain_view() function.
-///
+///\par
 /// The contexts expose the following interface:
-///
 /// \code
 /// struct SSA
 /// {
@@ -131,30 +129,29 @@ namespace nvbio {
 ///     bool has(const uint32 i) const
 /// }
 /// \endcode
-///
+///\par
 /// Detailed documentation can be found in the \ref SSAModule module documentation.
 ///
 /// \section FMIndexSection FM-Indices
-///
+///\par
 /// An fm_index is a self-compressed text index as described by Ferragina & Manzini.
 /// It is built on top of the following ingredients:
 ///     - the BWT of a text T
 ///     - a rank dictionary (\ref rank_dictionary) of the given BWT
 ///     - a sampled suffix array of T
-///
+///\par
 /// Given the above, it allows to count and locate all the occurrences in T of arbitrary patterns
 /// P in O(length(P)) time.
 /// Moreover, it does so with an incremental algorithm that proceeds character by character,
 /// a fundamental property that allows to implement sophisticated pattern matching algorithms
 /// based on backtracking.
-///
+///\par
 /// fm_index is <i>storage-free</i>, in the sense it doesn't directly hold any allocated
 /// data - hence it can be instantiated both on host and device data-structures, and it can
 /// be conveniently passed as a kernel parameter (provided its template parameters are also
 /// PODs).
-///
+///\par
 /// It supports the following functions:
-///
 /// <table>
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">
 /// <b>Function</b>
@@ -202,35 +199,36 @@ namespace nvbio {
 /// </table>
 ///
 /// \section PerformanceSection Performance
-///
+///\par
 /// The graphs below show the performance of exact and approximate matching using the FM-index on the CPU and GPU,
 /// searching for 32bp fragments inside the whole human genome. Approximate matching is performed with the hamming_backtrack()
 /// function, in this case allowing up to 1 mismatch per fragment:
 ///
-/// <img src="benchmark-fm-index.png" style="position:relative; bottom:-10px; border:0px;" width="50%" height="50%"/>
-/// <img src="benchmark-fm-index-speedup.png" style="position:relative; bottom:-10px; border:0px;" width="50%" height="50%"/>
+/// <img src="benchmark-fm-index.png" style="position:relative; bottom:-10px; border:0px;" width="55%" height="55%"/>
+/// <img src="benchmark-fm-index-speedup.png" style="position:relative; bottom:-10px; border:0px;" width="55%" height="55%"/>
 ///
 /// \section TechnicalOverviewSection Technical Overview
-///
+///\par
 /// A complete list of the classes and functions in this module is given in the \ref FMIndex documentation.
 ///
 
 ///@addtogroup FMIndex
 ///@{
 
-///
+///\par
 /// This class represents an FM-Index, i.e. the self-compressed text index by Ferragina & Manzini.
 /// An FM-Index is built on top of the following ingredients:
+///\par
 ///     - the BWT of a text T
 ///     - a rank dictionary (\ref rank_dictionary) of the given BWT
 ///     - a sampled suffix array of T
-///
+///\par
 /// Given the above, it allows to count and locate all the occurrences in T of arbitrary patterns
 /// P in O(length(P)) time.
 /// Moreover, it does so with an incremental algorithm that proceeds character by character,
 /// a fundamental property that allows to implement sophisticated pattern matching algorithms
 /// based on backtracking.
-///
+///\par
 /// fm_index is <i>storage-free</i>, in the sense it doesn't directly hold any allocated
 /// data - hence it can be instantiated both on host and device data-structures, and it can
 /// be conveniently passed as a kernel parameter (provided its template parameters are also

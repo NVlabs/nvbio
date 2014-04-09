@@ -122,9 +122,9 @@ bool all(
     return r[0] != 0u;
 }
 
-// a pseudo-iterator to evaluate the predicate (it1[i] < it2[i]) for arbitrary iterator pairs
+// a pseudo-iterator to evaluate the predicate (it1[i] <= it2[i]) for arbitrary iterator pairs
 //
-template <typename Iterator1,typename Iterator2>
+template <typename Iterator1, typename Iterator2>
 struct is_sorted_iterator
 {
     // constructor
@@ -139,6 +139,24 @@ struct is_sorted_iterator
     const Iterator2 it2;
 };
 
+// a pseudo-iterator to evaluate the predicate (hd[i] || (it1[i] <= it2[i])) for arbitrary iterator pairs
+//
+template <typename Iterator1, typename Iterator2, typename Headflags>
+struct is_segment_sorted_iterator
+{
+    // constructor
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    is_segment_sorted_iterator(const Iterator1 _it1, const Iterator2 _it2, const Headflags _hd) : it1( _it1 ), it2( _it2 ), hd(_hd) {}
+
+    // dereference operator
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    bool operator[] (const uint32 i) const { return hd[i] || (it1[i] <= it2[i]); }
+
+    const Iterator1 it1;
+    const Iterator2 it2;
+    const Headflags hd;
+};
+
 // return true if the items in the range [0,n) are sorted
 //
 template <typename Iterator>
@@ -147,6 +165,18 @@ bool is_sorted(
     const Iterator  values)
 {
     return all( n-1, is_sorted_iterator<Iterator,Iterator>( values, values+1 ) );
+}
+
+// return true if the items in the range [0,n) are sorted by segment, where
+// the beginning of each segment is identified by a set head flag
+//
+template <typename Iterator, typename Headflags>
+bool is_segment_sorted(
+    const uint32            n,
+    const Iterator          values,
+    const Headflags         flags)
+{
+    return all( n-1, is_segment_sorted_iterator<Iterator,Iterator,Headflags>( values, values+1, flags+1 ) );
 }
 
 // device-wide reduce

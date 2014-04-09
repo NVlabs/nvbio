@@ -81,6 +81,15 @@ bool is_sorted(
     const uint32            n,
     const Iterator          values);
 
+/// return true if the items in the range [0,n) are sorted by segment, where
+/// the beginning of each segment is identified by a set head flag
+///
+template <typename Iterator, typename Headflags>
+bool is_segment_sorted(
+    const uint32            n,
+    const Iterator          values,
+    const Headflags         flags);
+
 /// device-wide reduce
 ///
 /// \param n                    number of items to reduce

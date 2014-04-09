@@ -34,6 +34,7 @@
 #include <nvbio/basic/cuda/primitives.h>
 #include <nvbio/basic/thrust_view.h>
 #include <nvbio/basic/exceptions.h>
+#include <nvbio/basic/cuda/sort.h>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <thrust/sort.h>

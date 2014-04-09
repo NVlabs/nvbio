@@ -459,18 +459,20 @@ void generate_qgrams(
 template <typename QGramVectorType, typename IndexVectorType, typename CoordVectorType>
 struct QGramIndexViewCore
 {
+    // class typedefs
     typedef QGramVectorType                                                 qgram_vector_type;
     typedef IndexVectorType                                                 index_vector_type;
     typedef CoordVectorType                                                 coord_vector_type;
     typedef typename std::iterator_traits<qgram_vector_type>::value_type    qgram_type;
     typedef typename std::iterator_traits<coord_vector_type>::value_type    coord_type;
 
+    // plain view typedefs
     typedef QGramIndexViewCore<QGramVectorType,IndexVectorType,CoordVectorType> plain_view_type;
     typedef QGramIndexViewCore<QGramVectorType,IndexVectorType,CoordVectorType> const_plain_view_type;
 
     // unary functor typedefs
-    typedef qgram_type  argument_type;
-    typedef uint2       result_type;
+    typedef qgram_type                                                          argument_type;
+    typedef uint2                                                               result_type;
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     QGramIndexViewCore() {}

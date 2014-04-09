@@ -423,7 +423,8 @@ uint32 QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>
           count_iterator    merged_counts)
 {
     // copy the hits to a temporary sorting buffer
-    m_diags.resize( n_hits );
+    const uint32 buffer_size = align<32>( n_hits );
+    m_diags.resize( buffer_size * 2u );
 
     // snap the diagonals to the closest one
     thrust::transform(
@@ -435,15 +436,19 @@ uint32 QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>
     // now sort the results by diagonal (which can be either a uint32 or a uint2)
     typedef typename if_equal<diagonal_type, uint32, uint32, uint64>::type primitive_type;
 
-    thrust::device_ptr<primitive_type> raw_diags( (primitive_type*)nvbio::plain_view( m_diags ) );
-    thrust::sort(
-        raw_diags,
-        raw_diags + n_hits );
+    primitive_type* raw_diags( (primitive_type*)nvbio::plain_view( m_diags ) );
+
+    cuda::SortBuffers<primitive_type*> sort_buffers;
+    sort_buffers.keys[0] = raw_diags;
+    sort_buffers.keys[1] = raw_diags + buffer_size;
+
+    cuda::SortEnactor sort_enactor;
+    sort_enactor.sort( n_hits, sort_buffers );
 
     // and run-length encode them
     const uint32 n_merged = cuda::runlength_encode(
         n_hits,
-        m_diags.begin(),
+        m_diags.begin() + sort_buffers.selector * buffer_size,
         merged_hits,
         merged_counts,
         d_temp_storage );

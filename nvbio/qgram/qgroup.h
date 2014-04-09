@@ -82,11 +82,17 @@ struct QGroupIndexViewCore
 {
     static const uint32 WORD_SIZE = 32;
 
+    // class typedefs
     typedef index_iterator                                      vector_type;
     typedef uint32                                              coord_type;
 
+    // plain view typedefs
     typedef QGroupIndexViewCore<index_iterator>                 plain_view_type;
     typedef QGroupIndexViewCore<index_iterator>                 const_plain_view_type;
+
+    // unary functor typedefs
+    typedef uint64                                              argument_type;
+    typedef uint2                                               result_type;
 
     /// constructor
     ///

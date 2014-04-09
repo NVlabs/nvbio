@@ -64,22 +64,22 @@ void alloc_temp_storage(VectorType& vec, const uint64 size);
 ///
 template <typename PredicateIterator>
 bool any(
-    const uint32 n,
+    const uint32            n,
     const PredicateIterator pred);
 
 /// return true if all items in the range [0,n) evaluate to true
 ///
 template <typename PredicateIterator>
 bool all(
-    const uint32 n,
+    const uint32            n,
     const PredicateIterator pred);
 
 /// return true if the items in the range [0,n) are sorted
 ///
 template <typename Iterator>
 bool is_sorted(
-    const uint32    n,
-    const Iterator  values);
+    const uint32            n,
+    const Iterator          values);
 
 /// device-wide reduce
 ///

@@ -399,14 +399,14 @@ struct sw_alignment_score_dispatch
             const uint8 q = pattern[i];
             const uint8 qq = quals[i];
 
-            const score_type S = scoring.mismatch(qq);
             const score_type V = scoring.match(qq);
 
             score_type top, left, diagonal, hi;
 
             // j == 0 case
             {
-                const score_type S_ij = (text_cache[0] == q) ?  V : S;
+                const uint8      g = text_cache[0];
+                const score_type S_ij = (g == q) ?  V : scoring.mismatch( g, q, qq );
                 diagonal = band[0] + S_ij;
                 top      = band[1] + G;
                 hi       = nvbio::max( top, diagonal );
@@ -427,8 +427,8 @@ struct sw_alignment_score_dispatch
             #pragma unroll
             for (uint32 j = 1; j < BAND_LEN-1; ++j)
             {
-                const uint32 g = text_cache[j]; text_cache[j-1] = g;
-                const score_type S_ij = (g == q) ? V : S;
+                const uint8 g = text_cache[j]; text_cache[j-1] = g;
+                const score_type S_ij = (g == q) ? V : scoring.mismatch( g, q, qq );
                 diagonal = band[j]   + S_ij;
                 top      = band[j+1] + G;
                 left     = band[j-1] + I;
@@ -455,7 +455,7 @@ struct sw_alignment_score_dispatch
 
             // j == BAND_LEN-1 case
             {
-                const score_type S_ij = (g == q) ? V : S;
+                const score_type S_ij = (g == q) ? V : scoring.mismatch( g, q, qq );
                 diagonal = band[BAND_LEN-1] + S_ij;
                 left     = band[BAND_LEN-2] + I;
                 hi       = nvbio::max( left, diagonal );

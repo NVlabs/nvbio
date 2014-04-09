@@ -422,7 +422,8 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>
         typename query_cache,
         typename score_type,
         typename temp_iterator,
-        typename sink_type>
+        typename sink_type,
+        typename scoring_type>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     static void update_row(
         context_type&        context,
@@ -437,11 +438,10 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>
         score_type*          band,
         sink_type&           sink,
         score_type&          max_score,
-        const score_type     V,
-        const score_type     S,
         const score_type     G,
         const score_type     I,
-        const score_type     zero)
+        const score_type     zero,
+        const scoring_type   scoring)
     {
         // set the 0-th coefficient in the band to be equal to the (i-1)-th row of the left column (diagonal term)
         score_type prev = temp_i;
@@ -454,8 +454,9 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>
         #pragma unroll
         for (uint32 j = 1; j <= BAND_LEN; ++j)
         {
-            const symbol_type q_j     = q_cache[ j-1 ];
-            const score_type S_ij     = (r_i == q_j) ? V : S;
+            const symbol_type q_j     = q_cache[ j-1 ].x;
+            const uint8       qq_j    = q_cache[ j-1 ].y;
+            const score_type S_ij     = (r_i == q_j) ? scoring.match(qq_j) : scoring.mismatch( r_i, q_j, qq_j );
             const score_type diagonal = prev    + S_ij;
             const score_type top      = band[j] + G;
                              prev     = band[j];
@@ -476,8 +477,9 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>
         #pragma unroll
         for (uint32 j = 1; j <= BAND_LEN; ++j)
         {
-            const symbol_type q_j     = q_cache[ j-1 ];
-            const score_type S_ij     = (r_i == q_j) ? V : S;
+            const symbol_type q_j     = q_cache[ j-1 ].x;
+            const uint8       qq_j    = q_cache[ j-1 ].y;
+            const score_type S_ij     = (r_i == q_j) ? scoring.match(qq_j) : scoring.mismatch( r_i, q_j, qq_j );
             const score_type diagonal = prev      + S_ij;
             const score_type top      = band[j]   + G;
             const score_type left     = band[j-1] + I;
@@ -634,8 +636,6 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>
 
         const score_type G = scoring.deletion();
         const score_type I = scoring.insertion();
-        const score_type S = scoring.mismatch();
-        const score_type V = scoring.match();
         const score_type zero = score_type(0);
 
         // we are going to process the matrix in stripes, where each partial row within each stripe is processed
@@ -643,7 +643,7 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>
         // temporary storage.
 
         // fill row 0 with zeros, this will never be updated
-        uint8 q_cache[ BAND_LEN ];
+        uchar2 q_cache[ BAND_LEN ];
 
         // initialize the first column
         context.init( window_begin, N, temp, scoring, zero );
@@ -666,7 +666,7 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>
             // load a block of entries from each query
             #pragma unroll
             for (uint32 t = 0; t < BAND_LEN; ++t)
-                q_cache[ t ] = query[ block + t ];
+                q_cache[ t ] = make_uchar2( query[ block + t ], quals[ block + t ] );
 
             score_type max_score = Field_traits<score_type>::min();
 
@@ -689,8 +689,9 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>
                     band,
                     sink,
                     max_score,
-                    V,S,G,I,
-                    zero );
+                    G,I,
+                    zero,
+                    scoring );
             }
 
             // we are now (M - block - BAND_LEN) columns from the last one: check whether
@@ -717,7 +718,7 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>
             for (uint32 t = 0; t < BAND_LEN; ++t)
             {
                 if (block + t < block_end)
-                    q_cache[ t ] = query[ block + t ];
+                    q_cache[ t ] = make_uchar2( query[ block + t ], quals[ block + t ] );
             }
 
             score_type max_score = Field_traits<score_type>::min();
@@ -741,8 +742,9 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_type>
                     band,
                     sink,
                     max_score,
-                    V,S,G,I,
-                    zero );
+                    G,I,
+                    zero,
+                    scoring );
             }
         }
 
@@ -884,7 +886,8 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
         typename ref_cache,
         typename score_type,
         typename temp_iterator,
-        typename sink_type>
+        typename sink_type,
+        typename scoring_type>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     static void update_row(
         context_type&        context,
@@ -893,19 +896,18 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
         const uint32         i,
         const uint32         M,
         const symbol_type    q_i,
+        const uint8          qq_i,
         const score_type     m_i,
-        const score_type     s_i,
         const ref_cache      r_cache,
         temp_iterator        temp,
         score_type&          temp_i,
         score_type*          band,
         sink_type&           sink,
         score_type&          max_score,
-        const score_type     V,
-        const score_type     S,
         const score_type     G,
         const score_type     I,
-        const score_type     zero)
+        const score_type     zero,
+        const scoring_type   scoring)
     {
         // set the 0-th coefficient in the band to be equal to the (i-1)-th row of the left column (diagonal term)
         score_type prev = temp_i;
@@ -918,7 +920,7 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
         for (uint32 j = 1; j <= BAND_LEN; ++j)
         {
             const symbol_type r_j     = r_cache[ j-1 ];
-            const score_type S_ij     = (r_j == q_i) ? m_i : s_i;
+            const score_type S_ij     = (r_j == q_i) ? m_i : scoring.mismatch( r_j, q_i, qq_i );
             const score_type diagonal = prev      + S_ij;
             const score_type top      = band[j]   + I;
             const score_type left     = band[j-1] + G;
@@ -1066,8 +1068,6 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
 
         const score_type G = scoring.deletion();
         const score_type I = scoring.insertion();
-        const score_type S = scoring.mismatch();
-        const score_type V = scoring.match();
         const score_type zero = score_type(0);
 
         // we are going to process the matrix in stripes, where each partial row within each stripe is processed
@@ -1111,23 +1111,23 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
                 const uint8 qq_i = quals[i];
 
                 const int32 m_i = scoring.match(qq_i);
-                const int32 s_i = scoring.mismatch(qq_i);
 
                 update_row<false>(
                     context,
                     block, N,
                     i, M,
                     q_i,
+                    qq_i,
                     m_i,
-                    s_i,
                     r_cache,
                     temp,
                     temp_i,
                     band,
                     sink,
                     max_score,
-                    V,S,G,I,
-                    zero );
+                    G,I,
+                    zero,
+                    scoring );
             }
             if (TYPE == SEMI_GLOBAL)
             {
@@ -1170,23 +1170,23 @@ struct sw_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
                 const uint8 qq_i = quals[i];
 
                 const int32 m_i = scoring.match(qq_i);
-                const int32 s_i = scoring.mismatch(qq_i);
 
                 update_row<true>(
                     context,
                     block, N,
                     i, M,
                     q_i,
+                    qq_i,
                     m_i,
-                    s_i,
                     r_cache,
                     temp,
                     temp_i,
                     band,
                     sink,
                     max_score,
-                    V,S,G,I,
-                    zero );
+                    G,I,
+                    zero,
+                    scoring );
             }
 
             if (TYPE == SEMI_GLOBAL)

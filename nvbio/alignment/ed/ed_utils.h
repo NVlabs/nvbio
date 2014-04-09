@@ -46,6 +46,7 @@ struct EditDistanceSWScheme
 {
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 match(const uint8 q = 0)      const { return  0; };
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 mismatch(const uint8 q = 0)   const { return -1; };
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 mismatch(const uint8 a, const uint8 b, const uint8 q = 0)   const { return -1; };
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 deletion()                    const { return -1; };
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 insertion()                   const { return -1; };
 };

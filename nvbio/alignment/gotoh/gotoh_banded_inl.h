@@ -469,7 +469,6 @@ struct gotoh_alignment_score_dispatch
             const uint8 q  = pattern[i];
             const uint8 qq = quals[i];
 
-            const score_type S = scoring.mismatch(qq);
             const score_type V = scoring.match(qq);
 
             //
@@ -488,7 +487,8 @@ struct gotoh_alignment_score_dispatch
                 F_band[0] = nvbio::max( ftop, htop );
                 const DirectionVector fdir = ftop > htop ? DELETION_EXT : SUBSTITUTION;
 
-                const score_type S_ij     = (text_cache[0] == q) ?  V : S;
+                const uint8      g        = text_cache[0];
+                const score_type S_ij     = (g == q) ?  V : scoring.mismatch( g, q, qq );
                 const score_type diagonal = H_band[0] + S_ij;
                 const score_type top      = F_band[0];
                       score_type hi       = nvbio::max( top, diagonal );
@@ -539,7 +539,7 @@ struct gotoh_alignment_score_dispatch
                 }*/
 
                 const uint32 g = text_cache[j]; text_cache[j-1] = g;
-                const score_type S_ij = (g == q) ? V : S;
+                const score_type S_ij = (g == q) ? V : scoring.mismatch( g, q, qq );
                 const score_type diagonal = H_band[j] + S_ij;
                 const score_type top      = F_band[j];
                 const score_type left     = E_j;
@@ -585,7 +585,7 @@ struct gotoh_alignment_score_dispatch
                 const DirectionVector fdir = SUBSTITUTION;
 
                 // udpate H
-                const score_type S_ij     = (g == q) ? V : S;
+                const score_type S_ij     = (g == q) ? V : scoring.mismatch( g, q, qq );
                 const score_type diagonal = H_band[BAND_LEN-1] + S_ij;
                 const score_type left     = E_j;
                       score_type hi       = nvbio::max( left, diagonal );

@@ -287,6 +287,7 @@ struct SmithWatermanScoringScheme
     // -------- begin: aln::GotohAligner interface ----------------------------------------------------------------- //
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 match(const uint8 q = 0)      const { return  m_match(q); }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 mismatch(const uint8 q = 0)   const { return -m_mmp(q); }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 mismatch(const uint8 a, const uint8 b, const uint8 q = 0)   const { return -m_mmp(q); }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 pattern_gap_open()            const { return -m_read_gap_const - m_read_gap_coeff; }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 pattern_gap_extension()       const { return -m_read_gap_coeff; }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 text_gap_open()               const { return -m_ref_gap_const - m_ref_gap_coeff; }

@@ -122,8 +122,6 @@ bool all(
     return r[0] != 0u;
 }
 
-namespace priv {
-
 // a pseudo-iterator to evaluate the predicate (it1[i] < it2[i]) for arbitrary iterator pairs
 //
 template <typename Iterator1,typename Iterator2>
@@ -141,8 +139,6 @@ struct is_sorted_iterator
     const Iterator2 it2;
 };
 
-} // namespace priv
-
 // return true if the items in the range [0,n) are sorted
 //
 template <typename Iterator>
@@ -150,7 +146,7 @@ bool is_sorted(
     const uint32    n,
     const Iterator  values)
 {
-    return all( n-1, priv::is_sorted_iterator<Iterator,Iterator>( values, values+1 ) );
+    return all( n-1, is_sorted_iterator<Iterator,Iterator>( values, values+1 ) );
 }
 
 // device-wide reduce

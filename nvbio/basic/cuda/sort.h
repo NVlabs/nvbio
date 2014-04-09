@@ -69,6 +69,14 @@ struct SortBuffers
     ///
     SortBuffers() : selector(0) {}
 
+    /// return the currently selected keys
+    ///
+    Keys current_keys() const { return keys[ selector ]; }
+
+    /// return the currently selected values
+    ///
+    Values current_values() const { return values[ selector ]; }
+
     uint32  selector;
     Keys    keys[2];
     Values  values[2];

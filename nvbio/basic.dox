@@ -53,5 +53,6 @@
 /// \section Miscellaneous
 /// - \subpage algorithms_page
 /// - \subpage iterators_page
+/// - \subpage primitives_page
 /// - \subpage sorting_page
 /// - \subpage utilities_page

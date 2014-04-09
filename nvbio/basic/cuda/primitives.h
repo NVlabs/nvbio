@@ -40,6 +40,17 @@
 /// All temporary storage is in fact allocated within a single thrust::device_vector
 /// passed by the user, which can be safely reused across function calls.
 ///
+/// - any()
+/// - all()
+/// - is_sorted()
+/// - is_segment_sorted()
+/// - reduce()
+/// - inclusive_scan()
+/// - exclusive_scan()
+/// - copy_flagged()
+/// - copy_if()
+/// - runlength_encode()
+///
 
 namespace nvbio {
 namespace cuda {

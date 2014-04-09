@@ -32,13 +32,85 @@
 
 namespace nvbio {
 
-template <TrieType TYPE_T>
+template <uint32 ALPHABET_SIZE_T, TrieType TYPE_T>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-TrieNode<TYPE_T>::TrieNode() : m_child(invalid_node), m_mask(0u), m_size(1u) {}
+TrieNode<ALPHABET_SIZE_T,TYPE_T>::TrieNode() : m_child(invalid_node), m_mask(0u), m_size(1u) {}
+
+template <uint32 ALPHABET_SIZE_T, TrieType TYPE_T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+TrieNode<ALPHABET_SIZE_T,TYPE_T>::TrieNode(const uint32 _child, const uint32 _mask) :
+    m_child( _child ), m_mask( _mask ), m_size(1u)
+{
+    assert( (_child <= invalid_node) && (m_child == _child) );
+}
+
+template <uint32 ALPHABET_SIZE_T, TrieType TYPE_T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool TrieNode<ALPHABET_SIZE_T,TYPE_T>::is_leaf() const { return m_mask == 0u; }
+
+template <uint32 ALPHABET_SIZE_T, TrieType TYPE_T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 TrieNode<ALPHABET_SIZE_T,TYPE_T>::child() const { return m_child; }
+
+template <uint32 ALPHABET_SIZE_T, TrieType TYPE_T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 TrieNode<ALPHABET_SIZE_T,TYPE_T>::child(const uint32 c) const
+{
+    if (TYPE_T == CompressedTrie)
+        return m_child + nvbio::popc( m_mask & ((1u << c)-1u) );
+    else
+        return m_child + c;
+}
+
+template <uint32 ALPHABET_SIZE_T, TrieType TYPE_T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 TrieNode<ALPHABET_SIZE_T,TYPE_T>::nth_child(const uint32 c) const
+{
+    if (TYPE_T == CompressedTrie)
+        return m_child + c;
+    else
+        return m_child + find_nthbit( m_mask, c+1u );
+}
+
+template <uint32 ALPHABET_SIZE_T, TrieType TYPE_T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 TrieNode<ALPHABET_SIZE_T,TYPE_T>::first_child() const
+{
+    if (TYPE_T == CompressedTrie)
+        return m_child;
+    else
+        return m_child + ffs( m_mask );
+}
+
+template <uint32 ALPHABET_SIZE_T, TrieType TYPE_T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 TrieNode<ALPHABET_SIZE_T,TYPE_T>::mask()  const { return m_mask; }
+
+template <uint32 ALPHABET_SIZE_T, TrieType TYPE_T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+void TrieNode<ALPHABET_SIZE_T,TYPE_T>::set_child_bit(const uint32 c) { m_mask |= (1u << c); }
+
+template <uint32 ALPHABET_SIZE_T, TrieType TYPE_T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 TrieNode<ALPHABET_SIZE_T,TYPE_T>::child_bit(const uint32 c) const { return m_mask & (1u << c); }
+
+template <uint32 ALPHABET_SIZE_T, TrieType TYPE_T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+void TrieNode<ALPHABET_SIZE_T,TYPE_T>::set_size(const uint32 size) { m_size = size; }
+
+template <uint32 ALPHABET_SIZE_T, TrieType TYPE_T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 TrieNode<ALPHABET_SIZE_T,TYPE_T>::size() const { return m_size; }
+
+
 
 template <TrieType TYPE_T>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-TrieNode<TYPE_T>::TrieNode(const uint32 _child, const uint32 _mask) :
+TrieNode5<TYPE_T>::TrieNode5() : m_child(invalid_node), m_mask(0u), m_size(1u) {}
+
+template <TrieType TYPE_T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+TrieNode5<TYPE_T>::TrieNode5(const uint32 _child, const uint32 _mask) :
     m_child( _child ), m_mask( _mask ), m_size(1u)
 {
     assert( (_child <= invalid_node) && (m_child == _child) );
@@ -46,15 +118,15 @@ TrieNode<TYPE_T>::TrieNode(const uint32 _child, const uint32 _mask) :
 
 template <TrieType TYPE_T>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-bool TrieNode<TYPE_T>::is_leaf() const { return m_mask == 0u; }
+bool TrieNode5<TYPE_T>::is_leaf() const { return m_mask == 0u; }
 
 template <TrieType TYPE_T>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 TrieNode<TYPE_T>::child() const { return m_child; }
+uint32 TrieNode5<TYPE_T>::child() const { return m_child; }
 
 template <TrieType TYPE_T>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 TrieNode<TYPE_T>::child(const uint32 c) const
+uint32 TrieNode5<TYPE_T>::child(const uint32 c) const
 {
     if (TYPE_T == CompressedTrie)
         return m_child + nvbio::popc( m_mask & ((1u << c)-1u) );
@@ -64,7 +136,7 @@ uint32 TrieNode<TYPE_T>::child(const uint32 c) const
 
 template <TrieType TYPE_T>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 TrieNode<TYPE_T>::nth_child(const uint32 c) const
+uint32 TrieNode5<TYPE_T>::nth_child(const uint32 c) const
 {
     if (TYPE_T == CompressedTrie)
         return m_child + c;
@@ -74,7 +146,7 @@ uint32 TrieNode<TYPE_T>::nth_child(const uint32 c) const
 
 template <TrieType TYPE_T>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 TrieNode<TYPE_T>::first_child() const
+uint32 TrieNode5<TYPE_T>::first_child() const
 {
     if (TYPE_T == CompressedTrie)
         return m_child;
@@ -84,23 +156,24 @@ uint32 TrieNode<TYPE_T>::first_child() const
 
 template <TrieType TYPE_T>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 TrieNode<TYPE_T>::mask()  const { return m_mask; }
+uint32 TrieNode5<TYPE_T>::mask()  const { return m_mask; }
 
 template <TrieType TYPE_T>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-void TrieNode<TYPE_T>::set_child_bit(const uint32 c) { m_mask |= (1u << c); }
+void TrieNode5<TYPE_T>::set_child_bit(const uint32 c) { m_mask |= (1u << c); }
 
 template <TrieType TYPE_T>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 TrieNode<TYPE_T>::child_bit(const uint32 c) const { return m_mask & (1u << c); }
+uint32 TrieNode5<TYPE_T>::child_bit(const uint32 c) const { return m_mask & (1u << c); }
 
 template <TrieType TYPE_T>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-void TrieNode<TYPE_T>::set_size(const uint32 size) { m_size = size; }
+void TrieNode5<TYPE_T>::set_size(const uint32 size) { m_size = size; }
 
 template <TrieType TYPE_T>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 TrieNode<TYPE_T>::size() const { return m_size; }
+uint32 TrieNode5<TYPE_T>::size() const { return m_size; }
+
 
 
 // constructor
@@ -182,7 +255,7 @@ struct trie_copy<ALPHABET_SIZE_T, CompressedTrie>
         const uint32 child_offset = uint32( out_nodes.size() );
         out_nodes.resize( child_offset + children.count );
 
-        out_nodes[ out_node_index ] = TrieNode<CompressedTrie>(
+        out_nodes[ out_node_index ] = TrieNode<ALPHABET_SIZE_T,CompressedTrie>(
             child_offset,
             children.mask );
 

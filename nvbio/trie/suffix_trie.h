@@ -64,6 +64,7 @@ enum TrieType { CompressedTrie, UncompressedTrie };
 ///
 /// A suffix trie node
 ///
+/// \tparam ALPHABET_SIZE_T     the size of the alphabet, in symbols
 /// \tparam TYPE_T      a suffix trie can be stored either with an uncompressed layout,
 ///                     where each inner node reseves storage for |alphabet| children
 ///                     and some of them are marked as invalid, or with a compressed one,
@@ -72,9 +73,11 @@ enum TrieType { CompressedTrie, UncompressedTrie };
 ///                     as a popcount is necessary to select the child corresponding to the
 ///                     i-th character.
 ///
-template <TrieType TYPE_T>
+template <uint32 ALPHABET_SIZE_T, TrieType TYPE_T>
 struct TrieNode
 {
+    const static uint32 ALPHABET_SIZE = ALPHABET_SIZE_T;
+
     static const uint32     invalid_node = uint32(-1);
     static const TrieType   trie_type    = TYPE_T;
 
@@ -114,8 +117,101 @@ struct TrieNode
     uint32 size() const;
 
     uint32 m_child;
-    uint32 m_mask:5, m_size:27;         // FIXME: using 5 bits is only valid for 5-letter alphabets!
+    uint32 m_mask;
+    uint32 m_size;
 };
+
+///
+/// A suffix trie node for alphabets containing up to 5 symbols
+///
+/// \tparam TYPE_T      a suffix trie can be stored either with an uncompressed layout,
+///                     where each inner node reseves storage for |alphabet| children
+///                     and some of them are marked as invalid, or with a compressed one,
+///                     where only storage for the active children is actually reserved;
+///                     the latter type requires just a little more logic during traversal,
+///                     as a popcount is necessary to select the child corresponding to the
+///                     i-th character.
+///
+template <TrieType TYPE_T>
+struct TrieNode5
+{
+    const static uint32 ALPHABET_SIZE = 5;
+
+    static const uint32     invalid_node = uint32(-1);
+    static const TrieType   trie_type    = TYPE_T;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    TrieNode();
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    TrieNode(const uint32 _child, const uint32 _mask);
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    bool is_leaf() const;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 child() const;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 child(const uint32 c) const;
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 nth_child(const uint32 c) const;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 first_child() const;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 mask() const;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    void set_child_bit(const uint32 c);
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 child_bit(const uint32 c) const;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    void set_size(const uint32 size);
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 size() const;
+
+    uint32 m_child;
+    uint32 m_mask:5, m_size:27;
+};
+
+/// TrieNode specialization to 2-letter alphabets
+///
+template <TrieType TYPE_T>
+struct TrieNode<2,TYPE_T> : public TrieNode5
+{
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    TrieNode(const uint32 _child, const uint32 _mask) : TrieNode5( _child, _mask ) {}
+};
+/// TrieNode specialization to 3-letter alphabets
+///
+template <TrieType TYPE_T>
+struct TrieNode<3,TYPE_T> : public TrieNode5
+{
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    TrieNode(const uint32 _child, const uint32 _mask) : TrieNode5( _child, _mask ) {}
+};
+/// TrieNode specialization to 4-letter alphabets
+///
+template <TrieType TYPE_T>
+struct TrieNode<4,TYPE_T> : public TrieNode5
+{
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    TrieNode(const uint32 _child, const uint32 _mask) : TrieNode5( _child, _mask ) {}
+};
+/// TrieNode specialization to 5-letter alphabets
+///
+template <TrieType TYPE_T>
+struct TrieNode<5,TYPE_T> : public TrieNode5
+{
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    TrieNode(const uint32 _child, const uint32 _mask) : TrieNode5( _child, _mask ) {}
+};
+
 
 ///
 /// A suffix trie type built on a generic dictionary of sorted strings
@@ -168,6 +264,7 @@ private:
     NodeIterator m_seq;
 };
 
+
 /// copy a generic trie into a SuffixTrie.
 ///
 /// \tparam TrieType            input trie
@@ -200,7 +297,7 @@ private:
 ///     string_set.size() );
 ///
 /// // build an explicit suffix trie
-/// std::vector< TrieNode<CompressedTrie> > trie_nodes;
+/// std::vector< TrieNode<2,CompressedTrie> > trie_nodes;
 /// build_suffix_trie( sorted_dictionary, trie_nodes );
 ///\endcode
 ///

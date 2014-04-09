@@ -30,6 +30,7 @@
 #include <nvbio/basic/strided_iterator.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/vector_wrapper.h>
+#include <nvbio/basic/string_set.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
@@ -117,6 +118,19 @@ struct ReadDataView
     typedef QualIterator    qual_iterator;
     typedef NameIterator    name_iterator;
 
+    // symbol size for reads
+    static const uint32 READ_BITS = 4;
+    // big endian?
+    static const bool   HI_BITS   = false;
+
+    typedef PackedStream<read_iterator,uint8,READ_BITS,HI_BITS> read_stream_type;
+    typedef typename read_stream_type::iterator                 read_stream_iterator;
+    typedef vector_wrapper<read_stream_iterator>                read_string;
+
+    typedef ConcatenatedStringSet<
+        read_stream_iterator,
+        index_iterator>                                         read_string_set;
+
     /// empty constructor
     ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
@@ -153,15 +167,6 @@ struct ReadDataView
         m_avg_read_len      (in.m_avg_read_len)
     {}
 
-    // symbol size for reads
-    static const uint32 READ_BITS = 4;
-    // big endian?
-    static const bool   HI_BITS   = false;
-
-    typedef PackedStream<read_iterator,uint8,READ_BITS,HI_BITS> read_stream_type;
-    typedef typename read_stream_type::iterator                 read_stream_iterator;
-    typedef vector_wrapper<read_stream_iterator>                read_string;
-
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_iterator  name_stream()     const { return m_name_stream; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator name_index()      const { return m_name_index;  }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE read_iterator  read_stream()     const { return m_read_stream; }
@@ -176,6 +181,16 @@ struct ReadDataView
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  min_read_len()            const { return m_min_read_len; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  avg_read_len()            const { return m_avg_read_len; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint2   get_range(const uint32 i) const { return make_uint2(m_read_index[i],m_read_index[i+1]); }
+
+    /// return the a string-set view of this set of reads
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE read_string_set string_set() const
+    {
+        return read_string_set(
+            size(),
+            read_stream_type( read_stream() ).begin(),
+            read_index() );
+    }
 
     /// return the i-th read as a string
     ///

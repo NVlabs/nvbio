@@ -481,6 +481,7 @@ struct QGramIndexViewCore
     QGramIndexViewCore(
         const uint32                _Q,
         const uint32                _symbol_size,
+        const uint32                _n_qgrams,
         const uint32                _n_unique_qgrams,
         const qgram_vector_type     _qgrams,
         const index_vector_type     _slots,
@@ -490,6 +491,7 @@ struct QGramIndexViewCore
         const index_vector_type     _lut) :
         Q               ( _Q ),
         symbol_size     ( _symbol_size ),
+        n_qgrams        ( _n_qgrams ),
         n_unique_qgrams ( _n_unique_qgrams ),
         qgrams          ( _qgrams ),
         slots           ( _slots ),
@@ -534,6 +536,7 @@ struct QGramIndexViewCore
 
     uint32              Q;                  ///< the q-gram size
     uint32              symbol_size;        ///< symbol size
+    uint32              n_qgrams;           ///< the number of q-grams in the original string
     uint32              n_unique_qgrams;    ///< the number of unique q-grams in the original string
     qgram_vector_type   qgrams;             ///< the sorted list of unique q-grams
     index_vector_type   slots;              ///< slots[i] stores the first occurrence of q-grams[i] in index
@@ -589,6 +592,7 @@ struct QGramIndexCore
 
     uint32              Q;                  ///< the q-gram size
     uint32              symbol_size;        ///< symbol size
+    uint32              n_qgrams;           ///< the number of q-grams in the original string
     uint32              n_unique_qgrams;    ///< the number of unique q-grams in the original string
     qgram_vector_type   qgrams;             ///< the sorted list of unique q-grams
     index_vector_type   slots;              ///< slots[i] stores the first occurrence of q-grams[i] in index
@@ -783,6 +787,7 @@ QGramIndexViewCore<QT*,IT*,CT*> plain_view(QGramIndexCore<SystemTag,QT,IT,CT>& q
     return QGramIndexViewCore<QT*,IT*,CT*>(
         qgram.Q,
         qgram.symbol_size,
+        qgram.n_qgrams,
         qgram.n_unique_qgrams,
         nvbio::plain_view( qgram.qgrams ),
         nvbio::plain_view( qgram.slots ),
@@ -800,6 +805,7 @@ QGramIndexViewCore<const QT*,const IT*,const CT*> plain_view(const QGramIndexCor
     return QGramIndexViewCore<const QT*,const IT*,const CT*>(
         qgram.Q,
         qgram.symbol_size,
+        qgram.n_qgrams,
         qgram.n_unique_qgrams,
         nvbio::plain_view( qgram.qgrams ),
         nvbio::plain_view( qgram.slots ),

@@ -162,25 +162,13 @@ void test_qgram_index_build(
 
 // build a q-gram set-index from a string-set
 //
-template <typename string_type>
+template <typename string_set_type>
 void test_qgram_set_index_build(
     const uint32            Q,
-    const uint32            n_strings,
-    const uint32            string_len,
-    const string_type       string,
-    const uint32*           string_index,
+    const string_set_type   string_set,
     QGramSetIndexDevice&    qgram_index)
 {
     log_verbose(stderr, "  building q-gram set-index... started\n");
-
-    typedef ConcatenatedStringSet<
-        typename string_type::iterator,
-        const uint32*>              string_set_type;
-
-    const string_set_type string_set(
-        n_strings,
-        string.begin(),
-        string_index );
 
     Timer timer;
     timer.start();
@@ -199,7 +187,7 @@ void test_qgram_set_index_build(
 
     log_verbose(stderr, "  building q-gram set-index... done\n");
     log_verbose(stderr, "    unique q-grams : %.2f M q-grams\n", 1.0e-6f * float( qgram_index.n_unique_qgrams ));
-    log_verbose(stderr, "    throughput     : %.1f M q-grams/s\n", 1.0e-6f * float( string_len ) / time);
+    log_verbose(stderr, "    throughput     : %.1f M q-grams/s\n", 1.0e-6f * float( qgram_index.n_qgrams ) / time);
     log_verbose(stderr, "    memory usage   : %.1f MB\n", float( qgram_index.used_device_memory() ) / float(1024*1024) );
 }
 
@@ -504,12 +492,13 @@ int qgram_test(int argc, char* argv[])
     log_info(stderr, "  loading reads... done\n");
 
     // fetch the actual string
-    typedef io::ReadData::const_read_stream_type string_type;
+    typedef io::ReadData::const_read_stream_type        string_type;
+    typedef io::ReadData::const_read_string_set_type    string_set_type;
 
-    const uint32      n_strings      = d_read_data.size();
-    const uint32      string_len     = h_read_data->read_index()[ n_strings ];
-    const string_type string         = string_type( d_read_data.read_stream() );
-    const uint32*     string_index   = d_read_data.read_index();
+    const uint32          n_strings      = d_read_data.size();
+    const uint32          string_len     = h_read_data->read_index()[ n_strings ];
+    const string_type     string         = string_type( d_read_data.read_stream() );
+    const string_set_type string_set     = d_read_data.const_read_string_set();
 
     log_info(stderr, "    strings: %u\n", n_strings);
     log_info(stderr, "    symbols: %.3f M\n", 1.0e-6f * float(string_len));
@@ -613,10 +602,7 @@ int qgram_test(int argc, char* argv[])
 
         test_qgram_set_index_build(
             22u,
-            n_strings,
-            string_len,
-            string,
-            string_index,
+            string_set,
             qgram_index );
 
         if (device_test)

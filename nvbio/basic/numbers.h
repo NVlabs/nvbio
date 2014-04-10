@@ -71,6 +71,7 @@ NVBIO_FORCEINLINE __device__ uint32 warp_id()  { return threadIdx.x >> 5; }
 ///
 /// - \ref BasicUtils
 /// - \ref BasicFunctors
+/// - \ref BasicMetaFunctions
 ///
 
 ///@addtogroup Basic

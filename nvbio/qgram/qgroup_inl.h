@@ -189,14 +189,15 @@ void QGroupIndexDevice::build(
 
     Q           = q;
     symbol_size = symbol_sz;
+    n_qgrams    = string_len;
 
     const uint32 ALPHABET_SIZE = 1u << symbol_size;
 
-    uint64 n_qgrams = 1;
+    uint64 n_max_qgrams = 1;
     for (uint32 i = 0; i < q; ++i)
-        n_qgrams *= ALPHABET_SIZE;
+        n_max_qgrams *= ALPHABET_SIZE;
 
-    const uint32 n_qblocks = uint32( n_qgrams / WORD_SIZE );
+    const uint32 n_qblocks = uint32( n_max_qgrams / WORD_SIZE );
 
     I.resize( n_qblocks+1 );
     S.resize( n_qblocks+1 );

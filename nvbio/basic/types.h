@@ -126,6 +126,9 @@
 
 namespace nvbio {
 
+///@addtogroup Basic
+///@{
+
 typedef unsigned long long  uint64;
 typedef unsigned int        uint32;
 typedef unsigned short      uint16;
@@ -146,6 +149,17 @@ struct device_tag {};
 /// a null type, useful to represent unbound template arguments
 ///
 struct null_type {};
+
+///@addtogroup BasicUtils
+///@{
+
+///\defgroup BasicMetaFunctions Meta Functions
+///
+/// NVBIO's convenience meta-functions needed to solve philosophical questions about types...
+///
+
+///@addtogroup BasicMetaFunctions
+///@{
 
 /// a meta-function to convert a type to const
 ///
@@ -192,6 +206,39 @@ template <> struct unsigned_type<uint64> { typedef uint64 type; };
 template <> struct unsigned_type<int32>  { typedef uint32 type; };
 template <> struct unsigned_type<int64>  { typedef uint64 type; };
 
+/// same_type meta-function
+///
+template <typename T1, typename T2> struct same_type { static const bool pred = false; };
+template <typename T>               struct same_type<T,T> { static const bool pred = true; };
+
+/// equal meta-function
+///
+template <typename A, typename B>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool equal() { return same_type<A,B>::pred; }
+
+/// if_true meta-function
+///
+template <bool predicate, typename T, typename F> struct if_true {};
+template <typename T, typename F> struct if_true<true,T,F>  { typedef T type; };
+template <typename T, typename F> struct if_true<false,T,F> { typedef F type; };
+
+/// if_equal meta-function
+///
+template <typename A, typename B, typename T, typename F> struct if_equal
+{
+    typedef typename if_true< same_type<A,B>::pred, T, F >::type    type;
+};
+
+/// a helper struct to switch at compile-time between two types
+///
+template <typename A, typename B, uint32 N> struct binary_switch { typedef B type; };
+
+/// a helper struct to switch at compile-time between two types
+///
+template <typename A, typename B> struct binary_switch<A,B,0> { typedef A type; };
+
+///@} BasicMetaFunctions
+
 /// a utility to perform binary casts between different types
 ///
 template <typename Out, typename In>
@@ -218,29 +265,6 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Out binary_cast(const In in)
 template <uint32 C>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool is_pow2() { return (C & (C-1)) == 0u; }
 
-/// same_type meta-function
-///
-template <typename T1, typename T2> struct same_type { static const bool pred = false; };
-template <typename T>               struct same_type<T,T> { static const bool pred = true; };
-
-/// equal meta-function
-///
-template <typename A, typename B>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool equal() { return same_type<A,B>::pred; }
-
-/// if_true meta-function
-///
-template <bool predicate, typename T, typename F> struct if_true {};
-template <typename T, typename F> struct if_true<true,T,F>  { typedef T type; };
-template <typename T, typename F> struct if_true<false,T,F> { typedef F type; };
-
-/// if_equal meta-function
-///
-template <typename A, typename B, typename T, typename F> struct if_equal
-{
-    typedef typename if_true< same_type<A,B>::pred, T, F >::type    type;
-};
-
 // round up to next multiple of N, where N is a power of 2.
 template <uint32 N, typename I> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 I align(const I a) { return (N > 1) ? I(a + N-1) & I(~(N-1)) : a; }
@@ -249,13 +273,8 @@ I align(const I a) { return (N > 1) ? I(a + N-1) & I(~(N-1)) : a; }
 template <uint32 N, typename I> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 I align_down(const I a) { return (N > 1) ? I((a / N) * N) : a; }
 
-/// a helper struct to switch at compile-time between two types
-///
-template <typename A, typename B, uint32 N> struct binary_switch { typedef B type; };
-
-/// a helper struct to switch at compile-time between two types
-///
-template <typename A, typename B> struct binary_switch<A,B,0> { typedef A type; };
+///@} BasicUtils
+///@} Basic
 
 } // namespace nvbio
 

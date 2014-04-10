@@ -113,23 +113,39 @@ template <
     typename NameIterator>
 struct ReadDataView
 {
-    typedef IndexIterator   index_iterator;
-    typedef ReadIterator    read_iterator;
-    typedef QualIterator    qual_iterator;
-    typedef NameIterator    name_iterator;
+    typedef IndexIterator                                                     index_iterator;       ///< the index iterator
+    typedef typename to_const<index_iterator>::type                     const_index_iterator;       ///< the const index iterator
+
+    typedef ReadIterator                                                      read_iterator;        ///< the read storage iterator
+    typedef typename to_const<read_iterator>::type                      const_read_iterator;        ///< the const read storage iterator
+
+    typedef QualIterator                                                      qual_iterator;        ///< the qualities iterator
+    typedef typename to_const<qual_iterator>::type                      const_qual_iterator;        ///< the const qualities iterator
+
+    typedef NameIterator                                                      name_iterator;        ///< the names string iterator
+    typedef typename to_const<name_iterator>::type                      const_name_iterator;        ///< the names string iterator
 
     // symbol size for reads
     static const uint32 READ_BITS = 4;
     // big endian?
     static const bool   HI_BITS   = false;
 
-    typedef PackedStream<read_iterator,uint8,READ_BITS,HI_BITS> read_stream_type;
-    typedef typename read_stream_type::iterator                 read_stream_iterator;
-    typedef vector_wrapper<read_stream_iterator>                read_string;
+    typedef PackedStream<read_iterator,uint8,READ_BITS,HI_BITS>             read_stream_type;       ///< the packed read-stream type
+    typedef PackedStream<const_read_iterator,uint8,READ_BITS,HI_BITS> const_read_stream_type;       ///< the const packed read-stream type
+
+    typedef typename       read_stream_type::iterator                       read_stream_iterator;   ///< the read-stream iterator
+    typedef typename const_read_stream_type::iterator                 const_read_stream_iterator;   ///< the const read-stream iterator
+
+    typedef vector_wrapper<read_stream_iterator>                            read_string;            ///< the read string type
+    typedef vector_wrapper<const_read_stream_iterator>                const_read_string;            ///< the const read string type
 
     typedef ConcatenatedStringSet<
         read_stream_iterator,
-        index_iterator>                                         read_string_set;
+        index_iterator>                                                     read_string_set_type;   ///< string-set type
+
+    typedef ConcatenatedStringSet<
+        const_read_stream_iterator,
+        const_index_iterator>                                         const_read_string_set_type;   ///< const string-set type
 
     /// empty constructor
     ///
@@ -184,11 +200,31 @@ struct ReadDataView
 
     /// return the a string-set view of this set of reads
     ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE read_string_set string_set() const
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE read_string_set_type read_string_set()
     {
-        return read_string_set(
+        return read_string_set_type(
             size(),
             read_stream_type( read_stream() ).begin(),
+            read_index() );
+    }
+
+    /// return the a string-set view of this set of reads
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_read_string_set_type read_string_set() const
+    {
+        return const_read_string_set_type(
+            size(),
+            const_read_stream_type( read_stream() ).begin(),
+            read_index() );
+    }
+
+    /// return the a string-set view of this set of reads
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_read_string_set_type const_read_string_set() const
+    {
+        return const_read_string_set_type(
+            size(),
+            const_read_stream_type( read_stream() ).begin(),
             read_index() );
     }
 
@@ -238,7 +274,10 @@ public:
 ///
 struct ReadData : public ReadDataView<uint32*,uint32*,char*,char*>
 {
-    typedef ReadDataView<uint32*,uint32*,char*,char*> ReadDataBase;
+    typedef ReadDataView<uint32*,uint32*,char*,char*>                               ReadDataBase;
+
+    typedef ReadDataView<uint32*,uint32*,char*,char*>                               plain_view_type;
+    typedef ReadDataView<const uint32*,const uint32*,const char*,const char*> const_plain_view_type;
 
     /// empty constructor
     ///
@@ -254,10 +293,23 @@ struct ReadData : public ReadDataView<uint32*,uint32*,char*,char*>
     /// virtual destructor
     ///
     virtual ~ReadData() {}
-
-    typedef PackedStream<uint32*,uint8,READ_BITS,HI_BITS>             read_stream_type;
-    typedef PackedStream<const uint32*,uint8,READ_BITS,HI_BITS> const_read_stream_type;
 };
+
+/// return a plain view of a ReadData object
+///
+inline
+ReadData::plain_view_type plain_view(ReadData& read_data)
+{
+    return ReadData::plain_view_type( read_data );
+}
+
+/// return a plain view of a const ReadData object
+///
+inline
+ReadData::const_plain_view_type plain_view(const ReadData& read_data)
+{
+    return ReadData::const_plain_view_type( read_data );
+}
 
 ///
 /// a read batch in host memory

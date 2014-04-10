@@ -919,4 +919,4 @@ make_cached_string_set(
 
 } // namespace nvbio
 
-#include <nvbio/basic/string_set_inl.h>
+#include <nvbio/strings/string_set_inl.h>

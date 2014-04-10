@@ -46,7 +46,6 @@
 /// - \subpage priority_queues_page
 /// - \subpage priority_deques_page
 /// - \subpage ping_pong_queues_page
-/// - \subpage string_sets_page
 /// - \subpage sum_trees_page
 /// - \subpage vector_wrappers_page
 /// - \subpage vector_arrays_page

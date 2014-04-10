@@ -43,6 +43,7 @@
 /// NVBIO includes the following modules:
 ///
 /// - \subpage basic_page
+/// - \subpage strings_page
 /// - \subpage alignment_page
 /// - \subpage fmindex_page
 /// - \subpage qgram_page

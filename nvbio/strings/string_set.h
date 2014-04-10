@@ -35,9 +35,10 @@
 
 namespace nvbio {
 
-///\page string_sets_page String Sets
+///\page string_page Strings And String Sets
 ///
-/// A string set is a collection of strings. As there's many ways to encode a string,
+/// This module provides generic constructs to work with strings and string-sets.
+/// A string-set is a collection of strings. As there's many ways to encode a string,
 /// there's even more ways to represent a string set.
 /// For example, one might want to store the strings into a single concatenated array,
 /// and store offsets to the beginning of each one.
@@ -83,7 +84,7 @@ namespace nvbio {
 /// For a detailed description of all classes and functions see the \ref StringSetsModule module documentation.
 ///
 
-///@addtogroup Basic
+///@addtogroup Strings
 ///@{
 
 ///\defgroup StringSetsModule String Sets
@@ -572,11 +573,11 @@ private:
 };
 
 ///@} StringSetsModule
-///@} Basic
+///@} Strings
 
 namespace cuda {
 
-///@addtogroup Basic
+///@addtogroup Strings
 ///@{
 
 ///@addtogroup StringSetsModule
@@ -625,11 +626,11 @@ void copy(
           StridedPackedStringSet<StreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T,LengthIterator>&  out_string_set);
 
 ///@} StringSetsModule
-///@} Basic
+///@} Strings
 
 } // namespace cuda
 
-///@addtogroup Basic
+///@addtogroup Strings
 ///@{
 
 ///@addtogroup StringSetsModule
@@ -678,7 +679,7 @@ void copy(
           StridedPackedStringSet<StreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T,LengthIterator>&  out_string_set);
 
 ///@} StringSetsModule
-///@} Basic
+///@} Strings
 
 
 template <

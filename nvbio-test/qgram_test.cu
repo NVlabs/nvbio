@@ -219,9 +219,10 @@ void test_qgroup_index_build(
     const float time = timer.seconds();
 
     log_verbose(stderr, "  building q-group index... done\n");
-    log_verbose(stderr, "    unique q-grams : %.2f M q-grams\n", 1.0e-6f * float( qgram_index.n_unique_qgrams ));
-    log_verbose(stderr, "    throughput     : %.1f M q-grams/s\n", 1.0e-6f * float( string_len ) / time);
-    log_verbose(stderr, "    memory usage   : %.1f MB\n", float( qgram_index.used_device_memory() ) / float(1024*1024) );
+    log_verbose(stderr, "    indexed q-grams : %6.2f M q-grams\n", 1.0e-6f * float( qgram_index.n_qgrams ));
+    log_verbose(stderr, "    unique q-grams  : %6.2f M q-grams\n", 1.0e-6f * float( qgram_index.n_unique_qgrams ));
+    log_verbose(stderr, "    throughput      : %5.1f M q-grams/s\n", 1.0e-6f * float( string_len ) / time);
+    log_verbose(stderr, "    memory usage    : %5.1f MB\n", float( qgram_index.used_device_memory() ) / float(1024*1024) );
 
     log_verbose(stderr, "  querying q-group index... started\n");
 }

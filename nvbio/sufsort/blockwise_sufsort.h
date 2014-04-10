@@ -31,7 +31,7 @@
 #include <nvbio/sufsort/compression_sort.h>
 #include <nvbio/sufsort/prefix_doubling_sufsort.h>
 #include <nvbio/sufsort/dcs.h>
-#include <nvbio/basic/string_set.h>
+#include <nvbio/strings/string_set.h>
 #include <nvbio/basic/thrust_view.h>
 #include <nvbio/basic/cuda/sort.h>
 #include <nvbio/basic/timer.h>

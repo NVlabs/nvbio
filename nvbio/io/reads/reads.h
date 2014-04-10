@@ -30,7 +30,7 @@
 #include <nvbio/basic/strided_iterator.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/vector_wrapper.h>
-#include <nvbio/basic/string_set.h>
+#include <nvbio/strings/string_set.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>

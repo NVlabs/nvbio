@@ -38,8 +38,6 @@ shared_pointer.h
 simd.h
 simd_inl.h
 strided_iterator.h
-string_set.h
-string_set_inl.h
 sum_tree.h
 sum_tree_inl.h
 threads.cpp

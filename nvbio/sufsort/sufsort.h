@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include <nvbio/basic/string_set.h>
+#include <nvbio/strings/string_set.h>
 #include <nvbio/basic/thrust_view.h>
 #include <nvbio/basic/cuda/sort.h>
 #include <thrust/device_vector.h>

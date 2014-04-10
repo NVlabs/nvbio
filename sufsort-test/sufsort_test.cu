@@ -41,7 +41,7 @@
 #include <nvbio/sufsort/sufsort_utils.h>
 #include <nvbio/basic/exceptions.h>
 #include <nvbio/basic/timer.h>
-#include <nvbio/basic/string_set.h>
+#include <nvbio/strings/string_set.h>
 #include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/cuda/ldg.h>
 #include <nvbio/io/fmi.h>

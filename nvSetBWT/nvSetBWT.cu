@@ -39,7 +39,7 @@
 #include <nvbio/sufsort/sufsort_utils.h>
 #include <nvbio/sufsort/file_bwt.h>
 #include <nvbio/basic/timer.h>
-#include <nvbio/basic/string_set.h>
+#include <nvbio/strings/string_set.h>
 #include <nvbio/basic/shared_pointer.h>
 #include <nvbio/io/reads/reads.h>
 #include <nvbio/basic/dna.h>

@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// scan_test.cu
+// string_set_test.cu
 //
 
 #include <stdio.h>
@@ -36,7 +36,7 @@
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/cuda/tex.h>
-#include <nvbio/basic/string_set.h>
+#include <nvbio/strings/string_set.h>
 #include <thrust/device_vector.h>
 
 namespace nvbio {

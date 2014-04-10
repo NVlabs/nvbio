@@ -132,7 +132,7 @@
 ///\code
 /// #include <nvbio/qgram/qgram.h>
 /// #include <nvbio/basic/vector.h>
-/// #include <nvbio/basic/string_set.h>
+/// #include <nvbio/strings/string_set.h>
 /// #include <nvbio/basic/dna.h>
 /// ...
 ///

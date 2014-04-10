@@ -28,7 +28,7 @@
 #pragma once
 
 #include <nvbio/sufsort/sufsort_priv.h>
-#include <nvbio/basic/string_set.h>
+#include <nvbio/strings/string_set.h>
 #include <nvbio/basic/thrust_view.h>
 #include <nvbio/basic/cuda/sort.h>
 #include <thrust/device_vector.h>
@@ -666,6 +666,7 @@ void CompressionSort::sort(
 
                 NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
                 cuda::check_error("CompressionSort::sort() : seg_sort");
+
                 timer.stop();
                 radixsort_time += timer.seconds();
 

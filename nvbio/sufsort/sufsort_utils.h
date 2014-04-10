@@ -28,7 +28,7 @@
 #pragma once
 
 #include <nvbio/sufsort/sufsort_priv.h>
-#include <nvbio/basic/string_set.h>
+#include <nvbio/strings/string_set.h>
 #include <nvbio/basic/thrust_view.h>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>

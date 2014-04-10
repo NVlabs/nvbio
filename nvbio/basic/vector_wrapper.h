@@ -186,6 +186,12 @@ struct vector_wrapper
     Iterator    m_vec;
 };
 
+/// return length of a vector
+///
+template <typename Iterator>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 length(const vector_wrapper<Iterator>& vec) const { return vec.length(); }
+
 ///@} Basic
 
 } // namespace nvbio

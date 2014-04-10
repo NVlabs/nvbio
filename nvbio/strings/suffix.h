@@ -296,11 +296,11 @@ struct SuffixSetCore<SequenceType,SuffixIterator,2u>
 
 ///@} Private
 
-/// return the string index of a given infix
+/// return the string index of a given suffix
 ///
 template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 string_id(const Infix<StringType,CoordType>& infix) { return infix.m_coords.z; }
+uint32 string_id(const Suffix<StringType,CoordType,2u>& suffix) { return suffix.m_coords.y; }
 
 /// Represent a set of suffixes of a string or string-set. An SuffixSet is a \ref StringSetAnchor "String Set".
 ///

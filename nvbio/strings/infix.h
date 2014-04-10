@@ -229,6 +229,12 @@ template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 uint32 string_id(const Infix<StringType,CoordType>& infix) { return infix.m_coords.z; }
 
+/// return the length a given infix
+///
+template <typename StringType, typename CoordType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 length(const Infix<StringType,CoordType>& infix) { return infix.length(); }
+
 /// Represent a set of infixes of a string or string-set. An InfixSet is a \ref StringSetAnchor "String Set".
 ///
 /// \tparam SequenceType        the string or string-set type

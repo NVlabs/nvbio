@@ -173,12 +173,6 @@ struct Suffix<StringType,CoordType,2u>
     coord_type      m_coords;       ///< the suffix coordinates
 };
 
-/// return the string index of a given suffix
-///
-template <typename StringType, typename CoordType>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 string_id(const Suffix<StringType,CoordType,2u>& suffix) { return suffix.m_coords.y; }
-
 /// Represent a set of suffixes of a string or string-set
 ///
 /// \tparam SequenceType            the string or string-set type
@@ -301,6 +295,12 @@ struct SuffixSetCore<SequenceType,SuffixIterator,2u>
 template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 uint32 string_id(const Suffix<StringType,CoordType,2u>& suffix) { return suffix.m_coords.y; }
+
+/// return the length of a given suffix
+///
+template <typename StringType, typename CoordType, uint32 CoordDim>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 length(const Suffix<StringType,CoordType,CoordDim>& suffix) { return suffix.length(); }
 
 /// Represent a set of suffixes of a string or string-set. An SuffixSet is a \ref StringSetAnchor "String Set".
 ///

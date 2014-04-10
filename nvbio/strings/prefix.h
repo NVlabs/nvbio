@@ -296,6 +296,12 @@ template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 uint32 string_id(const Prefix<StringType,CoordType,2u>& prefix) { return prefix.m_coords.y; }
 
+/// return the length of a given prefix
+///
+template <typename StringType, typename CoordType, uint32 CoordDim>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 length(const Prefix<StringType,CoordType,CoordDim>& prefix) { return prefix.length(); }
+
 /// Represent a set of prefixes of a string or string-set. An PrefixSet is a \ref StringSetAnchor "String Set".
 ///
 /// \tparam SequenceType        the string or string-set type

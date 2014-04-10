@@ -302,7 +302,7 @@ template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 uint32 string_id(const Infix<StringType,CoordType>& infix) { return infix.m_coords.z; }
 
-/// Represent a set of suffixes of a string or string-set. An SuffixSet is a \ref StringSetModule "String Set".
+/// Represent a set of suffixes of a string or string-set. An SuffixSet is a \ref StringSetAnchor "String Set".
 ///
 /// \tparam SequenceType        the string or string-set type
 /// \tparam SuffixIterator      the suffix iterator type - value_type can be uint32 or uint64 for strings, uint2 or uint64_2 for string-sets

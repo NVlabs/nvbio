@@ -296,7 +296,7 @@ template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 uint32 string_id(const Prefix<StringType,CoordType,2u>& prefix) { return prefix.m_coords.y; }
 
-/// Represent a set of prefixes of a string or string-set. An PrefixSet is a \ref StringSetModule "String Set".
+/// Represent a set of prefixes of a string or string-set. An PrefixSet is a \ref StringSetAnchor "String Set".
 ///
 /// \tparam SequenceType        the string or string-set type
 /// \tparam PrefixIterator      the prefix iterator type - value_type can be uint32 or uint64 for strings, uint2 or uint64_2 for string-sets

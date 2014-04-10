@@ -229,7 +229,7 @@ template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 uint32 string_id(const Infix<StringType,CoordType>& infix) { return infix.m_coords.z; }
 
-/// Represent a set of infixes of a string or string-set. An InfixSet is a \ref StringSetModule "String Set".
+/// Represent a set of infixes of a string or string-set. An InfixSet is a \ref StringSetAnchor "String Set".
 ///
 /// \tparam SequenceType        the string or string-set type
 /// \tparam InfixIterator       the infix iterator type - value_type can be uint2 or uint64_2 for strings, uint4 or uint64_4 for string-sets

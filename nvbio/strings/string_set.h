@@ -35,8 +35,8 @@
 
 namespace nvbio {
 
-///\page strings_page Strings And String Sets
-///
+///\page strings_page Strings Module
+///\par
 /// This module provides generic constructs to work with strings and string-sets.
 /// A string-set is a collection of strings. As there's many ways to encode a string,
 /// there's even more ways to represent a string set.
@@ -48,12 +48,12 @@ namespace nvbio {
 /// using a few bits per symbol.
 ///
 /// \section AtAGlanceSection At a Glance
-///
+///\par
 /// This module provides a few generic adaptors that can be "configured" by means of
 /// the underlying template iterators.
 /// The philosohpy behind all of these containers is that they are just <i>shallow representations</i>,
 /// holding no storage. Hence they can be used both in host and device code.
-///
+///\par
 /// - ConcatenatedStringSet
 /// - SparseStringSet
 /// - StridedPackedStringSet
@@ -61,13 +61,14 @@ namespace nvbio {
 /// - InfixSet
 /// - PrefixSet
 /// - SuffixSet
-///
+///\par
 /// Furthermore, the module provides efficient generic copy() (resp. cuda::copy()) implementations to copy
 /// a given host (resp. device) string set from a given layout into another with a different layout.
 ///
-/// \section StringSetInterface Interface
-///
+/// \section StringSetInterface String-Set Interface
+///\par
 /// String sets are generic, interchangeable containers that expose the same interface:
+///\anchor StringSetAnchor
 ///\code
 /// interface StringSet
 /// {
@@ -83,8 +84,15 @@ namespace nvbio {
 ///\endcode
 ///
 /// \section TechnicalOverviewSection Technical Overview
-///
+///\par
 /// For a detailed description of all classes and functions see the \ref StringSetsModule module documentation.
+///
+
+///\defgroup StringsModule Strings Module
+///
+/// This module defines various functions and classes to operate with strings and string-sets which vary
+/// for the internal representation.
+/// For a deeper explanation, see the \ref strings_page page.
 ///
 
 ///@addtogroup Strings

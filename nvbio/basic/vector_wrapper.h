@@ -190,7 +190,7 @@ struct vector_wrapper
 ///
 template <typename Iterator>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 length(const vector_wrapper<Iterator>& vec) const { return vec.length(); }
+uint32 length(const vector_wrapper<Iterator>& vec) { return vec.length(); }
 
 ///@} Basic
 

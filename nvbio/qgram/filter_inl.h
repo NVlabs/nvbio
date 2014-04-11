@@ -101,7 +101,7 @@ struct closest_diagonal<uint4>
         if (diag - rounded_diag >= interval/2)
             rounded_diag++;
 
-        return make_uint2( range.x, rounded_diag );
+        return make_uint2( rounded_diag, range.x );
     }
 
     const uint32 interval;
@@ -199,7 +199,7 @@ struct filter_results< qgram_index_type, index_iterator, uint2 >
 
         const uint2 qgram_pos = qgram_index.locate( range.x + local_index );
 
-        // and write out the pair (index-id,index-pos,text-pos)
+        // and write out the tuple (index-id,index-pos,text-pos)
         return make_uint4( qgram_pos.x, qgram_pos.y, text_pos, 0u );
     }
 

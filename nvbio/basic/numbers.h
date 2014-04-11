@@ -155,6 +155,27 @@ inline NVBIO_HOST_DEVICE L round_z(const L x, const R y){ return L( y * divide_r
 
 /// return the c'th component of a by value
 ///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 comp(const uchar2 a, const char c)
+{
+    return (c == 0 ? a.x : a.y);
+}
+/// return the c'th component of a by value
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE char comp(const char2 a, const char c)
+{
+    return (c == 0 ? a.x : a.y);
+}
+
+/// return the c'th component of a by value
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 comp(const uchar4 a, const char c)
+{
+    return c <= 1 ?
+        (c == 0 ? a.x : a.y) :
+        (c == 2 ? a.z : a.w);
+}
+/// return the c'th component of a by value
+///
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE char comp(const char4 a, const char c)
 {
     return c <= 1 ?
@@ -172,7 +193,27 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE signed char& select(char4& a, const char c)
 
 /// return the c'th component of a by value
 ///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 comp(const uint2 a, const uint32 c)
+{
+    return (c == 0 ? a.x : a.y);
+}
+/// return the c'th component of a by value
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE  int32 comp(const  int2 a, const uint32 c)
+{
+    return (c == 0 ? a.x : a.y);
+}
+/// return the c'th component of a by value
+///
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 comp(const uint4 a, const uint32 c)
+{
+    return c <= 1 ?
+        (c == 0 ? a.x : a.y) :
+        (c == 2 ? a.z : a.w);
+}
+/// return the c'th component of a by value
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 comp(const int4 a, const uint32 c)
 {
     return c <= 1 ?
         (c == 0 ? a.x : a.y) :
@@ -811,6 +852,23 @@ struct max_functor
     template <typename T>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     T operator() (const T op1, const T op2) const { return nvbio::max( op1, op2 ); }
+};
+
+/// Get a given character from a vector
+///
+template <typename T>
+struct component_functor
+{
+    typedef T                                       argument_type;
+    typedef typename vector_traits<T>::value_type   result_type;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    component_functor(const uint32 c) : m_c( c ) {}
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const argument_type op) const { return comp( op, m_c ); }
+
+    uint32 m_c;
 };
 
 /// A functor to take the n leading bits of a word

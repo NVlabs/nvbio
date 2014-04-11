@@ -112,7 +112,7 @@ struct AlignmentStream
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint32 pattern_length(const uint32 i, context_type* context) const
     {
-        const uint32 read_id = m_diagonals[i].x;
+        const uint32 read_id = m_diagonals[i].y;
         return length( m_reads.get_read( read_id ) );
     }
 
@@ -124,13 +124,14 @@ struct AlignmentStream
         const uint2 diagonal  = m_diagonals[i];
 
         // retrieve the read id and its length
-        const uint32 read_id  = diagonal.x;
+        const uint32 read_id  = diagonal.y;
+        const uint32 text_pos = diagonal.x;
         const uint32 read_len = length( m_reads.get_read( read_id ) );
 
         // compute the segment of text to align to
-        const uint32 text_begin = read_len + diagonal.y > BAND_LEN/2 ? read_len + diagonal.y - BAND_LEN/2 : 0u;
+        const uint32 text_begin = text_pos > BAND_LEN/2 ? text_pos - BAND_LEN/2 : 0u;
         const uint32 text_end   = nvbio::min( text_begin + read_len + BAND_LEN, m_genome_len );
-        const uint32 text_len   = text_end - text_begin;
+        const uint32 text_len   = text_begin < text_end ? text_end - text_begin : 0u;
 
         return text_len;
     }
@@ -158,13 +159,14 @@ struct AlignmentStream
         const uint2 diagonal  = m_diagonals[i];
 
         // retrieve the read id and its length
-        const uint32 read_id  = diagonal.x;
+        const uint32 read_id  = diagonal.y;
+        const uint32 text_pos = diagonal.x;
         const uint32 read_len = length( m_reads.get_read( read_id ) );
 
         // compute the segment of text to align to
-        const uint32 text_begin = read_len + diagonal.y > BAND_LEN/2 ? read_len + diagonal.y - BAND_LEN/2 : 0u;
+        const uint32 text_begin = text_pos > BAND_LEN/2 ? text_pos - BAND_LEN/2 : 0u;
         const uint32 text_end   = nvbio::min( text_begin + read_len + BAND_LEN, m_genome_len );
-        const uint32 text_len   = text_end - text_begin;
+        const uint32 text_len   = text_begin < text_end ? text_end - text_begin : 0u;
 
         // load the text
         strings->text = strings->text_loader.load(

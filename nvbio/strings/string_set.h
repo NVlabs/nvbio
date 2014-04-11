@@ -123,6 +123,7 @@ namespace nvbio {
 ///         nvbio::plain_view( seed_coords ) );
 /// }
 ///\endcode
+/// See examples/seeding/seeding.cu for more details.
 ///
 /// \section TechnicalOverviewSection Technical Overview
 ///\par

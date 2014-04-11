@@ -286,9 +286,9 @@ void map(
 
     log_verbose(stderr, "  q-gram filter... done\n");
     log_verbose(stderr, "    extract throughput : %.2f B q-grams/s\n", (1.0e-9f * float( stats.queries )) / stats.extract_time);
-    log_verbose(stderr, "    rank throughput    : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.rank_time);
-    log_verbose(stderr, "    locate throughput  : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.locate_time);
-    log_verbose(stderr, "    align throughput   : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.align_time);
+    log_verbose(stderr, "    rank throughput    : %6.2f M reads/s\n", (1.0e-6f * float( stats.reads )) / stats.rank_time);
+    log_verbose(stderr, "    locate throughput  : %6.2f M reads/s\n", (1.0e-6f * float( stats.reads )) / stats.locate_time);
+    log_verbose(stderr, "    align throughput   : %6.2f M reads/s\n", (1.0e-6f * float( stats.reads )) / stats.align_time);
     log_verbose(stderr, "                       : %6.2f M hits/s\n",  (1.0e-6f * float( stats.merged )) / stats.align_time);
     log_verbose(stderr, "    matches            : %.2f M\n", 1.0e-6f * float( stats.matches ) );
     log_verbose(stderr, "    occurrences        : %.3f B\n", 1.0e-9f * float( stats.occurrences ) );
@@ -417,7 +417,7 @@ int main(int argc, char* argv[])
         const float time = timer.seconds();
 
         log_info(stderr, "  aligned reads:\n");
-        log_info(stderr, "    %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / time );
+        log_info(stderr, "    %6.2f M reads/s\n", (1.0e-6f * float( stats.reads )) / time );
     }
     return 0;
 }

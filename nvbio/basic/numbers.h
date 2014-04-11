@@ -199,42 +199,37 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint16 comp(const ushort4 a, const uint32 c)
 ///@addtogroup VectorTypes
 ///@{
 
-struct uint64_2
-{
-    uint64 x;
-    uint64 y;
-};
-struct uint64_3
-{
-    uint64 x;
-    uint64 y;
-    uint64 z;
-};
-struct uint64_4
-{
-    uint64 x;
-    uint64 y;
-    uint64 z;
-    uint64 w;
-};
-struct int64_2
-{
-    int64 x;
-    int64 y;
-};
-struct int64_3
-{
-    int64 x;
-    int64 y;
-    int64 z;
-};
-struct int64_4
-{
-    int64 x;
-    int64 y;
-    int64 z;
-    int64 w;
-};
+typedef uchar2 uint8_2;
+typedef uchar3 uint8_3;
+typedef uchar4 uint8_4;
+
+typedef  char2  int8_2;
+typedef  char3  int8_3;
+typedef  char4  int8_4;
+
+typedef ushort2 uint16_2;
+typedef ushort3 uint16_3;
+typedef ushort4 uint16_4;
+
+typedef  short2  int16_2;
+typedef  short3  int16_3;
+typedef  short4  int16_4;
+
+typedef uint2 uint32_2;
+typedef uint3 uint32_3;
+typedef uint4 uint32_4;
+
+typedef  int2  int32_2;
+typedef  int3  int32_3;
+typedef  int4  int32_4;
+
+typedef ulonglong2 uint64_2;
+typedef ulonglong3 uint64_3;
+typedef ulonglong4 uint64_4;
+
+typedef  longlong2  int64_2;
+typedef  longlong3  int64_3;
+typedef  longlong4  int64_4;
 
 template <typename T, uint32 DIM>
 struct vector_type {};

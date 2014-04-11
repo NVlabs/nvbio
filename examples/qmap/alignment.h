@@ -175,7 +175,7 @@ struct AlignmentStream
         // load the pattern
         strings->pattern = strings->pattern_loader.load(
             m_reads,
-            make_uint2( 0u, read_len ),
+            m_reads.get_range( read_id ),
             false,
             make_uint2( window_begin, window_end ) );
     }

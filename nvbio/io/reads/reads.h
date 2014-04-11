@@ -371,22 +371,6 @@ struct ReadData : public ReadDataView<uint32*,uint32*,char*,char*>
     virtual ~ReadData() {}
 };
 
-/// return a plain view of a ReadData object
-///
-inline
-ReadData::plain_view_type plain_view(ReadData& read_data)
-{
-    return ReadData::plain_view_type( read_data );
-}
-
-/// return a plain view of a const ReadData object
-///
-inline
-ReadData::const_plain_view_type plain_view(const ReadData& read_data)
-{
-    return ReadData::const_plain_view_type( read_data );
-}
-
 ///
 /// a read batch in host memory
 ///
@@ -514,4 +498,21 @@ ReadDataStream *open_read_file(const char *          read_file_name,
 ///@} // IO
 
 } // namespace io
+
+/// return a plain view of a ReadData object
+///
+inline
+io::ReadData::plain_view_type plain_view(io::ReadData& read_data)
+{
+    return io::ReadData::plain_view_type( read_data );
+}
+
+/// return a plain view of a const ReadData object
+///
+inline
+io::ReadData::const_plain_view_type plain_view(const io::ReadData& read_data)
+{
+    return io::ReadData::const_plain_view_type( read_data );
+}
+
 } // namespace nvbio

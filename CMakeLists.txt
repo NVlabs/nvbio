@@ -91,6 +91,8 @@ add_subdirectory(nvbio-aln-diff)
 add_subdirectory(sufsort-test)
 add_subdirectory(sw-benchmark)
 
+add_subdirectory(examples/seeding)
+
 nvbio_module(nvbio-project)
 nvbio_doxygen()
 

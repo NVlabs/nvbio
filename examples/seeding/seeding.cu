@@ -111,6 +111,9 @@ int main(int argc, char* argv[])
     // copy it to the device
     const io::ReadDataDevice d_read_data( *h_read_data );
 
+    log_info(stderr, "  loading reads... done\n");
+    log_info(stderr, "    %u reads\n", d_read_data.size());
+
     // prepare some typedefs for the involved string-sets and infixes
     typedef io::ReadData::const_read_string_set_type                        string_set_type;    // the read string-set
     typedef string_set_infix_coord_type                                     infix_coord_type;   // the infix coordinate type, for string-sets

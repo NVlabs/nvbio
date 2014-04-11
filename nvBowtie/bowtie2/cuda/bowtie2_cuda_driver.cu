@@ -217,11 +217,11 @@ int driver(
     Timer timer;
 
     timer.start();
-    io::FMIndexDataCUDA driver_data( driver_data_host,
-                        io::FMIndexDataCUDA::GENOME  |
-                        io::FMIndexDataCUDA::FORWARD |
-        (need_reverse ? io::FMIndexDataCUDA::REVERSE : 0u) |
-                        io::FMIndexDataCUDA::SA );
+    io::FMIndexDataDevice driver_data( driver_data_host,
+                        io::FMIndexDataDevice::GENOME  |
+                        io::FMIndexDataDevice::FORWARD |
+        (need_reverse ? io::FMIndexDataDevice::REVERSE : 0u) |
+                        io::FMIndexDataDevice::SA );
     timer.stop();
 
     log_stats(stderr, "  allocated device driver data (%.2f GB - %.1fs)\n", float(driver_data.allocated()) / 1.0e9f, timer.seconds() );
@@ -354,7 +354,7 @@ int driver(
 
         aligner.output_file->start_batch(read_data_host);
 
-        io::ReadDataCUDA read_data( *read_data_host, io::ReadDataCUDA::READS | io::ReadDataCUDA::QUALS );
+        io::ReadDataDevice read_data( *read_data_host, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS );
         cudaThreadSynchronize();
 
         timer.stop();
@@ -570,11 +570,11 @@ int driver(
         (params.allow_sub == 0 && USE_REVERSE_INDEX) ||
         (params.allow_sub == 1 && params.subseed_len == 0 && params.mode == BestMappingApprox);
 
-    io::FMIndexDataCUDA driver_data( driver_data_host,
-                        io::FMIndexDataCUDA::GENOME  |
-                        io::FMIndexDataCUDA::FORWARD |
-        (need_reverse ? io::FMIndexDataCUDA::REVERSE : 0u) |
-                        io::FMIndexDataCUDA::SA );
+    io::FMIndexDataDevice driver_data( driver_data_host,
+                        io::FMIndexDataDevice::GENOME  |
+                        io::FMIndexDataDevice::FORWARD |
+        (need_reverse ? io::FMIndexDataDevice::REVERSE : 0u) |
+                        io::FMIndexDataDevice::SA );
 
     log_stats(stderr, "  allocated device driver data (%.2f GB)\n", float(driver_data.allocated()) / 1.0e9f );
 
@@ -699,8 +699,8 @@ int driver(
 
         aligner.output_file->start_batch(read_data_host1, read_data_host2);
 
-        io::ReadDataCUDA read_data1( *read_data_host1, io::ReadDataCUDA::READS | io::ReadDataCUDA::QUALS );
-        io::ReadDataCUDA read_data2( *read_data_host2, io::ReadDataCUDA::READS | io::ReadDataCUDA::QUALS );
+        io::ReadDataDevice read_data1( *read_data_host1, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS );
+        io::ReadDataDevice read_data2( *read_data_host2, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS );
 
         timer.stop();
         stats.read_HtoD.add( read_data1.size(), timer.seconds() );

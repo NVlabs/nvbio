@@ -76,11 +76,11 @@ int main(int argc, char* argv[])
 
     if (strcmp( argv[1], "-gpu" ) == 0)
     {
-        nvbio::io::FMIndexDataCUDA driver_data_cuda(
+        nvbio::io::FMIndexDataDevice driver_data_cuda(
             driver_data,
-            nvbio::io::FMIndexDataCUDA::FORWARD | nvbio::io::FMIndexDataCUDA::REVERSE );
+            nvbio::io::FMIndexDataDevice::FORWARD | nvbio::io::FMIndexDataDevice::REVERSE );
 
-        nvbio::io::FMIndexDataCUDA::SSA_device_type ssa_cuda, rssa_cuda;
+        nvbio::io::FMIndexDataDevice::SSA_device_type ssa_cuda, rssa_cuda;
 
         init_ssa( driver_data_cuda, ssa_cuda, rssa_cuda );
 

@@ -91,7 +91,7 @@ void cuda_alloc(T*& dst, const T* src, const uint32 words, uint64& allocated)
         {
             size_t free, total;
             cudaMemGetInfo(&free, &total);
-            throw nvbio::bad_alloc("FMIndexDataCUDA: not enough device memory (allocation: %u MB, free: %u MB, total: %u MB)",
+            throw nvbio::bad_alloc("FMIndexDataDevice: not enough device memory (allocation: %u MB, free: %u MB, total: %u MB)",
                 sizeof(T)*words4/(1024*1024),
                 free / (1024*1024), total / (1024*1024));
         }
@@ -114,7 +114,7 @@ void cuda_alloc(T*& dst, const uint32 words, uint64& allocated)
     {
         size_t free, total;
         cudaMemGetInfo(&free, &total);
-        throw nvbio::bad_alloc("FMIndexDataCUDA: not enough device memory (allocation: %u MB, free: %u MB, total: %u MB)",
+        throw nvbio::bad_alloc("FMIndexDataDevice: not enough device memory (allocation: %u MB, free: %u MB, total: %u MB)",
             sizeof(T)*words4/(1024*1024),
             free / (1024*1024), total / (1024*1024));
     }
@@ -199,7 +199,7 @@ uint32* load_genome(
         seq_length = uint32(field);
         const uint32 unaligned_seq_words  = uint32( (seq_length+15)/16 );
         // make sure the genome length is a multiple of 4
-        // this is required due to the interleaving of bwt and occ data in FMIndexDataCUDA
+        // this is required due to the interleaving of bwt and occ data in FMIndexDataDevice
         seq_words  = align<FMI_ALIGNMENT>( unaligned_seq_words );
 
         genome_stream = allocator.alloc( seq_words );
@@ -244,7 +244,7 @@ uint32* load_genome(
         // alloc the word-packed genome
         const uint32 unaligned_seq_words = uint32( (seq_length+15)/16 );
         // make sure the genome length is a multiple of 4
-        // this is required due to the interleaving of bwt and occ data in FMIndexDataCUDA
+        // this is required due to the interleaving of bwt and occ data in FMIndexDataDevice
         seq_words = align<FMI_ALIGNMENT>( unaligned_seq_words );
 
         genome_stream = allocator.alloc( seq_words );
@@ -1064,7 +1064,7 @@ int FMIndexDataMMAP::load(
     return 1;
 }
 
-FMIndexDataCUDA::FMIndexDataCUDA(const FMIndexData& host_data, const uint32 flags) :
+FMIndexDataDevice::FMIndexDataDevice(const FMIndexData& host_data, const uint32 flags) :
     m_allocated( 0u )
 {
     seq_length = host_data.seq_length;
@@ -1087,7 +1087,7 @@ FMIndexDataCUDA::FMIndexDataCUDA(const FMIndexData& host_data, const uint32 flag
     if (flags & GENOME)
     {
         if (host_data.m_genome_stream == NULL)
-            log_warning(stderr, "FMIndexDataCUDA: requested genome is not available!\n");
+            log_warning(stderr, "FMIndexDataDevice: requested genome is not available!\n");
 
         cuda_alloc( m_genome_stream, host_data.m_genome_stream, seq_words, m_allocated );
     }
@@ -1095,14 +1095,14 @@ FMIndexDataCUDA::FMIndexDataCUDA(const FMIndexData& host_data, const uint32 flag
     if (flags & FORWARD)
     {
         if (host_data.m_bwt_stream == NULL || host_data.m_occ == NULL)
-            log_warning(stderr, "FMIndexDataCUDA: requested forward BWT is not available!\n");
+            log_warning(stderr, "FMIndexDataDevice: requested forward BWT is not available!\n");
 
 #if defined(FUSED_BWT_OCC)
         thrust::host_vector<uint32> bwt_occ( seq_words + occ_words );
 
-        if (occ_words < seq_words)  throw runtime_error("FMIndexDataCUDA: occurrence table has %u words, BWT has %u!", occ_words, seq_words);
-        if (occ_words % 4 != 0)     throw runtime_error("FMIndexDataCUDA: occurrence table has %u words, not a multiple of 4!", occ_words);
-        if (seq_words % 4 != 0)     throw runtime_error("FMIndexDataCUDA: BWT has %u words, not a multiple of 4!", seq_words);
+        if (occ_words < seq_words)  throw runtime_error("FMIndexDataDevice: occurrence table has %u words, BWT has %u!", occ_words, seq_words);
+        if (occ_words % 4 != 0)     throw runtime_error("FMIndexDataDevice: occurrence table has %u words, not a multiple of 4!", occ_words);
+        if (seq_words % 4 != 0)     throw runtime_error("FMIndexDataDevice: BWT has %u words, not a multiple of 4!", seq_words);
 
         for (uint32 w = 0; w < seq_words; w += 4)
         {
@@ -1124,7 +1124,7 @@ FMIndexDataCUDA::FMIndexDataCUDA(const FMIndexData& host_data, const uint32 flag
         if (flags & SA)
         {
             if (host_data.ssa.m_ssa == NULL)
-                log_warning(stderr, "FMIndexDataCUDA: requested forward SSA is not available!\n");
+                log_warning(stderr, "FMIndexDataDevice: requested forward SSA is not available!\n");
 
             cuda_alloc( const_cast<uint32*&>(ssa.m_ssa), host_data.ssa.m_ssa, sa_size, m_allocated );
         }
@@ -1133,15 +1133,15 @@ FMIndexDataCUDA::FMIndexDataCUDA(const FMIndexData& host_data, const uint32 flag
     if (flags & REVERSE)
     {
         if (host_data.m_rbwt_stream == NULL || host_data.m_rocc == NULL)
-            log_warning(stderr, "FMIndexDataCUDA: requested reverse BWT is not available!\n");
+            log_warning(stderr, "FMIndexDataDevice: requested reverse BWT is not available!\n");
 
 #if defined(FUSED_BWT_OCC)
         thrust::host_vector<uint32> bwt_occ;
         bwt_occ.reserve(seq_words + occ_words);
 
-        if (occ_words < seq_words)  throw runtime_error("FMIndexDataCUDA: occurrence table has %u words, BWT has %u!", occ_words, seq_words);
-        if (occ_words % 4 != 0)     throw runtime_error("FMIndexDataCUDA: occurrence table has %u words, not a multiple of 4!", occ_words);
-        if (seq_words % 4 != 0)     throw runtime_error("FMIndexDataCUDA: BWT has %u words, not a multiple of 4!", seq_words);
+        if (occ_words < seq_words)  throw runtime_error("FMIndexDataDevice: occurrence table has %u words, BWT has %u!", occ_words, seq_words);
+        if (occ_words % 4 != 0)     throw runtime_error("FMIndexDataDevice: occurrence table has %u words, not a multiple of 4!", occ_words);
+        if (seq_words % 4 != 0)     throw runtime_error("FMIndexDataDevice: BWT has %u words, not a multiple of 4!", seq_words);
 
         for (uint32 w = 0; w < seq_words; w += 4)
         {
@@ -1163,7 +1163,7 @@ FMIndexDataCUDA::FMIndexDataCUDA(const FMIndexData& host_data, const uint32 flag
         if (flags & SA)
         {
             if (host_data.rssa.m_ssa == NULL)
-                log_warning(stderr, "FMIndexDataCUDA: requested reverse SSA is not available!\n");
+                log_warning(stderr, "FMIndexDataDevice: requested reverse SSA is not available!\n");
 
             cuda_alloc( const_cast<uint32*&>(rssa.m_ssa), host_data.rssa.m_ssa, sa_size, m_allocated );
         }
@@ -1172,9 +1172,9 @@ FMIndexDataCUDA::FMIndexDataCUDA(const FMIndexData& host_data, const uint32 flag
     cuda_alloc(  L2, host_data.L2,  5u, m_allocated );
     cuda_alloc( rL2, host_data.rL2, 5u, m_allocated );
     cuda_alloc( count_table, host_data.count_table, 256u, m_allocated );
-    nvbio::cuda::check_error("FMIndexDataCUDA");
+    nvbio::cuda::check_error("FMIndexDataDevice");
 }
-FMIndexDataCUDA::~FMIndexDataCUDA()
+FMIndexDataDevice::~FMIndexDataDevice()
 {
     cudaFree( m_genome_stream );
     cudaFree( m_bwt_stream );
@@ -1190,9 +1190,9 @@ FMIndexDataCUDA::~FMIndexDataCUDA()
 }
 
 void init_ssa(
-    const FMIndexDataCUDA&              driver_data,
-    FMIndexDataCUDA::SSA_device_type&   ssa,
-    FMIndexDataCUDA::SSA_device_type&   rssa)
+    const FMIndexDataDevice&              driver_data,
+    FMIndexDataDevice::SSA_device_type&   ssa,
+    FMIndexDataDevice::SSA_device_type&   rssa)
 {
     typedef FMIndexData::rank_dict_type rank_dict_type;
     typedef FMIndexData::fm_index_type  fm_index_type;

@@ -36,12 +36,12 @@ namespace cuda {
 
 struct FMIndexDef
 {
-    typedef io::FMIndexDataCUDA::count_table_type                         count_table_type;
-    typedef io::FMIndexDataCUDA::occ_type                                 occ_type;
-    typedef io::FMIndexDataCUDA::bwt_type                                 bwt_type;
-    typedef io::FMIndexDataCUDA::ssa_type                                 ssa_type;
-    typedef io::FMIndexDataCUDA::rank_dict_type                           rank_dict_type;
-    typedef io::FMIndexDataCUDA::fm_index_type                            type;
+    typedef io::FMIndexDataDevice::count_table_type                         count_table_type;
+    typedef io::FMIndexDataDevice::occ_type                                 occ_type;
+    typedef io::FMIndexDataDevice::bwt_type                                 bwt_type;
+    typedef io::FMIndexDataDevice::ssa_type                                 ssa_type;
+    typedef io::FMIndexDataDevice::rank_dict_type                           rank_dict_type;
+    typedef io::FMIndexDataDevice::fm_index_type                            type;
 };
 
 } // namespace cuda

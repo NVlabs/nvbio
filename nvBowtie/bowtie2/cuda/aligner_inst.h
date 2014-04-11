@@ -39,8 +39,8 @@ void all_ed(
     const FMIndexDef::type                  fmi,
     const FMIndexDef::type                  rfmi,
     const UberScoringScheme&                scoring_scheme,
-    const io::FMIndexDataCUDA&              driver_data,
-    io::ReadDataCUDA&                       read_data,
+    const io::FMIndexDataDevice&            driver_data,
+    io::ReadDataDevice&                     read_data,
     Stats&                                  stats);
 
 void best_approx_ed(
@@ -49,8 +49,8 @@ void best_approx_ed(
     const FMIndexDef::type                  fmi,
     const FMIndexDef::type                  rfmi,
     const UberScoringScheme&                scoring_scheme,
-    const io::FMIndexDataCUDA&              driver_data,
-    io::ReadDataCUDA&                       read_data,
+    const io::FMIndexDataDevice&            driver_data,
+    io::ReadDataDevice&                     read_data,
     Stats&                                  stats);
 
 void best_approx_sw(
@@ -59,8 +59,8 @@ void best_approx_sw(
     const FMIndexDef::type                  fmi,
     const FMIndexDef::type                  rfmi,
     const UberScoringScheme&                scoring_scheme,
-    const io::FMIndexDataCUDA&              driver_data,
-    io::ReadDataCUDA&                       read_data,
+    const io::FMIndexDataDevice&            driver_data,
+    io::ReadDataDevice&                     read_data,
     Stats&                                  stats);
 
 void best_approx_ed(
@@ -69,9 +69,9 @@ void best_approx_ed(
     const FMIndexDef::type                  fmi,
     const FMIndexDef::type                  rfmi,
     const UberScoringScheme&                scoring_scheme,
-    const io::FMIndexDataCUDA&              driver_data,
-    io::ReadDataCUDA&                       read_data1,
-    io::ReadDataCUDA&                       read_data2,
+    const io::FMIndexDataDevice&            driver_data,
+    io::ReadDataDevice&                     read_data1,
+    io::ReadDataDevice&                     read_data2,
     Stats&                                  stats);
 
 void best_approx_sw(
@@ -80,9 +80,9 @@ void best_approx_sw(
     const FMIndexDef::type                  fmi,
     const FMIndexDef::type                  rfmi,
     const UberScoringScheme&                scoring_scheme,
-    const io::FMIndexDataCUDA&              driver_data,
-    io::ReadDataCUDA&                       read_data1,
-    io::ReadDataCUDA&                       read_data2,
+    const io::FMIndexDataDevice&            driver_data,
+    io::ReadDataDevice&                     read_data1,
+    io::ReadDataDevice&                     read_data2,
     Stats&                                  stats);
 
 } // namespace cuda

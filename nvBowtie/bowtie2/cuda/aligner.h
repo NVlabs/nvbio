@@ -168,80 +168,80 @@ struct Aligner
 
     template <typename scoring_tag>
     void best_approx(
-        const Params&               params,
-        const fmi_type              fmi,
-        const rfmi_type             rfmi,
-        const UberScoringScheme&    scoring_scheme,
-        const io::FMIndexDataCUDA&  driver_data,
-        io::ReadDataCUDA&           read_data,
-        Stats&                      stats);
+        const Params&                   params,
+        const fmi_type                  fmi,
+        const rfmi_type                 rfmi,
+        const UberScoringScheme&        scoring_scheme,
+        const io::FMIndexDataDevice&    driver_data,
+        io::ReadDataDevice&             read_data,
+        Stats&                          stats);
 
     template <
         typename scoring_tag,
         typename scoring_scheme_type>
     void best_approx_score(
-        const Params&               params,
-        const fmi_type              fmi,
-        const rfmi_type             rfmi,
-        const scoring_scheme_type&  scoring_scheme,
-        const io::FMIndexDataCUDA&  driver_data,
-        io::ReadDataCUDA&           read_data,
-        const uint32                seeding_pass,
-        const uint32                seed_queue_size,
-        const uint32*               seed_queue,
-        Stats&                      stats);
+        const Params&                   params,
+        const fmi_type                  fmi,
+        const rfmi_type                 rfmi,
+        const scoring_scheme_type&      scoring_scheme,
+        const io::FMIndexDataDevice&    driver_data,
+        io::ReadDataDevice&             read_data,
+        const uint32                    seeding_pass,
+        const uint32                    seed_queue_size,
+        const uint32*                   seed_queue,
+        Stats&                          stats);
 
     template <typename scoring_tag>
     void best_approx(
-        const Params&               params,
-        const FMIndexDef::type      fmi,
-        const FMIndexDef::type      rfmi,
-        const UberScoringScheme&    scoring_scheme,
-        const io::FMIndexDataCUDA&  driver_data,
-        io::ReadDataCUDA&           read_data1,
-        io::ReadDataCUDA&           read_data2,
-        Stats&                      stats);
+        const Params&                   params,
+        const FMIndexDef::type          fmi,
+        const FMIndexDef::type          rfmi,
+        const UberScoringScheme&        scoring_scheme,
+        const io::FMIndexDataDevice&    driver_data,
+        io::ReadDataDevice&             read_data1,
+        io::ReadDataDevice&             read_data2,
+        Stats&                          stats);
 
     template <
         typename scoring_tag,
         typename scoring_scheme_type>
     void best_approx_score(
-        const Params&               params,
-        const fmi_type              fmi,
-        const rfmi_type             rfmi,
-        const scoring_scheme_type&  scoring_scheme,
-        const io::FMIndexDataCUDA&  driver_data,
-        const uint32                anchor,
-        io::ReadDataCUDA&           read_data1,
-        io::ReadDataCUDA&           read_data2,
-        const uint32                seeding_pass,
-        const uint32                seed_queue_size,
-        const uint32*               seed_queue,
-        Stats&                      stats);
+        const Params&                   params,
+        const fmi_type                  fmi,
+        const rfmi_type                 rfmi,
+        const scoring_scheme_type&      scoring_scheme,
+        const io::FMIndexDataDevice&    driver_data,
+        const uint32                    anchor,
+        io::ReadDataDevice&             read_data1,
+        io::ReadDataDevice&             read_data2,
+        const uint32                    seeding_pass,
+        const uint32                    seed_queue_size,
+        const uint32*                   seed_queue,
+        Stats&                          stats);
 
     template <typename scoring_tag>
     void all(
-        const Params&               params,
-        const fmi_type              fmi,
-        const rfmi_type             rfmi,
-        const UberScoringScheme&    scoring_scheme,
-        const io::FMIndexDataCUDA&  driver_data,
-        io::ReadDataCUDA&           read_data,
-        Stats&                      stats);
+        const Params&                   params,
+        const fmi_type                  fmi,
+        const rfmi_type                 rfmi,
+        const UberScoringScheme&        scoring_scheme,
+        const io::FMIndexDataDevice&    driver_data,
+        io::ReadDataDevice&             read_data,
+        Stats&                          stats);
 
     template <typename scoring_scheme_type>
     void score_all(
-        const Params&               params,
-        const fmi_type              fmi,
-        const rfmi_type             rfmi,
-        const UberScoringScheme&    input_scoring_scheme,
-        const scoring_scheme_type&  scoring_scheme,
-        const io::FMIndexDataCUDA&  driver_data,
-        io::ReadDataCUDA&           read_data,
-        const uint32                seed_queue_size,
-        const uint32*               seed_queue,
-        Stats&                      stats,
-        uint64&                     total_alignments);
+        const Params&                   params,
+        const fmi_type                  fmi,
+        const rfmi_type                 rfmi,
+        const UberScoringScheme&        input_scoring_scheme,
+        const scoring_scheme_type&      scoring_scheme,
+        const io::FMIndexDataDevice&    driver_data,
+        io::ReadDataDevice&             read_data,
+        const uint32                    seed_queue_size,
+        const uint32*                   seed_queue,
+        Stats&                          stats,
+        uint64&                         total_alignments);
 
     // return a pointer to an "index" into the given keys sorted by their hi bits
     //

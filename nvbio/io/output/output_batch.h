@@ -79,13 +79,13 @@ public:
     DeviceCigarArray                           cigar;
     nvbio::cuda::DeviceVectorArray<uint8>&     mds;
 
-    io::ReadDataCUDA&                          read_data;
+    io::ReadDataDevice&                          read_data;
 
     GPUOutputBatch(uint32                                         _count,
                    thrust::device_vector<io::BestAlignments>&     _best_data_dvec,
                    DeviceCigarArray                               _cigar,
                    nvbio::cuda::DeviceVectorArray<uint8>&         _mds,
-                   io::ReadDataCUDA&                              _read_data)
+                   io::ReadDataDevice&                            _read_data)
             : count(_count),
               best_data_dvec(_best_data_dvec),
               cigar(_cigar),

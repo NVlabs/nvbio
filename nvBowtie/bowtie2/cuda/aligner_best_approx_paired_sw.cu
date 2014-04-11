@@ -33,15 +33,15 @@ namespace bowtie2 {
 namespace cuda {
 
 void best_approx_sw(
-          Aligner&              aligner,
-    const Params&               params,
-    const FMIndexDef::type      fmi,
-    const FMIndexDef::type      rfmi,
-    const UberScoringScheme&    scoring_scheme,
-    const io::FMIndexDataCUDA&  driver_data,
-    io::ReadDataCUDA&           read_data1,
-    io::ReadDataCUDA&           read_data2,
-    Stats&                      stats)
+          Aligner&                  aligner,
+    const Params&                   params,
+    const FMIndexDef::type          fmi,
+    const FMIndexDef::type          rfmi,
+    const UberScoringScheme&        scoring_scheme,
+    const io::FMIndexDataDevice&    driver_data,
+    io::ReadDataDevice&             read_data1,
+    io::ReadDataDevice&             read_data2,
+    Stats&                          stats)
 {
     aligner.best_approx<smith_waterman_scoring_tag>(
         params,

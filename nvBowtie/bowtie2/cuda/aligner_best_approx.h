@@ -50,8 +50,8 @@ void Aligner::best_approx(
     const fmi_type              fmi,
     const rfmi_type             rfmi,
     const UberScoringScheme&    input_scoring_scheme,
-    const io::FMIndexDataCUDA&  driver_data,
-    io::ReadDataCUDA&           read_data,
+    const io::FMIndexDataDevice&  driver_data,
+    io::ReadDataDevice&           read_data,
     Stats&                      stats)
 {
     // cast the genome to use proper iterators
@@ -365,16 +365,16 @@ template <
     typename scoring_tag,
     typename scoring_scheme_type>
 void Aligner::best_approx_score(
-    const Params&               params,
-    const fmi_type              fmi,
-    const rfmi_type             rfmi,
-    const scoring_scheme_type&  scoring_scheme,
-    const io::FMIndexDataCUDA&  driver_data,
-    io::ReadDataCUDA&           read_data,
-    const uint32                seeding_pass,
-    const uint32                seed_queue_size,
-    const uint32*               seed_queue,
-    Stats&                      stats)
+    const Params&                   params,
+    const fmi_type                  fmi,
+    const rfmi_type                 rfmi,
+    const scoring_scheme_type&      scoring_scheme,
+    const io::FMIndexDataDevice&    driver_data,
+    io::ReadDataDevice&             read_data,
+    const uint32                    seeding_pass,
+    const uint32                    seed_queue_size,
+    const uint32*                   seed_queue,
+    Stats&                          stats)
 {
     // prepare the scoring system
     typedef typename scoring_scheme_type::threshold_score_type          threshold_score_type;

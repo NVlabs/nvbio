@@ -491,7 +491,7 @@ int qgram_test(int argc, char* argv[])
     SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_size, batch_bps ) );
     
     // build its device version
-    io::ReadDataCUDA d_read_data( *h_read_data );
+    io::ReadDataDevice d_read_data( *h_read_data );
 
     log_info(stderr, "  loading reads... done\n");
 
@@ -515,7 +515,7 @@ int qgram_test(int argc, char* argv[])
     }
 
     // build its device version
-    const io::FMIndexDataCUDA fmi_cuda( fmi, io::FMIndexDataCUDA::GENOME );
+    const io::FMIndexDataDevice fmi_cuda( fmi, io::FMIndexDataDevice::GENOME );
 
     typedef io::FMIndexData::stream_type genome_type;
 

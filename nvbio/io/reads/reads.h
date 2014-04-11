@@ -440,7 +440,7 @@ struct ReadDataRAM : public ReadData
 ///
 /// a read in device memory
 ///
-struct ReadDataCUDA : public ReadData
+struct ReadDataDevice : public ReadData
 {
     enum {
         READS = 0x01,
@@ -449,11 +449,11 @@ struct ReadDataCUDA : public ReadData
 
     /// constructor
     ///
-     ReadDataCUDA(const ReadData& host_data, const uint32 flags = READS);
+     ReadDataDevice(const ReadData& host_data, const uint32 flags = READS);
 
     /// destructor
     ///
-    ~ReadDataCUDA();
+    ~ReadDataDevice();
 
     uint64 allocated() const { return m_allocated; }
 
@@ -461,8 +461,8 @@ private:
     uint64 m_allocated;
 };
 
-typedef ReadDataRAM  ReadDataHost;
-typedef ReadDataCUDA ReadDataDevice;
+typedef ReadDataRAM     ReadDataHost;
+typedef ReadDataDevice  ReadDataCUDA;
 
 ///
 /// A stream of ReadData, allowing to process the associated

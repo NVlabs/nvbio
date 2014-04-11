@@ -529,7 +529,7 @@ static void cudaAllocAndCopyVector(T*& dst, const T* src, const uint32 words, ui
     {
         cudaMalloc( &dst, sizeof(T) * words4 );
         if (dst == NULL)
-            throw std::bad_alloc(WINONLY("ReadDataCUDA: not enough device memory"));
+            throw std::bad_alloc(WINONLY("ReadDataDevice: not enough device memory"));
 
         cudaMemcpy( dst, src, sizeof(T) * words, cudaMemcpyHostToDevice );
 
@@ -539,7 +539,7 @@ static void cudaAllocAndCopyVector(T*& dst, const T* src, const uint32 words, ui
         dst = NULL;
 }
 
-ReadDataCUDA::ReadDataCUDA(const ReadData& host_data, const uint32 flags)
+ReadDataDevice::ReadDataDevice(const ReadData& host_data, const uint32 flags)
   : ReadData(),
     m_allocated( 0 )
 {
@@ -570,7 +570,7 @@ ReadDataCUDA::ReadDataCUDA(const ReadData& host_data, const uint32 flags)
         cudaAllocAndCopyVector( m_qual_stream, host_data.m_qual_stream, m_read_stream_len, m_allocated );
 }
 
-ReadDataCUDA::~ReadDataCUDA()
+ReadDataDevice::~ReadDataDevice()
 {
     if (m_read_stream)
         cudaFree( m_read_stream );

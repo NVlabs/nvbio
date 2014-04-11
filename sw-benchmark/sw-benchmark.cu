@@ -559,7 +559,7 @@ int main(int argc, char* argv[])
             break;
 
         // build the device side representation
-        const io::ReadDataCUDA d_read_data( *h_read_data );
+        const io::ReadDataDevice d_read_data( *h_read_data );
 
         const uint32 n_read_symbols = h_read_data->read_index()[ h_read_data->size() ];
 

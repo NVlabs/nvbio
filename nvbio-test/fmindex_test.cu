@@ -812,9 +812,9 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
     if (fmi.load( index_file, io::FMIndexData::FORWARD ))
     {
         typedef io::FMIndexData::partial_fm_index_type     host_fmindex_type;
-        typedef io::FMIndexDataCUDA::fm_index_type         cuda_fmindex_type;
+        typedef io::FMIndexDataDevice::fm_index_type       cuda_fmindex_type;
 
-        io::FMIndexDataCUDA fmi_cuda( fmi, io::FMIndexDataCUDA::FORWARD );
+        io::FMIndexDataDevice fmi_cuda( fmi, io::FMIndexDataDevice::FORWARD );
 
         host_fmindex_type host_fmindex = fmi.partial_index();
 
@@ -839,7 +839,7 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             exit(1);
         }
 
-        io::ReadDataCUDA reads_data_cuda( *reads_data );
+        io::ReadDataDevice reads_data_cuda( *reads_data );
 
         // create a host-side read batch
         io::ReadDataView<const uint32*,const uint32*,const char*,const char*> host_reads_view( *reads_data );

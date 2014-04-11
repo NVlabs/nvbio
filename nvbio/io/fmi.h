@@ -56,7 +56,7 @@ namespace io {
 /// - FMIndexDataRAM
 /// - FMIndexDataMMAPServer
 /// - FMIndexDataMMAP
-/// - FMIndexDataCUDA
+/// - FMIndexDataDevice
 ///
 
 ///@addtogroup IO
@@ -313,7 +313,7 @@ struct FMIndexDataMMAP : public FMIndexData
 /// A device-side FM-index - which can take a host memory FM-index and map it to
 /// device memory.
 ///
-struct FMIndexDataCUDA : public FMIndexData
+struct FMIndexDataDevice : public FMIndexData
 {
     typedef SSA_index_multiple_device<SA_INT>               SSA_device_type;
 
@@ -332,13 +332,13 @@ struct FMIndexDataCUDA : public FMIndexData
 
     typedef rank_dictionary<
         2u,
-        FMIndexDataCUDA::OCC_INT,
+        FMIndexDataDevice::OCC_INT,
         PackedStream<bwt_type,uint8,2u,true>,
         occ_type,
         count_table_type>                                       rank_dict_type;
 
     typedef SSA_index_multiple_context<
-        FMIndexDataCUDA::SA_INT,
+        FMIndexDataDevice::SA_INT,
         ssa_ldg_type>                                           ssa_type;
 
     typedef fm_index<
@@ -353,8 +353,8 @@ struct FMIndexDataCUDA : public FMIndexData
     ///
     /// \param host_data                                host-memory FM-index to load
     /// \param flags                                    specify which parts of the FM-index to load
-     FMIndexDataCUDA(const FMIndexData& host_data, const uint32 flags = GENOME | FORWARD | REVERSE);
-    ~FMIndexDataCUDA();                                 ///< destructor
+     FMIndexDataDevice(const FMIndexData& host_data, const uint32 flags = GENOME | FORWARD | REVERSE);
+    ~FMIndexDataDevice();                                 ///< destructor
 
     uint64 allocated() const { return m_allocated; }    ///< return the amount of allocated device memory
 
@@ -392,9 +392,13 @@ private:
 /// initialize the sampled suffix arrays on the GPU given a device-side FM-index.
 ///
 void init_ssa(
-    const FMIndexDataCUDA&              driver_data,
-    FMIndexDataCUDA::SSA_device_type&   ssa,
-    FMIndexDataCUDA::SSA_device_type&   rssa);
+    const FMIndexDataDevice&              driver_data,
+    FMIndexDataDevice::SSA_device_type&   ssa,
+    FMIndexDataDevice::SSA_device_type&   rssa);
+
+/// deprecated FMIndexDataCUDA typedef
+///
+typedef FMIndexDataDevice FMIndexDataCUDA;
 
 ///@} // FMIndexIO
 ///@} // IO

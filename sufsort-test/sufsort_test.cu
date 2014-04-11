@@ -498,7 +498,7 @@ int sufsort_test(int argc, char* argv[])
             return 0;
 
         // copy it to the gpu
-        io::FMIndexDataCUDA d_fmi( h_fmi, io::FMIndexData::GENOME );
+        io::FMIndexDataDevice d_fmi( h_fmi, io::FMIndexData::GENOME );
 
         typedef io::FMIndexData::stream_type                const_packed_stream_type;
         typedef io::FMIndexData::nonconst_stream_type             packed_stream_type;

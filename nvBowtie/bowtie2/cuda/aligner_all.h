@@ -43,8 +43,8 @@ void Aligner::all(
     const fmi_type              fmi,
     const rfmi_type             rfmi,
     const UberScoringScheme&    input_scoring_scheme,
-    const io::FMIndexDataCUDA&  driver_data,
-    io::ReadDataCUDA&           read_data,
+    const io::FMIndexDataDevice&  driver_data,
+    io::ReadDataDevice&           read_data,
     Stats&                      stats)
 {
     // prepare the scoring system
@@ -147,17 +147,17 @@ void Aligner::all(
 
 template <typename scoring_scheme_type>
 void Aligner::score_all(
-    const Params&               params,
-    const fmi_type              fmi,
-    const rfmi_type             rfmi,
-    const UberScoringScheme&    input_scoring_scheme,
-    const scoring_scheme_type&  scoring_scheme,
-    const io::FMIndexDataCUDA&  driver_data,
-    io::ReadDataCUDA&           read_data,
-    const uint32                seed_queue_size,
-    const uint32*               seed_queue,
-    Stats&                      stats,
-    uint64&                     total_alignments)
+    const Params&                   params,
+    const fmi_type                  fmi,
+    const rfmi_type                 rfmi,
+    const UberScoringScheme&        input_scoring_scheme,
+    const scoring_scheme_type&      scoring_scheme,
+    const io::FMIndexDataDevice&    driver_data,
+    io::ReadDataDevice&             read_data,
+    const uint32                    seed_queue_size,
+    const uint32*                   seed_queue,
+    Stats&                          stats,
+    uint64&                         total_alignments)
 {
     // prepare the scoring system
     //typedef typename scoring_scheme_type::threshold_score_type          threshold_score_type;

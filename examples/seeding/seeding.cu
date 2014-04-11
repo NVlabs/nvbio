@@ -45,10 +45,10 @@ using namespace nvbio;
 template <typename system_tag, typename string_set_type>
 InfixSet<string_set_type, const string_set_infix_coord_type*>
 extract_seeds(
-    const string_set_type                                   string_set,
-    const uint32                                            seed_len,
-    const uint32                                            seed_interval,
-    nvbio::vector<system_tag,string_set_infix_coord_type>&  seed_coords)
+    const string_set_type                                   string_set,         // the input string-set
+    const uint32                                            seed_len,           // the seeds length
+    const uint32                                            seed_interval,      // the spacing between seeds
+    nvbio::vector<system_tag,string_set_infix_coord_type>&  seed_coords)        // the output vector of seed coordinates
 {
     // enumerate all seeds
     const uint32 n_seeds = enumerate_string_set_seeds(
@@ -67,6 +67,10 @@ extract_seeds(
 //
 int main(int argc, char* argv[])
 {
+    //
+    // perform some basic option parsing
+    //
+
     uint32 n_bps = 10000000;
     char*  reads = "./data/SRR493095_1.fastq.gz";
 
@@ -78,19 +82,20 @@ int main(int argc, char* argv[])
             reads = argv[++i];
     }
 
+    // start our program
     log_info(stderr, "seeding... started\n");
 
-    const io::QualityEncoding qencoding = io::Phred33;
-
+    // open a read file
     log_info(stderr, "  loading reads... started\n");
 
     SharedPointer<io::ReadDataStream> read_data_file(
         io::open_read_file(
             reads,
-            qencoding,
+            io::Phred33,
             uint32(-1),
             uint32(-1) ) );
 
+    // check whether the file opened correctly
     if (read_data_file == NULL || read_data_file->is_ok() == false)
     {
         log_error(stderr, "    failed opening file \"%s\"\n", reads);
@@ -103,24 +108,29 @@ int main(int argc, char* argv[])
     // load a batch of reads
     SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_size, batch_bps ) );
 
+    // copy it to the device
     const io::ReadDataDevice d_read_data( *h_read_data );
 
-    // fetch the actual string
-    typedef io::ReadData::const_read_string_set_type                        string_set_type;
-    typedef nvbio::vector<device_tag,string_set_infix_coord_type>           infix_vector_type;
-    typedef InfixSet<string_set_type, const string_set_infix_coord_type*>   seed_set_type;
+    // prepare some typedefs for the involved string-sets and infixes
+    typedef io::ReadData::const_read_string_set_type                        string_set_type;    // the read string-set
+    typedef string_set_infix_coord_type                                     infix_coord_type;   // the infix coordinate type, for string-sets
+    typedef nvbio::vector<device_tag,infix_coord_type>                      infix_vector_type;  // the device vector type for infix coordinates
+    typedef InfixSet<string_set_type, const string_set_infix_coord_type*>   seed_set_type;      // the infix-set type for representing seeds
 
+    // fetch the actual read string-set
     const string_set_type d_read_string_set = d_read_data.read_string_set();
 
     // prepare enough storage for the seed coordinates
     infix_vector_type d_seed_coords;
 
+    // extract the seeds and get the corresponding string-set representation
     const seed_set_type d_seed_set = extract_seeds(
         d_read_string_set,
         20u,
         10u,
         d_seed_coords );
 
+    // output some stats
     log_info(stderr, "seeding... done\n");
     log_info(stderr, "  %u seeds\n", d_seed_set.size());
 

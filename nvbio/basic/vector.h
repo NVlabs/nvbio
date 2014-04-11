@@ -32,6 +32,8 @@
 #pragma once
 
 #include <nvbio/basic/types.h>
+#include <nvbio/basic/iterator.h>
+#include <nvbio/basic/thrust_view.h>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 

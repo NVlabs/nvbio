@@ -35,6 +35,7 @@
 #include <nvbio/basic/exceptions.h>
 #include <nvbio/basic/iterator.h>
 #include <nvbio/basic/vector.h>
+#include <nvbio/strings/seeds.h>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <thrust/sort.h>
@@ -341,59 +342,12 @@ namespace nvbio {
 /// - the \ref QGramIndex "Q-Gram Index"
 /// - the \ref QGramFilter "Q-Gram Filter"
 ///
-/// It also defines convenience functions to extract seeds out of strings and string-sets:
-/// - enumerate_string_seeds()
-/// - enumerate_string_set_seeds()
+/// It also defines convenience functions to generate q-grams extracted out of strings and string-sets
+/// (see \ref SeedingAnchor "Seeding"):
 /// - generate_qgrams()
-/// - uniform_seeds_functor
 ///
 ///@{
 ///
-
-
-/// extract a set of seed coordinates out of a string, according to a given seeding functor
-///
-/// \tparam seed_functor        a class providing the following interface:
-///\anchor SeedFunctor
-///\code
-/// struct seed_functor
-/// {
-///     typedef uint32  argument_type;
-///     typedef uint32  result_type;
-///
-///     // return the number of seeds produced for a given string length
-///     uint32 operator() (const uint32 length) const;
-///
-///     // return the coordinate of the i-th seed produced for a given string length
-///     uint32 seed(const uint32 length, const uint32 i) const;
-/// };
-///\endcode
-/// \tparam index_vector_type   a dynamic vector of uint2 coordinates
-///
-/// \param seeder               the seeding functor
-/// \param indices              the vector of output uint32 indices
-///
-template <typename seed_functor, typename index_vector_type>
-uint32 enumerate_string_seeds(
-    const uint32                string_len,
-    const seed_functor          seeder,
-          index_vector_type&    indices);
-
-/// extract a set of seed coordinates out of a string-set, according to a given seeding functor
-///
-/// \tparam string_set_type     the string-set type
-/// \tparam seed_functor        a \ref SeedFunctor "Seeding Functor"
-/// \tparam index_vector_type   a dynamic vector of uint2 coordinates
-///
-/// \param string_set           the string set to seed
-/// \param seeder               the seeding functor
-/// \param indices              the vector of output uint2 indices
-///
-template <typename string_set_type, typename seed_functor, typename index_vector_type>
-uint32 enumerate_string_set_seeds(
-    const string_set_type       string_set,
-    const seed_functor          seeder,
-          index_vector_type&    indices);
 
 /// generate the q-grams corresponding to a list of q-gram coordinates
 ///
@@ -837,39 +791,6 @@ struct qgram_locate_functor
 };
 
 ///@} // end of the QGramIndex group
-
-/// a \ref SeedFunctor "Seeding Functor" returning seeds sampled at regular intervals
-///
-struct uniform_seeds_functor
-{
-    typedef uint32  argument_type;
-    typedef uint32  result_type;
-
-    /// constructor
-    ///
-    /// \param _interval        the sampling interval
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uniform_seeds_functor(const uint32 _Q, const uint32 _interval) : Q(_Q), interval(_interval) {}
-
-    /// return the number of seeds for a given string length
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 operator() (const uint32 length) const
-    {
-        uint32 n = 0;
-        for (uint32 pos = 0; pos + Q <= length; pos += interval)
-            ++n;
-        return n;
-    }
-
-    /// return the coordinate of the i-th seed
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 seed(const uint32 length, const uint32 i) const { return i * interval; }
-
-    const uint32 Q;         ///< the seed length
-    const uint32 interval;  ///< the sampling interval
-};
 
 /// A utility functor to extract the i-th q-gram out of a string
 ///

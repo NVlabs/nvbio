@@ -64,6 +64,12 @@ namespace nvbio {
 ///\par
 /// Furthermore, the module provides efficient generic copy() (resp. cuda::copy()) implementations to copy
 /// a given host (resp. device) string set from a given layout into another with a different layout.
+///\par
+/// It also defines convenience functions to extract seeds out of strings and string-sets:
+///\anchor SeedingAnchor
+/// - enumerate_string_seeds()
+/// - enumerate_string_set_seeds()
+/// - uniform_seeds_functor
 ///
 /// \section StringSetInterface String-Set Interface
 ///\par
@@ -581,6 +587,27 @@ private:
     uint32         m_stride;
     StringIterator m_string;
     LengthIterator m_lengths;
+};
+
+/// A functor fetching the length of the i-th string in a set
+///
+template <typename string_set_type>
+struct string_set_length_functor
+{
+    typedef uint32 argument_type;
+    typedef uint32 result_type;
+
+    /// constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    string_set_length_functor(const string_set_type _string_set) : string_set(_string_set) {}
+
+    /// return the length of the i-th string, rounded to Q
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 operator() (const uint32 i) const { return string_set[i].length(); }
+
+    const string_set_type string_set;
 };
 
 ///@} StringSetsModule

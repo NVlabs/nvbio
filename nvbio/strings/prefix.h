@@ -147,7 +147,7 @@ struct Prefix<StringType,CoordType,2u>
     /// prefix size
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 size() const { return nvbio::length( m_string ) - m_coords.x; }
+    uint32 size() const { return nvbio::length( m_string ) - m_coords.y; }
 
     /// prefix length
     ///
@@ -157,12 +157,12 @@ struct Prefix<StringType,CoordType,2u>
     /// indexing operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    symbol_type operator[] (const uint32 i) const { return m_string[ m_coords.x + i ]; }
+    symbol_type operator[] (const uint32 i) const { return m_string[ m_coords.y + i ]; }
 
     /// indexing operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    reference operator[] (const uint32 i) { return m_string[ m_coords.x + i ]; }
+    reference operator[] (const uint32 i) { return m_string[ m_coords.y + i ]; }
 
     /// return the prefix coordinates
     ///
@@ -280,7 +280,7 @@ struct PrefixSetCore<SequenceType,PrefixIterator,2u>
     string_type operator[] (const uint32 i) const
     {
         const coord_type coords = m_prefixes[i];
-        return string_type( m_sequence[ coords.y ], coords );
+        return string_type( m_sequence[ coords.x ], coords );
     }
 
     uint32              m_size;
@@ -294,7 +294,7 @@ struct PrefixSetCore<SequenceType,PrefixIterator,2u>
 ///
 template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 string_id(const Prefix<StringType,CoordType,2u>& prefix) { return prefix.m_coords.y; }
+uint32 string_id(const Prefix<StringType,CoordType,2u>& prefix) { return prefix.m_coords.x; }
 
 /// return the length of a given prefix
 ///

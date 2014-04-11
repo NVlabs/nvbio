@@ -42,10 +42,12 @@ namespace nvbio {
 ///
 /// \tparam StringType          the underlying string type
 /// \tparam CoordType           the type of infix coordinates, uint2 for strings or uint4 for string-sets
+/// \tparam CoordDim            the number of coordinates, 2 for strings, 4 for string-sets
 ///
 template <
     typename StringType,
-    typename CoordType>
+    typename CoordType,
+    uint32   CoordDim>
 struct Infix
 {
     typedef StringType                                              string_type;
@@ -106,6 +108,137 @@ struct Infix
 ///@addtogroup Private
 ///@{
 
+/// A class to represent a string infix, i.e. an arbitrarily placed substring
+///
+/// \tparam StringType          the underlying string type
+/// \tparam CoordType           the type of infix coordinates, uint2 for strings or uint4 for string-sets
+///
+template <
+    typename StringType,
+    typename CoordType>
+struct Infix<StringType,CoordType,2u>
+{
+    typedef StringType                                              string_type;
+    typedef CoordType                                               coord_type;
+
+    typedef typename std::iterator_traits<string_type>::value_type  symbol_type;
+    typedef typename std::iterator_traits<string_type>::value_type  value_type;
+    typedef typename std::iterator_traits<string_type>::reference   reference;
+
+    /// constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    Infix() {}
+
+    /// constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    Infix(
+        const string_type   string,
+        const coord_type    infix) :
+        m_string( string ),
+        m_coords( infix ) {}
+
+    /// infix size
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 size() const { return m_coords.y - m_coords.x; }
+
+    /// infix length
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 length() const { return size(); }
+
+    /// indexing operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    symbol_type operator[] (const uint32 i) const { return m_string[ m_coords.x + i ]; }
+
+    /// indexing operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    reference operator[] (const uint32 i) { return m_string[ m_coords.x + i ]; }
+
+    /// return the infix range
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint2 range() const { return make_uint2( m_coords.y, m_coords.x ); }
+
+    /// return the infix coordinates
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    coord_type coords() const { return m_coords; }
+
+    string_type     m_string;       ///< the underlying string set
+    coord_type      m_coords;       ///< the infix coordinates
+};
+
+
+/// A class to represent a string infix, i.e. an arbitrarily placed substring
+///
+/// \tparam StringType          the underlying string type
+/// \tparam CoordType           the type of infix coordinates, uint2 for strings or uint4 for string-sets
+///
+template <
+    typename StringType,
+    typename CoordType>
+struct Infix<StringType,CoordType,4u>
+{
+    typedef StringType                                              string_type;
+    typedef CoordType                                               coord_type;
+
+    typedef typename std::iterator_traits<string_type>::value_type  symbol_type;
+    typedef typename std::iterator_traits<string_type>::value_type  value_type;
+    typedef typename std::iterator_traits<string_type>::reference   reference;
+
+    /// constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    Infix() {}
+
+    /// constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    Infix(
+        const string_type   string,
+        const coord_type    infix) :
+        m_string( string ),
+        m_coords( infix ) {}
+
+    /// infix size
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 size() const { return m_coords.z - m_coords.y; }
+
+    /// infix length
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 length() const { return size(); }
+
+    /// indexing operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    symbol_type operator[] (const uint32 i) const { return m_string[ m_coords.y + i ]; }
+
+    /// indexing operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    reference operator[] (const uint32 i) { return m_string[ m_coords.y + i ]; }
+
+    /// return the infix range
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint2 range() const { return make_uint2( m_coords.z, m_coords.y ); }
+
+    /// return the infix coordinates
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    coord_type coords() const { return m_coords; }
+
+    string_type     m_string;       ///< the underlying string set
+    coord_type      m_coords;       ///< the infix coordinates
+};
+
 /// Represent a set of infixes of a string or string-set
 ///
 /// \tparam SequenceType            the string or string-set type
@@ -132,7 +265,7 @@ struct InfixSetCore<SequenceType,InfixIterator,2u>
     typedef InfixIterator                                               infix_iterator;
 
     typedef typename std::iterator_traits<InfixIterator>::value_type    coord_type;
-    typedef Infix<sequence_type, coord_type>                            string_type;
+    typedef Infix<sequence_type, coord_type, 2u>                        string_type;
 
     /// constructor
     ///
@@ -184,7 +317,7 @@ struct InfixSetCore<SequenceType,InfixIterator,4u>
 
     typedef typename sequence_type::string_type                         base_string_type;
     typedef typename std::iterator_traits<InfixIterator>::value_type    coord_type;
-    typedef Infix<base_string_type, coord_type>                         string_type;
+    typedef Infix<base_string_type, coord_type, 4u>                     string_type;
 
     /// constructor
     ///
@@ -213,7 +346,7 @@ struct InfixSetCore<SequenceType,InfixIterator,4u>
     string_type operator[] (const uint32 i) const
     {
         const coord_type coords = m_infixes[i];
-        return string_type( m_sequence[ coords.z ], coords );
+        return string_type( m_sequence[ coords.x ], coords );
     }
 
     uint32              m_size;
@@ -227,7 +360,7 @@ struct InfixSetCore<SequenceType,InfixIterator,4u>
 ///
 template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 string_id(const Infix<StringType,CoordType>& infix) { return infix.m_coords.z; }
+uint32 string_id(const Infix<StringType,CoordType,4u>& infix) { return infix.m_coords.x; }
 
 /// return the length a given infix
 ///

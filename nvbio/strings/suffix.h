@@ -147,7 +147,7 @@ struct Suffix<StringType,CoordType,2u>
     /// suffix size
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 size() const { return m_coords.x; }
+    uint32 size() const { return m_coords.y; }
 
     /// suffix length
     ///
@@ -280,7 +280,7 @@ struct SuffixSetCore<SequenceType,SuffixIterator,2u>
     string_type operator[] (const uint32 i) const
     {
         const coord_type coords = m_suffixes[i];
-        return string_type( m_sequence[ coords.y ], coords );
+        return string_type( m_sequence[ coords.x ], coords );
     }
 
     uint32              m_size;
@@ -294,7 +294,7 @@ struct SuffixSetCore<SequenceType,SuffixIterator,2u>
 ///
 template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 string_id(const Suffix<StringType,CoordType,2u>& suffix) { return suffix.m_coords.y; }
+uint32 string_id(const Suffix<StringType,CoordType,2u>& suffix) { return suffix.m_coords.x; }
 
 /// return the length of a given suffix
 ///

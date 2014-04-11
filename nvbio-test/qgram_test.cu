@@ -40,6 +40,7 @@
 #include <nvbio/basic/vector_wrapper.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/strings/string_set.h>
+#include <nvbio/strings/seeds.h>
 #include <nvbio/basic/shared_pointer.h>
 #include <nvbio/io/reads/reads.h>
 #include <nvbio/io/fmi.h>

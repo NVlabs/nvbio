@@ -86,7 +86,7 @@ namespace nvbio {
 /// \section SeedingSection Seeding
 ///\par
 /// Many bioinformatics applications need to extract short <i>seeds</i> out of strings and string-sets:
-/// such seeds are nothing but infixes. This module provides a few convenience functions to enumerate
+/// such seeds are nothing but \ref InfixSet "infixes". This module provides a few convenience functions to enumerate
 /// all seeds resulting by applying a \ref SeedFunctor "Seeding Functor" to a string or string-set.
 /// Internally, these simple functions employ massively parallel algorithms, which run either on the
 /// host or on the bound cuda device, depending on whether the output is a host or device vector.
@@ -97,7 +97,8 @@ namespace nvbio {
 /// - uniform_seeds_functor
 ///
 ///\par
-/// The following is a sample showing how to extract uniformly sampled seeds from a host or device string-set:
+/// The following is a sample showing how to extract uniformly sampled seeds from a host or device string-set,
+/// and construct an InfixSet to represent them:
 ///\code
 /// // extract a set of uniformly spaced seeds from a string-set and return it as an InfixSet
 /// //

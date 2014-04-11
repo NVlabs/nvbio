@@ -353,8 +353,16 @@ uint64 QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>
     m_qgram_index = nvbio::plain_view( qgram_index );
 
     // alloc enough storage for the results
-    m_ranges.resize( n_queries );
-    m_slots.resize( n_queries );
+    if (m_ranges.size() < n_queries)
+    {
+        m_ranges.clear();
+        m_ranges.resize( n_queries );
+    }
+    if (m_slots.size() < n_queries)
+    {
+        m_slots.clear();
+        m_slots.resize( n_queries );
+    }
 
     // search the q-grams in the index, obtaining a set of ranges
     thrust::transform(

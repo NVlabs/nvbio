@@ -178,8 +178,6 @@ void map(
     const genome_string         genome,
           Stats&                stats)
 {
-    log_verbose(stderr, "  q-gram filter... started\n");
-
     const uint32 Q = qgram_index.Q;
 
     typedef typename qgram_index_type::system_tag system_tag;
@@ -206,7 +204,6 @@ void map(
     timer.stop();
     const float extract_time = timer.seconds();
 
-    stats.reads         += reads.size();
     stats.queries       += n_queries;
     stats.extract_time  += extract_time;
 
@@ -240,8 +237,7 @@ void map(
 
     cudaDeviceSynchronize();
     timer.stop();
-    const float rank_time = timer.seconds();
-    stats.rank_time += rank_time;
+    stats.rank_time   += timer.seconds();
     stats.occurrences += n_hits;
 
     // loop through large batches of hits and locate & merge them
@@ -283,16 +279,6 @@ void map(
         timer.stop();
         stats.align_time += timer.seconds();
     }
-
-    log_verbose(stderr, "  q-gram filter... done\n");
-    log_verbose(stderr, "    extract throughput : %.2f B q-grams/s\n", (1.0e-9f * float( stats.queries )) / stats.extract_time);
-    log_verbose(stderr, "    rank throughput    : %6.2f M reads/s\n", (1.0e-6f * float( stats.reads )) / stats.rank_time);
-    log_verbose(stderr, "    locate throughput  : %6.2f M reads/s\n", (1.0e-6f * float( stats.reads )) / stats.locate_time);
-    log_verbose(stderr, "    align throughput   : %6.2f M reads/s\n", (1.0e-6f * float( stats.reads )) / stats.align_time);
-    log_verbose(stderr, "                       : %6.2f M hits/s\n",  (1.0e-6f * float( stats.merged )) / stats.align_time);
-    log_verbose(stderr, "    matches            : %.2f M\n", 1.0e-6f * float( stats.matches ) );
-    log_verbose(stderr, "    occurrences        : %.3f B\n", 1.0e-9f * float( stats.occurrences ) );
-    log_verbose(stderr, "    merged occurrences : %.3f B (%.1f %%)\n", 1.0e-9f * float( stats.merged ), 100.0f * float(stats.merged)/float(stats.occurrences));
 }
 
 // main test entry point
@@ -410,14 +396,29 @@ int main(int argc, char* argv[])
                 genome_begin,
                 d_genome,
                 stats );
+
+            log_verbose(stderr, "\r  aligned %5.2f%% of genome", 100.0f * float( genome_end ) / float( genome_len ));
         }
+        log_verbose_cont(stderr, "\n");
 
         cudaDeviceSynchronize();
         timer.stop();
         const float time = timer.seconds();
 
+        // accumulate the number of aligned reads
+        stats.reads += d_read_data.size();
+
         log_info(stderr, "  aligned reads:\n");
         log_info(stderr, "    %6.2f M reads/s\n", (1.0e-6f * float( stats.reads )) / time );
+        log_verbose(stderr, "    breakdown:\n");
+        log_verbose(stderr, "      extract throughput : %.2f B q-grams/s\n", (1.0e-9f * float( stats.queries )) / stats.extract_time);
+        log_verbose(stderr, "      rank throughput    : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.rank_time);
+        log_verbose(stderr, "      locate throughput  : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.locate_time);
+        log_verbose(stderr, "      align throughput   : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.align_time);
+        log_verbose(stderr, "                         : %6.2f M hits/s\n",  (1.0e-6f * float( stats.merged )) / stats.align_time);
+        log_verbose(stderr, "      matches            : %.2f M\n", 1.0e-6f * float( stats.matches ) );
+        log_verbose(stderr, "      occurrences        : %.3f B\n", 1.0e-9f * float( stats.occurrences ) );
+        log_verbose(stderr, "      merged occurrences : %.3f B (%.1f %%)\n", 1.0e-9f * float( stats.merged ), 100.0f * float(stats.merged)/float(stats.occurrences));
     }
     return 0;
 }

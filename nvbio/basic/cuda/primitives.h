@@ -191,7 +191,6 @@ uint32 copy_if(
 /// \param d_in                 a device input iterator
 /// \param d_out                a device output iterator
 /// \param d_counts             a device output count iterator
-/// \param pred                 a unary predicate functor
 /// \param d_temp_storage       some temporary storage
 ///
 /// \return                     the number of copied items
@@ -202,6 +201,28 @@ uint32 runlength_encode(
     InputIterator                 d_in,
     OutputIterator                d_out,
     CountIterator                 d_counts,
+    thrust::device_vector<uint8>& d_temp_storage);
+
+/// device-wide run-length encode
+///
+/// \param n                    number of input items
+/// \param d_keys_in            a device input iterator
+/// \param d_values_in          a device input iterator
+/// \param d_keys_out           a device output iterator
+/// \param d_values_out         a device output iterator
+/// \param reduction_op         a reduction operator
+/// \param d_temp_storage       some temporary storage
+///
+/// \return                     the number of copied items
+///
+template <typename KeyIterator, typename ValueIterator, typename OutputKeyIterator, typename OutputValueIterator, typename ReductionOp>
+uint32 reduce_by_key(
+    const uint32                  n,
+    KeyIterator                   d_keys_in,
+    ValueIterator                 d_values_in,
+    OutputKeyIterator             d_keys_out,
+    OutputValueIterator           d_values_out,
+    ReductionOp                   reduction_op,
     thrust::device_vector<uint8>& d_temp_storage);
 
 ///@} // end of the Primitives group

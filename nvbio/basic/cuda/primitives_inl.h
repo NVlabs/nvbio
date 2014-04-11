@@ -387,7 +387,6 @@ uint32 copy_if(
 // \param d_in                 a device input iterator
 // \param d_out                a device output iterator
 // \param d_counts             a device output count iterator
-// \param pred                 a unary predicate functor
 // \param d_temp_storage       some temporary storage
 //
 // \return                     the number of copied items
@@ -424,6 +423,58 @@ uint32 runlength_encode(
 
     return uint32( d_num_selected[0] );
 };
+
+
+// device-wide run-length encode
+//
+// \param n                    number of input items
+// \param d_keys_in            a device input iterator
+// \param d_values_in          a device input iterator
+// \param d_keys_out           a device output iterator
+// \param d_values_out         a device output iterator
+// \param reduction_op         a reduction operator
+// \param d_temp_storage       some temporary storage
+//
+// \return                     the number of copied items
+//
+template <typename KeyIterator, typename ValueIterator, typename OutputKeyIterator, typename OutputValueIterator, typename ReductionOp>
+uint32 reduce_by_key(
+    const uint32                  n,
+    KeyIterator                   d_keys_in,
+    ValueIterator                 d_values_in,
+    OutputKeyIterator             d_keys_out,
+    OutputValueIterator           d_values_out,
+    ReductionOp                   reduction_op,
+    thrust::device_vector<uint8>& d_temp_storage)
+{
+    size_t                         temp_bytes = 0;
+    thrust::device_vector<int>     d_num_selected(1);
+
+    cub::DeviceReduce::ReduceByKey(
+        (void*)NULL, temp_bytes,
+        d_keys_in,
+        d_keys_out,
+        d_values_in,
+        d_values_out,
+        nvbio::plain_view( d_num_selected ),
+        reduction_op,
+        int(n) );
+
+    temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
+    alloc_temp_storage( d_temp_storage, temp_bytes );
+
+    cub::DeviceReduce::ReduceByKey(
+        (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
+        d_keys_in,
+        d_keys_out,
+        d_values_in,
+        d_values_out,
+        nvbio::plain_view( d_num_selected ),
+        reduction_op,
+        int(n) );
+
+    return uint32( d_num_selected[0] );
+}
 
 } // namespace cuda
 } // namespace nvbio

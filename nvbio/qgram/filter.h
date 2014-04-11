@@ -104,7 +104,7 @@ struct QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>
     /// the type of the hits will be either a uint2, if qgram_index_type is a string index,
     /// or a uint4 if it is a string-set index (the last entry of the uint4 is unused)
     ///
-    typedef typename if_equal<coord_type, uint32, uint2, uint4>::type   hit_type;
+    typedef typename if_equal<coord_type, uint32, uint2,  uint4>::type  hit_type;
     typedef typename if_equal<coord_type, uint32, uint32, uint2>::type  diagonal_type;
 
     /// enact the q-gram filter on a q-gram index and a set of indexed query q-grams;\n
@@ -208,7 +208,7 @@ struct QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>
     /// the type of the hits will be either a uint2, if qgram_index_type is a string index,
     /// or a uint4 if it is a string-set index (the last entry of the uint4 is unused)
     ///
-    typedef typename if_equal<coord_type, uint32, uint2, uint4>::type   hit_type;
+    typedef typename if_equal<coord_type, uint32, uint2,  uint4>::type  hit_type;
     typedef typename if_equal<coord_type, uint32, uint32, uint2>::type  diagonal_type;
 
     /// enact the q-gram filter on a q-gram index and a set of indexed query q-grams;\n

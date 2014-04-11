@@ -51,6 +51,7 @@ using namespace nvbio;
 struct Stats
 {
     Stats() :
+        time(0),
         build_time(0),
         extract_time(0),
         rank_time(0),
@@ -62,6 +63,7 @@ struct Stats
         occurrences(0),
         merged(0) {}
 
+    float   time;
     float   build_time;
     float   extract_time;
     float   rank_time;
@@ -168,9 +170,10 @@ void align(
 
 // perform q-gram index mapping
 //
-template <typename qgram_index_type, typename genome_string>
+template <typename qgram_index_type, typename qgram_filter_type, typename genome_string>
 void map(
           qgram_index_type&     qgram_index,
+          qgram_filter_type&    qgram_filter,
     const io::ReadDataDevice&   reads,
     const uint32                n_queries,
     const uint32                genome_len,
@@ -178,14 +181,14 @@ void map(
     const genome_string         genome,
           Stats&                stats)
 {
-    const uint32 Q = qgram_index.Q;
-
     typedef typename qgram_index_type::system_tag system_tag;
 
     // prepare some vectors to store the query qgrams
     nvbio::vector<system_tag,uint64>  qgrams( n_queries );
     nvbio::vector<system_tag,uint64>  sorted_qgrams( n_queries );
     nvbio::vector<system_tag,uint32>  sorted_indices( n_queries );
+
+    const uint32 Q = qgram_index.Q;
 
     Timer timer;
     timer.start();
@@ -213,8 +216,6 @@ void map(
 
     const uint32 batch_size = 16*1024*1024;
 
-    typedef QGramFilter<system_tag,qgram_index_type,const uint64*,const uint32*> qgram_filter_type;
-
     typedef typename qgram_filter_type::hit_type        hit_type;
     typedef typename qgram_filter_type::diagonal_type   diagonal_type;
 
@@ -223,8 +224,6 @@ void map(
     nvbio::vector<system_tag,diagonal_type> merged_hits( batch_size );
     nvbio::vector<system_tag,uint16>        merged_counts( batch_size );
     nvbio::vector<system_tag,int16>         scores( batch_size );
-
-    qgram_filter_type qgram_filter;
 
     timer.start();
 
@@ -359,8 +358,10 @@ int main(int argc, char* argv[])
         // copy it to the device
         const io::ReadDataDevice d_read_data( *h_read_data );
 
+        const uint32 n_reads = d_read_data.size();
+
         log_info(stderr, "  loading reads... done\n");
-        log_info(stderr, "    %u reads\n", d_read_data.size());
+        log_info(stderr, "    %u reads\n", n_reads);
 
         // prepare some typedefs for the involved string-sets and infixes
         typedef io::ReadData::const_read_string_set_type                        string_set_type;    // the read string-set
@@ -380,16 +381,22 @@ int main(int argc, char* argv[])
             d_read_string_set,
             qgram_index );
 
-        Timer timer;
-        timer.start();
+        typedef QGramFilterDevice<QGramSetIndexDevice,const uint64*,const uint32*> qgram_filter_type;
+        qgram_filter_type qgram_filter;
+
+        float time = 0.0f;
 
         // stream through the genome
         for (uint32 genome_begin = 0; genome_begin < genome_len; genome_begin += queries_batch)
         {
             const uint32 genome_end = nvbio::min( genome_begin + queries_batch, genome_len );
 
+            Timer timer;
+            timer.start();
+
             map(
                 qgram_index,
+                qgram_filter,
                 d_read_data,
                 genome_end - genome_begin,
                 genome_len,
@@ -397,28 +404,32 @@ int main(int argc, char* argv[])
                 d_genome,
                 stats );
 
-            log_verbose(stderr, "\r  aligned %5.2f%% of genome", 100.0f * float( genome_end ) / float( genome_len ));
+            cudaDeviceSynchronize();
+            timer.stop();
+            time += timer.seconds();
+
+            const float genome_ratio = float( genome_end ) / float( genome_len );
+
+            log_verbose(stderr, "\r  aligned %5.2f%% of genome (%6.2f K reads/s)", 100.0f * genome_ratio, (1.0e-3f * n_reads) * genome_ratio / time  );
         }
         log_verbose_cont(stderr, "\n");
 
-        cudaDeviceSynchronize();
-        timer.stop();
-        const float time = timer.seconds();
 
         // accumulate the number of aligned reads
-        stats.reads += d_read_data.size();
+        stats.reads += n_reads;
+        stats.time  += time;
 
-        log_info(stderr, "  aligned reads:\n");
-        log_info(stderr, "    %6.2f M reads/s\n", (1.0e-6f * float( stats.reads )) / time );
-        log_verbose(stderr, "    breakdown:\n");
-        log_verbose(stderr, "      extract throughput : %.2f B q-grams/s\n", (1.0e-9f * float( stats.queries )) / stats.extract_time);
-        log_verbose(stderr, "      rank throughput    : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.rank_time);
-        log_verbose(stderr, "      locate throughput  : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.locate_time);
-        log_verbose(stderr, "      align throughput   : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.align_time);
-        log_verbose(stderr, "                         : %6.2f M hits/s\n",  (1.0e-6f * float( stats.merged )) / stats.align_time);
-        log_verbose(stderr, "      matches            : %.2f M\n", 1.0e-6f * float( stats.matches ) );
-        log_verbose(stderr, "      occurrences        : %.3f B\n", 1.0e-9f * float( stats.occurrences ) );
-        log_verbose(stderr, "      merged occurrences : %.3f B (%.1f %%)\n", 1.0e-9f * float( stats.merged ), 100.0f * float(stats.merged)/float(stats.occurrences));
+        log_info(stderr, "  aligned %.1f M reads (%6.2f K reads/s)\n", 1.0e-6f * float(stats.reads), (1.0e-3f * float( stats.reads )) / stats.time);
+        log_verbose(stderr, "  breakdown:\n");
+        log_verbose(stderr, "    extract throughput : %.2f B q-grams/s\n", (1.0e-9f * float( stats.queries )) / stats.extract_time);
+        log_verbose(stderr, "    rank throughput    : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.rank_time);
+        log_verbose(stderr, "                       : %6.2f B seeds/s\n", (1.0e-9f * float( stats.queries )) / stats.rank_time);
+        log_verbose(stderr, "    locate throughput  : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.locate_time);
+        log_verbose(stderr, "    align throughput   : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.align_time);
+        log_verbose(stderr, "                       : %6.2f M hits/s\n",  (1.0e-6f * float( stats.merged )) / stats.align_time);
+        log_verbose(stderr, "    matches            : %.2f M\n", 1.0e-6f * float( stats.matches ) );
+        log_verbose(stderr, "    occurrences        : %.3f B\n", 1.0e-9f * float( stats.occurrences ) );
+        log_verbose(stderr, "    merged occurrences : %.3f B (%.1f %%)\n", 1.0e-9f * float( stats.merged ), 100.0f * float(stats.merged)/float(stats.occurrences));
     }
     return 0;
 }

@@ -217,7 +217,7 @@ void QGramSetIndexDevice::build(
     const uint32 n_strings = string_set.size();
 
     // extract the list of q-gram coordinates
-    n_qgrams = enumerate_string_set_seeds(
+    n_qgrams = (uint32)enumerate_string_set_seeds(
         string_set,
         seeder,
         index );
@@ -344,7 +344,7 @@ void QGramSetIndexDevice::build(
         q,
         symbol_sz,
         string_set,
-        uniform_seeds_functor( q, 1u ),
+        uniform_seeds_functor<>( q, 1u ),
         qlut );
 }
 

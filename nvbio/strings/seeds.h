@@ -28,6 +28,7 @@
 #pragma once
 
 #include <nvbio/strings/string_set.h>
+#include <nvbio/basic/numbers.h>
 #include <nvbio/basic/vector.h>
 #include <thrust/transform.h>
 #include <thrust/scan.h>
@@ -43,6 +44,7 @@ namespace nvbio {
 
 /// extract a set of seed coordinates out of a string, according to a given seeding functor
 ///
+/// \tparam index_type          the type of string indices: uint32 or uint64
 /// \tparam seed_functor        a class providing the following interface:
 ///\anchor SeedFunctor
 ///\code
@@ -65,9 +67,9 @@ namespace nvbio {
 ///                             in the first case, only the starting seed coordinates
 ///                             will be retained
 ///
-template <typename seed_functor, typename index_vector_type>
-uint32 enumerate_string_seeds(
-    const uint32                string_len,
+template <typename index_type, typename seed_functor, typename index_vector_type>
+index_type enumerate_string_seeds(
+    const index_type            string_len,
     const seed_functor          seeder,
           index_vector_type&    indices);
 
@@ -84,17 +86,19 @@ uint32 enumerate_string_seeds(
 ///                             will be retained
 ///
 template <typename string_set_type, typename seed_functor, typename index_vector_type>
-uint32 enumerate_string_set_seeds(
+uint64 enumerate_string_set_seeds(
     const string_set_type       string_set,
     const seed_functor          seeder,
           index_vector_type&    indices);
 
 /// a \ref SeedFunctor "Seeding Functor" returning seeds sampled at regular intervals
 ///
+template <typename index_type = uint32>
 struct uniform_seeds_functor
 {
-    typedef uint32  argument_type;
-    typedef uint32  result_type;
+    typedef index_type                                  argument_type;
+    typedef index_type                                  result_type;
+    typedef typename vector_type<index_type,2u>::type   range_type;
 
     /// constructor
     ///
@@ -105,7 +109,7 @@ struct uniform_seeds_functor
     /// return the number of seeds for a given string length
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 operator() (const uint32 length) const
+    index_type operator() (const index_type length) const
     {
         uint32 n = 0;
         for (uint32 pos = 0; pos + len <= length; pos += interval)
@@ -116,7 +120,7 @@ struct uniform_seeds_functor
     /// return the coordinate of the i-th seed
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 seed(const uint32 length, const uint32 i) const { return make_uint2( i * interval, i * interval + len ); }
+    range_type seed(const uint32 length, const index_type i) const { return make_vector( i * interval, i * interval + len ); }
 
     const uint32 len;       ///< the seed length
     const uint32 interval;  ///< the sampling interval

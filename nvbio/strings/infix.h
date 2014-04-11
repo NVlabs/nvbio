@@ -38,10 +38,16 @@ namespace nvbio {
 ///@addtogroup StringSetsModule
 ///@{
 
+typedef uint32_2    string_infix_coord_type;
+typedef uint64_2    long_string_infix_coord_type;
+
+typedef uint32_4    string_set_infix_coord_type;
+typedef uint64_4    long_string_set_infix_coord_type;
+
 /// A class to represent a string infix, i.e. an arbitrarily placed substring
 ///
 /// \tparam StringType          the underlying string type
-/// \tparam CoordType           the type of infix coordinates, uint2 for strings or uint4 for string-sets
+/// \tparam CoordType           the type of infix coordinates, string_infix_coord_type for strings or string_set_infix_coord_type for string-sets
 /// \tparam CoordDim            the number of coordinates, 2 for strings, 4 for string-sets
 ///
 template <
@@ -111,7 +117,7 @@ struct Infix
 /// A class to represent a string infix, i.e. an arbitrarily placed substring
 ///
 /// \tparam StringType          the underlying string type
-/// \tparam CoordType           the type of infix coordinates, uint2 for strings or uint4 for string-sets
+/// \tparam CoordType           the type of infix coordinates, string_infix_coord_type for strings or string_set_infix_coord_type for string-sets
 ///
 template <
     typename StringType,
@@ -177,7 +183,7 @@ struct Infix<StringType,CoordType,2u>
 /// A class to represent a string infix, i.e. an arbitrarily placed substring
 ///
 /// \tparam StringType          the underlying string type
-/// \tparam CoordType           the type of infix coordinates, uint2 for strings or uint4 for string-sets
+/// \tparam CoordType           the type of infix coordinates, string_infix_coord_type for strings or string_set_infix_coord_type for string-sets
 ///
 template <
     typename StringType,
@@ -242,8 +248,8 @@ struct Infix<StringType,CoordType,4u>
 /// Represent a set of infixes of a string or string-set
 ///
 /// \tparam SequenceType            the string or string-set type
-/// \tparam InfixIterator           the infix iterator type - value_type can be uint2 or uint64_2 for strings, uint4 or uint64_4 for string-sets
-/// \tparam CoordDim                the number of coordinates representing an infix, 2 for strings, 3 or 4 for string-sets
+/// \tparam InfixIterator           the infix iterator type - value_type can be string_infix_coord_type for strings, string_set_infix_coord_type for string-sets
+/// \tparam CoordDim                the number of coordinates representing an infix, 2 for strings, 4 for string-sets
 ///
 template <
     typename SequenceType,
@@ -254,7 +260,7 @@ struct InfixSetCore {};
 /// Represent a set of infixes of a string
 ///
 /// \tparam SequenceType            the string or string-set container
-/// \tparam InfixIterator           the infix iterator type - value_type can be uint2 or uint64_2
+/// \tparam InfixIterator           the infix iterator type - value_type can be string_infix_coord_type or long_string_set_infix_coord_type
 ///
 template <
     typename SequenceType,
@@ -364,14 +370,14 @@ uint32 string_id(const Infix<StringType,CoordType,4u>& infix) { return infix.m_c
 
 /// return the length a given infix
 ///
-template <typename StringType, typename CoordType>
+template <typename StringType, typename CoordType, uint32 CoordDim>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 length(const Infix<StringType,CoordType>& infix) { return infix.length(); }
+uint32 length(const Infix<StringType,CoordType,CoordDim>& infix) { return infix.length(); }
 
 /// Represent a set of infixes of a string or string-set. An InfixSet is a \ref StringSetAnchor "String Set".
 ///
 /// \tparam SequenceType        the string or string-set type
-/// \tparam InfixIterator       the infix iterator type - value_type can be uint2 or uint64_2 for strings, uint4 or uint64_4 for string-sets
+/// \tparam InfixIterator       the infix iterator type - value_type can be string_infix_coord_type for strings, string_set_infix_coord_type for string-sets
 ///
 template <
     typename SequenceType,

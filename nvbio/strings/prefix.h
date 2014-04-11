@@ -38,10 +38,16 @@ namespace nvbio {
 ///@addtogroup StringSetsModule
 ///@{
 
+typedef uint32      string_prefix_coord_type;
+typedef uint64      long_string_prefix_coord_type;
+
+typedef uint32_2    string_set_prefix_coord_type;
+typedef uint64_2    long_string_set_prefix_coord_type;
+
 /// A class to represent a string prefix, i.e. an arbitrarily placed substring
 ///
 /// \tparam StringType          the underlying string type
-/// \tparam CoordType           the type of prefix coordinates, uint32 or uint64 for strings, uint2 or uint64_2 for string-sets
+/// \tparam CoordType           the type of prefix coordinates, string_prefix_coord_type for strings, string_set_prefix_coord_type for string-sets
 /// \tparam CoordDim            the number of coordinates, 1 for strings, 2 for string-sets
 ///
 template <
@@ -176,7 +182,7 @@ struct Prefix<StringType,CoordType,2u>
 /// Represent a set of prefixes of a string or string-set
 ///
 /// \tparam SequenceType            the string or string-set type
-/// \tparam PrefixIterator          the prefix iterator type - value_type can be uint32 or uint64 for strings, uint2 or uint64_2 for string-sets
+/// \tparam PrefixIterator          the prefix iterator type - value_type can be string_prefix_coord_type for strings, string_set_prefix_coord_type for string-sets
 /// \tparam CoordDim                the number of coordinates representing a prefix, 1 for strings, 2 for string-sets
 ///
 template <
@@ -239,7 +245,7 @@ struct PrefixSetCore<SequenceType,PrefixIterator,1u>
 /// Represent a set of prefixes of a string-set
 ///
 /// \tparam SequenceType            the string or string-set type
-/// \tparam PrefixIterator          the prefix iterator type - value_type can be uint2 or uint64_2
+/// \tparam PrefixIterator          the prefix iterator type - value_type can be string_set_prefix_coord_type or long_string_set_prefix_coord_type
 ///
 template <
     typename SequenceType,
@@ -305,7 +311,7 @@ uint32 length(const Prefix<StringType,CoordType,CoordDim>& prefix) { return pref
 /// Represent a set of prefixes of a string or string-set. An PrefixSet is a \ref StringSetAnchor "String Set".
 ///
 /// \tparam SequenceType        the string or string-set type
-/// \tparam PrefixIterator      the prefix iterator type - value_type can be uint32 or uint64 for strings, uint2 or uint64_2 for string-sets
+/// \tparam PrefixIterator      the prefix iterator type - value_type can be string_prefix_coord_type for strings, string_set_prefix_coord_type for string-sets
 ///
 template <
     typename SequenceType,

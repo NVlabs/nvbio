@@ -64,12 +64,6 @@ namespace nvbio {
 ///\par
 /// Furthermore, the module provides efficient generic copy() (resp. cuda::copy()) implementations to copy
 /// a given host (resp. device) string set from a given layout into another with a different layout.
-///\par
-/// It also defines convenience functions to extract seeds out of strings and string-sets:
-///\anchor SeedingAnchor
-/// - enumerate_string_seeds()
-/// - enumerate_string_set_seeds()
-/// - uniform_seeds_functor
 ///
 /// \section StringSetInterface String-Set Interface
 ///\par
@@ -86,6 +80,46 @@ namespace nvbio {
 ///
 ///     // return the i-th string in the set
 ///     string_type operator[] (const uint32) [const];
+/// }
+///\endcode
+///
+/// \section SeedingSection Seeding
+///\par
+/// Many bioinformatics applications need to extract short <i>seeds</i> out of strings and string-sets:
+/// such seeds are nothing but infixes. This module provides a few convenience functions to enumerate
+/// all seeds resulting by applying a \ref SeedFunctor "Seeding Functor" to a string or string-set.
+/// Internally, these simple functions employ massively parallel algorithms, which run either on the
+/// host or on the bound cuda device, depending on whether the output is a host or device vector.
+///\par
+///\anchor SeedingAnchor
+/// - enumerate_string_seeds()
+/// - enumerate_string_set_seeds()
+/// - uniform_seeds_functor
+///
+///\par
+/// The following is a sample showing how to extract uniformly sampled seeds from a host or device string-set:
+///\code
+/// // extract a set of uniformly spaced seeds from a string-set and return it as an InfixSet
+/// //
+/// template <typename system_tag, typename string_set_type>
+/// InfixSet<string_set_type, const string_set_infix_coord_type*>
+/// extract_seeds(
+///     const string_set_type                                   string_set,
+///     const uint32                                            seed_len,
+///     const uint32                                            seed_interval,
+///     nvbio::vector<system_tag,string_set_infix_coord_type>&  seed_coords)
+/// {
+///     // enumerate all seeds
+///     const uint32 n_seeds = enumerate_string_set_seeds(
+///         string_set,
+///         uniform_seeds_functor<>( seed_len, seed_interval ),
+///         seed_coords );
+/// 
+///     // and build the output infix-set
+///     return InfixSet<string_set_type, const string_set_infix_coord_type*>(
+///         n_seeds,
+///         string_set,
+///         nvbio::plain_view( seed_coords ) );
 /// }
 ///\endcode
 ///

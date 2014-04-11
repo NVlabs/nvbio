@@ -147,6 +147,22 @@ struct ReadDataView
         const_read_stream_iterator,
         const_index_iterator>                                         const_read_string_set_type;   ///< const string-set type
 
+    typedef ConcatenatedStringSet<
+        qual_iterator,
+        index_iterator>                                                     qual_string_set_type;   ///< quality string-set type
+
+    typedef ConcatenatedStringSet<
+        const_qual_iterator,
+        const_index_iterator>                                         const_qual_string_set_type;   ///< const quality string-set type
+
+    typedef ConcatenatedStringSet<
+        name_iterator,
+        index_iterator>                                                     name_string_set_type;   ///< name string-set type
+
+    typedef ConcatenatedStringSet<
+        const_name_iterator,
+        const_index_iterator>                                         const_name_string_set_type;   ///< const name string-set type
+
     /// empty constructor
     ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
@@ -235,6 +251,66 @@ struct ReadDataView
         const uint2            read_range = get_range( i );
         const read_stream_type reads( read_stream() );
         return read_string( read_range.y - read_range.x, reads.begin() + read_range.x );
+    }
+
+    /// return the a string-set view of this set of reads
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE qual_string_set_type qual_string_set()
+    {
+        return qual_string_set_type(
+            size(),
+            qual_stream(),
+            read_index() );
+    }
+
+    /// return the a string-set view of this set of reads
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_string_set_type qual_string_set() const
+    {
+        return const_qual_string_set_type(
+            size(),
+            qual_stream(),
+            read_index() );
+    }
+
+    /// return the a string-set view of this set of reads
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_string_set_type const_qual_string_set() const
+    {
+        return const_qual_string_set_type(
+            size(),
+            qual_stream(),
+            read_index() );
+    }
+
+    /// return the a string-set view of this set of reads
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_string_set_type name_string_set()
+    {
+        return name_string_set_type(
+            size(),
+            name_stream(),
+            name_index() );
+    }
+
+    /// return the a string-set view of this set of reads
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_string_set_type name_string_set() const
+    {
+        return const_name_string_set_type(
+            size(),
+            name_stream(),
+            name_index() );
+    }
+
+    /// return the a string-set view of this set of reads
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_string_set_type const_name_string_set() const
+    {
+        return const_name_string_set_type(
+            size(),
+            name_stream(),
+            name_index() );
     }
 
 public:
@@ -384,6 +460,9 @@ struct ReadDataCUDA : public ReadData
 private:
     uint64 m_allocated;
 };
+
+typedef ReadDataRAM  ReadDataHost;
+typedef ReadDataCUDA ReadDataDevice;
 
 ///
 /// A stream of ReadData, allowing to process the associated

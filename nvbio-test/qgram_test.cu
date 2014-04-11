@@ -180,7 +180,7 @@ void test_qgram_set_index_build(
         Q,              // q-gram size
         2u,             // implicitly convert N to A
         string_set,
-        uniform_seeds_functor( Q, 10u ),
+        uniform_seeds_functor<>( Q, 10u ),
         12u );
 
     cudaDeviceSynchronize();

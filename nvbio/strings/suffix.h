@@ -38,10 +38,16 @@ namespace nvbio {
 ///@addtogroup StringSetsModule
 ///@{
 
+typedef uint32      string_suffix_coord_type;
+typedef uint64      long_string_suffix_coord_type;
+
+typedef uint32_2    string_set_suffix_coord_type;
+typedef uint64_2    long_string_set_suffix_coord_type;
+
 /// A class to represent a string suffix, i.e. an arbitrarily placed substring
 ///
 /// \tparam StringType          the underlying string type
-/// \tparam CoordType           the type of suffix coordinates, uint32 or uint64 for strings, uint2 or uint64_2 for string-sets
+/// \tparam CoordType           the type of suffix coordinates, string_suffix_coord_type for strings, string_set_suffix_coord_type for string-sets
 /// \tparam CoordDim            the number of coordinates, 1 for strings, 2 for string-sets
 ///
 template <
@@ -176,7 +182,7 @@ struct Suffix<StringType,CoordType,2u>
 /// Represent a set of suffixes of a string or string-set
 ///
 /// \tparam SequenceType            the string or string-set type
-/// \tparam SuffixIterator          the suffix iterator type - value_type can be uint32 or uint64 for strings, uint2 or uint64_2 for string-sets
+/// \tparam SuffixIterator          the suffix iterator type - value_type can be string_suffix_coord_type for strings, string_set_suffix_coord_type for string-sets
 /// \tparam CoordDim                the number of coordinates representing a suffix, 1 for strings, 2 for string-sets
 ///
 template <
@@ -239,7 +245,7 @@ struct SuffixSetCore<SequenceType,SuffixIterator,1u>
 /// Represent a set of suffixes of a string-set
 ///
 /// \tparam SequenceType            the string or string-set type
-/// \tparam SuffixIterator          the suffix iterator type - value_type can be uint2 or uint64_2
+/// \tparam SuffixIterator          the suffix iterator type - value_type can be string_set_suffix_coord_type or long_string_set_suffix_coord_type
 ///
 template <
     typename SequenceType,
@@ -305,7 +311,7 @@ uint32 length(const Suffix<StringType,CoordType,CoordDim>& suffix) { return suff
 /// Represent a set of suffixes of a string or string-set. An SuffixSet is a \ref StringSetAnchor "String Set".
 ///
 /// \tparam SequenceType        the string or string-set type
-/// \tparam SuffixIterator      the suffix iterator type - value_type can be uint32 or uint64 for strings, uint2 or uint64_2 for string-sets
+/// \tparam SuffixIterator      the suffix iterator type - value_type can be string_suffix_coord_type for strings, string_set_suffix_coord_type
 ///
 template <
     typename SequenceType,

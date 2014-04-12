@@ -71,7 +71,7 @@ struct closest_diagonal<uint2>
     {
         const uint32 diag = /*qgram_index_string_size + */ range.y - range.x;
         uint32 rounded_diag = util::round_z( diag, interval );
-        if (diag - rounded_diag >= interval/2)
+        if (diag - rounded_diag > interval/2)
             rounded_diag++;
 
         return rounded_diag;
@@ -98,7 +98,7 @@ struct closest_diagonal<uint4>
     {
         const uint32 diag = /*qgram_index.string_length(range.x) + */ range.z - range.y;
         uint32 rounded_diag = util::round_z( diag, interval );
-        if (diag - rounded_diag >= interval/2)
+        if (diag - rounded_diag > interval/2)
             rounded_diag++;
 
         return make_uint2( rounded_diag, range.x );
@@ -456,7 +456,7 @@ uint32 QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>
     // and run-length encode them
     const uint32 n_merged = cuda::runlength_encode(
         n_hits,
-        m_diags.begin() + sort_buffers.selector * buffer_size,
+        m_diags.begin() + sort_buffers.selector  * buffer_size,
         merged_hits,
         merged_counts,
         d_temp_storage );

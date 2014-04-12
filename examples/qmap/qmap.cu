@@ -194,6 +194,7 @@ template <typename qgram_index_type, typename qgram_filter_type, typename genome
 void map(
           qgram_index_type&             qgram_index,
           qgram_filter_type&            qgram_filter,
+    const uint32                        merge_intv,
     const io::ReadDataDevice&           reads,
     const uint32                        n_queries,
     const uint32                        genome_len,
@@ -276,7 +277,7 @@ void map(
             hits.begin() );
 
         const uint32 n_merged = qgram_filter.merge(
-            1u,
+            merge_intv,
             hits_end - hits_begin,
             hits.begin(),
             merged_hits.begin(),
@@ -303,36 +304,6 @@ void map(
         cudaDeviceSynchronize();
         timer.stop();
         stats.align_time += timer.seconds();
-
-        if (0)
-        {
-            const diagonal_type hit = merged_hits[0];
-            const uint32 read_id  = hit.y;
-            const uint32 text_pos = hit.x;
-
-            const thrust::device_ptr<const uint32> read_index( reads.read_index() );
-            const thrust::device_ptr<const uint32> read_stream( reads.read_stream() );
-            const uint2  read_range = make_uint2( read_index[ read_id ], read_index[ read_id+1 ] );
-
-            PackedStream<thrust::device_ptr<const uint32>,uint8,4u,false> packed_reads( read_stream );
-            char read_string[256];
-            dna_to_string(
-                packed_reads.begin() + read_range.x,
-                read_range.y - read_range.x,
-                read_string );
-
-            PackedStream<thrust::device_ptr<const uint32>,uint8,2u,true> packed_genome( thrust::device_ptr<const uint32>( genome.stream() ) );
-            char genome_string[256];
-            dna_to_string(
-                packed_genome.begin() + text_pos - 15,
-                read_range.y - read_range.x + 31,
-                genome_string );
-
-            fprintf(stderr, "hit: (%u, %u) @ %u\n", read_id, text_pos );
-            fprintf(stderr, "  (%u, %u)\n", read_range.x, read_range.y );
-            fprintf(stderr, "  %s\n", read_string);
-            fprintf(stderr, "  %s\n", genome_string);
-        }
 
         // compute the best score for each read in this batch
         const uint32 n_distinct = cuda::reduce_by_key(
@@ -369,9 +340,10 @@ int main(int argc, char* argv[])
 
     uint32 Q                = 20;
     uint32 Q_intv           = 10;
+    uint32 merge_intv       = 16;
     bool   rc               = false;
     uint32 max_reads        = uint32(-1);
-    int16  score_threshold  = -20;
+    int16  score_threshold  = -5;
 
     for (int i = 0; i < argc; ++i)
     {
@@ -380,11 +352,13 @@ int main(int argc, char* argv[])
             Q      = uint32( atoi( argv[++i] ) );
             Q_intv = uint32( atoi( argv[++i] ) );
         }
+        if (strcmp( argv[i], "-m" ) == 0)
+            merge_intv = uint32( atoi( argv[++i] ) );
         else if (strcmp( argv[i], "-rc" ) == 0)
             rc = true;
         else if (strcmp( argv[i], "-max-reads" ) == 0)
             max_reads = uint32( atoi( argv[++i] ) );
-        else if (strcmp( argv[i], "-r" ) == 0)
+        else if (strcmp( argv[i], "-t" ) == 0)
             score_threshold = int16( atoi( argv[++i] ) );
     }
 
@@ -484,6 +458,7 @@ int main(int argc, char* argv[])
             map(
                 qgram_index,
                 qgram_filter,
+                merge_intv,
                 d_read_data,
                 genome_end - genome_begin,
                 genome_len,

@@ -34,6 +34,7 @@
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/vector.h>
 #include <nvbio/basic/shared_pointer.h>
+#include <nvbio/basic/dna.h>
 #include <nvbio/strings/string_set.h>
 #include <nvbio/strings/infix.h>
 #include <nvbio/strings/seeds.h>
@@ -58,6 +59,7 @@ struct Stats
         locate_time(0),
         align_time(0),
         reads(0),
+        aligned(0),
         queries(0),
         matches(0),
         occurrences(0),
@@ -70,10 +72,27 @@ struct Stats
     float   locate_time;
     float   align_time;
     uint64  reads;
+    uint64  aligned;
     uint64  queries;
     uint64  matches;
     uint64  occurrences;
     uint64  merged;
+};
+
+// return 1 or 0 depending on whether a number is >= than a given threshold
+struct above_threshold
+{
+    typedef int16  argument_type;
+    typedef uint32 result_type;
+
+    // constructor
+    above_threshold(const int16 _t) : t(_t) {}
+
+    // functor operator
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 operator() (const int16 s) { return s >= t ? 1u : 0u; }
+
+    const int16 t;
 };
 
 // build a set of q-grams from a given string, together with their sorted counterpart
@@ -97,8 +116,8 @@ void build_qgrams(
     sorted_qgrams = qgrams;
     sorted_indices.resize( n_queries );
     thrust::copy(
-        thrust::make_counting_iterator<uint32>(0u),
-        thrust::make_counting_iterator<uint32>(0u) + n_queries,
+        thrust::make_counting_iterator<uint32>(genome_offset),
+        thrust::make_counting_iterator<uint32>(genome_offset) + n_queries,
         sorted_indices.begin() );
 
     thrust::sort_by_key( sorted_qgrams.begin(), sorted_qgrams.end(), sorted_indices.begin() );
@@ -214,7 +233,7 @@ void map(
     // search the sorted query q-grams with a q-gram filter
     //
 
-    const uint32 batch_size = 16*1024*1024;
+    const uint32 batch_size = 32*1024*1024;
 
     typedef typename qgram_filter_type::hit_type        hit_type;
     typedef typename qgram_filter_type::diagonal_type   diagonal_type;
@@ -224,11 +243,14 @@ void map(
     nvbio::vector<system_tag,diagonal_type> merged_hits( batch_size );
     nvbio::vector<system_tag,uint16>        merged_counts( batch_size );
     nvbio::vector<system_tag,int16>         scores( batch_size );
+    nvbio::vector<system_tag,uint32>        out_reads( batch_size );
+    nvbio::vector<system_tag,int16>         out_scores( batch_size );
+    nvbio::vector<system_tag,uint8>         temp_storage;
 
     timer.start();
 
     // first step: rank the query q-grams
-    const uint32 n_hits = qgram_filter.rank(
+    const uint64 n_hits = qgram_filter.rank(
         qgram_index,
         n_queries,
         nvbio::plain_view( sorted_qgrams ),
@@ -240,9 +262,9 @@ void map(
     stats.occurrences += n_hits;
 
     // loop through large batches of hits and locate & merge them
-    for (uint32 hits_begin = 0; hits_begin < n_hits; hits_begin += batch_size)
+    for (uint64 hits_begin = 0; hits_begin < n_hits; hits_begin += batch_size)
     {
-        const uint32 hits_end = nvbio::min( hits_begin + batch_size, n_hits );
+        const uint64 hits_end = nvbio::min( hits_begin + batch_size, n_hits );
 
         timer.start();
 
@@ -252,7 +274,7 @@ void map(
             hits.begin() );
 
         const uint32 n_merged = qgram_filter.merge(
-            16u,
+            1u,
             hits_end - hits_begin,
             hits.begin(),
             merged_hits.begin(),
@@ -277,6 +299,55 @@ void map(
         cudaDeviceSynchronize();
         timer.stop();
         stats.align_time += timer.seconds();
+
+        if (0)
+        {
+            const diagonal_type hit = merged_hits[0];
+            const uint32 read_id  = hit.y;
+            const uint32 text_pos = hit.x;
+
+            const thrust::device_ptr<const uint32> read_index( reads.read_index() );
+            const thrust::device_ptr<const uint32> read_stream( reads.read_stream() );
+            const uint2  read_range = make_uint2( read_index[ read_id ], read_index[ read_id+1 ] );
+
+            PackedStream<thrust::device_ptr<const uint32>,uint8,4u,false> packed_reads( read_stream );
+            char read_string[256];
+            dna_to_string(
+                packed_reads.begin() + read_range.x,
+                read_range.y - read_range.x,
+                read_string );
+
+            PackedStream<thrust::device_ptr<const uint32>,uint8,2u,true> packed_genome( thrust::device_ptr<const uint32>( genome.stream() ) );
+            char genome_string[256];
+            dna_to_string(
+                packed_genome.begin() + text_pos - 15,
+                read_range.y - read_range.x + 31,
+                genome_string );
+
+            fprintf(stderr, "hit: (%u, %u) @ %u\n", read_id, text_pos );
+            fprintf(stderr, "  (%u, %u)\n", read_range.x, read_range.y );
+            fprintf(stderr, "  %s\n", read_string);
+            fprintf(stderr, "  %s\n", genome_string);
+        }
+
+        // compute the best score for each read
+        const uint32 n_distinct = cuda::reduce_by_key(
+            n_merged,
+            thrust::make_transform_iterator( nvbio::plain_view( merged_hits ), component_functor<diagonal_type>( 1u ) ),
+            nvbio::plain_view( scores ),
+            nvbio::plain_view( out_reads ),
+            nvbio::plain_view( out_scores ),
+            thrust::maximum<int16>(),
+            temp_storage );
+
+        // count how many reads have a score >= -5
+        const uint32 n_aligned = cuda::reduce(
+            n_distinct,
+            thrust::make_transform_iterator( nvbio::plain_view( out_scores ), above_threshold( -20 ) ),
+            thrust::plus<uint32>(),
+            temp_storage );
+
+        stats.aligned += n_aligned;
     }
 }
 
@@ -294,8 +365,10 @@ int main(int argc, char* argv[])
     const char* reads = argv[argc-1];
     const char* index = argv[argc-2];
 
-    uint32 Q      = 20;
-    uint32 Q_intv = 10;
+    uint32 Q         = 20;
+    uint32 Q_intv    = 10;
+    bool   rc        = false;
+    uint32 max_reads = uint32(-1);
 
     for (int i = 0; i < argc; ++i)
     {
@@ -304,6 +377,10 @@ int main(int argc, char* argv[])
             Q      = uint32( atoi( argv[++i] ) );
             Q_intv = uint32( atoi( argv[++i] ) );
         }
+        else if (strcmp( argv[i], "-rc" ) == 0)
+            rc = true;
+        else if (strcmp( argv[i], "-max-reads" ) == 0)
+            max_reads = uint32( atoi( argv[++i] ) );
     }
 
     // TODO: load a genome archive...
@@ -330,8 +407,9 @@ int main(int argc, char* argv[])
         io::open_read_file(
             reads,
             io::Phred33,
+            max_reads,
             uint32(-1),
-            uint32(-1) ) );
+            rc ? io::REVERSE_COMPLEMENT : io::FORWARD ) );
 
     // check whether the file opened correctly
     if (read_data_file == NULL || read_data_file->is_ok() == false)
@@ -419,7 +497,7 @@ int main(int argc, char* argv[])
         stats.reads += n_reads;
         stats.time  += time;
 
-        log_info(stderr, "  aligned %.1f M reads (%6.2f K reads/s)\n", 1.0e-6f * float(stats.reads), (1.0e-3f * float( stats.reads )) / stats.time);
+        log_info(stderr, "  aligned %.2f M reads (%6.2f K reads/s)\n", 1.0e-6f * float(stats.reads), (1.0e-3f * float( stats.reads )) / stats.time);
         log_verbose(stderr, "  breakdown:\n");
         log_verbose(stderr, "    extract throughput : %.2f B q-grams/s\n", (1.0e-9f * float( stats.queries )) / stats.extract_time);
         log_verbose(stderr, "    rank throughput    : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.rank_time);
@@ -427,7 +505,8 @@ int main(int argc, char* argv[])
         log_verbose(stderr, "    locate throughput  : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.locate_time);
         log_verbose(stderr, "    align throughput   : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.align_time);
         log_verbose(stderr, "                       : %6.2f M hits/s\n",  (1.0e-6f * float( stats.merged )) / stats.align_time);
-        log_verbose(stderr, "    matches            : %.2f M\n", 1.0e-6f * float( stats.matches ) );
+        log_verbose(stderr, "    aligned            : %.2f M\n", 1.0e-6f * float( stats.aligned ) );
+        //log_verbose(stderr, "    matches            : %.2f M\n", 1.0e-6f * float( stats.matches ) );
         log_verbose(stderr, "    occurrences        : %.3f B\n", 1.0e-9f * float( stats.occurrences ) );
         log_verbose(stderr, "    merged occurrences : %.3f B (%.1f %%)\n", 1.0e-9f * float( stats.merged ), 100.0f * float(stats.merged)/float(stats.occurrences));
     }

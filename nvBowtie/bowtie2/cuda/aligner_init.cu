@@ -85,8 +85,8 @@ std::pair<uint64,uint64> Aligner::init_alloc(const uint32 BATCH_SIZE, const Para
     // alloc the scoring queues
     d_allocated_bytes += scoring_queues.resize( BATCH_SIZE, BATCH_SIZE, do_alloc ); // TODO: pass read-end 'type' field
 
-                     resize( do_alloc, sorting_queue_dvec,    BATCH_SIZE*2,                               d_allocated_bytes );
-    idx_queue_dptr = resize( do_alloc, idx_queue_dvec,        BATCH_SIZE*2,                               d_allocated_bytes );
+                     resize( do_alloc, sorting_queue_dvec,    BATCH_SIZE*2, d_allocated_bytes );
+    idx_queue_dptr = resize( do_alloc, idx_queue_dvec,        BATCH_SIZE*2, d_allocated_bytes );
 
     nvbio::cuda::check_error("allocating queues");
 
@@ -104,8 +104,8 @@ std::pair<uint64,uint64> Aligner::init_alloc(const uint32 BATCH_SIZE, const Para
         buffer_alignments_dptr = resize( do_alloc, buffer_alignments_dvec,  BATCH_SIZE*2,   d_allocated_bytes );
         buffer_read_info_dptr  = resize( do_alloc, buffer_read_info_dvec,   BATCH_SIZE*2,   d_allocated_bytes );
 
-        output_alignments_dptr = resize( do_alloc, output_alignments_dvec,  BATCH_SIZE,   d_allocated_bytes );
-        output_read_info_dptr  = resize( do_alloc, output_read_info_dvec,   BATCH_SIZE,   d_allocated_bytes );
+        output_alignments_dptr = resize( do_alloc, output_alignments_dvec,  BATCH_SIZE,     d_allocated_bytes );
+        output_read_info_dptr  = resize( do_alloc, output_read_info_dvec,   BATCH_SIZE,     d_allocated_bytes );
     }
     nvbio::cuda::check_error("allocating output buffers");
 
@@ -120,8 +120,8 @@ std::pair<uint64,uint64> Aligner::init_alloc(const uint32 BATCH_SIZE, const Para
 
     //const uint32 n_cigar_entries = BATCH_SIZE*(MAXIMUM_BAND_LEN_MULT*band_len+1);
     //const uint32 n_mds_entries   = BATCH_SIZE*MAX_READ_LEN;
-    const uint32 n_cigar_entries = (128 * BATCH_SIZE)/sizeof(io::Cigar);    // 32MB
-    const uint32 n_mds_entries   = (256 * BATCH_SIZE)/sizeof(uint8);        // 64MB
+    const uint32 n_cigar_entries = (128 * BATCH_SIZE)/sizeof(io::Cigar);    // 256MB
+    const uint32 n_mds_entries   = (256 * BATCH_SIZE)/sizeof(uint8);        // 256MB
     if (do_alloc)
     {
         log_verbose(stderr, "    allocating %u MB of string storage\n      CIGARs : %u MB\n      MDs    : %u MB\n",

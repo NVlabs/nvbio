@@ -240,35 +240,16 @@ int driver(
     uint32 BATCH_SIZE = 64*1024*1024;
 
     const uint64 GB = 1024u*1024u*1024u;
-    if (free <= GB)
+
+    for (BATCH_SIZE = 1024*1024; BATCH_SIZE >= 16*1024; BATCH_SIZE /= 2)
     {
-        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
-                     128*1024 :
-                     192*1024;
-    }
-    else if (free <= 2*GB)
-    {
-        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
-                     256*1024 :
-                     384*1024;
-    }
-    else if (free <= 4*GB)
-    {
-        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
-                     384*1024 :
-                     512*1024;
-    }
-    else if (free <= 6*GB)
-    {
-        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
-                     512*1024 :
-                     768*1024;
-    }
-    else
-    {
-        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
-                     768*1024 :
-                     1024*1024;
+        // leave some guard band of free memory
+        const uint32 guard_band = 512*1024*1024;
+
+        // gauge how much memory we'd need
+        const std::pair<uint64,uint64> mem_stats = aligner.init_alloc( BATCH_SIZE, params, kSingleEnd, false );
+        if (mem_stats.second < free - guard_band)
+            break;
     }
     log_stats(stderr, "  processing reads in batches of %uK\n", BATCH_SIZE/1024);
 
@@ -590,36 +571,15 @@ int driver(
     log_stats(stderr, "  device has %ld of %ld MB free\n", free/1024/1024, total/1024/1024);
     uint32 BATCH_SIZE = 64*1024*1024;
 
-    const uint64 GB = 1024u*1024u*1024u;
-    if (free <= GB)
+    for (BATCH_SIZE = 1024*1024; BATCH_SIZE >= 16*1024; BATCH_SIZE /= 2)
     {
-        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
-                     128*1024 :
-                     192*1024;
-    }
-    else if (free <= 2*GB)
-    {
-        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
-                     256*1024 :
-                     384*1024;
-    }
-    else if (free <= 4*GB)
-    {
-        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
-                     384*1024 :
-                     512*1024;
-    }
-    else if (free <= 6*GB)
-    {
-        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
-                     512*1024 :
-                     768*1024;
-    }
-    else
-    {
-        BATCH_SIZE = (params.allow_sub && params.mode == AllMapping) ?
-                      768*1024 :
-                     1024*1024;
+        // leave some guard band of free memory
+        const uint32 guard_band = 512*1024*1024;
+
+        // gauge how much memory we'd need
+        const std::pair<uint64,uint64> mem_stats = aligner.init_alloc( BATCH_SIZE, params, kPairedEnds, false );
+        if (mem_stats.second < free - guard_band)
+            break;
     }
     log_stats(stderr, "  processing reads in batches of %uK\n", BATCH_SIZE/1024);
 

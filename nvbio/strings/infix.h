@@ -281,11 +281,19 @@ struct Infix : public InfixCore< StringType, CoordType, vector_traits<CoordType>
         const coord_type    infix) : core_type( string, infix ) {}
 };
 
+/// make an infix, i.e. a substring of a given string
+///
+/// \tparam StringType  the underlying string type
+/// \tparam CoordType   the coordinates type, either string_infix_coord_type or string_set_infix_coord_type
+///
+/// \param string       the underlying string object
+/// \param coords       the infix coordinates
+///
 template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Infix<StringType,CoordType> make_infix(const StringType string, const CoordType coord)
+Infix<StringType,CoordType> make_infix(const StringType string, const CoordType coords)
 {
-    return Infix<StringType,CoordType>( string, coord );
+    return Infix<StringType,CoordType>( string, coords );
 }
 
 /// Represent a set of infixes of a string or string-set

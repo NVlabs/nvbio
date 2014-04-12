@@ -62,6 +62,9 @@ struct AlignmentStream
     // an alignment context
     struct context_type
     {
+        uint2                   read_range;
+        uint32                  genome_begin;
+        uint32                  genome_end;
         int32                   min_score;
         aln::BestSink<int32>    sink;
     };
@@ -112,28 +115,14 @@ struct AlignmentStream
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint32 pattern_length(const uint32 i, context_type* context) const
     {
-        const uint32 read_id = m_diagonals[i].y;
-        return length( m_reads.get_read( read_id ) );
+        return context->read_range.y - context->read_range.x;
     }
 
     // return the i-th text's length
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint32 text_length(const uint32 i, context_type* context) const
     {
-        // fetch the diagonal for the i-th alignment task
-        const uint2 diagonal  = m_diagonals[i];
-
-        // retrieve the read id and its length
-        const uint32 read_id  = diagonal.y;
-        const uint32 text_pos = diagonal.x;
-        const uint32 read_len = length( m_reads.get_read( read_id ) );
-
-        // compute the segment of text to align to
-        const uint32 text_begin = text_pos > BAND_LEN/2 ? text_pos - BAND_LEN/2 : 0u;
-        const uint32 text_end   = nvbio::min( text_begin + read_len + BAND_LEN, m_genome_len );
-        const uint32 text_len   = text_begin < text_end ? text_end - text_begin : 0u;
-
-        return text_len;
+        return context->genome_end - context->genome_begin;
     }
 
     // initialize the i-th context
@@ -142,6 +131,25 @@ struct AlignmentStream
         const uint32    i,
         context_type*   context) const
     {
+        // fetch the diagonal for the i-th alignment task
+        const uint2 diagonal  = m_diagonals[i];
+
+        // retrieve the read id and the text position
+        const uint32 read_id    = diagonal.y;
+        const uint32 text_pos   = diagonal.x;
+
+        // fetch the read range
+        context->read_range   = m_reads.get_range( read_id );
+        const uint32 read_len = context->read_range.y - context->read_range.x;
+
+        // compute the segment of text to align to
+        context->genome_begin = text_pos > BAND_LEN/2 ? text_pos - BAND_LEN/2 : 0u;
+        context->genome_end   = nvbio::min( context->genome_begin + read_len + BAND_LEN, m_genome_len );
+
+        // initialize the sink
+        context->sink = aln::BestSink<int32>();
+
+        // setup the minimum score
         context->min_score = Field_traits<int32>::min();
         return true;
     }
@@ -155,31 +163,13 @@ struct AlignmentStream
         const context_type* context,
               strings_type* strings) const
     {
-        // fetch the diagonal for the i-th alignment task
-        const uint2 diagonal  = m_diagonals[i];
-
-        // retrieve the read id and its length
-        const uint32 read_id  = diagonal.y;
-        const uint32 text_pos = diagonal.x;
-        const uint32 read_len = length( m_reads.get_read( read_id ) );
-
-        // compute the segment of text to align to
-        const uint32 text_begin = text_pos > BAND_LEN/2 ? text_pos - BAND_LEN/2 : 0u;
-        const uint32 text_end   = nvbio::min( text_begin + read_len + BAND_LEN, m_genome_len );
-        const uint32 text_len   = text_begin < text_end ? text_end - text_begin : 0u;
-
-        // load the text
-        strings->text = strings->text_loader.load(
-            m_genome,
-            text_begin,
-            text_len );
+        const uint2 read_subrange = make_uint2( window_begin, window_end );
 
         // load the pattern
-        strings->pattern = strings->pattern_loader.load(
-            m_reads,
-            m_reads.get_range( read_id ),
-            false,
-            make_uint2( window_begin, window_end ) );
+        strings->pattern = strings->pattern_loader.load( m_reads, context->read_range, false, read_subrange );
+
+        // load the text
+        strings->text = strings->text_loader.load( m_genome, context->genome_begin, context->genome_end - context->genome_begin );
     }
 
     // handle the output

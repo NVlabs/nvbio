@@ -44,6 +44,7 @@
 #include <nvbio/io/fmi.h>
 
 #include "alignment.h"
+#include "util.h"
 
 using namespace nvbio;
 
@@ -191,14 +192,15 @@ void align(
 //
 template <typename qgram_index_type, typename qgram_filter_type, typename genome_string>
 void map(
-          qgram_index_type&     qgram_index,
-          qgram_filter_type&    qgram_filter,
-    const io::ReadDataDevice&   reads,
-    const uint32                n_queries,
-    const uint32                genome_len,
-    const uint32                genome_offset,
-    const genome_string         genome,
-          Stats&                stats)
+          qgram_index_type&             qgram_index,
+          qgram_filter_type&            qgram_filter,
+    const io::ReadDataDevice&           reads,
+    const uint32                        n_queries,
+    const uint32                        genome_len,
+    const uint32                        genome_offset,
+    const genome_string                 genome,
+    nvbio::vector<device_tag,int16>&    best_scores,
+          Stats&                        stats)
 {
     typedef typename qgram_index_type::system_tag system_tag;
 
@@ -287,8 +289,10 @@ void map(
 
         timer.start();
 
+        //const aln::SimpleGotohScheme gotoh( 2, -2, -5, -3 );
         align(
             aln::make_edit_distance_aligner<aln::SEMI_GLOBAL>(),
+            //aln::make_gotoh_aligner<aln::LOCAL>( gotoh ),
             n_merged,
             nvbio::plain_view( merged_hits ),
             nvbio::plain_view( reads ),
@@ -330,7 +334,7 @@ void map(
             fprintf(stderr, "  %s\n", genome_string);
         }
 
-        // compute the best score for each read
+        // compute the best score for each read in this batch
         const uint32 n_distinct = cuda::reduce_by_key(
             n_merged,
             thrust::make_transform_iterator( nvbio::plain_view( merged_hits ), component_functor<diagonal_type>( 1u ) ),
@@ -340,14 +344,12 @@ void map(
             thrust::maximum<int16>(),
             temp_storage );
 
-        // count how many reads have a score >= -5
-        const uint32 n_aligned = cuda::reduce(
-            n_distinct,
-            thrust::make_transform_iterator( nvbio::plain_view( out_scores ), above_threshold( -20 ) ),
-            thrust::plus<uint32>(),
-            temp_storage );
-
-        stats.aligned += n_aligned;
+        // and keep track of the global best
+        update_scores(
+            n_merged,
+            nvbio::plain_view( out_reads ),
+            nvbio::plain_view( out_scores ),
+            nvbio::plain_view( best_scores ) );
     }
 }
 
@@ -365,10 +367,11 @@ int main(int argc, char* argv[])
     const char* reads = argv[argc-1];
     const char* index = argv[argc-2];
 
-    uint32 Q         = 20;
-    uint32 Q_intv    = 10;
-    bool   rc        = false;
-    uint32 max_reads = uint32(-1);
+    uint32 Q                = 20;
+    uint32 Q_intv           = 10;
+    bool   rc               = false;
+    uint32 max_reads        = uint32(-1);
+    int16  score_threshold  = -20;
 
     for (int i = 0; i < argc; ++i)
     {
@@ -381,6 +384,8 @@ int main(int argc, char* argv[])
             rc = true;
         else if (strcmp( argv[i], "-max-reads" ) == 0)
             max_reads = uint32( atoi( argv[++i] ) );
+        else if (strcmp( argv[i], "-r" ) == 0)
+            score_threshold = int16( atoi( argv[++i] ) );
     }
 
     // TODO: load a genome archive...
@@ -464,6 +469,10 @@ int main(int argc, char* argv[])
 
         float time = 0.0f;
 
+        const int16 worst_score = Field_traits<int16>::min();
+        nvbio::vector<device_tag,int16> best_scores( n_reads, worst_score );
+        nvbio::vector<device_tag,uint8> temp_storage;
+
         // stream through the genome
         for (uint32 genome_begin = 0; genome_begin < genome_len; genome_begin += queries_batch)
         {
@@ -480,6 +489,7 @@ int main(int argc, char* argv[])
                 genome_len,
                 genome_begin,
                 d_genome,
+                best_scores,
                 stats );
 
             cudaDeviceSynchronize();
@@ -492,12 +502,20 @@ int main(int argc, char* argv[])
         }
         log_verbose_cont(stderr, "\n");
 
-
         // accumulate the number of aligned reads
         stats.reads += n_reads;
         stats.time  += time;
 
-        log_info(stderr, "  aligned %.2f M reads (%6.2f K reads/s)\n", 1.0e-6f * float(stats.reads), (1.0e-3f * float( stats.reads )) / stats.time);
+        // count how many reads have a score >= score_threshold
+        const uint32 n_aligned = cuda::reduce(
+            n_reads,
+            thrust::make_transform_iterator( nvbio::plain_view( best_scores ), above_threshold( score_threshold ) ),
+            thrust::plus<uint32>(),
+            temp_storage );
+
+        stats.aligned += n_aligned;
+
+        log_info(stderr, "  aligned %6.2f %% reads (%6.2f K reads/s)\n", 100.0f * float( stats.aligned ) / float( stats.reads ), (1.0e-3f * float( stats.reads )) / stats.time);
         log_verbose(stderr, "  breakdown:\n");
         log_verbose(stderr, "    extract throughput : %.2f B q-grams/s\n", (1.0e-9f * float( stats.queries )) / stats.extract_time);
         log_verbose(stderr, "    rank throughput    : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.rank_time);
@@ -505,7 +523,6 @@ int main(int argc, char* argv[])
         log_verbose(stderr, "    locate throughput  : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.locate_time);
         log_verbose(stderr, "    align throughput   : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.align_time);
         log_verbose(stderr, "                       : %6.2f M hits/s\n",  (1.0e-6f * float( stats.merged )) / stats.align_time);
-        log_verbose(stderr, "    aligned            : %.2f M\n", 1.0e-6f * float( stats.aligned ) );
         //log_verbose(stderr, "    matches            : %.2f M\n", 1.0e-6f * float( stats.matches ) );
         log_verbose(stderr, "    occurrences        : %.3f B\n", 1.0e-9f * float( stats.occurrences ) );
         log_verbose(stderr, "    merged occurrences : %.3f B (%.1f %%)\n", 1.0e-9f * float( stats.merged ), 100.0f * float(stats.merged)/float(stats.occurrences));

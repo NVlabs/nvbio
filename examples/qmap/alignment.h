@@ -166,7 +166,7 @@ struct AlignmentStream
         const uint2 read_subrange = make_uint2( window_begin, window_end );
 
         // load the pattern
-        strings->pattern = strings->pattern_loader.load( m_reads, context->read_range, false, read_subrange );
+        strings->pattern = strings->pattern_loader.load( m_reads, context->read_range, FORWARD, STANDARD, read_subrange );
 
         // load the text
         strings->text = strings->text_loader.load( m_genome, context->genome_begin, context->genome_end - context->genome_begin );

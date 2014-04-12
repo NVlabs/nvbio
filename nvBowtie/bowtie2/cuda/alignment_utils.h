@@ -292,7 +292,13 @@ struct AlignmentStreamBase
 
         const uint2 read_subrange = make_uint2( window_begin, window_end );
 
-        strings->pattern = strings->pattern_loader.load( reads, context->read_range, context->read_rc, read_subrange );
+        strings->pattern = strings->pattern_loader.load(
+            reads,
+            context->read_range,
+            context->read_rc ? FORWARD    : REVERSE,        // the reads are loaded in REVERSE fashion, so we invert this flag here
+            context->read_rc ? COMPLEMENT : STANDARD,
+            read_subrange );
+
         strings->quals   = strings->pattern.qualities();
         strings->text    = strings->text_loader.load( m_pipeline.genome, context->genome_begin, context->genome_end - context->genome_begin );
     }

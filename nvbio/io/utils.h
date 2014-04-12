@@ -132,34 +132,33 @@ struct ReadStream
     ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
     ReadStream(const StreamType& s, const uint2 range) 
-      : stream(s), first(range.y-1), last(range.x) { }
+      : stream(s), first(range.x), last(range.y-1), rev(false), comp(false) { }
 
     /// constructor
     ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
     ReadStream(const StreamType& s, const QualType q, const uint2 range) 
-      : stream(s), qual(q), first(range.y-1), last(range.x) { }
+      : stream(s), qual(q), first(range.x), last(range.y-1), rev(false), comp(false) { }
 
     /// set the read flags
     ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
-    void set_flags(ReadType t) { rev_comp = (t == COMPLEMENT); }
+    void set_flags(const DirType d, const ReadType t) { rev = (d == REVERSE); comp = (t == COMPLEMENT); }
 
     /// return string length
     ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
-    uint32 length() const { return 1+first-last; }
+    uint32 length() const { return 1+last-first; }
 
     /// return a given base
     ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
     value_type operator[] (uint32 pos) const
     {
-        if (rev_comp) {
-            value_type c = stream[last+pos];
-            return c<4 ? 3-c : c;
-        }
-        return stream[first-pos];
+        const uint32 index = rev ? last-pos : first+pos;
+        const value_type c = stream[ index ];
+
+        return (comp) ? (c < 4 ? 3-c : c) : c;
     }
 
     /// return a given base quality
@@ -167,7 +166,8 @@ struct ReadStream
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
     uint8 quality(const uint32 pos) const
     {
-        return rev_comp ? qual[last+pos] : qual[first-pos];
+        const uint32 index = rev ? last-pos : first+pos;
+        return qual[ index ];
     }
 
     /// return qualities
@@ -175,7 +175,8 @@ struct ReadStream
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
     qual_string_type qualities() const { return qual_string_type(*this); }
 
-    bool        rev_comp;           ///< rev.comp. flag
+    bool        rev;                ///< reverse flag
+    bool        comp;               ///< complement flag
     uint32      first, last;        ///< offset of first and last elements
     StreamType  stream;             ///< read stream
     QualType    qual;               ///< quality stream
@@ -197,7 +198,7 @@ struct ReadLoader
     /// load a read
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    string_type load(const BatchType& batch, const uint2 range, bool rc)
+    string_type load(const BatchType& batch, const uint2 range, const DirType dir, const ReadType op)
     {
         const qual_iterator quals( batch.qual_stream() + range.x );
 
@@ -206,22 +207,22 @@ struct ReadLoader
             quals,
             make_uint2( 0, range.y - range.x ) );
 
-        read.set_flags( ReadType(rc) );
+        read.set_flags( dir, op );
         return read;
     }
     /// load a read substring
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    string_type load(const BatchType& batch, const uint2 range, bool rc, const uint2 subrange)
+    string_type load(const BatchType& batch, const uint2 range, const DirType dir, const ReadType op, const uint2 subrange)
     {
         const qual_iterator quals( batch.qual_stream() + range.x );
 
         string_type read(
-            loader.load( batch.read_stream(), range.x, range.y - range.x, subrange, !rc ), // FIXME: negate the RC flag here as
-            quals,                                                                         // reads are stored in reverse fashion...
+            loader.load( batch.read_stream(), range.x, range.y - range.x, subrange, dir == REVERSE ? true : false ),
+            quals,
             make_uint2( 0, range.y - range.x ) );
 
-        read.set_flags( ReadType(rc) );
+        read.set_flags( dir, op );
         return read;
     }
 

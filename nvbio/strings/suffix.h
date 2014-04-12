@@ -44,6 +44,9 @@ typedef uint64      long_string_suffix_coord_type;
 typedef uint32_2    string_set_suffix_coord_type;
 typedef uint64_2    long_string_set_suffix_coord_type;
 
+///@addtogroup Private
+///@{
+
 /// A class to represent a string suffix, i.e. an arbitrarily placed substring
 ///
 /// \tparam StringType          the underlying string type
@@ -54,10 +57,7 @@ template <
     typename StringType,
     typename CoordType,
     uint32   CoordDim>
-struct Suffix {};
-
-///@addtogroup Private
-///@{
+struct SuffixCore {};
 
 /// A class to represent a string suffix, i.e. an arbitrarily placed substring
 ///
@@ -67,7 +67,7 @@ struct Suffix {};
 template <
     typename StringType,
     typename CoordType>
-struct Suffix<StringType,CoordType,1u>
+struct SuffixCore<StringType,CoordType,1u>
 {
     typedef StringType                                              string_type;
     typedef CoordType                                               coord_type;
@@ -79,12 +79,12 @@ struct Suffix<StringType,CoordType,1u>
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    Suffix() {}
+    SuffixCore() {}
 
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    Suffix(
+    SuffixCore(
         const string_type   string,
         const coord_type    suffix) :
         m_string( string ),
@@ -127,7 +127,7 @@ struct Suffix<StringType,CoordType,1u>
 template <
     typename StringType,
     typename CoordType>
-struct Suffix<StringType,CoordType,2u>
+struct SuffixCore<StringType,CoordType,2u>
 {
     typedef StringType                                              string_type;
     typedef CoordType                                               coord_type;
@@ -139,12 +139,12 @@ struct Suffix<StringType,CoordType,2u>
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    Suffix() {}
+    SuffixCore() {}
 
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    Suffix(
+    SuffixCore(
         const string_type   string,
         const coord_type    suffix) :
         m_string( string ),
@@ -179,6 +179,58 @@ struct Suffix<StringType,CoordType,2u>
     coord_type      m_coords;       ///< the suffix coordinates
 };
 
+///@} Private
+
+/// A class to represent a string suffix, i.e. an arbitrarily placed substring
+///
+/// \tparam StringType          the underlying string type
+/// \tparam CoordType           the type of suffix coordinates, string_suffix_coord_type for strings, string_set_suffix_coord_type for string-sets
+/// \tparam CoordDim            the number of coordinates, 1 for strings, 2 for string-sets
+///
+template <
+    typename StringType,
+    typename CoordType>
+struct Suffix : SuffixCore< StringType, CoordType, vector_traits<CoordType>::DIM >
+{
+    typedef SuffixCore< StringType, CoordType, vector_traits<CoordType>::DIM >  core_type;
+    typedef StringType                                                          string_type;
+    typedef CoordType                                                           coord_type;
+
+    typedef typename std::iterator_traits<string_type>::value_type              symbol_type;
+    typedef typename std::iterator_traits<string_type>::value_type              value_type;
+    typedef typename std::iterator_traits<string_type>::reference               reference;
+
+    /// constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    Suffix() {}
+
+    /// constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    Suffix(
+        const string_type   string,
+        const coord_type    infix) : core_type( string, infix ) {}
+}
+
+/// make a suffix, i.e. a substring of a given string
+///
+/// \tparam StringType  the underlying string type
+/// \tparam CoordType   the coordinates type, either string_suffix_coord_type or string_set_suffix_coord_type
+///
+/// \param string       the underlying string object
+/// \param coords       the suffix coordinates
+///
+template <typename StringType, typename CoordType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+Suffix<StringType,CoordType> make_suffix(const StringType string, const CoordType coords)
+{
+    return Suffix<StringType,CoordType>( string, coords );
+}
+
+///@addtogroup Private
+///@{
+
 /// Represent a set of suffixes of a string or string-set
 ///
 /// \tparam SequenceType            the string or string-set type
@@ -205,7 +257,7 @@ struct SuffixSetCore<SequenceType,SuffixIterator,1u>
     typedef SuffixIterator                                              suffix_iterator;
 
     typedef typename std::iterator_traits<SuffixIterator>::value_type   coord_type;
-    typedef Suffix<sequence_type, coord_type, 1u>                       string_type;
+    typedef Suffix<sequence_type, coord_type>                           string_type;
 
     /// constructor
     ///
@@ -257,7 +309,7 @@ struct SuffixSetCore<SequenceType,SuffixIterator,2u>
 
     typedef typename sequence_type::string_type                         base_string_type;
     typedef typename std::iterator_traits<SuffixIterator>::value_type   coord_type;
-    typedef Suffix<base_string_type, coord_type, 2u>                    string_type;
+    typedef Suffix<base_string_type, coord_type>                        string_type;
 
     /// constructor
     ///
@@ -300,13 +352,13 @@ struct SuffixSetCore<SequenceType,SuffixIterator,2u>
 ///
 template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 string_id(const Suffix<StringType,CoordType,2u>& suffix) { return suffix.m_coords.x; }
+uint32 string_id(const SuffixCore<StringType,CoordType,2u>& suffix) { return suffix.m_coords.x; }
 
 /// return the length of a given suffix
 ///
 template <typename StringType, typename CoordType, uint32 CoordDim>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 length(const Suffix<StringType,CoordType,CoordDim>& suffix) { return suffix.length(); }
+uint32 length(const SuffixCore<StringType,CoordType,CoordDim>& suffix) { return suffix.length(); }
 
 /// Represent a set of suffixes of a string or string-set. An SuffixSet is a \ref StringSetAnchor "String Set".
 ///

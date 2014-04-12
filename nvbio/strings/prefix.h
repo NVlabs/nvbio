@@ -44,6 +44,9 @@ typedef uint64      long_string_prefix_coord_type;
 typedef uint32_2    string_set_prefix_coord_type;
 typedef uint64_2    long_string_set_prefix_coord_type;
 
+///@addtogroup Private
+///@{
+
 /// A class to represent a string prefix, i.e. an arbitrarily placed substring
 ///
 /// \tparam StringType          the underlying string type
@@ -54,10 +57,7 @@ template <
     typename StringType,
     typename CoordType,
     uint32   CoordDim>
-struct Prefix {};
-
-///@addtogroup Private
-///@{
+struct PrefixCore {};
 
 /// A class to represent a string prefix, i.e. an arbitrarily placed substring
 ///
@@ -67,7 +67,7 @@ struct Prefix {};
 template <
     typename StringType,
     typename CoordType>
-struct Prefix<StringType,CoordType,1u>
+struct PrefixCore<StringType,CoordType,1u>
 {
     typedef StringType                                              string_type;
     typedef CoordType                                               coord_type;
@@ -79,12 +79,12 @@ struct Prefix<StringType,CoordType,1u>
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    Prefix() {}
+    PrefixCore() {}
 
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    Prefix(
+    PrefixCore(
         const string_type   string,
         const coord_type    prefix) :
         m_string( string ),
@@ -127,7 +127,7 @@ struct Prefix<StringType,CoordType,1u>
 template <
     typename StringType,
     typename CoordType>
-struct Prefix<StringType,CoordType,2u>
+struct PrefixCore<StringType,CoordType,2u>
 {
     typedef StringType                                              string_type;
     typedef CoordType                                               coord_type;
@@ -139,12 +139,12 @@ struct Prefix<StringType,CoordType,2u>
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    Prefix() {}
+    PrefixCore() {}
 
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    Prefix(
+    PrefixCore(
         const string_type   string,
         const coord_type    prefix) :
         m_string( string ),
@@ -179,6 +179,58 @@ struct Prefix<StringType,CoordType,2u>
     coord_type      m_coords;       ///< the prefix coordinates
 };
 
+///@} Private
+
+/// A class to represent a string prefix, i.e. an arbitrarily placed substring
+///
+/// \tparam StringType          the underlying string type
+/// \tparam CoordType           the type of prefix coordinates, string_prefix_coord_type for strings, string_set_prefix_coord_type for string-sets
+/// \tparam CoordDim            the number of coordinates, 1 for strings, 2 for string-sets
+///
+template <
+    typename StringType,
+    typename CoordType>
+struct Prefix : PrefixCore< StringType, CoordType, vector_traits<CoordType>::DIM >
+{
+    typedef PrefixCore< StringType, CoordType, vector_traits<CoordType>::DIM >  core_type;
+    typedef StringType                                                          string_type;
+    typedef CoordType                                                           coord_type;
+
+    typedef typename std::iterator_traits<string_type>::value_type              symbol_type;
+    typedef typename std::iterator_traits<string_type>::value_type              value_type;
+    typedef typename std::iterator_traits<string_type>::reference               reference;
+
+    /// constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    Prefix() {}
+
+    /// constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    Prefix(
+        const string_type   string,
+        const coord_type    infix) : core_type( string, infix ) {}
+}
+
+/// make a prefix, i.e. a substring of a given string
+///
+/// \tparam StringType  the underlying string type
+/// \tparam CoordType   the coordinates type, either string_prefix_coord_type or string_set_prefix_coord_type
+///
+/// \param string       the underlying string object
+/// \param coords       the prefix coordinates
+///
+template <typename StringType, typename CoordType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+Prefix<StringType,CoordType> make_prefix(const StringType string, const CoordType coords)
+{
+    return Prefix<StringType,CoordType>( string, coords );
+}
+
+///@addtogroup Private
+///@{
+
 /// Represent a set of prefixes of a string or string-set
 ///
 /// \tparam SequenceType            the string or string-set type
@@ -205,7 +257,7 @@ struct PrefixSetCore<SequenceType,PrefixIterator,1u>
     typedef PrefixIterator                                              prefix_iterator;
 
     typedef typename std::iterator_traits<PrefixIterator>::value_type   coord_type;
-    typedef Prefix<sequence_type, coord_type, 1u>                       string_type;
+    typedef Prefix<sequence_type, coord_type>                           string_type;
 
     /// constructor
     ///
@@ -257,7 +309,7 @@ struct PrefixSetCore<SequenceType,PrefixIterator,2u>
 
     typedef typename sequence_type::string_type                         base_string_type;
     typedef typename std::iterator_traits<PrefixIterator>::value_type   coord_type;
-    typedef Prefix<base_string_type, coord_type, 2u>                    string_type;
+    typedef Prefix<base_string_type, coord_type>                        string_type;
 
     /// constructor
     ///
@@ -300,13 +352,13 @@ struct PrefixSetCore<SequenceType,PrefixIterator,2u>
 ///
 template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 string_id(const Prefix<StringType,CoordType,2u>& prefix) { return prefix.m_coords.x; }
+uint32 string_id(const PrefixCore<StringType,CoordType,2u>& prefix) { return prefix.m_coords.x; }
 
 /// return the length of a given prefix
 ///
 template <typename StringType, typename CoordType, uint32 CoordDim>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 length(const Prefix<StringType,CoordType,CoordDim>& prefix) { return prefix.length(); }
+uint32 length(const PrefixCore<StringType,CoordType,CoordDim>& prefix) { return prefix.length(); }
 
 /// Represent a set of prefixes of a string or string-set. An PrefixSet is a \ref StringSetAnchor "String Set".
 ///

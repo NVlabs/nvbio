@@ -57,6 +57,10 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Iterator find_pivot(
     const uint32    n,
     const Predicate predicate)
 {
+    // if the range has a size of zero, let's just return the intial element
+    if (n == 0)
+        return begin;
+
     // check whether this segment contains only 0s or only 1s
     if (predicate( begin[0] ) == predicate( begin[n-1] ))
         return predicate( begin[0] ) ? begin + n : begin;
@@ -89,6 +93,10 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Iterator lower_bound(
     Iterator        begin,
     const uint32    n)
 {
+    // if the range has a size of zero, let's just return the intial element
+    if (n == 0)
+        return begin;
+
     // check whether this segment is all left or right of x
     if (x < begin[0])
         return begin;

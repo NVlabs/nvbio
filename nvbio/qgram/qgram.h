@@ -447,11 +447,11 @@ struct QGramIndexViewCore
         symbol_size     ( _symbol_size ),
         n_qgrams        ( _n_qgrams ),
         n_unique_qgrams ( _n_unique_qgrams ),
+        QL              ( _QL ),
+        QLS             ( _QLS ),
         qgrams          ( _qgrams ),
         slots           ( _slots ),
         index           ( _index ),
-        QL              ( _QL ),
-        QLS             ( _QLS ),
         lut             ( _lut ) {}
 
     /// return the slots of P corresponding to the given qgram g
@@ -459,8 +459,11 @@ struct QGramIndexViewCore
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint2 range(const qgram_type g) const
     {
+        const uint32 g_lut = uint32( g >> QLS );
+
+        // consult the lookup table if there is one
         const uint2 lut_range = lut ?
-            make_uint2( lut[ g >> QLS ], lut[ (g >> QLS) + 1 ] ) :
+            make_uint2( lut[ g_lut ], lut[ g_lut + 1 ] ) :
             make_uint2( 0u, n_unique_qgrams );
 
         // find the slot where our q-gram is stored
@@ -492,12 +495,11 @@ struct QGramIndexViewCore
     uint32              symbol_size;        ///< symbol size
     uint32              n_qgrams;           ///< the number of q-grams in the original string
     uint32              n_unique_qgrams;    ///< the number of unique q-grams in the original string
+    uint32              QL;                 ///< the number of LUT symbols 
+    uint32              QLS;                ///< the number of leading bits of a q-gram to lookup in the LUT
     qgram_vector_type   qgrams;             ///< the sorted list of unique q-grams
     index_vector_type   slots;              ///< slots[i] stores the first occurrence of q-grams[i] in index
     coord_vector_type   index;              ///< the list of occurrences of all (partially-sorted) q-grams in the original string
-
-    uint32              QL;                 ///< the number of LUT symbols 
-    uint32              QLS;                ///< the number of leading bits of a q-gram to lookup in the LUT
     index_vector_type   lut;                ///< a LUT used to accelerate q-gram searches
 };
 

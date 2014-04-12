@@ -376,7 +376,7 @@ uint64 QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>
         n_queries,
         thrust::make_transform_iterator( m_ranges.begin(), qgram::range_size() ),
         m_slots.begin(),
-        thrust::plus<uint32>(),
+        thrust::plus<uint64>(),
         d_temp_storage );
 
     // determine the total number of occurrences

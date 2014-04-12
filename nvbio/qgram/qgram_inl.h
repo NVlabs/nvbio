@@ -139,22 +139,14 @@ void QGramIndexDevice::build(
         for (uint32 i = 0; i < QL; ++i)
             lut_size *= ALPHABET_SIZE;
 
-        // build a set of spaced q-grams
-        thrust::device_vector<qgram_type> lut_qgrams( lut_size );
-        thrust::transform(
-            thrust::make_counting_iterator<uint32>(0),
-            thrust::make_counting_iterator<uint32>(0) + lut_size,
-            lut_qgrams.begin(),
-            shift_left<qgram_type>( QLS ) );
-
         // and now search them
         lut.resize( lut_size+1 );
 
         thrust::lower_bound(
             qgrams.begin(),
             qgrams.begin() + n_unique_qgrams,
-            lut_qgrams.begin(),
-            lut_qgrams.begin() + lut_size,
+            thrust::make_transform_iterator( thrust::make_counting_iterator<uint32>(0), shift_left<qgram_type>( QLS ) ),
+            thrust::make_transform_iterator( thrust::make_counting_iterator<uint32>(0), shift_left<qgram_type>( QLS ) ) + lut_size,
             lut.begin() );
 
         // and write a sentinel value
@@ -234,14 +226,14 @@ void QGramSetIndexDevice::build(
 
     // create the ping-pong sorting buffers
     cub::DoubleBuffer<qgram_type>  key_buffers;
-    cub::DoubleBuffer<uint2>       value_buffers;
+    cub::DoubleBuffer<uint64>      value_buffers;
 
     key_buffers.selector       = 0;
     value_buffers.selector     = 0;
     key_buffers.d_buffers[0]   = nvbio::plain_view( d_all_qgrams );
     key_buffers.d_buffers[1]   = nvbio::plain_view( d_all_qgrams ) + align<32>( n_qgrams );
-    value_buffers.d_buffers[0] = nvbio::plain_view( index );
-    value_buffers.d_buffers[1] = nvbio::plain_view( d_temp_index );
+    value_buffers.d_buffers[0] = (uint64*)nvbio::plain_view( index );
+    value_buffers.d_buffers[1] = (uint64*)nvbio::plain_view( d_temp_index );
 
     size_t temp_storage_bytes = 0;
 
@@ -303,22 +295,14 @@ void QGramSetIndexDevice::build(
         for (uint32 i = 0; i < QL; ++i)
             lut_size *= ALPHABET_SIZE;
 
-        // build a set of spaced q-grams
-        thrust::device_vector<qgram_type> lut_qgrams( lut_size );
-        thrust::transform(
-            thrust::make_counting_iterator<uint32>(0),
-            thrust::make_counting_iterator<uint32>(0) + lut_size,
-            lut_qgrams.begin(),
-            shift_left<qgram_type>( QLS ) );
-
-        // and now search them
+        // build a set of spaced q-grams and search them
         lut.resize( lut_size+1 );
 
         thrust::lower_bound(
             qgrams.begin(),
             qgrams.begin() + n_unique_qgrams,
-            lut_qgrams.begin(),
-            lut_qgrams.begin() + lut_size,
+            thrust::make_transform_iterator( thrust::make_counting_iterator<uint32>(0), shift_left<qgram_type>( QLS ) ),
+            thrust::make_transform_iterator( thrust::make_counting_iterator<uint32>(0), shift_left<qgram_type>( QLS ) ) + lut_size,
             lut.begin() );
 
         // and write a sentinel value

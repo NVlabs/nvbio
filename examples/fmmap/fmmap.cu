@@ -179,7 +179,7 @@ void map(
 
     const uint32 batch_size = 32*1024*1024;
 
-    typedef typename uint2  hit_type;
+    typedef uint2  hit_type;
 
     // prepare storage for the output hits
     nvbio::vector<system_tag,hit_type>      hits( batch_size );

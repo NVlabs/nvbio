@@ -57,63 +57,7 @@ template <
     typename StringType,
     typename CoordType,
     uint32   CoordDim>
-struct InfixCore
-{
-    typedef StringType                                              string_type;
-    typedef CoordType                                               coord_type;
-    typedef typename vector_traits<CoordType>::value_type           index_type;
-
-    typedef typename std::iterator_traits<string_type>::value_type  symbol_type;
-    typedef typename std::iterator_traits<string_type>::value_type  value_type;
-    typedef typename std::iterator_traits<string_type>::reference   reference;
-
-    /// constructor
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    InfixCore() {}
-
-    /// constructor
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    InfixCore(
-        const string_type   string,
-        const coord_type    infix) :
-        m_string( string ),
-        m_coords( infix ) {}
-
-    /// infix size
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 size() const { return m_coords.y - m_coords.x; }
-
-    /// infix length
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 length() const { return size(); }
-
-    /// indexing operator
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    symbol_type operator[] (const uint32 i) const { return m_string[ m_coords.x + i ]; }
-
-    /// indexing operator
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    reference operator[] (const uint32 i) { return m_string[ m_coords.x + i ]; }
-
-    /// return the infix range
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 range() const { return make_uint2( m_coords.y, m_coords.x ); }
-
-    /// return the infix coordinates
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    coord_type coords() const { return m_coords; }
-
-    string_type     m_string;       ///< the underlying string set
-    coord_type      m_coords;       ///< the infix coordinates
-};
+struct InfixCore {};
 
 ///@addtogroup Private
 ///@{
@@ -173,7 +117,7 @@ struct InfixCore<StringType,CoordType,2u>
     /// return the infix range
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 range() const { return make_uint2( m_coords.y, m_coords.x ); }
+    uint2 range() const { return make_uint2( m_coords.x, m_coords.y ); }
 
     /// return the infix coordinates
     ///
@@ -239,7 +183,7 @@ struct InfixCore<StringType,CoordType,4u>
     /// return the infix range
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 range() const { return make_uint2( m_coords.z, m_coords.y ); }
+    uint2 range() const { return make_uint2( m_coords.y, m_coords.z ); }
 
     /// return the infix coordinates
     ///

@@ -61,6 +61,7 @@ struct InfixCore
 {
     typedef StringType                                              string_type;
     typedef CoordType                                               coord_type;
+    typedef typename vector_traits<CoordType>::value_type           index_type;
 
     typedef typename std::iterator_traits<string_type>::value_type  symbol_type;
     typedef typename std::iterator_traits<string_type>::value_type  value_type;
@@ -129,6 +130,7 @@ struct InfixCore<StringType,CoordType,2u>
 {
     typedef StringType                                              string_type;
     typedef CoordType                                               coord_type;
+    typedef typename vector_traits<CoordType>::value_type           index_type;
 
     typedef typename std::iterator_traits<string_type>::value_type  symbol_type;
     typedef typename std::iterator_traits<string_type>::value_type  value_type;
@@ -194,6 +196,7 @@ struct InfixCore<StringType,CoordType,4u>
 {
     typedef StringType                                              string_type;
     typedef CoordType                                               coord_type;
+    typedef typename vector_traits<CoordType>::value_type           index_type;
 
     typedef typename std::iterator_traits<string_type>::value_type  symbol_type;
     typedef typename std::iterator_traits<string_type>::value_type  value_type;
@@ -243,6 +246,11 @@ struct InfixCore<StringType,CoordType,4u>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     coord_type coords() const { return m_coords; }
 
+    /// return the string id
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 string_id() const { return m_coords.x; }
+
     string_type     m_string;       ///< the underlying string set
     coord_type      m_coords;       ///< the infix coordinates
 };
@@ -263,6 +271,7 @@ struct Infix : public InfixCore< StringType, CoordType, vector_traits<CoordType>
     typedef InfixCore< StringType, CoordType, vector_traits<CoordType>::DIM >   core_type;
     typedef StringType                                                          string_type;
     typedef CoordType                                                           coord_type;
+    typedef typename vector_traits<CoordType>::value_type                       index_type;
 
     typedef typename std::iterator_traits<string_type>::value_type              symbol_type;
     typedef typename std::iterator_traits<string_type>::value_type              value_type;
@@ -413,11 +422,23 @@ struct InfixSetCore<SequenceType,InfixIterator,4u>
 
 ///@} Private
 
+/// return the string begin of a given infix
+///
+template <typename StringType, typename CoordType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+typename Infix<StringType,CoordType>::index_type infix_begin(const Infix<StringType,CoordType>& infix) { return infix.range().x; }
+
+/// return the string end of a given infix
+///
+template <typename StringType, typename CoordType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+typename Infix<StringType,CoordType>::index_type infix_end(const Infix<StringType,CoordType>& infix) { return infix.range().y; }
+
 /// return the string index of a given infix
 ///
 template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 string_id(const InfixCore<StringType,CoordType,4u>& infix) { return infix.m_coords.x; }
+uint32 string_id(const InfixCore<StringType,CoordType,4u>& infix) { return infix.string_id(); }
 
 /// return the length a given infix
 ///

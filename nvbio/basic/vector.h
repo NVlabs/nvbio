@@ -88,4 +88,19 @@ struct vector<device_tag,T> : public thrust::device_vector<T>
     vector<device_tag,T>& operator= (const thrust::device_vector<T>& v) { this->base_type::operator=(v); return *this; }
 };
 
+/// a utility meta-type to wrap naked device pointers as thrust::device_ptr
+///
+template <typename T>   struct device_iterator_type             { typedef T type; };
+template <typename T>   struct device_iterator_type<T*>         { typedef thrust::device_ptr<T> type; };
+template <typename T>   struct device_iterator_type<const T*>   { typedef thrust::device_ptr<const T> type; };
+
+/// a convenience function to wrap naked device pointers as thrust::device_ptr
+///
+template <typename T>
+typename device_iterator_type<T>::type device_iterator(const T it)
+{
+    // wrap the plain iterator
+    return typename device_iterator_type<T>::type( it );
+}
+
 } // namespace nvbio

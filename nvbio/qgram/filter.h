@@ -30,16 +30,13 @@
 #include <nvbio/qgram/qgram.h>
 #include <nvbio/basic/types.h>
 #include <nvbio/basic/numbers.h>
+#include <nvbio/basic/vector.h>
 #include <nvbio/basic/algorithms.h>
-#include <nvbio/basic/cuda/primitives.h>
-#include <nvbio/basic/thrust_view.h>
 #include <nvbio/basic/exceptions.h>
 #include <nvbio/basic/cuda/sort.h>
-#include <thrust/host_vector.h>
-#include <thrust/device_vector.h>
+#include <nvbio/basic/cuda/primitives.h>
 #include <thrust/sort.h>
-#include <thrust/for_each.h>
-#include <thrust/binary_search.h>
+#include <thrust/scan.h>
 #include <thrust/iterator/constant_iterator.h>
 #include <thrust/iterator/counting_iterator.h>
 
@@ -58,9 +55,9 @@ namespace nvbio {
 /// pairs, where <i>qgram-pos</i> is the index of the hit into the string used to build qgram-index,
 /// and <i>query-pos</i> corresponds to one of the input query q-gram indices.
 ///\par
-/// For string-set q-gram indices, the filter will return an ordered set of <i>(string-id,string-pos,text-pos)</i>
+/// For string-set q-gram indices, the filter will return an ordered set of <i>(string-id,string-pos,query-pos)</i>
 /// pairs (encoded as uint4), where <i>string-id</i> is the index of the hit into the string-set used to build qgram-index,
-/// and <i>text-pos</i> corresponds to one of the input query q-gram indices.
+/// and <i>query-pos</i> corresponds to one of the input query q-gram indices.
 ///
 /// \tparam qgram_index_type    the type of the qgram-index
 /// \tparam query_iterator      the type of the query q-gram iterator
@@ -80,9 +77,9 @@ struct QGramFilter {};
 /// pairs, where <i>qgram-pos</i> is the index of the hit into the string used to build qgram-index,
 /// and <i>query-pos</i> corresponds to one of the input query q-gram indices.
 ///\par
-/// For string-set q-gram indices, the filter will return an ordered set of <i>(string-id,string-pos,text-pos)</i>
+/// For string-set q-gram indices, the filter will return an ordered set of <i>(string-id,string-pos,query-pos)</i>
 /// pairs (encoded as uint4), where <i>string-id</i> is the index of the hit into the string-set used to build qgram-index,
-/// and <i>text-pos</i> corresponds to one of the input query q-gram indices.
+/// and <i>query-pos</i> corresponds to one of the input query q-gram indices.
 ///\par
 /// Furthermore, the filter offers the ability to <i>merge</i> hits by diagonal bucket: in this case,
 /// the output type will be either a simple uint32 linear coordinate describing the diagonal,
@@ -184,13 +181,13 @@ struct QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>
 /// text, and a \ref QGramIndex "q-gram index".
 /// The q-gram index can be either a simple string index or a string-set index.
 ///\par
-/// For string q-gram indices, the filter will return an ordered set of <i>(qgram-pos,text-pos)</i>
+/// For string q-gram indices, the filter will return an ordered set of <i>(qgram-pos,query-pos)</i>
 /// pairs, where <i>qgram-pos</i> is the index of the hit into the string used to build qgram-index,
-/// and <i>text-pos</i> corresponds to one of the input query q-gram indices.
+/// and <i>query-pos</i> corresponds to one of the input query q-gram indices.
 ///\par
-/// For string-set q-gram indices, the filter will return an ordered set of <i>(string-id,string-pos,text-pos)</i>
+/// For string-set q-gram indices, the filter will return an ordered set of <i>(string-id,string-pos,query-pos)</i>
 /// pairs (encoded as uint4), where <i>string-id</i> is the index of the hit into the string-set used to build qgram-index,
-/// and <i>text-pos</i> corresponds to one of the input query q-gram indices.
+/// and <i>query-pos</i> corresponds to one of the input query q-gram indices.
 ///\par
 /// Furthermore, the filter offers the ability to <i>merge</i> hits by diagonal bucket: in this case,
 /// the output type will be either a simple uint32 linear coordinate describing the diagonal,

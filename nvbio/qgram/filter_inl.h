@@ -29,17 +29,6 @@
 
 namespace nvbio {
 
-template <typename T>   struct device_iterator_type             { typedef T type; };
-template <typename T>   struct device_iterator_type<T*>         { typedef thrust::device_ptr<T> type; };
-template <typename T>   struct device_iterator_type<const T*>   { typedef thrust::device_ptr<const T> type; };
-
-template <typename T>
-typename device_iterator_type<T>::type device_iterator(const T it)
-{
-    // wrap the plain iterator
-    return typename device_iterator_type<T>::type( it );
-}
-
 namespace qgram {
 
 // return the size of a given range

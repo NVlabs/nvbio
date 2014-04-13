@@ -190,3 +190,34 @@ struct AlignmentStream
     base_iterator   m_genome;
     int16*          m_scores;
 };
+
+// perform alignment
+//
+template <typename aligner_type, typename genome_string>
+void align(
+    const aligner_type                              aligner,
+    const uint32                                    n_tasks,
+    const uint2*                                    diagonals,
+    const io::ReadDataDevice::const_plain_view_type reads,
+    const uint32                                    genome_len,
+    const genome_string                             genome,
+          int16*                                    scores)
+{
+    static const uint32 BAND_LEN = 31;
+
+    typedef AlignmentStream<BAND_LEN,aligner_type> stream_type;
+
+    // create a stream
+    stream_type stream(
+        aligner,
+        n_tasks,
+        diagonals,
+        reads,
+        genome_len,
+        genome.stream(),
+        scores );
+
+    // test the ThreadParallelScheduler
+    aln::BatchedBandedAlignmentScore<BAND_LEN,stream_type,aln::ThreadParallelScheduler> batch;
+    batch.enact( stream );
+}

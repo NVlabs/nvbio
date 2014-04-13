@@ -157,37 +157,6 @@ void qgram_set_index_build(
     log_verbose(stderr, "    memory usage    : %5.1f MB\n", float( qgram_index.used_device_memory() ) / float(1024*1024) );
 }
 
-// perform alignment
-//
-template <typename aligner_type, typename genome_string>
-void align(
-    const aligner_type                              aligner,
-    const uint32                                    n_tasks,
-    const uint2*                                    diagonals,
-    const io::ReadDataDevice::const_plain_view_type reads,
-    const uint32                                    genome_len,
-    const genome_string                             genome,
-          int16*                                    scores)
-{
-    static const uint32 BAND_LEN = 31;
-
-    typedef AlignmentStream<BAND_LEN,aligner_type> stream_type;
-
-    // create a stream
-    stream_type stream(
-        aligner,
-        n_tasks,
-        diagonals,
-        reads,
-        genome_len,
-        genome.stream(),
-        scores );
-
-    // test the ThreadParallelScheduler
-    aln::BatchedBandedAlignmentScore<BAND_LEN,stream_type,aln::ThreadParallelScheduler> batch;
-    batch.enact( stream );
-}
-
 // perform q-gram index mapping
 //
 template <typename qgram_index_type, typename qgram_filter_type, typename genome_string>
@@ -498,7 +467,6 @@ int main(int argc, char* argv[])
         log_verbose(stderr, "    locate throughput  : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.locate_time);
         log_verbose(stderr, "    align throughput   : %6.2f K reads/s\n", (1.0e-3f * float( stats.reads )) / stats.align_time);
         log_verbose(stderr, "                       : %6.2f M hits/s\n",  (1.0e-6f * float( stats.merged )) / stats.align_time);
-        //log_verbose(stderr, "    matches            : %.2f M\n", 1.0e-6f * float( stats.matches ) );
         log_verbose(stderr, "    occurrences        : %.3f B\n", 1.0e-9f * float( stats.occurrences ) );
         log_verbose(stderr, "    merged occurrences : %.3f B (%.1f %%)\n", 1.0e-9f * float( stats.merged ), 100.0f * float(stats.merged)/float(stats.occurrences));
     }

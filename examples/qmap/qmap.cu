@@ -80,22 +80,6 @@ struct Stats
     uint64  merged;
 };
 
-// return 1 or 0 depending on whether a number is >= than a given threshold
-struct above_threshold
-{
-    typedef int16  argument_type;
-    typedef uint32 result_type;
-
-    // constructor
-    above_threshold(const int16 _t) : t(_t) {}
-
-    // functor operator
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 operator() (const int16 s) { return s >= t ? 1u : 0u; }
-
-    const int16 t;
-};
-
 // build a set of q-grams from a given string, together with their sorted counterpart
 //
 template <typename genome_string, typename qgram_vector_type, typename index_vector_type>

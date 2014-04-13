@@ -94,7 +94,7 @@ struct hit_to_diagonal
 
     // functor operator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 operator() (const uint2 hit)
+    uint2 operator() (const uint2 hit) const
     {
         const uint32 index_pos = hit.x;
         const uint32 seed_id   = hit.y;

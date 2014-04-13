@@ -258,6 +258,8 @@ struct fm_index
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE TSuffixArray    sa() const { return m_sa; }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bwt_type        bwt() const { return m_rank_dict.text; }
 
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE fm_index() {}
+
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE fm_index(
         const index_type      length,
         const index_type      primary,

@@ -159,25 +159,25 @@ struct FMIndexData
 
     // FM-index accessors
     //
-    occ_type  occ_iterator() { return occ_type( occ_stream()); }
-    occ_type rocc_iterator() { return occ_type(rocc_stream()); }
+    occ_type  occ_iterator() const { return occ_type( occ_stream()); }
+    occ_type rocc_iterator() const { return occ_type(rocc_stream()); }
 
-    bwt_type  bwt_iterator() { return bwt_type( bwt_stream()); }
-    bwt_type rbwt_iterator() { return bwt_type(rbwt_stream()); }
+    bwt_type  bwt_iterator() const { return bwt_type( bwt_stream()); }
+    bwt_type rbwt_iterator() const { return bwt_type(rbwt_stream()); }
 
-    ssa_type  ssa_iterator() { return ssa; }
-    ssa_type rssa_iterator() { return rssa; }
+    ssa_type  ssa_iterator() const { return ssa; }
+    ssa_type rssa_iterator() const { return rssa; }
 
-    count_table_type count_table_iterator() { return count_table; }
+    count_table_type count_table_iterator() const { return count_table; }
 
-    rank_dict_type  rank_dict() { return rank_dict_type(  bwt_iterator(),  occ_iterator(), count_table_iterator() ); }
-    rank_dict_type rrank_dict() { return rank_dict_type( rbwt_iterator(), rocc_iterator(), count_table_iterator() ); }
+    rank_dict_type  rank_dict() const { return rank_dict_type(  bwt_iterator(),  occ_iterator(), count_table_iterator() ); }
+    rank_dict_type rrank_dict() const { return rank_dict_type( rbwt_iterator(), rocc_iterator(), count_table_iterator() ); }
 
-    fm_index_type  index() { return fm_index_type( genome_length(),  primary,  L2,  rank_dict(),  ssa_iterator() ); }
-    fm_index_type rindex() { return fm_index_type( genome_length(), rprimary, rL2, rrank_dict(), rssa_iterator() ); }
+    fm_index_type  index() const { return fm_index_type( genome_length(),  primary,  L2,  rank_dict(),  ssa_iterator() ); }
+    fm_index_type rindex() const { return fm_index_type( genome_length(), rprimary, rL2, rrank_dict(), rssa_iterator() ); }
 
-    partial_fm_index_type  partial_index() { return partial_fm_index_type( genome_length(),  primary,  L2,  rank_dict(), null_type() ); }
-    partial_fm_index_type rpartial_index() { return partial_fm_index_type( genome_length(), rprimary, rL2, rrank_dict(), null_type() ); }
+    partial_fm_index_type  partial_index() const { return partial_fm_index_type( genome_length(),  primary,  L2,  rank_dict(), null_type() ); }
+    partial_fm_index_type rpartial_index() const { return partial_fm_index_type( genome_length(), rprimary, rL2, rrank_dict(), null_type() ); }
 
 
     uint32             m_flags;
@@ -363,25 +363,25 @@ struct FMIndexDataDevice : public FMIndexData
 
     /// iterators access
     ///
-    occ_type  occ_iterator() { return occ_type(bwt_occ_type((const uint4*) bwt_occ())); }
-    occ_type rocc_iterator() { return occ_type(bwt_occ_type((const uint4*)rbwt_occ())); }
+    occ_type  occ_iterator() const { return occ_type(bwt_occ_type((const uint4*) bwt_occ())); }
+    occ_type rocc_iterator() const { return occ_type(bwt_occ_type((const uint4*)rbwt_occ())); }
 
-    bwt_type  bwt_iterator() { return bwt_type(bwt_occ_type((const uint4*) bwt_occ())); }
-    bwt_type rbwt_iterator() { return bwt_type(bwt_occ_type((const uint4*)rbwt_occ())); }
+    bwt_type  bwt_iterator() const { return bwt_type(bwt_occ_type((const uint4*) bwt_occ())); }
+    bwt_type rbwt_iterator() const { return bwt_type(bwt_occ_type((const uint4*)rbwt_occ())); }
 
-    ssa_type  ssa_iterator() { return ssa_type(ssa_ldg_type( ssa.m_ssa)); }
-    ssa_type rssa_iterator() { return ssa_type(ssa_ldg_type(rssa.m_ssa)); }
+    ssa_type  ssa_iterator() const { return ssa_type(ssa_ldg_type( ssa.m_ssa)); }
+    ssa_type rssa_iterator() const { return ssa_type(ssa_ldg_type(rssa.m_ssa)); }
 
-    count_table_type count_table_iterator() { return count_table_type( count_table ); }
+    count_table_type count_table_iterator() const { return count_table_type( count_table ); }
 
-    rank_dict_type  rank_dict() { return rank_dict_type(  bwt_iterator(),  occ_iterator(), count_table_iterator() ); }
-    rank_dict_type rrank_dict() { return rank_dict_type( rbwt_iterator(), rocc_iterator(), count_table_iterator() ); }
+    rank_dict_type  rank_dict() const { return rank_dict_type(  bwt_iterator(),  occ_iterator(), count_table_iterator() ); }
+    rank_dict_type rrank_dict() const { return rank_dict_type( rbwt_iterator(), rocc_iterator(), count_table_iterator() ); }
 
-    fm_index_type  index() { return fm_index_type( genome_length(),  primary,  L2,  rank_dict(),  ssa_iterator() ); }
-    fm_index_type rindex() { return fm_index_type( genome_length(), rprimary, rL2, rrank_dict(), rssa_iterator() ); }
+    fm_index_type  index() const { return fm_index_type( genome_length(),  primary,  L2,  rank_dict(),  ssa_iterator() ); }
+    fm_index_type rindex() const { return fm_index_type( genome_length(), rprimary, rL2, rrank_dict(), rssa_iterator() ); }
 
-    partial_fm_index_type  partial_index() { return partial_fm_index_type( genome_length(),  primary,  L2,  rank_dict(), null_type() ); }
-    partial_fm_index_type rpartial_index() { return partial_fm_index_type( genome_length(), rprimary, rL2, rrank_dict(), null_type() ); }
+    partial_fm_index_type  partial_index() const { return partial_fm_index_type( genome_length(),  primary,  L2,  rank_dict(), null_type() ); }
+    partial_fm_index_type rpartial_index() const { return partial_fm_index_type( genome_length(), rprimary, rL2, rrank_dict(), null_type() ); }
 
 private:
     uint64                        m_allocated;          ///< # of allocated device memory bytes

@@ -50,6 +50,12 @@ struct deinterleaved_iterator
     ///
     NVBIO_HOST_DEVICE_TEMPLATE
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    deinterleaved_iterator() {}
+
+    /// constructor
+    ///
+    NVBIO_HOST_DEVICE_TEMPLATE
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     deinterleaved_iterator(const BaseIterator it) : m_it( it ) {}
 
     /// copy constructor

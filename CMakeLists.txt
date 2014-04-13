@@ -92,6 +92,8 @@ add_subdirectory(sufsort-test)
 add_subdirectory(sw-benchmark)
 
 add_subdirectory(examples/seeding)
+add_subdirectory(examples/fmmap)
+add_subdirectory(examples/qmap)
 
 nvbio_module(nvbio-project)
 nvbio_doxygen()

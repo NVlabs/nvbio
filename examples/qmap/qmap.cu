@@ -290,8 +290,9 @@ int main(int argc, char* argv[])
     // perform some basic option parsing
     //
 
-    const uint32 batch_bps     = 128*1024*1024;
-    const uint32 queries_batch = 16*1024*1024;
+    const uint32 batch_reads   =   1*1024*1024;
+    const uint32 batch_bps     = 100*1024*1024;
+    const uint32 queries_batch =  16*1024*1024;
 
     const char* reads = argv[argc-1];
     const char* index = argv[argc-2];
@@ -353,15 +354,13 @@ int main(int argc, char* argv[])
     }
     log_info(stderr, "  opening reads file... done\n");
 
-    const uint32 batch_size = uint32(-1);
-
     // keep stats
     Stats stats;
 
     while (1)
     {
         // load a batch of reads
-        SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_size, batch_bps ) );
+        SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_reads, batch_bps ) );
         if (h_read_data == NULL)
             break;
 

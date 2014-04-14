@@ -182,6 +182,12 @@ struct ReadStream
     QualType    qual;               ///< quality stream
 };
 
+/// return string length
+///
+template< typename StreamType, typename QualType>
+NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
+uint32 length(const ReadStream<StreamType,QualType>& read) { return read.length(); }
+
 ///
 /// Utility class to load a read with a StringLoader.
 /// The Tag type allows to specify the caching policy.

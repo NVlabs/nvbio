@@ -278,7 +278,7 @@ int main(int argc, char* argv[])
     params.merge_intv       = 16;
     bool   rc               = false;
     uint32 max_reads        = uint32(-1);
-    int16  score_threshold  = -5;
+    int16  score_threshold  = -20;
 
     for (int i = 0; i < argc; ++i)
     {

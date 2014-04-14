@@ -232,10 +232,20 @@ enum AlignmentType { GLOBAL, LOCAL, SEMI_GLOBAL };
 /// the pattern or along the text. To communicate the values across stripes, the right-most
 /// column of each stripe must be stored in memory - hence the two algorithms differ for
 /// the amount of temporary storage needed (for long texts, text-blocking is preferred).
+///\par
+/// Additionally, for \ref EditDistanceAligner "edit distance", the Myers bit-vector algorithm
+/// is available.
 ///@{
 
 struct PatternBlockingTag {};  ///< block along the pattern
 struct TextBlockingTag {};     ///< block along the text (at the moment, this is only supported for scoring)
+
+///< Myers bit-vector algorithm
+///
+///\tparam ALPHABET_SIZE_T      the size of the alphabet, in symbols; currently there are fast
+///                             specializations for alphabets of 2, 4 and 5 symbols.
+///
+template <uint32 ALPHABET_SIZE_T> struct MyersTag { static const uint32 ALPHABET_SIZE = ALPHABET_SIZE_T; };
 
 template <typename T> struct transpose_tag {};
 template <>           struct transpose_tag<PatternBlockingTag> { typedef TextBlockingTag type; };

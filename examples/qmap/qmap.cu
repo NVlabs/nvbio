@@ -244,8 +244,9 @@ void map(
         timer.start();
 
         //const aln::SimpleGotohScheme gotoh( 2, -2, -5, -3 );
+        typedef aln::MyersTag<5u> myers_dna5_tag;
         align(
-            aln::make_edit_distance_aligner<aln::SEMI_GLOBAL>(),
+            aln::make_edit_distance_aligner<aln::SEMI_GLOBAL, myers_dna5_tag>(),
             //aln::make_gotoh_aligner<aln::LOCAL>( gotoh ),
             n_merged,
             nvbio::plain_view( merged_hits ),
@@ -286,7 +287,7 @@ int main(int argc, char* argv[])
     //
 
     const uint32 batch_bps     = 128*1024*1024;
-    const uint32 queries_batch = 32*1024*1024;
+    const uint32 queries_batch = 16*1024*1024;
 
     const char* reads = argv[argc-1];
     const char* index = argv[argc-2];

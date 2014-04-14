@@ -146,11 +146,9 @@ void map(
     nvbio::vector<device_tag,int16>&    best_scores,
           Stats&                        stats)
 {
-    typedef device_tag system_tag;
-
     typedef io::ReadDataDevice::const_read_string_set_type                      read_string_set_type;
     typedef string_set_infix_coord_type                                         infix_coord_type;
-    typedef nvbio::vector<system_tag,infix_coord_type>                          infix_vector_type;
+    typedef nvbio::vector<device_tag,infix_coord_type>                          infix_vector_type;
     typedef InfixSet<read_string_set_type, const string_set_infix_coord_type*>  seed_string_set_type;
 
     // prepare some vectors to store the query qgrams
@@ -182,11 +180,11 @@ void map(
     typedef uint2  hit_type;
 
     // prepare storage for the output hits
-    nvbio::vector<system_tag,hit_type>      hits( batch_size );
-    nvbio::vector<system_tag,int16>         scores( batch_size );
-    nvbio::vector<system_tag,uint32>        out_reads( batch_size );
-    nvbio::vector<system_tag,int16>         out_scores( batch_size );
-    nvbio::vector<system_tag,uint8>         temp_storage;
+    nvbio::vector<device_tag,hit_type>      hits( batch_size );
+    nvbio::vector<device_tag,int16>         scores( batch_size );
+    nvbio::vector<device_tag,uint32>        out_reads( batch_size );
+    nvbio::vector<device_tag,int16>         out_scores( batch_size );
+    nvbio::vector<device_tag,uint8>         temp_storage;
 
     timer.start();
 
@@ -224,8 +222,9 @@ void map(
         timer.start();
 
         //const aln::SimpleGotohScheme gotoh( 2, -2, -5, -3 );
+        typedef aln::MyersTag<5u> myers_dna5_tag;
         align(
-            aln::make_edit_distance_aligner<aln::SEMI_GLOBAL>(),
+            aln::make_edit_distance_aligner<aln::SEMI_GLOBAL, myers_dna5_tag>(),
             //aln::make_gotoh_aligner<aln::LOCAL>( gotoh ),
             hits_end - hits_begin,
             nvbio::plain_view( hits ),

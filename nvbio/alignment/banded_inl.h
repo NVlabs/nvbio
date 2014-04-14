@@ -33,7 +33,7 @@
 #include <nvbio/alignment/ed/ed_banded_inl.h>
 #include <nvbio/alignment/sw/sw_banded_inl.h>
 #include <nvbio/alignment/gotoh/gotoh_banded_inl.h>
-
+#include <nvbio/alignment/myers/myers_banded_inl.h>
 namespace nvbio {
 namespace aln {
 

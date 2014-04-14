@@ -82,7 +82,7 @@ struct closest_diagonal<uint4>
     result_type operator() (const uint4 range) const
     {
         const uint32 diag = /*qgram_index.string_length(range.x) + */ range.z - range.y;
-        const uint32 rounded_diag = util::round_z( diag, interval );
+        const uint32 rounded_diag = util::round( diag, interval );
 
         return make_uint2( rounded_diag, range.x );
     }

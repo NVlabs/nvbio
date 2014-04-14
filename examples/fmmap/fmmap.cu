@@ -237,10 +237,14 @@ void map(
         timer.stop();
         stats.align_time += timer.seconds();
 
-        // compute the best score for each read in this batch
+        // compute the best score for each read in this batch;
+        // note that we divide the string-id by 2 to merge results coming from the forward
+        // and reverse-complemented strands
         const uint32 n_distinct = cuda::reduce_by_key(
             hits_end - hits_begin,
-            thrust::make_transform_iterator( nvbio::plain_view( hits ), component_functor<hit_type>( 1u ) ),
+            thrust::make_transform_iterator(
+                nvbio::plain_view( hits ),
+                make_composition_functor( divide_by_two(), component_functor<hit_type>( 1u ) ) ), // take the second component divided by 2
             nvbio::plain_view( scores ),
             nvbio::plain_view( out_reads ),
             nvbio::plain_view( out_scores ),
@@ -276,7 +280,6 @@ int main(int argc, char* argv[])
     params.seed_len         = 22;
     params.seed_intv        = 10;
     params.merge_intv       = 16;
-    bool   rc               = false;
     uint32 max_reads        = uint32(-1);
     int16  score_threshold  = -20;
 
@@ -289,8 +292,6 @@ int main(int argc, char* argv[])
         }
         if (strcmp( argv[i], "-m" ) == 0)
             params.merge_intv = uint32( atoi( argv[++i] ) );
-        else if (strcmp( argv[i], "-rc" ) == 0)
-            rc = true;
         else if (strcmp( argv[i], "-max-reads" ) == 0)
             max_reads = uint32( atoi( argv[++i] ) );
         else if (strcmp( argv[i], "-t" ) == 0)
@@ -323,7 +324,7 @@ int main(int argc, char* argv[])
             io::Phred33,
             max_reads,
             uint32(-1),
-            rc ? io::REVERSE_COMPLEMENT : io::FORWARD ) );
+            io::ReadEncoding( io::FORWARD | io::REVERSE_COMPLEMENT ) ) );
 
     // check whether the file opened correctly
     if (read_data_file == NULL || read_data_file->is_ok() == false)
@@ -359,7 +360,7 @@ int main(int argc, char* argv[])
         // copy it to the device
         const io::ReadDataDevice d_read_data( *h_read_data );
 
-        const uint32 n_reads = d_read_data.size();
+        const uint32 n_reads = d_read_data.size() / 2;
 
         log_info(stderr, "  loading reads... done\n");
         log_info(stderr, "    %u reads\n", n_reads);

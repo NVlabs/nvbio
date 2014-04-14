@@ -29,6 +29,19 @@
 
 #include <nvbio/basic/numbers.h>
 
+using namespace nvbio;
+
+// divide by two
+//
+struct divide_by_two
+{
+    typedef uint32  argument_type;
+    typedef uint32  result_type;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const argument_type op) const { return op / 2u; }
+};
+
 // return 1 or 0 depending on whether a number is >= than a given threshold
 struct above_threshold
 {

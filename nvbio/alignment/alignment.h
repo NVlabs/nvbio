@@ -265,12 +265,12 @@ enum AlignmentType { GLOBAL, LOCAL, SEMI_GLOBAL };
 struct PatternBlockingTag {};  ///< block along the pattern
 struct TextBlockingTag {};     ///< block along the text (at the moment, this is only supported for scoring)
 
-/// Myers bit-vector algorithm
+/// Myers bit-vector algorithm, only supported for the EditDistanceAligner
 ///
 ///\tparam ALPHABET_SIZE_T      the size of the alphabet, in symbols; currently there are fast
 ///                             specializations for alphabets of 2, 4 and 5 symbols.
 ///
-template <uint32 ALPHABET_SIZE_T> struct MyersTag { static const uint32 ALPHABET_SIZE = ALPHABET_SIZE_T; };
+template <uint32 ALPHABET_SIZE_T> struct MyersTag { static const uint32 ALPHABET_SIZE = ALPHABET_SIZE_T; }; ///< Myers bit-vector algorithm
 
 template <typename T> struct transpose_tag {};
 template <>           struct transpose_tag<PatternBlockingTag> { typedef TextBlockingTag type; };

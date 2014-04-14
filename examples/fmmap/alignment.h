@@ -63,7 +63,7 @@ struct AlignmentStream
         uint32                  genome_begin;
         uint32                  genome_end;
         int32                   min_score;
-        aln::BestSink<int32>    sink;
+        aln::BestSink<int16>    sink;
     };
     // a container for the strings to be aligned
     struct strings_type
@@ -144,10 +144,10 @@ struct AlignmentStream
         context->genome_end   = nvbio::min( context->genome_begin + read_len + BAND_LEN, m_genome_len );
 
         // initialize the sink
-        context->sink = aln::BestSink<int32>();
+        context->sink = aln::BestSink<int16>();
 
         // setup the minimum score
-        context->min_score = Field_traits<int32>::min();
+        context->min_score = Field_traits<int16>::min();
         return true;
     }
 

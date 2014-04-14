@@ -224,12 +224,13 @@ int horizontal_column(const uint32 B_c_ref, uint32& VP, uint32& VN, const int s)
 }
 
 template <
-    uint32   BAND_WIDTH,
-    uint32   C,
-    uint32   ALPHABET_SIZE,
-    typename pattern_string,
-    typename text_string,
-    typename sink_type>
+    uint32          BAND_WIDTH,
+    uint32          C,
+    AlignmentType   TYPE,
+    uint32          ALPHABET_SIZE,
+    typename        pattern_string,
+    typename        text_string,
+    typename        sink_type>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 bool banded_myers(
     const pattern_string pattern,
@@ -276,11 +277,13 @@ bool banded_myers(
         dist -= horizontal_column<BAND_WIDTH>( B.get( text[i] ), VP, VN, s );
 
         // report a potential hit
-        if (dist >= min_score)
+        if (TYPE == SEMI_GLOBAL && dist >= min_score)
             sink.report( dist, make_uint2( i+1, pattern_len ) );
 
         --s;
     }
+    if (TYPE == GLOBAL && dist >= min_score)
+        sink.report( dist, make_uint2( text_len, pattern_len ) );
     return true;
 }
 
@@ -313,7 +316,7 @@ bool banded_alignment_score(
     const int32                                                 min_score,
     sink_type&                                                  sink)
 {
-    return banded_myers<BAND_LEN,0u,ALPHABET_SIZE>(
+    return banded_myers<BAND_LEN,0u,TYPE,ALPHABET_SIZE>(
         pattern,
         text,
         min_score,
@@ -354,7 +357,7 @@ bool banded_alignment_score(
     sink_type&                                                  sink,
     checkpoint_type                                             checkpoint)
 {
-    return banded_myers<BAND_LEN,0u,ALPHABET_SIZE>(
+    return banded_myers<BAND_LEN,0u,TYPE,ALPHABET_SIZE>(
         pattern,
         text,
         min_score,

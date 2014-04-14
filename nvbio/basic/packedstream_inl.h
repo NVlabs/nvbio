@@ -91,9 +91,9 @@ struct packer<BIG_ENDIAN_T,SYMBOL_SIZE,Symbol,InputStream,IndexType,uint32>
 
         if (is_pow2<SYMBOL_SIZE>())
         {
-                  uint32 word = stream[ word_idx ];
+                  uint32 word          = stream[ word_idx ];
             const uint32 symbol_offset = BIG_ENDIAN_T ? (32u - SYMBOL_SIZE - uint32(bit_idx & 31u)) : uint32(bit_idx & 31u);
-            const uint32 symbol = uint32(sym & SYMBOL_MASK) << symbol_offset;
+            const uint32 symbol        = uint32(sym & SYMBOL_MASK) << symbol_offset;
 
             // clear all bits
             word &= ~(SYMBOL_MASK << symbol_offset);
@@ -103,9 +103,9 @@ struct packer<BIG_ENDIAN_T,SYMBOL_SIZE,Symbol,InputStream,IndexType,uint32>
         }
         else
         {
-                  uint32 word1 = stream[ word_idx ];
+                  uint32 word1         = stream[ word_idx ];
             const uint32 symbol_offset = uint32(bit_idx & 31u);
-            const uint32 symbol1 = uint32(sym & SYMBOL_MASK) << symbol_offset;
+            const uint32 symbol1       = uint32(sym & SYMBOL_MASK) << symbol_offset;
 
             // clear all bits
             word1 &= ~(SYMBOL_MASK << symbol_offset);
@@ -118,10 +118,10 @@ struct packer<BIG_ENDIAN_T,SYMBOL_SIZE,Symbol,InputStream,IndexType,uint32>
             const uint32 rem_bits  = SYMBOL_SIZE - read_bits;
             if (rem_bits)
             {
+                const uint32 rem_mask = (1u << rem_bits) - 1u;
+
                       uint32 word2   = stream[ word_idx+1 ];
                 const uint32 symbol2 = uint32(sym & SYMBOL_MASK) >> read_bits;
-
-                const uint32 rem_mask = (1u << rem_bits) - 1u;
 
                 // clear all bits
                 word2 &= ~rem_mask;
@@ -148,17 +148,17 @@ struct packer<BIG_ENDIAN_T,SYMBOL_SIZE,Symbol,InputStream,IndexType,uint64>
 
         if (is_pow2<SYMBOL_SIZE>())
         {
-            const uint64 word = stream[ word_idx ];
+            const uint64 word          = stream[ word_idx ];
             const uint32 symbol_offset = BIG_ENDIAN_T ? (64u - SYMBOL_SIZE  - uint32(bit_idx & 63u)) : uint32(bit_idx & 63u);
-            const uint32 symbol = uint32((word >> symbol_offset) & SYMBOL_MASK);
+            const uint32 symbol        = uint32((word >> symbol_offset) & SYMBOL_MASK);
 
             return Symbol( symbol );
         }
         else
         {
-            const uint32 word1 = stream[ word_idx ];
+            const uint64 word1         = stream[ word_idx ];
             const uint32 symbol_offset = uint32(bit_idx & 63u);
-            const uint32 symbol1 = uint32((word1 >> symbol_offset) & SYMBOL_MASK);
+            const uint32 symbol1       = uint32((word1 >> symbol_offset) & SYMBOL_MASK);
 
             // check if we need to read a second word
             const uint32 read_bits = nvbio::min( 64u - symbol_offset, SYMBOL_SIZE );
@@ -167,8 +167,8 @@ struct packer<BIG_ENDIAN_T,SYMBOL_SIZE,Symbol,InputStream,IndexType,uint64>
             {
                 const uint64 rem_mask = (uint64(1u) << rem_bits) - 1u;
 
-                const uint64 word2 = stream[ word_idx+1 ];
-                const uint32 symbol2 = uint32(word2 & rem_mask);
+                const uint64 word2    = stream[ word_idx+1 ];
+                const uint32 symbol2  = uint32(word2 & rem_mask);
 
                 return Symbol( symbol1 | (symbol2 << read_bits) );
             }
@@ -216,10 +216,10 @@ struct packer<BIG_ENDIAN_T,SYMBOL_SIZE,Symbol,InputStream,IndexType,uint64>
             const uint32 rem_bits  = SYMBOL_SIZE - read_bits;
             if (rem_bits)
             {
-                      uint32 word2   = stream[ word_idx+1 ];
-                const uint64 symbol2 = uint64(sym & SYMBOL_MASK) >> read_bits;
-
                 const uint64 rem_mask = (uint64(1u) << rem_bits) - 1u;
+
+                      uint64 word2   = stream[ word_idx+1 ];
+                const uint64 symbol2 = uint64(sym & SYMBOL_MASK) >> read_bits;
 
                 // clear all bits
                 word2 &= ~rem_mask;

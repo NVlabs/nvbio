@@ -151,6 +151,17 @@ inline NVBIO_HOST_DEVICE L round_i(const L x, const R y){ return L( y * divide_r
 template<typename L, typename R>
 inline NVBIO_HOST_DEVICE L round_z(const L x, const R y){ return L( y * divide_rz(x, y) ); }
 
+/// \ingroup BasicUtils
+/// round x towards to the closest multiple of x
+///
+template<typename L, typename R>
+inline NVBIO_HOST_DEVICE L round(const L x, const R y)
+{
+    const L r = round_z( x, y );
+    return R((x - r)*2) > y ? r+L(1) : r;
+}
+
+
 } // end namespace util
 
 /// return the c'th component of a by value

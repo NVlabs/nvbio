@@ -237,8 +237,8 @@ bool banded_myers(
     const int16          min_score,
           sink_type&     sink)
 {
-    const uint32 pattern_len = nvbio::length( pattern );
-    const uint32 text_len    = nvbio::length( text );
+    const uint32 pattern_len = pattern.length();
+    const uint32 text_len    = text.length();
 
     // check whether the text is long enough
     if (text_len < pattern_len)

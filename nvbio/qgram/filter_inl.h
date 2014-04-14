@@ -263,6 +263,31 @@ void QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>::lo
             m_indices ) );
 }
 
+// simply convert hits to diagonal coordinates
+//
+// \tparam hits_iterator         a hit_iterator iterator
+// \tparam output_iterator       a diagonal_type iterator
+//
+// \param  n_hits          the number of input hits
+// \param  hits            the input hits
+// \param  diags           the output diagonals
+//
+template <typename qgram_index_type, typename query_iterator, typename index_iterator>
+template <typename hits_iterator, typename output_iterator>
+void QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>::diagonals(
+    const uint32            n_hits,
+    const hits_iterator     hits,
+          output_iterator   diags,
+    const uint32            interval)
+{
+    // snap the diagonals to the closest one
+    thrust::transform(
+        hits,
+        hits + n_hits,
+        diags,
+        qgram::closest_diagonal<hit_type>( interval ) );
+}
+
 // merge hits falling within the same diagonal interval; this method will
 // replace the vector of hits with a compacted list of hits snapped to the
 // closest sample diagonal (i.e. multiple of the given interval), together
@@ -287,12 +312,8 @@ uint32 QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>::
 {
     m_diags.resize( n_hits );
 
-    // snap the diagonals to the closest one
-    thrust::transform(
-        hits,
-        hits + n_hits,
-        m_diags.begin(),
-        qgram::closest_diagonal<hit_type>( interval ) );
+    // convert hits to diagonals and snap them to the closest one
+    diagonals( n_hits, hits, m_diags.begin(), interval );
 
     // now sort the results by diagonal (which can be either a uint32 or a uint2)
     typedef typename if_equal<diagonal_type, uint32, uint32, uint64>::type primitive_type;
@@ -391,6 +412,31 @@ void QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>::
             m_indices ) );
 }
 
+// simply convert hits to diagonal coordinates
+//
+// \tparam hits_iterator         a hit_iterator iterator
+// \tparam output_iterator       a diagonal_type iterator
+//
+// \param  n_hits          the number of input hits
+// \param  hits            the input hits
+// \param  diags           the output diagonals
+//
+template <typename qgram_index_type, typename query_iterator, typename index_iterator>
+template <typename hits_iterator, typename output_iterator>
+void QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>::diagonals(
+    const uint32            n_hits,
+    const hits_iterator     hits,
+          output_iterator   diags,
+    const uint32            interval)
+{
+    // snap the diagonals to the closest one
+    thrust::transform(
+        device_iterator( hits ),
+        device_iterator( hits ) + n_hits,
+        device_iterator( diags ),
+        qgram::closest_diagonal<hit_type>( interval ) );
+}
+
 // merge hits falling within the same diagonal interval; this method will
 // replace the vector of hits with a compacted list of hits snapped to the
 // closest sample diagonal (i.e. multiple of the given interval), together
@@ -417,12 +463,8 @@ uint32 QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>
     const uint32 buffer_size = align<32>( n_hits );
     m_diags.resize( buffer_size * 2u );
 
-    // snap the diagonals to the closest one
-    thrust::transform(
-        device_iterator( hits ),
-        device_iterator( hits ) + n_hits,
-        m_diags.begin(),
-        qgram::closest_diagonal<hit_type>( interval ) );
+    // convert hits to diagonals and snap them to the closest one
+    diagonals( n_hits, hits, m_diags.begin(), interval );
 
     // now sort the results by diagonal (which can be either a uint32 or a uint2)
     typedef typename if_equal<diagonal_type, uint32, uint32, uint64>::type primitive_type;

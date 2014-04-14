@@ -132,6 +132,23 @@ struct QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>
         const uint64    end,
         hits_iterator   hits);
 
+    /// simply convert hits to diagonal coordinates
+    ///
+    /// \tparam hits_iterator         a hit_iterator iterator
+    /// \tparam output_iterator       a diagonal_type iterator
+    ///
+    /// \param  n_hits          the number of input hits
+    /// \param  hits            the input hits
+    /// \param  diags           the output diagonals
+    /// \param  interval        the snapping interval
+    ///
+    template <typename hits_iterator, typename output_iterator>
+    void diagonals(
+        const uint32            n_hits,
+        const hits_iterator     hits,
+              output_iterator   diags,
+        const uint32            interval = 1);
+
     /// merge hits falling within the same diagonal interval; given a vector of hits,
     /// this method will return a compacted list of hits snapped to the closest sample
     /// diagonal (i.e. multiple of the given interval), together with a counts vector
@@ -233,6 +250,23 @@ struct QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>
         const uint64            begin,
         const uint64            end,
         hits_iterator           hits);
+
+    /// simply convert hits to diagonal coordinates
+    ///
+    /// \tparam hits_iterator         a hit_iterator iterator
+    /// \tparam output_iterator       a diagonal_type iterator
+    ///
+    /// \param  n_hits          the number of input hits
+    /// \param  hits            the input hits
+    /// \param  diags           the output diagonals
+    /// \param  interval        the snapping interval
+    ///
+    template <typename hits_iterator, typename output_iterator>
+    void diagonals(
+        const uint32            n_hits,
+        const hits_iterator     hits,
+              output_iterator   diags,
+        const uint32            interval = 1);
 
     /// merge hits falling within the same diagonal interval; given a vector of hits,
     /// this method will return a compacted list of hits snapped to the closest sample

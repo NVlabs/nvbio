@@ -322,7 +322,7 @@ int main(int argc, char* argv[])
         io::open_read_file(
             reads,
             io::Phred33,
-            max_reads,
+            2*max_reads,
             uint32(-1),
             io::ReadEncoding( io::FORWARD | io::REVERSE_COMPLEMENT ) ) );
 

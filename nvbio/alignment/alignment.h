@@ -107,7 +107,7 @@
 /// - \ref SmithWatermanAligner
 /// - \ref GotohAligner
 ///\par
-/// These objects are parameterized by an AlignmentType, which can be any of GLOBAL,
+/// These objects are parameterized by an \ref AlignmentTypeModule "AlignmentType", which can be any of GLOBAL,
 /// SEMI_GLOBAL or LOCAL, and an \ref AlgorithmTag "Algorithm Tag", which specifies the
 /// actual algorithm to employ.
 /// At the moment, there are three such algorithms:
@@ -239,7 +239,7 @@ namespace aln {
 ///@{
 ///
 
-///@defgroup AlignmentType Alignment Type
+///@defgroup AlignmentTypeModule Alignment Type
 /// The alignment type specifies how to penalize gaps at the beginning and end of the
 /// pattern and text.
 ///@{
@@ -248,7 +248,7 @@ namespace aln {
 ///
 enum AlignmentType { GLOBAL, LOCAL, SEMI_GLOBAL };
 
-///@} // end of AlignerTag group
+///@} // end of AlignerTagModule group
 
 ///@defgroup AlgorithmTag Algorithm Tags
 /// Algorithm tags are used to specify a DP algorithm.
@@ -262,7 +262,15 @@ enum AlignmentType { GLOBAL, LOCAL, SEMI_GLOBAL };
 /// is available.
 ///@{
 
+/// an algorithm that blocks the DP matrix along the pattern, in stripes parallel to the text
+///
+///\anchor PatternBlockingTag
 struct PatternBlockingTag {};  ///< block along the pattern
+
+/// an algorithm that blocks the DP matrix along the text, in stripes parallel to the pattern
+/// (at the moment, only supported for scoring)
+///
+///\anchor TextBlockingTag
 struct TextBlockingTag {};     ///< block along the text (at the moment, this is only supported for scoring)
 
 /// Myers bit-vector algorithm, only supported for the EditDistanceAligner
@@ -270,6 +278,7 @@ struct TextBlockingTag {};     ///< block along the text (at the moment, this is
 ///\tparam ALPHABET_SIZE_T      the size of the alphabet, in symbols; currently there are fast
 ///                             specializations for alphabets of 2, 4 and 5 symbols.
 ///
+///\anchor MyersTag
 template <uint32 ALPHABET_SIZE_T> struct MyersTag { static const uint32 ALPHABET_SIZE = ALPHABET_SIZE_T; }; ///< Myers bit-vector algorithm
 
 template <typename T> struct transpose_tag {};

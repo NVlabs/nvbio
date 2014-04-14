@@ -72,7 +72,6 @@ struct rank_functor
     const string_set_type   string_set;
 };
 
-template <typename index_type>
 struct filter_results
 {
     typedef uint64  argument_type;
@@ -81,11 +80,9 @@ struct filter_results
     // constructor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     filter_results(
-        const index_type        _index,
-        const uint32            _n_queries,
-        const uint64*           _slots,
-        const uint2*            _ranges) :
-    index       ( _index ),
+        const uint32    _n_queries,
+        const uint64*   _slots,
+        const uint2*    _ranges) :
     n_queries   ( _n_queries ),
     slots       ( _slots ),
     ranges      ( _ranges ) {}
@@ -108,16 +105,34 @@ struct filter_results
         const uint64 base_slot   = slot ? slots[ slot-1 ] : 0u;
         const uint32 local_index = output_index - base_slot;
 
-        const uint32 index_pos = locate( index, range.x + local_index );
-
         // and write out the pair (qgram_pos,text_pos)
-        return make_uint2( index_pos, string_id );
+        return make_uint2(  range.x + local_index, string_id );
     }
 
-    const index_type        index;
-    const uint32            n_queries;
-    const uint64*           slots;
-    const uint2*            ranges;
+    const uint32    n_queries;
+    const uint64*   slots;
+    const uint2*    ranges;
+};
+
+
+template <typename index_type>
+struct locate_results
+{
+    typedef uint2   argument_type;
+    typedef uint2   result_type;
+
+    // constructor
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    locate_results(const index_type _index) : index( _index ) {}
+
+    // functor operator
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const uint2 pair) const
+    {
+        return make_uint2( locate( index, pair.x ), pair.y );
+    }
+
+    const index_type index;
 };
 
 } // namespace fmindex
@@ -173,16 +188,22 @@ void FMIndexFilter<host_tag,fm_index_type>::locate(
     const uint64    end,
     hits_iterator   hits)
 {
-    // and fill it
+    // fill the output hits with (SA,string-id) coordinates
     thrust::transform(
         thrust::make_counting_iterator<uint64>(0u) + begin,
         thrust::make_counting_iterator<uint64>(0u) + end,
         hits,
-        fmindex::filter_results<fm_index_type>(
-            m_index,
+        fmindex::filter_results(
             m_n_queries,
             nvbio::plain_view( m_slots ),
             nvbio::plain_view( m_ranges ) ) );
+
+    // and locate the SA coordinates
+    thrust::transform(
+        hits,
+        hits + (end - begin),
+        hits,
+        fmindex::locate_results<fm_index_type>( m_index ) );
 }
 
 // enact the filter on an FM-index and a string-set
@@ -237,16 +258,68 @@ void FMIndexFilter<device_tag,fm_index_type>::locate(
     const uint64    end,
     hits_iterator   hits)
 {
-    // and fill it
+#if 0
+    const uint32 n_hits = end - begin;
+    const uint32 buffer_size = align<32>( n_hits );
+
+    if (m_hits.size() < buffer_size * 2u)
+    {
+        m_hits.clear();
+        m_hits.resize( buffer_size * 2u );
+    }
+
+    // fill the output hits with (SA,string-id) coordinates
+    thrust::transform(
+        thrust::make_counting_iterator<uint64>(0u) + begin,
+        thrust::make_counting_iterator<uint64>(0u) + end,
+        m_hits.begin(),
+        fmindex::filter_results(
+            m_n_queries,
+            nvbio::plain_view( m_slots ),
+            nvbio::plain_view( m_ranges ) ) );
+
+    // sort by the first 8 bits of the SA coordinates
+    uint64* raw_hits( (uint64*)nvbio::plain_view( m_hits ) );
+
+    cuda::SortBuffers<uint64*> sort_buffers;
+    sort_buffers.keys[0] = raw_hits;
+    sort_buffers.keys[1] = raw_hits + buffer_size;
+
+    cuda::SortEnactor sort_enactor;
+    sort_enactor.sort( n_hits, sort_buffers, 0u, 8u );
+
+    // locate the SA coordinates, in place
+    thrust::transform(
+        m_hits.begin() + buffer_size * sort_buffers.selector,
+        m_hits.begin() + buffer_size * sort_buffers.selector + n_hits,
+        m_hits.begin() + buffer_size * sort_buffers.selector,
+        fmindex::locate_results<fm_index_type>( m_index ) );
+
+    // and sort back by string-id into final position
+    sort_enactor.sort( n_hits, sort_buffers, 32u, 64u );
+
+    thrust::copy(
+        m_hits.begin() + buffer_size * sort_buffers.selector,
+        m_hits.begin() + buffer_size * sort_buffers.selector + n_hits,
+        device_iterator( hits ) );
+#else
+    // fill the output hits with (SA,string-id) coordinates
     thrust::transform(
         thrust::make_counting_iterator<uint64>(0u) + begin,
         thrust::make_counting_iterator<uint64>(0u) + end,
         device_iterator( hits ),
-        fmindex::filter_results<fm_index_type>(
-            m_index,
+        fmindex::filter_results(
             m_n_queries,
             nvbio::plain_view( m_slots ),
             nvbio::plain_view( m_ranges ) ) );
+
+    // and locate the SA coordinates
+    thrust::transform(
+        device_iterator( hits ),
+        device_iterator( hits ) + (end - begin),
+        device_iterator( hits ),
+        fmindex::locate_results<fm_index_type>( m_index ) );
+#endif
 }
 
 } // namespace nvbio

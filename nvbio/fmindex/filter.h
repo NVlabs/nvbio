@@ -193,6 +193,7 @@ struct FMIndexFilter<device_tag, fm_index_type>
     uint64                              m_n_occurrences;
     thrust::device_vector<uint2>        m_ranges;
     thrust::device_vector<uint64>       m_slots;
+    thrust::device_vector<uint2>        m_hits;
     thrust::device_vector<uint8>        d_temp_storage;
 };
 

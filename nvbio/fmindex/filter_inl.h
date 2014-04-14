@@ -114,7 +114,6 @@ struct filter_results
     const uint2*    ranges;
 };
 
-
 template <typename index_type>
 struct locate_results
 {
@@ -130,6 +129,47 @@ struct locate_results
     result_type operator() (const uint2 pair) const
     {
         return make_uint2( locate( index, pair.x ), pair.y );
+    }
+
+    const index_type index;
+};
+
+template <typename index_type>
+struct locate_ssa_results
+{
+    typedef uint2   argument_type;
+    typedef uint2   result_type;
+
+    // constructor
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    locate_ssa_results(const index_type _index) : index( _index ) {}
+
+    // functor operator
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const uint2 pair) const
+    {
+        return locate_ssa_iterator( index, pair.x );
+    }
+
+    const index_type index;
+};
+
+template <typename index_type>
+struct lookup_ssa_results
+{
+    typedef uint2   first_argument_type;
+    typedef uint2   second_argument_type;
+    typedef uint2   result_type;
+
+    // constructor
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    lookup_ssa_results(const index_type _index) : index( _index ) {}
+
+    // functor operator
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const uint2 pair, const uint2 ssa) const
+    {
+        return make_uint2( lookup_ssa_iterator( index, ssa ), pair.y );
     }
 
     const index_type index;
@@ -288,12 +328,23 @@ void FMIndexFilter<device_tag,fm_index_type>::locate(
     cuda::SortEnactor sort_enactor;
     sort_enactor.sort( n_hits, sort_buffers, 0u, 8u );
 
-    // locate the SA coordinates, in place
+    const uint32 pairs_selector = sort_buffers.selector;
+    const uint32 ssa_selector   = sort_buffers.selector ? 0u : 1u;
+
+    // locate the SSA iterators
     thrust::transform(
-        m_hits.begin() + buffer_size * sort_buffers.selector,
-        m_hits.begin() + buffer_size * sort_buffers.selector + n_hits,
-        m_hits.begin() + buffer_size * sort_buffers.selector,
-        fmindex::locate_results<fm_index_type>( m_index ) );
+        m_hits.begin() + buffer_size * pairs_selector,
+        m_hits.begin() + buffer_size * pairs_selector + n_hits,
+        m_hits.begin() + buffer_size * ssa_selector,
+        fmindex::locate_ssa_results<fm_index_type>( m_index ) );
+
+    // perform the final SSA lookup
+    thrust::transform(
+        m_hits.begin() + buffer_size * pairs_selector,
+        m_hits.begin() + buffer_size * pairs_selector + n_hits,
+        m_hits.begin() + buffer_size * ssa_selector,
+        m_hits.begin() + buffer_size * pairs_selector,
+        fmindex::lookup_ssa_results<fm_index_type>( m_index ) );
 
     // and sort back by string-id into final position
     sort_enactor.sort( n_hits, sort_buffers, 32u, 64u );
@@ -303,6 +354,14 @@ void FMIndexFilter<device_tag,fm_index_type>::locate(
         m_hits.begin() + buffer_size * sort_buffers.selector + n_hits,
         device_iterator( hits ) );
 #else
+    const uint32 n_hits = end - begin;
+
+    if (m_hits.size() < n_hits)
+    {
+        m_hits.clear();
+        m_hits.resize( n_hits );
+    }
+
     // fill the output hits with (SA,string-id) coordinates
     thrust::transform(
         thrust::make_counting_iterator<uint64>(0u) + begin,
@@ -313,12 +372,20 @@ void FMIndexFilter<device_tag,fm_index_type>::locate(
             nvbio::plain_view( m_slots ),
             nvbio::plain_view( m_ranges ) ) );
 
-    // and locate the SA coordinates
+    // locate the SSA iterators
     thrust::transform(
         device_iterator( hits ),
-        device_iterator( hits ) + (end - begin),
+        device_iterator( hits ) + n_hits,
+        m_hits.begin(),
+        fmindex::locate_ssa_results<fm_index_type>( m_index ) );
+
+    // and perform the final SSA lookup
+    thrust::transform(
         device_iterator( hits ),
-        fmindex::locate_results<fm_index_type>( m_index ) );
+        device_iterator( hits ) + n_hits,
+        m_hits.begin(),
+        device_iterator( hits ),
+        fmindex::lookup_ssa_results<fm_index_type>( m_index ) );
 #endif
 }
 

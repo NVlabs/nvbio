@@ -98,6 +98,24 @@
 ///
 /// \endcode
 ///
+/// \section AlignersSection Aligners and Alignment Algorithms
+///
+/// Before we have seen that scoring functions take an aligner as an input. NVBIO exposes
+/// three such types, which specify the actual type of alignment scheme to use:
+///\par
+/// - \ref EditDistanceAligner
+/// - \ref SmithWatermanAligner
+/// - \ref GotohAligner
+///\par
+/// These objects are parameterized by an AlignmentType, which can be any of GLOBAL,
+/// SEMI_GLOBAL or LOCAL, and an \ref AlgorithmTag "Algorithm Tag", which specifies the
+/// actual algorithm to employ.
+/// At the moment, there are three such algorithms:
+///\par
+/// - \ref PatternBlockingTag : a DP algorithm which blocks the matrix in stripes along the pattern
+/// - \ref TextBlockingTag : a DP algorithm which blocks the matrix in stripes along the text
+/// - \ref MyersTag : the Myers bit-vector algorithm, a very fast algorithm to perform edit distance computations
+///
 /// \section TracebackSection Traceback
 ///\par
 /// Traceback is the process of computing the actual alignment between two strings, that is to say
@@ -181,9 +199,9 @@
 /// thrust::device_vector<uint8>  text_storage( n_strings * text_len );
 /// thrust::device_vector<uint32> text_offsets( n_strings+1 );
 ///
-/// // fill their content with random characters
-/// fill_random( pattern_storage.begin(), pattern_storage.end() );
-/// fill_random( text_storage.begin(), text_storage.end() );
+/// // fill their content with random characters in [0,4)
+/// fill_random( 4u, pattern_storage.begin(), pattern_storage.end() );
+/// fill_random( 4u, text_storage.begin(), text_storage.end() );
 ///
 /// // prepare their offset vectors
 /// thrust::sequence( pattern_offsets.begin(), pattern_offsets.begin() + n_strings+1, 0u, pattern_len );
@@ -194,7 +212,7 @@
 ///
 /// // and execute the batch alignment
 /// aln::batch_alignment_score(
-///     aln::make_edit_distance_aligner<aln::SEMI_GLOBAL>(),
+///     aln::make_edit_distance_aligner<aln::SEMI_GLOBAL, MyersTag<4u> >(),
 ///     make_concatenated_string_set( n_strings, pattern_storage.begin(), pattern_offsets.begin() ),
 ///     make_concatenated_string_set( n_strings, text_storage.begin(),    text_offsets.begin() ),
 ///     sinks.begin(),
@@ -221,9 +239,16 @@ namespace aln {
 ///@{
 ///
 
+///@defgroup AlignmentType Alignment Type
+/// The alignment type specifies how to penalize gaps at the beginning and end of the
+/// pattern and text.
+///@{
+
 /// alignment type specifier
 ///
 enum AlignmentType { GLOBAL, LOCAL, SEMI_GLOBAL };
+
+///@} // end of AlignerTag group
 
 ///@defgroup AlgorithmTag Algorithm Tags
 /// Algorithm tags are used to specify a DP algorithm.
@@ -240,7 +265,7 @@ enum AlignmentType { GLOBAL, LOCAL, SEMI_GLOBAL };
 struct PatternBlockingTag {};  ///< block along the pattern
 struct TextBlockingTag {};     ///< block along the text (at the moment, this is only supported for scoring)
 
-///< Myers bit-vector algorithm
+/// Myers bit-vector algorithm
 ///
 ///\tparam ALPHABET_SIZE_T      the size of the alphabet, in symbols; currently there are fast
 ///                             specializations for alphabets of 2, 4 and 5 symbols.

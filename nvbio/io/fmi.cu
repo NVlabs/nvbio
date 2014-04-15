@@ -1097,7 +1097,7 @@ FMIndexDataDevice::FMIndexDataDevice(const FMIndexData& host_data, const uint32 
         if (host_data.m_bwt_stream == NULL || host_data.m_occ == NULL)
             log_warning(stderr, "FMIndexDataDevice: requested forward BWT is not available!\n");
 
-#if defined(FUSED_BWT_OCC)
+    #if defined(FUSED_BWT_OCC)
         thrust::host_vector<uint32> bwt_occ( seq_words + occ_words );
 
         if (occ_words < seq_words)  throw runtime_error("FMIndexDataDevice: occurrence table has %u words, BWT has %u!", occ_words, seq_words);
@@ -1117,10 +1117,10 @@ FMIndexDataDevice::FMIndexDataDevice(const FMIndexData& host_data, const uint32 
         }
         nvbio::cuda::thrust_copy_vector(m_bwt_occ, bwt_occ);
         m_allocated += sizeof(uint32)*(seq_words + occ_words);
-#else
+    #else
         cuda_alloc( m_bwt_stream,    host_data.m_bwt_stream,    seq_words, m_allocated );
         cuda_alloc( m_occ,           host_data.m_occ,           occ_words, m_allocated );
-#endif
+    #endif
         if (flags & SA)
         {
             if (host_data.ssa.m_ssa == NULL)
@@ -1135,9 +1135,8 @@ FMIndexDataDevice::FMIndexDataDevice(const FMIndexData& host_data, const uint32 
         if (host_data.m_rbwt_stream == NULL || host_data.m_rocc == NULL)
             log_warning(stderr, "FMIndexDataDevice: requested reverse BWT is not available!\n");
 
-#if defined(FUSED_BWT_OCC)
-        thrust::host_vector<uint32> bwt_occ;
-        bwt_occ.reserve(seq_words + occ_words);
+    #if defined(FUSED_BWT_OCC)
+        thrust::host_vector<uint32> bwt_occ( seq_words + occ_words );
 
         if (occ_words < seq_words)  throw runtime_error("FMIndexDataDevice: occurrence table has %u words, BWT has %u!", occ_words, seq_words);
         if (occ_words % 4 != 0)     throw runtime_error("FMIndexDataDevice: occurrence table has %u words, not a multiple of 4!", occ_words);
@@ -1156,10 +1155,10 @@ FMIndexDataDevice::FMIndexDataDevice(const FMIndexData& host_data, const uint32 
         }
         nvbio::cuda::thrust_copy_vector(m_rbwt_occ, bwt_occ);
         m_allocated += sizeof(uint32)*(seq_words + occ_words);
-#else
+    #else
         cuda_alloc( m_rbwt_stream,   host_data.m_rbwt_stream,   seq_words, m_allocated );
         cuda_alloc( m_rocc,          host_data.m_rocc,          occ_words, m_allocated );
-#endif
+    #endif
         if (flags & SA)
         {
             if (host_data.rssa.m_ssa == NULL)

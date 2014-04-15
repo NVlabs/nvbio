@@ -34,6 +34,7 @@
 #include <nvbio/basic/mmap.h>
 #include <nvbio/basic/deinterleaved_iterator.h>
 #include <nvbio/basic/cuda/ldg.h>
+#include <nvbio/basic/thrust_view.h>
 #include <nvbio/fmindex/fmindex.h>
 #include <nvbio/fmindex/ssa.h>
 
@@ -358,8 +359,8 @@ struct FMIndexDataDevice : public FMIndexData
 
     uint64 allocated() const { return m_allocated; }    ///< return the amount of allocated device memory
 
-    const uint32*  bwt_occ() const { return thrust::raw_pointer_cast( &m_bwt_occ.front() ); }  ///< return the fused forward BWT & occurrence tables
-    const uint32* rbwt_occ() const { return thrust::raw_pointer_cast( &m_rbwt_occ.front() ); } ///< return the fused reverse BWT & occurrence tables
+    const uint32*  bwt_occ() const { return nvbio::plain_view( m_bwt_occ ); }  ///< return the fused forward BWT & occurrence tables
+    const uint32* rbwt_occ() const { return nvbio::plain_view( m_rbwt_occ ); } ///< return the fused reverse BWT & occurrence tables
 
     /// iterators access
     ///

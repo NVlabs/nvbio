@@ -72,19 +72,19 @@ uint32 find_mems(
             range.x = index.L2(c) + c_rank.x + 1;
             range.y = index.L2(c) + c_rank.y;
 
-            // stop if the range became empty
-            if (range.x > range.y)
+            // check if the range is too small
+            if (1u + range.y - range.x < min_intv)
                 break;
 
             // store the range
             //ranges[ n_ranges ] = range;
             ++n_ranges;
-
-            // check if the range is small enough
-            if (1u + range.y - range.x <= min_intv)
-                break;
         }
     }
+
+    // no valid match covering x
+    if (n_ranges == 0u)
+        return x;
 
     // keep track of the left-most coordinate covered by a MEM
     uint32 leftmost_coordinate = x+1;
@@ -108,7 +108,7 @@ uint32 find_mems(
 
         int32 l;
 
-        for (l = r; l >= 0 && (1u + range.y - range.x > min_intv); --l)
+        for (l = r; l >= 0; --l)
         {
             const uint8 c = pattern[l];
             if (c > 3) // there is an N here. no match 
@@ -124,16 +124,16 @@ uint32 find_mems(
                 index.L2(c) + c_rank.x + 1,
                 index.L2(c) + c_rank.y );
 
-            // stop if the range became empty
-            if (new_range.x > new_range.y)
+            // stop if the range became too small
+            if (1u + new_range.y - new_range.x < min_intv)
                 break;
 
             // update the range
             range = new_range;
         }
 
-        // only output the range if it's not contained in other MEMs
-        if (uint32(l+1) < leftmost_coordinate)
+        // only output the range if it's not contained in any other MEM
+        if (uint32(l+1) < leftmost_coordinate && uint32(l+1) < r)
         {
             // save the range, together with its span
             const uint2 pattern_span = make_uint2( uint32(l+1), r );

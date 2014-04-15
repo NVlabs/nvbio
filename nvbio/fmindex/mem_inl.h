@@ -48,13 +48,15 @@ uint32 find_mems(
     typedef typename fm_index_type::index_type coord_type;
     typedef typename fm_index_type::range_type range_type;
 
+    // find how far can we extend right starting from x
+    //
     uint32 n_ranges = 0;
     {
         const fm_index_type& index = r_index;
 
+        // extend forward, using the reverse index
         range_type range = make_vector( coord_type(0u), index.length() );
 
-        // extend forward, using the reverse index
         for (uint32 i = x; i < pattern_len; ++i)
         {
             const uint8 c = pattern[i];
@@ -92,7 +94,7 @@ uint32 find_mems(
     // we basically loop through all MEMs ending in [x,x+n_ranges) starting
     // from the end of the range and walking backwards - and for each of them we:
     //
-    //  - find their starting point,
+    //  - find their starting point through backwards search
     //
     //  - and add them to the output only if they extend further left than
     //    any of the previously found ones
@@ -101,7 +103,7 @@ uint32 find_mems(
     {
         const fm_index_type& index = f_index;
 
-        // extend from y towards the left as much possible
+        // extend from r to the left as much possible
         range_type range = make_vector( coord_type(0u), index.length() );
 
         int32 l;

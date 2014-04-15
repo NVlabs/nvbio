@@ -211,7 +211,9 @@ namespace nvbio {
 /// Here is an example showing how to extract a set of seeds from a string set and find their occurrences
 /// on the device:
 ///\code
+/// template <typename fm_index_type>
 /// void seed(
+///     fm_index_type           fm_index,
 ///     const string_set_type   string_set,         // the input string-set
 ///     const uint32            seed_len,           // the seeds length
 ///     const uint32            seed_interval)      // the spacing between seeds
@@ -230,6 +232,9 @@ namespace nvbio {
 ///         n_seeds,
 ///         string_set,
 ///         nvbio::plain_view( seed_coords ) );
+///
+///     // the filter
+///     FMIndexFilterDevice fm_filter;
 ///
 ///     // first step: rank the query seeds
 ///     const uint64 n_hits = fm_filter.rank( fm_index, seed_string_set );

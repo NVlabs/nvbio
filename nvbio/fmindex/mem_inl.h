@@ -61,6 +61,7 @@ uint32 find_mems(
             if (c > 3) // there is an N here. no match 
                 break;
 
+            // search c in the FM-index
             const range_type c_rank = rank(
                 index,
                 make_vector( range.x-1, range.y ),
@@ -84,7 +85,7 @@ uint32 find_mems(
     }
 
     // keep track of the left-most coordinate covered by a MEM
-    uint32 min_l = x+1;
+    uint32 leftmost_coordinate = x+1;
 
     // now extend backwards, using the forward index
     for (int32 r = int32(n_ranges)-1; r >= 0; --r)
@@ -104,6 +105,7 @@ uint32 find_mems(
             if (c > 3) // there is an N here. no match 
                 break;
 
+            // search c in the FM-index
             const range_type c_rank = rank(
                 index,
                 make_vector( range.x-1, range.y ),
@@ -122,7 +124,7 @@ uint32 find_mems(
         }
 
         // only output the range if it's not contained in other MEMs
-        if (uint32(l+1) < min_l)
+        if (uint32(l+1) < leftmost_coordinate)
         {
             // save the range, together with its span
             const uint2 pattern_span = make_uint2( uint32(l+1), y );
@@ -135,7 +137,7 @@ uint32 find_mems(
             }
 
             // update the left-most covered coordinate
-            min_l = uint32(l+1);
+            leftmost_coordinate = uint32(l+1);
         }
     }
 

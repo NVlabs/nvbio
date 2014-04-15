@@ -181,6 +181,14 @@ struct DeviceVectorArray
         uint64 bytes = 0;
         if (do_alloc) m_arena.resize( arena ); bytes += sizeof(T)*arena;
         if (do_alloc) m_index.resize( size );  bytes += sizeof(uint32)*size;
+        if (do_alloc)
+        {
+            // initialize all slots
+            thrust::fill(
+                m_index.begin(),
+                m_index.begin() + size,
+                arena );
+        }
         return bytes;
     }
 
@@ -255,6 +263,14 @@ struct HostVectorArray
         uint64 bytes = 0;
         if (do_alloc) m_arena.resize( arena ); bytes += sizeof(T)*arena;
         if (do_alloc) m_index.resize( size );  bytes += sizeof(uint32)*size;
+        if (do_alloc)
+        {
+            // initialize all slots
+            thrust::fill(
+                m_index.begin(),
+                m_index.begin() + size,
+                arena );
+        }
         return bytes;
     }
 

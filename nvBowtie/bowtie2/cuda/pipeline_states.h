@@ -220,9 +220,9 @@ struct AllMappingPipelineState : public BaseScoringPipelineState<ScoringScheme>
     uint32*                                         buffer_read_info;
     io::Alignment*                                  buffer_alignments;
 
-    nvbio::cuda::VectorArrayView<io::Cigar>         cigar;          ///< cigar arena
+    nvbio::VectorArrayView<io::Cigar>               cigar;          ///< cigar arena
     uint2*                                          cigar_coords;   ///< cigar coords
-    nvbio::cuda::VectorArrayView<uint8>             mds;            ///< mds arena
+    nvbio::VectorArrayView<uint8>                   mds;            ///< mds arena
 
     uint8*                                          dp_buffer;      ///< DP buffer
     uint64                                          dp_buffer_size; ///< DP buffer size
@@ -283,9 +283,9 @@ struct TracebackPipelineState
 
     const ScoringScheme                             scoring_scheme; ///< scoring scheme
 
-    nvbio::cuda::VectorArrayView<io::Cigar>         cigar;          ///< cigar arena
+    nvbio::VectorArrayView<io::Cigar>               cigar;          ///< cigar arena
     uint2*                                          cigar_coords;   ///< cigar coords
-    nvbio::cuda::VectorArrayView<uint8>             mds;            ///< mds arena
+    nvbio::VectorArrayView<uint8>                   mds;            ///< mds arena
 
     uint8*                                          dp_buffer;      ///< DP buffer
     uint64                                          dp_buffer_size; ///< DP buffer size

@@ -163,6 +163,8 @@ int main(int argc, char* argv[])
 
         log_info(stderr, "  locating MEMs... started\n");
 
+        float locate_time = 0.0f;
+
         // loop through large batches of hits and locate & merge them
         for (uint64 mems_begin = 0; mems_begin < n_mems; mems_begin += mems_batch)
         {
@@ -175,11 +177,16 @@ int main(int argc, char* argv[])
                 mems_end,
                 mems.begin() );
 
-            log_verbose(stderr, "\r    %5.2f%%", 100.0f * float( mems_end ) / float( n_mems ));
+            cudaDeviceSynchronize();
+            timer.stop();
+            locate_time += timer.seconds();
+
+            log_verbose(stderr, "\r    %5.2f%% (%4.1f M MEMs/s)",
+                 100.0f * float( mems_end ) / float( n_mems ),
+                1.0e-6f * float( mems_end ) / locate_time );
         }
 
         log_info(stderr, "  locating MEMs... done\n");
-        log_info(stderr, "    %.1f K MEMs/s\n", 1.0e-3f * float(n_mems) / timer.seconds());
     }
     return 0;
 }

@@ -88,10 +88,17 @@ uint32 find_mems(
     uint32 leftmost_coordinate = x+1;
 
     // now extend backwards, using the forward index
-    for (int32 r = int32(n_ranges)-1; r >= 0; --r)
+    //
+    // we basically loop through all MEMs ending in [x,x+n_ranges) starting
+    // from the end of the range and walking backwards - and for each of them we:
+    //
+    //  - find their starting point,
+    //
+    //  - and add them to the output only if they extend further left than
+    //    any of the previously found ones
+    //
+    for (int32 r = x + int32(n_ranges) - 1 ; r >= int32(x); --r)
     {
-        const uint32 y = x + n_ranges - 1u;
-
         const fm_index_type& index = f_index;
 
         // extend from y towards the left as much possible
@@ -99,7 +106,7 @@ uint32 find_mems(
 
         int32 l;
 
-        for (l = y; l >= 0 && (1u + range.y - range.x > min_intv); --l)
+        for (l = r; l >= 0 && (1u + range.y - range.x > min_intv); --l)
         {
             const uint8 c = pattern[l];
             if (c > 3) // there is an N here. no match 
@@ -127,7 +134,7 @@ uint32 find_mems(
         if (uint32(l+1) < leftmost_coordinate)
         {
             // save the range, together with its span
-            const uint2 pattern_span = make_uint2( uint32(l+1), y );
+            const uint2 pattern_span = make_uint2( uint32(l+1), r );
 
             // keep the MEM only if it is above a certain length
             if (pattern_span.y - pattern_span.x >= min_span)

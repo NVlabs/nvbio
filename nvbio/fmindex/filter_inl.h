@@ -167,9 +167,11 @@ struct locate_ssa_results
 template <typename index_type>
 struct lookup_ssa_results
 {
-    typedef uint2   first_argument_type;
-    typedef uint2   second_argument_type;
-    typedef uint2   result_type;
+    typedef typename index_type::range_type range_type;
+
+    typedef range_type   first_argument_type;
+    typedef range_type   second_argument_type;
+    typedef range_type   result_type;           // TODO: this should be the filter's hit_type
 
     // constructor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
@@ -179,7 +181,7 @@ struct lookup_ssa_results
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     result_type operator() (const uint2 pair, const uint2 ssa) const
     {
-        return make_uint2( lookup_ssa_iterator( index, ssa ), pair.y );
+        return make_vector( lookup_ssa_iterator( index, ssa ), pair.y );
     }
 
     const index_type index;

@@ -167,93 +167,18 @@ struct range_size
     uint64 operator() (const rank_type range) const { return 1u + range.y - range.x; }
 };
 
-template <typename index_type, typename string_set_type>
-struct right_extension_functor
+// return the span of a given range
+template <typename rank_type>
+struct span_size
 {
-    typedef typename index_type::index_type     coord_type;
-    typedef typename index_type::range_type     range_type;
+    typedef rank_type argument_type;
+    typedef uint64    result_type;
 
-    // constructor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    right_extension_functor(
-        const index_type        _f_index,
-        const index_type        _r_index,
-        const string_set_type   _string_set,
-        const uint32            _min_intv,
-        VectorArrayView<uint2>  _range_arrays) :
-    f_index      ( _f_index ),
-    r_index      ( _r_index ),
-    string_set   ( _string_set ),
-    min_intv     ( _min_intv ),
-    range_arrays ( _range_arrays ) {}
-
-    // functor operator
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    void operator() (const uint32 string_id) const
+    uint64 operator() (const rank_type range) const
     {
-        typename string_set_type::string_type pattern = string_set[ string_id ];
-
-        const uint32 pattern_len = nvbio::length( pattern );
-
-        uint2  ranges[1024];
-        uint32 n_ranges = 0;
-
-        const index_type& index = r_index;
-
-        for (uint32 x = 0; x < pattern_len;)
-        {
-            uint32 n = 0;
-
-            // extend forward, using the reverse index
-            range_type range = make_vector( coord_type(0u), index.length() );
-
-            for (uint32 i = x; i < pattern_len; ++i)
-            {
-                const uint8 c = pattern[i];
-                if (c > 3) // there is an N here. no match 
-                    break;
-
-                const range_type c_rank = rank(
-                    index,
-                    make_vector( range.x-1, range.y ),
-                    c );
-
-                range.x = index.L2(c) + c_rank.x + 1;
-                range.y = index.L2(c) + c_rank.y;
-
-                // check if the range is too small
-                if (1u + range.y - range.x < min_intv)
-                    break;
-
-                // advance n
-                ++n;
-            }
-
-            // output a range
-            if (n)
-                ranges[ n_ranges++ ] = make_uint2( string_id, x + n );
-
-            // jump to the next uncovered base
-            x = (n == 0) ? x + 1u : x + n;
-        }
-
-        // output the array of results
-        if (n_ranges)
-        {
-            uint2* output = range_arrays.alloc( string_id, n_ranges );
-            if (output != NULL)
-            {
-                for (uint32 i = 0; i < n_ranges; ++i)
-                    output[i] = ranges[i];
-            }
-        }
+        return (range.w >> 16u) - (range.w & 0xFFu);
     }
-
-    const index_type                f_index;
-    const index_type                r_index;
-    const string_set_type           string_set;
-    const uint32                    min_intv;
-    mutable VectorArrayView<uint2>  range_arrays;
 };
 
 // a simple mem handler

@@ -201,7 +201,7 @@ namespace nvbio {
 /// \section FMIndexFiltersSection Batch Filtering
 ///\par
 /// Performing massively parallel FM-index queries requires careful load balancing, as finding all
-/// occurrences of a given set of strings in a text is one to many process with variable-rate data expansion.
+/// occurrences of a given set of strings in a text is a one-to-many process with variable-rate data expansion.
 /// NVBIO offers simple host and device contexts to rank and a set of strings and enumerate all their
 /// occurrences automatically:
 ///\par

@@ -83,7 +83,7 @@ void GPUOutputBatch::readback_cigars(io::HostCigarArray& host_cigar) const
 }
 
 // copy MD strings back to the host
-void GPUOutputBatch::readback_mds(nvbio::cuda::HostVectorArray<uint8>& host_mds) const
+void GPUOutputBatch::readback_mds(nvbio::HostVectorArray<uint8>& host_mds) const
 {
     host_mds = mds;
 }

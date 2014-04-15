@@ -34,7 +34,7 @@
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 
-#include <nvbio/basic/cuda/vector_array.h>
+#include <nvbio/basic/vector_array.h>
 #include <nvbio/io/fmi.h>
 #include <nvbio/io/reads/reads.h>
 
@@ -77,14 +77,14 @@ public:
 
     thrust::device_vector<io::BestAlignments>& best_data_dvec;
     DeviceCigarArray                           cigar;
-    nvbio::cuda::DeviceVectorArray<uint8>&     mds;
+    nvbio::DeviceVectorArray<uint8>&           mds;
 
     io::ReadDataDevice&                          read_data;
 
     GPUOutputBatch(uint32                                         _count,
                    thrust::device_vector<io::BestAlignments>&     _best_data_dvec,
                    DeviceCigarArray                               _cigar,
-                   nvbio::cuda::DeviceVectorArray<uint8>&         _mds,
+                   nvbio::DeviceVectorArray<uint8>&               _mds,
                    io::ReadDataDevice&                            _read_data)
             : count(_count),
               best_data_dvec(_best_data_dvec),
@@ -100,7 +100,7 @@ public:
     // copy cigars into host memory
     void readback_cigars(HostCigarArray& host_cigars) const;
     // copy md strings into host memory
-    void readback_mds(nvbio::cuda::HostVectorArray<uint8>& host_mds) const;
+    void readback_mds(nvbio::HostVectorArray<uint8>& host_mds) const;
 };
 
 } // namespace io

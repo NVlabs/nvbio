@@ -44,7 +44,6 @@
 #include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/cuda/sort.h>
 #include <nvbio/basic/cuda/host_device_buffer.h>
-#include <nvbio/basic/cuda/vector_array.h>
 #include <nvbio/basic/cuda/work_queue.h>
 #include <nvbio/basic/timer.h>
 #include <nvbio/basic/console.h>
@@ -52,6 +51,7 @@
 #include <nvbio/basic/threads.h>
 #include <nvbio/basic/html.h>
 #include <nvbio/basic/dna.h>
+#include <nvbio/basic/vector_array.h>
 #include <nvbio/fmindex/bwt.h>
 #include <nvbio/fmindex/ssa.h>
 #include <nvbio/fmindex/fmindex.h>
@@ -134,10 +134,10 @@ struct Aligner
     uint64*                               hits_range_scan_dptr;
     // -------------------------------------------------------- //
 
-    nvbio::cuda::DeviceVectorArray<uint8>       mds;
-    nvbio::cuda::DeviceVectorArray<io::Cigar>   cigar;
-    thrust::device_vector<uint2>                cigar_coords_dvec;
-    uint2*                                      cigar_coords_dptr;
+    nvbio::DeviceVectorArray<uint8>       mds;
+    nvbio::DeviceVectorArray<io::Cigar>   cigar;
+    thrust::device_vector<uint2>          cigar_coords_dvec;
+    uint2*                                cigar_coords_dptr;
 
     thrust::device_vector<uint64>   hits_stats_dvec;
     thrust::host_vector<uint64>     hits_stats_hvec;

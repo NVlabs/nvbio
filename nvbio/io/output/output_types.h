@@ -32,7 +32,7 @@
 
 #include <nvbio/io/fmi.h>
 #include <nvbio/io/reads/reads.h>
-#include <nvbio/basic/cuda/vector_array.h>
+#include <nvbio/basic/vector_array.h>
 
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
@@ -119,11 +119,11 @@ struct AlignmentResult
 /// Wrapper struct to keep CIGAR arrays and CIGAR coords in one place. This is the device version.
 struct DeviceCigarArray
 {
-    nvbio::cuda::DeviceVectorArray<io::Cigar>& array;
+    nvbio::DeviceVectorArray<io::Cigar>&       array;
     thrust::device_vector<uint2>&              coords;
 
-    DeviceCigarArray(nvbio::cuda::DeviceVectorArray<io::Cigar>& array,
-                     thrust::device_vector<uint2>&              coords)
+    DeviceCigarArray(nvbio::DeviceVectorArray<io::Cigar>& array,
+                     thrust::device_vector<uint2>&        coords)
         : array(array),
           coords(coords)
     { }
@@ -132,12 +132,12 @@ struct DeviceCigarArray
 /// Wrapper struct to keep CIGAR arrays and CIGAR coords in one place (host version).
 struct HostCigarArray
 {
-    nvbio::cuda::HostVectorArray<io::Cigar> array;
+    nvbio::HostVectorArray<io::Cigar> array;
     thrust::host_vector<uint2>              coords;
 };
 
 /// The type for the MDS array in the host
-typedef nvbio::cuda::HostVectorArray<uint8> HostMdsArray;
+typedef nvbio::HostVectorArray<uint8> HostMdsArray;
 
 /// Utility struct to gather all data related to a given alignment.
 /// This breaks out the alignment data for a given alignment by setting up

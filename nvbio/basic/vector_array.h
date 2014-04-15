@@ -30,9 +30,9 @@
 #include <nvbio/basic/types.h>
 #include <nvbio/basic/thrust_view.h>
 #include <nvbio/basic/atomics.h>
+#include <nvbio/basic/cuda/arch.h>   // thrust_copy_vector
 
 namespace nvbio {
-namespace cuda {
 
 /// \page vector_arrays_page Vector Arrays
 ///
@@ -274,9 +274,9 @@ struct HostVectorArray
     ///
     HostVectorArray& operator=(const DeviceVectorArray<T>& vec)
     {
-        thrust_copy_vector( m_arena, vec.m_arena );
-        thrust_copy_vector( m_index, vec.m_index );
-        thrust_copy_vector( m_pool,  vec.m_pool );
+        cuda::thrust_copy_vector( m_arena, vec.m_arena );
+        cuda::thrust_copy_vector( m_index, vec.m_index );
+        cuda::thrust_copy_vector( m_pool,  vec.m_pool );
         return *this;
     }
 
@@ -310,27 +310,25 @@ struct HostVectorArray
     thrust::host_vector<uint32>   m_pool;         ///< pool counter
 };
 
+///\relates DeviceVectorArray
+/// return a view of the queues
+///
+template <typename T>
+VectorArrayView<T> device_view(DeviceVectorArray<T>& vec) { return vec.device_view(); }
+
+///\relates DeviceVectorArray
+/// return a view of the queues
+///
+template <typename T>
+VectorArrayView<T> plain_view(DeviceVectorArray<T>& vec) { return vec.device_view(); }
+
+///\relates DeviceVectorArray
+/// return a view of the queues
+///
+template <typename T>
+VectorArrayView<T> plain_view(HostVectorArray<T>& vec) { return vec.plain_view(); }
+
 ///@} // VectorArrayModule
 ///@} Basic
-
-} // namespace cuda
-
-///\relates cuda::DeviceVectorArray
-/// return a view of the queues
-///
-template <typename T>
-cuda::VectorArrayView<T> device_view(cuda::DeviceVectorArray<T>& vec) { return vec.device_view(); }
-
-///\relates cuda::DeviceVectorArray
-/// return a view of the queues
-///
-template <typename T>
-cuda::VectorArrayView<T> plain_view(cuda::DeviceVectorArray<T>& vec) { return vec.device_view(); }
-
-///\relates cuda::DeviceVectorArray
-/// return a view of the queues
-///
-template <typename T>
-cuda::VectorArrayView<T> plain_view(cuda::HostVectorArray<T>& vec) { return vec.plain_view(); }
 
 } // namespace nvbio

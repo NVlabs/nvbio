@@ -158,6 +158,7 @@ public:
 template <typename T>
 struct DeviceVectorArray
 {
+    typedef device_tag            system_tag;
     typedef VectorArrayView<T>    device_view_type;  ///< this object's plain view type
     typedef VectorArrayView<T>    plain_view_type;  ///< this object's plain view type
 
@@ -232,6 +233,7 @@ struct DeviceVectorArray
 template <typename T>
 struct HostVectorArray
 {
+    typedef device_tag            system_tag;
     typedef VectorArrayView<T>    plain_view_type;  ///< this object's plain view type
 
     /// constructor

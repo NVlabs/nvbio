@@ -212,9 +212,9 @@ namespace nvbio {
 /// on the device:
 ///\code
 /// void seed(
-///     const string_set_type                                   string_set,         // the input string-set
-///     const uint32                                            seed_len,           // the seeds length
-///     const uint32                                            seed_interval)      // the spacing between seeds
+///     const string_set_type   string_set,         // the input string-set
+///     const uint32            seed_len,           // the seeds length
+///     const uint32            seed_interval)      // the spacing between seeds
 /// {
 ///     nvbio::vector<device_tag,string_set_infix_coord_type>&  seed_coords
 ///
@@ -251,7 +251,19 @@ namespace nvbio {
 ///         ...
 ///    }
 /// }
+/// \section MEMFiltersSection MEM Filtering
+///\par
+/// Additionally to simple filters above, NVBIO also some provides built-in functionality to find all (Super-) Maximal Extension Matches
+/// in a string or a string-set:
+///\par
 ///\endcode
+///\par
+/// - find_mems()
+/// - \ref MEMFilterHost
+/// - \ref MEMFilterDevice
+///\par
+/// The filters are analogous to the ones introduced in the previous section, except that rather than finding exact matches
+/// for each string in a set, they will find all their MEMs or SMEMs.
 ///
 /// \section PerformanceSection Performance
 ///\par

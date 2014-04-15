@@ -89,7 +89,8 @@ uint32 find_mems(
     const uint32            min_span = 1u);
 
 ///
-/// This class implements a FM-index filter which can be used to find and filter MEMs
+///\par
+/// This class implements an FM-index filter which can be used to find and filter MEMs
 /// between an arbitrary string-set and an \ref FMIndex "FM-index".
 ///\par
 /// The filter is designed to:
@@ -106,7 +107,8 @@ template <typename system_tag, typename fm_index_type>
 struct MEMFilter {};
 
 ///
-/// This class implements a FM-index filter which can be used to find and filter MEMs
+///\par
+/// This class implements an FM-index filter which can be used to find and filter MEMs
 /// between an arbitrary string-set and an \ref FMIndex "FM-index".
 ///\par
 /// The filter is designed to:
@@ -182,7 +184,8 @@ struct MEMFilter<host_tag, fm_index_type>
 };
 
 ///
-/// This class implements a FM-index filter which can be used to find and filter MEMs
+///\par
+/// This class implements an FM-index filter which can be used to find and filter MEMs
 /// between an arbitrary string-set and an \ref FMIndex "FM-index".
 ///\par
 /// The filter is designed to:
@@ -257,9 +260,39 @@ struct MEMFilter<device_tag, fm_index_type>
     thrust::device_vector<uint8>        d_temp_storage;
 };
 
+///
+///\par
+/// This class implements an FM-index filter which can be used to find and filter MEMs
+/// between an arbitrary string-set and an \ref FMIndex "FM-index".
+///\par
+/// The filter is designed to:
+///\par
+///  - first <i>find and rank</i> the suffix array ranges containing occurrences of all MEMs,
+/// expressed as a series of lists of <i>(SA-begin, SA-end,string-begin,string-end)</i> tuples,
+/// one for each string in the set.
+///  - and then <i>enumerate</i> each individual occurrence of a MEM within the lists,
+///  as a set of <i>(index-pos,string-id,string-begin,string-end)</i> tuples.
+///\par
+/// \tparam fm_index_type    the type of the fm-index
+///
 template <typename fm_index_type>
 struct MEMFilterHost : public MEMFilter<host_tag, fm_index_type> {};
 
+///
+///\par
+/// This class implements an FM-index filter which can be used to find and filter MEMs
+/// between an arbitrary string-set and an \ref FMIndex "FM-index".
+///\par
+/// The filter is designed to:
+///\par
+///  - first <i>find and rank</i> the suffix array ranges containing occurrences of all MEMs,
+/// expressed as a series of lists of <i>(SA-begin, SA-end,string-begin,string-end)</i> tuples,
+/// one for each string in the set.
+///  - and then <i>enumerate</i> each individual occurrence of a MEM within the lists,
+///  as a set of <i>(index-pos,string-id,string-begin,string-end)</i> tuples.
+///\par
+/// \tparam fm_index_type    the type of the fm-index
+///
 template <typename fm_index_type>
 struct MEMFilterDevice : public MEMFilter<device_tag, fm_index_type> {};
 

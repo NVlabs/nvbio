@@ -213,7 +213,7 @@ namespace nvbio {
 ///\code
 /// template <typename fm_index_type>
 /// void seed(
-///     fm_index_type           fm_index,
+///     fm_index_type           fm_index,           // the input FM-index
 ///     const string_set_type   string_set,         // the input string-set
 ///     const uint32            seed_len,           // the seeds length
 ///     const uint32            seed_interval)      // the spacing between seeds

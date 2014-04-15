@@ -47,7 +47,7 @@ namespace nvbio {
 ///@addtogroup FMIndex
 ///@{
 
-/// find all MEMs (Maximal Extension Matches) covering a given base
+/// find all MEMs (Maximal Extension Matches) covering a given base of a pattern
 ///
 /// \tparam pattern_type        the pattern string type
 /// \tparam delegate_type       the delegate output handler, must implement the following interface:

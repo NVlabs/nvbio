@@ -259,9 +259,9 @@ namespace nvbio {
 /// in a string or a string-set:
 ///\par
 ///\par
-/// - find_mems()
-/// - \ref MEMFilterHost
-/// - \ref MEMFilterDevice
+/// - find_mems() : a host/device per-thread function to find all MEMs overlapping a given base of a pattern string
+/// - \ref MEMFilterHost : a parallel host context to enumerate all MEMs of a string-set
+/// - \ref MEMFilterDevice : a parallel device context to enumerate all MEMs of a string-set
 ///\par
 /// The filters are analogous to the ones introduced in the previous section, except that rather than finding exact matches
 /// for each string in a set, they will find all their MEMs or SMEMs.

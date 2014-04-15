@@ -116,7 +116,7 @@ struct FMIndexFilter<host_tag, fm_index_type>
 
     /// return the individual ranges of the ranked queries
     ///
-    const uint2* ranges() const { return nvbio::plain_view( m_ranges ); }
+    const range_type* ranges() const { return nvbio::plain_view( m_ranges ); }
 
     /// return the global ranks of the output hits (i.e. the range <i>[ranks[i], ranks[i+1])</i>
     /// identifies the position of the hits corresponding to the i-th query in the locate output)
@@ -186,7 +186,7 @@ struct FMIndexFilter<device_tag, fm_index_type>
 
     /// return the individual ranges of the ranked queries
     ///
-    const uint2* ranges() const { return nvbio::plain_view( m_ranges ); }
+    const range_type* ranges() const { return nvbio::plain_view( m_ranges ); }
 
     /// return the global ranks of the output hits (i.e. the range <i>[ranks[i], ranks[i+1])</i>
     /// identifies the position of the hits corresponding to the i-th query in the locate output)

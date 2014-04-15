@@ -134,7 +134,7 @@ struct locate_results
 
     // functor operator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    result_type operator() (const uint2 pair) const
+    result_type operator() (const range_type pair) const
     {
         return make_vector( locate( index, pair.x ), pair.y );
     }
@@ -179,7 +179,7 @@ struct lookup_ssa_results
 
     // functor operator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    result_type operator() (const uint2 pair, const uint2 ssa) const
+    result_type operator() (const range_type pair, const range_type ssa) const
     {
         return make_vector( lookup_ssa_iterator( index, ssa ), pair.y );
     }

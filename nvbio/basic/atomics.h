@@ -52,10 +52,70 @@ namespace nvbio {
 ///@{
 
 ///@defgroup Atomics
-/// This module implements basic host atomic counters.
+/// This module implements basic host/device atomic counters.
 ///@{
 
-#ifdef WIN32
+int32  host_atomic_add( int32* value, const  int32 op);
+uint32 host_atomic_add(uint32* value, const uint32 op);
+int64  host_atomic_add( int64* value, const  int64 op);
+uint64 host_atomic_add(uint64* value, const uint64 op);
+
+int32  host_atomic_sub( int32* value, const  int32 op);
+uint32 host_atomic_sub(uint32* value, const uint32 op);
+int64  host_atomic_sub( int64* value, const  int64 op);
+uint64 host_atomic_sub(uint64* value, const uint64 op);
+
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+int32 atomic_add(int32* value, const int32 op)
+{
+  #if defined(NVBIO_DEVICE_COMPILATION)
+    return atomicAdd( value, op );
+  #else
+    return host_atomic_add( value, op );
+  #endif
+}
+
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 atomic_add(uint32* value, const uint32 op)
+{
+  #if defined(NVBIO_DEVICE_COMPILATION)
+    return atomicAdd( value, op );
+  #else
+    return host_atomic_add( value, op );
+  #endif
+}
+
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint64 atomic_add(uint64* value, const uint64 op)
+{
+  #if defined(NVBIO_DEVICE_COMPILATION)
+    return atomicAdd( value, op );
+  #else
+    return host_atomic_add( value, op );
+  #endif
+}
+
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+int32 atomic_sub(int32* value, const int32 op)
+{
+  #if defined(NVBIO_DEVICE_COMPILATION)
+    return atomicSub( value, op );
+  #else
+    return host_atomic_sub( value, op );
+  #endif
+}
+
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 atomic_sub(uint32* value, const uint32 op)
+{
+  #if defined(NVBIO_DEVICE_COMPILATION)
+    return atomicSub( value, op );
+  #else
+    return host_atomic_sub( value, op );
+  #endif
+}
+
+#if defined(WIN32)
 
 int32 atomic_increment(int32 volatile *value);
 int64 atomic_increment(int64 volatile *value);

@@ -29,6 +29,7 @@
 
 #include <nvbio/basic/types.h>
 #include <nvbio/basic/thrust_view.h>
+#include <nvbio/basic/atomics.h>
 
 namespace nvbio {
 namespace cuda {
@@ -50,14 +51,14 @@ namespace cuda {
 ///
 /// The DeviceVectorArray is a container meant to be used from the host; the corresponding view:
 ///
-/// - DeviceVectorArrayView
+/// - VectorArrayView
 ///
 /// can be obtained with a call to the plain_view() function.
 ///
 /// \section Example
 ///
 ///\code
-/// __global__ void my_alloc_kernel(DeviceVectorArrayView<uint32> vector_array)
+/// __global__ void my_alloc_kernel(VectorArrayView<uint32> vector_array)
 /// {
 ///     const uint32 idx = threadIdx.x + blockIdx.x * blockDim.x;
 ///     const uint32 size = threadIdx.x+1;
@@ -67,7 +68,7 @@ namespace cuda {
 ///         idx,           // vector to allocate
 ///         size );        // vector size
 /// }
-/// __global__ void my_other_kernel(DeviceVectorArrayView<uint32> vector_array)
+/// __global__ void my_other_kernel(VectorArrayView<uint32> vector_array)
 /// {
 ///     const uint32 idx = threadIdx.x + blockIdx.x * blockDim.x;
 ///
@@ -102,25 +103,24 @@ namespace cuda {
 /// A utility class to manage a vector of dynamically-allocated arrays
 ///
 template <typename T>
-struct DeviceVectorArrayView
+struct VectorArrayView
 {
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    DeviceVectorArrayView(
+    VectorArrayView(
         T*      arena = NULL,
         uint32* index = NULL,
         uint32* pool  = NULL,
         uint32  size  = 0u)
         : m_arena(arena), m_index(index), m_pool(pool), m_size(size) {}
 
-#ifdef __CUDACC__
     /// alloc the vector bound to the given index
     ///
-    NVBIO_FORCEINLINE NVBIO_DEVICE
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     T* alloc(const uint32 index, const uint32 size)
     {
-        const uint32 slot = atomicAdd( m_pool, size );
+        const uint32 slot = atomic_add( m_pool, size );
         if (slot + size >= m_size)
         {
             // mark an out-of-bounds allocation
@@ -130,7 +130,6 @@ struct DeviceVectorArrayView
         m_index[index] = slot;
         return m_arena + slot;
     }
-#endif
 
     /// return the vector corresponding to the given index
     ///
@@ -159,8 +158,8 @@ public:
 template <typename T>
 struct DeviceVectorArray
 {
-    typedef DeviceVectorArrayView<T>    device_view_type;
-    typedef DeviceVectorArrayView<T>    plain_view_type;
+    typedef VectorArrayView<T>    device_view_type;  ///< this object's plain view type
+    typedef VectorArrayView<T>    plain_view_type;  ///< this object's plain view type
 
     /// constructor
     ///
@@ -204,10 +203,21 @@ struct DeviceVectorArray
     ///
     device_view_type device_view()
     {
-        return DeviceVectorArrayView<T>(
+        return VectorArrayView<T>(
             nvbio::device_view( m_arena ),
             nvbio::device_view( m_index ),
             nvbio::device_view( m_pool ),
+            uint32( m_arena.size() ) );
+    }
+
+    /// return the plain view of this object
+    ///
+    plain_view_type plain_view()
+    {
+        return VectorArrayView<T>(
+            nvbio::plain_view( m_arena ),
+            nvbio::plain_view( m_index ),
+            nvbio::plain_view( m_pool ),
             uint32( m_arena.size() ) );
     }
 
@@ -222,6 +232,8 @@ struct DeviceVectorArray
 template <typename T>
 struct HostVectorArray
 {
+    typedef VectorArrayView<T>    plain_view_type;  ///< this object's plain view type
+
     /// constructor
     ///
     HostVectorArray() : m_pool(1,0) {}
@@ -280,6 +292,17 @@ struct HostVectorArray
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint32 slot(const uint32 index) const { return m_index[index]; }
 
+    /// return the plain view of this object
+    ///
+    plain_view_type plain_view()
+    {
+        return VectorArrayView<T>(
+            nvbio::plain_view( m_arena ),
+            nvbio::plain_view( m_index ),
+            nvbio::plain_view( m_pool ),
+            uint32( m_arena.size() ) );
+    }
+
     thrust::host_vector<T>        m_arena;        ///< memory arena
     thrust::host_vector<uint32>   m_index;        ///< index of the allocated arrays
     thrust::host_vector<uint32>   m_pool;         ///< pool counter
@@ -294,12 +317,18 @@ struct HostVectorArray
 /// return a view of the queues
 ///
 template <typename T>
-cuda::DeviceVectorArrayView<T> device_view(cuda::DeviceVectorArray<T>& vec) { return vec.device_view(); }
+cuda::VectorArrayView<T> device_view(cuda::DeviceVectorArray<T>& vec) { return vec.device_view(); }
 
 ///\relates cuda::DeviceVectorArray
 /// return a view of the queues
 ///
 template <typename T>
-cuda::DeviceVectorArrayView<T> plain_view(cuda::DeviceVectorArray<T>& vec) { return vec.device_view(); }
+cuda::VectorArrayView<T> plain_view(cuda::DeviceVectorArray<T>& vec) { return vec.device_view(); }
+
+///\relates cuda::DeviceVectorArray
+/// return a view of the queues
+///
+template <typename T>
+cuda::VectorArrayView<T> plain_view(cuda::HostVectorArray<T>& vec) { return vec.plain_view(); }
 
 } // namespace nvbio

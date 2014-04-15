@@ -240,7 +240,7 @@ namespace nvbio {
 ///     const uint64 n_hits = fm_filter.rank( fm_index, seeds );
 /// 
 ///     // prepare storage for the output hits
-///     nvbio::vector<device_tag,hit_type> hits( batch_size );
+///     nvbio::vector<device_tag,FMIndexFilterDevice::hit_type> hits( batch_size );
 ///
 ///     // loop through large batches of hits and locate & merge them
 ///     for (uint64 hits_begin = 0; hits_begin < n_hits; hits_begin += batch_size)

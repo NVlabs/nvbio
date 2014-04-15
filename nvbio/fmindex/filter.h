@@ -212,7 +212,15 @@ struct FMIndexFilter<device_tag, fm_index_type>
 /// \tparam fm_index_type    the type of the fm-index
 ///
 template <typename fm_index_type>
-struct FMIndexFilterHost : public FMIndexFilter<host_tag, fm_index_type> {};
+struct FMIndexFilterHost : public FMIndexFilter<host_tag, fm_index_type>
+{
+    typedef FMIndexFilter<host_tag, fm_index_type>          core_type;      ///< the base class
+    typedef typename core_type::system_tag                  system_tag;     ///< the backend system
+    typedef typename core_type::index_type                  index_type;     ///< the index type
+
+    typedef typename core_type::coord_type                  coord_type;     ///< the coordinate type of the fm-index, uint32|uint2
+    typedef typename core_type::hit_type                    hit_type;       ///< hits are either uint2 or uint4
+};
 
 ///
 ///\par
@@ -226,7 +234,15 @@ struct FMIndexFilterHost : public FMIndexFilter<host_tag, fm_index_type> {};
 /// \tparam fm_index_type    the type of the fm-index
 ///
 template <typename fm_index_type>
-struct FMIndexFilterDevice : public FMIndexFilter<device_tag, fm_index_type> {};
+struct FMIndexFilterDevice : public FMIndexFilter<device_tag, fm_index_type>
+{
+    typedef FMIndexFilter<device_tag, fm_index_type>        core_type;      ///< the base class
+    typedef typename core_type::system_tag                  system_tag;     ///< the backend system
+    typedef typename core_type::index_type                  index_type;     ///< the index type
+
+    typedef typename core_type::coord_type                  coord_type;     ///< the coordinate type of the fm-index, uint32|uint2
+    typedef typename core_type::hit_type                    hit_type;       ///< hits are either uint2 or uint4
+};
 
 ///@} // end of the FMIndex group
 

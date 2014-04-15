@@ -47,8 +47,9 @@ namespace nvbio {
 ///@{
 
 ///
+///\par
 /// This class implements a FM-index filter which can be used to find and filter matches
-/// between an arbitrary string set, and a \ref FMIndex "FM-index".
+/// between an arbitrary string-set and an \ref FMIndex "FM-index".
 ///\par
 /// The filter will return an ordered set of <i>(index-pos,string-id)</i> pairs, where <i>string-id</i> is
 /// the index into the string-set and <i>index-pos</i> is an index into the FM-index.
@@ -60,8 +61,9 @@ template <typename system_tag, typename fm_index_type>
 struct FMIndexFilter {};
 
 ///
+///\par
 /// This class implements a FM-index filter which can be used to find and filter matches
-/// between an arbitrary string set, and a \ref FMIndex "FM-index".
+/// between an arbitrary string-set and an \ref FMIndex "FM-index".
 ///\par
 /// The filter will return an ordered set of <i>(index-pos,string-id)</i> pairs, where <i>string-id</i> is
 /// the index into the string-set and <i>index-pos</i> is an index into the FM-index.
@@ -128,8 +130,9 @@ struct FMIndexFilter<host_tag, fm_index_type>
 };
 
 ///
+///\par
 /// This class implements a FM-index filter which can be used to find and filter matches
-/// between an arbitrary string set, and a \ref FMIndex "FM-index".
+/// between an arbitrary string-set and an \ref FMIndex "FM-index".
 ///\par
 /// The filter will return an ordered set of <i>(index-pos,string-id)</i> pairs, where <i>string-id</i> is
 /// the index into the string-set and <i>index-pos</i> is an index into the FM-index.
@@ -150,7 +153,7 @@ struct FMIndexFilter<device_tag, fm_index_type>
     static const uint32                                     hit_dim = coord_dim*2;  ///< hits are either uint2 or uint4
     typedef typename vector_type<coord_type,hit_dim>::type  hit_type;               ///< hits are either uint2 or uint4
 
-    /// enact thefilter on an FM-index and a string-set
+    /// enact the filter on an FM-index and a string-set
     ///
     /// \param index            the FM-index
     /// \param string-set       the query string-set
@@ -197,9 +200,31 @@ struct FMIndexFilter<device_tag, fm_index_type>
     thrust::device_vector<uint8>        d_temp_storage;
 };
 
+///
+///\par
+/// This class implements a FM-index filter which can be used to find and filter matches
+/// between an arbitrary string-set and an \ref FMIndex "FM-index".
+///\par
+/// The filter will return an ordered set of <i>(index-pos,string-id)</i> pairs, where <i>string-id</i> is
+/// the index into the string-set and <i>index-pos</i> is an index into the FM-index.
+///\par
+///
+/// \tparam fm_index_type    the type of the fm-index
+///
 template <typename fm_index_type>
 struct FMIndexFilterHost : public FMIndexFilter<host_tag, fm_index_type> {};
 
+///
+///\par
+/// This class implements a FM-index filter which can be used to find and filter matches
+/// between an arbitrary string-set and an \ref FMIndex "FM-index".
+///\par
+/// The filter will return an ordered set of <i>(index-pos,string-id)</i> pairs, where <i>string-id</i> is
+/// the index into the string-set and <i>index-pos</i> is an index into the FM-index.
+///\par
+///
+/// \tparam fm_index_type    the type of the fm-index
+///
 template <typename fm_index_type>
 struct FMIndexFilterDevice : public FMIndexFilter<device_tag, fm_index_type> {};
 

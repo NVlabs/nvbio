@@ -198,6 +198,61 @@ namespace nvbio {
 /// </td></tr>
 /// </table>
 ///
+/// \section FMIndexFiltersSection Batch Filtering
+///\par
+/// Performing massively parallel FM-index queries requires careful load balancing, as finding all
+/// occurrences of a given set of strings in a text is one to many process with variable-rate data expansion.
+/// NVBIO offers simple host and device contexts to rank and a set of strings and enumerate all their
+/// occurrences automatically:
+///\par
+/// - \ref FMIndexFilterHost
+/// - \ref FMIndexFilterDevice
+///\par
+/// Here is an example showing how to extract a set of seeds from a string set and find their occurrences
+/// on the device:
+///\code
+/// void seed(
+///     const string_set_type                                   string_set,         // the input string-set
+///     const uint32                                            seed_len,           // the seeds length
+///     const uint32                                            seed_interval)      // the spacing between seeds
+/// {
+///     nvbio::vector<device_tag,string_set_infix_coord_type>&  seed_coords
+///
+///     // enumerate all seeds
+///     const uint32 n_seeds = enumerate_string_set_seeds(
+///         string_set,
+///         uniform_seeds_functor<>( seed_len, seed_interval ),
+///         seed_coords );
+/// 
+///     // and build the output infix-set
+///     typedef InfixSet<string_set_type, const string_set_infix_coord_type*> seed_set_type;
+///     seed_set_type seeds(
+///         n_seeds,
+///         string_set,
+///         nvbio::plain_view( seed_coords ) );
+///
+///     // first step: rank the query seeds
+///     const uint64 n_hits = fm_filter.rank( fm_index, seed_string_set );
+/// 
+///     // prepare storage for the output hits
+///     nvbio::vector<device_tag,hit_type> hits( batch_size );
+///
+///     // loop through large batches of hits and locate & merge them
+///     for (uint64 hits_begin = 0; hits_begin < n_hits; hits_begin += batch_size)
+///     {
+///         const uint64 hits_end = nvbio::min( hits_begin + batch_size, n_hits );
+/// 
+///         fm_filter.locate(
+///             hits_begin,
+///             hits_end,
+///             hits.begin() );
+///
+///         // do something with the hits, e.g. extending them using DP alignment...
+///         ...
+///    }
+/// }
+///\endcode
+///
 /// \section PerformanceSection Performance
 ///\par
 /// The graphs below show the performance of exact and approximate matching using the FM-index on the CPU and GPU,

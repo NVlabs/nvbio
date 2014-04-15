@@ -251,12 +251,13 @@ namespace nvbio {
 ///         ...
 ///    }
 /// }
+///\endcode
+///
 /// \section MEMFiltersSection MEM Filtering
 ///\par
 /// Additionally to simple filters above, NVBIO also some provides built-in functionality to find all (Super-) Maximal Extension Matches
 /// in a string or a string-set:
 ///\par
-///\endcode
 ///\par
 /// - find_mems()
 /// - \ref MEMFilterHost

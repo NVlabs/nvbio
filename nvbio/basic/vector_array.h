@@ -111,9 +111,10 @@ struct VectorArrayView
     VectorArrayView(
         T*      arena = NULL,
         uint32* index = NULL,
+        uint32* sizes = NULL,
         uint32* pool  = NULL,
         uint32  size  = 0u)
-        : m_arena(arena), m_index(index), m_pool(pool), m_size(size) {}
+        : m_arena(arena), m_index(index), m_sizes(sizes), m_pool(pool), m_size(size) {}
 
     /// alloc the vector bound to the given index
     ///
@@ -125,9 +126,11 @@ struct VectorArrayView
         {
             // mark an out-of-bounds allocation
             m_index[index] = m_size;
+            m_sizes[index] = 0u;
             return NULL;
         }
         m_index[index] = slot;
+        m_sizes[index] = size;
         return m_arena + slot;
     }
 
@@ -145,9 +148,15 @@ struct VectorArrayView
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint32 slot(const uint32 index) const { return m_index[index]; }
 
+    /// return the size of the given array
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 size(const uint32 index) const { return m_sizes[index]; }
+
 public:
     T*      m_arena;        ///< memory arena
     uint32* m_index;        ///< index of the allocated arrays
+    uint32* m_sizes;        ///< sizes of the allocated arrays
     uint32* m_pool;         ///< pool counter
     uint32  m_size;         ///< size of the arena
 };
@@ -181,6 +190,7 @@ struct DeviceVectorArray
         uint64 bytes = 0;
         if (do_alloc) m_arena.resize( arena ); bytes += sizeof(T)*arena;
         if (do_alloc) m_index.resize( size );  bytes += sizeof(uint32)*size;
+        if (do_alloc) m_sizes.resize( size );  bytes += sizeof(uint32)*size;
         if (do_alloc)
         {
             // initialize all slots
@@ -188,6 +198,12 @@ struct DeviceVectorArray
                 m_index.begin(),
                 m_index.begin() + size,
                 arena );
+
+            // initialize all slots
+            thrust::fill(
+                m_sizes.begin(),
+                m_sizes.begin() + size,
+                uint32(0) );
         }
         return bytes;
     }
@@ -215,6 +231,7 @@ struct DeviceVectorArray
         return VectorArrayView<T>(
             nvbio::device_view( m_arena ),
             nvbio::device_view( m_index ),
+            nvbio::device_view( m_sizes ),
             nvbio::device_view( m_pool ),
             uint32( m_arena.size() ) );
     }
@@ -226,12 +243,14 @@ struct DeviceVectorArray
         return VectorArrayView<T>(
             nvbio::plain_view( m_arena ),
             nvbio::plain_view( m_index ),
+            nvbio::plain_view( m_sizes ),
             nvbio::plain_view( m_pool ),
             uint32( m_arena.size() ) );
     }
 
     thrust::device_vector<T>        m_arena;        ///< memory arena
     thrust::device_vector<uint32>   m_index;        ///< index of the allocated arrays
+    thrust::device_vector<uint32>   m_sizes;        ///< sizes of the allocated arrays
     thrust::device_vector<uint32>   m_pool;         ///< pool counter
 };
 
@@ -263,6 +282,7 @@ struct HostVectorArray
         uint64 bytes = 0;
         if (do_alloc) m_arena.resize( arena ); bytes += sizeof(T)*arena;
         if (do_alloc) m_index.resize( size );  bytes += sizeof(uint32)*size;
+        if (do_alloc) m_sizes.resize( size );  bytes += sizeof(uint32)*size;
         if (do_alloc)
         {
             // initialize all slots
@@ -270,6 +290,12 @@ struct HostVectorArray
                 m_index.begin(),
                 m_index.begin() + size,
                 arena );
+
+            // initialize all slots
+            thrust::fill(
+                m_sizes.begin(),
+                m_sizes.begin() + size,
+                uint32(0) );
         }
         return bytes;
     }
@@ -292,6 +318,7 @@ struct HostVectorArray
     {
         cuda::thrust_copy_vector( m_arena, vec.m_arena );
         cuda::thrust_copy_vector( m_index, vec.m_index );
+        cuda::thrust_copy_vector( m_sizes, vec.m_sizes );
         cuda::thrust_copy_vector( m_pool,  vec.m_pool );
         return *this;
     }
@@ -317,12 +344,14 @@ struct HostVectorArray
         return VectorArrayView<T>(
             nvbio::plain_view( m_arena ),
             nvbio::plain_view( m_index ),
+            nvbio::plain_view( m_sizes ),
             nvbio::plain_view( m_pool ),
             uint32( m_arena.size() ) );
     }
 
     thrust::host_vector<T>        m_arena;        ///< memory arena
     thrust::host_vector<uint32>   m_index;        ///< index of the allocated arrays
+    thrust::host_vector<uint32>   m_sizes;        ///< sizes of the allocated arrays
     thrust::host_vector<uint32>   m_pool;         ///< pool counter
 };
 

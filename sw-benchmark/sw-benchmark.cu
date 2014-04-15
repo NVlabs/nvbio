@@ -577,6 +577,20 @@ int main(int argc, char* argv[])
             scoring.m_gap_ext  = -1;
 
             fprintf(stderr,"  testing Gotoh scoring speed...\n");
+            fprintf(stderr,"    %15s : ", "global");
+            {
+                batch_score_profile_all(
+                    aln::make_gotoh_aligner<aln::GLOBAL,aln::TextBlockingTag>( scoring ),
+                    d_read_data.size(),
+                    d_read_data.read_index(),
+                    d_read_data.read_stream(),
+                    d_read_data.max_read_len(),
+                    n_read_symbols,
+                    nvbio::plain_view( d_ref_storage ),
+                    ref_length,
+                    nvbio::plain_view( score_dvec ) );
+            }
+
             fprintf(stderr,"    %15s : ", "semi-global");
             {
                 batch_score_profile_all(
@@ -593,7 +607,7 @@ int main(int argc, char* argv[])
             fprintf(stderr,"    %15s : ", "local");
             {
                 batch_score_profile_all(
-                    aln::make_gotoh_aligner<aln::SEMI_GLOBAL,aln::TextBlockingTag>( scoring ),
+                    aln::make_gotoh_aligner<aln::LOCAL,aln::TextBlockingTag>( scoring ),
                     d_read_data.size(),
                     d_read_data.read_index(),
                     d_read_data.read_stream(),

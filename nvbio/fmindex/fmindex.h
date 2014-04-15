@@ -237,7 +237,7 @@ namespace nvbio {
 ///     FMIndexFilterDevice fm_filter;
 ///
 ///     // first step: rank the query seeds
-///     const uint64 n_hits = fm_filter.rank( fm_index, seed_string_set );
+///     const uint64 n_hits = fm_filter.rank( fm_index, seeds );
 /// 
 ///     // prepare storage for the output hits
 ///     nvbio::vector<device_tag,hit_type> hits( batch_size );

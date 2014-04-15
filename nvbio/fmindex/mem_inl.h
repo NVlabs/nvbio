@@ -98,7 +98,7 @@ uint32 find_mems(
 
         int32 l;
 
-        for (l = y; l >= 0; --l)
+        for (l = y; l >= 0 && (1u + range.y - range.x > min_intv); --l)
         {
             const uint8 c = pattern[l];
             if (c > 3) // there is an N here. no match 
@@ -119,10 +119,6 @@ uint32 find_mems(
 
             // update the range
             range = new_range;
-
-            // check if the range is small enough
-            if (1u + range.y - range.x <= min_intv)
-                break;
         }
 
         // only output the range if it's not contained in other MEMs

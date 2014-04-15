@@ -177,8 +177,6 @@ struct MEMFilter<host_tag, fm_index_type>
     index_type                          m_f_index;
     index_type                          m_r_index;
     uint64                              m_n_occurrences;
-    //HostVectorArray<uint2>              m_right_ranges;
-    //HostVectorArray<uint4>              m_left_ranges;
     HostVectorArray<rank_type>          m_mem_ranges;
     thrust::host_vector<uint64>         m_slots;
 };
@@ -254,7 +252,6 @@ struct MEMFilter<device_tag, fm_index_type>
     index_type                          m_f_index;
     index_type                          m_r_index;
     uint64                              m_n_occurrences;
-    //DeviceVectorArray<uint2>            m_right_ranges;
     DeviceVectorArray<rank_type>        m_mem_ranges;
     thrust::device_vector<uint64>       m_slots;
     thrust::device_vector<uint8>        d_temp_storage;

@@ -89,6 +89,23 @@
 /// - <a href="http://www.barrgroup.com/Embedded-Systems/How-To/CRC-Calculation-C-Code">crc</a>
 /// - a modification of Nathaniel McClatchey's <a href="https://github.com/nmcclatchey/Priority-Deque/">priority_deque</a>
 ///
+/// \section Recent News
+///\par
+/// <table>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">15/03/2014 \n NVBIO 0.9.5</td>
+/// <td style="vertical-align:text-top;">
+/// - New Features: \n
+///   * Added a whole new \ref qgram_page for q-gram indexing and q-gram counting.
+///   * Added a banded \ref AlignersAnchor "Myers bit-vector" edit-distance algorithm running just short of 1 TCUPS!
+///   * Added parallel primitives for simple and efficient \ref SeedingAnchor "seed extraction" from string and string-sets
+///   * Added parallel \ref FMIndexFilters "FM-index" and \ref MEMFilters "MEM" filters
+///   * Further improved GPU BWT construction throughput by ~20%.
+/// - Bug Fixes: \n
+///   * Fixed access violation bug in ModernGPU's SegmentedSort (thanks Sean Baxter), used at the core of our suffix sorting routines
+///   * Fixed FMIndexDataDevice constructor bug when loading the reverse index
+/// </td></tr>
+/// </table>
+///
 /// \section Requirements
 ///\par
 /// NVBIO has been designed for GPUs supporting at least CUDA's <i>Compute Capability 3.5</i>.

@@ -201,8 +201,9 @@
 /// thrust::device_vector<uint32> text_offsets( n_strings+1 );
 ///
 /// // fill their content with random characters in [0,4)
-/// fill_random( 4u, pattern_storage.begin(), pattern_storage.end() );
-/// fill_random( 4u, text_storage.begin(), text_storage.end() );
+/// const uint32 ALPHABET_SIZE = 4u;
+/// fill_random( ALPHABET_SIZE, pattern_storage.begin(), pattern_storage.end() );
+/// fill_random( ALPHABET_SIZE, text_storage.begin(), text_storage.end() );
 ///
 /// // prepare their offset vectors
 /// thrust::sequence( pattern_offsets.begin(), pattern_offsets.begin() + n_strings+1, 0u, pattern_len );
@@ -213,7 +214,7 @@
 ///
 /// // and execute the batch alignment
 /// aln::batch_alignment_score(
-///     aln::make_edit_distance_aligner<aln::SEMI_GLOBAL, MyersTag<4u> >(),
+///     aln::make_edit_distance_aligner<aln::SEMI_GLOBAL, MyersTag<ALPHABET_SIZE> >(),
 ///     make_concatenated_string_set( n_strings, pattern_storage.begin(), pattern_offsets.begin() ),
 ///     make_concatenated_string_set( n_strings, text_storage.begin(),    text_offsets.begin() ),
 ///     sinks.begin(),

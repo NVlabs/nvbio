@@ -198,8 +198,8 @@ namespace nvbio {
 /// </td></tr>
 /// </table>
 ///
-/// \section FMIndexFiltersSection Batch Filtering
 ///\anchor FMIndexFilters
+/// \section FMIndexFiltersSection Batch Filtering
 ///\par
 /// Performing massively parallel FM-index queries requires careful load balancing, as finding all
 /// occurrences of a given set of strings in a text is a one-to-many process with variable-rate data expansion.
@@ -259,8 +259,8 @@ namespace nvbio {
 /// }
 ///\endcode
 ///
-/// \section MEMFiltersSection MEM Filtering
 ///\anchor MEMFilters
+/// \section MEMFiltersSection MEM Filtering
 ///\par
 /// Additionally to simple filters above, NVBIO also some provides built-in functionality to find all (Super-) Maximal Extension Matches
 /// in a string or a string-set:

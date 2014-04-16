@@ -198,6 +198,19 @@ namespace nvbio {
 /// </td></tr>
 /// </table>
 ///
+///\anchor BidirectionalFMIndex
+/// \section BidirectionalFMIndexSection Bidirectional FM-indices
+///\par
+/// NVBIO also supports forward and backwards extension using <a href=http://ieeexplore.ieee.org/xpls/icp.jsp?arnumber=5341875>bidirectional FM-indices</a>:
+///\par
+/// - extend_forward() : extend the range corresponding to a pattern P to that of the pattern Pc
+/// - extend_backwards() : extend the range corresponding to a pattern P to that of the pattern cP
+///\par
+/// Instead of requiring an ad-hoc data structure, bidirectional queries are supported by simply
+/// using both a forward and a reverse FM-index. Note that extension can be done without a sampled
+/// suffix array, so that there's no need to store two of them: in practice, the FM-indices can
+/// also be of type fm_index <RankDictionary,null_type>.
+///
 ///\anchor FMIndexFilters
 /// \section FMIndexFiltersSection Batch Filtering
 ///\par

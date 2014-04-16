@@ -102,6 +102,11 @@ struct vector_wrapper
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     vector_wrapper(const uint32 size, Iterator vec) : m_size( size ), m_vec( vec ) {}
 
+    /// resize the vector
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    void resize(const uint32 sz) { m_size = sz; }
+
     /// return vector size
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE

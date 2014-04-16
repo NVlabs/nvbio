@@ -32,10 +32,11 @@
 ///\par
 ///\n
 /// <b>nvSSA</b> is an application built on top of \ref nvbio_page to build the Sampled
-/// Suffix Arrays needed for nvBowtie and potentially other FM-index based applications.
+/// Suffix Arrays given a set of BWT files.
 ///\par
 /// Given a BWT-based index generated with nvBWT (e.g. my-index.*), it will generate
 /// both the forward and reverse SSAs.
+/// Note that normally this is not normally needed, as nvBWT does already output them.
 ///
 ///\verbatim
 /// ./nvSSA my-index
@@ -44,7 +45,7 @@
 /// will create the files:
 ///
 ///\verbatim
-/// my-index.ssa
-/// my-index.rssa
+/// my-index.sa
+/// my-index.rsa
 ///\endverbatim
 ///

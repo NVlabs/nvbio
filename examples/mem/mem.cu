@@ -52,8 +52,8 @@ int main(int argc, char* argv[])
     // perform some basic option parsing
     //
 
-    const uint32 batch_reads   =   1*1024*1024;
-    const uint32 batch_bps     = 100*1024*1024;
+    const uint32 batch_reads   =     512*1024;
+    const uint32 batch_bps     = 50*1024*1024;
 
     const char* reads = argv[argc-1];
     const char* index = argv[argc-2];
@@ -155,6 +155,7 @@ int main(int argc, char* argv[])
         timer.start();
 
         mem_filter.rank(
+            THRESHOLD_KMEM_SEARCH,
             f_index,
             r_index,
             d_read_data.const_read_string_set(),

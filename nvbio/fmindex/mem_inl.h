@@ -173,8 +173,8 @@ uint32 find_threshold_kmems(
     typedef typename fm_index_type::index_type coord_type;
     typedef typename fm_index_type::range_type range_type;
 
-    uint4 mems1[512];
-    uint4 mems2[512];
+    uint4 mems1[1024];
+    uint4 mems2[1024];
 
     nvbio::vector_wrapper<uint4*> prev( 0, &mems1[0] );
     nvbio::vector_wrapper<uint4*> curr( 0, &mems2[0] );
@@ -331,29 +331,39 @@ struct span_size
 template <typename coord_type>
 struct mem_handler
 {
+    static const uint32 MAX_SIZE = 1024;
+
     typedef typename vector_type<coord_type,2u>::type range_type;
     typedef typename vector_type<coord_type,4u>::type mem_type;
 
     // constructor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    mem_handler(const uint32 _string_id) : string_id(_string_id), n_mems(0) {}
+    mem_handler(const uint32 _string_id, const uint32 _max_intv) :
+        string_id(_string_id),
+        max_intv(_max_intv),
+        n_mems(0) {}
 
     // constructor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     void output(const range_type range, const uint2 span)
     {
-        if (n_mems >= 1024)
+        if (n_mems >= MAX_SIZE)
             return;
 
-        mems[ n_mems++ ] = make_vector(
-            coord_type( range.x ),
-            coord_type( range.y ),
-            coord_type( string_id ),
-            coord_type( span.x | span.y << 16u ) );
+        // check whether the SA range is small enough
+        if (1u + range.y - range.x <= max_intv)
+        {
+            mems[ n_mems++ ] = make_vector(
+                coord_type( range.x ),
+                coord_type( range.y ),
+                coord_type( string_id ),
+                coord_type( span.x | span.y << 16u ) );
+        }
     }
 
     const uint32    string_id;
-    mem_type        mems[1024];
+    const uint32    max_intv;
+    mem_type        mems[MAX_SIZE];
     uint32          n_mems;
 };
 
@@ -371,11 +381,13 @@ struct mem_functor
         const index_type        _r_index,
         const string_set_type   _string_set,
         const uint32            _min_intv,
+        const uint32            _max_intv,
         VectorArrayView<uint4>  _mem_arrays) :
     f_index      ( _f_index ),
     r_index      ( _r_index ),
     string_set   ( _string_set ),
     min_intv     ( _min_intv ),
+    max_intv     ( _max_intv ),
     mem_arrays   ( _mem_arrays ) {}
 
     // functor operator
@@ -389,7 +401,7 @@ struct mem_functor
         const uint32 pattern_len = nvbio::length( pattern );
 
         // build a MEM handler
-        mem_handler<coord_type> handler( string_id );
+        mem_handler<coord_type> handler( string_id, max_intv );
 
         // and collect all MEMs
         for (uint32 x = 0; x < pattern_len;)
@@ -439,6 +451,7 @@ struct mem_functor
     const index_type                    r_index;
     const string_set_type               string_set;
     const uint32                        min_intv;
+    const uint32                        max_intv;
     mutable VectorArrayView<mem_type>   mem_arrays;
 };
 
@@ -563,11 +576,12 @@ struct lookup_ssa_results
 template <typename fm_index_type>
 template <typename string_set_type>
 uint64 MEMFilter<host_tag, fm_index_type>::rank(
+    const MEMSearchType     search_type,
     const fm_index_type&    f_index,
     const fm_index_type&    r_index,
     const string_set_type&  string_set,
     const uint32            min_intv,
-    const MEMSearchType     search_type)
+    const uint32            max_intv)
 {
     // save the query
     m_n_queries     = string_set.size();
@@ -590,6 +604,7 @@ uint64 MEMFilter<host_tag, fm_index_type>::rank(
                 m_r_index,
                 string_set,
                 min_intv,
+                max_intv,
                 nvbio::plain_view( m_mem_ranges ) )
             );
     }
@@ -603,6 +618,7 @@ uint64 MEMFilter<host_tag, fm_index_type>::rank(
                 m_r_index,
                 string_set,
                 min_intv,
+                max_intv,
                 nvbio::plain_view( m_mem_ranges ) )
             );
     }
@@ -680,11 +696,12 @@ void MEMFilter<host_tag, fm_index_type>::locate(
 template <typename fm_index_type>
 template <typename string_set_type>
 uint64 MEMFilter<device_tag, fm_index_type>::rank(
+    const MEMSearchType     search_type,
     const fm_index_type&    f_index,
     const fm_index_type&    r_index,
     const string_set_type&  string_set,
     const uint32            min_intv,
-    const MEMSearchType     search_type)
+    const uint32            max_intv)
 {
     // save the query
     m_n_queries     = string_set.size();
@@ -707,6 +724,7 @@ uint64 MEMFilter<device_tag, fm_index_type>::rank(
                 m_r_index,
                 string_set,
                 min_intv,
+                max_intv,
                 nvbio::plain_view( m_mem_ranges ) )
             );
     }
@@ -720,6 +738,7 @@ uint64 MEMFilter<device_tag, fm_index_type>::rank(
                 m_r_index,
                 string_set,
                 min_intv,
+                max_intv,
                 nvbio::plain_view( m_mem_ranges ) )
             );
     }

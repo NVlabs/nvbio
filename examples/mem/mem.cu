@@ -74,16 +74,25 @@ int main(int argc, char* argv[])
                             io::FMIndexData::REVERSE |
                             io::FMIndexData::SA;
 
-    // TODO: load a genome archive...
-    io::FMIndexDataRAM h_fmi;
-    if (!h_fmi.load( index, fm_flags ))
+    io::FMIndexData *h_fmi = NULL;
+    io::FMIndexDataMMAP mmap_loader;
+    io::FMIndexDataRAM file_loader;
+
+    if (mmap_loader.load( index ))
     {
-        log_error(stderr, "    failed loading index \"%s\"\n", index);
-        return 1u;
+        h_fmi = &mmap_loader;
+    } else {
+        if (!file_loader.load( index, fm_flags ))
+        {
+            log_error(stderr, "    failed loading index \"%s\"\n", index);
+            return 1u;
+        }
+
+        h_fmi = &file_loader;
     }
 
     // build its device version
-    const io::FMIndexDataDevice d_fmi( h_fmi, fm_flags );
+    const io::FMIndexDataDevice d_fmi( *h_fmi, fm_flags );
 
     typedef io::FMIndexDataDevice::stream_type genome_type;
 

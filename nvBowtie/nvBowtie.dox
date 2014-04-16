@@ -216,10 +216,9 @@
 ///
 ///\par
 /// While most parameters should be easy to understand, a major difference is that nvBowtie
-/// relies on external programs to build the reference indices:
+/// relies on an external program to build the reference indices:
 ///
 /// - \subpage nvbwt_page :      builds the BWT indices of the reference FASTA files
-/// - \subpage nvssa_page :      builds the Sampled Suffix Arrays corresponding to a given BWT
 ///
 ///\par
 /// e.g. suppose you have the human genome in a single FASTA file, <i>hg19.fa</i>; the
@@ -227,7 +226,6 @@
 ///
 ///\verbatim
 /// ./nvBWT hg19.fa hg19-index
-/// ./nvSSA hg19-index
 ///\endverbatim
 ///
 ///\par

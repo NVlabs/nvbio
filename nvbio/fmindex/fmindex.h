@@ -278,7 +278,9 @@ namespace nvbio {
 /// Additionally to the exact matching filters above, NVBIO also some provides built-in functionality to find all
 /// (Super-) Maximal Extension Matches in a string or a string-set:
 ///\par
-/// - find_mems() : a host/device per-thread function to find all MEMs overlapping a given base of a pattern string
+/// - find_kmems() : a host/device per-thread function to find all k-MEMs overlapping a given base of a pattern string
+/// - find_threshold_kmems() : a host/device per-thread function to find all k-MEMs overlapping a given base of a pattern string for all
+///   threshold values of k
 /// - \ref MEMFilterHost : a parallel host context to enumerate all MEMs of a string-set
 /// - \ref MEMFilterDevice : a parallel device context to enumerate all MEMs of a string-set
 ///\par

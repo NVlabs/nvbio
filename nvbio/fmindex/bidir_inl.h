@@ -139,8 +139,8 @@ void extend_backwards(
     const uint32 y = 1u + f_range.y - f_range.x;
 
     // and now compute the new reverse range of cP
-    r_range.y = f_range.x + x + y - 1u;
-    r_range.x = f_range.x + x;
+    r_range.y = r_range.x + x + y - 1u;
+    r_range.x = r_range.x + x;
 }
 
 } // namespace nvbio

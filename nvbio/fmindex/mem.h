@@ -28,6 +28,7 @@
 #pragma once
 
 #include <nvbio/fmindex/fmindex.h>
+#include <nvbio/fmindex/bidir.h>
 #include <nvbio/basic/types.h>
 #include <nvbio/basic/numbers.h>
 #include <nvbio/basic/algorithms.h>
@@ -47,7 +48,7 @@ namespace nvbio {
 ///@addtogroup FMIndex
 ///@{
 
-/// find all MEMs (Maximal Extension Matches) covering a given base of a pattern
+/// find all SMEMs (Super Maximal Extension Matches) covering a given base of a pattern
 ///
 /// \tparam pattern_type        the pattern string type
 /// \tparam delegate_type       the delegate output handler, must implement the following interface:
@@ -78,7 +79,7 @@ namespace nvbio {
 ///
 template <typename pattern_type, typename fm_index_type, typename delegate_type>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint32 find_mems(
+uint32 find_kmems(
     const uint32            pattern_len,
     const pattern_type      pattern,
     const uint32            x,
@@ -87,6 +88,60 @@ uint32 find_mems(
           delegate_type&    handler,
     const uint32            min_intv = 1u,
     const uint32            min_span = 1u);
+
+/// find k-MEMs (k-Maximal Extension Matches) covering a given base of a pattern, for all
+/// the "threshold" values of k, i.e. the values assumed by the number k of occurrences
+/// in each MEM's SA range.
+/// In other words, this function saves all k-MEMs encountered when extending a span
+/// covering x either left or right causes a change in the number of occurrences k,
+/// for each possible value of k.
+///
+/// \tparam pattern_type        the pattern string type
+/// \tparam delegate_type       the delegate output handler, must implement the following interface:
+///\anchor MEMHandler
+///\code
+/// interface MEMHandler
+/// {
+///     typedef typename fm_index_type::range_type range_type;
+///
+///     // output an FM-index range referring to the forward index,
+///     // together with its corresponding span on the pattern
+///     void output(
+///         const range_type    range,     // output SA range
+///         const uint2         span);     // output pattern span
+/// };
+///\endcode
+///
+/// \param pattern_len          the length of the query pattern
+/// \param pattern              the query pattern
+/// \param x                    the base of the query pattern to cover with MEMs
+/// \param f_index              the forward FM-index to match against
+/// \param r_index              the reverse FM-index to match against
+/// \param handler              the output handler
+/// \param min_intv             the minimum SA interval size
+/// \param min_span             the minimum pattern span size
+///
+/// \return the right-most end of the MEMs covering x, or x itself if no MEM was found
+///
+template <typename pattern_type, typename fm_index_type, typename delegate_type>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 find_threshold_kmems(
+    const uint32            pattern_len,
+    const pattern_type      pattern,
+    const uint32            x,
+    const fm_index_type     f_index,
+    const fm_index_type     r_index,
+          delegate_type&    handler,
+    const uint32            min_intv = 1u,
+    const uint32            min_span = 1u);
+
+///
+/// the type of search
+///
+enum MEMSearchType {
+    KMEM_SEARCH             = 0,  ///< k-Maximal Exact Matches
+    THRESHOLD_KMEM_SEARCH   = 1   ///< Threshold k-Maximal Exact Matches
+};
 
 ///
 ///\par
@@ -146,7 +201,8 @@ struct MEMFilter<host_tag, fm_index_type>
         const fm_index_type&    f_index,
         const fm_index_type&    r_index,
         const string_set_type&  string_set,
-        const uint32            min_intv = 1u);
+        const uint32            min_intv    = 1u,
+        const MEMSearchType     search_type = KMEM_SEARCH);
 
     /// enumerate all mems in a given range
     ///
@@ -221,7 +277,8 @@ struct MEMFilter<device_tag, fm_index_type>
         const fm_index_type&    f_index,
         const fm_index_type&    r_index,
         const string_set_type&  string_set,
-        const uint32            min_intv = 1u);
+        const uint32            min_intv    = 1u,
+        const MEMSearchType     search_type = KMEM_SEARCH);
 
     /// enumerate all mems in a given range
     ///

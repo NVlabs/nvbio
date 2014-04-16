@@ -35,8 +35,8 @@
 /// Suffix Arrays given a set of BWT files.
 ///\par
 /// Given a BWT-based index generated with nvBWT (e.g. my-index.*), it will generate
-/// both the forward and reverse SSAs.
-/// Note that normally this is not normally needed, as nvBWT does already output them.
+/// both the forward and reverse SSAs.\n
+/// <b>Note:</b> this is not normally needed, as nvBWT does already output them.
 ///
 ///\verbatim
 /// ./nvSSA my-index

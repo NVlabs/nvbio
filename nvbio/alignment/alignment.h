@@ -101,7 +101,7 @@
 ///\anchor AlignersAnchor
 /// \section AlignersSection Aligners and Alignment Algorithms
 ///\par
-/// Previously we have seen that scoring functions take an aligner as an input. NVBIO exposes
+/// In the previous section we have seen that scoring functions take an aligner as an input. NVBIO exposes
 /// three such types, which specify the actual type of alignment scheme to use:
 ///\par
 /// - \ref EditDistanceAligner

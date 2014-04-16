@@ -79,14 +79,14 @@
 /// - \subpage nvfm_server_page - a shared memory FM-index server
 /// - \subpage nvsetbwt_page - a tool to perform BWT-based read indexing
 ///
-/// \section Recent News
+/// \section RecentNew Recent News
 ///\par
 /// <table>
-/// <tr><td style="white-space: nowrap; vertical-align:text-top;">15/03/2014 \n NVBIO 0.9.5</td>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">15/04/2014 \n NVBIO 0.9.5</td>
 /// <td style="vertical-align:text-top;">
 /// - <b>New Features:</b> \n
 ///   * Added a whole new \ref qgram_page for q-gram indexing and q-gram counting.
-///   * Added a banded \ref AlignersAnchor "Myers bit-vector" edit-distance algorithm running just short of 1 TCUPS!
+///   * Added a banded \ref AlignersAnchor "Myers bit-vector" edit-distance algorithm running just short of <b>1 TCUPS</b>!
 ///   * Added parallel primitives for simple and efficient \ref SeedingAnchor "seed extraction" from string and string-sets
 ///   * Added parallel \ref FMIndexFilters "FM-index" and \ref MEMFilters "MEM" filters
 ///   * Further improved GPU BWT construction throughput by ~20%.

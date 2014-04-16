@@ -217,7 +217,7 @@
 ///\par
 /// While most parameters should be easy to understand, a major difference is that nvBowtie
 /// relies on an external program to build the reference indices:
-///
+///\par
 /// - \subpage nvbwt_page :      builds the BWT indices of the reference FASTA files
 ///
 ///\par

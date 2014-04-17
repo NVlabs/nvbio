@@ -152,8 +152,9 @@ enum MEMSearchType {
 /// The filter is designed to:
 ///\par
 ///  - first <i>find and rank</i> the suffix array ranges containing occurrences of all MEMs,
-/// expressed as a series of lists of <i>(SA-begin,SA-end,string-id,string_begin|string-end<<16)</i> tuples,
-/// one for each string in the set.
+/// expressed as a series of lists of <i>(SA-begin,SA-end,string-id,string_begin|string-end<<16)</i> tuples:
+/// there is one such list for each string in the set, and the entries are stored contiguously in a single
+/// vector;
 ///  - and then <i>enumerate</i> each individual occurrence of a MEM within the lists,
 ///  as a set of <i>(index-pos,string-id,string-begin,string-end)</i> tuples.
 ///\par
@@ -170,8 +171,9 @@ struct MEMFilter {};
 /// The filter is designed to:
 ///\par
 ///  - first <i>find and rank</i> the suffix array ranges containing occurrences of all MEMs,
-/// expressed as a series of lists of <i>(SA-begin, SA-end,string-id,string_begin|string-end<<16)</i> tuples,
-/// one for each string in the set.
+/// expressed as a series of lists of <i>(SA-begin, SA-end,string-id,string_begin|string-end<<16)</i> tuples:
+/// there is one such list for each string in the set, and the entries are stored contiguously in a single
+/// vector;
 ///  - and then <i>enumerate</i> each individual occurrence of a MEM within the lists,
 ///  as a set of <i>(index-pos,string-id,string-begin,string-end)</i> tuples.
 ///\par
@@ -256,8 +258,9 @@ struct MEMFilter<host_tag, fm_index_type>
 /// The filter is designed to:
 ///\par
 ///  - first <i>find and rank</i> the suffix array ranges containing occurrences of all MEMs,
-/// expressed as a series of lists of <i>(SA-begin, SA-end,string-id,string_begin|string-end<<16)</i> tuples,
-/// one for each string in the set.
+/// expressed as a series of lists of <i>(SA-begin, SA-end,string-id,string_begin|string-end<<16)</i> tuples:
+/// there is one such list for each string in the set, and the entries are stored contiguously in a single
+/// vector;
 ///  - and then <i>enumerate</i> each individual occurrence of a MEM within the lists,
 ///  as a set of <i>(index-pos,string-id,string-begin,string-end)</i> tuples.
 ///\par
@@ -343,8 +346,9 @@ struct MEMFilter<device_tag, fm_index_type>
 /// The filter is designed to:
 ///\par
 ///  - first <i>find and rank</i> the suffix array ranges containing occurrences of all MEMs,
-/// expressed as a series of lists of <i>(SA-begin, SA-end,string-begin,string-end)</i> tuples,
-/// one for each string in the set.
+/// expressed as a series of lists of <i>(SA-begin, SA-end,string-begin,string-end)</i> tuples:
+/// there is one such list for each string in the set, and the entries are stored contiguously in a single
+/// vector;
 ///  - and then <i>enumerate</i> each individual occurrence of a MEM within the lists,
 ///  as a set of <i>(index-pos,string-id,string-begin,string-end)</i> tuples.
 ///\par
@@ -361,8 +365,9 @@ struct MEMFilterHost : public MEMFilter<host_tag, fm_index_type> {};
 /// The filter is designed to:
 ///\par
 ///  - first <i>find and rank</i> the suffix array ranges containing occurrences of all MEMs,
-/// expressed as a series of lists of <i>(SA-begin, SA-end,string-begin,string-end)</i> tuples,
-/// one for each string in the set.
+/// expressed as a series of lists of <i>(SA-begin, SA-end,string-begin,string-end)</i> tuples:
+/// there is one such list for each string in the set, and the entries are stored contiguously in a single
+/// vector;
 ///  - and then <i>enumerate</i> each individual occurrence of a MEM within the lists,
 ///  as a set of <i>(index-pos,string-id,string-begin,string-end)</i> tuples.
 ///\par

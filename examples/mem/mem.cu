@@ -61,15 +61,18 @@ int main(int argc, char* argv[])
     uint32 max_reads        = uint32(-1);
     uint32 min_intv         = 1u;
     uint32 max_intv         = 10000u;
+    uint32 min_span         = 19u;
 
     for (int i = 0; i < argc; ++i)
     {
         if (strcmp( argv[i], "-max-reads" ) == 0)
             max_reads = uint32( atoi( argv[++i] ) );
         else if (strcmp( argv[i], "-min-intv" ) == 0)
-            min_intv = int16( atoi( argv[++i] ) );
+            min_intv = atoi( argv[++i] );
         else if (strcmp( argv[i], "-max-intv" ) == 0)
-            max_intv = int16( atoi( argv[++i] ) );
+            max_intv = atoi( argv[++i] );
+        else if (strcmp( argv[i], "-min-span" ) == 0)
+            min_span = atoi( argv[++i] );
     }
 
     const uint32 fm_flags = io::FMIndexData::GENOME  |
@@ -163,7 +166,8 @@ int main(int argc, char* argv[])
             r_index,
             d_read_data.const_read_string_set(),
             min_intv,
-            max_intv );
+            max_intv,
+            min_span );
 
         cudaDeviceSynchronize();
         timer.stop();

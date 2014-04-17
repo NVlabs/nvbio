@@ -273,10 +273,10 @@ uint32 find_threshold_kmems(
                         {
                             // pass all results to the delegate
                             handler.output( f_range, pattern_span );
-                        }
 
-                        out_n++;
-                        out_i = i+1;
+                            out_n++;
+                            out_i = i+1;
+                        }
                     }
 				} // otherwise the match is contained in another longer match
             }

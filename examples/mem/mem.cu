@@ -60,6 +60,7 @@ int main(int argc, char* argv[])
 
     uint32 max_reads        = uint32(-1);
     uint32 min_intv         = 1u;
+    uint32 max_intv         = 10000u;
 
     for (int i = 0; i < argc; ++i)
     {
@@ -67,6 +68,8 @@ int main(int argc, char* argv[])
             max_reads = uint32( atoi( argv[++i] ) );
         else if (strcmp( argv[i], "-min-intv" ) == 0)
             min_intv = int16( atoi( argv[++i] ) );
+        else if (strcmp( argv[i], "-max-intv" ) == 0)
+            max_intv = int16( atoi( argv[++i] ) );
     }
 
     const uint32 fm_flags = io::FMIndexData::GENOME  |
@@ -159,7 +162,8 @@ int main(int argc, char* argv[])
             f_index,
             r_index,
             d_read_data.const_read_string_set(),
-            min_intv );
+            min_intv,
+            max_intv );
 
         cudaDeviceSynchronize();
         timer.stop();
@@ -195,6 +199,7 @@ int main(int argc, char* argv[])
                  100.0f * float( mems_end ) / float( n_mems ),
                 1.0e-6f * float( mems_end ) / locate_time );
         }
+        log_verbose_cont(stderr, "\n" );
 
         log_info(stderr, "  locating MEMs... done\n");
     }

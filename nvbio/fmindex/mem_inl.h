@@ -720,6 +720,7 @@ uint64 MEMFilter<host_tag, fm_index_type>::rank(
         m_mem_ranges.m_index.swap( slots );
         m_mem_ranges.m_arena.swap( arena );
 
+        // and now scan the range sizes
         thrust::inclusive_scan(
             thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::range_size<rank_type>() ),
             thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::range_size<rank_type>() ) + n_ranges,
@@ -864,7 +865,7 @@ uint64 MEMFilter<device_tag, fm_index_type>::rank(
         m_mem_ranges.m_index.swap( slots );
         m_mem_ranges.m_arena.swap( arena );
 
-        // now scan the range sizes
+        // and now scan the range sizes
         cuda::inclusive_scan(
             n_ranges,
             thrust::make_transform_iterator( nvbio::plain_view( m_mem_ranges.m_arena ), mem::range_size<rank_type>() ),

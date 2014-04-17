@@ -40,6 +40,7 @@
 #include <nvbio/strings/string.h>
 #include <thrust/sort.h>
 #include <thrust/scan.h>
+#include <thrust/binary_search.h>
 #include <thrust/iterator/constant_iterator.h>
 #include <thrust/iterator/counting_iterator.h>
 
@@ -210,6 +211,10 @@ struct MEMFilter<host_tag, fm_index_type>
         const uint32            max_intv    = uint32(-1),
         const uint32            min_span    = 1u);
 
+    /// find the index of the first MEM hit corresponding to a given string
+    ///
+    uint32 first_hit(const uint32 string_id) const;
+
     /// enumerate all mems in a given range
     ///
     /// \tparam mems_iterator         a mem_type iterator
@@ -291,6 +296,10 @@ struct MEMFilter<device_tag, fm_index_type>
         const uint32            min_intv    = 1u,
         const uint32            max_intv    = uint32(-1),
         const uint32            min_span    = 1u);
+
+    /// find the index of the first MEM hit corresponding to a given string
+    ///
+    uint32 first_hit(const uint32 string_id) const;
 
     /// enumerate all mems in a given range
     ///

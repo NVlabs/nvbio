@@ -317,9 +317,20 @@ struct range_size
     uint64 operator() (const rank_type range) const { return 1u + range.y - range.x; }
 };
 
+// return the string-id of a given MEM rank
+template <typename rank_type>
+struct rank_string_id
+{
+    typedef rank_type argument_type;
+    typedef uint32    result_type;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 operator() (const rank_type range) const { return range.z; }
+};
+
 // return the span of a given range
 template <typename rank_type>
-struct span_size
+struct rank_span_size
 {
     typedef rank_type argument_type;
     typedef uint64    result_type;
@@ -745,6 +756,24 @@ uint64 MEMFilter<host_tag, fm_index_type>::rank(
     return m_n_occurrences;
 }
 
+// find the starting position for the MEM ranks corresponding to a given string
+//
+template <typename fm_index_type>
+uint32 MEMFilter<host_tag, fm_index_type>::first_hit(const uint32 string_id) const
+{
+    // fetch the number of output MEM ranges
+    const uint32 n_ranges = m_mem_ranges.allocated_size();
+
+    // find the first MEM rank from the given string
+    const uint32 first_rank = uint32( thrust::lower_bound(
+        thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::rank_string_id<rank_type>() ),
+        thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::rank_string_id<rank_type>() ) + n_ranges,
+        string_id ) - thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::rank_string_id<rank_type>() ) );
+
+    // and find the corresponding MEM hits start
+    return first_rank ? m_slots[ first_rank-1u ] : 0u;
+}
+
 // enumerate all mems in a given range
 //
 // \tparam mems_iterator         a mem_type iterator
@@ -893,6 +922,25 @@ uint64 MEMFilter<device_tag, fm_index_type>::rank(
         m_n_occurrences = m_slots[ n_ranges - 1u ];
     }
     return m_n_occurrences;
+}
+
+// find the starting position for the MEM ranks corresponding to a given string
+//
+template <typename fm_index_type>
+uint32 MEMFilter<device_tag, fm_index_type>::first_hit(const uint32 string_id) const
+{
+    // fetch the number of output MEM ranges
+    const uint32 n_ranges = m_mem_ranges.allocated_size();
+
+    // find the first MEM rank from the given string
+    const uint32 first_rank = uint32( thrust::lower_bound(
+        thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::rank_string_id<rank_type>() ),
+        thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::rank_string_id<rank_type>() ) + n_ranges,
+        string_id ) - thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::rank_string_id<rank_type>() ) );
+
+    // and find the corresponding MEM hits start
+    return first_rank ? m_slots[ first_rank-1u ] : 0u;
+
 }
 
 // enumerate all mems in a given range

@@ -1,0 +1,14 @@
+nvbio_module(nvmem)
+
+addsources(
+nvmem.cu
+pipeline.h
+options.h
+options.cpp
+mem-search.h
+mem-search.cu
+)
+
+cuda_add_executable(nvmem ${nvmem_srcs})
+target_link_libraries(nvmem nvbio zlibstatic crcstatic ${SYSTEM_LINK_LIBRARIES})
+

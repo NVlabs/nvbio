@@ -449,8 +449,9 @@ struct mem_functor
             mem_type* output = mem_arrays.alloc( string_id, handler.n_mems );
             if (output != NULL)
             {
+                // output in reverse order, i.e. sorted by the starting coordinate
                 for (uint32 i = 0; i < handler.n_mems; ++i)
-                    output[i] = handler.mems[i];
+                    output[i] = handler.mems[ handler.n_mems - i - 1u ];
             }
         }
     }

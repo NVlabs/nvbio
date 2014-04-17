@@ -27,7 +27,7 @@ if(MSVC)
 endif()
 
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${NVBIO_SOURCE_ROOT})
 
 #============================================================================
 # crc

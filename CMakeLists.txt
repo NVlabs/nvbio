@@ -15,10 +15,12 @@ option(WERROR
   "Treat compiler warnings as errors"
   OFF)
 
+set(NVBIO_SOURCE_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+
 # import our own nvbio_* macros
-include("${CMAKE_SOURCE_DIR}/cmake-local/nvbio.cmake")
+include("${NVBIO_SOURCE_ROOT}/cmake-local/nvbio.cmake")
 # grab gcc flags
-include("${CMAKE_SOURCE_DIR}/cmake-local/gcc.cmake")
+include("${NVBIO_SOURCE_ROOT}/cmake-local/gcc.cmake")
 
 # default to debug builds
 if (NOT CMAKE_BUILD_TYPE)
@@ -71,8 +73,11 @@ endif()
 
 set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} ${CUDA_NVCC_DEBUG_FLAGS} --gpu-architecture=sm_35 -use_fast_math)
 
-set(cudpp_INCLUDE_DIRS ${CMAKE_SOURCE_DIR})
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/contrib ${CMAKE_BINARY_DIR}/contrib/zlib-1.2.7 ${CMAKE_SOURCE_DIR}/contrib/crc ${CMAKE_SOURCE_DIR}/contrib/bamtools ${CMAKE_SOURCE_DIR}/contrib/moderngpu/include)
+set(cudpp_INCLUDE_DIRS ${NVBIO_SOURCE_ROOT})
+set(INCLUDE_DIRS ${NVBIO_SOURCE_ROOT} ${NVBIO_SOURCE_ROOT}/contrib ${CMAKE_BINARY_DIR}/contrib/zlib-1.2.7 ${NVBIO_SOURCE_ROOT}/contrib/crc ${NVBIO_SOURCE_ROOT}/contrib/bamtools ${NVBIO_SOURCE_ROOT}/contrib/moderngpu/include)
+include_directories(${INCLUDE_DIRS})
+# export our include directories in the cache for external projects to pick up
+set(nvbio_INCLUDE_DIRECTORIES ${INCLUDE_DIRS} CACHE STRING "nvbio include paths")
 
 add_subdirectory(contrib/zlib-1.2.7)
 add_subdirectory(contrib/crc)

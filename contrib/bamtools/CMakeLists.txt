@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 
 find_package(CUDA)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/nvbio)
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${NVBIO_SOURCE_ROOT}/nvbio)
 
 set(BAMTOOLS_SRCS
     BamAux.h

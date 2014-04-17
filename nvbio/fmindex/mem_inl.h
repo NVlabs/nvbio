@@ -490,12 +490,12 @@ struct filter_results
         const uint64 base_slot   = slot ? slots[ slot-1 ] : 0u;
         const uint32 local_index = output_index - base_slot;
 
-        // and write out the pair (qgram_pos,text_pos)
+        // and write out the MEM occurrence
         return make_vector(
-            coord_type( range.x + local_index ),
-            coord_type( 0u ),
-            range.z,
-            range.w );
+            coord_type( range.x + local_index ),    // SA coordinate for this occurrence
+            coord_type( 0u ),                       // unused
+            range.z,                                // string-id
+            range.w );                              // packed pattern span
     }
 
     const uint32        n_ranges;
@@ -562,6 +562,73 @@ struct lookup_ssa_results
 
     const index_type index;
 };
+
+// copy the array of ranges bound to index i into the proper position of the output
+template <typename rank_type>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+void copy_ranges(
+    const uint32                            i,              // vector index to copy
+    const VectorArrayView<rank_type>        in_ranges,      // input vector array
+    const uint32*                           slots,          // output slots
+    rank_type*                              out_ranges)     // output arena
+{
+    const uint32 slot = slots[i];
+
+    const uint32     n_src = in_ranges.size( i );
+    const rank_type* src   = in_ranges[i];
+          rank_type* dst   = out_ranges + slot;
+
+    for (uint32 j = 0; j < n_src; ++j)
+        dst[j] = src[j];
+}
+
+// device kernel to reorder a vector array of mem-ranges
+template <typename rank_type>
+__global__
+void reorder_ranges_kernel(
+    const uint32                            n_items,        // # of input items
+    const VectorArrayView<rank_type>        in_ranges,      // input vector array
+    const uint32*                           slots,          // output slots
+    rank_type*                              out_ranges)     // output arena
+{
+    const uint32 i = threadIdx.x + blockIdx.x * blockDim.x;
+    if (i >= n_items)
+        return;
+
+    copy_ranges( i, in_ranges, slots, out_ranges );
+}
+
+// device function to reorder a vector array of mem-ranges
+template <typename rank_type>
+void reorder_ranges(
+    const device_tag                        system_tag,     // system tag
+    const uint32                            n_items,        // # of input items
+    const VectorArrayView<rank_type>        in_ranges,      // input vector array
+    const uint32*                           slots,          // output slots
+    rank_type*                              out_ranges)     // output arena
+{
+    const uint32 block_dim = 128;
+    const uint32 n_blocks = util::divide_ri( n_items, block_dim );
+
+    reorder_ranges_kernel<<<n_blocks,block_dim>>>(
+        n_items,
+        in_ranges,
+        slots,
+        out_ranges );
+}
+// host function to reorder a vector array of mem-ranges
+template <typename rank_type>
+void reorder_ranges(
+    const host_tag                          system_tag,     // system tag
+    const uint32                            n_items,        // # of input items
+    const VectorArrayView<rank_type>        in_ranges,      // input vector array
+    const uint32*                           slots,          // output slots
+    rank_type*                              out_ranges)     // output arena
+{
+    #pragma omp parallel for
+    for (int i = 0; i < int( n_items ); ++i)
+        copy_ranges( i, in_ranges, slots, out_ranges );
+}
 
 } // namespace mem
 
@@ -631,6 +698,28 @@ uint64 MEMFilter<host_tag, fm_index_type>::rank(
 
     if (n_ranges)
     {
+        // reorder the arena by string-id
+        thrust::host_vector<rank_type> arena( n_ranges );
+        thrust::host_vector<uint32>    slots( m_n_queries );
+
+        // scan the mem-range array sizes to get the new array slots
+        thrust::inclusive_scan(
+            m_mem_ranges.m_sizes.begin(),
+            m_mem_ranges.m_sizes.begin() + m_n_queries,
+            slots.begin() );
+
+        // and put everything in place
+        mem::reorder_ranges(
+            host_tag(),
+            m_n_queries,
+            nvbio::plain_view( m_mem_ranges ),
+            nvbio::plain_view( slots ),
+            nvbio::plain_view( arena ) );
+
+        // swap the new array indices and the arena
+        m_mem_ranges.m_index.swap( slots );
+        m_mem_ranges.m_arena.swap( arena );
+
         thrust::inclusive_scan(
             thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::range_size<rank_type>() ),
             thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::range_size<rank_type>() ) + n_ranges,
@@ -751,6 +840,31 @@ uint64 MEMFilter<device_tag, fm_index_type>::rank(
 
     if (n_ranges)
     {
+        // reorder the arena by string-id
+        thrust::device_vector<rank_type> arena( n_ranges );
+        thrust::device_vector<uint32>    slots( m_n_queries );
+
+        // scan the mem-range array sizes to get the new array slots
+        cuda::inclusive_scan(
+            m_n_queries,
+            m_mem_ranges.m_sizes.begin(),
+            slots.begin(),
+            thrust::plus<uint32>(),
+            d_temp_storage );
+
+        // and put everything in place
+        mem::reorder_ranges(
+            device_tag(),
+            m_n_queries,
+            nvbio::plain_view( m_mem_ranges ),
+            nvbio::plain_view( slots ),
+            nvbio::plain_view( arena ) );
+
+        // swap the new array indices and the arena
+        m_mem_ranges.m_index.swap( slots );
+        m_mem_ranges.m_arena.swap( arena );
+
+        // now scan the range sizes
         cuda::inclusive_scan(
             n_ranges,
             thrust::make_transform_iterator( nvbio::plain_view( m_mem_ranges.m_arena ), mem::range_size<rank_type>() ),

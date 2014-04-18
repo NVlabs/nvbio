@@ -25,8 +25,31 @@ struct mem_state
     mem_vector_type mems;
 };
 
+struct read_chunk
+{
+    read_chunk() :
+        read_begin(0),
+        read_end(0),
+        mem_begin(0),
+        mem_end(0) {}
+
+    uint32  read_begin;
+    uint32  read_end;
+    uint32  mem_begin;
+    uint32  mem_end;
+};
+
 void mem_init(struct pipeline_context *pipeline);
 void mem_search(struct pipeline_context *pipeline, const io::ReadDataDevice *batch);
-void mem_split(struct pipeline_context *pipeline, const io::ReadDataDevice *batch);
+
+// given the first read in a chunk, determine a suitably sized chunk of reads
+// (for which we can locate all MEMs in one go), updating pipeline::chunk
+void fit_read_chunk(
+    struct pipeline_context     *pipeline,
+    const io::ReadDataDevice    *batch,
+    const uint32                read_begin);    // first read in the chunk
+
+// locate all mems in the range defined by pipeline::chunk
+void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *batch);
 
 #endif // ifndef __MEM_H

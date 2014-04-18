@@ -9,8 +9,9 @@ using namespace nvbio;
 
 struct pipeline_context 
 {
-    io::OutputFile *output;
-    struct mem_state mem;
+    io::OutputFile      *output;
+    struct mem_state    mem;
+    struct read_chunk   chunk;
 };
 
 #endif // ifndef __ALIGNER_H

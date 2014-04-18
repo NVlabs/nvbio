@@ -56,7 +56,17 @@ int main(int argc, char **argv)
 
         // search for MEMs
         mem_search(&pipeline, &device_batch);
-        mem_split(&pipeline, &device_batch);
+
+        // now start a loop where we break the read batch into smaller chunks for
+        // which we can locate all MEMs and build all chains
+        for (uint32 read_begin = 0; read_begin < batch->size(); read_begin = pipeline.chunk.read_end)
+        {
+            // determine the next chunk of reads to process
+            fit_read_chunk(&pipeline, &device_batch, read_begin);
+
+            // locate all MEMs in the current chunk
+            mem_locate(&pipeline, &device_batch);
+        }
 
         delete batch;
     }

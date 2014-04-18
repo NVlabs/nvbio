@@ -2,6 +2,8 @@
 
 #include <nvbio/basic/numbers.h>
 #include <nvbio/basic/algorithms.h>
+#include <thrust/iterator/counting_iterator.h>
+#include <thrust/iterator/transform_iterator.h>
 
 #include "options.h"
 #include "pipeline.h"
@@ -74,8 +76,6 @@ void mem_search(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
     struct mem_state *mem = &pipeline->mem;
     const uint32 n_reads = batch->size();
 
-    mem_state::mem_vector_type mems(command_line_options.mems_batch);
-
     // reset the filter
     mem->mem_filter = mem_state::mem_filter_type();
 
@@ -85,10 +85,90 @@ void mem_search(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
 
     log_info(stderr, "%.1f average ranges\n", float(mem->mem_filter.n_ranges()) / float(n_reads));
     log_info(stderr, "%.1f average MEMs\n", float(mem->mem_filter.n_mems()) / float(n_reads));
-
-    // sort by read-id and range size
-    thrust::sort(mems.begin(), mems.end(), read_id_sort());
 }
+
+namespace {
+
+#if defined(NVBIO_DEVICE_COMPILATION)
+  #define HOST_DEVICE_STATEMENT( host, device ) device
+#else
+  #define HOST_DEVICE_STATEMENT( host, device ) host
+#endif
+
+// a functor to count the number of MEM hits produced by a given range of reads
+struct hit_count_functor
+{
+    typedef uint32 argument_type;
+    typedef uint32 result_type;
+
+    // constructor
+    hit_count_functor(struct mem_state* _mem) : mem( _mem ) {}
+
+    // return the number of hits up to a given read
+    NVBIO_HOST_DEVICE                                   // silence nvcc - this function is host only
+    uint32 operator() (const uint32 read_id) const
+    {
+        return HOST_DEVICE_STATEMENT( mem->mem_filter.first_hit( read_id ), 0u );
+    }
+
+    struct mem_state* mem;
+};
+
+};
+
+// given the first read in a chunk, determine a suitably sized chunk of reads
+// (for which we can locate all MEMs in one go), updating pipeline::chunk
+void fit_read_chunk(
+    struct pipeline_context     *pipeline,
+    const io::ReadDataDevice    *batch,
+    const uint32                read_begin)     // first read in the chunk
+{
+    struct mem_state *mem = &pipeline->mem;
+
+    const uint32 max_hits = command_line_options.mems_batch;
+
+    //
+    // use a binary search to locate the ending read forming a chunk with up to max_hits
+    //
+
+    pipeline->chunk.read_begin = read_begin;
+
+    // determine the index of the first hit in the chunk
+    pipeline->chunk.mem_begin = mem->mem_filter.first_hit( read_begin );
+
+    // make an iterator to count the number of hits in a given range of reads
+    typedef thrust::counting_iterator<uint32>                            index_iterator;
+    typedef thrust::transform_iterator<hit_count_functor,index_iterator> hit_counting_iterator;
+
+    const hit_counting_iterator hit_counter(
+        thrust::make_counting_iterator( 0u ),
+        hit_count_functor( mem ) );
+
+    // perform the binary search
+    pipeline->chunk.read_end = uint32( nvbio::upper_bound(
+            max_hits,
+            hit_counter + read_begin,
+            batch->size() - read_begin ) - hit_counter );
+
+    // determine the index of the ending hit in the chunk
+    pipeline->chunk.mem_end = mem->mem_filter.first_hit( pipeline->chunk.read_end );
+}
+
+// locate all mems in the range defined by pipeline::chunk
+void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *batch)
+{
+    struct mem_state *mem = &pipeline->mem;
+
+    if (mem->mems.size() < command_line_options.mems_batch)
+        mem->mems.resize( command_line_options.mems_batch );
+
+    mem->mem_filter.locate(
+        pipeline->chunk.mem_begin,
+        pipeline->chunk.mem_end,
+        mem->mems.begin() );
+}
+
+#if 0
 
 #if 0 // this one seems like it'll be slower
 __global__ void compute_read_boundaries(uint32 *read_start_offsets, uint32 *read_hits_scan, mem_state::mem_filter_type::mem_type *mems, uint64 *slots, uint32 n_hits, uint32 n_reads)
@@ -171,3 +251,5 @@ void mem_split(struct pipeline_context *pipeline, const io::ReadDataDevice *batc
                                                      thrust::raw_pointer_cast(&mem->mem_filter.m_slots[0]),
                                                      n_hits, n_reads);
 }
+
+#endif

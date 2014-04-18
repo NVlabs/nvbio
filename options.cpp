@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+
+#if !defined(WIN32)
+
 #include <unistd.h>
 #include <getopt.h>
 
@@ -53,3 +56,5 @@ void parse_command_line(int argc, char **argv)
     command_line_options.input_file_name = argv[optind + 1];
     command_line_options.output_file_name = argv[optind + 2];
 }
+
+#endif

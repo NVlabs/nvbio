@@ -29,6 +29,7 @@
 
 #include <nvbio/basic/types.h>
 #include <nvbio/basic/vector_wrapper.h>
+#include <string.h>
 
 
 namespace nvbio {

@@ -143,10 +143,10 @@ uint32 find_kmems(
             {
                 // pass all results to the delegate
                 handler.output( range, pattern_span );
-            }
 
-            // update the left-most covered coordinate
-            leftmost_coordinate = uint32(l+1);
+                // update the left-most covered coordinate
+                leftmost_coordinate = uint32(l+1);
+            }
         }
     }
 

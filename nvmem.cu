@@ -56,6 +56,7 @@ int main(int argc, char **argv)
 
         // search for MEMs
         mem_search(&pipeline, &device_batch);
+        mem_split(&pipeline, &device_batch);
 
         delete batch;
     }

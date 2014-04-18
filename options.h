@@ -16,8 +16,14 @@ struct runtime_options
 
     // whether to allow using mmap() to load the genome
     bool genome_use_mmap;
-    // input batch size for reads
+    // input read batch size
     uint64 batch_size;
+
+    // MEM search options
+    uint32 min_intv;    // min and max interval sizes for MEM search
+    uint32 max_intv;
+    uint32 min_span;    // minimum read span, MEMs that span less than this many bps will be dropped
+    uint32 mems_batch;  // number of MEMs to process at once (?)
 
     runtime_options()
     {
@@ -27,7 +33,11 @@ struct runtime_options
 
         // default options
         genome_use_mmap = true;
-        batch_size = 200000;
+        batch_size = 256 * 1024;
+        min_intv = 1;
+        max_intv = 10000;
+        min_span = 19;
+        mems_batch = 16 * 1024 * 1024;
     };
 };
 

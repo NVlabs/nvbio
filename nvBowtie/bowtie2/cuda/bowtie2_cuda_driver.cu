@@ -239,8 +239,6 @@ int driver(
 
     uint32 BATCH_SIZE = 64*1024*1024;
 
-    const uint64 GB = 1024u*1024u*1024u;
-
     for (BATCH_SIZE = 1024*1024; BATCH_SIZE >= 16*1024; BATCH_SIZE /= 2)
     {
         // leave some guard band of free memory

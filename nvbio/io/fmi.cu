@@ -497,7 +497,7 @@ int FMIndexDataRAM::load(
     std::string rbwt_string   = std::string( genome_prefix ) + ".rbwt";
     std::string sa_string     = std::string( genome_prefix ) + ".sa";
     std::string rsa_string    = std::string( genome_prefix ) + ".rsa";
-    const char* wpac_file_name = genome_wpac_string.c_str();
+    //const char* wpac_file_name = genome_wpac_string.c_str();
     //const char* pac_file_name  = genome_pac_string.c_str();
     const char* bwt_file_name  = bwt_string.c_str();
     const char* rbwt_file_name = rbwt_string.c_str();

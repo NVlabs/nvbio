@@ -163,6 +163,42 @@ enum MEMSearchType {
 template <typename system_tag, typename fm_index_type>
 struct MEMFilter {};
 
+template <typename coord_type>
+struct MEMHit : vector_type<coord_type,4u>::type
+{
+    typedef vector_type<coord_type,4u>::type    base_type;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    MEMHit() {}
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    MEMHit(const base_type vec)
+    {
+        base_type::x = vec.x;
+        base_type::y = vec.y;
+        base_type::z = vec.z;
+        base_type::w = vec.w;
+    }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    MEMHit(const uint32 index_pos, const uint32 string_id, const uint32 span_begin, const uint32 span_end)
+    {
+        base_type::x = index_pos;
+        base_type::y = string_id;
+        base_type::z = span_begin;
+        base_type::w = span_end;
+    }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    coord_type index_pos() const { return x; }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 string_id() const { return uint32(y); }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint2 span() const { return make_uint2( uint32(z), uint32(w) ); }
+};
+
 ///
 ///\par
 /// This class implements an FM-index filter which can be used to find and filter MEMs
@@ -189,7 +225,7 @@ struct MEMFilter<host_tag, fm_index_type>
     static const uint32                                     coord_dim = vector_traits<coord_type>::DIM;
 
     typedef typename vector_type<coord_type,4u>::type       rank_type;      ///< rank coordinates are either uint32_4 or uint64_4
-    typedef typename vector_type<coord_type,4u>::type       mem_type;       ///< MEM coordinates are either uint32_4 or uint64_4
+    typedef MEMHit<coord_type>                              mem_type;       ///< MEM coordinates are either uint32_4 or uint64_4
     typedef mem_type                                        hit_type;       ///< MEM coordinates are either uint32_4 or uint64_4
 
     /// enact the filter on an FM-index and a string-set
@@ -276,7 +312,7 @@ struct MEMFilter<device_tag, fm_index_type>
     static const uint32                                     coord_dim = vector_traits<coord_type>::DIM;
 
     typedef typename vector_type<coord_type,4u>::type       rank_type;      ///< rank coordinates are either uint32_4 or uint64_4
-    typedef typename vector_type<coord_type,4u>::type       mem_type;       ///< MEM coordinates are either uint32_4 or uint64_4
+    typedef MEMHit<coord_type>                              mem_type;       ///< MEM coordinates are either uint32_4 or uint64_4
     typedef mem_type                                        hit_type;       ///< MEM coordinates are either uint32_4 or uint64_4
 
     /// enact the filter on an FM-index and a string-set

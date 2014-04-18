@@ -156,13 +156,15 @@ __global__ void prefix_doubling_kernel(
     //   - in order to perform prefix-doubling, we want to set K[i] as
     //     the position of suffix SA[i] + j, i.e. K[i] = invSA[ SA[i] + j ]
     //
+    const cuda::ldg_pointer<uint32> inv_keys_ldg( inv_keys );
+
   #if !defined(VECTORIZED_PREFIX_DOUBLING) // reference scalar implementation
     const uint32 idx = threadIdx.x + blockIdx.x * blockDim.x;
     if (idx >= n_slots)
        return;
 
     const uint32 suf_nj = suffixes[idx] + j;
-    const uint32 K_nj   = suf_nj < n_suffixes ? __ldg( inv_keys + suf_nj ) : 0u;
+    const uint32 K_nj   = suf_nj < n_suffixes ? inv_keys_ldg[ suf_nj ] : 0u;
           out_keys[idx] = K_nj;
   #else // vectorized implementation
     const uint32 idx = threadIdx.x + blockIdx.x * blockDim.x;
@@ -173,10 +175,10 @@ __global__ void prefix_doubling_kernel(
           suf_nj = make_uint4( suf_nj.x + j, suf_nj.y + j, suf_nj.z + j, suf_nj.w + j );
 
     const uint4 K_nj = make_uint4(
-        suf_nj.x < n_suffixes ? __ldg( inv_keys + suf_nj.x ) : 0u,
-        suf_nj.y < n_suffixes ? __ldg( inv_keys + suf_nj.y ) : 0u,
-        suf_nj.z < n_suffixes ? __ldg( inv_keys + suf_nj.z ) : 0u,
-        suf_nj.w < n_suffixes ? __ldg( inv_keys + suf_nj.w ) : 0u );
+        suf_nj.x < n_suffixes ? inv_keys_ldg[ suf_nj.x ] : 0u,
+        suf_nj.y < n_suffixes ? inv_keys_ldg[ suf_nj.y ] : 0u,
+        suf_nj.z < n_suffixes ? inv_keys_ldg[ suf_nj.z ] : 0u,
+        suf_nj.w < n_suffixes ? inv_keys_ldg[ suf_nj.w ] : 0u );
 
     ((uint4*)out_keys)[idx] = K_nj;
   #endif

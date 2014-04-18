@@ -727,7 +727,7 @@ uint64 MEMFilter<host_tag, fm_index_type>::rank(
         thrust::host_vector<uint32>    slots( m_n_queries );
 
         // scan the mem-range array sizes to get the new array slots
-        thrust::inclusive_scan(
+        thrust::exclusive_scan(
             m_mem_ranges.m_sizes.begin(),
             m_mem_ranges.m_sizes.begin() + m_n_queries,
             slots.begin() );
@@ -891,11 +891,12 @@ uint64 MEMFilter<device_tag, fm_index_type>::rank(
         thrust::device_vector<uint32>    slots( m_n_queries );
 
         // scan the mem-range array sizes to get the new array slots
-        cuda::inclusive_scan(
+        cuda::exclusive_scan(
             m_n_queries,
             m_mem_ranges.m_sizes.begin(),
             slots.begin(),
             thrust::plus<uint32>(),
+            0u,
             d_temp_storage );
 
         // and put everything in place

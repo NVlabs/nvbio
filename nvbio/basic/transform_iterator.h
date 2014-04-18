@@ -46,9 +46,9 @@ template <typename T, typename Transform>
 struct transform_iterator
 {
     typedef typename Transform::result_type                     value_type;
-    typedef typename value_type&                                reference;
-    typedef typename value_type&                                const_reference;
-    typedef typename value_type*                                pointer;
+    typedef value_type&                                         reference;
+    typedef value_type                                          const_reference;
+    typedef value_type*                                         pointer;
     typedef typename std::iterator_traits<T>::difference_type   difference_type;
     //typedef typename std::iterator_traits<T>::distance_type     distance_type;
     typedef std::random_access_iterator_tag                     iterator_category;

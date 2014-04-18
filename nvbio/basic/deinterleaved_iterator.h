@@ -130,7 +130,7 @@ struct deinterleaved_iterator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     deinterleaved_iterator operator+(const difference_type i) const
     {
-        return transform_iterator( m_it + i );
+        return deinterleaved_iterator( m_it + i );
     }
 
     /// subtraction

@@ -541,15 +541,15 @@ struct locate_ssa_results
 
     // functor operator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    mem_type operator() (const mem_type range) const
+    mem_type operator() (const mem_type mem) const
     {
-        const range_type r = locate_ssa_iterator( index, range.x );
+        const range_type r = locate_ssa_iterator( index, mem.coords.x );
 
         return mem_type(
             coord_type( r.x ),
             coord_type( r.y ),
-            range.z,
-            range.w );
+            mem.coords.z,
+            mem.coords.w );
     }
 
     const index_type index;
@@ -571,14 +571,14 @@ struct lookup_ssa_results
 
     // functor operator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    mem_type operator() (const mem_type range) const
+    mem_type operator() (const mem_type mem) const
     {
-        const coord_type loc = lookup_ssa_iterator( index, make_vector( range.x, range.y ) );
+        const coord_type loc = lookup_ssa_iterator( index, make_vector( mem.coords.x, mem.coords.y ) );
         return mem_type(
             loc,
-            range.z,
-            coord_type( range.w & 0xFFu ),
-            coord_type( range.w >> 16u ) );
+            mem.coords.z,
+            coord_type( mem.coords.w & 0xFFu ),
+            coord_type( mem.coords.w >> 16u ) );
     }
 
     const index_type index;

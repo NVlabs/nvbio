@@ -163,8 +163,16 @@ enum MEMSearchType {
 template <typename system_tag, typename fm_index_type>
 struct MEMFilter {};
 
+///
+///\par
+/// A MEM hit struct, including:
+///\par
+/// - the index position,
+/// - the string id,
+/// - the span of the string covered by the MEM
+///
 template <typename coord_type>
-struct MEMHit : typename vector_type<coord_type,4u>::type
+struct MEMHit
 {
     typedef typename vector_type<coord_type,4u>::type    base_type;
 
@@ -172,31 +180,27 @@ struct MEMHit : typename vector_type<coord_type,4u>::type
     MEMHit() {}
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    MEMHit(const base_type vec)
-    {
-        base_type::x = vec.x;
-        base_type::y = vec.y;
-        base_type::z = vec.z;
-        base_type::w = vec.w;
-    }
+    MEMHit(const base_type vec) : coords( vec ) {}
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     MEMHit(const uint32 index_pos, const uint32 string_id, const uint32 span_begin, const uint32 span_end)
     {
-        base_type::x = index_pos;
-        base_type::y = string_id;
-        base_type::z = span_begin;
-        base_type::w = span_end;
+        coords.x = index_pos;
+        coords.y = string_id;
+        coords.z = span_begin;
+        coords.w = span_end;
     }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    coord_type index_pos() const { return x; }
+    coord_type index_pos() const { return coords.x; }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 string_id() const { return uint32(y); }
+    uint32 string_id() const { return uint32(coords.y); }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 span() const { return make_uint2( uint32(z), uint32(w) ); }
+    uint2 span() const { return make_uint2( uint32(coords.z), uint32(coords.w) ); }
+
+    base_type coords;
 };
 
 ///

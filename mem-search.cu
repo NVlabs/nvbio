@@ -143,10 +143,13 @@ void fit_read_chunk(
 struct mem_loc_functor
 {
     typedef mem_state::mem_type argument_type;
-    typedef uint32              result_type;
+    typedef uint64              result_type;
 
     NVBIO_HOST_DEVICE
-    uint32 operator() (const argument_type mem) const { return mem.index_pos(); }
+    uint64 operator() (const argument_type mem) const
+    {
+        return uint64( mem.index_pos() ) | (uint64( mem.string_id() ) << 32);
+    }
 };
 
 // a functor to extract the read id from a mem
@@ -178,7 +181,7 @@ void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
         mem->mems.begin() );
 
     // sort the mems by reference location
-    nvbio::vector<device_tag,uint32> loc( n_mems );
+    nvbio::vector<device_tag,uint64> loc( n_mems );
 
     thrust::transform(
         mem->mems.begin(),

@@ -202,8 +202,7 @@ template <uint32 N>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 void syncthreads()
 {
-    #ifdef __CUDA_ARCH__
-    if ((N > cuda::Arch::WARP_SIZE) || (is_pow2<N>() == false))
+    #if defined(NVBIO_DEVICE_COMPILATION)
         __syncthreads();
     #endif
 }

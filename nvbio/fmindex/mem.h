@@ -164,9 +164,9 @@ template <typename system_tag, typename fm_index_type>
 struct MEMFilter {};
 
 template <typename coord_type>
-struct MEMHit : vector_type<coord_type,4u>::type
+struct MEMHit : typename vector_type<coord_type,4u>::type
 {
-    typedef vector_type<coord_type,4u>::type    base_type;
+    typedef typename vector_type<coord_type,4u>::type    base_type;
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     MEMHit() {}

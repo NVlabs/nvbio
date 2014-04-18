@@ -7,6 +7,8 @@ options.h
 options.cpp
 mem-search.h
 mem-search.cu
+util.h
+util.cu
 )
 
 cuda_add_executable(nvmem ${nvmem_srcs})

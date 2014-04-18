@@ -3,17 +3,19 @@
 #include <nvbio/io/output/output_file.h>
 #include <nvbio/io/reads/reads.h>
 
-#include "pipeline.h"
 #include "options.h"
+#include "util.h"
+#include "pipeline.h"
 #include "mem-search.h"
 
 using namespace nvbio;
 
 int main(int argc, char **argv)
 {
-    struct pipeline_context pipeline;
     parse_command_line(argc, argv);
+    gpu_init();
 
+    struct pipeline_context pipeline;
     // load the fmindex and prepare the SMEM search
     mem_init(&pipeline);
 

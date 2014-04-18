@@ -12,8 +12,9 @@ struct mem_state
     typedef MEMFilterDevice<fm_index_type>                       mem_filter_type;
     typedef nvbio::vector<device_tag, mem_filter_type::mem_type> mem_vector_type;
     typedef io::FMIndexDataDevice::stream_type                   genome_type;
+    typedef mem_filter_type::mem_type                            mem_type;
 
-    nvbio::io::FMIndexData *fmindex_data_host;
+    nvbio::io::FMIndexData       *fmindex_data_host;
     nvbio::io::FMIndexDataDevice *fmindex_data_device;
 
     // the FM-index objects
@@ -21,8 +22,12 @@ struct mem_state
 
     // our MEM filter object, used to rank and locate MEMs and keep track of statistics
     mem_filter_type mem_filter;
+
     // the result vector for mem_search
     mem_vector_type mems;
+
+    // an index into the mems sorted by reference location
+    nvbio::vector<device_tag,uint32> mems_index;
 };
 
 struct read_chunk
@@ -51,5 +56,8 @@ void fit_read_chunk(
 
 // locate all mems in the range defined by pipeline::chunk
 void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *batch);
+
+// build chains for the current pipeline::chunk of reads
+void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *batch);
 
 #endif // ifndef __MEM_H

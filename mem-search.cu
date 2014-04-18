@@ -2,6 +2,8 @@
 
 #include <nvbio/basic/numbers.h>
 #include <nvbio/basic/algorithms.h>
+#include <nvbio/basic/transform_iterator.h>
+#include <nvbio/basic/cuda/ldg.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/iterator/transform_iterator.h>
 
@@ -52,23 +54,6 @@ void mem_init(struct pipeline_context *pipeline)
     pipeline->mem.f_index = pipeline->mem.fmindex_data_device->index();
     pipeline->mem.r_index = pipeline->mem.fmindex_data_device->rindex();
 }
-
-// utility class to sort MEMs by increasing read-id first, then by decreasing number of hits
-class read_id_sort
-{
-public:
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE int operator() (mem_state::mem_filter_type::mem_type a, mem_state::mem_filter_type::mem_type b)
-    {
-        // x = SA-begin, y = SA-end, z = string-id, w = string_end<<16|string_begin
-        if (a.z == b.z)
-        {
-            // for the same read-id, sort by decreasing SA range size
-            return (a.y - a.x) > (b.y - b.x);
-        } else {
-            return a.z < b.z;
-        }
-    }
-};
 
 // search MEMs for all reads in batch
 void mem_search(struct pipeline_context *pipeline, const io::ReadDataDevice *batch)
@@ -154,18 +139,117 @@ void fit_read_chunk(
     pipeline->chunk.mem_end = mem->mem_filter.first_hit( pipeline->chunk.read_end );
 }
 
+// a functor to extract the reference location from a mem
+struct mem_loc_functor
+{
+    typedef mem_state::mem_type argument_type;
+    typedef uint32              result_type;
+
+    NVBIO_HOST_DEVICE
+    uint32 operator() (const argument_type mem) const { return mem.index_pos(); }
+};
+
+// a functor to extract the read id from a mem
+struct mem_read_id_functor
+{
+    typedef mem_state::mem_type argument_type;
+    typedef uint32              result_type;
+
+    NVBIO_HOST_DEVICE
+    uint32 operator() (const argument_type mem) const { return mem.string_id(); }
+};
+
 // locate all mems in the range defined by pipeline::chunk
 void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *batch)
 {
     struct mem_state *mem = &pipeline->mem;
 
     if (mem->mems.size() < command_line_options.mems_batch)
+    {
         mem->mems.resize( command_line_options.mems_batch );
+        mem->mems_index.resize( command_line_options.mems_batch );
+    }
+
+    const uint32 n_mems = pipeline->chunk.mem_end - pipeline->chunk.mem_begin;
 
     mem->mem_filter.locate(
         pipeline->chunk.mem_begin,
         pipeline->chunk.mem_end,
         mem->mems.begin() );
+
+    // sort the mems by reference location
+    nvbio::vector<device_tag,uint32> loc( n_mems );
+
+    thrust::transform(
+        mem->mems.begin(),
+        mem->mems.begin() + n_mems,
+        loc.begin(),
+        mem_loc_functor() );
+
+    thrust::copy(
+        thrust::make_counting_iterator<uint32>(0u),
+        thrust::make_counting_iterator<uint32>(0u) + n_mems,
+        mem->mems_index.begin() );
+
+    // TODO: this is slow, switch to nvbio::cuda::SortEnactor
+    thrust::sort_by_key(
+        loc.begin(),
+        loc.begin() + n_mems,
+        mem->mems_index.begin() );
+}
+
+// build chains for the current pipeline::chunk of reads
+__global__
+void build_chains_kernel(
+    const io::ReadDataDevice::const_plain_view_type batch,
+    const read_chunk                                chunk,
+    const uint32                                    n_mems,
+    const mem_state::mem_type*                      mems,
+    const uint32*                                   mems_index)
+{
+    const uint32 read_id = threadIdx.x + blockIdx.x * blockDim.x + chunk.read_begin;
+    if (read_id >= chunk.read_end)
+        return;
+
+    // find the first seed belonging to this read
+    const uint32 mem_begin = uint32( nvbio::lower_bound(
+        read_id,
+        nvbio::make_transform_iterator( mems, mem_read_id_functor() ),
+        n_mems ) - nvbio::make_transform_iterator( mems, mem_read_id_functor() ) );
+
+    // find the first seed belonging to the next read
+    const uint32 mem_end = uint32( nvbio::lower_bound(
+        read_id+1u,
+        nvbio::make_transform_iterator( mems, mem_read_id_functor() ),
+        n_mems ) - nvbio::make_transform_iterator( mems, mem_read_id_functor() ) );
+
+    // process the seeds in order
+    //nvbio::cuda::ldg_pointer<mem_state::mem_type> mems_ldg( mems );
+    for (uint32 i = mem_begin; i < mem_end; ++i)
+    {
+        const mem_state::mem_type seed = mems[ mems_index[i] ];
+
+        // insert seed
+    }
+}
+
+// build chains for the current pipeline::chunk of reads
+void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *batch)
+{
+    struct mem_state *mem = &pipeline->mem;
+
+    const uint32 n_reads = pipeline->chunk.read_end - pipeline->chunk.read_begin;
+    const uint32 n_mems  = pipeline->chunk.mem_end  - pipeline->chunk.mem_begin;
+
+    const uint32 block_dim = 128;
+    const uint32 n_blocks  = util::divide_ri( n_reads, block_dim );
+
+    build_chains_kernel<<<n_blocks, block_dim>>>(
+        nvbio::plain_view( *batch ),
+        pipeline->chunk,
+        n_mems,
+        nvbio::plain_view( mem->mems ),
+        nvbio::plain_view( mem->mems_index ) );
 }
 
 #if 0

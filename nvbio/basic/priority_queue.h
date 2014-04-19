@@ -116,6 +116,10 @@ struct priority_queue
 
     /// top of the queue
     ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Key& top();
+
+    /// top of the queue
+    ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Key top() const;
 
     /// return the i-th element in the heap

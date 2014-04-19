@@ -103,6 +103,14 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void priority_queue<Key,Container,Compare>::
 // top of the queue
 //
 template <typename Key, typename Container, typename Compare>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Key& priority_queue<Key,Container,Compare>::top()
+{
+    return m_queue[1];
+}
+
+// top of the queue
+//
+template <typename Key, typename Container, typename Compare>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Key priority_queue<Key,Container,Compare>::top() const
 {
     return m_queue[1];

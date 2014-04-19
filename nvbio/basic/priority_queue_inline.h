@@ -125,4 +125,74 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void priority_queue<Key,Container,Compare>::
     m_queue.resize(0);
 }
 
+namespace
+{
+    // returns the index of the first node at the same level as node i
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 leftmost(uint32 i)
+    {
+        const uint32 msb = 1u << (sizeof(i) * 8u - 1u);
+        return msb >> util::count_leading_zeros(i);
+    }
+
+    // returns the width of the tree at the level of node i
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 width(uint32 i)
+    {
+        return 1u << (sizeof(i) * 8u - util::count_leading_zeros(i) - 1u);
+    }
+
+    // returns the parent node of i
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 parent(uint32 i)
+    {
+        return i >> 1u;
+    }
+}
+
+/// locate the largest element v such that v <= x, writing the element in out
+/// returns false if no such element exists in the queue
+template <typename Key, typename Container, typename Compare>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool priority_queue<Key,Container,Compare>::bounded_max_search(Key& out, const Key& x) const
+{
+    Key max = 0;
+    uint32 max_i = 0;
+    uint32 i;
+    bool stop;
+
+    // start with the leftmost leaf node
+    i = leftmost(m_size);
+    stop = false;
+
+    while(!stop && i > 0)
+    {
+        const uint32 num_nodes = nvbio::min(width(i), m_size - i);
+
+        // visit all nodes at the same level of i
+        stop = true;
+        for(uint32 j = i; j < i + num_nodes; j++)
+        {
+            if (m_queue[j] <= x)
+            {
+                // if at least one of the nodes at this level is <= x, then visit the level above
+                // (this is overly conservative: we can skip the parent if one of the children is > x)
+                stop = false;
+
+                if (m_queue[j] > max)
+                {
+                    // found a new maximum
+                    max = m_queue[j];
+                    max_i = j;
+                }
+            }
+        }
+
+        // go up one level
+        i = parent(i);
+    }
+
+    if (max_i == 0)
+        return false;
+
+    out = m_queue[max_i];
+    return true;
+}
+
 } // namespace nvbio

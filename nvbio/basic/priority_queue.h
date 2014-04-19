@@ -120,6 +120,11 @@ struct priority_queue
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void clear();
 
+    /// locate the largest element v such that v <= x, writing the element in out
+    /// returns false if no such element exists in the queue
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool bounded_max_search(Key& out, const Key& x) const;
+
     uint32      m_size;
     Container   m_queue;
     Compare     m_cmp;

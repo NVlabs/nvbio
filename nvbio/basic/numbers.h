@@ -161,6 +161,33 @@ inline NVBIO_HOST_DEVICE L round(const L x, const R y)
     return R((x - r)*2) > y ? r+L(1) : r;
 }
 
+/// \ingroup BasicUtils
+/// count leading zeros in i
+inline NVBIO_HOST_DEVICE uint32 count_leading_zeros(uint32 i)
+{
+#if __CUDA_ARCH__ > 0
+    return __clz(i);
+#else
+# ifdef WIN32
+    return __lzcnt(i);
+# else
+    return __builtin_clz(i);
+# endif
+#endif
+}
+
+inline NVBIO_HOST_DEVICE uint64 count_leading_zeros(uint64 i)
+{
+#if __CUDA_ARCH__ > 0
+    return __clz(i);
+#else
+# ifdef WIN32
+    return __lzcnt64(i);
+# else
+    return __builtin_clzll(i);
+# endif
+#endif
+}
 
 } // end namespace util
 

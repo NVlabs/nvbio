@@ -104,18 +104,18 @@ struct chain_compare
 // build chains for the current pipeline::chunk of reads
 __global__
 void build_chains_kernel(
-    const io::ReadDataDevice::const_plain_view_type batch,
-    const read_chunk                                chunk,
-    const uint32                                    pass_number,
-    const uint32                                    n_active,
-    const uint32*                                   active_reads,
-          uint32*                                   active_flags,
-    const uint32                                    w,
-    const uint32                                    max_chain_gap,
-    const uint32                                    n_mems,
-    const mem_state::mem_type*                      mems,
-    const uint32*                                   mems_index,
-          uint64*                                   mems_chains)
+    const io::ReadDataDevice::const_plain_view_type batch,              // the input batch of reads
+    const read_chunk                                chunk,              // the current sub-batch
+    const uint32                                    pass_number,        // the pass number - we process up to N seeds per pass
+    const uint32                                    n_active,           // the number of active reads in this pass
+    const uint32*                                   active_reads,       // the set of active reads
+          uint8*                                    active_flags,       // the output set of active read flags
+    const uint32                                    w,                  // w parameter
+    const uint32                                    max_chain_gap,      // max chain gap parameter
+    const uint32                                    n_mems,             // the total number of MEMs for this chunk of reads
+    const mem_state::mem_type*                      mems,               // the MEMs for this chunk of reads
+    const uint32*                                   mems_index,         // a sorting index into the MEMs specifying the processing order
+          uint64*                                   mems_chains)        // the output chain IDs corresponding to the sorted MEMs
 {
     const uint32 thread_id = threadIdx.x + blockIdx.x * blockDim.x;
     if (thread_id >= n_active)
@@ -194,7 +194,7 @@ void build_chains_kernel(
     }
 
     // write out whether we need more passes
-    active_flags[ thread_id ] =  pass_number * MAX_CHAINS < mem_end;
+    active_flags[ thread_id ] = (pass_number * MAX_CHAINS < mem_end) ? 1u : 0u;
 }
 
 // build chains for the current pipeline::chunk of reads
@@ -212,7 +212,7 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
 
     // prepare some ping-pong queues for tracking active reads that need more passes
     nvbio::vector<device_tag,uint32> active_reads( n_reads );
-    nvbio::vector<device_tag,uint32> active_flags( n_reads );
+    nvbio::vector<device_tag,uint8>  active_flags( n_reads );
     nvbio::vector<device_tag,uint32> out_reads( n_reads );
     nvbio::vector<device_tag,uint8>  temp_storage;
 

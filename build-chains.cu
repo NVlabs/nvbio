@@ -216,6 +216,10 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
     const uint32 n_reads = pipeline->chunk.read_end - pipeline->chunk.read_begin;
     const uint32 n_mems  = pipeline->chunk.mem_end  - pipeline->chunk.mem_begin;
 
+    // skip pathological cases
+    if (n_mems == 0u)
+        return;
+
     //
     // Here we are going to run multiple passes of the same kernel, as we cannot fit
     // all chains in local memory at once...

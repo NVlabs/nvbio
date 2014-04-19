@@ -133,6 +133,15 @@ void fit_read_chunk(
 
     pipeline->chunk.read_begin = read_begin;
 
+    // skip pathological cases
+    if (mem->mem_filter.n_ranges() == 0)
+    {
+        pipeline->chunk.read_end = batch->size();
+        pipeline->chunk.mem_begin = 0u;
+        pipeline->chunk.mem_end = 0u;
+        return;
+    }
+
     // determine the index of the first hit in the chunk
     pipeline->chunk.mem_begin = mem->mem_filter.first_hit( read_begin );
 
@@ -180,6 +189,10 @@ void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
     }
 
     const uint32 n_mems = pipeline->chunk.mem_end - pipeline->chunk.mem_begin;
+
+    // skip pathological cases
+    if (n_mems == 0u)
+        return;
 
     mem->mem_filter.locate(
         pipeline->chunk.mem_begin,

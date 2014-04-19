@@ -761,14 +761,7 @@ uint64 MEMFilter<host_tag, fm_index_type>::rank(
 template <typename fm_index_type>
 uint32 MEMFilter<host_tag, fm_index_type>::first_hit(const uint32 string_id) const
 {
-    // fetch the number of output MEM ranges
-    const uint32 n_ranges = m_mem_ranges.allocated_size();
-
-    // find the first MEM rank from the given string
-    const uint32 first_rank = uint32( thrust::lower_bound(
-        thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::rank_string_id<rank_type>() ),
-        thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::rank_string_id<rank_type>() ) + n_ranges,
-        string_id ) - thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::rank_string_id<rank_type>() ) );
+    const uint32 first_rank = m_mem_ranges.m_index[ string_id ];
 
     // and find the corresponding MEM hits start
     return first_rank ? m_slots[ first_rank-1u ] : 0u;
@@ -930,14 +923,7 @@ uint64 MEMFilter<device_tag, fm_index_type>::rank(
 template <typename fm_index_type>
 uint32 MEMFilter<device_tag, fm_index_type>::first_hit(const uint32 string_id) const
 {
-    // fetch the number of output MEM ranges
-    const uint32 n_ranges = m_mem_ranges.allocated_size();
-
-    // find the first MEM rank from the given string
-    const uint32 first_rank = uint32( thrust::lower_bound(
-        thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::rank_string_id<rank_type>() ),
-        thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::rank_string_id<rank_type>() ) + n_ranges,
-        string_id ) - thrust::make_transform_iterator( m_mem_ranges.m_arena.begin(), mem::rank_string_id<rank_type>() ) );
+    const uint32 first_rank = m_mem_ranges.m_index[ string_id ];
 
     // and find the corresponding MEM hits start
     return first_rank ? m_slots[ first_rank-1u ] : 0u;

@@ -133,7 +133,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void priority_queue<Key,Container,Compare>::
     m_queue.resize(0);
 }
 
-namespace
+namespace priqueue
 {
     // returns the index of the first node at the same level as node i
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 leftmost(uint32 i)
@@ -166,12 +166,12 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool priority_queue<Key,Container,Compare>::
     bool stop;
 
     // start with the leftmost leaf node
-    i = leftmost(m_size);
+    i = priqueue::leftmost(m_size);
     stop = false;
 
     while(!stop && i > 0)
     {
-        const uint32 num_nodes = nvbio::min(width(i), m_size - i);
+        const uint32 num_nodes = nvbio::min( priqueue::width(i), m_size - i );
 
         // visit all nodes at the same level of i
         stop = true;
@@ -196,7 +196,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool priority_queue<Key,Container,Compare>::
         }
 
         // go up one level
-        i = parent(i);
+        i = priqueue::parent(i);
     }
 
     if (max_i == 0)

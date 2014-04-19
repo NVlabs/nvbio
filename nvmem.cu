@@ -1,4 +1,6 @@
 #include <nvbio/basic/console.h>
+#include <nvbio/basic/shared_pointer.h>
+#include <nvbio/basic/cuda/arch.h>
 #include <nvbio/io/fmi.h>
 #include <nvbio/io/output/output_file.h>
 #include <nvbio/io/reads/reads.h>
@@ -20,8 +22,13 @@ int main(int argc, char **argv)
     mem_init(&pipeline);
 
     // open the input read file
-    io::ReadDataStream *input = io::open_read_file(command_line_options.input_file_name, io::Phred33, uint32(-1), uint32(-1),
-                                                   io::ReadEncoding(io::FORWARD | io::REVERSE_COMPLEMENT));
+    SharedPointer<io::ReadDataStream> input = SharedPointer<io::ReadDataStream>(
+        io::open_read_file(
+            command_line_options.input_file_name,
+            io::Phred33,
+            uint32(-1),
+            uint32(-1),
+            io::ReadEncoding(io::FORWARD | io::REVERSE_COMPLEMENT) ) );
 
     if (input == NULL || input->is_ok() == false)
     {
@@ -44,7 +51,7 @@ int main(int argc, char **argv)
     for(;;)
     {
         // read the next batch
-        io::ReadData *batch = input->next(command_line_options.batch_size, uint32(-1));
+        SharedPointer<io::ReadData> batch = SharedPointer<io::ReadData>( input->next(command_line_options.batch_size, uint32(-1)) );
         if (batch == NULL)
         {
             // EOF
@@ -57,23 +64,42 @@ int main(int argc, char **argv)
         // search for MEMs
         mem_search(&pipeline, &device_batch);
 
+        cudaDeviceSynchronize();
+        nvbio::cuda::check_error("mem-search kernel");
+
         // now start a loop where we break the read batch into smaller chunks for
         // which we can locate all MEMs and build all chains
         for (uint32 read_begin = 0; read_begin < batch->size(); read_begin = pipeline.chunk.read_end)
         {
+            log_verbose(stderr, "chunking... started\n");
+
             // determine the next chunk of reads to process
             fit_read_chunk(&pipeline, &device_batch, read_begin);
+
+            log_verbose(stderr, "chunking... done\n");
+            log_verbose(stderr, "  reads : [%u,%u)\n", pipeline.chunk.read_begin, pipeline.chunk.read_end);
+            log_verbose(stderr, "  mems  : [%u,%u)\n", pipeline.chunk.mem_begin, pipeline.chunk.mem_end);
+
+            log_verbose(stderr, "locating mems... started\n");
 
             // locate all MEMs in the current chunk
             mem_locate(&pipeline, &device_batch);
 
+            cudaDeviceSynchronize();
+            nvbio::cuda::check_error("mem-locate kernel");
+
+            log_verbose(stderr, "locating mems... done\n");
+            log_verbose(stderr, "building chains... started\n");
+
             // build the chains
             build_chains(&pipeline, &device_batch);
-        }
 
-        delete batch;
+            cudaDeviceSynchronize();
+            nvbio::cuda::check_error("build-chains kernel");
+
+            log_verbose(stderr, "building chains... done\n");
+        }
     }
 
     pipeline.output->close();
-    delete input;
 }

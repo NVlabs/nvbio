@@ -135,12 +135,13 @@ void build_chains_kernel(
         nvbio::make_transform_iterator( mems, mem_read_id_functor() ),
         n_mems ) - nvbio::make_transform_iterator( mems, mem_read_id_functor() ) );
 
-    typedef nvbio::vector_wrapper<chain*> chain_vector_type;
+    typedef nvbio::vector_wrapper<chain*>                                       chain_vector_type;
+    typedef nvbio::priority_queue<chain, chain_vector_type, chain_compare>      chain_queue_type;
     const uint32 MAX_CHAINS = 128;     // need to handle overflow in multiple passes...
 
     // keep a priority queue of the chains organized by the reference coordinate of their leftmost seed
-    chain chain_queue_storage[MAX_CHAINS+1];
-    nvbio::priority_queue<chain, chain_vector_type, chain_compare> chain_queue( chain_vector_type( 0u, chain_queue_storage ) );
+    chain            chain_queue_storage[MAX_CHAINS+1];
+    chain_queue_type chain_queue( chain_vector_type( 0u, chain_queue_storage ) );
 
     // keep track of the number of created chains
     uint64 n_chains = pass_number * MAX_CHAINS;
@@ -166,10 +167,13 @@ void build_chains_kernel(
         else
         {
             // find the closest chain...
-            chain& chn = chain_queue.top();
+            //chain& chn = chain_queue.top();
+            chain_queue_type::iterator chain_it = chain_queue.upper_bound( chain( 0u, seed ) );
 
             // and test whether we can merge this seed into it
-            if (chn.merge( seed, w, max_chain_gap ) == false)
+            //if (chn.merge( seed, w, max_chain_gap ) == false)
+            if (chain_it != chain_queue.end() &&
+                chain_it->merge( seed, w, max_chain_gap ) == false)
             {
                 // get a new chain id
                 chain_id = n_chains++;
@@ -180,7 +184,8 @@ void build_chains_kernel(
             else
             {
                 // merge with the existing chain
-                chain_id = chn.id;
+                //chain_id = chn.id;
+                chain_id = chain_it->id;
             }
         }
 

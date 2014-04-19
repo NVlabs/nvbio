@@ -52,7 +52,7 @@ struct runtime_options
 
         // default options
         genome_use_mmap = true;
-        batch_size      = 256 * 1024;
+        batch_size      = 512 * 1024;
         min_intv        = 1;
         max_intv        = 10000;
         min_span        = 19;

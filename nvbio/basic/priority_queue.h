@@ -89,6 +89,11 @@ namespace nvbio {
 template <typename Key, typename Container, typename Compare>
 struct priority_queue
 {
+    typedef Key                                         value_type;
+    typedef Container                                   container_type;
+    typedef typename container_type::const_iterator     const_iterator;
+    typedef const_iterator                              iterator;
+
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE priority_queue(Container cont = Container(), const Compare cmp = Compare());
@@ -125,6 +130,26 @@ struct priority_queue
     /// returns false if no such element exists in the queue
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool bounded_max_search(Key& out, const Key& x) const;
+
+    /// starting iterator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    const_iterator begin() const { return m_queue.size() ? m_queue.begin() + 1u : m_queue.end(); }
+
+    /// starting iterator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    iterator begin() { return m_queue.size() ? m_queue.begin() + 1u : m_queue.end(); }
+
+    /// ending iterator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    const_iterator end() const { return m_queue.end(); }
+
+    /// ending iterator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    iterator end() { return m_queue.end(); }
 
     uint32      m_size;
     Container   m_queue;

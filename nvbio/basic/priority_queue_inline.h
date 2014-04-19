@@ -169,17 +169,20 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool priority_queue<Key,Container,Compare>::
         stop = true;
         for(uint32 j = i; j < i + num_nodes; j++)
         {
-            if (m_queue[j] <= x)
+            if (!m_cmp( x, m_queue[j] )) // m_queue[j] <= x
             {
                 // if at least one of the nodes at this level is <= x, then visit the level above
                 // (this is overly conservative: we can skip the parent if one of the children is > x)
                 stop = false;
 
-                if (m_queue[j] > max)
+                if (!m_cmp( m_queue[j], max )) // m_queue[j] >= max
                 {
                     // found a new maximum
-                    max = m_queue[j];
-                    max_i = j;
+                    if (j > max_i)
+                    {
+                        max = m_queue[j];
+                        max_i = j;
+                    }
                 }
             }
         }

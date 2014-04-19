@@ -69,7 +69,7 @@ int main(int argc, char **argv)
             // EOF
             break;
         }
-        log_info(stderr, "processing %u reads\n", batch->size());
+        log_info(stderr, "processing reads [%llu,%llu)\n", total_reads, total_reads + batch->size());
 
         // copy batch to the device
         const io::ReadDataDevice device_batch(*batch);

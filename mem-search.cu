@@ -173,6 +173,7 @@ void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
     {
         mem->mems.resize( command_line_options.mems_batch );
         mem->mems_index.resize( command_line_options.mems_batch );
+        mem->mems_chain.resize( command_line_options.mems_batch );
     }
 
     const uint32 n_mems = pipeline->chunk.mem_end - pipeline->chunk.mem_begin;
@@ -207,24 +208,47 @@ struct chain
 {
     // construct an empty chain
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    chain() {}
+    chain() : id(uint32(-1)) {}
 
     // construct a new chain from a single seed
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    chain(const mem_state::mem_type seed) : ref( seed.index_pos() ) {}
+    chain(const uint32 _id, const mem_state::mem_type seed) :
+        id( _id ),
+        ref( seed.index_pos() ),
+        span_beg( seed.span().x ),
+        last_span( seed.span() )
+    {}
 
     // test whether we can merge the given mem into this chain
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    bool merge(const mem_state::mem_type seed)
+    bool merge(const mem_state::mem_type seed, const uint32 w, const uint32 max_chain_gap)
     {
+        const uint32 seed_len = seed.span().y - seed.span().x;
+        const uint32 last_len = last_span.y - last_span.x;
+        const uint32 rbeg     = ref;
+        const uint32 rend     = last_ref + last_len;
+
+        // check whether seed is contained in the chain
+        if (seed.span().x >= span_beg && seed.span().y <= last_span.y && seed.index_pos() >= rbeg && seed.index_pos() + seed_len <= rend)
+            return true; // contained seed; do nothing
+
+    	const int32 x = seed.span().x - last_span.x; // always non-negative
+        const int32 y = seed.index_pos() - last_ref;
+        if ((y >= 0) && (x - y <= w) && (x - last_len < max_chain_gap) && (y - last_len < max_chain_gap))
+        {
+             // grow the chain
+            last_span = seed.span();
+            last_ref  = seed.index_pos();
+            return true;
+        }
         return false;
     }
 
-    // a list of seeds : how do we store it? we need a large arena of some kind from where
-    // to carve list entries...
-    //seed_list seeds;
-
-    uint32 ref; // cache the leftmost reference coordinate
+    uint32 id;              // chain id
+    uint32 ref;             // reference coordinate of the first seed in the chain
+    uint32 span_beg;        // read span begin
+    uint32 last_ref;        // the reference coordinate of the last seed in the chain
+    uint2  last_span;       // the read span of the last seed in the chain
 };
 
 struct chain_compare
@@ -242,9 +266,12 @@ __global__
 void build_chains_kernel(
     const io::ReadDataDevice::const_plain_view_type batch,
     const read_chunk                                chunk,
+    const uint32                                    w,
+    const uint32                                    max_chain_gap,
     const uint32                                    n_mems,
     const mem_state::mem_type*                      mems,
-    const uint32*                                   mems_index)
+    const uint32*                                   mems_index,
+          uint64*                                   mems_chains)
 {
     const uint32 read_id = threadIdx.x + blockIdx.x * blockDim.x + chunk.read_begin;
     if (read_id >= chunk.read_end)
@@ -269,16 +296,26 @@ void build_chains_kernel(
     chain chain_queue_storage[MAX_CHAINS];
     nvbio::priority_queue<chain, chain_vector_type, chain_compare> chain_queue( chain_vector_type( 0u, chain_queue_storage ) );
 
+    // keep track of the number of created chains
+    uint64 n_chains = 0u;
+
     // process the seeds in order
     for (uint32 i = mem_begin; i < mem_end; ++i)
     {
-        const mem_state::mem_type seed = mems[ mems_index[i] ];
+        const uint32 seed_idx           = mems_index[i];
+        const mem_state::mem_type seed  = mems[ seed_idx ];
+
+        // the chain id for this seed, to be determined
+        uint32 chain_id;
 
         // insert seed
         if (chain_queue.empty())
         {
+            // get a new chain id
+            chain_id = n_chains++;
+
             // build a new chain
-            chain_queue.push( chain(seed) );
+            chain_queue.push( chain( chain_id, seed ) );
         }
         else
         {
@@ -286,9 +323,23 @@ void build_chains_kernel(
             chain& chn = chain_queue.top();
 
             // and test whether we can merge this seed into it
-            if (chn.merge( seed ) == false)
-                chain_queue.push( chain(seed) );
+            if (chn.merge( seed, w, max_chain_gap ) == false)
+            {
+                // get a new chain id
+                chain_id = n_chains++;
+
+                // build a new chain
+                chain_queue.push( chain( chain_id, seed ) );
+            }
+            else
+            {
+                // merge with the existing chain
+                chain_id = chn.id;
+            }
         }
+
+        // write out the chain id (OR'd with the read id)
+        mems_chains[ seed_idx ] = n_chains | (uint64( read_id ) << 32);
     }
 }
 
@@ -306,7 +357,10 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
     build_chains_kernel<<<n_blocks, block_dim>>>(
         nvbio::plain_view( *batch ),
         pipeline->chunk,
+        command_line_options.w,
+        command_line_options.max_chain_gap,
         n_mems,
         nvbio::plain_view( mem->mems ),
-        nvbio::plain_view( mem->mems_index ) );
+        nvbio::plain_view( mem->mems_index ),
+        nvbio::plain_view( mem->mems_chain ) );
 }

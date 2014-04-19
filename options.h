@@ -23,21 +23,26 @@ struct runtime_options
     uint32 min_intv;    // min and max interval sizes for MEM search
     uint32 max_intv;
     uint32 min_span;    // minimum read span, MEMs that span less than this many bps will be dropped
-    uint32 mems_batch;  // number of MEMs to process at once (?)
+    uint32 mems_batch;  // number of MEMs to locate at once
+    uint32 w;
+    uint32 max_chain_gap;
 
     runtime_options()
     {
         genome_file_name = NULL;
-        input_file_name = NULL;
+        input_file_name  = NULL;
         output_file_name = NULL;
 
         // default options
         genome_use_mmap = true;
-        batch_size = 256 * 1024;
-        min_intv = 1;
-        max_intv = 10000;
-        min_span = 19;
-        mems_batch = 16 * 1024 * 1024;
+        batch_size      = 256 * 1024;
+        min_intv        = 1;
+        max_intv        = 10000;
+        min_span        = 19;
+        mems_batch      = 16 * 1024 * 1024;
+
+        w               = 100;
+        max_chain_gap   = 10000;
     };
 };
 

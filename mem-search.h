@@ -28,6 +28,9 @@ struct mem_state
 
     // an index into the mems sorted by reference location
     nvbio::vector<device_tag,uint32> mems_index;
+
+    // the chain IDs of each mem
+    nvbio::vector<device_tag,uint64> mems_chain;
 };
 
 struct read_chunk

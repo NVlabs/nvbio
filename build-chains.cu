@@ -200,9 +200,6 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
     const uint32 n_reads = pipeline->chunk.read_end - pipeline->chunk.read_begin;
     const uint32 n_mems  = pipeline->chunk.mem_end  - pipeline->chunk.mem_begin;
 
-    const uint32 block_dim = 128;
-    const uint32 n_blocks  = util::divide_ri( n_reads, block_dim );
-
     //
     // Here we are going to run multiple passes of the same kernel, as we cannot fit
     // all chains in local memory at once...
@@ -224,6 +221,9 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
 
     for (uint32 pass_number = 0u; n_active; ++pass_number)
     {
+        const uint32 block_dim = 128;
+        const uint32 n_blocks  = util::divide_ri( n_active, block_dim );
+
         // assign a chain id to each mem
         build_chains_kernel<<<n_blocks, block_dim>>>(
             nvbio::plain_view( *batch ),

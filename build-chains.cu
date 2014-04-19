@@ -145,7 +145,7 @@ void build_chains_kernel(
     chain            chain_queue_storage[MAX_CHAINS+1];
     chain_queue_type chain_queue( chain_vector_type( 0u, chain_queue_storage ) );
 
-    // keep track of the number of created chains
+    // keep a counter tracking the number of chains that get created
     //
     // NOTE: here we conservatively assume that in the previous passes we have
     // created the maximum number of chains, so as to avoid assigning an already

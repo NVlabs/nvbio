@@ -18,15 +18,9 @@
 
 #pragma once
 
-#include <nvbio/io/output/output_file.h>
-
 #include "mem-search.h"
 
 using namespace nvbio;
 
-struct pipeline_context 
-{
-    io::OutputFile      *output;
-    struct mem_state    mem;
-    struct read_chunk   chunk;
-};
+// build chains for the current pipeline::chunk of reads
+void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *batch);

@@ -7,6 +7,8 @@ options.h
 options.cpp
 mem-search.h
 mem-search.cu
+build-chains.h
+build-chains.cu
 util.h
 util.cu
 )

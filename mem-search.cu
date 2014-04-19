@@ -339,7 +339,7 @@ void build_chains_kernel(
         }
 
         // write out the chain id (OR'd with the read id)
-        mems_chains[ seed_idx ] = n_chains | (uint64( read_id ) << 32);
+        mems_chains[i] = n_chains | (uint64( read_id ) << 32);
     }
 }
 
@@ -363,4 +363,10 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
         nvbio::plain_view( mem->mems ),
         nvbio::plain_view( mem->mems_index ),
         nvbio::plain_view( mem->mems_chain ) );
+
+    // sort mems by chain id
+    thrust::sort_by_key( // TODO: this is slow, switch to nvbio::cuda::SortEnactor
+        mem->mems_chain.begin(),
+        mem->mems_chain.begin() + n_mems,
+        mem->mems_index.begin() );
 }

@@ -26,7 +26,7 @@ struct mem_state
     // the result vector for mem_search
     mem_vector_type mems;
 
-    // an index into the mems sorted by reference location
+    // a sorting index into the mems (first by reference location, then by chain id)
     nvbio::vector<device_tag,uint32> mems_index;
 
     // the chain IDs of each mem

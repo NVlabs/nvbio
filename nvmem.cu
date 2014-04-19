@@ -18,6 +18,7 @@
 
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/shared_pointer.h>
+#include <nvbio/basic/cuda/arch.h>          // cuda::check_error
 #include <nvbio/io/fmi.h>
 #include <nvbio/io/output/output_file.h>
 #include <nvbio/io/reads/reads.h>

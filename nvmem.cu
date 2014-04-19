@@ -47,9 +47,21 @@ int main(int argc, char **argv)
         exit(1);
     }
 
+    Timer  global_timer;
+    Timer  timer;
+    float  io_time     = 0.0f;
+    float  search_time = 0.0f;
+    float  locate_time = 0.0f;
+    float  chain_time  = 0.0f;
+    float  total_time  = 0.0f;
+    uint64 total_reads = 0;
+
     // go!
     for(;;)
     {
+        global_timer.start();
+        timer.start();
+
         // read the next batch
         SharedPointer<io::ReadData> batch = SharedPointer<io::ReadData>( input->next(command_line_options.batch_size, uint32(-1)) );
         if (batch == NULL)
@@ -62,16 +74,26 @@ int main(int argc, char **argv)
         // copy batch to the device
         const io::ReadDataDevice device_batch(*batch);
 
+        timer.stop();
+        io_time += timer.seconds();
+
+        timer.start();
+
         // search for MEMs
         mem_search(&pipeline, &device_batch);
 
         cudaDeviceSynchronize();
         nvbio::cuda::check_error("mem-search kernel");
 
+        timer.stop();
+        search_time += timer.seconds();
+
         // now start a loop where we break the read batch into smaller chunks for
         // which we can locate all MEMs and build all chains
         for (uint32 read_begin = 0; read_begin < batch->size(); read_begin = pipeline.chunk.read_end)
         {
+            timer.start();
+
             log_verbose(stderr, "chunking... started\n");
 
             // determine the next chunk of reads to process
@@ -89,6 +111,11 @@ int main(int argc, char **argv)
             cudaDeviceSynchronize();
             nvbio::cuda::check_error("mem-locate kernel");
 
+            timer.stop();
+            locate_time += timer.seconds();
+
+            timer.start();
+
             log_verbose(stderr, "locating mems... done\n");
             log_verbose(stderr, "building chains... started\n");
 
@@ -99,7 +126,19 @@ int main(int argc, char **argv)
             nvbio::cuda::check_error("build-chains kernel");
 
             log_verbose(stderr, "building chains... done\n");
+
+            timer.stop();
+            chain_time += timer.seconds();
         }
+        global_timer.stop();
+        total_time += global_timer.seconds();
+        total_reads += batch->size();
+
+        log_stats(stderr, "  time: %5.1fs (%.1f K reads/s)\n", total_time, 1.0e-3f * float(total_reads)/total_time);
+        log_stats(stderr, "    io     : %6.2f %%\n", 100.0f * io_time/total_time);
+        log_stats(stderr, "    search : %6.2f %%\n", 100.0f * search_time/total_time);
+        log_stats(stderr, "    locate : %6.2f %%\n", 100.0f * locate_time/total_time);
+        log_stats(stderr, "    chain  : %6.2f %%\n", 100.0f * chain_time/total_time);
     }
 
     pipeline.output->close();

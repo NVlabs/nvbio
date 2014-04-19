@@ -762,8 +762,7 @@ template <typename fm_index_type>
 uint32 MEMFilter<host_tag, fm_index_type>::first_hit(const uint32 string_id) const
 {
     // fetch the total number of MEM ranges
-    const uint32 n_ranges = m_mem_ranges.allocated_size();
-    if (string_id >= n_ranges)
+    if (string_id >= m_n_queries)
         return m_n_occurrences;
 
     const uint32 first_rank = m_mem_ranges.m_index[ string_id ];
@@ -929,8 +928,7 @@ template <typename fm_index_type>
 uint32 MEMFilter<device_tag, fm_index_type>::first_hit(const uint32 string_id) const
 {
     // fetch the total number of MEM ranges
-    const uint32 n_ranges = m_mem_ranges.allocated_size();
-    if (string_id >= n_ranges)
+    if (string_id >= m_n_queries)
         return m_n_occurrences;
 
     const uint32 first_rank = m_mem_ranges.m_index[ string_id ];

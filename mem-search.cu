@@ -277,12 +277,15 @@ void build_chains_kernel(
         // insert seed
         if (chain_queue.empty())
         {
+            // build a new chain
             chain_queue.push( chain(seed) );
         }
         else
         {
+            // find the closest chain...
             chain& chn = chain_queue.top();
 
+            // and test whether we can merge this seed into it
             if (chn.merge( seed ) == false)
                 chain_queue.push( chain(seed) );
         }

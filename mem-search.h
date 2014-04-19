@@ -38,9 +38,13 @@ struct read_chunk
         mem_begin(0),
         mem_end(0) {}
 
+    // ID of the first and last reads in this chunk
     uint32  read_begin;
     uint32  read_end;
+
+    // index of the first hit for the first read
     uint32  mem_begin;
+    // index of the last hit for the last read
     uint32  mem_end;
 };
 

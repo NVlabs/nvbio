@@ -66,6 +66,9 @@ int main(int argc, char **argv)
 
             // locate all MEMs in the current chunk
             mem_locate(&pipeline, &device_batch);
+
+            // build the chains
+            build_chains(&pipeline, &device_batch);
         }
 
         delete batch;

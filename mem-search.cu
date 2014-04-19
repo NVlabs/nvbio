@@ -5,7 +5,7 @@
 #include <nvbio/basic/priority_queue.h>
 #include <nvbio/basic/transform_iterator.h>
 #include <nvbio/basic/vector_wrapper.h>
-#include <nvbio/basic/cuda/ldg.h>
+#include <nvbio/basic/cuda/primitives.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/iterator/transform_iterator.h>
 
@@ -266,6 +266,10 @@ __global__
 void build_chains_kernel(
     const io::ReadDataDevice::const_plain_view_type batch,
     const read_chunk                                chunk,
+    const uint32                                    pass_number,
+    const uint32                                    n_active,
+    const uint32*                                   active_reads,
+          uint32*                                   active_flags,
     const uint32                                    w,
     const uint32                                    max_chain_gap,
     const uint32                                    n_mems,
@@ -273,9 +277,11 @@ void build_chains_kernel(
     const uint32*                                   mems_index,
           uint64*                                   mems_chains)
 {
-    const uint32 read_id = threadIdx.x + blockIdx.x * blockDim.x + chunk.read_begin;
-    if (read_id >= chunk.read_end)
+    const uint32 thread_id = threadIdx.x + blockIdx.x * blockDim.x;
+    if (thread_id >= n_active)
         return;
+
+    const uint32 read_id = active_reads[ thread_id ];
 
     // find the first seed belonging to this read
     const uint32 mem_begin = uint32( nvbio::lower_bound(
@@ -290,17 +296,17 @@ void build_chains_kernel(
         n_mems ) - nvbio::make_transform_iterator( mems, mem_read_id_functor() ) );
 
     typedef nvbio::vector_wrapper<chain*> chain_vector_type;
-    const uint32 MAX_CHAINS = 2048;     // need to handle overflow in multiple passes...
+    const uint32 MAX_CHAINS = 128;     // need to handle overflow in multiple passes...
 
     // keep a priority queue of the chains organized by the reference coordinate of their leftmost seed
-    chain chain_queue_storage[MAX_CHAINS];
+    chain chain_queue_storage[MAX_CHAINS+1];
     nvbio::priority_queue<chain, chain_vector_type, chain_compare> chain_queue( chain_vector_type( 0u, chain_queue_storage ) );
 
     // keep track of the number of created chains
-    uint64 n_chains = 0u;
+    uint64 n_chains = pass_number * MAX_CHAINS;
 
     // process the seeds in order
-    for (uint32 i = mem_begin; i < mem_end; ++i)
+    for (uint32 i = nvbio::min( mem_begin, pass_number * MAX_CHAINS ); i < mem_end; ++i)
     {
         const uint32 seed_idx           = mems_index[i];
         const mem_state::mem_type seed  = mems[ seed_idx ];
@@ -341,6 +347,9 @@ void build_chains_kernel(
         // write out the chain id (OR'd with the read id)
         mems_chains[i] = n_chains | (uint64( read_id ) << 32);
     }
+
+    // write out whether we need more passes
+    active_flags[ thread_id ] =  pass_number * MAX_CHAINS < mem_end;
 }
 
 // build chains for the current pipeline::chunk of reads
@@ -354,15 +363,52 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
     const uint32 block_dim = 128;
     const uint32 n_blocks  = util::divide_ri( n_reads, block_dim );
 
-    build_chains_kernel<<<n_blocks, block_dim>>>(
-        nvbio::plain_view( *batch ),
-        pipeline->chunk,
-        command_line_options.w,
-        command_line_options.max_chain_gap,
-        n_mems,
-        nvbio::plain_view( mem->mems ),
-        nvbio::plain_view( mem->mems_index ),
-        nvbio::plain_view( mem->mems_chain ) );
+    //
+    // Here we are going to run multiple passes of the same kernel, as we cannot fit
+    // all chains in local memory at once...
+    //
+
+    // prepare some ping-pong queues for tracking active reads that need more passes
+    nvbio::vector<device_tag,uint32> active_reads( n_reads );
+    nvbio::vector<device_tag,uint32> active_flags( n_reads );
+    nvbio::vector<device_tag,uint32> out_reads( n_reads );
+    nvbio::vector<device_tag,uint8>  temp_storage;
+
+    // initialize the active reads queue
+    thrust::copy(
+        thrust::make_counting_iterator<uint32>(0u),
+        thrust::make_counting_iterator<uint32>(0u) + pipeline->chunk.read_begin,
+        active_reads.begin() );
+
+    uint32 n_active = n_reads;
+
+    for (uint32 pass_number = 0u; n_active; ++pass_number)
+    {
+        // assign a chain id to each mem
+        build_chains_kernel<<<n_blocks, block_dim>>>(
+            nvbio::plain_view( *batch ),
+            pipeline->chunk,
+            pass_number,
+            n_active,
+            nvbio::plain_view( active_reads ),
+            nvbio::plain_view( active_flags ),
+            command_line_options.w,
+            command_line_options.max_chain_gap,
+            n_mems,
+            nvbio::plain_view( mem->mems ),
+            nvbio::plain_view( mem->mems_index ),
+            nvbio::plain_view( mem->mems_chain ) );
+
+        // shrink the set of active reads
+        n_active = cuda::copy_flagged(
+            n_active,
+            active_reads.begin(),
+            active_flags.begin(),
+            out_reads.begin(),
+            temp_storage );
+
+        active_reads.swap( out_reads );
+    }
 
     // sort mems by chain id
     thrust::sort_by_key( // TODO: this is slow, switch to nvbio::cuda::SortEnactor

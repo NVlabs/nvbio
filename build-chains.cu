@@ -135,19 +135,30 @@ void build_chains_kernel(
         nvbio::make_transform_iterator( mems, mem_read_id_functor() ),
         n_mems ) - nvbio::make_transform_iterator( mems, mem_read_id_functor() ) );
 
-    typedef nvbio::vector_wrapper<chain*>                                       chain_vector_type;
-    typedef nvbio::priority_queue<chain, chain_vector_type, chain_compare>      chain_queue_type;
-    const uint32 MAX_CHAINS = 128;     // need to handle overflow in multiple passes...
+    // the maximum amount of chains we can output in one pass
+    const uint32 MAX_CHAINS = 128;
 
     // keep a priority queue of the chains organized by the reference coordinate of their leftmost seed
+    typedef nvbio::vector_wrapper<chain*>                                       chain_vector_type;
+    typedef nvbio::priority_queue<chain, chain_vector_type, chain_compare>      chain_queue_type;
+
     chain            chain_queue_storage[MAX_CHAINS+1];
     chain_queue_type chain_queue( chain_vector_type( 0u, chain_queue_storage ) );
 
     // keep track of the number of created chains
+    //
+    // NOTE: here we conservatively assume that in the previous passes we have
+    // created the maximum number of chains, so as to avoid assigning an already
+    // taken ID to a new chain (which would result in merging potentially unrelated
+    // chains)
     uint64 n_chains = pass_number * MAX_CHAINS;
 
+    // compute the first and ending MEM to process in this pass
+    const uint32 mem_batch_begin = mem_begin + pass_number * MAX_CHAINS;
+    const uint32 mem_batch_end   = nvbio::min( mem_batch_begin + MAX_CHAINS, mem_end );
+
     // process the seeds in order
-    for (uint32 i = nvbio::min( mem_begin, pass_number * MAX_CHAINS ); i < mem_end; ++i)
+    for (uint32 i = mem_batch_begin; i < mem_batch_end; ++i)
     {
         const uint32 seed_idx           = mems_index[i];
         const mem_state::mem_type seed  = mems[ seed_idx ];

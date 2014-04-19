@@ -88,7 +88,7 @@ int main(int argc, char **argv)
             // EOF
             break;
         }
-        log_info(stderr, "processing reads [%llu,%llu)\n", total_reads, total_reads + batch->size());
+        log_info(stderr, "processing reads [%llu,%llu)\n", total_reads, total_reads + batch->size()/2);
 
         // copy batch to the device
         const io::ReadDataDevice device_batch(*batch);
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
         }
         global_timer.stop();
         total_time += global_timer.seconds();
-        total_reads += batch->size();
+        total_reads += batch->size()/2;
 
         log_stats(stderr, "  time: %5.1fs (%.1f K reads/s)\n", total_time, 1.0e-3f * float(total_reads)/total_time);
         log_stats(stderr, "    io     : %6.2f %%\n", 100.0f * io_time/total_time);

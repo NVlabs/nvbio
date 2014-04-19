@@ -155,15 +155,15 @@ namespace priqueue
     }
 }
 
-/// locate the largest element v such that v <= x, writing the element in out
-/// returns false if no such element exists in the queue
+// locate the largest element v such that v <= x, writing the element in out
+// returns false if no such element exists in the queue
 template <typename Key, typename Container, typename Compare>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool priority_queue<Key,Container,Compare>::bounded_max_search(Key& out, const Key& x) const
 {
-    Key max = 0;
     uint32 max_i = 0;
+    Key    max;
     uint32 i;
-    bool stop;
+    bool   stop;
 
     // start with the leftmost leaf node
     i = priqueue::leftmost(m_size);
@@ -183,7 +183,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool priority_queue<Key,Container,Compare>::
                 // (this is overly conservative: we can skip the parent if one of the children is > x)
                 stop = false;
 
-                if (!m_cmp( m_queue[j], max )) // m_queue[j] >= max
+                if (max_i == 0 || !m_cmp( m_queue[j], max )) // m_queue[j] >= max
                 {
                     // found a new maximum
                     if (j > max_i)
@@ -204,6 +204,58 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool priority_queue<Key,Container,Compare>::
 
     out = m_queue[max_i];
     return true;
+}
+
+// locate the largest element v such that v <= x; return end() if no
+// such element exists
+//
+template <typename Key, typename Container, typename Compare>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE priority_queue<Key,Container,Compare>::iterator
+priority_queue<Key,Container,Compare>::upper_bound(const Key& x)
+{
+    uint32 max_i = 0;
+    Key    max;
+    uint32 i;
+    bool   stop;
+
+    // start with the leftmost leaf node
+    i = priqueue::leftmost(m_size);
+    stop = false;
+
+    while(!stop && i > 0)
+    {
+        const uint32 num_nodes = nvbio::min( priqueue::width(i), m_size - i );
+
+        // visit all nodes at the same level of i
+        stop = true;
+        for(uint32 j = i; j < i + num_nodes; j++)
+        {
+            if (!m_cmp( x, m_queue[j] )) // m_queue[j] <= x
+            {
+                // if at least one of the nodes at this level is <= x, then visit the level above
+                // (this is overly conservative: we can skip the parent if one of the children is > x)
+                stop = false;
+
+                if (max_i == 0 || !m_cmp( m_queue[j], max )) // m_queue[j] >= max
+                {
+                    // found a new maximum
+                    if (j > max_i)
+                    {
+                        max = m_queue[j];
+                        max_i = j;
+                    }
+                }
+            }
+        }
+
+        // go up one level
+        i = priqueue::parent(i);
+    }
+
+    if (max_i == 0)
+        return end();
+
+    return begin() + max_i;
 }
 
 } // namespace nvbio

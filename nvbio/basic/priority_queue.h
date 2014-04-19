@@ -155,6 +155,11 @@ struct priority_queue
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
     iterator end() { return m_queue.end(); }
 
+    /// locate the largest element v such that v <= x; return end() if no
+    /// such element exists
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE iterator upper_bound(const Key& x);
+
     uint32      m_size;
     Container   m_queue;
     Compare     m_cmp;

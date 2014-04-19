@@ -2,7 +2,9 @@
 
 #include <nvbio/basic/numbers.h>
 #include <nvbio/basic/algorithms.h>
+#include <nvbio/basic/priority_queue.h>
 #include <nvbio/basic/transform_iterator.h>
+#include <nvbio/basic/vector_wrapper.h>
 #include <nvbio/basic/cuda/ldg.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/iterator/transform_iterator.h>
@@ -201,6 +203,40 @@ void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
         mem->mems_index.begin() );
 }
 
+struct chain
+{
+    // construct an empty chain
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    chain() {}
+
+    // construct a new chain from a single seed
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    chain(const mem_state::mem_type seed) : ref( seed.index_pos() ) {}
+
+    // test whether we can merge the given mem into this chain
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    bool merge(const mem_state::mem_type seed)
+    {
+        return false;
+    }
+
+    // a list of seeds : how do we store it? we need a large arena of some kind from where
+    // to carve list entries...
+    //seed_list seeds;
+
+    uint32 ref; // cache the leftmost reference coordinate
+};
+
+struct chain_compare
+{
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    bool operator() (const chain& chain1, const chain& chain2) const
+    {
+        // compare by the reference coordinate of the first seed of each chain
+        return chain1.ref < chain2.ref;
+    }
+};
+
 // build chains for the current pipeline::chunk of reads
 __global__
 void build_chains_kernel(
@@ -226,13 +262,30 @@ void build_chains_kernel(
         nvbio::make_transform_iterator( mems, mem_read_id_functor() ),
         n_mems ) - nvbio::make_transform_iterator( mems, mem_read_id_functor() ) );
 
+    typedef nvbio::vector_wrapper<chain*> chain_vector_type;
+    const uint32 MAX_CHAINS = 2048;     // need to handle overflow in multiple passes...
+
+    // keep a priority queue of the chains organized by the reference coordinate of their leftmost seed
+    chain chain_queue_storage[MAX_CHAINS];
+    nvbio::priority_queue<chain, chain_vector_type, chain_compare> chain_queue( chain_vector_type( 0u, chain_queue_storage ) );
+
     // process the seeds in order
-    //nvbio::cuda::ldg_pointer<mem_state::mem_type> mems_ldg( mems );
     for (uint32 i = mem_begin; i < mem_end; ++i)
     {
         const mem_state::mem_type seed = mems[ mems_index[i] ];
 
         // insert seed
+        if (chain_queue.empty())
+        {
+            chain_queue.push( chain(seed) );
+        }
+        else
+        {
+            chain& chn = chain_queue.top();
+
+            if (chn.merge( seed ) == false)
+                chain_queue.push( chain(seed) );
+        }
     }
 }
 

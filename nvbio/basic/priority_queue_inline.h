@@ -131,13 +131,13 @@ namespace
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 leftmost(uint32 i)
     {
         const uint32 msb = 1u << (sizeof(i) * 8u - 1u);
-        return msb >> util::count_leading_zeros(i);
+        return msb >> lzc(i);
     }
 
     // returns the width of the tree at the level of node i
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 width(uint32 i)
     {
-        return 1u << (sizeof(i) * 8u - util::count_leading_zeros(i) - 1u);
+        return 1u << (sizeof(i) * 8u - lzc(i) - 1u);
     }
 
     // returns the parent node of i

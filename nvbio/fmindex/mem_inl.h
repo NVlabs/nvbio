@@ -561,14 +561,14 @@ struct right_mem_functor
     //
     // \return the right-most position covered by a MEM
     //
-    template <typename pattern_type, typename vector_type>
+    template <typename pattern_type, typename output_vector>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint32 right_kmems(
         const uint32            pattern_len,
         const pattern_type      pattern,
         const uint32            string_id,
         const uint32            x,
-              vector_type&      output,
+              output_vector&    output,
         const uint32            min_intv) const
     {
         // find how far can we extend right starting from x

@@ -48,46 +48,57 @@ uint32 find_kmems(
     typedef typename fm_index_type::index_type coord_type;
     typedef typename fm_index_type::range_type range_type;
 
+    uint4 right_mems[1024];
+
+    nvbio::vector_wrapper<uint4*> right_ranges( 0, &right_mems[0] );
+
     // find how far can we extend right starting from x
     //
-    uint32 n_ranges = 0;
     {
-        const fm_index_type& index = r_index;
-
         // extend forward, using the reverse index
-        range_type range = make_vector( coord_type(0u), index.length() );
+        range_type f_range = make_vector( coord_type(0u), f_index.length() );
+        range_type r_range = make_vector( coord_type(0u), r_index.length() );
 
-        for (uint32 i = x; i < pattern_len; ++i)
+        range_type prev_range = f_range;
+
+        uint32 i;
+        for (i = x; i < pattern_len; ++i)
         {
             const uint8 c = pattern[i];
-            if (c > 3) // there is an N here. no match 
+            if (c > 3) // there is an N here. no match
+            {
+                prev_range = f_range;
                 break;
+            }
 
             // search c in the FM-index
-            const range_type c_rank = rank(
-                index,
-                make_vector( range.x-1, range.y ),
-                c );
-
-            range.x = index.L2(c) + c_rank.x + 1;
-            range.y = index.L2(c) + c_rank.y;
+            extend_forward( f_index, r_index, f_range, r_range, c );
 
             // check if the range is too small
-            if (1u + range.y - range.x < min_intv)
+            if (1u + f_range.y - f_range.x < min_intv)
                 break;
 
             // store the range
-            //ranges[ n_ranges ] = range;
-            ++n_ranges;
+            if (f_range.y - f_range.x != prev_range.y - prev_range.x)
+            {
+                // do not add the empty span
+                if (i > x)
+                    right_ranges.push_back( make_vector( prev_range.x, prev_range.y, coord_type(x), coord_type(i) ) );
+
+                prev_range = f_range;
+            }
         }
+        // check if we still need to save one range
+        if (right_ranges.size() && (right_ranges.back().y - right_ranges.back().x) != (prev_range.y - prev_range.x))
+            right_ranges.push_back( make_vector( prev_range.x, prev_range.y, coord_type(x), coord_type(i) ) );
     }
 
     // no valid match covering x
-    if (n_ranges == 0u)
+    if (right_ranges.size() == 0u)
         return x;
 
-    // keep track of the left-most coordinate covered by a MEM
-    uint32 leftmost_coordinate = x+1;
+    // save the result value for later
+    const uint32 rightmost_base = right_ranges.back().w;
 
     // now extend backwards, using the forward index
     //
@@ -99,16 +110,21 @@ uint32 find_kmems(
     //  - and add them to the output only if they extend further left than
     //    any of the previously found ones
     //
-    for (int32 r = x + int32(n_ranges) - 1 ; r >= int32(x); --r)
+
+    // keep track of the left-most coordinate covered by a MEM
+    uint32 leftmost_coordinate = x+1;
+
+    for (int32 j = right_ranges.size()-1; j >= 0; --j)
     {
-        const fm_index_type& index = f_index;
+              range_type  f_range = make_vector( right_ranges[j].x, right_ranges[j].y );
+        const uint32      r       = right_ranges[j].w;
 
         // extend from r to the left as much possible
-        range_type range = make_vector( coord_type(0u), index.length() );
+        const fm_index_type& index = f_index;
 
         int32 l;
 
-        for (l = r; l >= 0; --l)
+        for (l = int32(x) - 1; l >= 0; --l)
         {
             const uint8 c = pattern[l];
             if (c > 3) // there is an N here. no match 
@@ -117,7 +133,7 @@ uint32 find_kmems(
             // search c in the FM-index
             const range_type c_rank = rank(
                 index,
-                make_vector( range.x-1, range.y ),
+                make_vector( f_range.x-1, f_range.y ),
                 c );
 
             const range_type new_range = make_vector(
@@ -129,7 +145,7 @@ uint32 find_kmems(
                 break;
 
             // update the range
-            range = new_range;
+            f_range = new_range;
         }
 
         // only output the range if it's not contained in any other MEM
@@ -142,7 +158,7 @@ uint32 find_kmems(
             if (pattern_span.y - pattern_span.x >= min_span)
             {
                 // pass all results to the delegate
-                handler.output( range, pattern_span );
+                handler.output( f_range, pattern_span );
 
                 // update the left-most covered coordinate
                 leftmost_coordinate = uint32(l+1);
@@ -151,7 +167,7 @@ uint32 find_kmems(
     }
 
     // return the right-most end of the MEMs covering x
-    return x + n_ranges;
+    return rightmost_base;
 }
 
 // find all k-MEMs covering a given base, for each k

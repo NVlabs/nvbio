@@ -862,7 +862,8 @@ void discard_ranges_kernel(
     // keep track of the leftmost MEM coordinate
     uint32 leftmost_coordinate = uint32(-1);
 
-    uint32 n_output = 0u;
+    uint32 group_begin = 0u;
+    uint32 n_output    = 0u;
 
     for (uint32 j = 0; j < vec_size; ++j)
     {
@@ -873,11 +874,22 @@ void discard_ranges_kernel(
         // check the special marker to see if this is the initial MEM for a group
         if (rank.z & MEM_GROUP_MARKER)
         {
+            // reverse the order of the MEMs in the previous group, so so as to sort them by left coordinate
+            for (uint32 k = 0; k < (n_output - group_begin)/2; ++k)
+            {
+                const rank_type tmp      = vec[ group_begin + k ];
+                vec[ group_begin + k ]   = vec[ n_output - k - 1u ];
+                vec[ n_output - k - 1u ] = tmp;
+            }
+
             // remove the marker
             rank.z &= ~MEM_GROUP_MARKER;
 
             // reset the leftmost MEM coordinate
             leftmost_coordinate = uint32(-1);
+
+            // reset the group start
+            group_begin = n_output;
         }
 
         const uint2 range = make_uint2( rank.x, rank.y );

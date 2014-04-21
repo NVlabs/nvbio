@@ -81,6 +81,3 @@ void fit_read_chunk(
 
 // locate all mems in the range defined by pipeline::chunk
 void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *batch);
-
-// build chains for the current pipeline::chunk of reads
-void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *batch);

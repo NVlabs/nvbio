@@ -448,6 +448,11 @@ struct MEMFilter<device_tag, fm_index_type>
     thrust::device_vector<uint8>        d_temp_storage;
 };
 
+/// find the index i of the furthermost string such that filter.first_hit( j ) <= mem_count for each j < i
+///
+template <typename system_tag, typename fm_index_type>
+uint32 string_batch_bound(const MEMFilter<system_tag, fm_index_type>& filter, const uint32 mem_count);
+
 ///
 ///\par
 /// This class implements an FM-index filter which can be used to find and filter MEMs

@@ -1531,4 +1531,21 @@ void MEMFilter<device_tag, fm_index_type>::locate(
         mem::lookup_ssa_results<fm_index_type>( m_f_index ) );
 }
 
+// find the index i of the furthermost string such that filter.first_hit( j ) <= mem_count for each j < i
+//
+template <typename system_tag, typename fm_index_type>
+uint32 string_batch_bound(const MEMFilter<system_tag, fm_index_type>& filter, const uint32 mem_count)
+{
+    return uint32( thrust::upper_bound(
+        thrust::make_permutation_iterator(
+            filter.m_slots.begin(),
+            filter.m_mem_ranges.m_index.begin() ),
+        thrust::make_permutation_iterator(
+            filter.m_slots.begin(),
+            filter.m_mem_ranges.m_index.begin() ) + filter.m_n_queries,
+            mem_count ) - thrust::make_permutation_iterator(
+            filter.m_slots.begin(),
+            filter.m_mem_ranges.m_index.begin() ) );
+}
+
 } // namespace nvbio

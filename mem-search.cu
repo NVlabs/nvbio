@@ -94,35 +94,6 @@ void mem_search(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
     log_verbose(stderr, "%.1f average MEMs\n", float(mem->mem_filter.n_mems()) / float(n_reads));
 }
 
-namespace {
-
-#if defined(NVBIO_DEVICE_COMPILATION)
-  #define HOST_DEVICE_STATEMENT( host, device ) device
-#else
-  #define HOST_DEVICE_STATEMENT( host, device ) host
-#endif
-
-// a functor to count the number of MEM hits produced by a given range of reads
-struct hit_count_functor
-{
-    typedef uint32 argument_type;
-    typedef uint32 result_type;
-
-    // constructor
-    hit_count_functor(struct mem_state* _mem) : mem( _mem ) {}
-
-    // return the number of hits up to a given read
-    NVBIO_HOST_DEVICE                                   // silence nvcc - this function is host only
-    uint32 operator() (const uint32 read_id) const
-    {
-        return HOST_DEVICE_STATEMENT( mem->mem_filter.first_hit( read_id ), 0u );
-    }
-
-    struct mem_state* mem;
-};
-
-};
-
 // given the first read in a chunk, determine a suitably sized chunk of reads
 // (for which we can locate all MEMs in one go), updating pipeline::chunk
 void fit_read_chunk(
@@ -152,19 +123,8 @@ void fit_read_chunk(
     // determine the index of the first hit in the chunk
     pipeline->chunk.mem_begin = mem->mem_filter.first_hit( read_begin );
 
-    // make an iterator to count the number of hits in a given range of reads
-    typedef thrust::counting_iterator<uint32>                            index_iterator;
-    typedef thrust::transform_iterator<hit_count_functor,index_iterator> hit_counting_iterator;
-
-    const hit_counting_iterator hit_counter(
-        thrust::make_counting_iterator( 1u ),
-        hit_count_functor( mem ) );
-
-    // perform the binary search
-    pipeline->chunk.read_end = uint32( nvbio::lower_bound(
-        pipeline->chunk.mem_begin + max_hits,
-        hit_counter + read_begin,
-        batch->size() - read_begin ) - hit_counter );
+    // perform a binary search to find the end of our batch
+    pipeline->chunk.read_end = nvbio::string_batch_bound( mem->mem_filter, pipeline->chunk.mem_begin + max_hits );
 
     // determine the index of the ending hit in the chunk
     pipeline->chunk.mem_end = mem->mem_filter.first_hit( pipeline->chunk.read_end );

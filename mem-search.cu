@@ -80,8 +80,15 @@ void mem_search(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
     mem->mem_filter = mem_state::mem_filter_type();
 
     // search for MEMs
-    mem->mem_filter.rank(KMEM_SEARCH, mem->f_index, mem->r_index, batch->const_read_string_set(),
-                         command_line_options.min_intv, command_line_options.max_intv, command_line_options.min_span);
+    mem->mem_filter.rank(
+        mem->f_index,
+        mem->r_index,
+        batch->const_read_string_set(),
+        command_line_options.min_intv,
+        command_line_options.max_intv,
+        command_line_options.min_span,
+        command_line_options.split_len,
+        command_line_options.split_width);
 
     log_verbose(stderr, "%.1f average ranges\n", float(mem->mem_filter.n_ranges()) / float(n_reads));
     log_verbose(stderr, "%.1f average MEMs\n", float(mem->mem_filter.n_mems()) / float(n_reads));

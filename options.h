@@ -43,6 +43,8 @@ struct runtime_options
     uint32 mems_batch;  // number of MEMs to locate at once
     uint32 w;
     uint32 max_chain_gap;
+    uint32 split_len;
+    uint32 split_width;
 
     runtime_options()
     {
@@ -52,11 +54,13 @@ struct runtime_options
 
         // default options
         genome_use_mmap = true;
-        batch_size      = 512 * 1024;
+        batch_size      = 256 * 1024;
         min_intv        = 1;
         max_intv        = 10000;
         min_span        = 19;
         mems_batch      = 16 * 1024 * 1024;
+        split_len       = 28;
+        split_width     = 10;
 
         w               = 100;
         max_chain_gap   = 10000;

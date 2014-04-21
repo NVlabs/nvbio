@@ -18,6 +18,7 @@
 
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/shared_pointer.h>
+#include <nvbio/basic/exceptions.h>
 #include <nvbio/basic/cuda/arch.h>          // cuda::check_error
 #include <nvbio/io/fmi.h>
 #include <nvbio/io/output/output_file.h>
@@ -31,7 +32,7 @@
 
 using namespace nvbio;
 
-int main(int argc, char **argv)
+int run(int argc, char **argv)
 {
     parse_command_line(argc, argv);
     gpu_init();
@@ -120,7 +121,7 @@ int main(int argc, char **argv)
 
             log_verbose(stderr, "chunking... done\n");
             log_verbose(stderr, "  reads : [%u,%u)\n", pipeline.chunk.read_begin, pipeline.chunk.read_end);
-            log_verbose(stderr, "  mems  : [%u,%u)\n", pipeline.chunk.mem_begin, pipeline.chunk.mem_end);
+            log_verbose(stderr, "  mems  : [%u,%u)\n", pipeline.chunk.mem_begin,  pipeline.chunk.mem_end);
 
             log_verbose(stderr, "locating mems... started\n");
 
@@ -161,4 +162,53 @@ int main(int argc, char **argv)
     }
 
     pipeline.output->close();
+    return 0;
+}
+
+int main(int argc, char **argv)
+{
+    try
+    {
+        return run( argc, argv );
+    }
+    catch (nvbio::cuda_error e)
+    {
+        log_error(stderr, "caught a nvbio::cuda_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::bad_alloc e)
+    {
+        log_error(stderr, "caught a nvbio::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::logic_error e)
+    {
+        log_error(stderr, "caught a nvbio::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::runtime_error e)
+    {
+        log_error(stderr, "caught a nvbio::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::bad_alloc e)
+    {
+        log_error(stderr, "caught a std::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::logic_error e)
+    {
+        log_error(stderr, "caught a std::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::runtime_error e)
+    {
+        log_error(stderr, "caught a std::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (...)
+    {
+        log_error(stderr, "caught an unknown exception!\n");
+    }
+    return 0;
 }

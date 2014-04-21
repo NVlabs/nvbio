@@ -233,8 +233,8 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
 
     // initialize the active reads queue
     thrust::copy(
-        thrust::make_counting_iterator<uint32>(0u),
         thrust::make_counting_iterator<uint32>(0u) + pipeline->chunk.read_begin,
+        thrust::make_counting_iterator<uint32>(0u) + pipeline->chunk.read_end,
         active_reads.begin() );
 
     uint32 n_active = n_reads;
@@ -258,6 +258,9 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
             nvbio::plain_view( mem->mems ),
             nvbio::plain_view( mem->mems_index ),
             nvbio::plain_view( mem->mems_chain ) );
+
+        cudaDeviceSynchronize();
+        cuda::check_error("build-chains kernel");
 
         // shrink the set of active reads
         n_active = cuda::copy_flagged(

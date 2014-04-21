@@ -150,11 +150,11 @@ void fit_read_chunk(
     typedef thrust::transform_iterator<hit_count_functor,index_iterator> hit_counting_iterator;
 
     const hit_counting_iterator hit_counter(
-        thrust::make_counting_iterator( 0u ),
+        thrust::make_counting_iterator( 1u ),
         hit_count_functor( mem ) );
 
     // perform the binary search
-    pipeline->chunk.read_end = uint32( nvbio::upper_bound(
+    pipeline->chunk.read_end = uint32( nvbio::lower_bound(
         pipeline->chunk.mem_begin + max_hits,
         hit_counter + read_begin,
         batch->size() - read_begin ) - hit_counter );

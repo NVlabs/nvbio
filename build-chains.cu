@@ -205,7 +205,7 @@ void build_chains_kernel(
     }
 
     // write out whether we need more passes
-    active_flags[ thread_id ] = (pass_number * MAX_CHAINS < mem_end) ? 1u : 0u;
+    active_flags[ thread_id ] = (mem_batch_begin < mem_end) ? 1u : 0u;
 }
 
 // build chains for the current pipeline::chunk of reads

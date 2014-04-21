@@ -679,7 +679,7 @@ struct split_mem_functor
         const mem_type* in_mems = in_mem_arrays[ string_id ];
 
         // build a MEM handler
-        mem_type                    mems[1024];
+        mem_type                    mems[2048];
         vector_wrapper<mem_type*>   mems_vec( 0u, mems );
 
         // and collect all MEMs
@@ -713,7 +713,7 @@ struct split_mem_functor
 
                 if (i == max_i                                  &&
                     mem.span().y - mem.span().x >= split_len    &&
-                    n_occ                       >= split_width)
+                    n_occ                       <= split_width)
                 {
                     const uint32 y = right_kmems(
                         pattern_len,
@@ -738,7 +738,7 @@ struct split_mem_functor
             const mem_type mem = in_mems[i];
 
             if (mem.span().y - mem.span().x >= split_len &&
-                mem.range_size()            >= split_width)
+                mem.range_size()            <= split_width)
             {
                 const uint32 y = right_kmems(
                     pattern_len,

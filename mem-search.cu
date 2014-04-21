@@ -83,8 +83,8 @@ void mem_search(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
     mem->mem_filter.rank(KMEM_SEARCH, mem->f_index, mem->r_index, batch->const_read_string_set(),
                          command_line_options.min_intv, command_line_options.max_intv, command_line_options.min_span);
 
-    log_info(stderr, "%.1f average ranges\n", float(mem->mem_filter.n_ranges()) / float(n_reads));
-    log_info(stderr, "%.1f average MEMs\n", float(mem->mem_filter.n_mems()) / float(n_reads));
+    log_verbose(stderr, "%.1f average ranges\n", float(mem->mem_filter.n_ranges()) / float(n_reads));
+    log_verbose(stderr, "%.1f average MEMs\n", float(mem->mem_filter.n_mems()) / float(n_reads));
 }
 
 namespace {
@@ -155,12 +155,21 @@ void fit_read_chunk(
 
     // perform the binary search
     pipeline->chunk.read_end = uint32( nvbio::upper_bound(
-            max_hits,
-            hit_counter + read_begin,
-            batch->size() - read_begin ) - hit_counter );
+        pipeline->chunk.mem_begin + max_hits,
+        hit_counter + read_begin,
+        batch->size() - read_begin ) - hit_counter );
 
     // determine the index of the ending hit in the chunk
     pipeline->chunk.mem_end = mem->mem_filter.first_hit( pipeline->chunk.read_end );
+
+    // check whether we couldn't produce a non-empty batch
+    if (pipeline->chunk.mem_begin == pipeline->chunk.mem_end &&
+        pipeline->chunk.mem_end < mem->mem_filter.n_mems())
+    {
+        const uint32 mem_count = mem->mem_filter.first_hit( read_begin+1 ) - pipeline->chunk.mem_begin;
+        log_error(stderr,"read %u/%u has too many MEMs (%u), exceeding maximum batch size\n", read_begin, batch->size(), mem_count );
+        exit(1);
+    }
 }
 
 // a functor to extract the reference location from a mem
@@ -173,6 +182,19 @@ struct mem_loc_functor
     uint64 operator() (const argument_type mem) const
     {
         return uint64( mem.index_pos() ) | (uint64( mem.string_id() ) << 32);
+    }
+};
+
+// a functor to extract the reference left coordinate from a mem
+struct mem_left_coord_functor
+{
+    typedef mem_state::mem_type argument_type;
+    typedef uint64              result_type;
+
+    NVBIO_HOST_DEVICE
+    uint64 operator() (const argument_type mem) const
+    {
+        return uint64( mem.span().x ) | (uint64( mem.string_id() ) << 32);
     }
 };
 
@@ -206,7 +228,8 @@ void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
         mem->mems.begin(),
         mem->mems.begin() + n_mems,
         loc.begin(),
-        mem_loc_functor() );
+        mem_left_coord_functor() );
+        //mem_loc_functor() );
 
     thrust::copy(
         thrust::make_counting_iterator<uint32>(0u),

@@ -1258,6 +1258,9 @@ uint64 MEMFilter<device_tag, fm_index_type>::rank(
         thrust::plus<uint32>(),
         d_temp_storage );
 
+    // reset the pool size
+    m_mem_ranges.m_pool[0] = n_ranges;
+
     // reserve enough storage for the ranges
     m_slots.resize( n_ranges );
 
@@ -1287,7 +1290,6 @@ uint64 MEMFilter<device_tag, fm_index_type>::rank(
         // swap the new array indices and the arena
         m_mem_ranges.m_index.swap( slots );
         m_mem_ranges.m_arena.swap( arena );
-        m_mem_ranges.m_pool[0] = n_ranges;
 
         // and now scan the range sizes
         cuda::inclusive_scan(

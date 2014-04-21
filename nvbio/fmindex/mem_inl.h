@@ -330,7 +330,7 @@ struct range_size
     typedef uint64    result_type;
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint64 operator() (const rank_type range) const { return 1u + range.y - range.x; }
+    uint64 operator() (const rank_type range) const { return range.range_size(); }
 };
 
 // return the string-id of a given MEM rank
@@ -364,8 +364,8 @@ struct mem_handler
 {
     static const uint32 MAX_SIZE = 1024;
 
-    typedef typename vector_type<coord_type,2u>::type range_type;
-    typedef typename vector_type<coord_type,4u>::type mem_type;
+    typedef typename vector_type<coord_type,2u>::type   range_type;
+    typedef MEMRange<coord_type>                        rank_type;
 
     // constructor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
@@ -384,17 +384,16 @@ struct mem_handler
         // check whether the SA range is small enough
         if (1u + range.y - range.x <= max_intv)
         {
-            mems[ n_mems++ ] = make_vector(
-                coord_type( range.x ),
-                coord_type( range.y ),
-                coord_type( string_id ),
-                coord_type( span.x | span.y << 16u ) );
+            mems[ n_mems++ ] = rank_type(
+                range,
+                string_id,
+                span );
         }
     }
 
     const uint32    string_id;
     const uint32    max_intv;
-    mem_type        mems[MAX_SIZE];
+    rank_type       mems[MAX_SIZE];
     uint32          n_mems;
 };
 
@@ -403,18 +402,18 @@ struct mem_functor
 {
     typedef typename index_type::index_type             coord_type;
     typedef typename index_type::range_type             range_type;
-    typedef typename vector_type<coord_type,4u>::type   mem_type;
+    typedef MEMRange<coord_type>                        mem_type;
 
     // constructor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     mem_functor(
-        const index_type        _f_index,
-        const index_type        _r_index,
-        const string_set_type   _string_set,
-        const uint32            _min_intv,
-        const uint32            _max_intv,
-        const uint32            _min_span,
-        VectorArrayView<uint4>  _mem_arrays) :
+        const index_type            _f_index,
+        const index_type            _r_index,
+        const string_set_type       _string_set,
+        const uint32                _min_intv,
+        const uint32                _max_intv,
+        const uint32                _min_span,
+        VectorArrayView<mem_type>   _mem_arrays) :
     f_index      ( _f_index ),
     r_index      ( _r_index ),
     string_set   ( _string_set ),
@@ -497,18 +496,18 @@ struct right_mem_functor
 {
     typedef typename index_type::index_type             coord_type;
     typedef typename index_type::range_type             range_type;
-    typedef typename vector_type<coord_type,4u>::type   mem_type;
+    typedef MEMRange<coord_type>                        mem_type;
 
     // constructor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     right_mem_functor(
-        const index_type        _f_index,
-        const index_type        _r_index,
-        const string_set_type   _string_set,
-        const uint32            _min_intv,
-        const uint32            _max_intv,
-        const uint32            _min_span,
-        VectorArrayView<uint4>  _mem_arrays) :
+        const index_type            _f_index,
+        const index_type            _r_index,
+        const string_set_type       _string_set,
+        const uint32                _min_intv,
+        const uint32                _max_intv,
+        const uint32                _min_span,
+        VectorArrayView<mem_type>   _mem_arrays) :
     f_index      ( _f_index ),
     r_index      ( _r_index ),
     string_set   ( _string_set ),
@@ -606,20 +605,18 @@ struct right_mem_functor
             {
                 // do not add the empty span
                 if (i > x)
-                    mems_vec.push_back( make_vector( prev_range.x, prev_range.y, string_id, coord_type(x) | (coord_type(i) << 16) ) );
+                    mems_vec.push_back( mem_type( prev_range, string_id, x, i ) );
 
                 prev_range = f_range;
             }
         }
         // check if we still need to save one range
-        if (mems_vec.size() && (mems_vec.back().y - mems_vec.back().x) != (prev_range.y - prev_range.x))
-            mems_vec.push_back( make_vector( prev_range.x, prev_range.y, string_id, coord_type(x) | (coord_type(i) << 16) ) );
+        if (mems_vec.size() && (mems_vec.back().range().y - mems_vec.back().range().x) != (prev_range.y - prev_range.x))
+            mems_vec.push_back( mem_type( prev_range, string_id, x, i ) );
 
         // no valid match covering x
         if (mems_vec.size() == 0u)
             return x;
-
-        const uint32 MEM_GROUP_MARKER = 1u << 31;
 
         // output them in reverse order, i.e. from largest to smallest
         for (uint32 i = 0; i < mems_vec.size(); ++i)
@@ -628,13 +625,13 @@ struct right_mem_functor
 
             // add a special marker to identify the rightmost MEM covering a given position later on
             if (i == 0)
-                mem.z |= MEM_GROUP_MARKER;
+                mem.set_group_flag();
 
             output.push_back( mem );
         }
 
         // return the rightmost coordinate
-        return (mems_vec.back().w >> 16);
+        return mems_vec.back().span().y;
     }
 
     const index_type                    f_index;
@@ -653,7 +650,7 @@ struct left_mem_functor
 {
     typedef typename index_type::index_type             coord_type;
     typedef typename index_type::range_type             range_type;
-    typedef typename vector_type<coord_type,4u>::type   mem_type;
+    typedef MEMRange<coord_type>                        mem_type;
 
     // functor typedefs
     typedef mem_type    argument_type;
@@ -679,12 +676,10 @@ struct left_mem_functor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     mem_type operator() (const mem_type mem) const
     {
-        const uint32 MEM_GROUP_MARKER = 1u << 31;
-
-              range_type    f_range   = make_vector( mem.x, mem.y ); 
-        const uint32        string_id = mem.z & (~MEM_GROUP_MARKER); // remove the special marker
-        const uint32        x         = mem.w & 0xFFu;
-        const uint32        r         = mem.w >> 16;
+              range_type    f_range   = mem.range(); 
+        const uint32        string_id = mem.string_id();
+        const uint32        x         = mem.span().x;
+        const uint32        r         = mem.span().y;
 
         // fetch the pattern
         typename string_set_type::string_type pattern = string_set[ string_id ];
@@ -718,11 +713,11 @@ struct left_mem_functor
             f_range = new_range;
         }
 
-        return make_vector(
-            f_range.x,
-            f_range.y,
-            mem.z,
-            coord_type(l+1) | coord_type(r << 16) );
+        return mem_type(
+            f_range,
+            string_id,
+            make_uint2( l+1, r ),
+            mem.group_flag() );
     }
 
     const index_type                    f_index;
@@ -737,7 +732,7 @@ template <typename coord_type>
 struct filter_results
 {
     typedef typename vector_type<coord_type,2u>::type   range_type;
-    typedef typename vector_type<coord_type,4u>::type   rank_type;
+    typedef MEMRange<coord_type>                        rank_type;
     typedef MEMHit<coord_type>                          mem_type;
 
     typedef rank_type  argument_type;
@@ -770,10 +765,11 @@ struct filter_results
 
         // and write out the MEM occurrence
         return mem_type(
-            coord_type( range.x + local_index ),    // SA coordinate for this occurrence
-            coord_type( 0u ),                       // unused
-            range.z,                                // string-id
-            range.w );                              // packed pattern span
+            make_vector(
+                coord_type( range.range().x + local_index ),    // SA coordinate for this occurrence
+                coord_type( 0u ),                               // unused
+                coord_type( range.string_id() ),                // string-id
+                range.coords.w ) );                             // packed pattern span
     }
 
     const uint32        n_ranges;
@@ -803,10 +799,11 @@ struct locate_ssa_results
         const range_type r = locate_ssa_iterator( index, mem.coords.x );
 
         return mem_type(
-            coord_type( r.x ),
-            coord_type( r.y ),
-            mem.coords.z,
-            mem.coords.w );
+            make_vector(
+                coord_type( r.x ),
+                coord_type( r.y ),
+                mem.coords.z,
+                mem.coords.w ) );
     }
 
     const index_type index;
@@ -833,9 +830,9 @@ struct lookup_ssa_results
         const coord_type loc = lookup_ssa_iterator( index, make_vector( mem.coords.x, mem.coords.y ) );
         return mem_type(
             loc,
-            mem.coords.z,
-            coord_type( mem.coords.w & 0xFFu ),
-            coord_type( mem.coords.w >> 16u ) );
+            uint32( mem.coords.z ),
+            uint32( mem.coords.w ) & 0xFFu,
+            uint32( mem.coords.w ) >> 16u );
     }
 
     const index_type index;
@@ -867,12 +864,10 @@ void discard_ranges_kernel(
 
     for (uint32 j = 0; j < vec_size; ++j)
     {
-        const uint32 MEM_GROUP_MARKER = 1u << 31;
-
         rank_type rank = vec[j];
 
         // check the special marker to see if this is the initial MEM for a group
-        if (rank.z & MEM_GROUP_MARKER)
+        if (rank.group_flag())
         {
             // reverse the order of the MEMs in the previous group, so so as to sort them by left coordinate
             for (uint32 k = 0; k < (n_output - group_begin)/2; ++k)
@@ -882,9 +877,6 @@ void discard_ranges_kernel(
                 vec[ n_output - k - 1u ] = tmp;
             }
 
-            // remove the marker
-            rank.z &= ~MEM_GROUP_MARKER;
-
             // reset the leftmost MEM coordinate
             leftmost_coordinate = uint32(-1);
 
@@ -892,8 +884,8 @@ void discard_ranges_kernel(
             group_begin = n_output;
         }
 
-        const uint2 range = make_uint2( rank.x, rank.y );
-        const uint2 span  = make_uint2( rank.w & 0xFFu, rank.w >> 16 );
+        const uint2 range = rank.range();
+        const uint2 span  = rank.span();
 
         // check whether we want to keep this MEM rank
         if (span.x < leftmost_coordinate &&             // make sure it's not contained in a previous MEM

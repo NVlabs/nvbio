@@ -165,6 +165,73 @@ struct MEMFilter {};
 
 ///
 ///\par
+/// A MEM range struct, including:
+///\par
+/// - the index range,
+/// - the string id,
+/// - the span of the string covered by the MEM
+///
+template <typename coord_type>
+struct MEMRange
+{
+    typedef typename vector_type<coord_type,4u>::type    base_type;
+    typedef typename vector_type<coord_type,2u>::type    range_type;
+
+    static const uint32 GROUP_FLAG = 1u << 31;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    MEMRange() {}
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    MEMRange(const base_type vec) : coords( vec ) {}
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    MEMRange(const uint2 range, const uint32 string_id, const uint2 span, const bool flag = false)
+    {
+        coords.x = range.x;
+        coords.y = range.y;
+        coords.z = string_id;
+        coords.w = span.x | (span.y << 16);
+
+        if (flag)
+            set_group_flag();
+    }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    MEMRange(const uint2 range, const uint32 string_id, const uint32 span_begin, const uint32 span_end, const bool flag = false)
+    {
+        coords.x = range.x;
+        coords.y = range.y;
+        coords.z = string_id;
+        coords.w = span_begin | (span_end << 16);
+
+        if (flag)
+            set_group_flag();
+    }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    void set_group_flag() { coords.z |= GROUP_FLAG; }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    bool group_flag() const { return (coords.z & GROUP_FLAG) ? true : false; }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    range_type range() const { return make_uint2( coords.x, coords.y ); }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    coord_type range_size() const { return 1u + coords.y - coords.x; }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 string_id() const { return uint32(coords.z) & (~GROUP_FLAG); }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint2 span() const { return make_uint2( uint32(coords.w) & 0xFFu, uint32(coords.w) >> 16u ); }
+
+    base_type coords;
+};
+
+///
+///\par
 /// A MEM hit struct, including:
 ///\par
 /// - the index position,
@@ -181,6 +248,15 @@ struct MEMHit
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     MEMHit(const base_type vec) : coords( vec ) {}
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    MEMHit(const uint32 index_pos, const uint32 string_id, const uint2 span)
+    {
+        coords.x = index_pos;
+        coords.y = string_id;
+        coords.z = span.x;
+        coords.w = span.y;
+    }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     MEMHit(const uint32 index_pos, const uint32 string_id, const uint32 span_begin, const uint32 span_end)
@@ -228,7 +304,7 @@ struct MEMFilter<host_tag, fm_index_type>
     typedef typename index_type::index_type                 coord_type;     ///< the coordinate type of the fm-index, uint32|uint64
     static const uint32                                     coord_dim = vector_traits<coord_type>::DIM;
 
-    typedef typename vector_type<coord_type,4u>::type       rank_type;      ///< rank coordinates are either uint32_4 or uint64_4
+    typedef MEMRange<coord_type>                            rank_type;      ///< rank coordinates are either uint32_4 or uint64_4
     typedef MEMHit<coord_type>                              mem_type;       ///< MEM coordinates are either uint32_4 or uint64_4
     typedef mem_type                                        hit_type;       ///< MEM coordinates are either uint32_4 or uint64_4
 
@@ -315,7 +391,7 @@ struct MEMFilter<device_tag, fm_index_type>
     typedef typename index_type::index_type                 coord_type;     ///< the coordinate type of the fm-index, uint32|uint64
     static const uint32                                     coord_dim = vector_traits<coord_type>::DIM;
 
-    typedef typename vector_type<coord_type,4u>::type       rank_type;      ///< rank coordinates are either uint32_4 or uint64_4
+    typedef MEMRange<coord_type>                            rank_type;      ///< rank coordinates are either uint32_4 or uint64_4
     typedef MEMHit<coord_type>                              mem_type;       ///< MEM coordinates are either uint32_4 or uint64_4
     typedef mem_type                                        hit_type;       ///< MEM coordinates are either uint32_4 or uint64_4
 

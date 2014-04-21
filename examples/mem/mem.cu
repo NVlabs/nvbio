@@ -161,7 +161,6 @@ int main(int argc, char* argv[])
         timer.start();
 
         mem_filter.rank(
-            THRESHOLD_KMEM_SEARCH,
             f_index,
             r_index,
             d_read_data.const_read_string_set(),

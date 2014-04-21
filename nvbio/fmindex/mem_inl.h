@@ -397,7 +397,7 @@ struct mem_handler
     uint32          n_mems;
 };
 
-template <MEMSearchType TYPE, typename index_type, typename string_set_type>
+template <typename index_type, typename string_set_type>
 struct mem_functor
 {
     typedef typename index_type::index_type             coord_type;
@@ -439,34 +439,17 @@ struct mem_functor
         for (uint32 x = 0; x < pattern_len;)
         {
             // find MEMs covering x and move to the next uncovered position along the pattern
-            if (TYPE == THRESHOLD_KMEM_SEARCH)
-            {
-                const uint32 y = find_threshold_kmems(
-                    pattern_len,
-                    pattern,
-                    x,
-                    f_index,
-                    r_index,
-                    handler,
-                    min_intv,
-                    min_span );
+            const uint32 y = find_kmems(
+                pattern_len,
+                pattern,
+                x,
+                f_index,
+                r_index,
+                handler,
+                min_intv,
+                min_span );
 
-                x = nvbio::max( y, x+1u );
-            }
-            else
-            {
-                const uint32 y = find_kmems(
-                    pattern_len,
-                    pattern,
-                    x,
-                    f_index,
-                    r_index,
-                    handler,
-                    min_intv,
-                    min_span );
-
-                x = nvbio::max( y, x+1u );
-            }
+            x = nvbio::max( y, x+1u );
         }
 
         // output the array of results
@@ -490,6 +473,90 @@ struct mem_functor
     const uint32                        min_span;
     mutable VectorArrayView<mem_type>   mem_arrays;
 };
+
+// find all MEMs covering a given base
+//
+// \return the right-most position covered by a MEM
+//
+template <typename pattern_type, typename fm_index_type, typename output_vector>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 right_kmems(
+    const uint32            pattern_len,
+    const pattern_type      pattern,
+    const uint32            string_id,
+    const uint32            x,
+    const fm_index_type     f_index,
+    const fm_index_type     r_index,
+          output_vector&    output,
+    const uint32            min_intv)
+{
+    typedef typename fm_index_type::index_type  coord_type;
+    typedef typename fm_index_type::range_type  range_type;
+    typedef MEMRange<coord_type>                mem_type;
+
+    // find how far can we extend right starting from x
+    //
+
+    // internal output
+    mem_type                    mems[1024];
+    vector_wrapper<mem_type*>   mems_vec( 0u, mems );
+
+    // extend forward, using the reverse index
+    range_type f_range = make_vector( coord_type(0u), f_index.length() );
+    range_type r_range = make_vector( coord_type(0u), r_index.length() );
+
+    range_type prev_range = f_range;
+
+    uint32 i;
+    for (i = x; i < pattern_len; ++i)
+    {
+        const uint8 c = pattern[i];
+        if (c > 3) // there is an N here. no match
+        {
+            prev_range = f_range;
+            break;
+        }
+
+        // search c in the FM-index
+        extend_forward( f_index, r_index, f_range, r_range, c );
+
+        // check if the range is too small
+        if (1u + f_range.y - f_range.x < min_intv)
+            break;
+
+        // store the range
+        if (f_range.y - f_range.x != prev_range.y - prev_range.x)
+        {
+            // do not add the empty span
+            if (i > x)
+                mems_vec.push_back( mem_type( prev_range, string_id, x, i ) );
+
+            prev_range = f_range;
+        }
+    }
+    // check if we still need to save one range
+    if (mems_vec.size() && (mems_vec.back().range().y - mems_vec.back().range().x) != (prev_range.y - prev_range.x))
+        mems_vec.push_back( mem_type( prev_range, string_id, x, i ) );
+
+    // no valid match covering x
+    if (mems_vec.size() == 0u)
+        return x;
+
+    // output them in reverse order, i.e. from largest to smallest
+    for (uint32 i = 0; i < mems_vec.size(); ++i)
+    {
+        mem_type mem = mems_vec[ mems_vec.size() - i - 1u ];
+
+        // add a special marker to identify the rightmost MEM covering a given position later on
+        if (i == 0)
+            mem.set_group_flag();
+
+        output.push_back( mem );
+    }
+
+    // return the rightmost coordinate
+    return mems_vec.back().span().y;
+}
 
 template <typename index_type, typename string_set_type>
 struct right_mem_functor
@@ -538,6 +605,8 @@ struct right_mem_functor
                 pattern,
                 string_id,
                 x,
+                f_index,
+                r_index,
                 mems_vec,
                 min_intv );
 
@@ -556,84 +625,6 @@ struct right_mem_functor
         }
     }
 
-    // find all MEMs covering a given base
-    //
-    // \return the right-most position covered by a MEM
-    //
-    template <typename pattern_type, typename output_vector>
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 right_kmems(
-        const uint32            pattern_len,
-        const pattern_type      pattern,
-        const uint32            string_id,
-        const uint32            x,
-              output_vector&    output,
-        const uint32            min_intv) const
-    {
-        // find how far can we extend right starting from x
-        //
-
-        // internal output
-        mem_type                    mems[1024];
-        vector_wrapper<mem_type*>   mems_vec( 0u, mems );
-
-        // extend forward, using the reverse index
-        range_type f_range = make_vector( coord_type(0u), f_index.length() );
-        range_type r_range = make_vector( coord_type(0u), r_index.length() );
-
-        range_type prev_range = f_range;
-
-        uint32 i;
-        for (i = x; i < pattern_len; ++i)
-        {
-            const uint8 c = pattern[i];
-            if (c > 3) // there is an N here. no match
-            {
-                prev_range = f_range;
-                break;
-            }
-
-            // search c in the FM-index
-            extend_forward( f_index, r_index, f_range, r_range, c );
-
-            // check if the range is too small
-            if (1u + f_range.y - f_range.x < min_intv)
-                break;
-
-            // store the range
-            if (f_range.y - f_range.x != prev_range.y - prev_range.x)
-            {
-                // do not add the empty span
-                if (i > x)
-                    mems_vec.push_back( mem_type( prev_range, string_id, x, i ) );
-
-                prev_range = f_range;
-            }
-        }
-        // check if we still need to save one range
-        if (mems_vec.size() && (mems_vec.back().range().y - mems_vec.back().range().x) != (prev_range.y - prev_range.x))
-            mems_vec.push_back( mem_type( prev_range, string_id, x, i ) );
-
-        // no valid match covering x
-        if (mems_vec.size() == 0u)
-            return x;
-
-        // output them in reverse order, i.e. from largest to smallest
-        for (uint32 i = 0; i < mems_vec.size(); ++i)
-        {
-            mem_type mem = mems_vec[ mems_vec.size() - i - 1u ];
-
-            // add a special marker to identify the rightmost MEM covering a given position later on
-            if (i == 0)
-                mem.set_group_flag();
-
-            output.push_back( mem );
-        }
-
-        // return the rightmost coordinate
-        return mems_vec.back().span().y;
-    }
-
     const index_type                    f_index;
     const index_type                    r_index;
     const string_set_type               string_set;
@@ -641,6 +632,151 @@ struct right_mem_functor
     const uint32                        max_intv;
     const uint32                        min_span;
     mutable VectorArrayView<mem_type>   mem_arrays;
+};
+
+template <typename index_type, typename string_set_type>
+struct split_mem_functor
+{
+    typedef typename index_type::index_type             coord_type;
+    typedef typename index_type::range_type             range_type;
+    typedef MEMRange<coord_type>                        mem_type;
+
+    // constructor
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    split_mem_functor(
+        const index_type            _f_index,
+        const index_type            _r_index,
+        const string_set_type       _string_set,
+        const uint32                _split_len,
+        const uint32                _split_width,
+        const uint32                _min_intv,
+        const uint32                _max_intv,
+        const uint32                _min_span,
+        VectorArrayView<mem_type>   _in_mem_arrays,
+        VectorArrayView<mem_type>   _out_mem_arrays) :
+    f_index         ( _f_index ),
+    r_index         ( _r_index ),
+    string_set      ( _string_set ),
+    split_len       ( _split_len ),
+    split_width     ( _split_width ),
+    min_intv        ( _min_intv ),
+    max_intv        ( _max_intv ),
+    min_span        ( _min_span ),
+    in_mem_arrays   ( _in_mem_arrays ),
+    out_mem_arrays  ( _out_mem_arrays ) {}
+
+    // functor operator
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    void operator() (const uint32 string_id) const
+    {
+        // fetch the pattern
+        typename string_set_type::string_type pattern = string_set[ string_id ];
+
+        // compute its length
+        const uint32 pattern_len = nvbio::length( pattern );
+
+        const uint32    n_mems  = in_mem_arrays.size( string_id );
+        const mem_type* in_mems = in_mem_arrays[ string_id ];
+
+        // build a MEM handler
+        mem_type                    mems[1024];
+        vector_wrapper<mem_type*>   mems_vec( 0u, mems );
+
+        // and collect all MEMs
+        #if 0
+        for (uint32 group_begin = 0; group_begin < n_mems;)
+        {
+            // find the end of the group as well as the longest MEM in the group
+            uint32 group_end;
+            uint32 max_i = 0u;
+            uint32 max   = 0u;
+
+            for (group_end = group_begin; group_end < n_mems; ++group_end)
+            {
+                const mem_type mem = in_mems[ group_end ];
+
+                if (max <= mem.span().y - mem.span().x)
+                {
+                    max   = mem.span().y - mem.span().x;
+                    max_i = group_end;
+                }
+                if (group_end > group_begin && mem.group_flag())
+                    break;
+            }
+
+            // process all MEMs in the group splitting the longest one
+            for (uint32 i = group_begin; i < group_end; ++i)
+            {
+                const mem_type mem = in_mems[i];
+
+                const uint32 n_occ = 1u + mem.range().y - mem.range().x;
+
+                if (i == max_i                                  &&
+                    mem.span().y - mem.span().x >= split_len    &&
+                    n_occ                       >= split_width)
+                {
+                    const uint32 y = right_kmems(
+                        pattern_len,
+                        pattern,
+                        string_id,
+                        (mem.span().x + mem.span().y) / 2u,
+                        f_index,
+                        r_index,
+                        mems_vec,
+                        n_occ+1u );
+                }
+                else
+                    mems_vec.push_back( mem );
+            }
+
+            // advance to the next group
+            group_begin = group_end;
+        }
+        #else
+        for (uint32 i = 0; i < n_mems; ++i)
+        {
+            const mem_type mem = in_mems[i];
+
+            if (mem.span().y - mem.span().x >= split_len &&
+                mem.range_size()            >= split_width)
+            {
+                const uint32 y = right_kmems(
+                    pattern_len,
+                    pattern,
+                    string_id,
+                    (mem.span().x + mem.span().y) / 2u,
+                    f_index,
+                    r_index,
+                    mems_vec,
+                    mem.range_size() + 1u );
+            }
+            else
+                mems_vec.push_back( mem );
+        }
+        #endif
+
+        // output the array of results
+        if (mems_vec.size())
+        {
+            mem_type* output = out_mem_arrays.alloc( string_id, mems_vec.size() );
+            if (output != NULL)
+            {
+                for (uint32 i = 0; i < mems_vec.size(); ++i)
+                    output[i] = mems_vec[i];
+            }
+        }
+    }
+
+    const index_type                    f_index;
+    const index_type                    r_index;
+    const string_set_type               string_set;
+    const uint32                        split_len;
+    const uint32                        split_width;
+    const uint32                        min_intv;
+    const uint32                        max_intv;
+    const uint32                        min_span;
+    const VectorArrayView<mem_type>     in_mem_arrays;
+    mutable VectorArrayView<mem_type>   out_mem_arrays;
 };
 
 // A functor to extend a MEM to the left
@@ -846,7 +982,8 @@ void discard_ranges_kernel(
     const uint32                            n_items,        // # of input items
           VectorArrayView<rank_type>        ranges,         // input vector array
     const uint32                            max_intv,       // max SA interval size
-    const uint32                            min_span)       // minimum pattern span
+    const uint32                            min_span,       // minimum pattern span
+    const uint32                            reverse)        // reverse the output
 {
     const uint32 i = threadIdx.x + blockIdx.x * blockDim.x;
     if (i >= n_items)
@@ -870,11 +1007,14 @@ void discard_ranges_kernel(
         if (rank.group_flag())
         {
             // reverse the order of the MEMs in the previous group, so so as to sort them by left coordinate
-            for (uint32 k = 0; k < (n_output - group_begin)/2; ++k)
+            if (reverse)
             {
-                const rank_type tmp      = vec[ group_begin + k ];
-                vec[ group_begin + k ]   = vec[ n_output - k - 1u ];
-                vec[ n_output - k - 1u ] = tmp;
+                for (uint32 k = 0; k < (n_output - group_begin)/2; ++k)
+                {
+                    const rank_type tmp      = vec[ group_begin + k ];
+                    vec[ group_begin + k ]   = vec[ n_output - k - 1u ];
+                    vec[ n_output - k - 1u ] = tmp;
+                }
             }
 
             // reset the leftmost MEM coordinate
@@ -892,6 +1032,11 @@ void discard_ranges_kernel(
             span.y - span.x >= min_span  &&             // make sure its span is long enough
             1u + range.y - range.x <= max_intv)         // make sure it doesn't have too many occurrences
         {
+            // make sure the first output entry in each group has the group flag set
+            if (leftmost_coordinate == uint32(-1))
+                rank.set_group_flag();
+
+            // output this entry
             vec[ n_output++ ] = rank;
 
             // update the leftmost coordinate
@@ -908,18 +1053,37 @@ template <typename rank_type>
 void discard_ranges(
     const device_tag                        system_tag,     // system tag
     const uint32                            n_items,        // # of input items
-          VectorArrayView<rank_type>        ranges,         // input vector array
+          DeviceVectorArray<rank_type>&     ranges,         // input vector array
     const uint32                            max_intv,       // max SA interval size
-    const uint32                            min_span)       // minimum pattern span
+    const uint32                            min_span,       // minimum pattern span
+    const bool                              reverse)        // reverse the output
 {
     const uint32 block_dim = 128;
     const uint32 n_blocks = util::divide_ri( n_items, block_dim );
 
     discard_ranges_kernel<<<n_blocks,block_dim>>>(
         n_items,
-        ranges,
+        nvbio::plain_view( ranges ),
         max_intv,
-        min_span );
+        min_span,
+        reverse );
+
+    // reset the pool size
+    {
+        thrust::device_vector<uint8> d_temp_storage;
+
+        // compute the number of output MEM ranges
+        // NOTE: this reduction is necessary as discard_ranges might have changed the
+        // number of ranges effectively in use
+        const uint32 n_ranges = cuda::reduce(
+            n_items,
+            ranges.m_sizes.begin(),
+            thrust::plus<uint32>(),
+            d_temp_storage );
+
+        // reset the pool size
+        ranges.m_pool[0] = n_ranges;
+    }
 }
 
 // copy the array of ranges bound to index i into the proper position of the output
@@ -1002,13 +1166,14 @@ void reorder_ranges(
 template <typename fm_index_type>
 template <typename string_set_type>
 uint64 MEMFilter<host_tag, fm_index_type>::rank(
-    const MEMSearchType     search_type,
     const fm_index_type&    f_index,
     const fm_index_type&    r_index,
     const string_set_type&  string_set,
     const uint32            min_intv,
     const uint32            max_intv,
-    const uint32            min_span)
+    const uint32            min_span,
+    const uint32            split_len,
+    const uint32            split_width)
 {
     // save the query
     m_n_queries     = string_set.size();
@@ -1021,36 +1186,18 @@ uint64 MEMFilter<host_tag, fm_index_type>::rank(
     m_mem_ranges.resize( m_n_queries, max_string_length * m_n_queries );
 
     // search the strings in the index, obtaining a set of ranges
-    if (search_type == THRESHOLD_KMEM_SEARCH)
-    {
-        thrust::for_each(
-            thrust::make_counting_iterator<uint32>(0u),
-            thrust::make_counting_iterator<uint32>(0u) + m_n_queries,
-            mem::mem_functor<THRESHOLD_KMEM_SEARCH,fm_index_type,string_set_type>(
-                m_f_index,
-                m_r_index,
-                string_set,
-                min_intv,
-                max_intv,
-                min_span,
-                nvbio::plain_view( m_mem_ranges ) )
-            );
-    }
-    else
-    {
-        thrust::for_each(
-            thrust::make_counting_iterator<uint32>(0u),
-            thrust::make_counting_iterator<uint32>(0u) + m_n_queries,
-            mem::mem_functor<KMEM_SEARCH,fm_index_type,string_set_type>(
-                m_f_index,
-                m_r_index,
-                string_set,
-                min_intv,
-                max_intv,
-                min_span,
-                nvbio::plain_view( m_mem_ranges ) )
-            );
-    }
+    thrust::for_each(
+        thrust::make_counting_iterator<uint32>(0u),
+        thrust::make_counting_iterator<uint32>(0u) + m_n_queries,
+        mem::mem_functor<fm_index_type,string_set_type>(
+            m_f_index,
+            m_r_index,
+            string_set,
+            min_intv,
+            max_intv,
+            min_span,
+            nvbio::plain_view( m_mem_ranges ) )
+        );
 
     // fetch the number of output MEM ranges
     const uint32 n_ranges = m_mem_ranges.allocated_size();
@@ -1163,13 +1310,14 @@ void MEMFilter<host_tag, fm_index_type>::locate(
 template <typename fm_index_type>
 template <typename string_set_type>
 uint64 MEMFilter<device_tag, fm_index_type>::rank(
-    const MEMSearchType     search_type,
     const fm_index_type&    f_index,
     const fm_index_type&    r_index,
     const string_set_type&  string_set,
     const uint32            min_intv,
     const uint32            max_intv,
-    const uint32            min_span)
+    const uint32            min_span,
+    const uint32            split_len,
+    const uint32            split_width)
 {
     // save the query
     m_n_queries     = string_set.size();
@@ -1182,22 +1330,6 @@ uint64 MEMFilter<device_tag, fm_index_type>::rank(
     m_mem_ranges.resize( m_n_queries, max_string_length * m_n_queries );
 
     // search the strings in the index, obtaining a set of ranges
-    if (search_type == THRESHOLD_KMEM_SEARCH)
-    {
-        thrust::for_each(
-            thrust::make_counting_iterator<uint32>(0u),
-            thrust::make_counting_iterator<uint32>(0u) + m_n_queries,
-            mem::mem_functor<THRESHOLD_KMEM_SEARCH,fm_index_type,string_set_type>(
-                m_f_index,
-                m_r_index,
-                string_set,
-                min_intv,
-                max_intv,
-                min_span,
-                nvbio::plain_view( m_mem_ranges ) )
-            );
-    }
-    else
     {
         thrust::for_each(
             thrust::make_counting_iterator<uint32>(0u),
@@ -1229,29 +1361,71 @@ uint64 MEMFilter<device_tag, fm_index_type>::rank(
                 min_span )
             );
 
+        const bool do_split = split_len < uint32(-1);
+
         // and discard MEM ranges we don't want to keep
         mem::discard_ranges(
             device_tag(),
             m_n_queries,
-            nvbio::plain_view( m_mem_ranges ),
+            m_mem_ranges,
             max_intv,
-            min_span );
+            min_span,
+            do_split ? false : true );
+
+        // split long MEMs
+        if (do_split)
+        {
+            DeviceVectorArray<rank_type> unsplit_mem_ranges;
+
+            m_mem_ranges.swap( unsplit_mem_ranges );
+            m_mem_ranges.resize( m_n_queries, max_string_length * m_n_queries );
+
+            thrust::for_each(
+                thrust::make_counting_iterator<uint32>(0u),
+                thrust::make_counting_iterator<uint32>(0u) + m_n_queries,
+                mem::split_mem_functor<fm_index_type,string_set_type>(
+                    m_f_index,
+                    m_r_index,
+                    string_set,
+                    split_len,
+                    split_width,
+                    min_intv,
+                    max_intv,
+                    min_span,
+                    nvbio::plain_view( unsplit_mem_ranges ),
+                    nvbio::plain_view( m_mem_ranges ) )
+                );
+
+            // fetch the number of output MEM ranges
+            const uint32 n_ranges = m_mem_ranges.allocated_size();
+
+            // extend them left
+            thrust::transform(
+                m_mem_ranges.m_arena.begin(),
+                m_mem_ranges.m_arena.begin() + n_ranges,
+                m_mem_ranges.m_arena.begin(),
+                mem::left_mem_functor<fm_index_type,string_set_type>(
+                    m_f_index,
+                    m_r_index,
+                    string_set,
+                    min_intv,
+                    max_intv,
+                    min_span )
+                );
+
+            // and discard MEM ranges we don't want to keep
+            mem::discard_ranges(
+                device_tag(),
+                m_n_queries,
+                m_mem_ranges,
+                max_intv,
+                min_span,
+                true );
+        }
     }
 
-    // fetch the number of output MEM ranges
-    //const uint32 n_ranges = m_mem_ranges.allocated_size();
-
-    // compute the number of output MEM ranges
-    // NOTE: this reduction is necessary as discard_ranges might have changed the
-    // number of ranges effectively in use
-    const uint32 n_ranges = cuda::reduce(
-        m_n_queries,
-        m_mem_ranges.m_sizes.begin(),
-        thrust::plus<uint32>(),
-        d_temp_storage );
-
-    // reset the pool size
-    m_mem_ranges.m_pool[0] = n_ranges;
+    // fetch the number of MEM ranges
+    const uint32 n_ranges = m_mem_ranges.allocated_size();
 
     // reserve enough storage for the ranges
     m_slots.resize( n_ranges );

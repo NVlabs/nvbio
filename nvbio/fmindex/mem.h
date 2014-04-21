@@ -137,14 +137,6 @@ uint32 find_threshold_kmems(
     const uint32            min_span = 1u);
 
 ///
-/// the type of search
-///
-enum MEMSearchType {
-    KMEM_SEARCH             = 0,  ///< k-Maximal Exact Matches
-    THRESHOLD_KMEM_SEARCH   = 1   ///< Threshold k-Maximal Exact Matches
-};
-
-///
 ///\par
 /// This class implements an FM-index filter which can be used to find and filter MEMs
 /// between an arbitrary string-set and an \ref FMIndex "FM-index".
@@ -321,13 +313,14 @@ struct MEMFilter<host_tag, fm_index_type>
     ///
     template <typename string_set_type>
     uint64 rank(
-        const MEMSearchType     search_type,
         const fm_index_type&    f_index,
         const fm_index_type&    r_index,
         const string_set_type&  string_set,
         const uint32            min_intv    = 1u,
         const uint32            max_intv    = uint32(-1),
-        const uint32            min_span    = 1u);
+        const uint32            min_span    = 1u,
+        const uint32            split_len   = uint32(-1),
+        const uint32            split_width = uint32(-1));
 
     /// find the index of the first MEM hit corresponding to a given string
     ///
@@ -408,13 +401,14 @@ struct MEMFilter<device_tag, fm_index_type>
     ///
     template <typename string_set_type>
     uint64 rank(
-        const MEMSearchType     search_type,
         const fm_index_type&    f_index,
         const fm_index_type&    r_index,
         const string_set_type&  string_set,
         const uint32            min_intv    = 1u,
         const uint32            max_intv    = uint32(-1),
-        const uint32            min_span    = 1u);
+        const uint32            min_span    = 1u,
+        const uint32            split_len   = uint32(-1),
+        const uint32            split_width = uint32(-1));
 
     /// find the index of the first MEM hit corresponding to a given string
     ///

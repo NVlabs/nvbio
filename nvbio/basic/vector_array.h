@@ -224,6 +224,28 @@ struct DeviceVectorArray
     ///
     uint32 arena_size() const { return m_arena.size(); }
 
+    /// copy operator
+    ///
+    DeviceVectorArray& operator=(const DeviceVectorArray<T>& vec)
+    {
+        cuda::thrust_copy_vector( m_arena, vec.m_arena );
+        cuda::thrust_copy_vector( m_index, vec.m_index );
+        cuda::thrust_copy_vector( m_sizes, vec.m_sizes );
+        cuda::thrust_copy_vector( m_pool,  vec.m_pool );
+        return *this;
+    }
+
+    /// swap
+    ///
+    DeviceVectorArray& swap(DeviceVectorArray<T>& vec)
+    {
+        m_arena.swap( vec.m_arena );
+        m_index.swap( vec.m_index );
+        m_sizes.swap( vec.m_sizes );
+        m_pool.swap( vec.m_pool );
+        return *this;
+    }
+
     /// return the device view of this object
     ///
     device_view_type device_view()
@@ -320,6 +342,17 @@ struct HostVectorArray
         cuda::thrust_copy_vector( m_index, vec.m_index );
         cuda::thrust_copy_vector( m_sizes, vec.m_sizes );
         cuda::thrust_copy_vector( m_pool,  vec.m_pool );
+        return *this;
+    }
+
+    /// swap
+    ///
+    HostVectorArray& swap(HostVectorArray<T>& vec)
+    {
+        m_arena.swap( vec.m_arena );
+        m_index.swap( vec.m_index );
+        m_sizes.swap( vec.m_sizes );
+        m_pool.swap( vec.m_pool );
         return *this;
     }
 

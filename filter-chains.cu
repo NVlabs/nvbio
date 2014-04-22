@@ -39,17 +39,19 @@ using namespace nvbio;
 __global__
 void chain_coverage_kernel(
     const uint32                                    n_chains,           // the number of chains
+    const uint32*                                   chain_reads,        // the chain reads
     const uint32*                                   chain_offsets,      // the chain offsets
     const uint32*                                   chain_lengths,      // the chain lengths
     const mem_state::mem_type*                      mems,               // the MEMs for this chunk of reads
     const uint32*                                   mems_index,         // a sorting index into the MEMs specifying their processing order
           uint2*                                    chain_ranges,       // the output chain ranges
-          uint32*                                   chain_weights)      // the output chain weights
+          uint64*                                   chain_weights)      // the output chain weights
 {
     const uint32 chain_id = threadIdx.x + blockIdx.x * blockDim.x;
     if (chain_id >= n_chains)
         return;
 
+    const uint32 read  = chain_reads[ chain_id ];
     const uint32 begin = chain_offsets[ chain_id ];
     const uint32 end   = chain_lengths[ chain_id ] + begin;
 
@@ -74,7 +76,7 @@ void chain_coverage_kernel(
 
     // write out the outputs
     chain_ranges[ chain_id ]  = range;
-    chain_weights[ chain_id ] = weight;
+    chain_weights[ chain_id ] = uint64( weight ) | (uint64( read ) << 32);
 }
 
 // filter the chains belonging to each read
@@ -83,11 +85,9 @@ void chain_filter_kernel(
     const read_chunk                                chunk,              // the current sub-batch
     const uint32                                    n_chains,           // the number of chains
     const uint32*                                   chain_reads,        // the chain reads
-    const uint32*                                   chain_offsets,      // the chain offsets
-    const uint32*                                   chain_lengths,      // the chain lengths
     const uint32*                                   chain_index,        // the chain order
     const uint2*                                    chain_ranges,       // the chain ranges
-    const uint32*                                   chain_weights,      // the chain weights
+    const uint64*                                   chain_weights,      // the chain weights
     const float                                     mask_level,         // input option
     const float                                     chain_drop_ratio,   // input option
     const uint32                                    min_seed_len,       // input option
@@ -109,13 +109,13 @@ void chain_filter_kernel(
     for (uint32 i = begin + 1; i < end; ++i)
     {
         const uint2  i_span = chain_ranges[ chain_index[i] ];
-        const uint32 i_w    = chain_weights[ chain_index[i] ];
+        const uint32 i_w    = chain_weights[ i ] & 0xFFFFFFFFu;               // already sorted as chain_index
 
         uint32 j;
         for (j = begin; j < begin + n; ++j)
         {
             const uint2  j_span = chain_ranges[ chain_index[j] ];
-            const uint32 j_w    = chain_weights[ chain_index[j] ];
+            const uint32 j_w    = chain_weights[ j ] & 0xFFFFFFFFu;           // already sorted as chain_index
 
             const uint32 max_begin = nvbio::max( i_span.x, j_span.x );
             const uint32 min_end   = nvbio::min( i_span.y, j_span.y );
@@ -204,7 +204,7 @@ void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *
         nvbio::hi_bits_functor<uint32,uint64>() );
 
     nvbio::vector<device_tag,uint2>  chain_ranges( n_chains );
-    nvbio::vector<device_tag,uint32> chain_weights( n_chains );
+    nvbio::vector<device_tag,uint64> chain_weights( n_chains );
     nvbio::vector<device_tag,uint32> chain_index( reserved_space ); // potentially a little bigger because we'll reuse
                                                                     // it for the final filtering...
 
@@ -218,6 +218,7 @@ void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *
 
         chain_coverage_kernel<<<n_blocks, block_dim>>>(
             n_chains,
+            nvbio::plain_view( mem->chain_reads ),
             nvbio::plain_view( mem->chain_offsets ),
             nvbio::plain_view( mem->chain_lengths ),
             nvbio::plain_view( mem->mems ),
@@ -252,8 +253,6 @@ void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *
             pipeline->chunk,
             n_chains,
             nvbio::plain_view( mem->chain_reads ),
-            nvbio::plain_view( mem->chain_offsets ),
-            nvbio::plain_view( mem->chain_lengths ),
             nvbio::plain_view( chain_index ),
             nvbio::plain_view( chain_ranges ),
             nvbio::plain_view( chain_weights ),

@@ -90,7 +90,7 @@ void mem_search(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
         batch->const_read_string_set(),
         command_line_options.min_intv,
         command_line_options.max_intv,
-        command_line_options.min_span,
+        command_line_options.min_seed_len,
         command_line_options.split_len,
         command_line_options.split_width);
 

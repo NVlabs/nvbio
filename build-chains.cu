@@ -257,6 +257,7 @@ void chain_filter_kernel(
     const uint32*                                   chain_reads,        // the chain reads
     const uint32*                                   chain_offsets,      // the chain offsets
     const uint32*                                   chain_lengths,      // the chain lengths
+    const uint32*                                   chain_index,        // the chain order
     const uint2*                                    chain_ranges,       // the chain ranges
     const uint32*                                   chain_weights,      // the chain weights
     const float                                     mask_level,         // input option
@@ -271,17 +272,22 @@ void chain_filter_kernel(
     const uint32 begin = uint32( nvbio::lower_bound( read_id, chain_reads, n_chains ) - chain_reads );
     const uint32 end   = uint32( nvbio::upper_bound( read_id, chain_reads, n_chains ) - chain_reads );
 
+    // keep the first chain
+    chain_flags[ chain_index[begin] ] = 1u; // mark to keep
+
+    // and loop through all the rest to decide which ones to keep
     uint32 n = 1;
+
     for (uint32 i = begin + 1; i < end; ++i)
     {
-        const uint2  i_span = chain_ranges[i];
-        const uint32 i_w    = chain_weights[i];
+        const uint2  i_span = chain_ranges[ chain_index[i] ];
+        const uint32 i_w    = chain_weights[ chain_index[i] ];
 
         uint32 j;
         for (j = begin; j < begin + n; ++j)
         {
-            const uint2  j_span = chain_ranges[j];
-            const uint32 j_w    = chain_weights[j];
+            const uint2  j_span = chain_ranges[ chain_index[j] ];
+            const uint32 j_w    = chain_weights[ chain_index[j] ];
 
             const uint32 max_begin = nvbio::max( i_span.x, j_span.x );
             const uint32 min_end   = nvbio::min( i_span.y, j_span.y );
@@ -291,7 +297,7 @@ void chain_filter_kernel(
                 const uint32 min_l = nvbio::min( i_span.y - i_span.x, j_span.y - j_span.x );
 				if (min_end - max_begin >= min_l * mask_level) // significant overlap
                 {
-                    chain_flags[i] = 1u; // mark to keep
+                    chain_flags[ chain_index[i] ] = 1u; // mark to keep
 
                     if (i_w < j_w * chain_drop_ratio &&
                         j_w - i_w >= min_seed_len * 2)
@@ -299,9 +305,9 @@ void chain_filter_kernel(
 				}
             }
         }
-		if (j == n) // if have no significant overlap with better chains, keep it.
+		if (j == n) // no significant overlap with better chains, keep it.
         {
-            chain_flags[i] = 1u; // mark to keep
+            chain_flags[ chain_index[i] ] = 1u; // mark to keep
 
             ++n;
         }
@@ -398,7 +404,8 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
         temp_storage );
 
     // resize the chain vectors if needed
-    if (n_chains > mem->chain_lengths.size())
+    uint32 reserved_space = uint32( mem->chain_lengths.size() );
+    if (n_chains > reserved_space)
     {
         mem->chain_lengths.clear();
         mem->chain_lengths.resize( n_chains );
@@ -406,6 +413,8 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
         mem->chain_offsets.resize( n_chains );
         mem->chain_reads.clear();
         mem->chain_reads.resize( n_chains );
+
+        reserved_space = n_chains;
     }
 
     // copy their lengths
@@ -429,11 +438,10 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
         mem->chain_reads.begin(),
         nvbio::hi_bits_functor<uint32,uint64>() );
 
-    log_verbose(stderr, "  chains: %u\n", n_chains);
-
     nvbio::vector<device_tag,uint2>  chain_ranges( n_chains );
     nvbio::vector<device_tag,uint32> chain_weights( n_chains );
-    nvbio::vector<device_tag,uint32> chain_index( n_chains );
+    nvbio::vector<device_tag,uint32> chain_index( reserved_space ); // potentially a little bigger because we'll reuse
+                                                                    // it for the final filtering...
 
     optional_device_synchronize();
     cuda::check_error("chain-coverage-init");
@@ -469,4 +477,59 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
 
     nvbio::vector<device_tag,uint8> chain_flags( n_chains );
     thrust::fill( chain_flags.begin(), chain_flags.begin() + n_chains, 0u );
+
+    // filter chains: set the flags for the chains to be kept
+    {
+        const uint32 block_dim = 128;
+        const uint32 n_blocks  = util::divide_ri( n_reads, block_dim );
+
+        chain_filter_kernel<<<n_blocks, block_dim>>>(
+            pipeline->chunk,
+            n_chains,
+            nvbio::plain_view( mem->chain_reads ),
+            nvbio::plain_view( mem->chain_offsets ),
+            nvbio::plain_view( mem->chain_lengths ),
+            nvbio::plain_view( chain_index ),
+            nvbio::plain_view( chain_ranges ),
+            nvbio::plain_view( chain_weights ),
+            command_line_options.mask_level,
+            command_line_options.chain_drop_ratio,
+            command_line_options.min_seed_len,
+            nvbio::plain_view( chain_flags ) );
+
+        optional_device_synchronize();
+        cuda::check_error("chain-dilter kernel");
+    }
+
+    // filter chain_reads
+    const uint32 n_filtered_chains = cuda::copy_flagged(
+        n_chains,
+        mem->chain_reads.begin(),
+        chain_flags.begin(),
+        chain_index.begin(),
+        temp_storage );
+
+    mem->chain_reads.swap( chain_index );
+
+    // filter chain_offsets
+    cuda::copy_flagged(
+        n_chains,
+        mem->chain_offsets.begin(),
+        chain_flags.begin(),
+        chain_index.begin(),
+        temp_storage );
+
+    mem->chain_offsets.swap( chain_index );
+
+    // filter chain_lengths
+    cuda::copy_flagged(
+        n_chains,
+        mem->chain_lengths.begin(),
+        chain_flags.begin(),
+        chain_index.begin(),
+        temp_storage );
+
+    mem->chain_lengths.swap( chain_index );
+
+    log_verbose(stderr, "  chains: %u -> %u\n", n_chains, n_filtered_chains);
 }

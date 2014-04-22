@@ -110,6 +110,8 @@ int run(int argc, char **argv)
 
             // build the chains
             build_chains(&pipeline, &device_batch);
+
+            log_verbose(stderr, "  chains: %u -> %u\n", pipeline.mem.n_chains);
         }
         global_timer.stop();
         pipeline.stats.n_reads += batch->size()/2;

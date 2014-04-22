@@ -62,6 +62,7 @@ struct mem_state
     nvbio::vector<device_tag,uint32> chain_offsets;     // the first seed of each chain
     nvbio::vector<device_tag,uint32> chain_lengths;     // the number of seeds in each chain
     nvbio::vector<device_tag,uint32> chain_reads;       // the read (strand) id of each chain
+    uint32                           n_chains;          // the number of chains
 };
 
 struct read_chunk

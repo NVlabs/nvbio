@@ -531,5 +531,5 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
 
     mem->chain_lengths.swap( chain_index );
 
-    log_verbose(stderr, "  chains: %u -> %u\n", n_chains, n_filtered_chains);
+    mem->n_chains = n_filtered_chains;
 }

@@ -100,6 +100,10 @@ void chain_filter_kernel(
     const uint32 begin = uint32( nvbio::lower_bound( read_id, chain_reads, n_chains ) - chain_reads );
     const uint32 end   = uint32( nvbio::upper_bound( read_id, chain_reads, n_chains ) - chain_reads );
 
+    // skip pathological cases
+    if (begin == end)
+        return;
+
     // keep the first chain
     chain_flags[ chain_index[begin] ] = 1u; // mark to keep
 

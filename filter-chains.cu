@@ -296,5 +296,9 @@ void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *
 
     mem->chain_lengths.swap( chain_index );
 
+    // assign the output number of chains
     mem->n_chains = n_filtered_chains;
+
+    // keep stats
+    pipeline->stats.n_chains += n_filtered_chains;
 }

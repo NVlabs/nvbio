@@ -194,18 +194,18 @@ void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *
 
     // find the offset to the beginning of each chain
     thrust::lower_bound(
-        mem->mems_chain.begin(),
-        mem->mems_chain.begin() + n_mems,
-        unique_chains.begin(),
-        unique_chains.begin() + n_chains,
-        mem->chain_offsets.begin() );
+        mem->mems_chain.begin(),                    // the beginning of the sorted list of keys to search in
+        mem->mems_chain.begin() + n_mems,           // the end of the sorted list of keys to search in
+        unique_chains.begin(),                      // the beginning of the sequence of values to search
+        unique_chains.begin() + n_chains,           // the end of the sequence of values to search
+        mem->chain_offsets.begin() );               // the output sequence
 
     // extract the read-id frome the chain ids
     thrust::transform(
-        unique_chains.begin(),
-        unique_chains.begin() + n_chains,
-        mem->chain_reads.begin(),
-        nvbio::hi_bits_functor<uint32,uint64>() );
+        unique_chains.begin(),                      // the beginning of the input sequence to transform
+        unique_chains.begin() + n_chains,           // the end of the input sequence to transform
+        mem->chain_reads.begin(),                   // the beginning othe output sequence
+        nvbio::hi_bits_functor<uint32,uint64>() );  // the functor to apply, in this case a 32-bit left shift
 
     nvbio::vector<device_tag,uint2>  chain_ranges( n_chains );
     nvbio::vector<device_tag,uint64> chain_weights( n_chains );
@@ -271,31 +271,31 @@ void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *
 
     // filter chain_reads
     const uint32 n_filtered_chains = cuda::copy_flagged(
-        n_chains,
-        mem->chain_reads.begin(),
-        chain_flags.begin(),
-        chain_index.begin(),
-        temp_storage );
+        n_chains,                                   // the number of input elements
+        mem->chain_reads.begin(),                   // the input sequence of flagged elements to copy
+        chain_flags.begin(),                        // the input sequence of flags
+        chain_index.begin(),                        // the output sequence of copied elements
+        temp_storage );                             // some temporary storage
 
     mem->chain_reads.swap( chain_index );
 
     // filter chain_offsets
     cuda::copy_flagged(
-        n_chains,
-        mem->chain_offsets.begin(),
-        chain_flags.begin(),
-        chain_index.begin(),
-        temp_storage );
+        n_chains,                                   // the number of input elements
+        mem->chain_offsets.begin(),                 // the input sequence of flagged elements to copy
+        chain_flags.begin(),                        // the input sequence of flags
+        chain_index.begin(),                        // the output sequence of copied elements
+        temp_storage );                             // some temporary storage
 
     mem->chain_offsets.swap( chain_index );
 
     // filter chain_lengths
     cuda::copy_flagged(
-        n_chains,
-        mem->chain_lengths.begin(),
-        chain_flags.begin(),
-        chain_index.begin(),
-        temp_storage );
+        n_chains,                                   // the number of input elements
+        mem->chain_lengths.begin(),                 // the input sequence of flagged elements to copy
+        chain_flags.begin(),                        // the input sequence of flags
+        chain_index.begin(),                        // the output sequence of copied elements
+        temp_storage );                             // some temporary storage
 
     mem->chain_lengths.swap( chain_index );
 

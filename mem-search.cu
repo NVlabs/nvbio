@@ -215,10 +215,10 @@ void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
         mem->mems_index.begin() );
 
     // TODO: this is slow, switch to nvbio::cuda::SortEnactor
-    //thrust::sort_by_key(
-    //    loc.begin(),
-    //    loc.begin() + n_mems,
-    //    mem->mems_index.begin() );
+    thrust::sort_by_key(
+        loc.begin(),
+        loc.begin() + n_mems,
+        mem->mems_index.begin() );
 
     optional_device_synchronize();
     nvbio::cuda::check_error("mem-locate kernel");

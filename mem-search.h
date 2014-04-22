@@ -24,6 +24,14 @@
 
 using namespace nvbio;
 
+struct chain_coverage
+{
+    uint32 begin;
+    uint32 end;
+    uint32 weight;
+    uint32 overlap;
+};
+
 struct mem_state
 {
     typedef io::FMIndexDataDevice::fm_index_type                 fm_index_type;
@@ -49,6 +57,11 @@ struct mem_state
 
     // the chain IDs of each mem
     nvbio::vector<device_tag,uint64> mems_chain;
+
+    // the list of chains
+    nvbio::vector<device_tag,uint32> chain_offsets;     // the first seed of each chain
+    nvbio::vector<device_tag,uint32> chain_lengths;     // the number of seeds in each chain
+    nvbio::vector<device_tag,uint32> chain_reads;       // the read (strand) id of each chain
 };
 
 struct read_chunk

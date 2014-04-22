@@ -180,11 +180,9 @@ void build_chains_kernel(
         else
         {
             // find the closest chain...
-            //chain& chn = chain_queue.top();
             chain_queue_type::iterator chain_it = chain_queue.upper_bound( chain( 0u, seed ) );
 
             // and test whether we can merge this seed into it
-            //if (chn.merge( seed, w, max_chain_gap ) == false)
             if (chain_it != chain_queue.end() &&
                 chain_it->merge( seed, w, max_chain_gap ) == false)
             {
@@ -197,7 +195,6 @@ void build_chains_kernel(
             else
             {
                 // merge with the existing chain
-                //chain_id = chn.id;
                 chain_id = chain_it->id;
             }
         }
@@ -208,6 +205,107 @@ void build_chains_kernel(
 
     // write out whether we need more passes
     active_flags[ thread_id ] = (mem_batch_begin < mem_end) ? 1u : 0u;
+}
+
+// compute the coverage for each chain in a set
+__global__
+void chain_coverage_kernel(
+    const uint32                                    n_chains,           // the number of chains
+    const uint32*                                   chain_offsets,      // the chain offsets
+    const uint32*                                   chain_lengths,      // the chain lengths
+    const mem_state::mem_type*                      mems,               // the MEMs for this chunk of reads
+    const uint32*                                   mems_index,         // a sorting index into the MEMs specifying their processing order
+          uint2*                                    chain_ranges,       // the output chain ranges
+          uint32*                                   chain_weights)      // the output chain weights
+{
+    const uint32 chain_id = threadIdx.x + blockIdx.x * blockDim.x;
+    if (chain_id >= n_chains)
+        return;
+
+    const uint32 begin = chain_offsets[ chain_id ];
+    const uint32 end   = chain_lengths[ chain_id ] + begin;
+
+    uint2  range  = make_uint2( uint32(-1), 0u );
+    uint32 weight = 0;
+
+    // NOTE: we assume here the MEMs of a chain appear sorted by their left coordinate
+    for (uint32 i = begin; i < end; ++i)
+    {
+        const mem_state::mem_type seed = mems[ mems_index[i] ];
+
+        const uint2 span = seed.span();
+
+        if (span.x >= range.y)
+            weight += span.y - span.x;
+        else if (span.y > range.y)
+            weight += span.y - range.y;
+
+        range.x = nvbio::min( range.x, seed.span().x );
+        range.y = nvbio::max( range.y, seed.span().y );
+    }
+
+    // write out the outputs
+    chain_ranges[ chain_id ]  = range;
+    chain_weights[ chain_id ] = weight;
+}
+
+// filter the chains belonging to each read
+__global__
+void chain_filter_kernel(
+    const read_chunk                                chunk,              // the current sub-batch
+    const uint32                                    n_chains,           // the number of chains
+    const uint32*                                   chain_reads,        // the chain reads
+    const uint32*                                   chain_offsets,      // the chain offsets
+    const uint32*                                   chain_lengths,      // the chain lengths
+    const uint2*                                    chain_ranges,       // the chain ranges
+    const uint32*                                   chain_weights,      // the chain weights
+    const float                                     mask_level,         // input option
+    const float                                     chain_drop_ratio,   // input option
+    const uint32                                    min_seed_len,       // input option
+          uint8*                                    chain_flags)        // the output flags
+{
+    const uint32 read_id = threadIdx.x + blockIdx.x * blockDim.x + chunk.read_begin;
+    if (read_id >= chunk.read_end)
+        return;
+
+    const uint32 begin = uint32( nvbio::lower_bound( read_id, chain_reads, n_chains ) - chain_reads );
+    const uint32 end   = uint32( nvbio::upper_bound( read_id, chain_reads, n_chains ) - chain_reads );
+
+    uint32 n = 1;
+    for (uint32 i = begin + 1; i < end; ++i)
+    {
+        const uint2  i_span = chain_ranges[i];
+        const uint32 i_w    = chain_weights[i];
+
+        uint32 j;
+        for (j = begin; j < begin + n; ++j)
+        {
+            const uint2  j_span = chain_ranges[j];
+            const uint32 j_w    = chain_weights[j];
+
+            const uint32 max_begin = nvbio::max( i_span.x, j_span.x );
+            const uint32 min_end   = nvbio::min( i_span.y, j_span.y );
+
+            if (min_end > max_begin) // have overlap
+            {
+                const uint32 min_l = nvbio::min( i_span.y - i_span.x, j_span.y - j_span.x );
+				if (min_end - max_begin >= min_l * mask_level) // significant overlap
+                {
+                    chain_flags[i] = 1u; // mark to keep
+
+                    if (i_w < j_w * chain_drop_ratio &&
+                        j_w - i_w >= min_seed_len * 2)
+                        break;
+				}
+            }
+        }
+		if (j == n) // if have no significant overlap with better chains, keep it.
+        {
+            chain_flags[i] = 1u; // mark to keep
+
+            ++n;
+        }
+    }
 }
 
 // build chains for the current pipeline::chunk of reads
@@ -263,7 +361,7 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
             nvbio::plain_view( mem->mems_index ),
             nvbio::plain_view( mem->mems_chain ) );
 
-        cudaDeviceSynchronize();
+        optional_device_synchronize();
         cuda::check_error("build-chains kernel");
 
         // shrink the set of active reads
@@ -278,11 +376,97 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
     }
 
     // sort mems by chain id
-    thrust::sort_by_key( // TODO: this is slow, switch to nvbio::cuda::SortEnactor
+    // NOTE: it's important here to use a stable-sort, so as to guarantee preserving
+    // the ordering by left-coordinate of the MEMs
+    thrust::sort_by_key(                                // TODO: this is slow, switch to nvbio::cuda::SortEnactor
         mem->mems_chain.begin(),
         mem->mems_chain.begin() + n_mems,
         mem->mems_index.begin() );
 
     optional_device_synchronize();
     nvbio::cuda::check_error("build-chains kernel");
+
+    // extract the list of unique chain ids together with their counts, i.e. the chain lengths
+    nvbio::vector<device_tag,uint64> unique_chains( n_mems );
+    nvbio::vector<device_tag,uint32> unique_counts( n_mems );
+
+    const uint32 n_chains = cuda::runlength_encode(
+        n_mems,
+        mem->mems_chain.begin(),
+        unique_chains.begin(),
+        unique_counts.begin(),
+        temp_storage );
+
+    // resize the chain vectors if needed
+    if (n_chains > mem->chain_lengths.size())
+    {
+        mem->chain_lengths.clear();
+        mem->chain_lengths.resize( n_chains );
+        mem->chain_offsets.clear();
+        mem->chain_offsets.resize( n_chains );
+        mem->chain_reads.clear();
+        mem->chain_reads.resize( n_chains );
+    }
+
+    // copy their lengths
+    thrust::copy(
+        unique_counts.begin(),
+        unique_counts.begin() + n_chains,
+        mem->chain_lengths.begin() );
+
+    // find the offset to the beginning of each chain
+    thrust::lower_bound(
+        mem->mems_chain.begin(),
+        mem->mems_chain.begin() + n_mems,
+        unique_chains.begin(),
+        unique_chains.begin() + n_chains,
+        mem->chain_offsets.begin() );
+
+    // extract the read-id frome the chain ids
+    thrust::transform(
+        unique_chains.begin(),
+        unique_chains.begin() + n_chains,
+        mem->chain_reads.begin(),
+        nvbio::hi_bits_functor<uint32,uint64>() );
+
+    log_verbose(stderr, "  chains: %u\n", n_chains);
+
+    nvbio::vector<device_tag,uint2>  chain_ranges( n_chains );
+    nvbio::vector<device_tag,uint32> chain_weights( n_chains );
+    nvbio::vector<device_tag,uint32> chain_index( n_chains );
+
+    optional_device_synchronize();
+    cuda::check_error("chain-coverage-init");
+
+    // compute chain coverages
+    {
+        const uint32 block_dim = 128;
+        const uint32 n_blocks  = util::divide_ri( n_chains, block_dim );
+
+        chain_coverage_kernel<<<n_blocks, block_dim>>>(
+            n_chains,
+            nvbio::plain_view( mem->chain_offsets ),
+            nvbio::plain_view( mem->chain_lengths ),
+            nvbio::plain_view( mem->mems ),
+            nvbio::plain_view( mem->mems_index ),
+            nvbio::plain_view( chain_ranges ),
+            nvbio::plain_view( chain_weights ) );
+
+        optional_device_synchronize();
+        cuda::check_error("chain-coverage kernel");
+    }
+
+    // sort the chains by weight
+    thrust::copy(
+        thrust::make_counting_iterator<uint32>(0u),
+        thrust::make_counting_iterator<uint32>(0u) + n_chains,
+        chain_index.begin() );
+
+    thrust::sort_by_key(                            // TODO: this is slow, switch to nvbio::cuda::SortEnactor
+        chain_weights.begin(),
+        chain_weights.begin() + n_chains,
+        chain_index.begin() );
+
+    nvbio::vector<device_tag,uint8> chain_flags( n_chains );
+    thrust::fill( chain_flags.begin(), chain_flags.begin() + n_chains, 0u );
 }

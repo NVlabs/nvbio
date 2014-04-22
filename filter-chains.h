@@ -22,8 +22,5 @@
 
 using namespace nvbio;
 
-// build chains for the current pipeline::chunk of reads
-void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *batch);
-
 // filter chains for the current pipeline::chunk of reads
 void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *batch);

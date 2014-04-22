@@ -9,6 +9,8 @@ mem-search.h
 mem-search.cu
 build-chains.h
 build-chains.cu
+filter-chains.h
+filter-chains.cu
 util.h
 util.cu
 )

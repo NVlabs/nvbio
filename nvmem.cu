@@ -29,6 +29,7 @@
 #include "pipeline.h"
 #include "mem-search.h"
 #include "build-chains.h"
+#include "filter-chains.h"
 
 using namespace nvbio;
 
@@ -110,6 +111,9 @@ int run(int argc, char **argv)
 
             // build the chains
             build_chains(&pipeline, &device_batch);
+
+            // filter the chains
+            filter_chains(&pipeline, &device_batch);
 
             log_verbose(stderr, "  chains: %u -> %u\n", pipeline.mem.n_chains);
         }

@@ -18,4 +18,14 @@
 
 #pragma once
 
+#define DO_OPTIONAL_SYNCHRONIZE 1
+
 void gpu_init(void);
+
+
+inline void optional_device_synchronize()
+{
+#if DO_OPTIONAL_SYNCHRONIZE
+    cudaDeviceSynchronize();
+#endif
+}

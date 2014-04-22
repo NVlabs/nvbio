@@ -19,9 +19,11 @@
 #include "mem-search.h"
 #include "options.h"
 #include "pipeline.h"
+#include "util.h"
 
 #include <nvbio/basic/numbers.h>
 #include <nvbio/basic/algorithms.h>
+#include <nvbio/basic/timer.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/iterator/transform_iterator.h>
 #include <thrust/sort.h>
@@ -73,6 +75,8 @@ void mem_init(struct pipeline_context *pipeline)
 // search MEMs for all reads in batch
 void mem_search(struct pipeline_context *pipeline, const io::ReadDataDevice *batch)
 {
+    ScopedTimer<float> timer( &pipeline->stats.search_time ); // keep track of the time spent here
+
     struct mem_state *mem = &pipeline->mem;
     const uint32 n_reads = batch->size();
 
@@ -92,6 +96,9 @@ void mem_search(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
 
     log_verbose(stderr, "%.1f average ranges\n", float(mem->mem_filter.n_ranges()) / float(n_reads));
     log_verbose(stderr, "%.1f average MEMs\n", float(mem->mem_filter.n_mems()) / float(n_reads));
+
+    optional_device_synchronize();
+    nvbio::cuda::check_error("mem-search kernel");
 }
 
 // given the first read in a chunk, determine a suitably sized chunk of reads
@@ -101,6 +108,8 @@ void fit_read_chunk(
     const io::ReadDataDevice    *batch,
     const uint32                read_begin)     // first read in the chunk
 {
+    const ScopedTimer<float> timer( &pipeline->stats.search_time ); // keep track of the time spent here
+
     struct mem_state *mem = &pipeline->mem;
 
     const uint32 max_hits = command_line_options.mems_batch;
@@ -168,6 +177,8 @@ struct mem_left_coord_functor
 // locate all mems in the range defined by pipeline::chunk
 void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *batch)
 {
+    const ScopedTimer<float> timer( &pipeline->stats.locate_time ); // keep track of the time spent here
+
     struct mem_state *mem = &pipeline->mem;
 
     if (mem->mems.size() < command_line_options.mems_batch)
@@ -208,4 +219,9 @@ void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
     //    loc.begin(),
     //    loc.begin() + n_mems,
     //    mem->mems_index.begin() );
+
+    optional_device_synchronize();
+    nvbio::cuda::check_error("mem-locate kernel");
+
+    pipeline->stats.n_mems += n_mems; // keep track of the number of mems produced
 }

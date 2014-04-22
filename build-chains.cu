@@ -20,10 +20,12 @@
 #include "mem-search.h"
 #include "options.h"
 #include "pipeline.h"
+#include "util.h"
 
 #include <nvbio/basic/numbers.h>
 #include <nvbio/basic/algorithms.h>
 #include <nvbio/basic/priority_queue.h>
+#include <nvbio/basic/timer.h>
 #include <nvbio/basic/transform_iterator.h>
 #include <nvbio/basic/vector_wrapper.h>
 #include <nvbio/basic/cuda/primitives.h>
@@ -211,6 +213,8 @@ void build_chains_kernel(
 // build chains for the current pipeline::chunk of reads
 void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *batch)
 {
+    const ScopedTimer<float> timer( &pipeline->stats.chain_time ); // keep track of the time spent here
+
     struct mem_state *mem = &pipeline->mem;
 
     const uint32 n_reads = pipeline->chunk.read_end - pipeline->chunk.read_begin;
@@ -278,4 +282,7 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
         mem->mems_chain.begin(),
         mem->mems_chain.begin() + n_mems,
         mem->mems_index.begin() );
+
+    optional_device_synchronize();
+    nvbio::cuda::check_error("build-chains kernel");
 }

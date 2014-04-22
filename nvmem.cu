@@ -69,12 +69,6 @@ int run(int argc, char **argv)
 
     Timer  global_timer;
     Timer  timer;
-    float  io_time     = 0.0f;
-    float  search_time = 0.0f;
-    float  locate_time = 0.0f;
-    float  chain_time  = 0.0f;
-    float  total_time  = 0.0f;
-    uint64 total_reads = 0;
 
     // go!
     for(;;)
@@ -89,76 +83,43 @@ int run(int argc, char **argv)
             // EOF
             break;
         }
-        log_info(stderr, "processing reads [%llu,%llu)\n", total_reads, total_reads + batch->size()/2);
+        log_info(stderr, "processing reads [%llu,%llu)\n", pipeline.stats.n_reads, pipeline.stats.n_reads + batch->size()/2);
 
         // copy batch to the device
         const io::ReadDataDevice device_batch(*batch);
 
         timer.stop();
-        io_time += timer.seconds();
-
-        timer.start();
+        pipeline.stats.io_time += timer.seconds();
 
         // search for MEMs
         mem_search(&pipeline, &device_batch);
-
-        cudaDeviceSynchronize();
-        nvbio::cuda::check_error("mem-search kernel");
-
-        timer.stop();
-        search_time += timer.seconds();
 
         // now start a loop where we break the read batch into smaller chunks for
         // which we can locate all MEMs and build all chains
         for (uint32 read_begin = 0; read_begin < batch->size(); read_begin = pipeline.chunk.read_end)
         {
-            timer.start();
-
-            log_verbose(stderr, "chunking... started\n");
-
             // determine the next chunk of reads to process
             fit_read_chunk(&pipeline, &device_batch, read_begin);
 
-            log_verbose(stderr, "chunking... done\n");
+            log_verbose(stderr, "processing chunk\n");
             log_verbose(stderr, "  reads : [%u,%u)\n", pipeline.chunk.read_begin, pipeline.chunk.read_end);
             log_verbose(stderr, "  mems  : [%u,%u)\n", pipeline.chunk.mem_begin,  pipeline.chunk.mem_end);
-
-            log_verbose(stderr, "locating mems... started\n");
 
             // locate all MEMs in the current chunk
             mem_locate(&pipeline, &device_batch);
 
-            cudaDeviceSynchronize();
-            nvbio::cuda::check_error("mem-locate kernel");
-
-            timer.stop();
-            locate_time += timer.seconds();
-
-            timer.start();
-
-            log_verbose(stderr, "locating mems... done\n");
-            log_verbose(stderr, "building chains... started\n");
-
             // build the chains
             build_chains(&pipeline, &device_batch);
-
-            cudaDeviceSynchronize();
-            nvbio::cuda::check_error("build-chains kernel");
-
-            log_verbose(stderr, "building chains... done\n");
-
-            timer.stop();
-            chain_time += timer.seconds();
         }
         global_timer.stop();
-        total_time += global_timer.seconds();
-        total_reads += batch->size()/2;
+        pipeline.stats.n_reads += batch->size()/2;
+        pipeline.stats.time    += global_timer.seconds();
 
-        log_stats(stderr, "  time: %5.1fs (%.1f K reads/s)\n", total_time, 1.0e-3f * float(total_reads)/total_time);
-        log_stats(stderr, "    io     : %6.2f %%\n", 100.0f * io_time/total_time);
-        log_stats(stderr, "    search : %6.2f %%\n", 100.0f * search_time/total_time);
-        log_stats(stderr, "    locate : %6.2f %%\n", 100.0f * locate_time/total_time);
-        log_stats(stderr, "    chain  : %6.2f %%\n", 100.0f * chain_time/total_time);
+        log_stats(stderr, "  time: %5.1fs (%.1f K reads/s)\n", pipeline.stats.time, 1.0e-3f * float(pipeline.stats.n_reads)/pipeline.stats.time);
+        log_stats(stderr, "    io     : %6.2f %%\n", 100.0f * pipeline.stats.io_time/pipeline.stats.time);
+        log_stats(stderr, "    search : %6.2f %%\n", 100.0f * pipeline.stats.search_time/pipeline.stats.time);
+        log_stats(stderr, "    locate : %6.2f %%\n", 100.0f * pipeline.stats.locate_time/pipeline.stats.time);
+        log_stats(stderr, "    chain  : %6.2f %%\n", 100.0f * pipeline.stats.chain_time/pipeline.stats.time);
     }
 
     pipeline.output->close();

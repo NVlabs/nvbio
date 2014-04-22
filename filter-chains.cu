@@ -263,7 +263,7 @@ void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *
             nvbio::plain_view( chain_flags ) );
 
         optional_device_synchronize();
-        cuda::check_error("chain-dilter kernel");
+        cuda::check_error("chain-filter kernel");
     }
 
     // filter chain_reads

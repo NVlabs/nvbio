@@ -1009,6 +1009,18 @@ struct hi_bits_functor<uint32,uint32>
     result_type operator() (const argument_type op) const { return result_type( op ); }
 };
 
+/// Return the first 32 hi-bits of a 64-bit word
+///
+template <>
+struct hi_bits_functor<uint32,uint64>
+{
+    typedef uint64 argument_type;
+    typedef uint32 result_type;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const argument_type op) const { return result_type( op >> 32 ); }
+};
+
 /// Get a given character from a vector
 ///
 template <typename T>

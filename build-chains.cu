@@ -265,11 +265,11 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
 
         // shrink the set of active reads
         n_active = cuda::copy_flagged(
-            n_active,
-            active_reads.begin(),
-            active_flags.begin(),
-            out_reads.begin(),
-            temp_storage );
+            n_active,                                   // the number of input elements
+            active_reads.begin(),                       // the input sequence of elements to copy
+            active_flags.begin(),                       // the input sequence of copy flags
+            out_reads.begin(),                          // the output sequence of copied elements
+            temp_storage );                             // some temporary storage
 
         active_reads.swap( out_reads );
     }

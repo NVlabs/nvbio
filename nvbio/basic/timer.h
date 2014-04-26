@@ -99,10 +99,10 @@ private:
 /// to the moment it goes out of scope
 ///
 template <typename T>
-struct Scoped_timer
+struct ScopedTimer
 {
-	 Scoped_timer(T* time) : m_time( time ), m_timer() { m_timer.start(); }
-	~Scoped_timer() { m_timer.stop(); *m_time += m_timer.seconds(); }
+	 ScopedTimer(T* time) : m_time( time ), m_timer() { m_timer.start(); }
+	~ScopedTimer() { m_timer.stop(); *m_time += m_timer.seconds(); }
 
 	T*		m_time;
 	Timer	m_timer;

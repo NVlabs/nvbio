@@ -164,6 +164,25 @@ priority_queue<Key,Container,Compare>::upper_bound(const Key& x)
 {
     uint32 max_i = 0;
     Key    max;
+#if 1
+    for (uint32 j = 1; j < size()+1; ++j)
+    {
+        if (!m_cmp( x, m_queue[j] )) // m_queue[j] <= x
+        {
+            if (max_i == 0 || !m_cmp( m_queue[j], max )) // m_queue[j] >= max
+            {
+                // found a new maximum
+                max = m_queue[j];
+                max_i = j;
+            }
+        }
+    }
+
+    if (max_i == 0)
+        return end();
+
+    return begin() + max_i-1;
+#else
     uint32 i;
     bool   stop;
 
@@ -176,7 +195,8 @@ priority_queue<Key,Container,Compare>::upper_bound(const Key& x)
         const uint32 num_nodes = nvbio::min( priqueue::width(i), m_size - i );
 
         // visit all nodes at the same level of i
-        stop = true;
+        //stop = true;
+        stop = (num_nodes == priqueue::width(i) ? true : false);
         for(uint32 j = i; j < i + num_nodes; j++)
         {
             if (!m_cmp( x, m_queue[j] )) // m_queue[j] <= x
@@ -204,7 +224,8 @@ priority_queue<Key,Container,Compare>::upper_bound(const Key& x)
     if (max_i == 0)
         return end();
 
-    return begin() + max_i;
+    return begin() + max_i-1;
+#endif
 }
 
 } // namespace nvbio

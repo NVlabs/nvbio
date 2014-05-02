@@ -200,7 +200,7 @@ void build_chains_kernel(
         }
 
         // write out the chain id (OR'd with the read id)
-        mems_chains[i] = n_chains | (uint64( read_id ) << 32);
+        mems_chains[i] = chain_id | (uint64( read_id ) << 32);
     }
 
     // write out whether we need more passes

@@ -273,7 +273,7 @@ struct dispatch_rank<2,K,PackedStream<TextStorage,uint8,2u,true,index_type>,OccI
         if (i == index_type(-1))
             return 0u;
 
-        const uint32 k = i / K;
+        const uint32 k = uint32( i / K );
         const uint32 m = (i - k*K) >> LOG_SYMS_PER_WORD;
         const word_type i_mod = ~word_type(i) & (SYMS_PER_WORD-1);
 
@@ -299,8 +299,8 @@ struct dispatch_rank<2,K,PackedStream<TextStorage,uint8,2u,true,index_type>,OccI
             return make_vector( r, r );
         }
 
-        const uint32 kl = range.x / K;
-        const uint32 kh = range.y / K;
+        const uint32 kl = uint32( range.x / K );
+        const uint32 kh = uint32( range.y / K );
 
         // fetch base occurrence counters for the respective blocks
         const index_type outl = dict.occ[ kl*4 + c ];
@@ -313,7 +313,7 @@ struct dispatch_rank<2,K,PackedStream<TextStorage,uint8,2u,true,index_type>,OccI
     // fetch the number of occurrences of character c in the substring [0,i]
     static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE vec4_type run4(const dictionary_type& dict, const index_type i)
     {
-        const uint32 k = i / K;
+        const uint32 k = uint32( i / K );
         const uint32 m = (i - k*K) >> LOG_SYMS_PER_WORD;
 
         // fetch base occurrence counters for all symbols in the respective block
@@ -329,8 +329,8 @@ struct dispatch_rank<2,K,PackedStream<TextStorage,uint8,2u,true,index_type>,OccI
     // fetch the number of occurrences of character c in the substring [0,i]
     static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void run4(const dictionary_type& dict, const range_type range, vec4_type* outl, vec4_type* outh)
     {
-        const uint32 kl = range.x / K;
-        const uint32 kh = range.y / K;
+        const uint32 kl = uint32( range.x / K );
+        const uint32 kh = uint32( range.y / K );
 
         // fetch base occurrence counters for for all symbols in the respective blocks
         *outl =                      make_vector( dict.occ[kl*4+0], dict.occ[kl*4+1], dict.occ[kl*4+2], dict.occ[kl*4+3] );

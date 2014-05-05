@@ -380,7 +380,7 @@ struct SuffixSet : public SuffixSetCore<
 
     typedef SequenceType                                                sequence_type;      ///< the underlying sequence type
     typedef SuffixIterator                                              suffix_iterator;    ///< the underlingy suffix iterator type
-    typedef typename iterator_system<SequenceType>::type                system_tag;         ///< the system tag
+    typedef typename iterator_system<PrefixIterator>::type              system_tag;         ///< the system tag
 
     typedef typename base_type::coord_type                              coord_type;         ///< the suffix coordinates type
     typedef typename base_type::string_type                             string_type;        ///< the suffix string type

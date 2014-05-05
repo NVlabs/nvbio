@@ -407,7 +407,7 @@ struct InfixSet : public InfixSetCore<
 
     typedef SequenceType                                                sequence_type;  ///< the underlying sequence type
     typedef InfixIterator                                               infix_iterator; ///< the underlingy infix iterator type
-    typedef typename iterator_system<SequenceType>::type                system_tag;     ///< the system tag
+    typedef typename iterator_system<InfixIterator>::type               system_tag;     ///< the system tag
 
     typedef typename base_type::coord_type                              coord_type;     ///< the infix coordinates type
     typedef typename base_type::string_type                             string_type;    ///< the infix string type

@@ -325,8 +325,8 @@
 ///     ...
 ///
 ///     thrust::for_each(
-///         seeds.begin(),
-///         seeds.end(),
+///         seeds.begin(),                                // the loop's begin iterator
+///         seeds.end(),                                  // the loop's end iterator
 ///         print_strings<infix_set_type>() );            // the loop's body
 /// }
 ///\endcode

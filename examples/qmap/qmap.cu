@@ -262,7 +262,7 @@ void map(
         // compute the best score for each read in this batch;
         // note that we divide the string-id by 2 to merge results coming from the forward
         // and reverse-complemented strands
-        const uint32 n_distinct = cuda::reduce_by_key(
+        cuda::reduce_by_key(
             n_merged,
             thrust::make_transform_iterator(
                 merged_hits.begin(),

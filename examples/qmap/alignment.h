@@ -205,7 +205,7 @@ void align(
     const genome_string                             genome,
           int16*                                    scores)
 {
-    static const uint32 BAND_LEN = 31;
+    NVBIO_VAR_UNUSED static const uint32 BAND_LEN = 31;
 
     typedef AlignmentStream<BAND_LEN,aligner_type> stream_type;
 

@@ -43,6 +43,7 @@
 /// - \subpage generic_programming_page
 /// - \subpage host_device_page
 /// - \subpage hello_dna_page
+/// - \subpage hello_dna_2_page
 ///
 /// \section ModulesSection Modules
 ///\par
@@ -216,6 +217,227 @@
 
 /// \page hello_dna_page Hello DNA!
 ///\par
-/// This page will teach you to familiarize with some of NVBIO's basic containers and concepts
-/// showing you how to instantiate a simple DNA string that can be accessed both on the host
-/// and the device and how to apply some basic transformations to it using parallel constructs.
+/// This page will teach you to familiarize with some of NVBIO's basic containers and concepts,
+/// showing you how to instantiate a \ref packed_streams_page "PackedVector" to store some DNA string.
+/// Packed vectors are useful to represent streams of symbols using a few bits per symbol. For a DNA alphabet,
+/// we'll only need 2-bits:
+///
+///\code
+/// #include <nvbio/basic/packed_vector.h>
+/// #include <nvbio/basic/dna.h>
+///
+/// void main()
+/// {
+///     // our hello world ASCII string
+///     const char dna_string[] = "ACGTTGCA";
+///     const uint32 len = uint32( strlen( dna_string ) );
+///
+///     // our DNA alphabet size
+///     const uint32 ALPHABET_SIZE = 2u;
+///
+///     // instantiate a packed host vector
+///     nvbio::PackedVector<host_tag,ALPHABET_SIZE> h_dna( len );
+///
+///     // and fill it in with the contents of our original string, converted
+///     // to a 2-bit DNA alphabet (i.e. A = 0, C = 1, G = 2, T = 3)
+///     nvbio::string_to_dna(
+///         dna_string,               // the input ASCII string
+///         h_dna.begin() );          // the output iterator
+///
+///     // copy the packed vector to the device
+///     nvbio::PackedVector<device_tag,ALPHABET_SIZE> d_dna( h_dna );
+/// }
+///\endcode
+///
+/// Next: \subpage hello_dna_2_page
+
+/// \page hello_dna_2_page Hello DNA! - Part 2
+///\par
+/// This page will teach you to familiarize with NVBIO's notion of \ref strings_page "string sets" and
+/// with some basic parallel constructs.
+/// Assume you have the string from the previous example, but now want to extract all of its 3-mers,
+/// for example to use them in a seed & extend aligner.
+/// The collection of all 3-mers can be thought of a set of substrings, or <i>infixes</i> of your original string;
+/// NVBIO represents such an object as an InfixSet.
+/// Moreover, it provides a function to extract the coordinates of such seeds in <i>parallel</i>.
+///
+///\code
+/// #include <nvbio/basic/packed_vector.h>
+/// #include <nvbio/basic/dna.h>
+/// #include <nvbio/strings/infix.h>
+/// #include <nvbio/strings/seeds.h>
+///
+/// using namespace nvbio
+///
+/// void main()
+/// {
+///     // our hello world ASCII string
+///     const char dna_string[] = "ACGTTGCA";
+///     const uint32 len = uint32( strlen( dna_string ) );
+///
+///     // our DNA alphabet size
+///     const uint32 ALPHABET_SIZE = 2u;
+///
+///     // instantiate a packed host vector
+///     nvbio::PackedVector<host_tag,ALPHABET_SIZE> h_dna( len );
+///
+///     // and fill it in with the contents of our original string, converted
+///     // to a 2-bit DNA alphabet (i.e. A = 0, C = 1, G = 2, T = 3)
+///     nvbio::string_to_dna(
+///         dna_string,               // the input ASCII string
+///         h_dna.begin() );          // the output iterator
+///
+///     // copy the packed vector to the device
+///     nvbio::PackedVector<device_tag,ALPHABET_SIZE> d_dna( h_dna );
+///
+///     // prepare a vector to store the coordinates of the resulting infixes
+///     nvbio::vector<device_tag,string_infix_coord_type> d_seed_coords;
+///
+///     const uint32 n_seeds = enumerate_string_seeds(
+///         len,
+///         uniform_seeds_functor( 3u, 1u ),
+///         d_seed_coords );
+///
+///     // define an infix-set to represent the resulting infixes
+///     typedef nvbio::PackedVector<device_tag,ALPHABET_SIZE>::iterator           packed_iterator_type;
+///     typedef nvbio::vector<device_tag,string_infix_coord_type>::const_iterator infix_iterator_type;
+///     typedef InfixSet<packed_iterator_type, infix_iterator_type>               infix_set_type;
+///
+///     infix_set_type d_seeds(
+///         n_seeds,                                // the number of infixes in the set
+///         d_dna.begin(),                          // the underlying string
+///         d_seed_coords.begin() );                // the iterator to the infix coordinates
+///
+///     ...
+///\endcode
+///
+///\par
+/// At this point it would be nice to do something with the string-set we just created.
+/// For the sake of the example, we will just print all its strings.
+/// Technically, we could just loop through the strings in the set, and print them on the host.
+/// However, suppose we want to do it in the native space of the set, i.e. on the device, and
+/// suppose we want to do it in parallel: how can we do this?
+/// Well, we will do it here using the thrust::for_each construct:
+///
+///\code
+///     ...
+///
+///     thrust::for_each(
+///         nvbio::device_tag(),                                 // the execution context
+///         thrust::make_counting_iterator(0u),                  // the first element of our loop sequence
+///         thrust::make_counting_iterator(0u) + seeds.size(),   // the end element of our loop sequence
+///         print_strings<infix_set_type>( seeds ) );            // the loop's body
+/// }
+///\endcode
+///\par
+/// Thrust's for_each takes a functor encoding the body of our loop, and applies it to all elements
+/// of a sequence. In this case, the sequence is the set of integers [0,n_seeds), and the
+/// body of our loop will be the following:
+///
+///\code
+/// template <typename string_set_type>
+/// struct print_strings
+/// {
+///     NVBIO_HOST_DEVICE
+///     print_strings(const string_set_type _string_set) : string_set( _string_set ) {}
+/// 
+///     NVBIO_HOST_DEVICE
+///     void operator() (const uint32 i) const
+///     {
+///         // build an ASCII string for i-th seed
+///         char seed[4];
+///         nvbio::dna_to_string(
+///             string_set[i],                    // the i-th string in the set
+///             nvbio::length( string_set[i] ),   // its length
+///             seed );                           // the output ASCII string
+/// 
+///         // and print it...
+///         printf("seed[%u] = %s\n", i, seed);
+///     }
+/// 
+///     const string_set_type string_set;
+/// };
+///\endcode
+///
+///\par
+/// Notice how we marked our print_strings methods with the NVBIO_HOST_DEVICE qualifier: this
+/// tells the CUDA compiler that these methods can be compiled both for the host and the device.
+
+/// \page hello_dna_3_page Hello DNA! - Part 3
+///\par
+/// This page will make you familiarize with the concept of plain views and how to write
+/// templated functors.
+/// Suppose that you want to extract each of the 3-mers of a DNA string, encoded as plain
+/// integer hashes. In a serial world, you'd just loop through them one by one. In a parallel
+/// world, you'd want to use a parallel for_each. The body of the for_each will be a functor
+/// class.
+///
+///\code
+/// #include <nvbio/basic/packed_vector.h>
+/// #include <nvbio/basic/dna.h>
+/// #include <nvbio/basic/primitives.h>
+///
+/// // define a functor to extract the i-th mer of a string as an integer hash
+/// //
+/// template <typename string_type, typename output_type>
+/// struct hash_functor
+/// {
+///     hash_functor(string_type _input, output_type _output) : input(_input), output(_output) {}
+///
+///     // define the functor operator() to extract the i-th 3-mer
+///     void operator() (const uint32 i) const
+///     {
+///         uint32 hash = 0;
+///         for (uint32 j = 0; j < 3; ++j)
+///             hash |= input[i+j] << (j*2);  // pack the j-th symbol using 2-bits
+///
+///         output[i] = hash;
+///     }
+///
+///     string_type         input;
+///     mutable output_type output;
+/// };
+///
+/// // define a utility function to instantiate the hash functor above, useful to
+/// // exploit C++'s Template Argument Deduction and avoid having to always
+/// // specify template arguments
+/// template <typename string_type, typename output_type>
+/// hash_functor<string_type,output_type> make_hash_functor(string_type _input, output_type _output)
+/// {
+///    return hash_functor<string_type,output_type>( _input, _output );
+/// }
+///
+/// void main()
+/// {
+///     // our hello world ASCII string
+///     const char dna_string[] = "ACGTTGCA";
+///     const uint32 len = (uint32)strlen( dna_string );
+///
+///     // our DNA alphabet size
+///     const uint32 ALPHABET_SIZE = 2u;
+///
+///     // instantiate a packed host vector
+///     nvbio::PackedVector<host_tag,ALPHABET_SIZE> h_dna;
+///
+///     // resize the vector
+///     h_dna.resize( len );
+///
+///     // and fill it in with the contents of our original string, converted
+///     // to a 2-bit DNA alphabet (i.e. A = 0, C = 1, G = 2, T = 3)
+///     nvbio::string_to_dna(
+///         dna_string,               // the input ASCII string
+///         h_dna.begin() );          // the output iterator
+///
+///     // define a vector for storing the output 3-mers
+///     nvbio::vector<host_tag,uint32> h_mers( len - 3u );
+///
+///     // for each i in [0,len-3], extract the i-th 3-mer, in parallel
+///     thrust::for_each(
+///         host_tag,
+///         thrust::make_counting_iterator( 0u ),       // the beginning of the loop sequence
+///         thrust::make_counting_iterator( len - 3u ), // the end of the loop sequence
+///         make_hash_functor(                          // the for_each "body" functor
+///            nvbio::plain_view( h_dna ),
+///            nvbio::plain_view( h_mers ) ) );
+/// }
+///\endcode

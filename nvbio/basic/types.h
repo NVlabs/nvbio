@@ -29,6 +29,9 @@
 
 #include <assert.h>
 #include <vector_types.h>
+#include <thrust/iterator/detail/host_system_tag.h>
+#include <thrust/iterator/detail/device_system_tag.h>
+#include <thrust/iterator/detail/any_system_tag.h>
 
 #ifdef __CUDACC__
     #define NVBIO_HOST_DEVICE __host__ __device__
@@ -140,11 +143,11 @@ typedef char                int8;
 
 /// a tag to define the host architecture
 ///
-struct host_tag {};
+struct host_tag : public thrust::host_system_tag {};
 
 /// a tag to define the device architecture
 ///
-struct device_tag {};
+struct device_tag : public thrust::device_system_tag {};
 
 /// a null type, useful to represent unbound template arguments
 ///

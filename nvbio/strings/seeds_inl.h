@@ -32,11 +32,20 @@ namespace nvbio {
 template <typename in_coord_type, typename out_coord_type>
 struct project_coords_functor {};
 
-template <typename in_coord_type>
-struct project_coords_functor<in_coord_type,in_coord_type>
+template <>
+struct project_coords_functor<uint32,uint32>
 {
-    typedef in_coord_type argument_type;
-    typedef in_coord_type result_type;
+    typedef uint32 argument_type;
+    typedef uint32 result_type;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const argument_type i) const { return i; }
+};
+template <>
+struct project_coords_functor<uint64,uint64>
+{
+    typedef uint64 argument_type;
+    typedef uint64 result_type;
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     result_type operator() (const argument_type i) const { return i; }

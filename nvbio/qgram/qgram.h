@@ -270,8 +270,8 @@
 /// const uint32 n_hits = qgram_filter.rank(
 ///     qgram_index,
 ///     n_query_qgrams,
-///     nvbio::plain_view( d_query_qgrams ),
-///     nvbio::plain_view( d_query_indices ) );
+///     nvbio::raw_pointer( d_query_qgrams ),
+///     nvbio::raw_pointer( d_query_indices ) );
 ///
 /// //
 /// // loop through large batches of hits and locate them

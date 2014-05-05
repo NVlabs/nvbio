@@ -529,7 +529,7 @@ int main(int argc, char* argv[])
     typedef PackedStream<uint32*,uint8,2,false> ref_stream_type;
 
     thrust::device_vector<uint32> d_ref_storage( h_ref_storage );
-    ref_stream_type d_ref_stream( nvbio::plain_view( d_ref_storage ) );
+    ref_stream_type d_ref_stream( nvbio::raw_pointer( d_ref_storage ) );
 
     const uint32 batch_size = 256*1024;
 
@@ -538,7 +538,7 @@ int main(int argc, char* argv[])
   #if defined(SSWLIB)
     std::vector<int8_t> unpacked_ref( ref_length );
     {
-        ref_stream_type h_ref_stream( nvbio::plain_view( h_ref_storage ) );
+        ref_stream_type h_ref_stream( nvbio::raw_pointer( h_ref_storage ) );
         for (uint32 i = 0; i < ref_length; ++i)
             unpacked_ref[i] = h_ref_stream[i];
     }
@@ -586,9 +586,9 @@ int main(int argc, char* argv[])
                     d_read_data.read_stream(),
                     d_read_data.max_read_len(),
                     n_read_symbols,
-                    nvbio::plain_view( d_ref_storage ),
+                    nvbio::raw_pointer( d_ref_storage ),
                     ref_length,
-                    nvbio::plain_view( score_dvec ) );
+                    nvbio::raw_pointer( score_dvec ) );
             }
 
             fprintf(stderr,"    %15s : ", "semi-global");
@@ -600,9 +600,9 @@ int main(int argc, char* argv[])
                     d_read_data.read_stream(),
                     d_read_data.max_read_len(),
                     n_read_symbols,
-                    nvbio::plain_view( d_ref_storage ),
+                    nvbio::raw_pointer( d_ref_storage ),
                     ref_length,
-                    nvbio::plain_view( score_dvec ) );
+                    nvbio::raw_pointer( score_dvec ) );
             }
             fprintf(stderr,"    %15s : ", "local");
             {
@@ -613,9 +613,9 @@ int main(int argc, char* argv[])
                     d_read_data.read_stream(),
                     d_read_data.max_read_len(),
                     n_read_symbols,
-                    nvbio::plain_view( d_ref_storage ),
+                    nvbio::raw_pointer( d_ref_storage ),
                     ref_length,
-                    nvbio::plain_view( score_dvec ) );
+                    nvbio::raw_pointer( score_dvec ) );
             }
         }
         if (TEST_MASK & ED)
@@ -630,9 +630,9 @@ int main(int argc, char* argv[])
                     d_read_data.read_stream(),
                     d_read_data.max_read_len(),
                     n_read_symbols,
-                    nvbio::plain_view( d_ref_storage ),
+                    nvbio::raw_pointer( d_ref_storage ),
                     ref_length,
-                    nvbio::plain_view( score_dvec ) );
+                    nvbio::raw_pointer( score_dvec ) );
             }
         }
 

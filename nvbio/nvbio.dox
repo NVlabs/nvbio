@@ -364,6 +364,9 @@
 ///\par
 /// Notice how we marked our print_strings methods with the NVBIO_HOST_DEVICE qualifier: this
 /// tells the CUDA compiler that these methods can be compiled both for the host and the device.
+/// It is also worth mentioning that if we kept our vectors on the host (i.e. replacing the device_tag
+/// specifiers with host_tag), everything would have still run in parallel, except it would have
+/// run on the host.
 
 /// \page hello_dna_3_page Hello DNA! - Part 3
 ///\par

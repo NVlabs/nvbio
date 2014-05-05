@@ -325,39 +325,35 @@
 ///     ...
 ///
 ///     thrust::for_each(
-///         nvbio::device_tag(),                                 // the execution context
-///         thrust::make_counting_iterator(0u),                  // the first element of our loop sequence
-///         thrust::make_counting_iterator(0u) + seeds.size(),   // the end element of our loop sequence
-///         print_strings<infix_set_type>( seeds ) );            // the loop's body
+///         seeds.begin(),
+///         seeds.end(),
+///         print_strings<infix_set_type>() );            // the loop's body
 /// }
 ///\endcode
 ///\par
 /// Thrust's for_each takes a functor encoding the body of our loop, and applies it to all elements
-/// of a sequence. In this case, the sequence is the set of integers [0,n_seeds), and the
-/// body of our loop will be the following:
+/// of a sequence. In this case, the sequence is the string-set, and the body of our loop will be
+/// the following:
 ///
 ///\code
 /// template <typename string_set_type>
 /// struct print_strings
 /// {
-///     NVBIO_HOST_DEVICE
-///     print_strings(const string_set_type _string_set) : string_set( _string_set ) {}
+///     typedef typename string_set_type::string_type string_type;
 /// 
 ///     NVBIO_HOST_DEVICE
-///     void operator() (const uint32 i) const
+///     void operator() (const string_type string) const
 ///     {
-///         // build an ASCII string for i-th seed
+///         // build an ASCII string
 ///         char seed[4];
 ///         nvbio::dna_to_string(
-///             string_set[i],                    // the i-th string in the set
-///             nvbio::length( string_set[i] ),   // its length
-///             seed );                           // the output ASCII string
+///             string,                    // the input string
+///             nvbio::length( string ),   // its length
+///             seed );                    // the output ASCII string
 /// 
 ///         // and print it...
-///         printf("seed[%u] = %s\n", i, seed);
+///         printf("%s\n", seed);
 ///     }
-/// 
-///     const string_set_type string_set;
 /// };
 ///\endcode
 ///

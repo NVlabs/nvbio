@@ -41,22 +41,19 @@ using namespace nvbio;
 template <typename string_set_type>
 struct print_strings
 {
-    NVBIO_HOST_DEVICE
-    print_strings(const string_set_type _string_set) : string_set( _string_set ) {}
+    typedef typename string_set_type::string_type string_type;
 
     NVBIO_HOST_DEVICE
-    void operator() (const uint32 i) const
+    void operator() (const string_type& string) const
     {
         char seed[4];
         dna_to_string(
-            string_set[i],
-            length( string_set[i] ),
+            string,
+            length( string ),
             seed );
 
-        printf("seed[%u] = %s\n", i, seed);
+        printf("%s\n", seed);
     }
-
-    const string_set_type string_set;
 };
 
 // main test entry point
@@ -94,16 +91,17 @@ int main(int argc, char* argv[])
     typedef nvbio::vector<device_tag,string_infix_coord_type>::const_iterator   infix_iterator_type;
     typedef InfixSet<packed_iterator_type, infix_iterator_type> infix_set_type;
 
-    infix_set_type seeds(
+    const infix_set_type seeds(
         n_seeds,                                // the number of infixes in the set
         d_dna.begin(),                          // the underlying string
         d_seed_coords.begin() );                // the iterator to the infix coordinates
 
     thrust::for_each(
-        device_tag(),
-        thrust::make_counting_iterator(0u),
-        thrust::make_counting_iterator(0u) + seeds.size(),
-        print_strings<infix_set_type>( seeds ) );
+        seeds.begin(),
+        seeds.end(),
+        print_strings<infix_set_type>() );
+
+    cudaDeviceSynchronize();
 
     return 0;
 }

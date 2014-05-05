@@ -318,7 +318,8 @@
 /// Technically, we could just loop through the strings in the set, and print them on the host.
 /// However, suppose we want to do it in the native space of the set, i.e. on the device, and
 /// suppose we want to do it in parallel: how can we do this?
-/// Well, we will do it here using the thrust::for_each construct:
+/// Well, we will do it here using <a href="http://docs.nvidia.com/cuda/thrust/">Thrust</a>, and particularly
+/// the <a href="http://thrust.github.io/doc/group__modifying.html">thrust::for_each</a> construct:
 ///
 ///\code
 ///     ...

@@ -167,7 +167,7 @@ struct StringSetIterator
     typedef typename if_equal<
         system_tag, host_tag,
         random_access_host_iterator_tag,
-        random_access_device_iterator_tag>                              iterator_category;
+        random_access_device_iterator_tag>::type                        iterator_category;
 
     /// constructor
     ///

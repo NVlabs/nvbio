@@ -207,7 +207,7 @@ typename StringSetIterator<StringSet>::difference_type operator- (
     const StringSetIterator<StringSet>& it1,
     const StringSetIterator<StringSet>& it2)
 {
-    return it2.idx - it1.idx;
+    return it1.idx - it2.idx;
 }
 
 /// operator+

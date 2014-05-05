@@ -53,6 +53,7 @@ namespace nvbio {
 ///
 /// The main classes are:
 ///
+/// - PackedVector :             a packed vector object
 /// - PackedStream :             a packed stream object
 /// - PackedStreamRef :          a proxy object to represent packed symbol references
 /// - PackedStreamIterator :     a PackedStream iterator
@@ -180,14 +181,14 @@ struct PackedStreamIterator
     typedef typename Stream::index_type  index_type;
     typedef typename Stream::sindex_type sindex_type;
 
-    typedef Stream                                            stream_type;
-    typedef Symbol                                            value_type;
-    typedef PackedStreamRef<Stream>                           reference;
-    typedef Symbol                                            const_reference;
-    typedef reference*                                        pointer;
-    typedef int32                                             difference_type;
-    typedef int32                                             distance_type;
-    typedef typename std::random_access_iterator_tag          iterator_category;
+    typedef Stream                                                      stream_type;
+    typedef Symbol                                                      value_type;
+    typedef PackedStreamRef<Stream>                                     reference;
+    typedef Symbol                                                      const_reference;
+    typedef reference*                                                  pointer;
+    typedef int32                                                       difference_type;
+    typedef int32                                                       distance_type;
+    typedef typename std::iterator_traits<Stream>::iterator_category    iterator_category;
 
     /// empty constructor
     ///

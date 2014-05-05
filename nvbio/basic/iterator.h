@@ -33,6 +33,8 @@
 #pragma once
 
 #include <iterator>
+#include <nvbio/basic/types.h>
+#include <thrust/iterator/iterator_categories.h>
 
 #if defined(__CUDACC__)
 
@@ -54,3 +56,38 @@ struct iterator_traits<const _Ty * __restrict__>
 } // namespace std
 
 #endif // __CUDACC__
+
+namespace nvbio {
+
+typedef std::input_iterator_tag                     input_host_iterator_tag;
+typedef std::output_iterator_tag                    output_host_iterator_tag;
+typedef std::forward_iterator_tag                   forward_host_iterator_tag;
+typedef std::bidirectional_iterator_tag             bidirectional_host_iterator_tag;
+typedef std::random_access_iterator_tag             random_access_host_iterator_tag;
+
+typedef thrust::input_device_iterator_tag           input_device_iterator_tag;
+typedef thrust::output_device_iterator_tag          output_device_iterator_tag;
+typedef thrust::forward_device_iterator_tag         forward_device_iterator_tag;
+typedef thrust::bidirectional_device_iterator_tag   bidirectional_device_iterator_tag;
+typedef thrust::random_access_device_iterator_tag   random_access_device_iterator_tag;
+
+template <typename iterator_category> struct iterator_category_system {};
+template <>                           struct iterator_category_system<input_host_iterator_tag>              { typedef host_tag   type; };
+template <>                           struct iterator_category_system<output_host_iterator_tag>             { typedef host_tag   type; };
+template <>                           struct iterator_category_system<forward_host_iterator_tag>            { typedef host_tag   type; };
+template <>                           struct iterator_category_system<bidirectional_host_iterator_tag>      { typedef host_tag   type; };
+template <>                           struct iterator_category_system<random_access_host_iterator_tag>      { typedef host_tag   type; };
+template <>                           struct iterator_category_system<input_device_iterator_tag>            { typedef device_tag type; };
+template <>                           struct iterator_category_system<output_device_iterator_tag>           { typedef device_tag type; };
+template <>                           struct iterator_category_system<forward_device_iterator_tag>          { typedef device_tag type; };
+template <>                           struct iterator_category_system<bidirectional_device_iterator_tag>    { typedef device_tag type; };
+template <>                           struct iterator_category_system<random_access_device_iterator_tag>    { typedef device_tag type; };
+
+template <typename iterator>
+struct iterator_system
+{
+    typedef typename std::iterator_traits<iterator>::iterator_category  iterator_category;
+    typedef typename iterator_category_system<iterator_category>::type  type;
+};
+
+} // namespace nvbio

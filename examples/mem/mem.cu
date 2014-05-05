@@ -33,6 +33,7 @@
 #include <nvbio/basic/timer.h>
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/vector.h>
+#include <nvbio/basic/packed_vector.h>
 #include <nvbio/basic/shared_pointer.h>
 #include <nvbio/basic/dna.h>
 #include <nvbio/strings/string_set.h>
@@ -44,10 +45,70 @@
 
 using namespace nvbio;
 
+// define a functor to extract the i-th mer of a string as an integer hash
+//
+template <typename string_type, typename output_type>
+struct hash_functor
+{
+    hash_functor(string_type _input, output_type _output) : input(_input), output(_output) {}
+
+    // define the functor operator() to extract the i-th 3-mer
+    void operator() (const uint32 i) const
+    {
+       uint32 hash = 0;
+       for (uint32 j = 0; j < 3; ++j)
+           hash |= input[i+j] << (j*2);  // pack the j-th symbol using 2-bits
+
+       output[i] = hash;
+    }
+    string_type         input;
+    mutable output_type output;
+};
+// define a utility function to instantiate the hash functor above, useful to
+// exploit C++'s Template Argument Deduction and avoid having to always
+// specify template arguments
+template <typename string_type, typename output_type>
+hash_functor<string_type,output_type> make_hash_functor(string_type _input, output_type _output)
+{
+    return hash_functor<string_type,output_type>( _input, _output );
+}
+
 // main test entry point
 //
 int main(int argc, char* argv[])
 {
+    {
+        // our hello world ASCII string
+        const char dna_string[] = "ACGTTGCA";
+        const uint32 len = (uint32)strlen( dna_string );
+
+        // our DNA alphabet size
+        const uint32 ALPHABET_SIZE = 2u;
+
+        // instantiate a packed host vector
+        nvbio::PackedVector<host_tag,ALPHABET_SIZE> h_dna;
+
+        // resize the vector
+        h_dna.resize( len );
+
+        // and fill it in with the contents of our original string, converted
+        // to a 2-bit DNA alphabet (i.e. A = 0, C = 1, G = 2, T = 3)
+        nvbio::string_to_dna(
+            dna_string,               // the input ASCII string
+            h_dna.begin() );          // the output iterator
+
+        // define a vector for storing the output 3-mers
+        nvbio::vector<host_tag,uint32> h_mers( len - 3u );
+
+        thrust::for_each(
+            thrust::host_system_tag(),
+            thrust::make_counting_iterator( 0u ),
+            thrust::make_counting_iterator( len - 3u ),
+            make_hash_functor(
+                nvbio::plain_view( h_dna ),
+                nvbio::plain_view( h_mers ) ) );
+    }
+
     //
     // perform some basic option parsing
     //
@@ -103,7 +164,6 @@ int main(int argc, char* argv[])
     typedef io::FMIndexDataDevice::stream_type genome_type;
 
     // fetch the genome string
-    const uint32      genome_len = d_fmi.genome_length();
     const genome_type d_genome( d_fmi.genome_stream() );
 
     // open a read file

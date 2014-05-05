@@ -526,10 +526,10 @@ void PrefixDoublingSufSort::sort(
         cuda::SortEnactor                  sort_enactor;
 
         sort_buffers.selector  = 0;
-        sort_buffers.keys[0]   = nvbio::device_view( d_sort_keys );
-        sort_buffers.keys[1]   = nvbio::device_view( d_segment_keys );
-        sort_buffers.values[0] = nvbio::device_view( d_sort_indices );
-        sort_buffers.values[1] = nvbio::device_view( d_segment_heads );
+        sort_buffers.keys[0]   = nvbio::raw_pointer( d_sort_keys );
+        sort_buffers.keys[1]   = nvbio::raw_pointer( d_segment_keys );
+        sort_buffers.values[0] = nvbio::raw_pointer( d_sort_indices );
+        sort_buffers.values[1] = nvbio::raw_pointer( d_segment_heads );
 
         // sort the keys together with the indices
         sort_enactor.sort( n_suffixes, sort_buffers );
@@ -558,12 +558,12 @@ void PrefixDoublingSufSort::sort(
         //   out  : (1, 1, 3, 4, 4, 4, 7, 7, 7)
         const uint32 n_segments = extract_segments(
             n_suffixes,
-            nvbio::device_view( d_sort_keys ),
-            nvbio::device_view( d_segment_flags ),
-            nvbio::device_view( d_segment_blocks ),
-            nvbio::device_view( d_active_slots ),
-            nvbio::device_view( d_segment_keys ),
-            nvbio::device_view( d_segment_heads ) );
+            nvbio::raw_pointer( d_sort_keys ),
+            nvbio::raw_pointer( d_segment_flags ),
+            nvbio::raw_pointer( d_segment_blocks ),
+            nvbio::raw_pointer( d_active_slots ),
+            nvbio::raw_pointer( d_segment_keys ),
+            nvbio::raw_pointer( d_segment_heads ) );
 
         NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
         timer.stop();
@@ -643,14 +643,14 @@ void PrefixDoublingSufSort::sort(
             // now keep only the slots we are interested in
             compact(
                 n_active_suffixes,
-                nvbio::device_view( d_partial_flags ) + 4u,
-                nvbio::device_view( d_segment_keys ),
-                nvbio::device_view( d_segment_flags ),
-                nvbio::device_view( d_active_slots ),
-                nvbio::device_view( d_sort_indices ),
-                nvbio::device_view( d_temp_flags ),
-                nvbio::device_view( d_sort_keys ),
-                nvbio::device_view( d_segment_heads ) );
+                nvbio::raw_pointer( d_partial_flags ) + 4u,
+                nvbio::raw_pointer( d_segment_keys ),
+                nvbio::raw_pointer( d_segment_flags ),
+                nvbio::raw_pointer( d_active_slots ),
+                nvbio::raw_pointer( d_sort_indices ),
+                nvbio::raw_pointer( d_temp_flags ),
+                nvbio::raw_pointer( d_sort_keys ),
+                nvbio::raw_pointer( d_segment_heads ) );
 
             // and swap the buffers
             d_segment_flags.swap( d_temp_flags );
@@ -686,9 +686,9 @@ void PrefixDoublingSufSort::sort(
             n_active_suffixes,
             n_suffixes,
             j,
-            nvbio::device_view( d_sort_indices ),
-            nvbio::device_view( d_inv_keys ),
-            nvbio::device_view( d_sort_keys ) );
+            nvbio::raw_pointer( d_sort_indices ),
+            nvbio::raw_pointer( d_inv_keys ),
+            nvbio::raw_pointer( d_sort_keys ) );
 
         NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
         timer.stop();
@@ -696,18 +696,18 @@ void PrefixDoublingSufSort::sort(
 
         timer.start();
 
-        uint32* d_comp_flags = (uint32*)nvbio::device_view( d_temp_flags );
+        uint32* d_comp_flags = (uint32*)nvbio::raw_pointer( d_temp_flags );
 
         // build the compressed flags
         priv::pack_flags(
             n_active_suffixes,
-            nvbio::device_view( d_segment_flags ),
+            nvbio::raw_pointer( d_segment_flags ),
             d_comp_flags );
 
         // sort within segments
         mgpu::SegSortPairsFromFlags(
-            nvbio::device_view( d_sort_keys ),
-            nvbio::device_view( d_sort_indices ),
+            nvbio::raw_pointer( d_sort_keys ),
+            nvbio::raw_pointer( d_sort_indices ),
             n_active_suffixes,
             d_comp_flags,
             *m_mgpu );
@@ -725,12 +725,12 @@ void PrefixDoublingSufSort::sort(
         //   out  : (1, 1, 3, 4, 4, 4, 7, 7, 7)
         const uint32 n_segments = extract_segments(
             n_active_suffixes,
-            nvbio::device_view( d_sort_keys ),
-            nvbio::device_view( d_segment_flags ),
-            nvbio::device_view( d_segment_blocks ),
-            nvbio::device_view( d_active_slots ),
-            nvbio::device_view( d_segment_keys ),
-            nvbio::device_view( d_segment_heads ) );
+            nvbio::raw_pointer( d_sort_keys ),
+            nvbio::raw_pointer( d_segment_flags ),
+            nvbio::raw_pointer( d_segment_blocks ),
+            nvbio::raw_pointer( d_active_slots ),
+            nvbio::raw_pointer( d_segment_keys ),
+            nvbio::raw_pointer( d_segment_heads ) );
 
         if (n_segments == n_active_suffixes) // we are done!
         {

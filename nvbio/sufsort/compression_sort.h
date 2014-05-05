@@ -340,16 +340,16 @@ void CompressionSort::sort(
         timer.start();
 
         // build the compressed flags
-        uint32* d_comp_flags = (uint32*)nvbio::device_view( d_temp_flags );
+        uint32* d_comp_flags = (uint32*)nvbio::raw_pointer( d_temp_flags );
         priv::pack_flags(
             n_active_suffixes,
-            nvbio::device_view( d_segment_flags ),
+            nvbio::raw_pointer( d_segment_flags ),
             d_comp_flags );
 
         // sort within segments
         mgpu::SegSortPairsFromFlags(
-            nvbio::device_view( d_keys ),
-            nvbio::device_view( d_indices ),
+            nvbio::raw_pointer( d_keys ),
+            nvbio::raw_pointer( d_indices ),
             n_active_suffixes,
             d_comp_flags,
             *m_mgpu );
@@ -368,8 +368,8 @@ void CompressionSort::sort(
         // those by themselves.
         priv::build_head_flags(
             n_active_suffixes,
-            nvbio::device_view( d_keys ),
-            nvbio::device_view( d_segment_flags ) );
+            nvbio::raw_pointer( d_keys ),
+            nvbio::raw_pointer( d_segment_flags ) );
 
         d_segment_flags[0]                 = 1u; // make sure the first flag is a 1
         d_segment_flags[n_active_suffixes] = 1u; // and add a sentinel
@@ -570,7 +570,7 @@ void CompressionSort::sort(
             // extract the given radix word from each of the partially sorted suffixes on the host
             set.init_slice(
                 n_active_strings,
-                n_active_strings == n_strings ? (const uint32*)NULL : plain_view( d_indices ),
+                n_active_strings == n_strings ? (const uint32*)NULL : raw_pointer( d_indices ),
                 word_block_begin,
                 word_block_end );
           #else
@@ -605,11 +605,11 @@ void CompressionSort::sort(
                 // extract only active radices, already sorted
                 set.extract(
                     n_active_strings,
-                    plain_view( d_indices ),
+                    raw_pointer( d_indices ),
                     word_idx,
                     word_block_begin,
                     word_block_end,
-                    plain_view( d_keys ) );
+                    raw_pointer( d_keys ) );
 
                 NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
                 timer.stop();
@@ -624,7 +624,7 @@ void CompressionSort::sort(
                     word_idx,
                     word_block_begin,
                     word_block_end,
-                    plain_view( d_temp_indices ) );
+                    raw_pointer( d_temp_indices ) );
 
                 NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
                 timer.stop();
@@ -647,10 +647,10 @@ void CompressionSort::sort(
                 timer.start();
 
                 // build the compressed flags
-                uint32* d_comp_flags = (uint32*)nvbio::device_view( d_temp_flags );
+                uint32* d_comp_flags = (uint32*)nvbio::raw_pointer( d_temp_flags );
                 priv::pack_flags(
                     n_active_strings,
-                    nvbio::device_view( d_segment_flags ),
+                    nvbio::raw_pointer( d_segment_flags ),
                     d_comp_flags );
 
                 NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
@@ -658,8 +658,8 @@ void CompressionSort::sort(
 
                 // sort within segments
                 mgpu::SegSortPairsFromFlags(
-                    nvbio::device_view( d_keys ),
-                    nvbio::device_view( d_indices ),
+                    nvbio::raw_pointer( d_keys ),
+                    nvbio::raw_pointer( d_indices ),
                     n_active_strings,
                     d_comp_flags,
                     *m_mgpu );
@@ -680,8 +680,8 @@ void CompressionSort::sort(
                 // those by themselves.
                 priv::build_head_flags(
                     n_active_strings,
-                    nvbio::device_view( d_keys ),
-                    nvbio::device_view( d_segment_flags ) );
+                    nvbio::raw_pointer( d_keys ),
+                    nvbio::raw_pointer( d_segment_flags ) );
 
                 NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
                 cuda::check_error("CompressionSort::sort() : build_head_flags");

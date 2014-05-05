@@ -380,9 +380,13 @@ struct PrefixSet : public PrefixSetCore<
 
     typedef SequenceType                                                sequence_type;      ///< the underlying sequence type
     typedef PrefixIterator                                              prefix_iterator;    ///< the underlingy prefix iterator type
+    typedef typename iterator_system<SequenceType>::type                system_tag;         ///< the system tag
 
     typedef typename base_type::coord_type                              coord_type;         ///< the prefix coordinates type
     typedef typename base_type::string_type                             string_type;        ///< the prefix string type
+
+    typedef StringSetIterator< PrefixSet<SequenceType,InfixIterator> >        iterator;     ///< the iterator type
+    typedef StringSetIterator< PrefixSet<SequenceType,InfixIterator> >  const_iterator;     ///< the const_iterator type
 
     /// constructor
     ///
@@ -397,6 +401,22 @@ struct PrefixSet : public PrefixSetCore<
         const sequence_type     sequence,
         const prefix_iterator    prefixes) :
         base_type( size, sequence, prefixes ) {}
+
+    /// begin iterator
+    ///
+    const_iterator begin() const { return const_iterator(*this,0u); }
+
+    /// begin iterator
+    ///
+    const_iterator end() const { return const_iterator(*this,size()); }
+
+    /// begin iterator
+    ///
+    iterator begin() { return iterator(*this,0u); }
+
+    /// begin iterator
+    ///
+    iterator end() { return iterator(*this,size()); }
 };
 
 ///@} StringSetsModule

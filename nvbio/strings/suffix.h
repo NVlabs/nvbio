@@ -380,9 +380,13 @@ struct SuffixSet : public SuffixSetCore<
 
     typedef SequenceType                                                sequence_type;      ///< the underlying sequence type
     typedef SuffixIterator                                              suffix_iterator;    ///< the underlingy suffix iterator type
+    typedef typename iterator_system<SequenceType>::type                system_tag;         ///< the system tag
 
     typedef typename base_type::coord_type                              coord_type;         ///< the suffix coordinates type
     typedef typename base_type::string_type                             string_type;        ///< the suffix string type
+
+    typedef StringSetIterator< SuffixSet<SequenceType,InfixIterator> >        iterator;     ///< the iterator type
+    typedef StringSetIterator< SuffixSet<SequenceType,InfixIterator> >  const_iterator;     ///< the const_iterator type
 
     /// constructor
     ///
@@ -397,6 +401,22 @@ struct SuffixSet : public SuffixSetCore<
         const sequence_type     sequence,
         const suffix_iterator    suffixes) :
         base_type( size, sequence, suffixes ) {}
+
+    /// begin iterator
+    ///
+    const_iterator begin() const { return const_iterator(*this,0u); }
+
+    /// begin iterator
+    ///
+    const_iterator end() const { return const_iterator(*this,size()); }
+
+    /// begin iterator
+    ///
+    iterator begin() { return iterator(*this,0u); }
+
+    /// begin iterator
+    ///
+    iterator end() { return iterator(*this,size()); }
 };
 
 ///@} StringSetsModule

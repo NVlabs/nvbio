@@ -27,10 +27,12 @@
 
 #pragma once
 
+#include <nvbio/strings/string.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/vector_wrapper.h>
 #include <nvbio/basic/strided_iterator.h>
 #include <nvbio/basic/cached_iterator.h>
+#include <nvbio/basic/iterator.h>
 
 
 namespace nvbio {
@@ -154,6 +156,172 @@ struct sparse_string_set_tag {};
 struct strided_string_set_tag {};
 struct strided_packed_string_set_tag {};
 
+template <typename StringSetType>
+struct StringSetIterator
+{
+    typedef typename StringSetType::system_tag                          system_tag;
+    typedef typename StringSetType::string_type                         value_type;
+    typedef typename StringSetType::string_type                         reference;
+    typedef typename StringSetType::string_type*                        pointer;
+    typedef typename int32                                              difference_type;
+    typedef typename if_equal<
+        system_tag, host_tag,
+        random_access_host_iterator_tag,
+        random_access_device_iterator_tag>                              iterator_category;
+
+    /// constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE StringSetIterator() {}
+
+    /// constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE StringSetIterator(StringSetType _string_set, const uint32 _idx) : string_set(_string_set), idx(_idx) {}
+
+    /// indexing operator
+    ///
+    /// \param i        requested value
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE value_type operator[] (const uint32 i) const { return string_set[idx + i]; }
+
+    /// indexing operator
+    ///
+    /// \param i        requested value
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE reference operator[] (const uint32 i) { return string_set[idx + i]; }
+
+    /// dereference operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE value_type operator* () const { return string_set[idx]; }
+
+    /// dereference operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE reference operator* () { return string_set[idx]; }
+
+    StringSetType   string_set;
+    uint32          idx;
+};
+
+/// difference operator
+///
+template <typename StringSet>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+typename StringSetIterator<StringSet>::difference_type operator- (
+    const StringSetIterator<StringSet>& it1,
+    const StringSetIterator<StringSet>& it2)
+{
+    return it2.idx - it1.idx;
+}
+
+/// operator+
+///
+template <typename StringSet>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+StringSetIterator<StringSet> operator+ (
+    const StringSetIterator<StringSet>& it,
+    const int32                         d)
+{
+    return StringSetIterator<StringSet>( it.string_set, it.idx + d );
+}
+
+/// operator-
+///
+template <typename StringSet>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+StringSetIterator<StringSet> operator- (
+    const StringSetIterator<StringSet>& it,
+    const int32                         d)
+{
+    return StringSetIterator<StringSet>( it.string_set, it.idx - d );
+}
+
+/// operator+=
+///
+template <typename StringSet>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+StringSetIterator<StringSet>& operator+= (
+    StringSetIterator<StringSet>& it,
+    const int32                   d)
+{
+    it.idx += d;
+    return it;
+}
+
+/// operator-=
+///
+template <typename StringSet>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+StringSetIterator<StringSet>& operator-= (
+    StringSetIterator<StringSet>& it,
+    const int32                   d)
+{
+    it.idx -= d;
+    return it;
+}
+
+/// operator<
+///
+template <typename StringSet>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator< (
+    const StringSetIterator<StringSet>& it1,
+    const StringSetIterator<StringSet>& it2)
+{
+    return it1.idx < it2.idx;
+}
+
+/// operator>
+///
+template <typename StringSet>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator> (
+    const StringSetIterator<StringSet>& it1,
+    const StringSetIterator<StringSet>& it2)
+{
+    return it1.idx > it2.idx;
+}
+
+/// operator<=
+///
+template <typename StringSet>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator<= (
+    const StringSetIterator<StringSet>& it1,
+    const StringSetIterator<StringSet>& it2)
+{
+    return it1.idx < it2.idx;
+}
+
+/// operator>=
+///
+template <typename StringSet>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator>= (
+    const StringSetIterator<StringSet>& it1,
+    const StringSetIterator<StringSet>& it2)
+{
+    return it1.idx >= it2.idx;
+}
+
+/// operator==
+///
+template <typename StringSet>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator== (
+    const StringSetIterator<StringSet>& it1,
+    const StringSetIterator<StringSet>& it2)
+{
+    return it1.idx == it2.idx;
+}
+
+/// operator!=
+///
+template <typename StringSet>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!= (
+    const StringSetIterator<StringSet>& it1,
+    const StringSetIterator<StringSet>& it2)
+{
+    return it1.idx != it2.idx;
+}
+
 ///
 /// A "flat" collection of strings that are concatenated together into
 /// a single one, and their starting points are given by a single offset vector.
@@ -242,6 +410,10 @@ struct ConcatenatedStringSet
     typedef vector_wrapper<StringIterator>                              string_type;
     typedef StringIterator                                              symbol_iterator;
     typedef OffsetIterator                                              offset_iterator;
+    typedef typename iterator_system<StringIterator>::type              system_tag;
+
+    typedef StringSetIterator< ConcatenatedStringSet<StringIterator,OffsetIterator> >       iterator;
+    typedef StringSetIterator< ConcatenatedStringSet<StringIterator,OffsetIterator> > const_iterator;
 
     /// default constructor
     ///
@@ -279,6 +451,22 @@ struct ConcatenatedStringSet
             m_offsets[i+1] - offset,
             m_string + offset );
     }
+
+    /// begin iterator
+    ///
+    const_iterator begin() const { return const_iterator(*this,0u); }
+
+    /// begin iterator
+    ///
+    const_iterator end() const { return const_iterator(*this,size()); }
+
+    /// begin iterator
+    ///
+    iterator begin() { return iterator(*this,0u); }
+
+    /// begin iterator
+    ///
+    iterator end() { return iterator(*this,size()); }
 
     /// return the base string
     ///
@@ -356,6 +544,10 @@ struct SparseStringSet
     typedef vector_wrapper<StringIterator>                              string_type;
     typedef StringIterator                                              symbol_iterator;
     typedef RangeIterator                                               range_iterator;
+    typedef typename iterator_system<StringIterator>::type              system_tag;
+
+    typedef StringSetIterator< SparseStringSet<StringIterator,RangeIterator> >       iterator;
+    typedef StringSetIterator< SparseStringSet<StringIterator,RangeIterator> > const_iterator;
 
     /// default constructor
     ///
@@ -393,6 +585,22 @@ struct SparseStringSet
             range.y - range.x,
             m_string + range.x );
     }
+
+    /// begin iterator
+    ///
+    const_iterator begin() const { return const_iterator(*this,0u); }
+
+    /// begin iterator
+    ///
+    const_iterator end() const { return const_iterator(*this,size()); }
+
+    /// begin iterator
+    ///
+    iterator begin() { return iterator(*this,0u); }
+
+    /// begin iterator
+    ///
+    iterator end() { return iterator(*this,size()); }
 
     /// return the base string
     ///
@@ -461,6 +669,7 @@ struct StridedPackedStringSet
     typedef typename packed_stream_type::iterator                                       packed_stream_iterator;
     typedef vector_wrapper<packed_stream_type>                                          string_type;
     typedef LengthIterator                                                              length_iterator;
+    typedef typename iterator_system<StreamIterator>::type                              system_tag;
 
     static const uint32 SYMBOL_SIZE  = SYMBOL_SIZE_T;
     static const bool   BIG_ENDIAN   = BIG_ENDIAN_T;
@@ -560,6 +769,10 @@ struct StridedStringSet
     typedef strided_iterator<StringIterator>                                        strided_symbol_iterator;
     typedef vector_wrapper<strided_symbol_iterator>                                 string_type;
     typedef LengthIterator                                                          length_iterator;
+    typedef typename iterator_system<StringIterator>::type                          system_tag;
+
+    typedef StringSetIterator< StridedStringSet<StringIterator,LengthIterator> >       iterator;
+    typedef StringSetIterator< StridedStringSet<StringIterator,LengthIterator> > const_iterator;
 
     /// default constructor
     ///
@@ -607,6 +820,22 @@ struct StridedStringSet
             length,
             base_iterator );
     }
+
+    /// begin iterator
+    ///
+    const_iterator begin() const { return const_iterator(*this,0u); }
+
+    /// begin iterator
+    ///
+    const_iterator end() const { return const_iterator(*this,size()); }
+
+    /// begin iterator
+    ///
+    iterator begin() { return iterator(*this,0u); }
+
+    /// begin iterator
+    ///
+    iterator end() { return iterator(*this,size()); }
 
     /// return the base string
     ///

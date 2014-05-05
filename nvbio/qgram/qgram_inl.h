@@ -206,8 +206,6 @@ void QGramSetIndexDevice::build(
     QL          = qlut;
     QLS         = (Q - QL) * symbol_size;
 
-    const uint32 n_strings = string_set.size();
-
     // extract the list of q-gram coordinates
     n_qgrams = (uint32)enumerate_string_set_seeds(
         string_set,

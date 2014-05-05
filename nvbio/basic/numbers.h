@@ -1227,6 +1227,9 @@ struct reverse_functor
 template <uint32 ALPHABET_SIZE>
 struct complement_functor
 {
+    typedef uint8 argument_type;
+    typedef uint8 result_type;
+
     /// empty constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE

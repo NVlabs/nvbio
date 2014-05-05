@@ -235,8 +235,8 @@ struct SingleTest
 
         SharedPointer<SWMatrices> mat = SharedPointer<SWMatrices>( new SWMatrices() );
 
-        const uint8* str_hptr = nvbio::plain_view( str_hvec );
-        const uint8* ref_hptr = nvbio::plain_view( ref_hvec );
+        const uint8* str_hptr = nvbio::raw_pointer( str_hvec );
+        const uint8* ref_hptr = nvbio::raw_pointer( ref_hvec );
 
         typename column_storage_type<aligner_type>::type column[N];
 
@@ -300,8 +300,8 @@ struct SingleTest
     {
         NVBIO_VAR_UNUSED const uint32 CHECKPOINTS = 32u;
 
-        const uint8* str_hptr = nvbio::plain_view( str_hvec );
-        const uint8* ref_hptr = nvbio::plain_view( ref_hvec );
+        const uint8* str_hptr = nvbio::raw_pointer( str_hvec );
+        const uint8* ref_hptr = nvbio::raw_pointer( ref_hvec );
 
         const int32 ref_score = ref_banded_sw<M,N,BAND_LEN>( str_hptr, ref_hptr, 0u, aligner );
 
@@ -378,7 +378,7 @@ float enact_batch(
     for (uint32 i = 0; i < n_tests; ++i)
     {
         // enact the batch
-        batch.enact( stream, temp_size, nvbio::device_view( temp_dvec ) );
+        batch.enact( stream, temp_size, nvbio::raw_pointer( temp_dvec ) );
 
         cudaDeviceSynchronize();
     }
@@ -428,9 +428,9 @@ void batch_score_profile_all(
         stream_type stream(
             aligner,
             n_tasks,
-            nvbio::device_view( pattern_dvec ),
-            nvbio::device_view( text_dvec ),
-            nvbio::device_view( score_dvec ) );
+            nvbio::raw_pointer( pattern_dvec ),
+            nvbio::raw_pointer( text_dvec ),
+            nvbio::raw_pointer( score_dvec ) );
 
         // test the ThreadParallelScheduler
         batch_score_profile<ThreadParallelScheduler,N,M>(
@@ -451,9 +451,9 @@ void batch_score_profile_all(
         stream_type stream(
             aligner,
             n_tasks,
-            nvbio::device_view( pattern_dvec ),
-            nvbio::device_view( text_dvec ),
-            nvbio::device_view( score_dvec ) );
+            nvbio::raw_pointer( pattern_dvec ),
+            nvbio::raw_pointer( text_dvec ),
+            nvbio::raw_pointer( score_dvec ) );
 
         // test the WarpParallelScheduler
         batch_score_profile<WarpParallelScheduler,N,M>(
@@ -476,9 +476,9 @@ void batch_score_profile_all(
                 n_tasks,
                 M,
                 N,
-                nvbio::device_view( pattern_dvec ),
-                nvbio::device_view( text_dvec ),
-                nvbio::device_view( score_dvec ) );
+                nvbio::raw_pointer( pattern_dvec ),
+                nvbio::raw_pointer( text_dvec ),
+                nvbio::raw_pointer( score_dvec ) );
 
             cudaDeviceSynchronize();
         }
@@ -530,9 +530,9 @@ void batch_banded_score_profile_all(
     stream_type stream(
         aligner,
         n_tasks,
-        nvbio::device_view( pattern_dvec ),
-        nvbio::device_view( text_dvec ),
-        nvbio::device_view( score_dvec ) );
+        nvbio::raw_pointer( pattern_dvec ),
+        nvbio::raw_pointer( text_dvec ),
+        nvbio::raw_pointer( score_dvec ) );
 
     // test the ThreadParallelScheduler
     batch_banded_score_profile<BAND_LEN,ThreadParallelScheduler,N,M>(
@@ -720,8 +720,8 @@ void test(int argc, char* argv[])
         thrust::host_vector<uint8> str_hvec( M );
         thrust::host_vector<uint8> ref_hvec( N );
 
-        uint8* str_hptr = nvbio::plain_view( str_hvec );
-        uint8* ref_hptr = nvbio::plain_view( ref_hvec );
+        uint8* str_hptr = nvbio::raw_pointer( str_hvec );
+        uint8* ref_hptr = nvbio::raw_pointer( ref_hvec );
 
         string_to_dna("ACAACTA", str_hptr);
         string_to_dna("AAACACCCTAACACACTAAA", ref_hptr);
@@ -770,8 +770,8 @@ void test(int argc, char* argv[])
         thrust::host_vector<uint8> str_hvec( M );
         thrust::host_vector<uint8> ref_hvec( N );
 
-        uint8* str_hptr = nvbio::plain_view( str_hvec );
-        uint8* ref_hptr = nvbio::plain_view( ref_hvec );
+        uint8* str_hptr = nvbio::raw_pointer( str_hvec );
+        uint8* ref_hptr = nvbio::raw_pointer( ref_hvec );
         string_to_dna("TTATGTAGGTGGTCTGGTTTTTGCCTTTTAAGCTTCTGCAAAAAACAACAACAAACTTGTGGTATTACACTGACTCTACAGATCAATTTGGGGACAACTTCCATGTGTTCCACCACCAATACTGAATCTTTCAATCGACTGACGTGGTAT", str_hptr);
         string_to_dna("ATCGGATTCTTTCTTACTTGTAGGTGGTCTGGTTTTTGCCTTTTAAGCTTCTGCAAAAAACAACAACAAACTTGTGGTATTACACTGACTCTACAGATCAATTTGGGGACAACTTCCATGTGTTCCACCACCAATACTGAATCTTTCAATCGACTGACGTGGTATCTCTCTCTCCATCTAT", ref_hptr);
 
@@ -801,8 +801,8 @@ void test(int argc, char* argv[])
         thrust::host_vector<uint8> str_hvec( M );
         thrust::host_vector<uint8> ref_hvec( N );
 
-        uint8* str_hptr = nvbio::plain_view( str_hvec );
-        uint8* ref_hptr = nvbio::plain_view( ref_hvec );
+        uint8* str_hptr = nvbio::raw_pointer( str_hvec );
+        uint8* ref_hptr = nvbio::raw_pointer( ref_hvec );
 
         const char* str_ascii =
             "TAGGAGGTAACATGTATGGAGCATTTACCATAGGCCAAGCACTGTTCTAAGAACTTCGGACATGTTATCTCACTTGTATAAGTACTTAGGTGCCTACAACATAAGCAGCACCTGGTAAATTAAGTATTGAAAAAATGCAGATCG";
@@ -843,8 +843,8 @@ void test(int argc, char* argv[])
         thrust::host_vector<uint8> str_hvec( M );
         thrust::host_vector<uint8> ref_hvec( N );
 
-        uint8* str_hptr = nvbio::plain_view( str_hvec );
-        uint8* ref_hptr = nvbio::plain_view( ref_hvec );
+        uint8* str_hptr = nvbio::raw_pointer( str_hvec );
+        uint8* ref_hptr = nvbio::raw_pointer( ref_hvec );
 
         const char* str_ascii =
             "TAGGAGGTAACATGTATGGAGCATTTACCATAGGCCAAGCACTGTTCTAAGAACTTCGGACATGTTATCTCACTTGTATAAGTACTTAGGTGCCTACAACATAAGCAGCACCTGGTAAATTAAGTATTGAAAAAATGCAGATCG";
@@ -882,8 +882,8 @@ void test(int argc, char* argv[])
         thrust::host_vector<uint32> ref( N_WORDS * N_TASKS );
 
         LCG_random rand;
-        fill_packed_stream<4u>( rand, 4u, M * N_TASKS, nvbio::plain_view( str ) );
-        fill_packed_stream<2u>( rand, 4u, N * N_TASKS, nvbio::plain_view( ref ) );
+        fill_packed_stream<4u>( rand, 4u, M * N_TASKS, nvbio::raw_pointer( str ) );
+        fill_packed_stream<2u>( rand, 4u, N * N_TASKS, nvbio::raw_pointer( ref ) );
 
         thrust::device_vector<uint32> str_dvec( str );
         thrust::device_vector<uint32> ref_dvec( ref );
@@ -1019,8 +1019,8 @@ void test(int argc, char* argv[])
         thrust::host_vector<uint32> ref( N_WORDS * N_TASKS );
 
         LCG_random rand;
-        fill_packed_stream<4u>( rand, 4u, M * N_TASKS, nvbio::plain_view( str ) );
-        fill_packed_stream<2u>( rand, 4u, N * N_TASKS, nvbio::plain_view( ref ) );
+        fill_packed_stream<4u>( rand, 4u, M * N_TASKS, nvbio::raw_pointer( str ) );
+        fill_packed_stream<2u>( rand, 4u, N * N_TASKS, nvbio::raw_pointer( ref ) );
 
         thrust::device_vector<uint32> str_dvec( str );
         thrust::device_vector<uint32> ref_dvec( ref );

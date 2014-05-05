@@ -276,7 +276,7 @@ void save_bpac(const uint32 seq_length, const uint32* string_storage, const char
         pac_string[i] = string[i];
 
     // save the uint8 stream
-    if (save_stream( output_file, seq_bytes, nvbio::plain_view( pac_storage ) ) == false)
+    if (save_stream( output_file, seq_bytes, nvbio::raw_pointer( pac_storage ) ) == false)
     {
         log_error(stderr, "  writing failed!\n");
         exit(1);

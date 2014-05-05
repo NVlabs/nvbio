@@ -163,7 +163,7 @@ struct StringSetIterator
     typedef typename StringSetType::string_type                         value_type;
     typedef typename StringSetType::string_type                         reference;
     typedef typename StringSetType::string_type*                        pointer;
-    typedef typename int32                                              difference_type;
+    typedef int32                                                       difference_type;
     typedef typename if_equal<
         system_tag, host_tag,
         random_access_host_iterator_tag,

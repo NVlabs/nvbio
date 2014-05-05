@@ -77,6 +77,15 @@ struct project_coords_functor<in_coord_type,uint3>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     result_type operator() (const argument_type i) const { return make_uint3( i.x, i.y, i.z ); }
 };
+template <typename in_coord_type>
+struct project_coords_functor<in_coord_type,uint4>
+{
+    typedef in_coord_type argument_type;
+    typedef uint4         result_type;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const argument_type i) const { return make_uint4( i.x, i.y, i.z, i.w ); }
+};
 
 /// project a given set of coordinates to a lower-dimensional object
 ///

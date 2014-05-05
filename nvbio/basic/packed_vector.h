@@ -40,7 +40,14 @@ namespace nvbio {
 ///@addtogroup PackedStreams
 ///@{
 
-/// Bit-Packed Vector
+///
+/// A class to represent a vector of packed symbols, where the size of the symbol is specified at compile-time
+/// as a template parameter.
+/// The sequence is packed on top of an underlying stream of 32-bit words.
+///
+/// \tparam SYMBOL_SIZE_T       the number of bits needed for each symbol
+/// \tparam BIG_ENDIAN_T        the "endianness" of the words: if true, symbols will be packed from right to left within each word
+/// \tparam IndexType           the type of integer used to address the stream (e.g. uint32, uint64)
 ///
 template <typename SystemTag, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T = false, typename IndexType = uint32>
 struct PackedVector
@@ -71,6 +78,12 @@ struct PackedVector
     /// constructor
     ///
     PackedVector(const index_type size = 0);
+
+    /// copy constructor
+    ///
+    template <typename other_tag>
+    PackedVector(const PackedVector<other_tag,SYMBOL_SIZE,BIG_ENDIAN,IndexType>& other) :
+        m_storage( other.m_storage ), m_size( other.m_size ) {}
 
     /// resize
     ///

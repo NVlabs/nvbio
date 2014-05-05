@@ -294,9 +294,10 @@
 ///     nvbio::vector<device_tag,string_infix_coord_type> d_seed_coords;
 ///
 ///     const uint32 n_seeds = enumerate_string_seeds(
-///         len,
-///         uniform_seeds_functor( 3u, 1u ),
-///         d_seed_coords );
+///         len,                                   // the string length
+///         uniform_seeds_functor<>( 3u, 1u ),     // a seeding functor, specifying to extract
+///                                                // all 3-mers offset by 1 base each
+///         d_seed_coords );                       // the output infix coordinates
 ///
 ///     // define an infix-set to represent the resulting infixes
 ///     typedef nvbio::PackedVector<device_tag,ALPHABET_SIZE>::iterator           packed_iterator_type;

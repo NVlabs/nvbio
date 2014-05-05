@@ -120,8 +120,8 @@ void build_qgrams(
     sorted_qgrams = qgrams;
     sorted_indices.resize( n_queries );
     thrust::copy(
-        thrust::make_counting_iterator<uint32>(0u),
-        thrust::make_counting_iterator<uint32>(0u) + n_queries,
+        thrust::make_counting_iterator<uint32>(genome_offset),
+        thrust::make_counting_iterator<uint32>(genome_offset) + n_queries,
         sorted_indices.begin() );
 
     thrust::sort_by_key( sorted_qgrams.begin(), sorted_qgrams.end(), sorted_indices.begin() );
@@ -271,7 +271,7 @@ void test_qgram_index_query(
         qgrams.begin(),
         qgrams.begin() + n_queries,
         ranges.begin(),
-        nvbio::plain_view( qgram_index ) );
+        nvbio::raw_pointer( qgram_index ) );
 
     cudaDeviceSynchronize();
     timer.stop();
@@ -284,7 +284,7 @@ void test_qgram_index_query(
         sorted_qgrams.begin(),
         sorted_qgrams.begin() + n_queries,
         ranges.begin(),
-        nvbio::plain_view( qgram_index ) );
+        nvbio::raw_pointer( qgram_index ) );
 
     cudaDeviceSynchronize();
     timer.stop();
@@ -336,8 +336,14 @@ void test_qgram_index_query(
     const uint32 n_hits = qgram_filter.rank(
         qgram_index,
         n_queries,
-        nvbio::plain_view( sorted_qgrams ),
-        nvbio::plain_view( sorted_indices ) );
+        nvbio::raw_pointer( sorted_qgrams ),
+        nvbio::raw_pointer( sorted_indices ) );
+
+    if (n_hits != n_occurrences)
+    {
+        log_error(stderr, "  mismatching number of hits: expected %u, got %u\n", n_occurrences, n_hits);
+        exit(1);
+    }
 
     // loop through large batches of hits and locate them
     for (uint32 hits_begin = 0; hits_begin < n_hits; hits_begin += batch_size)

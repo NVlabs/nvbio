@@ -243,11 +243,11 @@ void map(
         const uint32 n_distinct = cuda::reduce_by_key(
             hits_end - hits_begin,
             thrust::make_transform_iterator(
-                nvbio::plain_view( hits ),
+                hits.begin(),
                 make_composition_functor( divide_by_two(), component_functor<hit_type>( 1u ) ) ), // take the second component divided by 2
-            nvbio::plain_view( scores ),
-            nvbio::plain_view( out_reads ),
-            nvbio::plain_view( out_scores ),
+            scores.begin(),
+            out_reads.begin(),
+            out_scores.begin(),
             thrust::maximum<int16>(),
             temp_storage );
 
@@ -391,7 +391,7 @@ int main(int argc, char* argv[])
         // count how many reads have a score >= score_threshold
         const uint32 n_aligned = cuda::reduce(
             n_reads,
-            thrust::make_transform_iterator( nvbio::plain_view( best_scores ), above_threshold( score_threshold ) ),
+            thrust::make_transform_iterator( best_scores.begin(), above_threshold( score_threshold ) ),
             thrust::plus<uint32>(),
             temp_storage );
 

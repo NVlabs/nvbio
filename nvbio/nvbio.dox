@@ -38,6 +38,12 @@
 /// most of its components are completely cross-platform and can be used both from host C++ and device
 /// CUDA code.
 ///
+/// \section IntroductionSection Introduction
+///
+/// - \subpage generic_programming_page
+/// - \subpage host_device_page
+/// - \subpage hello_dna_page
+///
 /// \section ModulesSection Modules
 ///\par
 /// NVBIO includes the following modules:
@@ -52,11 +58,6 @@
 /// - \subpage io_page
 /// - \subpage fasta_page
 /// - \subpage fastq_page
-///
-/// \section DesignConceptsSection Design Concepts
-///\par
-/// - \subpage host_device_page
-/// - \subpage generic_programming_page
 ///
 /// \section PerformanceSection Performance
 ///\par
@@ -100,13 +101,16 @@
 /// with distinct memory spaces.
 /// Hence, there can be several types of functions and data-structures:
 ///\par
-/// - functions that can be called on the host
-/// - functions that can be called on the device
-/// - functions that can be called both on the host and the device
+/// - single-threaded functions that can be called by a host thread
+/// - single-threaded functions that can be called by a device thread
+/// - single-threaded functions that can be called both on the host and the device
+/// - parallel functions that can be called by a host thread, and spawn one or more sets of host threads
+/// - parallel functions that can be called by a host thread, but spawn one or more sets of device threads
 ///\par
 /// - data-structures that encapsulate host data and are meant to be used on the host
+///   (e.g. a resizable host vector, nvbio::vector<host_tag,T>)
 /// - data-structures that encapsulate device data but are meant to be used on the host
-///   (e.g. a resizable device vector)
+///   (e.g. a resizable device vector, nvbio::vector<device_tag,T>)
 /// - data-structures that encapsulate device data and are meant to be used on the device
 ///\par
 /// Unified Virtual Memory (coming with the NVIDIA Maxwell generation) will eventually allow
@@ -116,17 +120,63 @@
 /// \section PlainViewsSection Plain Views
 ///\par
 /// The fact that some data structures contain device data but can only be used from the host,
-/// coupled with the fact that without Unified Virtual Memory it's only possible to pass PODs
-/// as device kernel parameters, lends naturally to the definition of <i>plain views</i>.
-///\par
-/// A plain view of an object is essentially a shallow reference to that object's data
-/// encapsulated in a POD data structure that can be passed as kernel parameters.
+/// coupled with the fact that at the moment CUDA does not allow to pass references
+/// as device kernel arguments and requires to pass PODs in, lends naturally to the definition of
+/// <i>plain views</i>: in NVBIO's speech, a plain view of an object is essentially a <i>shallow reference</i>
+/// to an object's data encapsulated in a POD data structure that can be passed as kernel parameters.
 ///\par
 /// NVBIO defines the generic function plain_view() to obtain the plain view of a given object.
 /// Analogously it defines the meta function plain_view_subtype<T>::type to get the type of the
 /// plain view of any given type T (where defined).
-/// Moreover, as a convention NVBIO's data structures T define the subtype T::plain_view_type
-/// to identify their plain view type.
+/// Moreover, as a convention NVBIO's data structures T define the subtype T::plain_view_type and
+/// T::const_plain_view_type to identify their plain view types.
+///\par
+/// As an example consider the following situation, where on the host you have created a large device vector
+/// you want to be filled by a device kernel.
+/// Ideally, you'd want to simply pass a reference to the vector to your kernel, as in:
+///\code
+/// __global__ void my_kernel(                   // the CUDA kernel
+///     nvbio::vector<device_tag,uint32>& vec)   // ideally, receive a reference: doesn't work without UVM!
+/// {
+///     const uint32 tid = threadIdx.x + blockIdx.x * blockDim.x; // compute a linear thread id
+///     if (tid < vec.size())
+///         vec[tid] = tid * 10;
+/// }
+///
+/// int main()
+/// {
+///     nvbio::vector<device_tag,uint32> vec( 1000000 );
+///
+///     const uint32 blockdim = 128;
+///     const uint32 n_blocks = util::divide_ri( vec.size(), blockdim ); 
+///     my_kernel<<<n_blocks,blockdim>>>( vec );
+/// }
+///\endcode
+///\par
+/// However, this won't be possible in CUDA until UVM is finally available. With NVBIO, you'd do this instead:
+///\code
+/// __global__ void my_kernel(                   // the CUDA kernel
+///     nvbio::vector_view<uint32> vec)          // NVBIO's surrogate of a reference
+/// {
+///     const uint32 tid = threadIdx.x + blockIdx.x * blockDim.x; // compute a linear thread id
+///     if (tid < vec.size())
+///         vec[tid] = tid * 10;
+/// }
+///
+/// int main()
+/// {
+///     nvbio::vector<device_tag,uint32> vec( 1000000 );
+///
+///     const uint32 blockdim = 128;
+///     const uint32 n_blocks = util::divide_ri( vec.size(), blockdim );
+///     my_kernel<<<n_blocks,blockdim>>>( nvbio::plain_view( vec ) );
+/// }
+///\endcode
+///\par
+/// This basic pattern can be applied to all of NVBIO's data structures that are meant to be setup from the
+/// host and accessed from the device.
+///
+/// Next: \subpage hello_dna_page
 
 /// \page generic_programming_page Generic Programming
 ///\par
@@ -162,3 +212,10 @@
 ///\par
 /// And obviously, the same story goes for FM-indices, Bloom filters, and so on and so on...
 ///
+/// Next: \subpage host_device_page
+
+/// \page hello_dna_page Hello DNA!
+///\par
+/// This page will teach you to familiarize with some of NVBIO's basic containers and concepts
+/// showing you how to instantiate a simple DNA string that can be accessed both on the host
+/// and the device and how to apply some basic transformations to it using parallel constructs.

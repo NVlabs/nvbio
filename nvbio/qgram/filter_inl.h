@@ -318,7 +318,7 @@ uint32 QGramFilter<host_tag, qgram_index_type, query_iterator, index_iterator>::
     // now sort the results by diagonal (which can be either a uint32 or a uint2)
     typedef typename if_equal<diagonal_type, uint32, uint32, uint64>::type primitive_type;
 
-    primitive_type* raw_diags( (primitive_type*)nvbio::plain_view( m_diags ) );
+    primitive_type* raw_diags( (primitive_type*)nvbio::raw_pointer( m_diags ) );
     thrust::sort(
         raw_diags,
         raw_diags + n_hits );
@@ -469,7 +469,7 @@ uint32 QGramFilter<device_tag, qgram_index_type, query_iterator, index_iterator>
     // now sort the results by diagonal (which can be either a uint32 or a uint2)
     typedef typename if_equal<diagonal_type, uint32, uint32, uint64>::type primitive_type;
 
-    primitive_type* raw_diags( (primitive_type*)nvbio::plain_view( m_diags ) );
+    primitive_type* raw_diags( (primitive_type*)nvbio::raw_pointer( m_diags ) );
 
     cuda::SortBuffers<primitive_type*> sort_buffers;
     sort_buffers.keys[0] = raw_diags;

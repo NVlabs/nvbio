@@ -179,8 +179,8 @@ struct ReadHitsIndexDeviceView
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     ReadHitsIndexDeviceView(
-        uint32*         links  = NULL,
-        const uint32    stride = 0u) : m_links( links ), m_stride( stride ) {}
+        links_storage_type  links  = links_storage_type(),
+        const uint32        stride = 0u) : m_links( links ), m_stride( stride ) {}
 
     /// return the number of hits bound to a read
     ///
@@ -266,15 +266,15 @@ struct HitQueuesDeviceView
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     HitQueuesDeviceView(
-        index_storage_type     _read_id         = NULL,     // hit -> read mapping
-        seed_storage_type      _seed            = NULL,     // hit info
-        ssa_storage_type       _ssa             = NULL,     // hit ssa info
-        loc_storage_type       _loc             = NULL,     // hit locations
-        score_storage_type     _score           = NULL,     // hit scores
-        sink_storage_type      _sink            = NULL,     // hit sinks
-        loc_storage_type       _opposite_loc    = NULL,     // hit locations, opposite mate
-        score_storage_type     _opposite_score  = NULL,     // hit scores, opposite mate
-        sink_storage_type      _opposite_sink   = NULL);    // hit sinks, opposite mate
+        index_storage_type     _read_id         = index_storage_type(),     // hit -> read mapping
+        seed_storage_type      _seed            = seed_storage_type(),      // hit info
+        ssa_storage_type       _ssa             = ssa_storage_type(),       // hit ssa info
+        loc_storage_type       _loc             = loc_storage_type(),       // hit locations
+        score_storage_type     _score           = score_storage_type(),     // hit scores
+        sink_storage_type      _sink            = sink_storage_type(),      // hit sinks
+        loc_storage_type       _opposite_loc    = loc_storage_type(),       // hit locations, opposite mate
+        score_storage_type     _opposite_score  = score_storage_type(),     // hit scores, opposite mate
+        sink_storage_type      _opposite_sink   = sink_storage_type());     // hit sinks, opposite mate
 
     /// return a reference to a given hit
     ///

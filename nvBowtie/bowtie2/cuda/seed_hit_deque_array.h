@@ -158,11 +158,11 @@ struct SeedHitDequeArrayDeviceView
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     SeedHitDequeArrayDeviceView(
-        index_storage_type  counts = NULL,
-        index_storage_type  index  = NULL,
-        hits_storage_type   hits   = NULL,
-        prob_storage_type   probs  = NULL,
-        index_storage_type  pool   = NULL);
+        index_storage_type  counts = index_storage_type(),
+        index_storage_type  index  = index_storage_type(),
+        hits_storage_type   hits   = hits_storage_type(),
+        prob_storage_type   probs  = prob_storage_type(),
+        index_storage_type  pool   = index_storage_type());
 
     /// return a reference to the given deque
     ///
@@ -188,12 +188,12 @@ struct SeedHitDequeArrayDeviceView
     /// get the storage for the hit vector bound to a given read
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    SeedHit* get_data(const uint32 read_id) const { return m_hits + m_index[read_id]; }
+    SeedHit* get_data(const uint32 read_id) const { return m_hits.base() + m_index[read_id]; }
 
     /// get the storage for the hit vector bound to a given read
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    float* get_probs(const uint32 read_id) const { return m_probs + m_index[read_id]; }
+    float* get_probs(const uint32 read_id) const { return m_probs.base() + m_index[read_id]; }
 
     /// erase the set of hits bound to a read.
     /// NOTE: this method doesn't release the previously allocated memory!

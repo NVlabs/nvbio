@@ -32,43 +32,64 @@
 #pragma once
 
 #include <nvbio/basic/types.h>
+#include <nvbio/basic/vector_view.h>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 
 namespace nvbio {
 
-template <typename T> struct device_view_subtype< thrust::device_vector<T> > { typedef T* type; };
-template <typename T> struct plain_view_subtype< thrust::host_vector<T> >   { typedef T* type; };
-template <typename T> struct plain_view_subtype< thrust::device_vector<T> > { typedef T* type; };
+template <typename T> struct device_view_subtype< thrust::device_vector<T> > { typedef vector_view<T*> type; };
+template <typename T> struct plain_view_subtype< thrust::host_vector<T> >   { typedef vector_view<T*> type; };
+template <typename T> struct plain_view_subtype< thrust::device_vector<T> > { typedef vector_view<T*> type; };
 
-/// return the device view of a device vector
+/// return the plain view of a device vector
 ///
 template <typename T>
-T* device_view(thrust::device_vector<T>& vec) { return vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL; }
+vector_view<T*> device_view(thrust::device_vector<T>& vec) { return vector_view<T*>( vec.size(), vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL ); }
 
-/// return the device view of a device vector
+/// return the plain view of a device vector
 ///
 template <typename T>
-const T* device_view(const thrust::device_vector<T>& vec) { return vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL; }
+vector_view<const T*> device_view(const thrust::device_vector<T>& vec) { return vector_view<const T*>( vec.size(), vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL ); }
 
-/// return the device view of a device vector
+/// return the plain view of a device vector
 ///
 template <typename T>
-T* plain_view(thrust::device_vector<T>& vec) { return vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL; }
+vector_view<T*> plain_view(thrust::device_vector<T>& vec) { return vector_view<T*>( vec.size(), vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL ); }
 
-/// return the device view of a device vector
+/// return the plain view of a device vector
 ///
 template <typename T>
-const T* plain_view(const thrust::device_vector<T>& vec) { return vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL; }
+vector_view<const T*> plain_view(const thrust::device_vector<T>& vec) { return vector_view<const T*>( vec.size(), vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL ); }
 
-/// return the device view of a device vector
+/// return the plain view of a device vector
 ///
 template <typename T>
-T* plain_view(thrust::host_vector<T>& vec) { return vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL; }
+vector_view<T*> plain_view(thrust::host_vector<T>& vec) { return vector_view<T*>( vec.size(), vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL ); }
 
-/// return the device view of a device vector
+/// return the plain view of a device vector
 ///
 template <typename T>
-const T* plain_view(const thrust::host_vector<T>& vec) { return vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL; }
+vector_view<const T*> plain_view(const thrust::host_vector<T>& vec) { return vector_view<const T*>( vec.size(), vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL ); }
+
+/// return the raw pointer of a device vector
+///
+template <typename T>
+T* raw_pointer(thrust::device_vector<T>& vec) { return vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL; }
+
+/// return the raw pointer of a device vector
+///
+template <typename T>
+const T* raw_pointer(const thrust::device_vector<T>& vec) { return vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL; }
+
+/// return the raw pointer of a device vector
+///
+template <typename T>
+T* raw_pointer(thrust::host_vector<T>& vec) { return vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL; }
+
+/// return the plain view of a device vector
+///
+template <typename T>
+const T* raw_pointer(const thrust::host_vector<T>& vec) { return vec.size(), vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL; }
 
 } // namespace nvbio

@@ -859,11 +859,9 @@ void assign(
 }
 
 //
-// A utility device function to transpose a set of packed input streams:
+// A utility function to transpose a set of packed input streams:
 //   the symbols of the i-th input stream is supposed to be stored contiguously in the range [offset(i), offset + N(i)]
 //   the *words* of i-th output stream will be stored in strided fashion at out_stream[tid, tid + (N(i)+symbols_per_word-1/symbols_per_word) * stride]
-//
-// The function is warp-synchronous, hence all threads in each warp must be active.
 //
 // \param stride       output stride
 // \param N            length of this thread's string in the input stream

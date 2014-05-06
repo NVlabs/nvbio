@@ -858,9 +858,6 @@ void assign(
     }
 }
 
-#if defined(__CUDACC__)
-
-#if 0
 //
 // A utility device function to transpose a set of packed input streams:
 //   the symbols of the i-th input stream is supposed to be stored contiguously in the range [offset(i), offset + N(i)]
@@ -874,111 +871,51 @@ void assign(
 // \param in_stream    input stream
 // \param out_stream   output stream
 //
-template <uint32 BLOCKDIM, uint32 BITS, bool BIG_ENDIAN_T, typename InStreamIterator, typename OutStreamIterator>
+template <uint32 BLOCKDIM, uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename InStreamIterator, typename OutStreamIterator>
 NVBIO_DEVICE
 void transpose_packed_streams(const uint32 stride, const uint32 N, const uint32 in_offset, const InStreamIterator in_stream, OutStreamIterator out_stream)
 {
-    const uint32 WARP_SIZE = cuda::Arch::WARP_SIZE;
-    const uint32 NUM_WARPS = BLOCKDIM / WARP_SIZE;
+    typedef typename std::iterator_traits<InStreamIterator>::value_type word_type;
 
-    __shared__ volatile uint32 sm_begin_words[ BLOCKDIM ];
-    __shared__ volatile uint32 sm_end_words[ BLOCKDIM ];
-    __shared__ volatile uint32 sm_words[ BLOCKDIM * (cuda::Arch::WARP_SIZE+1) ];
-
-    const uint32 SYMBOLS_PER_WORD = (sizeof(uint32)*8) / BITS;
+    const uint32 SYMBOLS_PER_WORD = (sizeof(word_type)*8) / SYMBOL_SIZE;
+          uint32 word_offset      = in_offset & (SYMBOLS_PER_WORD-1);
           uint32 begin_word       = in_offset / SYMBOLS_PER_WORD;
           uint32 end_word         = (in_offset + N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
-          uint32 word_offset      = in_offset & (SYMBOLS_PER_WORD-1);
-          uint32 saved_words      = 0;
 
-    // save the last word
-    sm_end_words[ threadIdx.x ] = end_word;
-
-    while (__any( begin_word < end_word ))
+    // write out the output symbols
+    const uint32 N_words = (N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
+    word_type cur_word = in_stream[begin_word+0];
+    for (uint32 w = 0; w < N_words; ++w)
     {
-        // save the new first word
-        sm_begin_words[ threadIdx.x ] = begin_word;
-
-        // use the entire warp to load WARP_SIZE words for each sequence
-        for (uint32 t = 0; t < WARP_SIZE; ++t)
+        if (BIG_ENDIAN == false)
         {
-            const uint32 src_begin_word  =  sm_begin_words[ warp_id() * WARP_SIZE + t ];
-            const uint32 src_end_word    =  sm_end_words[   warp_id() * WARP_SIZE + t ];
+            // fill the first part of the output word
+            word_type out_word = cur_word >> (word_offset*SYMBOL_SIZE);
 
-            // use the entire warp to load up to WARP_SIZE consecutive words
-            if (src_begin_word + warp_tid() < src_end_word)
-                sm_words[ warp_tid() * (BLOCKDIM+NUM_WARPS) + (warp_id() * (WARP_SIZE+1) + t) ] = in_stream[ src_begin_word + warp_tid() ];
+            // fetch the next word
+            cur_word = begin_word+w+1 < end_word ? in_stream[begin_word+w+1] : 0u;
+
+            // fill the second part of the output word
+            if (word_offset)
+                out_word |= cur_word << ((SYMBOLS_PER_WORD - word_offset)*SYMBOL_SIZE);
+
+            out_stream[ stride*w ] = out_word;
         }
-
-        if (begin_word < end_word)
+        else
         {
-            // compute the number of whole words we are going to save out
-            const uint32 whole_words = nvbio::min( word_offset ? WARP_SIZE-1 : WARP_SIZE, end_word - begin_word );
+            // fill the first part of the output word
+            word_type out_word = cur_word << (word_offset*SYMBOL_SIZE);
 
-            // shift the sequence of bits in shared memory so as to remove the offset before writing them out
-            typedef PackedStream<strided_iterator<uint32*>, uint8, BITS, BIG_ENDIAN_T> stream_type;
-            stream_type stream( strided_iterator<uint32*>( (uint32*)sm_words + (warp_id() * (WARP_SIZE+1) + warp_tid()), BLOCKDIM+NUM_WARPS ) );
+            // fetch the next word
+            cur_word = begin_word+w+1 < end_word ? in_stream[begin_word+w+1] : 0u;
 
-            for (uint32 i = 0; i < whole_words * SYMBOLS_PER_WORD; ++i)
-                stream[i] = stream[i + word_offset];
+            // fill the second part of the output word
+            if (word_offset)
+                out_word |= cur_word >> ((SYMBOLS_PER_WORD - word_offset)*SYMBOL_SIZE);
 
-            // save the shifted words to global memory
-            for (uint32 i = 0; i < whole_words; ++i)
-                out_stream[ stride*(saved_words + i) ] = sm_words[ (warp_id() * (WARP_SIZE+1) + warp_tid()) + i * (BLOCKDIM+NUM_WARPS) ];
-
-            // update the first word we have to start reading from
-            begin_word  += whole_words;
-            saved_words += whole_words;
-
-            // update the offset in the word we have to start reading from
-            word_offset = (word_offset + whole_words * SYMBOLS_PER_WORD) & (SYMBOLS_PER_WORD-1);
+            out_stream[ stride*w ] = out_word;
         }
     }
 }
-#else
-//
-// A utility device function to transpose a set of packed input streams:
-//   the symbols of the i-th input stream is supposed to be stored contiguously in the range [offset(i), offset + N(i)]
-//   the *words* of i-th output stream will be stored in strided fashion at out_stream[tid, tid + (N(i)+symbols_per_word-1/symbols_per_word) * stride]
-//
-// The function is warp-synchronous, hence all threads in each warp must be active.
-//
-// \param stride       output stride
-// \param N            length of this thread's string in the input stream
-// \param in_offset    offset of this thread's string in the input stream
-// \param in_stream    input stream
-// \param out_stream   output stream
-//
-template <uint32 BLOCKDIM, uint32 BITS, bool BIG_ENDIAN_T, typename InStreamIterator, typename OutStreamIterator>
-NVBIO_DEVICE
-void transpose_packed_streams(const uint32 stride, const uint32 N, const uint32 in_offset, const InStreamIterator in_stream, OutStreamIterator out_stream)
-{
-    const uint32 SYMBOLS_PER_WORD = (sizeof(uint32)*8) / BITS;
-          uint32 begin_word       = in_offset / SYMBOLS_PER_WORD;
-          uint32 end_word         = (in_offset + N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
-          uint32 word_offset      = in_offset & (SYMBOLS_PER_WORD-1);
-
-    // load the words of the input stream in local memory with a tight loop
-    uint32 lmem[64];
-    for (uint32 word = begin_word; word < end_word; ++word)
-        lmem[word - begin_word] = in_stream[ word ];
-
-    typedef PackedStream<const_cached_iterator<const uint32*>,uint8,BITS,BIG_ENDIAN_T> const_stream_type;
-    typedef PackedStream<uint32*,uint8,BITS,BIG_ENDIAN_T>                                    stream_type;
-
-    const_stream_type clmem_stream( &lmem[0] );
-    stream_type        lmem_stream( &lmem[0] );
-
-    // shift the symbols in lmem
-    for (uint32 i = 0; i < N; ++i)
-        lmem_stream[i] = clmem_stream[i + word_offset];
-
-    // save the shifted words to global memory
-    for (uint32 i = 0; i < end_word - begin_word; ++i)
-        out_stream[ stride*i ] = lmem[ i ];
-}
-#endif
-
-#endif
 
 } // namespace nvbio

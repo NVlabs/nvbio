@@ -899,11 +899,12 @@ void packed_concatenated_to_strided_packed_kernel(
     OutStreamIterator out_stream,
     OutLengthIterator out_lengths)
 {
-#if 0
     const uint32 tid = threadIdx.x + blockIdx.x * BLOCKDIM;
+    if (tid >= N_strings)
+        return;
 
-    const uint32 offset = tid < N_strings ? in_offsets[tid]            : 0u;
-    const uint32 length = tid < N_strings ? in_offsets[tid+1] - offset : 0u;
+    const uint32 offset = in_offsets[tid];
+    const uint32 length = in_offsets[tid+1] - offset;
 
     transpose_packed_streams<BLOCKDIM,SYMBOL_SIZE,BIG_ENDIAN>(
         out_stride,
@@ -912,60 +913,7 @@ void packed_concatenated_to_strided_packed_kernel(
         in_stream,
         out_stream + tid );
 
-    if (tid < N_strings)
-        out_lengths[tid] = length;
-#else
-    const uint32 tid = threadIdx.x + blockIdx.x * BLOCKDIM;
-    if (tid >= N_strings)
-        return;
-
-    const uint32 in_offset = in_offsets[tid];
-    const uint32 N         = in_offsets[tid+1] - in_offset;
-
-    typedef typename std::iterator_traits<InStreamIterator>::value_type word_type;
-
-    const uint32 SYMBOLS_PER_WORD = (sizeof(word_type)*8) / SYMBOL_SIZE;
-          uint32 word_offset      = in_offset & (SYMBOLS_PER_WORD-1);
-          uint32 begin_word       = in_offset / SYMBOLS_PER_WORD;
-          uint32 end_word         = (in_offset + N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
-
-    // write out the output symbols
-    const uint32 N_words = (N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
-    word_type cur_word = in_stream[begin_word+0];
-    for (uint32 w = 0; w < N_words; ++w)
-    {
-        if (BIG_ENDIAN == false)
-        {
-            // fill the first part of the output word
-            word_type out_word = cur_word >> (word_offset*SYMBOL_SIZE);
-
-            // fetch the next word
-            cur_word = begin_word+w+1 < end_word ? in_stream[begin_word+w+1] : 0u;
-
-            // fill the second part of the output word
-            if (word_offset)
-                out_word |= cur_word << ((SYMBOLS_PER_WORD - word_offset)*SYMBOL_SIZE);
-
-            out_stream[ tid + out_stride*w ] = out_word;
-        }
-        else
-        {
-            // fill the first part of the output word
-            word_type out_word = cur_word << (word_offset*SYMBOL_SIZE);
-
-            // fetch the next word
-            cur_word = begin_word+w+1 < end_word ? in_stream[begin_word+w+1] : 0u;
-
-            // fill the second part of the output word
-            if (word_offset)
-                out_word |= cur_word >> ((SYMBOLS_PER_WORD - word_offset)*SYMBOL_SIZE);
-
-            out_stream[ tid + out_stride*w ] = out_word;
-        }
-    }
-
-    out_lengths[tid] = N;
-#endif
+    out_lengths[tid] = length;
 }
 
 //
@@ -988,10 +936,11 @@ void packed_sparse_to_strided_packed_kernel(
     OutStreamIterator out_stream,
     OutLengthIterator out_lengths)
 {
-#if 0
     const uint32 tid = threadIdx.x + blockIdx.x * BLOCKDIM;
+    if (tid >= N_strings)
+        return;
 
-    const uint2  range  = tid < N_strings ? in_ranges[tid] : make_uint2( 0u, 0u );
+    const uint2  range  = in_ranges[tid];
     const uint32 offset = range.x;
     const uint32 length = range.y - range.x;
 
@@ -1002,61 +951,7 @@ void packed_sparse_to_strided_packed_kernel(
         in_stream,
         out_stream + tid );
 
-    if (tid < N_strings)
-        out_lengths[tid] = length;
-#else
-    const uint32 tid = threadIdx.x + blockIdx.x * BLOCKDIM;
-    if (tid >= N_strings)
-        return;
-
-    const uint2  range     = in_ranges[tid];
-    const uint32 in_offset = range.x;
-    const uint32 N         = range.y - in_offset;
-
-    typedef typename std::iterator_traits<InStreamIterator>::value_type word_type;
-
-    const uint32 SYMBOLS_PER_WORD = (sizeof(word_type)*8) / SYMBOL_SIZE;
-          uint32 word_offset      = in_offset & (SYMBOLS_PER_WORD-1);
-          uint32 begin_word       = in_offset / SYMBOLS_PER_WORD;
-          uint32 end_word         = (in_offset + N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
-
-    // write out the output symbols
-    const uint32 N_words = (N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
-    word_type cur_word = in_stream[begin_word+0];
-    for (uint32 w = 0; w < N_words; ++w)
-    {
-        if (BIG_ENDIAN == false)
-        {
-            // fill the first part of the output word
-            word_type out_word = cur_word >> (word_offset*SYMBOL_SIZE);
-
-            // fetch the next word
-            cur_word = begin_word+w+1 < end_word ? in_stream[begin_word+w+1] : 0u;
-
-            // fill the second part of the output word
-            if (word_offset)
-                out_word |= cur_word << ((SYMBOLS_PER_WORD - word_offset)*SYMBOL_SIZE);
-
-            out_stream[ tid + out_stride*w ] = out_word;
-        }
-        else
-        {
-            // fill the first part of the output word
-            word_type out_word = cur_word << (word_offset*SYMBOL_SIZE);
-
-            // fetch the next word
-            cur_word = begin_word+w+1 < end_word ? in_stream[begin_word+w+1] : 0u;
-
-            // fill the second part of the output word
-            if (word_offset)
-                out_word |= cur_word >> ((SYMBOLS_PER_WORD - word_offset)*SYMBOL_SIZE);
-
-            out_stream[ tid + out_stride*w ] = out_word;
-        }
-    }
-
-    out_lengths[tid] = N;
-#endif
+    out_lengths[tid] = length;
 }
 
 template <typename OutStringSet>

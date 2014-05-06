@@ -165,6 +165,13 @@ struct PackedStreamRef
     index_type m_index;
 };
 
+/// redefine the to_const meta-function for PackedStreamRef to just return a symbol
+///
+template <typename Stream> struct to_const< PackedStreamRef<Stream> >
+{
+    typedef typename PackedStreamRef<Stream>::symbol_type type;
+};
+
 ///
 /// PackedStream iterator
 ///

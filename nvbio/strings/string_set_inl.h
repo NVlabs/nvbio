@@ -412,8 +412,9 @@ void packed_sparse_to_strided_kernel(
     if (tid >= N_strings)
         return;
 
-    const uint32 in_offset = in_ranges[tid].x;
-    const uint32 N         = in_ranges[tid].y - in_offset;
+    const uint2  range     = in_ranges[tid];
+    const uint32 in_offset = range.x;
+    const uint32 N         = range.y - in_offset;
 
 #if 0
     typedef typename std::iterator_traits<InStreamIterator>::value_type word_type;

@@ -1291,6 +1291,102 @@ struct copy_dispatch<
         }
     };
 
+    // packed-concat input set
+    template <
+        typename InStreamIterator,
+        typename SymbolType,
+        uint32   SYMBOL_SIZE_T,
+        bool     BIG_ENDIAN_T,
+        typename InOffsetIterator>
+    struct source_dispatch<
+        ConcatenatedStringSet<
+            PackedStreamIterator< PackedStream<InStreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> >,
+            InOffsetIterator>
+        >
+    {
+        typedef ConcatenatedStringSet<
+            PackedStreamIterator< PackedStream<InStreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> >,
+            InOffsetIterator>   in_string_set_type;
+
+        static void enact(
+            const in_string_set_type&  in_string_set,
+            const out_string_set_type& out_string_set)
+        {
+            const uint32 BLOCKDIM = 64u;
+
+            if (out_string_set.size() != in_string_set.size() ||
+                out_string_set.stride() < out_string_set.size())
+                throw nvbio::runtime_error( "copy() : unmatched string set sizes" );
+
+            const uint32 n_blocks = (in_string_set.size() + BLOCKDIM-1)/BLOCKDIM;
+
+            // get the base word stream of the input
+            const InStreamIterator in_stream = in_string_set.base_string().container().stream();
+
+            packed_concat_to_strided_kernel<
+                BLOCKDIM,
+                SYMBOL_SIZE_T,
+                BIG_ENDIAN_T>
+                <<<n_blocks,BLOCKDIM>>>(
+                in_string_set.size(),
+                out_string_set.stride(),
+                in_stream,
+                in_string_set.offsets(),
+                out_string_set.base_string(),
+                out_string_set.lengths() );
+
+            cudaThreadSynchronize();
+        }
+    };
+
+    // packed-sparse input set
+    template <
+        typename InStreamIterator,
+        typename SymbolType,
+        uint32   SYMBOL_SIZE_T,
+        bool     BIG_ENDIAN_T,
+        typename InOffsetIterator>
+    struct source_dispatch<
+        SparseStringSet<
+            PackedStreamIterator< PackedStream<InStreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> >,
+            InOffsetIterator>
+        >
+    {
+        typedef SparseStringSet<
+            PackedStreamIterator< PackedStream<InStreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> >,
+            InOffsetIterator>   in_string_set_type;
+
+        static void enact(
+            const in_string_set_type&  in_string_set,
+            const out_string_set_type& out_string_set)
+        {
+            const uint32 BLOCKDIM = 64u;
+
+            if (out_string_set.size() != in_string_set.size() ||
+                out_string_set.stride() < out_string_set.size())
+                throw nvbio::runtime_error( "copy() : unmatched string set sizes" );
+
+            const uint32 n_blocks = (in_string_set.size() + BLOCKDIM-1)/BLOCKDIM;
+
+            // get the base word stream of the input
+            const InStreamIterator in_stream = in_string_set.base_string().container().stream();
+
+            packed_sparse_to_strided_kernel<
+                BLOCKDIM,
+                SYMBOL_SIZE_T,
+                BIG_ENDIAN_T>
+                <<<n_blocks,BLOCKDIM>>>(
+                in_string_set.size(),
+                out_string_set.stride(),
+                in_stream,
+                in_string_set.ranges(),
+                out_string_set.base_string(),
+                out_string_set.lengths() );
+
+            cudaThreadSynchronize();
+        }
+    };
+
     template <typename in_string_set_type>
     static void enact(
             const in_string_set_type&  in_string_set,

@@ -872,7 +872,7 @@ void assign(
 // \param out_stream   output stream
 //
 template <uint32 BLOCKDIM, uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename InStreamIterator, typename OutStreamIterator>
-NVBIO_DEVICE
+NVBIO_HOST_DEVICE
 void transpose_packed_streams(const uint32 stride, const uint32 N, const uint32 in_offset, const InStreamIterator in_stream, OutStreamIterator out_stream)
 {
     typedef typename std::iterator_traits<InStreamIterator>::value_type word_type;

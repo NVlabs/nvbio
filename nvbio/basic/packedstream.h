@@ -564,8 +564,6 @@ struct uint4_as_uint32_iterator
     IteratorType m_it;
 };
 
-#if defined(__CUDACC__)
-
 ///
 /// A utility device function to transpose a set of packed input streams:
 ///   the symbols of the i-th input stream is supposed to be stored contiguously in the range [offset(i), offset + N(i)]
@@ -580,9 +578,8 @@ struct uint4_as_uint32_iterator
 /// \param out_stream   output stream (usually of the form ptr + thread_id)
 ///
 template <uint32 BLOCKDIM, uint32 BITS, bool BIG_ENDIAN, typename InStreamIterator, typename OutStreamIterator>
-NVBIO_DEVICE void transpose_packed_streams(const uint32 stride, const uint32 N, const uint32 in_offset, const InStreamIterator in_stream, OutStreamIterator out_stream);
-
-#endif
+NVBIO_HOST_DEVICE
+void transpose_packed_streams(const uint32 stride, const uint32 N, const uint32 in_offset, const InStreamIterator in_stream, OutStreamIterator out_stream);
 
 ///@} PackedStreams
 ///@} Basic

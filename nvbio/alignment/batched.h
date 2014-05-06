@@ -148,6 +148,45 @@ void batch_alignment_score(
     const scheduler_type        scheduler);
 
 ///
+/// A convenience function for aligning a batch of patterns to a corresponding batch of texts on
+/// the device.
+/// <b><em>NOTE</em></b>: this function allocates temporary storage, and doesn't perform
+/// any local memory caching of the input strings: hence, it might not attain maximum performance.
+/// For maximum speed, check the BatchedAlignmentScore contexts.
+///\par
+/// All the involved string sets and iterators must reside in <em>device memory</em>.
+///\par
+/// For a usage example, see \ref BatchAlignmentSection.
+///
+/// \tparam aligner_type        an \ref Aligner "Aligner" algorithm
+/// \tparam pattern_set_type    a string set storing the patterns
+/// \tparam text_set_type       a string set storing the texts
+/// \tparam sink_iterator       a random access iterator to the output alignment sinks
+/// \tparam scheduler_type      a \ref BatchScheduler "Batch Scheduler"
+///
+/// \param aligner              the \ref Aligner "Aligner" algorithm
+/// \param patterns             the patterns string set
+/// \param texts                the texts string set
+/// \param sinks                the output alignment sinks
+/// \param scheduler            the \ref BatchScheduler "Batch Scheduler"
+///
+template <
+    uint32   BAND_LEN,
+    typename aligner_type,
+    typename pattern_set_type,
+    typename text_set_type,
+    typename sink_iterator,
+    typename scheduler_type>
+void batch_banded_alignment_score(
+    const aligner_type      aligner,
+    const pattern_set_type  patterns,
+    const text_set_type     texts,
+          sink_iterator     sinks,
+    const scheduler_type    scheduler,
+    const uint32            max_pattern_length,
+    const uint32            max_text_length);
+
+///
 /// Execution context for a batch of alignment jobs.
 ///
 /// \tparam stream_type     the stream of alignment jobs

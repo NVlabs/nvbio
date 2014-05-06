@@ -42,7 +42,7 @@ namespace aln {
 
 template <uint32 BAND_LEN, typename stream_type>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-void batched_banded_alignment_score(const stream_type stream, const uint32 work_id)
+void batched_banded_alignment_score(const stream_type& stream, const uint32 work_id)
 {
     typedef typename stream_type::aligner_type  aligner_type;
     typedef typename stream_type::context_type  context_type;
@@ -58,9 +58,9 @@ void batched_banded_alignment_score(const stream_type stream, const uint32 work_
     }
 
     // compute the end of the current DP matrix window
-    const uint32 len = equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
-        stream.pattern_length( work_id, &context ) :
-        stream.text_length( work_id, &context );
+    const uint32 len = equal<typename aligner_type::algorithm_tag,TextBlockingTag>() ?
+        stream.text_length( work_id, &context ) :
+        stream.pattern_length( work_id, &context );
 
     // load the strings to be aligned
     strings_type strings;
@@ -83,7 +83,6 @@ template <const uint32 BAND_LEN, typename stream_type>
 __global__ void batched_banded_alignment_score_kernel(const stream_type stream)
 {
     const uint32 tid = blockIdx.x * blockDim.x + threadIdx.x;
-
     if (tid >= stream.size())
         return;
 

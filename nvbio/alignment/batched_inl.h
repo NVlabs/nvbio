@@ -760,10 +760,10 @@ struct AlignmentStream
 {
     typedef t_aligner_type                              aligner_type;
 
-    typedef typename pattern_set_type::string_type      pattern_string;
-    typedef typename text_set_type::string_type         text_string;
-    typedef typename qualities_set_type::string_type    quals_string;
-    typedef typename sink_iterator::value_type          sink_type;
+    typedef typename pattern_set_type::string_type                      pattern_string;
+    typedef typename text_set_type::string_type                         text_string;
+    typedef typename qualities_set_type::string_type                    quals_string;
+    typedef typename std::iterator_traits<sink_iterator>::value_type    sink_type;
 
     // an alignment context
     struct context_type
@@ -780,6 +780,7 @@ struct AlignmentStream
     };
 
     // constructor
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     AlignmentStream(
         aligner_type                _aligner,
         const uint32                _count,
@@ -828,6 +829,9 @@ struct AlignmentStream
         const uint32    i,
         context_type*   context) const
     {
+        // initialize the sink
+        context->sink = sink_type();
+
         context->min_score = Field_traits<int32>::min();
         return true;
     }
@@ -936,6 +940,45 @@ void batch_alignment_score(
         sinks,
         500,            // TODO: compute this with a reduction!
         500 );          // TODO: compute this with a reduction!
+
+    // enact the batch
+    batch_type batch;
+    batch.enact( stream );
+}
+
+//
+// A convenience function for aligning a batch of patterns to a corresponding batch of texts.
+//
+template <
+    uint32   BAND_LEN,
+    typename aligner_type,
+    typename pattern_set_type,
+    typename text_set_type,
+    typename sink_iterator,
+    typename scheduler_type>
+void batch_banded_alignment_score(
+    const aligner_type      aligner,
+    const pattern_set_type  patterns,
+    const text_set_type     texts,
+          sink_iterator     sinks,
+    const scheduler_type    scheduler,
+    const uint32            max_pattern_length,
+    const uint32            max_text_length)
+{
+    typedef priv::AlignmentStream<aligner_type,pattern_set_type,trivial_quality_string_set,text_set_type,sink_iterator> stream_type;
+
+    typedef aln::BatchedBandedAlignmentScore<BAND_LEN, stream_type, scheduler_type> batch_type;  // our batch type
+
+    // create the stream
+    stream_type stream(
+        aligner,
+        patterns.size(),
+        patterns,
+        trivial_quality_string_set(),
+        texts,
+        sinks,
+        max_pattern_length,
+        max_text_length );
 
     // enact the batch
     batch_type batch;

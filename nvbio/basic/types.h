@@ -27,6 +27,7 @@
 
 #pragma once
 
+#include <nvbio/basic/version.h>
 #include <assert.h>
 #include <vector_types.h>
 #include <thrust/iterator/detail/host_system_tag.h>

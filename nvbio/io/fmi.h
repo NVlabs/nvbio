@@ -129,8 +129,12 @@ struct FMIndexData
     static const uint32 OCC_INT = 64;
     static const uint32 SA_INT  = 16;
 
-    typedef PackedStream<const uint32*,uint8,2,true>          stream_type;
-    typedef PackedStream<      uint32*,uint8,2,true> nonconst_stream_type;
+    static const uint32 GENOME_BITS       = 2u;
+    static const bool   GENOME_BIG_ENDIAN = true;
+    static const uint32 GENOME_SYMBOLS_PER_WORD = (4*sizeof(uint32))/GENOME_BITS;
+
+    typedef PackedStream<const uint32*,uint8,GENOME_BITS,GENOME_BIG_ENDIAN>          stream_type;
+    typedef PackedStream<      uint32*,uint8,GENOME_BITS,GENOME_BIG_ENDIAN> nonconst_stream_type;
 
     typedef SSA_index_multiple<SA_INT>  SSA_type;
     typedef SSA_type::context_type      SSA_context;

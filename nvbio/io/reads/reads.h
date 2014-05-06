@@ -128,7 +128,11 @@ struct ReadDataView
     // symbol size for reads
     static const uint32 READ_BITS = 4;
     // big endian?
-    static const bool   HI_BITS   = false;
+    static const bool   HI_BITS   = false; // deprecated
+    // big endian?
+    static const bool   READ_BIG_ENDIAN = false;
+    // symbols per word
+    static const uint32 READ_SYMBOLS_PER_WORD = (4*sizeof(uint32))/READ_BITS;
 
     typedef PackedStream<read_iterator,uint8,READ_BITS,HI_BITS>             read_stream_type;       ///< the packed read-stream type
     typedef PackedStream<const_read_iterator,uint8,READ_BITS,HI_BITS> const_read_stream_type;       ///< the const packed read-stream type

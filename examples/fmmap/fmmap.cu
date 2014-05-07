@@ -83,7 +83,19 @@ struct Stats
     uint64  occurrences;
 };
 
-// transform a (index-pos,seed-id) hit into a diagonal (text-pos = index-pos - seed-pos, read-id)
+// the pipeline state
+//
+struct Pipeline
+{
+    typedef io::FMIndexDataDevice::fm_index_type        fm_index_type;
+    typedef FMIndexFilterDevice<fm_index_type>          fm_filter_type;
+
+    Params                               params;    // program options
+    SharedPointer<io::FMIndexDataDevice> fm_data;   // fm-index data
+    fm_filter_type                       fm_filter; // fm-index filter
+};
+
+// transform an (index-pos,seed-id) hit into a diagonal (text-pos = index-pos - seed-pos, read-id)
 struct hit_to_diagonal
 {
     typedef uint2  argument_type;
@@ -207,21 +219,30 @@ struct sink_score
 
 // perform q-gram index mapping
 //
-template <typename fm_index_type, typename fm_filter_type, typename genome_string>
 void map(
-    const Params                        params,
-          fm_index_type&                fm_index,
-          fm_filter_type&               fm_filter,
+    Pipeline&                           pipeline,
     const io::ReadDataDevice&           reads,
-    const uint32                        genome_len,
-    const genome_string                 genome,
     nvbio::vector<device_tag,int16>&    best_scores,
           Stats&                        stats)
 {
+    typedef io::FMIndexDataDevice::stream_type                                  genome_string;
     typedef io::ReadDataDevice::const_read_string_set_type                      read_string_set_type;
     typedef string_set_infix_coord_type                                         infix_coord_type;
     typedef nvbio::vector<device_tag,infix_coord_type>                          infix_vector_type;
     typedef InfixSet<read_string_set_type, const string_set_infix_coord_type*>  seed_string_set_type;
+
+    // fetch the program options
+    const Params& params = pipeline.params;
+
+    // fetch the genome string
+    const uint32        genome_len = pipeline.fm_data->genome_length();
+    const genome_string genome( pipeline.fm_data->genome_stream() );
+
+    // fetch an fm-index view
+    const Pipeline::fm_index_type fm_index = pipeline.fm_data->index();
+
+    // fetch the fm-index filter
+    Pipeline::fm_filter_type& fm_filter = pipeline.fm_filter;
 
     // prepare some vectors to store the query qgrams
     infix_vector_type seed_coords;
@@ -244,12 +265,12 @@ void map(
     stats.extract_time  += extract_time;
 
     //
-    // search the sorted query q-grams with a q-gram filter
+    // search the sorted seeds with the FM-index filter
     //
 
     const uint32 batch_size = 16*1024*1024;
 
-    typedef uint2  hit_type;
+    typedef uint2 hit_type; // each hit will be an (index-pos,seed-id) coordinate pair
 
     // prepare storage for the output hits
     nvbio::vector<device_tag,hit_type>      hits( batch_size );
@@ -414,16 +435,15 @@ int main(int argc, char* argv[])
         return 1u;
     }
 
+    Pipeline pipeline;
+
+    // store the program options
+    pipeline.params = params;
+
     // build its device version
-    const io::FMIndexDataDevice d_fmi( h_fmi, io::FMIndexDataDevice::GENOME | io::FMIndexData::FORWARD | io::FMIndexData::SA );
-
-    typedef io::FMIndexDataDevice::stream_type genome_type;
-    //typedef PackedStream<cuda::ldg_pointer<uint32>,uint8,2,true> genome_type;
-
-    // fetch the genome string
-    const uint32      genome_len = d_fmi.genome_length();
-    const genome_type d_genome( d_fmi.genome_stream() );
-    //const genome_type d_genome( cuda::ldg_pointer<uint32>( d_fmi.genome_stream() ) );
+    pipeline.fm_data = new io::FMIndexDataDevice( h_fmi, io::FMIndexData::GENOME  |
+                                                         io::FMIndexData::FORWARD |
+                                                         io::FMIndexData::SA );
 
     // open a read file
     log_info(stderr, "  opening reads file... started\n");
@@ -443,15 +463,6 @@ int main(int argc, char* argv[])
         return 1u;
     }
     log_info(stderr, "  opening reads file... done\n");
-
-    typedef io::FMIndexDataDevice::fm_index_type        fm_index_type;
-    typedef FMIndexFilterDevice<fm_index_type>          fm_filter_type;
-
-    // fetch the FM-index
-    const fm_index_type fm_index = d_fmi.index();
-
-    // create an FM-index filter
-    fm_filter_type fm_filter;
 
     // keep stats
     Stats stats;
@@ -481,12 +492,8 @@ int main(int argc, char* argv[])
         timer.start();
 
         map(
-            params,
-            fm_index,
-            fm_filter,
+            pipeline,
             d_read_data,
-            genome_len,
-            d_genome,
             best_scores,
             stats );
 

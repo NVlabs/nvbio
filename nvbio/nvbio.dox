@@ -44,6 +44,7 @@
 /// - \subpage host_device_page
 /// - \subpage hello_dna_page
 /// - \subpage hello_dna_2_page
+/// - \subpage fmmap_page
 ///
 /// \section ModulesSection Modules
 ///\par
@@ -177,7 +178,7 @@
 /// This basic pattern can be applied to all of NVBIO's data structures that are meant to be setup from the
 /// host and accessed from the device.
 ///
-/// Next: \subpage hello_dna_page
+/// Next: \ref hello_dna_page
 
 /// \page generic_programming_page Generic Programming
 ///\par
@@ -213,7 +214,7 @@
 ///\par
 /// And obviously, the same story goes for FM-indices, Bloom filters, and so on and so on...
 ///
-/// Next: \subpage host_device_page
+/// Next: \ref host_device_page
 
 /// \page hello_dna_page Hello DNA!
 ///\par
@@ -249,7 +250,7 @@
 /// }
 ///\endcode
 ///
-/// Next: \subpage hello_dna_2_page
+/// Next: \ref hello_dna_2_page
 
 /// \page hello_dna_2_page Hello DNA! - Part 2
 ///\par
@@ -257,7 +258,7 @@
 /// with some basic parallel constructs.
 /// Assume you have the string from the previous example, but now want to extract all of its 3-mers,
 /// for example to use them in a seed & extend aligner.
-/// The collection of all 3-mers can be thought of a set of substrings, or <i>infixes</i> of your original string;
+/// The collection of all 3-mers can be thought of as a set of substrings, or <i>infixes</i> of your original string;
 /// NVBIO represents such an object as an InfixSet.
 /// Moreover, it provides a function to extract the coordinates of such seeds in <i>parallel</i>.
 ///
@@ -267,7 +268,7 @@
 /// #include <nvbio/strings/infix.h>
 /// #include <nvbio/strings/seeds.h>
 ///
-/// using namespace nvbio
+/// using namespace nvbio;
 ///
 /// void main()
 /// {
@@ -363,6 +364,8 @@
 /// It is also worth mentioning that if we kept our vectors on the host (i.e. replacing the device_tag
 /// specifiers with host_tag), everything would have still run in parallel, except it would have
 /// run on the host.
+///
+/// Next: \ref fmmap_page
 
 /// \page hello_dna_3_page Hello DNA! - Part 3
 ///\par
@@ -442,3 +445,388 @@
 ///            nvbio::plain_view( h_mers ) ) );
 /// }
 ///\endcode
+
+/// \page fmmap_page All-Mapping using an FM-index
+///\par
+/// NVBIO tries to make it easy to write modern bioinformatics applications exploiting parallel architectures.
+/// In this page we'll see how to apply it to build a prototype \ref fmindex_page "FM-index" based all-mapper.\n
+/// 
+/// \section InputSection Input
+///\par
+/// The first step for a reference-based aligner is loading a reference index, and streaming a set of reads.
+/// Let's start by loading the FM-index, using the corresponding \ref fmindex_io_page "I/O" classes.
+///
+///\code
+/// #include <stdio.h>
+/// #include <stdlib.h>
+/// #include <nvbio/basic/timer.h>
+/// #include <nvbio/basic/console.h>
+/// #include <nvbio/basic/vector.h>
+/// #include <nvbio/basic/shared_pointer.h>
+/// #include <nvbio/basic/dna.h>
+/// #include <nvbio/io/reads/reads.h>
+/// #include <nvbio/io/fmi.h>
+///
+/// #include "util.h"
+///
+/// void main()
+/// {
+///     //
+///     // perform some basic option parsing
+///     //
+/// 
+///     const char* reads = argv[argc-1];
+///     const char* index = argv[argc-2];
+/// 
+///     Params params;
+///     params.seed_len         = 22;
+///     params.seed_intv        = 10;
+///     params.merge_intv       = 16;
+///     uint32 max_reads        = uint32(-1);
+///     int16  score_threshold  = -20;
+/// 
+///     for (int i = 0; i < argc; ++i)
+///     {
+///         if (strcmp( argv[i], "-s" ) == 0)
+///         {
+///             params.seed_len  = uint32( atoi( argv[++i] ) );
+///             params.seed_intv = uint32( atoi( argv[++i] ) );
+///         }
+///         if (strcmp( argv[i], "-m" ) == 0)
+///             params.merge_intv = uint32( atoi( argv[++i] ) );
+///         else if (strcmp( argv[i], "-max-reads" ) == 0)
+///             max_reads = uint32( atoi( argv[++i] ) );
+///         else if (strcmp( argv[i], "-t" ) == 0)
+///             score_threshold = int16( atoi( argv[++i] ) );
+///     }
+/// 
+///     // Load an FM-index in RAM
+///     io::FMIndexDataRAM h_fmi;
+///     if (!h_fmi.load( index, io::FMIndexData::GENOME | io::FMIndexData::FORWARD | io::FMIndexData::SA ))
+///     {
+///         log_error(stderr, "    failed loading index \"%s\"\n", index);
+///         return 1u;
+///     }
+///     ...
+///\endcode
+///
+///\par
+/// Besides some simple option parsing, at this point we have an application that loads an FM-index from disk
+/// into system memory, including the genome, its forward BWT and the Sampled Suffix Array.
+/// At this point, if we want our mapper to run on the GPU we can copy the FM-index in device memory with
+/// a single line, again specifying which of its components to load.
+/// Rather than keepting it on the stack, we will store it in a <i>Pipeline</i> object, which we'll use
+/// to keep all the state of our mapper.
+///
+///\code
+/// struct Pipeline
+/// {
+///     Params                               params;    // the mapping params
+///     SharedPointer<io::FMIndexDataDevice> fm_data;   // the device FM-index
+/// };
+///\endcode
+///
+///\code
+///     ...
+///	    Pipeline pipeline;
+///
+///		// save the program options
+///     pipeline.params = params;
+///
+///     // build the device index
+///     pipeline.fm_data = new io::FMIndexDataDevice( io::FMIndexData::GENOME  |
+///												      io::FMIndexData::FORWARD |
+///                                                   io::FMIndexData::SA );
+///     ...
+///\endcode
+///
+///\par
+/// The second second step is to start streaming reads in; NVBIO's philosophy here is to use a batched approach, where
+/// the size of the batch will roughly determine the amount of available parallelism in the rest of the pipeline.
+/// In order to amortize fixed costs (e.g. grid launch / synchronization overhead) it's good to allow for as much
+/// parallelism as possible given your memory constraints - but as a rough guideline, suffice it to say that lightweight
+/// kernels should have at least ~128K items to process, possibly more (for example, sorting performance saturates at 16-32M keys).\n
+/// So if some stages of the alignment pipeline will parallelize across reads, it would be good to have at least 1M or so to
+/// process.
+/// Obviously, one million reads could require plenty of memory if the reads are long, so we might want to cap the maximum
+/// number of base pairs as well:
+///
+///\code
+/// ...
+///     const uint32 batch_reads   =   1*1024*1024;
+///     const uint32 batch_bps     = 100*1024*1024;
+///
+///     // open a read file, storing for each read both its forward and its reverse-complemented representations
+///     SharedPointer<io::ReadDataStream> read_data_file(
+///         io::open_read_file(
+///             reads,
+///             io::Phred33,
+///             2*max_reads,
+///             uint32(-1),
+///             io::ReadEncoding( io::FORWARD | io::REVERSE_COMPLEMENT ) ) );
+/// 
+///     // check whether the file opened correctly
+///     if (read_data_file == NULL || read_data_file->is_ok() == false)
+///     {
+///         log_error(stderr, "    failed opening file \"%s\"\n", reads);
+///         return 1u;
+///     }
+/// 
+///     // start looping to consume the input reads
+///     while (1)
+///     {
+///         // load a batch of reads
+///         SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_reads, batch_bps ) );
+///         if (h_read_data == NULL)
+///             break;
+/// 
+///         log_info(stderr, "  loading reads... started\n");
+/// 
+///         // copy it to the device
+///         const io::ReadDataDevice d_read_data( *h_read_data );
+/// 
+///			// remember we generated two strands per input read...
+///         const uint32 n_reads = d_read_data.size() / 2;
+/// 
+///         log_info(stderr, "  loading reads... done\n");
+///         log_info(stderr, "    %u reads\n", n_reads);
+///
+///         // do the real mapping work
+///         map( pipeline, d_read_data );
+///     }
+/// }
+///\endcode
+///
+///\par
+/// Now we are ready to start the real mapping work. In order to do it, we'll need to store
+/// another data structure in our pipeline, namely the \ref FMIndexFilters "FMIndexFilter".
+/// This data structure is just a context for perform FM-index based filtering, i.e. the process
+/// of finding potential matches of a set of strings using an FM-index.
+///
+///\code
+/// struct Pipeline
+/// {
+///     typedef io::FMIndexDataDevice::fm_index_type        fm_index_type;  // the fm-index view type
+///     typedef FMIndexFilterDevice<fm_index_type>          fm_filter_type; // the fm-index filter type
+///
+///     Params                               params;    // the mapping params
+///     SharedPointer<io::FMIndexDataDevice> fm_data;   // the device FM-index
+///     fm_filter_type                       fm_filter; // the FM-index filter
+/// };
+///\endcode
+///\par
+/// Here you go, ready to write the bulk of the aligner.
+/// 
+/// \section MappingSection Mapping
+///\par
+/// We'll write a simple seed & extend aligner, so the first thing we'll want to do is
+/// split our reads in equal segments.
+/// As shown in the previous example, the collection of these seeds can be seen as an \ref InfixSet .
+/// Let's start with some boiler-plate code to make sure we have everythin we need:
+///
+///\code
+/// void map(Pipeline& pipeline, const io::ReadDataDevice& reads)
+/// {
+///     // the FM-index data contains the packed genome stream, of this type
+///     typedef io::FMIndexDataDevice::stream_type                                  genome_string;
+///
+///     // the reads can be accessed as a string-set, of this type
+///     typedef io::ReadDataDevice::const_read_string_set_type                      read_string_set_type;
+///
+///     // the seeds will be infixes of a string-set, with this coordinates type
+///     typedef string_set_infix_coord_type                                         infix_coord_type;
+///
+///     // and we'll store them in a device vector
+///     typedef nvbio::vector<device_tag,infix_coord_type>                          infix_vector_type;
+///
+///     // finally, this will be the type of their infix-set
+///     typedef InfixSet<read_string_set_type, const string_set_infix_coord_type*>  seed_string_set_type;
+///
+///
+///     // fetch the program options
+///     const Params& params = pipeline.params;
+/// 
+///     // fetch the genome string
+///     const uint32        genome_len = pipeline.fm_data->genome_length();
+///     const genome_string genome( pipeline.fm_data->genome_stream() );
+/// 
+///     // fetch an fm-index view
+///     const Pipeline::fm_index_type fm_index = pipeline.fm_data->index();
+/// 
+///     // fetch the fm-index filter
+///     Pipeline::fm_filter_type& fm_filter = pipeline.fm_filter;
+///
+///     // prepare some vectors to store the query qgrams
+///     infix_vector_type seed_coords;
+/// 
+///     // extract the seeds
+///     const read_string_set_type read_string_set = reads.const_read_string_set();
+///     const seed_string_set_type seed_string_set = extract_seeds(
+///         read_string_set,
+///         params.seed_len,
+///         params.seed_intv,
+///         seed_coords );
+///     ...
+///\endcode
+///
+///\par
+/// The next step is mapping the seeds using the FM-index filter; we start by <i>ranking</i>
+/// their occurrences:
+///
+///\code
+/// ...
+///     // first step: rank the query seeds
+///     const uint64 n_hits = fm_filter.rank( fm_index, seed_string_set );
+/// ...
+///\endcode
+///
+///\par
+/// Now, each seed might have mapped to a whole range of suffixes in the Suffix Array of the genome,
+/// and all those locations are potential candidates for a valid alignment.
+/// We want to visit them all, which means we need to <i>locate</i> their coordinates.\n
+/// Notice that this process might involve a severe data expansion, as some seeds might map to 
+/// millions of genome locations: hence, we cannot simply locate all the hits in one go.
+/// <i>n_hits</i> is the the sum of the number of generated hits.
+/// The \ref FMIndexFilters "FMIndexFilter" interface gives us the chance to do it in batches,
+/// while doing the delicate job of parallelizing work at the finest possible grain and with
+/// the most evenly distributed load-balancing: i.e. spreading the variable sized suffix array
+/// ranges across multiple threads, so that each thread gets a single hit to locate.
+/// Well, in practice, you can ignore this, as NVBIO will do it for you.
+/// The only thing you need to remember is to process your hits in large batches:
+///
+///\code
+///     ...
+///     typedef uint2 hit_type; // each hit will be a (genome-pos,seed-id) coordinate pair
+/// 
+///     // prepare storage for the output hits
+///     nvbio::vector<device_tag,hit_type>      hits( batch_size );
+///     nvbio::vector<device_tag,uint32>        out_reads( batch_size );
+///     nvbio::vector<device_tag,int16>         out_scores( batch_size );
+///     nvbio::vector<device_tag,uint8>         temp_storage;
+///
+///     // loop through large batches of hits and locate & merge them
+///     for (uint64 hits_begin = 0; hits_begin < n_hits; hits_begin += batch_size)
+///     {
+///         const uint64 hits_end = nvbio::min( hits_begin + batch_size, n_hits );
+/// 
+///         fm_filter.locate(
+///             hits_begin,      // the beginning of the range of hits to locate
+///             hits_end,        // the end of the range of hits to locate
+///             hits.begin() );  // the output vector to be filled
+///         ...
+///\endcode
+///
+///\par
+/// At this point, remember the hit coordinates refer to the seeds, not to the reads
+/// they belong to.
+/// We hence want to convert them to <i>diagonals</i> of the genome/read matrices,
+/// and we do this employing <a href="http://docs.nvidia.com/cuda/thrust/">thrust::transform()</a>:
+///
+///\code
+///     ...
+///         // transform the (index-pos,seed-id) hit coordinates into diagonals
+///         thrust::transform(
+///             hits.begin(),
+///             hits.begin() + hits_end - hits_begin,
+///             hits.begin(),
+///             hit_to_diagonal( nvbio::plain_view( seed_coords ) ) );
+///     ...
+///\endcode
+///
+///\code
+/// // transform an (index-pos,seed-id) hit into a diagonal (text-pos = index-pos - seed-pos, read-id)
+/// struct hit_to_diagonal
+/// {
+///     typedef uint2  argument_type;
+///     typedef uint2  result_type;
+/// 
+///     // constructor
+///     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+///     hit_to_diagonal(const string_set_infix_coord_type* _seed_coords) : seed_coords(_seed_coords) {}
+/// 
+///     // functor operator
+///     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+///     uint2 operator() (const uint2 hit) const
+///     {
+///         const uint32 index_pos = hit.x;
+///         const uint32 seed_id   = hit.y;
+/// 
+///         const string_set_infix_coord_type seed = seed_coords[ seed_id ];
+/// 
+///         const uint32 read_pos = infix_begin( seed );
+///         const uint32 read_id  =   string_id( seed );
+/// 
+///         return make_uint2( index_pos - read_pos, read_id );
+///     }
+/// 
+///     const string_set_infix_coord_type* seed_coords;
+/// };
+///\endcode
+///
+///\par
+/// We are finally ready for the <i>extension</i> or <i>verification</i> phase: we need to check if the
+/// candidate hits identified by the seeds are true alignments or not, i.e. whether they map to within
+/// a certain edit-distance from the reference genome.
+/// We'll do this using the banded \ref AlignersAnchor "Myers bit-vector" aligner, applied to the \ref BatchAlignmentSection
+/// "batch alignment" problem of aligning the string-set of reads associated to all hits against the string-set
+/// of their corresponding genome locations.
+/// Both these string-sets can be though of as <i>sparse</i> string sets, i.e. sparse collections of substrings of:
+///\par
+///  - the contiguously packed string of input reads
+///  - the reference genome
+///
+///\code
+///        ...
+///        // build the set of read infixes
+///         thrust::transform(
+///             hits.begin(),
+///             hits.begin() + hits_end - hits_begin,
+///             read_infix_coords.begin(),
+///             read_infixes( nvbio::plain_view( reads ) ) );
+/// 
+///         // build the set of genome infixes
+///         thrust::transform(
+///             hits.begin(),
+///             hits.begin() + hits_end - hits_begin,
+///             genome_infix_coords.begin(),
+///             genome_infixes<BAND_LEN>( genome_len, nvbio::plain_view( reads ) ) );
+/// 
+///         typedef nvbio::vector<device_tag,string_infix_coord_type>::const_iterator infix_iterator;
+/// 
+///         typedef io::ReadDataDevice::const_read_stream_type      read_stream;
+///         typedef read_stream::iterator                           read_iterator;
+///         typedef typename genome_string::iterator                genome_iterator;
+/// 
+///         const SparseStringSet<read_iterator,infix_iterator> read_infix_set(
+///             hits_end - hits_begin,
+///             read_stream( reads.read_stream() ).begin(),
+///             read_infix_coords.begin() );
+/// 
+///         const SparseStringSet<genome_iterator,infix_iterator> genome_infix_set(
+///             hits_end - hits_begin,
+///             genome.begin(),
+///             genome_infix_coords.begin() );
+/// 
+///         typedef aln::MyersTag<5u> myers_dna5_tag;
+///         aln::batch_banded_alignment_score<BAND_LEN>(
+///             aln::make_edit_distance_aligner<aln::SEMI_GLOBAL, myers_dna5_tag>(),
+///             read_infix_set,
+///             genome_infix_set,
+///             nvbio::raw_pointer( sinks ),
+///             aln::ThreadParallelScheduler(),
+///             reads.max_read_len(),
+///             reads.max_read_len() + BAND_LEN );
+///     }
+/// }
+///\endcode
+///\par
+/// Technically, we are almost done: we now have the mapping score for each candidate hit.
+/// In this tutorial we won't do anything with them, but the accompanying code actually shows
+/// how to keep track of the best scores for each read by using <i>segmented reductions</i>.
+///\par
+/// This example should have given you an idea of how to build a pipeline based on some of NVBIO's
+/// parallel constructs, from FM-index filters to DP alignment.
+/// Hopefully, you are now set to read through the rest of the documentation and discover how
+/// many other useful tools might come to your help!
+///
+/// Top: \ref nvbio_page

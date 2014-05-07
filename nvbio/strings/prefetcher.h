@@ -195,7 +195,7 @@ struct StringPrefetcher<
 };
 
 ///
-/// A class to prefetch an infix built on top of a vector_view<PackedStreamIterator> using a local-memory cache
+/// A class to prefetch an infix built on top of a vector_view of a PackedStreamIterator using a local-memory cache
 ///
 /// \tparam StorageIterator     the underlying packed string storage iterator
 /// \tparam SYMBOL_SIZE_T       the size of the packed symbols, in bits

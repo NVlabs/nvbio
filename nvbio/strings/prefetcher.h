@@ -42,8 +42,11 @@ namespace nvbio {
 ///@defgroup StringPrefetchers String Prefetchers
 ///
 /// This module implements a set of string <i>prefetchers</i> for common string types.
-/// The idea behind prefetching is that on CUDA devices, especially with packed strings, it's often useful
-/// to pre-load the memory words covered by the strings in cached local memory.
+/// The idea behind prefetching is that on some CUDA architectures it's often useful
+/// to pre-load the words of memory where strings are stored in a local-memory cache before
+/// running expensive algorithms on them (especially with packed-strings).
+/// This is because local-memory reads guarantee fully coalesced accesses and implement
+/// efficient L1 caching.
 ///
 ///@{
 

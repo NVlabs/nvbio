@@ -22,9 +22,9 @@ include("${NVBIO_SOURCE_ROOT}/cmake-local/nvbio.cmake")
 # grab gcc flags
 include("${NVBIO_SOURCE_ROOT}/cmake-local/gcc.cmake")
 
-# default to debug builds
+# default to release builds
 if (NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "Debug")
+  set(CMAKE_BUILD_TYPE "Release")
 endif()
 
 message(STATUS "Building ${CMAKE_BUILD_TYPE}")
@@ -35,12 +35,6 @@ if (CMAKE_BUILD_TYPE MATCHES "Debug")
   set(CUDA_NVCC_DEBUG_FLAGS "-g -lineinfo")
 else()
   set(CUDA_NVCC_DEBUG_FLAGS "")
-endif()
-
-# path to install binaries to
-# this is the same place that the old Linux makefiles placed the binaries in
-if (NOT WIN32)
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 endif()
 
 find_package(CUDA)

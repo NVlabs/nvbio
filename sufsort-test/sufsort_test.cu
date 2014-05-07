@@ -32,8 +32,8 @@
 #include <stdlib.h>
 #include <vector>
 #include <algorithm>
-#ifdef _OPENMP
 #include <crc/crc.h>
+#ifdef _OPENMP
 #include <omp.h>
 #endif
 

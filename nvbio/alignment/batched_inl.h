@@ -33,6 +33,7 @@
 #include <nvbio/basic/cuda/work_queue.h>
 #include <nvbio/basic/strided_iterator.h>
 #include <nvbio/alignment/batched_stream.h>
+#include <nvbio/strings/prefetcher.h>
 
 namespace nvbio {
 namespace aln {
@@ -760,10 +761,14 @@ struct AlignmentStream
 {
     typedef t_aligner_type                              aligner_type;
 
-    typedef typename pattern_set_type::string_type                      pattern_string;
-    typedef typename text_set_type::string_type                         text_string;
-    typedef typename qualities_set_type::string_type                    quals_string;
-    typedef typename std::iterator_traits<sink_iterator>::value_type    sink_type;
+    typedef typename pattern_set_type::string_type                          input_pattern_string;
+    typedef typename text_set_type::string_type                             input_text_string;
+    typedef StringPrefetcher<input_pattern_string, lmem_cache_tag<128> >    pattern_prefetcher_type;
+    typedef typename pattern_prefetcher_type::string_type                   pattern_string;
+    typedef StringPrefetcher<input_text_string, lmem_cache_tag<128> >       text_prefetcher_type;
+    typedef typename text_prefetcher_type::string_type                      text_string;
+    typedef typename qualities_set_type::string_type                        quals_string;
+    typedef typename std::iterator_traits<sink_iterator>::value_type        sink_type;
 
     // an alignment context
     struct context_type
@@ -774,6 +779,9 @@ struct AlignmentStream
     // a container for the strings to be aligned
     struct strings_type
     {
+        pattern_prefetcher_type pattern_prefetcher;
+        text_prefetcher_type    text_prefetcher;
+
         pattern_string          pattern;
         quals_string            quals;
         text_string             text;
@@ -845,9 +853,9 @@ struct AlignmentStream
         const context_type* context,
               strings_type* strings) const
     {
-        strings->pattern = m_patterns[i];
+        strings->pattern = strings->pattern_prefetcher.load( m_patterns[i] );
         strings->quals   = m_quals[i];
-        strings->text    = m_texts[i];
+        strings->text    = strings->text_prefetcher.load( m_texts[i] );
     }
 
     // handle the output

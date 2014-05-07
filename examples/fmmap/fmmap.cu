@@ -41,8 +41,9 @@
 #include <nvbio/fmindex/filter.h>
 #include <nvbio/io/reads/reads.h>
 #include <nvbio/io/fmi.h>
+#include <nvbio/alignment/alignment.h>
+#include <nvbio/alignment/batched.h>
 
-#include "alignment.h"
 #include "util.h"
 
 using namespace nvbio;
@@ -133,14 +134,18 @@ extract_seeds(
         nvbio::plain_view( seed_coords ) );
 }
 
+// a functor to extract the read infixes from the hit diagonals
+//
 struct read_infixes
 {
     typedef io::ReadDataDevice::const_plain_view_type       read_view_type;
 
+    // constructor
     NVBIO_HOST_DEVICE
     read_infixes(const read_view_type reads) :
         m_reads( reads ) {}
 
+    // functor operator
     NVBIO_HOST_DEVICE
     string_infix_coord_type operator() (const uint2 diagonal) const
     {
@@ -153,16 +158,20 @@ struct read_infixes
     const read_view_type m_reads;
 };
 
+// a functor to extract the genome infixes from the hit diagonals
+//
 template <uint32 BAND_LEN>
 struct genome_infixes
 {
     typedef io::ReadDataDevice::const_plain_view_type       read_view_type;
 
+    // constructor
     NVBIO_HOST_DEVICE
     genome_infixes(const uint32 genome_len, const read_view_type reads) :
         m_genome_len( genome_len ),
         m_reads( reads ) {}
 
+    // functor operator
     NVBIO_HOST_DEVICE
     string_infix_coord_type operator() (const uint2 diagonal) const
     {
@@ -182,6 +191,18 @@ struct genome_infixes
 
     const uint32         m_genome_len;
     const read_view_type m_reads;
+};
+
+// a functor to extract the score from a sink
+//
+struct sink_score
+{
+    typedef aln::BestSink<int16> argument_type;
+    typedef int16                result_type;
+
+    // functor operator
+    NVBIO_HOST_DEVICE
+    int16 operator() (const aln::BestSink<int16>& sink) const { return sink.score; }
 };
 
 // perform q-gram index mapping
@@ -232,7 +253,6 @@ void map(
 
     // prepare storage for the output hits
     nvbio::vector<device_tag,hit_type>      hits( batch_size );
-    nvbio::vector<device_tag,int16>         scores( batch_size );
     nvbio::vector<device_tag,uint32>        out_reads( batch_size );
     nvbio::vector<device_tag,int16>         out_scores( batch_size );
     nvbio::vector<device_tag,uint8>         temp_storage;
@@ -247,17 +267,11 @@ void map(
     stats.rank_time   += timer.seconds();
     stats.occurrences += n_hits;
 
-    nvbio::vector<device_tag, aln::BestSink<int16> >  sinks( scores.size() );
+    nvbio::vector<device_tag, aln::BestSink<int16> >  sinks( batch_size );
     nvbio::vector<device_tag,string_infix_coord_type> genome_infix_coords( batch_size );
     nvbio::vector<device_tag,string_infix_coord_type> read_infix_coords( batch_size );
 
     static const uint32 BAND_LEN = 31;
-    //nvbio::vector<device_tag,uint8>  strided_reads( batch_size * reads.max_read_len() );
-    //nvbio::vector<device_tag,uint8>  strided_genome( batch_size * (reads.max_read_len() + BAND_LEN) );
-    nvbio::vector<device_tag,uint32>  strided_reads( batch_size * util::divide_ri(reads.max_read_len(), io::ReadData::READ_SYMBOLS_PER_WORD) );
-    nvbio::vector<device_tag,uint32>  strided_genome( batch_size * util::divide_ri(reads.max_read_len() + BAND_LEN, io::FMIndexData::GENOME_SYMBOLS_PER_WORD) );
-    nvbio::vector<device_tag,uint32>  strided_reads_len( batch_size );
-    nvbio::vector<device_tag,uint32>  strided_genome_len( batch_size );
 
     // loop through large batches of hits and locate & merge them
     for (uint64 hits_begin = 0; hits_begin < n_hits; hits_begin += batch_size)
@@ -283,7 +297,7 @@ void map(
             hit_to_diagonal( nvbio::plain_view( seed_coords ) ) );
 
         timer.start();
-#if 1
+
         // build the set of read infixes
         thrust::transform(
             hits.begin(),
@@ -313,51 +327,19 @@ void map(
             hits_end - hits_begin,
             genome.begin(),
             genome_infix_coords.begin() );
-    //
-        //StridedStringSet<uint8*,uint32*> strided_read_set(
-        StridedPackedStringSet<uint32*,uint8,io::ReadData::READ_BITS,io::ReadData::READ_BIG_ENDIAN,uint32*> strided_read_set(
-            hits_end - hits_begin,
-            batch_size,
-            nvbio::raw_pointer( strided_reads ),
-            nvbio::raw_pointer( strided_reads_len ) );
-
-        //StridedStringSet<uint8*,uint32*> strided_genome_set(
-        StridedPackedStringSet<uint32*,uint8,io::FMIndexData::GENOME_BITS,io::FMIndexData::GENOME_BIG_ENDIAN,uint32*> strided_genome_set(
-            hits_end - hits_begin,
-            batch_size,
-            nvbio::raw_pointer( strided_genome ),
-            nvbio::raw_pointer( strided_genome_len ) );
-
-        cuda::copy(
-            read_infix_set,
-            strided_read_set );
-
-        cuda::copy(
-            genome_infix_set,
-            strided_genome_set );//
 
         typedef aln::MyersTag<5u> myers_dna5_tag;
+        //const aln::SimpleGotohScheme gotoh( 2, -2, -5, -3 );
         aln::batch_banded_alignment_score<BAND_LEN>(
             aln::make_edit_distance_aligner<aln::SEMI_GLOBAL, myers_dna5_tag>(),
-            strided_read_set,
-            strided_genome_set,
+            //aln::make_gotoh_aligner<aln::LOCAL>( gotoh ),
+            read_infix_set,
+            genome_infix_set,
             nvbio::raw_pointer( sinks ),
             aln::ThreadParallelScheduler(),
             reads.max_read_len(),
             reads.max_read_len() + BAND_LEN );
-#else
-        //const aln::SimpleGotohScheme gotoh( 2, -2, -5, -3 );
-        typedef aln::MyersTag<5u> myers_dna5_tag;
-        align(
-            aln::make_edit_distance_aligner<aln::SEMI_GLOBAL, myers_dna5_tag>(),
-            //aln::make_gotoh_aligner<aln::LOCAL>( gotoh ),
-            hits_end - hits_begin,
-            nvbio::plain_view( hits ),
-            nvbio::plain_view( reads ),
-            genome_len,
-            genome,
-            nvbio::plain_view( scores ) );
-#endif
+
         cudaDeviceSynchronize();
         timer.stop();
         stats.align_time += timer.seconds();
@@ -370,7 +352,7 @@ void map(
             thrust::make_transform_iterator(
                 hits.begin(),
                 make_composition_functor( divide_by_two(), component_functor<hit_type>( 1u ) ) ), // take the second component divided by 2
-            scores.begin(),
+            thrust::make_transform_iterator( sinks.begin(), sink_score() ),
             out_reads.begin(),
             out_scores.begin(),
             thrust::maximum<int16>(),

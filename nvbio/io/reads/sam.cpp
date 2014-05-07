@@ -182,9 +182,13 @@ bool ReadDataFile_SAM::init(void)
                 {
                     return false;
                 }
-            } else if (strncmp(linebuf, "@SQ\t", strlen("@SQ\t")) == 0) {
-                // ignored
-                continue;
+            } else if (strncmp(linebuf, "@SQ\t", strlen("@SQ\t")) == 0)
+            {
+                ret = parseReferenceSequenceLine(delim + 1);
+                if (!ret)
+                {
+                    return false;
+                }
             } else if (strncmp(linebuf, "@RG\t", strlen("@RG\t")) == 0) {
                 // ignored
                 continue;
@@ -233,7 +237,7 @@ bool ReadDataFile_SAM::parseHeaderLine(char *start)
 
         if (strncmp(start, "VN:", strlen("VN:")) == 0)
         {
-            version = strdup(&start[3]);
+            version = &start[3];
         } else if (strncmp(start, "SO:", strlen("SO:")) == 0) {
             if(strcmp(&start[3], "unknown") == 0)
             {
@@ -268,6 +272,72 @@ bool ReadDataFile_SAM::parseHeaderLine(char *start)
 
     return true;
 }
+
+// parse a @SQ line from the SAM file
+// start points at the first tag of the line
+bool ReadDataFile_SAM::parseReferenceSequenceLine(char *start)
+{
+    char *seq_name = NULL;
+    char *seq_len = NULL;
+    char *delim;
+
+    for(;;)
+    {
+        // look for the next delimiter
+        delim = strchr(start, '\t');
+
+        // zero out the next delimiter if found
+        if (delim)
+        {
+            *delim = 0;
+        }
+
+        if (strncmp(start, "SN:", strlen("SN:")) == 0)
+        {
+            if (seq_name != NULL)
+            {
+                log_warning(stderr, "SAM file warning (line %d): multiple SN tags in @SQ record\n", numLines);
+            } else {
+                seq_name = &start[3];
+            }
+        } else if (strncmp(start, "LN:", strlen("LN:")) == 0) {
+            if (seq_len != NULL)
+            {
+                log_warning(stderr, "SAM file warning (line %d): multiple LN tags in @SQ record\n", numLines);
+            } else {
+                seq_len = &start[3];
+            }
+        }
+
+        if (!delim)
+        {
+            // this was the last token
+            break;
+        }
+
+        // advance to next token
+        start = delim + 1;
+    }
+
+    if (seq_name == NULL || seq_len == NULL)
+    {
+        log_warning(stderr, "SAM file warning (line %d): missing required tags in @SQ record\n", numLines);
+        return true;
+    }
+
+    char *endptr = NULL;
+    uint64 len = strtoll(seq_len, &endptr, 10);
+    if (!endptr || endptr == seq_len || *endptr != '\0')
+    {
+        log_warning(stderr, "SAM file warning (line %d): invalid sequence length in @SQ record\n", numLines);
+    }
+
+    sq_names.push_back(std::string(seq_name));
+    sq_lengths.push_back(len);
+
+    return true;
+}
+
 
 // fetch the next chunk of reads (up to max_reads) from the file and push it into output
 int ReadDataFile_SAM::nextChunk(ReadDataRAM *output, uint32 max_reads, uint32 max_bps)

@@ -600,7 +600,7 @@
 ///\par
 /// Now we are ready to start the real mapping work. In order to do it, we'll need to store
 /// another data structure in our pipeline, namely the \ref FMIndexFilters "FMIndexFilter".
-/// This data structure is just a context for perform FM-index based filtering, i.e. the process
+/// This data structure is just a context for performing FM-index based filtering, i.e. the process
 /// of finding potential matches of a set of strings using an FM-index.
 ///
 ///\code
@@ -685,8 +685,7 @@
 /// and all those locations are potential candidates for a valid alignment.
 /// We want to visit them all, which means we need to <i>locate</i> their coordinates.\n
 /// Notice that this process might involve a severe data expansion, as some seeds might map to 
-/// millions of genome locations: hence, we cannot simply locate all the hits in one go.
-/// <i>n_hits</i> is the the sum of the number of generated hits.
+/// millions of genome locations: hence, we cannot simply locate all the <i>n_hits</i> in one go.
 /// The \ref FMIndexFilters "FMIndexFilter" interface gives us the chance to do it in batches,
 /// while doing the delicate job of parallelizing work at the finest possible grain and with
 /// the most evenly distributed load-balancing: i.e. spreading the variable sized suffix array
@@ -769,8 +768,8 @@
 /// a certain edit-distance from the reference genome.
 /// We'll do this using the banded \ref AlignersAnchor "Myers bit-vector" aligner, applied to the \ref BatchAlignmentSection
 /// "batch alignment" problem of aligning the string-set of reads associated to all hits against the string-set
-/// of their corresponding genome locations.
-/// Both these string-sets can be though of as <i>sparse</i> string sets, i.e. sparse collections of substrings of:
+/// of corresponding genome locations.
+/// Both these string-sets can be thought of as <i>sparse</i> string sets, i.e. sparse collections of substrings of:
 ///\par
 ///  - the contiguously packed string of input reads
 ///  - the reference genome

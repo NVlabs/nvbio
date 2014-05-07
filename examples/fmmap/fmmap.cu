@@ -102,8 +102,8 @@ struct hit_to_diagonal
 
         const string_set_infix_coord_type seed = seed_coords[ seed_id ];
 
-        const uint32 read_pos = infix_begin( make_infix( "", seed ) );
-        const uint32 read_id  =   string_id( make_infix( "", seed ) );
+        const uint32 read_pos = infix_begin( seed );
+        const uint32 read_id  =   string_id( seed );
 
         return make_uint2( index_pos - read_pos, read_id );
     }
@@ -417,12 +417,13 @@ int main(int argc, char* argv[])
     // build its device version
     const io::FMIndexDataDevice d_fmi( h_fmi, io::FMIndexDataDevice::GENOME | io::FMIndexData::FORWARD | io::FMIndexData::SA );
 
-    //typedef io::FMIndexDataDevice::stream_type genome_type;
-    typedef PackedStream<cuda::ldg_pointer<uint32>,uint8,2,true> genome_type;
+    typedef io::FMIndexDataDevice::stream_type genome_type;
+    //typedef PackedStream<cuda::ldg_pointer<uint32>,uint8,2,true> genome_type;
 
     // fetch the genome string
     const uint32      genome_len = d_fmi.genome_length();
-    const genome_type d_genome( cuda::ldg_pointer<uint32>( d_fmi.genome_stream() ) );
+    const genome_type d_genome( d_fmi.genome_stream() );
+    //const genome_type d_genome( cuda::ldg_pointer<uint32>( d_fmi.genome_stream() ) );
 
     // open a read file
     log_info(stderr, "  opening reads file... started\n");

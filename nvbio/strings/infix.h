@@ -72,6 +72,7 @@ struct InfixCore<StringType,CoordType,2u>
     typedef StringType                                              string_type;
     typedef CoordType                                               coord_type;
     typedef typename vector_traits<CoordType>::value_type           index_type;
+    typedef typename vector_type<index_type,2>::type                range_type;
 
     typedef typename std::iterator_traits<string_type>::value_type  symbol_type;
     typedef typename std::iterator_traits<string_type>::value_type  value_type;
@@ -94,12 +95,12 @@ struct InfixCore<StringType,CoordType,2u>
     /// infix size
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 size() const { return m_coords.y - m_coords.x; }
+    index_type size() const { return m_coords.y - m_coords.x; }
 
     /// infix length
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 length() const { return size(); }
+    index_type length() const { return size(); }
 
     /// indexing operator
     ///
@@ -114,7 +115,7 @@ struct InfixCore<StringType,CoordType,2u>
     /// return the infix range
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 range() const { return make_uint2( m_coords.x, m_coords.y ); }
+    range_type range() const { return make_vector( m_coords.x, m_coords.y ); }
 
     /// return the infix coordinates
     ///
@@ -138,6 +139,7 @@ struct InfixCore<StringType,CoordType,4u>
     typedef StringType                                              string_type;
     typedef CoordType                                               coord_type;
     typedef typename vector_traits<CoordType>::value_type           index_type;
+    typedef typename vector_type<index_type,2>::type                range_type;
 
     typedef typename std::iterator_traits<string_type>::value_type  symbol_type;
     typedef typename std::iterator_traits<string_type>::value_type  value_type;
@@ -160,12 +162,12 @@ struct InfixCore<StringType,CoordType,4u>
     /// infix size
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 size() const { return m_coords.z - m_coords.y; }
+    index_type size() const { return m_coords.z - m_coords.y; }
 
     /// infix length
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 length() const { return size(); }
+    index_type length() const { return size(); }
 
     /// indexing operator
     ///
@@ -180,7 +182,7 @@ struct InfixCore<StringType,CoordType,4u>
     /// return the infix range
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint2 range() const { return make_uint2( m_coords.y, m_coords.z ); }
+    range_type range() const { return make_vector( m_coords.y, m_coords.z ); }
 
     /// return the infix coordinates
     ///
@@ -190,7 +192,7 @@ struct InfixCore<StringType,CoordType,4u>
     /// return the string id
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 string_id() const { return m_coords.x; }
+    index_type string_id() const { return m_coords.x; }
 
     string_type     m_string;       ///< the underlying string set
     coord_type      m_coords;       ///< the infix coordinates
@@ -365,6 +367,76 @@ struct InfixSetCore<SequenceType,InfixIterator,4u>
 };
 
 ///@} Private
+
+/// return the string begin of a given infix
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 infix_begin(const uint32_2& infix) { return infix.x; }
+
+/// return the string begin of a given infix
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 infix_end(const uint32_2& infix) { return infix.y; }
+
+/// return the length a given infix
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 length(const uint32_2& infix) { return infix.y - infix.x; }
+
+/// return the string begin of a given infix
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint64 infix_begin(const uint64_2& infix) { return infix.x; }
+
+/// return the string begin of a given infix
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint64 infix_end(const uint64_2& infix) { return infix.y; }
+
+/// return the length a given infix
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint64 length(const uint64_2& infix) { return infix.y - infix.x; }
+
+/// return the string begin of a given infix
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 infix_begin(const uint32_4& infix) { return infix.y; }
+
+/// return the string begin of a given infix
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 infix_end(const uint32_4& infix) { return infix.z; }
+
+/// return the length a given infix
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 length(const uint32_4& infix) { return infix.z - infix.y; }
+
+/// return the string begin of a given infix
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint64 infix_begin(const uint64_4& infix) { return infix.y; }
+
+/// return the string begin of a given infix
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint64 infix_end(const uint64_4& infix) { return infix.z; }
+
+/// return the length a given infix
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint64 length(const uint64_4& infix) { return infix.z - infix.y; }
+
+/// return the string index of a given infix
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 string_id(const uint32_4& infix) { return infix.x; }
+
+/// return the string index of a given infix
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint64 string_id(const uint64_4& infix) { return infix.x; }
 
 /// return the string begin of a given infix
 ///

@@ -246,6 +246,9 @@ Infix<StringType,CoordType> make_infix(const StringType string, const CoordType 
     return Infix<StringType,CoordType>( string, coords );
 }
 
+///@addtogroup Private
+///@{
+
 /// Represent a set of infixes of a string or string-set
 ///
 /// \tparam SequenceType            the string or string-set type

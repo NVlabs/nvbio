@@ -418,6 +418,13 @@ namespace nvbio {
                 return *this;
             }
 
+            template<typename U>
+            SharedPointer& operator= (U* p)
+            {
+                reset( p );
+                return *this;
+            }
+
             // swallowed support for auto_ptr<T>, should go here
 
             void reset()

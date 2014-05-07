@@ -2,7 +2,10 @@ addsources(
 alignments.h
 alignments_inl.h
 bam_format.h
+bufferedtextfile.h
 fmi.cu
 fmi.h
 utils.h
+vcf.cpp
+vcf.h
 )

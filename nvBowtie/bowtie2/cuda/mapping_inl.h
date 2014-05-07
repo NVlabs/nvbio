@@ -37,7 +37,6 @@
 #include <nvbio/basic/cached_iterator.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/priority_deque.h>
-#include <nvbio/basic/vector_wrapper.h>
 #include <nvbio/basic/strided_iterator.h>
 #include <nvbio/basic/algorithms.h>
 

@@ -37,7 +37,6 @@
 #include <nvbio/basic/timer.h>
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/vector.h>
-#include <nvbio/basic/vector_wrapper.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/strings/string_set.h>
 #include <nvbio/strings/seeds.h>

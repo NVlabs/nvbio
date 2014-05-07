@@ -29,7 +29,7 @@
 
 #include <nvbio/strings/string.h>
 #include <nvbio/basic/packedstream.h>
-#include <nvbio/basic/vector_wrapper.h>
+#include <nvbio/basic/vector_view.h>
 #include <nvbio/basic/strided_iterator.h>
 #include <nvbio/basic/cached_iterator.h>
 #include <nvbio/basic/iterator.h>
@@ -407,7 +407,7 @@ struct ConcatenatedStringSet
 {
     typedef concatenated_string_set_tag                                 string_set_tag;
     typedef typename std::iterator_traits<StringIterator>::value_type   symbol_type;
-    typedef vector_wrapper<StringIterator>                              string_type;
+    typedef vector_view<StringIterator>                                 string_type;
     typedef StringIterator                                              symbol_iterator;
     typedef OffsetIterator                                              offset_iterator;
     typedef typename iterator_system<StringIterator>::type              system_tag;
@@ -541,7 +541,7 @@ struct SparseStringSet
 {
     typedef sparse_string_set_tag                                       string_set_tag;
     typedef typename std::iterator_traits<StringIterator>::value_type   symbol_type;
-    typedef vector_wrapper<StringIterator>                              string_type;
+    typedef vector_view<StringIterator>                                 string_type;
     typedef StringIterator                                              symbol_iterator;
     typedef RangeIterator                                               range_iterator;
     typedef typename iterator_system<StringIterator>::type              system_tag;
@@ -667,7 +667,7 @@ struct StridedPackedStringSet
     typedef strided_iterator<StreamIterator>                                            strided_stream_iterator;
     typedef PackedStream<strided_stream_iterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> packed_stream_type;
     typedef typename packed_stream_type::iterator                                       packed_stream_iterator;
-    typedef vector_wrapper<packed_stream_type>                                          string_type;
+    typedef vector_view<packed_stream_type>                                             string_type;
     typedef LengthIterator                                                              length_iterator;
     typedef typename iterator_system<StreamIterator>::type                              system_tag;
 
@@ -767,7 +767,7 @@ struct StridedStringSet
 
     typedef StringIterator                                                          symbol_iterator;
     typedef strided_iterator<StringIterator>                                        strided_symbol_iterator;
-    typedef vector_wrapper<strided_symbol_iterator>                                 string_type;
+    typedef vector_view<strided_symbol_iterator>                                    string_type;
     typedef LengthIterator                                                          length_iterator;
     typedef typename iterator_system<StringIterator>::type                          system_tag;
 

@@ -28,7 +28,7 @@
 #include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/packedstream_loader.h>
-#include <nvbio/basic/vector_wrapper.h>
+#include <nvbio/basic/vector_view.h>
 
 #pragma once
 
@@ -244,7 +244,7 @@ struct GenomeLoader
 {
     typedef PackedStringLoader<GenomeStorage,2,true,Tag>    loader_type;
     typedef typename loader_type::iterator                  iterator;
-    typedef vector_wrapper<iterator>                        string_type;
+    typedef vector_view<iterator>                           string_type;
 
     /// load a genome segment
     ///

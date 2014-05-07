@@ -133,6 +133,57 @@ extract_seeds(
         nvbio::plain_view( seed_coords ) );
 }
 
+struct read_infixes
+{
+    typedef io::ReadDataDevice::const_plain_view_type       read_view_type;
+
+    NVBIO_HOST_DEVICE
+    read_infixes(const read_view_type reads) :
+        m_reads( reads ) {}
+
+    NVBIO_HOST_DEVICE
+    string_infix_coord_type operator() (const uint2 diagonal) const
+    {
+        const uint32 read_id = diagonal.y;
+
+        // fetch the read range
+        return m_reads.get_range( read_id );
+    }
+
+    const read_view_type m_reads;
+};
+
+template <uint32 BAND_LEN>
+struct genome_infixes
+{
+    typedef io::ReadDataDevice::const_plain_view_type       read_view_type;
+
+    NVBIO_HOST_DEVICE
+    genome_infixes(const uint32 genome_len, const read_view_type reads) :
+        m_genome_len( genome_len ),
+        m_reads( reads ) {}
+
+    NVBIO_HOST_DEVICE
+    string_infix_coord_type operator() (const uint2 diagonal) const
+    {
+        const uint32 read_id  = diagonal.y;
+        const uint32 text_pos = diagonal.x;
+
+        // fetch the read range
+        const uint2  read_range = m_reads.get_range( read_id );
+        const uint32 read_len   = read_range.y - read_range.x;
+
+        // compute the segment of text to align to
+        const uint32 genome_begin = text_pos > BAND_LEN/2 ? text_pos - BAND_LEN/2 : 0u;
+        const uint32 genome_end   = nvbio::min( genome_begin + read_len + BAND_LEN, m_genome_len );
+
+        return make_uint2( genome_begin, genome_end );
+    }
+
+    const uint32         m_genome_len;
+    const read_view_type m_reads;
+};
+
 // perform q-gram index mapping
 //
 template <typename fm_index_type, typename fm_filter_type, typename genome_string>
@@ -175,7 +226,7 @@ void map(
     // search the sorted query q-grams with a q-gram filter
     //
 
-    const uint32 batch_size = 32*1024*1024;
+    const uint32 batch_size = 16*1024*1024;
 
     typedef uint2  hit_type;
 
@@ -195,6 +246,18 @@ void map(
     timer.stop();
     stats.rank_time   += timer.seconds();
     stats.occurrences += n_hits;
+
+    nvbio::vector<device_tag, aln::BestSink<int16> >  sinks( scores.size() );
+    nvbio::vector<device_tag,string_infix_coord_type> genome_infix_coords( batch_size );
+    nvbio::vector<device_tag,string_infix_coord_type> read_infix_coords( batch_size );
+
+    static const uint32 BAND_LEN = 31;
+    //nvbio::vector<device_tag,uint8>  strided_reads( batch_size * reads.max_read_len() );
+    //nvbio::vector<device_tag,uint8>  strided_genome( batch_size * (reads.max_read_len() + BAND_LEN) );
+    nvbio::vector<device_tag,uint32>  strided_reads( batch_size * util::divide_ri(reads.max_read_len(), io::ReadData::READ_SYMBOLS_PER_WORD) );
+    nvbio::vector<device_tag,uint32>  strided_genome( batch_size * util::divide_ri(reads.max_read_len() + BAND_LEN, io::FMIndexData::GENOME_SYMBOLS_PER_WORD) );
+    nvbio::vector<device_tag,uint32>  strided_reads_len( batch_size );
+    nvbio::vector<device_tag,uint32>  strided_genome_len( batch_size );
 
     // loop through large batches of hits and locate & merge them
     for (uint64 hits_begin = 0; hits_begin < n_hits; hits_begin += batch_size)
@@ -220,7 +283,69 @@ void map(
             hit_to_diagonal( nvbio::plain_view( seed_coords ) ) );
 
         timer.start();
+#if 1
+        // build the set of read infixes
+        thrust::transform(
+            hits.begin(),
+            hits.begin() + hits_end - hits_begin,
+            read_infix_coords.begin(),
+            read_infixes( nvbio::plain_view( reads ) ) );
 
+        // build the set of genome infixes
+        thrust::transform(
+            hits.begin(),
+            hits.begin() + hits_end - hits_begin,
+            genome_infix_coords.begin(),
+            genome_infixes<BAND_LEN>( genome_len, nvbio::plain_view( reads ) ) );
+
+        typedef nvbio::vector<device_tag,string_infix_coord_type>::const_iterator infix_iterator;
+
+        typedef io::ReadDataDevice::const_read_stream_type      read_stream;
+        typedef read_stream::iterator                           read_iterator;
+        typedef typename genome_string::iterator                genome_iterator;
+
+        const SparseStringSet<read_iterator,infix_iterator> read_infix_set(
+            hits_end - hits_begin,
+            read_stream( reads.read_stream() ).begin(),
+            read_infix_coords.begin() );
+
+        const SparseStringSet<genome_iterator,infix_iterator> genome_infix_set(
+            hits_end - hits_begin,
+            genome.begin(),
+            genome_infix_coords.begin() );
+    //
+        //StridedStringSet<uint8*,uint32*> strided_read_set(
+        StridedPackedStringSet<uint32*,uint8,io::ReadData::READ_BITS,io::ReadData::READ_BIG_ENDIAN,uint32*> strided_read_set(
+            hits_end - hits_begin,
+            batch_size,
+            nvbio::raw_pointer( strided_reads ),
+            nvbio::raw_pointer( strided_reads_len ) );
+
+        //StridedStringSet<uint8*,uint32*> strided_genome_set(
+        StridedPackedStringSet<uint32*,uint8,io::FMIndexData::GENOME_BITS,io::FMIndexData::GENOME_BIG_ENDIAN,uint32*> strided_genome_set(
+            hits_end - hits_begin,
+            batch_size,
+            nvbio::raw_pointer( strided_genome ),
+            nvbio::raw_pointer( strided_genome_len ) );
+
+        cuda::copy(
+            read_infix_set,
+            strided_read_set );
+
+        cuda::copy(
+            genome_infix_set,
+            strided_genome_set );//
+
+        typedef aln::MyersTag<5u> myers_dna5_tag;
+        aln::batch_banded_alignment_score<BAND_LEN>(
+            aln::make_edit_distance_aligner<aln::SEMI_GLOBAL, myers_dna5_tag>(),
+            strided_read_set,
+            strided_genome_set,
+            nvbio::raw_pointer( sinks ),
+            aln::ThreadParallelScheduler(),
+            reads.max_read_len(),
+            reads.max_read_len() + BAND_LEN );
+#else
         //const aln::SimpleGotohScheme gotoh( 2, -2, -5, -3 );
         typedef aln::MyersTag<5u> myers_dna5_tag;
         align(
@@ -232,7 +357,7 @@ void map(
             genome_len,
             genome,
             nvbio::plain_view( scores ) );
-
+#endif
         cudaDeviceSynchronize();
         timer.stop();
         stats.align_time += timer.seconds();
@@ -310,11 +435,12 @@ int main(int argc, char* argv[])
     // build its device version
     const io::FMIndexDataDevice d_fmi( h_fmi, io::FMIndexDataDevice::GENOME | io::FMIndexData::FORWARD | io::FMIndexData::SA );
 
-    typedef io::FMIndexDataDevice::stream_type genome_type;
+    //typedef io::FMIndexDataDevice::stream_type genome_type;
+    typedef PackedStream<cuda::ldg_pointer<uint32>,uint8,2,true> genome_type;
 
     // fetch the genome string
     const uint32      genome_len = d_fmi.genome_length();
-    const genome_type d_genome( d_fmi.genome_stream() );
+    const genome_type d_genome( cuda::ldg_pointer<uint32>( d_fmi.genome_stream() ) );
 
     // open a read file
     log_info(stderr, "  opening reads file... started\n");

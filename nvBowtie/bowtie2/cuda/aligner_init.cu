@@ -220,7 +220,7 @@ void hits_stats_kernel(
 
     strided_iterator<const SeedHit*> hits( hit_data+read_id, batch_size );
 
-    typedef vector_wrapper< strided_iterator<const SeedHit*> > Storage;
+    typedef vector_view< strided_iterator<const SeedHit*> > Storage;
     typedef priority_deque< SeedHit, Storage, hit_compare > HitQueue;
     Storage qStore( hit_ranges, hits );
     HitQueue hitheap( qStore, HitQueue::CONSTRUCTED );

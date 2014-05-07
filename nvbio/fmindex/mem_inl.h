@@ -50,7 +50,7 @@ uint32 find_kmems(
 
     uint4 right_mems[1024];
 
-    nvbio::vector_wrapper<uint4*> right_ranges( 0, &right_mems[0] );
+    nvbio::vector_view<uint4*> right_ranges( 0, &right_mems[0] );
 
     // find how far can we extend right starting from x
     //
@@ -192,8 +192,8 @@ uint32 find_threshold_kmems(
     uint4 mems1[1024];
     uint4 mems2[1024];
 
-    nvbio::vector_wrapper<uint4*> prev( 0, &mems1[0] );
-    nvbio::vector_wrapper<uint4*> curr( 0, &mems2[0] );
+    nvbio::vector_view<uint4*> prev( 0, &mems1[0] );
+    nvbio::vector_view<uint4*> curr( 0, &mems2[0] );
 
     // find how far can we extend right starting from x
     //
@@ -236,7 +236,7 @@ uint32 find_threshold_kmems(
             curr.push_back( make_vector( prev_range.x, prev_range.y, coord_type(x), coord_type(i) ) );
 
         // swap prev and curr
-        nvbio::vector_wrapper<uint4*> tmp = prev;
+        nvbio::vector_view<uint4*> tmp = prev;
         prev = curr;
         curr = tmp;
     }
@@ -311,7 +311,7 @@ uint32 find_threshold_kmems(
             break;
 
         // swap prev and curr
-        nvbio::vector_wrapper<uint4*> tmp = prev;
+        nvbio::vector_view<uint4*> tmp = prev;
         prev = curr;
         curr = tmp;
     }
@@ -499,7 +499,7 @@ uint32 right_kmems(
 
     // internal output
     mem_type                    mems[1024];
-    vector_wrapper<mem_type*>   mems_vec( 0u, mems );
+    vector_view<mem_type*>   mems_vec( 0u, mems );
 
     // extend forward, using the reverse index
     range_type f_range = make_vector( coord_type(0u), f_index.length() );
@@ -595,7 +595,7 @@ struct right_mem_functor
 
         // build a MEM handler
         mem_type                    mems[1024];
-        vector_wrapper<mem_type*>   mems_vec( 0u, mems );
+        vector_view<mem_type*>   mems_vec( 0u, mems );
 
         // and collect all MEMs
         for (uint32 x = 0; x < pattern_len;)
@@ -680,7 +680,7 @@ struct split_mem_functor
 
         // build a MEM handler
         mem_type                    mems[2048];
-        vector_wrapper<mem_type*>   mems_vec( 0u, mems );
+        vector_view<mem_type*>      mems_vec( 0u, mems );
 
         // and collect all MEMs
         #if 0

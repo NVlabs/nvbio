@@ -29,7 +29,7 @@
 
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/cached_iterator.h>
-#include <nvbio/basic/vector_wrapper.h>
+#include <nvbio/basic/vector_view.h>
 
 namespace nvbio {
 
@@ -40,7 +40,7 @@ template <typename StreamType,
           typename SymbolType,
           uint32 SYMBOL_SIZE_T,
           bool   BIG_ENDIAN_T>
-struct lmem_selector< vector_wrapper< PackedStreamIterator< PackedStream<StreamType,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> > > >
+struct lmem_selector< vector_view< PackedStreamIterator< PackedStream<StreamType,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> > > >
 {
     typedef typename std::iterator_traits<StreamType>::value_type type;
 
@@ -54,9 +54,9 @@ template <typename StreamType,
           bool   BIG_ENDIAN_T,
           typename W>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-vector_wrapper< typename PackedStream<const_cached_iterator<const W*>,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>::iterator >
+vector_view< typename PackedStream<const_cached_iterator<const W*>,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>::iterator >
 make_local_string(
-    vector_wrapper< PackedStreamIterator< PackedStream<StreamType,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> > > string,
+    vector_view< PackedStreamIterator< PackedStream<StreamType,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> > > string,
     W* lmem)
 {
     const StreamType in_stream = string.begin().container().stream();
@@ -76,7 +76,7 @@ make_local_string(
     typedef PackedStream<const_cached_iterator<const W*>,uint8,SYMBOL_SIZE_T,BIG_ENDIAN_T> const_stream_type;
     const_stream_type clmem_stream( lmem );
 
-    return vector_wrapper<typename const_stream_type::iterator>( N, clmem_stream.begin() + word_offset );
+    return vector_view<typename const_stream_type::iterator>( N, clmem_stream.begin() + word_offset );
 }
 
 } // namespace nvbio

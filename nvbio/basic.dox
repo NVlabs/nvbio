@@ -47,7 +47,7 @@
 /// - \subpage priority_deques_page
 /// - \subpage ping_pong_queues_page
 /// - \subpage sum_trees_page
-/// - \subpage vector_wrappers_page
+/// - \subpage vector_views_page
 /// - \subpage vector_arrays_page
 /// \section Miscellaneous
 /// - \subpage algorithms_page

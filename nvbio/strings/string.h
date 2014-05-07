@@ -28,7 +28,7 @@
 #pragma once
 
 #include <nvbio/basic/types.h>
-#include <nvbio/basic/vector_wrapper.h>
+#include <nvbio/basic/vector_view.h>
 #include <string.h>
 
 

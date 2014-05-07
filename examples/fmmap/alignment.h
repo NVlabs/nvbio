@@ -76,6 +76,7 @@ struct AlignmentStream
     };
 
     // constructor
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     AlignmentStream(
         aligner_type            _aligner,
         const uint32            _count,

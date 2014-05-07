@@ -31,7 +31,7 @@
 #include <nvbio/alignment/alignment.h>
 #include <nvbio/alignment/batched.h>
 #include <nvbio/io/utils.h>
-#include <nvbio/basic/vector_wrapper.h>
+#include <nvbio/basic/vector_view.h>
 
 namespace nvbio {
 namespace bowtie2 {

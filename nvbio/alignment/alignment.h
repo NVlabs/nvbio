@@ -70,7 +70,7 @@
 /// To see a concrete usage example, consider the following code snippet:
 ///
 /// \code
-/// typedef vector_wrapper<const char*> const_string;
+/// typedef vector_view<const char*> const_string;
 ///
 /// const_string  text = make_string("AAAAGGGTGCTCAA");
 /// const_string  pattern  = make_string("GGGTGCTCAA");

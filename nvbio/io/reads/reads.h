@@ -29,7 +29,7 @@
 
 #include <nvbio/basic/strided_iterator.h>
 #include <nvbio/basic/packedstream.h>
-#include <nvbio/basic/vector_wrapper.h>
+#include <nvbio/basic/vector_view.h>
 #include <nvbio/strings/string_set.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -140,8 +140,8 @@ struct ReadDataView
     typedef typename       read_stream_type::iterator                       read_stream_iterator;   ///< the read-stream iterator
     typedef typename const_read_stream_type::iterator                 const_read_stream_iterator;   ///< the const read-stream iterator
 
-    typedef vector_wrapper<read_stream_iterator>                            read_string;            ///< the read string type
-    typedef vector_wrapper<const_read_stream_iterator>                const_read_string;            ///< the const read string type
+    typedef vector_view<read_stream_iterator>                               read_string;            ///< the read string type
+    typedef vector_view<const_read_stream_iterator>                   const_read_string;            ///< the const read string type
 
     typedef ConcatenatedStringSet<
         read_stream_iterator,

@@ -70,7 +70,7 @@ namespace nvbio {
 ///
 ///\code
 /// // build a simple priority_deque over 4 integers
-/// typedef vector_wrapper<uint32*>             vector_type;
+/// typedef vector_view<uint32*>                vector_type;
 /// typedef priority_deque<uint32, vector_type> deque_type;
 ///
 /// uint32 deque_storage[4] = { 5, 3, 8, 1 }

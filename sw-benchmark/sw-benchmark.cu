@@ -48,7 +48,7 @@
 #include <nvbio/basic/cuda/ldg.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/packedstream_loader.h>
-#include <nvbio/basic/vector_wrapper.h>
+#include <nvbio/basic/vector_view.h>
 #include <nvbio/basic/shared_pointer.h>
 #include <nvbio/io/reads/reads.h>
 #include <nvbio/fasta/fasta.h>
@@ -82,11 +82,11 @@ struct AlignmentStream
 
     typedef nvbio::PackedStringLoader<base_iterator,4,io::ReadData::HI_BITS,cache_type> pattern_loader_type;
     typedef typename pattern_loader_type::iterator                                      pattern_iterator;
-    typedef nvbio::vector_wrapper<pattern_iterator>                                     pattern_string;
+    typedef nvbio::vector_view<pattern_iterator>                                     pattern_string;
 
     typedef nvbio::PackedStringLoader<base_iterator,2,false,uncached_tag_type>          text_loader_type;
     typedef typename text_loader_type::iterator                                         text_iterator;
-    typedef nvbio::vector_wrapper<text_iterator>                                        text_string;
+    typedef nvbio::vector_view<text_iterator>                                        text_string;
 
     // an alignment context
     struct context_type
@@ -226,11 +226,11 @@ __global__ void alignment_test_kernel(
 
     typedef nvbio::PackedStringLoader<base_iterator,4,io::ReadData::HI_BITS,lmem_cache_type>    pattern_loader_type;
     typedef typename pattern_loader_type::iterator                                              pattern_iterator;
-    typedef nvbio::vector_wrapper<pattern_iterator>                                             pattern_string;
+    typedef nvbio::vector_view<pattern_iterator>                                                pattern_string;
 
     typedef nvbio::PackedStringLoader<base_iterator,2,false,uncached_tag_type>                  text_loader_type;
     typedef typename text_loader_type::iterator                                                 text_iterator;
-    typedef nvbio::vector_wrapper<text_iterator>                                                text_string;
+    typedef nvbio::vector_view<text_iterator>                                                   text_string;
 
     if (tid >= N_probs)
         return;

@@ -47,7 +47,7 @@ namespace nvbio {
 ///
 ///\code
 /// // build a simple priority_queue over 4 integers
-/// typedef vector_wrapper<uint32*>             vector_type;
+/// typedef vector_view<uint32*>                vector_type;
 /// typedef priority_queue<uint32, vector_type> queue_type;
 ///
 /// uint32 queue_storage[4];

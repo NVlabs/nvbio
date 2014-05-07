@@ -35,7 +35,7 @@
 #include <nvBowtie/bowtie2/cuda/params.h>
 #include <nvbio/basic/cuda/pingpong_queues.h>
 #include <nvbio/basic/priority_deque.h>
-#include <nvbio/basic/vector_wrapper.h>
+#include <nvbio/basic/vector_view.h>
 #include <nvbio/basic/strided_iterator.h>
 #include <nvbio/basic/sum_tree.h>
 

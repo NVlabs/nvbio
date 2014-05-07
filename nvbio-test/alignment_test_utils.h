@@ -37,7 +37,7 @@
 #include <nvbio/basic/cached_iterator.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/packedstream_loader.h>
-#include <nvbio/basic/vector_wrapper.h>
+#include <nvbio/basic/vector_view.h>
 #include <nvbio/basic/shared_pointer.h>
 #include <nvbio/basic/dna.h>
 #include <nvbio/alignment/alignment.h>
@@ -67,9 +67,9 @@ enum AlignmentTest
 };
 
 // make a light-weight string from an ASCII char string
-vector_wrapper<const char*> make_string(const char* str)
+vector_view<const char*> make_string(const char* str)
 {
-    return vector_wrapper<const char*>( uint32(strlen(str)), str );
+    return vector_view<const char*>( uint32(strlen(str)), str );
 }
 
 // run-length encode a string

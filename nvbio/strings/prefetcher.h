@@ -31,6 +31,7 @@
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/packedstream_loader.h>
 #include <nvbio/basic/vector_view.h>
+#include <nvbio/strings/infix.h>
 
 
 namespace nvbio {
@@ -125,6 +126,120 @@ struct StringPrefetcher<
             string.size(),
             loader.load( string.base().container().stream(),
                          string.base().index(),
+                         string.size(),
+                         range,
+                         false ) );
+    }
+
+    loader_type loader;
+};
+
+///
+/// A class to prefetch an infix built on top of a PackedStreamIterator using a local-memory cache
+///
+/// \tparam StorageIterator     the underlying packed string storage iterator
+/// \tparam SYMBOL_SIZE_T       the size of the packed symbols, in bits
+/// \tparam BIG_ENDIAN_T        the endianness of the packing
+/// \tparam CACHE_SIZE          the local-memory cache size, in words
+///
+template <typename InfixCoordType, typename StorageIterator, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, uint32 CACHE_SIZE>
+struct StringPrefetcher<
+    Infix< PackedStreamIterator< PackedStream<StorageIterator,uint8,SYMBOL_SIZE_T,BIG_ENDIAN_T> >,
+           InfixCoordType >,
+    lmem_cache_tag<CACHE_SIZE> >
+{
+    typedef Infix< PackedStreamIterator< PackedStream<StorageIterator,uint8,SYMBOL_SIZE_T,BIG_ENDIAN_T> >,
+                   InfixCoordType>                                                                                  input_string_type;
+    typedef PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,lmem_cache_tag<CACHE_SIZE> >              loader_type;
+    typedef vector_view<typename loader_type::iterator>                                                             string_type;
+
+    /// given a string, prefetch all its content and return a new string object
+    /// wrapping the cached version
+    ///
+    /// \param string       input string
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    string_type load(const input_string_type& string)
+    {
+        return string_type(
+            string.size(),
+            loader.load( string.m_string.container().stream(),
+                         string.m_string.index() + string.range().x,
+                         string.size() ) );
+    }
+
+    /// given a string, prefetch the contents of a substring and return a new string object
+    /// wrapping the cached version
+    ///
+    /// \param string           input string
+    /// \param range            range of the substring to load
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    string_type load(
+        const input_string_type& string,
+        const uint2              range)
+    {
+        return string_type(
+            string.size(),
+            loader.load( string.m_string.container().stream(),
+                         string.m_string.index() + string.range().x,
+                         string.size(),
+                         range,
+                         false ) );
+    }
+
+    loader_type loader;
+};
+
+///
+/// A class to prefetch an infix built on top of a vector_view<PackedStreamIterator> using a local-memory cache
+///
+/// \tparam StorageIterator     the underlying packed string storage iterator
+/// \tparam SYMBOL_SIZE_T       the size of the packed symbols, in bits
+/// \tparam BIG_ENDIAN_T        the endianness of the packing
+/// \tparam CACHE_SIZE          the local-memory cache size, in words
+///
+template <typename InfixCoordType, typename StorageIterator, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, uint32 CACHE_SIZE>
+struct StringPrefetcher<
+    Infix< vector_view< PackedStreamIterator< PackedStream<StorageIterator,uint8,SYMBOL_SIZE_T,BIG_ENDIAN_T> > >,
+           InfixCoordType >,
+    lmem_cache_tag<CACHE_SIZE> >
+{
+    typedef Infix< vector_view< PackedStreamIterator< PackedStream<StorageIterator,uint8,SYMBOL_SIZE_T,BIG_ENDIAN_T> > >,
+                   InfixCoordType>                                                                                  input_string_type;
+    typedef PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,lmem_cache_tag<CACHE_SIZE> >              loader_type;
+    typedef vector_view<typename loader_type::iterator>                                                             string_type;
+
+    /// given a string, prefetch all its content and return a new string object
+    /// wrapping the cached version
+    ///
+    /// \param string       input string
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    string_type load(const input_string_type& string)
+    {
+        return string_type(
+            string.size(),
+            loader.load( string.m_string.base().container().stream(),
+                         string.m_string.base().index() + string.range().x,
+                         string.size() ) );
+    }
+
+    /// given a string, prefetch the contents of a substring and return a new string object
+    /// wrapping the cached version
+    ///
+    /// \param string           input string
+    /// \param range            range of the substring to load
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    string_type load(
+        const input_string_type& string,
+        const uint2              range)
+    {
+        return string_type(
+            string.size(),
+            loader.load( string.m_string.base().container().stream(),
+                         string.m_string.base().index() + string.range().x,
                          string.size(),
                          range,
                          false ) );

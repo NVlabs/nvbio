@@ -129,10 +129,10 @@ namespace nvbio {
 ///
 /// \section TechnicalOverviewSection Technical Overview
 ///\par
-/// For a detailed description of all classes and functions see the \ref StringsModule documentation.
+/// For a detailed description of all classes and functions see the \ref Strings documentation.
 ///
 
-///\defgroup StringsModule Strings Module
+///\defgroup Strings Strings Module
 ///
 /// This module defines various functions and classes to operate with strings and string-sets which vary
 /// for the internal representation.

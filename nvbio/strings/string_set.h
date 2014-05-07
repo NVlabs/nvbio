@@ -145,7 +145,7 @@ namespace nvbio {
 ///\defgroup StringSetsModule String Sets
 ///
 /// This module defines various types of string sets which vary for the internal representation.
-/// For a deeper explanation, see the \ref string_sets_page page.
+/// For a deeper explanation, see the \ref string_page page.
 ///
 
 ///@addtogroup StringSetsModule

@@ -492,7 +492,7 @@
 /// into system memory, including the genome, its forward BWT and the Sampled Suffix Array.
 /// At this point, if we want our mapper to run on the GPU we can copy the FM-index in device memory with
 /// a single line, again specifying which of its components to load.
-/// Rather than keepting it on the stack, we will store it in a <i>Pipeline</i> object, which we'll use
+/// Rather than keeping it on the stack, we will store it in a <i>Pipeline</i> object, which we'll use
 /// to keep all the state of our mapper.
 ///
 ///\code

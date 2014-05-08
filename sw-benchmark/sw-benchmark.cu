@@ -70,6 +70,9 @@ enum { CACHE_SIZE = 64 };
 typedef nvbio::lmem_cache_tag<CACHE_SIZE>                                       lmem_cache_tag_type;
 typedef nvbio::uncached_tag                                                     uncached_tag_type;
 
+enum { REF_BITS       = 2 };
+enum { REF_BIG_ENDIAN = false };
+
 //
 // An alignment stream class to be used in conjunction with the BatchAlignmentScore class
 //
@@ -87,8 +90,8 @@ struct AlignmentStream
     typedef nvbio::vector_view<pattern_iterator>                                                pattern_string;
 
     typedef nvbio::PackedStringLoader<base_iterator,
-        io::FMIndexData::GENOME_BITS,
-        io::FMIndexData::GENOME_BIG_ENDIAN,uncached_tag_type>                                   text_loader_type;
+        REF_BITS,
+        REF_BIG_ENDIAN,uncached_tag_type>                                                       text_loader_type;
     typedef typename text_loader_type::iterator                                                 text_iterator;
     typedef nvbio::vector_view<text_iterator>                                                   text_string;
 
@@ -235,8 +238,8 @@ __global__ void alignment_test_kernel(
     typedef nvbio::vector_view<pattern_iterator>                                                pattern_string;
 
     typedef nvbio::PackedStringLoader<base_iterator,
-        io::FMIndexData::GENOME_BITS,
-        io::FMIndexData::GENOME_BIG_ENDIAN,uncached_tag_type>                                   text_loader_type;
+        REF_BITS,
+        REF_BIG_ENDIAN,uncached_tag_type>                                                       text_loader_type;
     typedef typename text_loader_type::iterator                                                 text_iterator;
     typedef nvbio::vector_view<text_iterator>                                                   text_string;
 
@@ -534,7 +537,7 @@ int main(int argc, char* argv[])
     }
     log_visible(stderr, "reading reference file \"%s\"... done (%u bps)\n", ref_name, ref_length);
 
-    typedef PackedStream<uint32*,uint8,2,false> ref_stream_type;
+    typedef PackedStream<uint32*,uint8,REF_BITS,REF_BIG_ENDIAN> ref_stream_type;
 
     thrust::device_vector<uint32> d_ref_storage( h_ref_storage );
     ref_stream_type d_ref_stream( nvbio::raw_pointer( d_ref_storage ) );

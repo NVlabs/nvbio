@@ -783,7 +783,9 @@
 ///             genome.begin(),
 ///             genome_infix_coords.begin() );
 /// 
+///         // spawn a batched banded DP alignment
 ///         typedef aln::MyersTag<5u> myers_dna5_tag;
+///
 ///         aln::batch_banded_alignment_score<BAND_LEN>(
 ///             aln::make_edit_distance_aligner<aln::SEMI_GLOBAL, myers_dna5_tag>(),
 ///             read_infix_set,

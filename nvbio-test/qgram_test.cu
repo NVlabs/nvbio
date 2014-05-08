@@ -506,7 +506,7 @@ int qgram_test(int argc, char* argv[])
 
     const uint32          n_strings      = d_read_data.size();
     const uint32          string_len     = h_read_data->read_index()[ n_strings ];
-    const string_type     string         = string_type( d_read_data.read_stream() );
+    const string_type     string         = d_read_data.read_stream();
     const string_set_type string_set     = d_read_data.const_read_string_set();
 
     log_info(stderr, "    strings: %u\n", n_strings);

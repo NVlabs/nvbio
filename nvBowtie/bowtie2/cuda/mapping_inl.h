@@ -222,7 +222,7 @@ struct seed_mapper<EXACT_MAPPING>
         const uint32 nwords = (seed_offs + seed_len+8)>>3; //seed_len/8+1
         const uint32 fword  = pos >> 3; // pos / 8
         for (uint32 i=0; i<nwords; ++i)
-            S[i] = read_batch.read_stream()[fword + i];
+            S[i] = read_batch.read_stream_storage()[fword + i];
 
         OffsetXform <Reader::index_type> forward_offset(seed_offs);
         ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
@@ -312,7 +312,7 @@ struct seed_mapper<APPROX_MAPPING>
         const uint32 nwords = (seed_offs + seed_len+8)>>3; //seed_len/8+1
         const uint32 fword  = pos >> 3; // pos / 8
         for(uint32 i=0; i<nwords; ++i)
-            S[i] = read_batch.read_stream()[fword + i];
+            S[i] = read_batch.read_stream_storage()[fword + i];
 
         OffsetXform <Reader::index_type> forward_offset(seed_offs);
         ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
@@ -374,7 +374,7 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
         const uint32 nwords = (seed_offs + seed_len+8)>>3; //seed_len/8+1
         const uint32 fword  = pos >> 3; // pos / 8
         for(uint32 i=0; i<nwords; ++i)
-            S[i] = read_batch.read_stream()[fword + i];
+            S[i] = read_batch.read_stream_storage()[fword + i];
 
         OffsetXform <Reader::index_type> forward_offset(seed_offs);
         ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);

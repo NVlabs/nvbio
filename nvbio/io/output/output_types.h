@@ -227,7 +227,7 @@ struct AlignmentData
         read_len = read_data_batch_p->read_index()[read_id_p + 1] - read_offset;
         read_name = read_data_batch_p->name_stream() + read_data_batch_p->name_index()[read_id];
 
-        read_data = io::ReadData::const_read_stream_type(read_data_batch_p->read_stream()).begin() + read_offset;
+        read_data = read_data_batch_p->read_stream().begin() + read_offset;
         qual = read_data_batch_p->qual_stream() + read_offset;
 
         cigar       = cigar_array_p->array[read_id_p];

@@ -108,22 +108,22 @@ enum PairedEndPolicy
 ///
 template <
     typename IndexIterator,
-    typename ReadIterator,
-    typename QualIterator,
-    typename NameIterator>
+    typename ReadStorageIterator,
+    typename QualStorageIterator,
+    typename NameStorageIterator>
 struct ReadDataView
 {
-    typedef IndexIterator                                                     index_iterator;       ///< the index iterator
-    typedef typename to_const<index_iterator>::type                     const_index_iterator;       ///< the const index iterator
+    typedef IndexIterator                                                     index_iterator;           ///< the index iterator
+    typedef typename to_const<index_iterator>::type                     const_index_iterator;           ///< the const index iterator
 
-    typedef ReadIterator                                                      read_iterator;        ///< the read storage iterator
-    typedef typename to_const<read_iterator>::type                      const_read_iterator;        ///< the const read storage iterator
+    typedef ReadStorageIterator                                               read_storage_iterator;    ///< the read storage iterator
+    typedef typename to_const<read_storage_iterator>::type              const_read_storage_iterator;    ///< the const read storage iterator
 
-    typedef QualIterator                                                      qual_iterator;        ///< the qualities iterator
-    typedef typename to_const<qual_iterator>::type                      const_qual_iterator;        ///< the const qualities iterator
+    typedef QualStorageIterator                                               qual_storage_iterator;    ///< the qualities iterator
+    typedef typename to_const<qual_storage_iterator>::type              const_qual_storage_iterator;    ///< the const qualities iterator
 
-    typedef NameIterator                                                      name_iterator;        ///< the names string iterator
-    typedef typename to_const<name_iterator>::type                      const_name_iterator;        ///< the names string iterator
+    typedef NameStorageIterator                                               name_storage_iterator;    ///< the names string iterator
+    typedef typename to_const<name_storage_iterator>::type              const_name_storage_iterator;    ///< the names string iterator
 
     // symbol size for reads
     static const uint32 READ_BITS = 4;
@@ -134,14 +134,14 @@ struct ReadDataView
     // symbols per word
     static const uint32 READ_SYMBOLS_PER_WORD = (4*sizeof(uint32))/READ_BITS;
 
-    typedef PackedStream<read_iterator,uint8,READ_BITS,HI_BITS>             read_stream_type;       ///< the packed read-stream type
-    typedef PackedStream<const_read_iterator,uint8,READ_BITS,HI_BITS> const_read_stream_type;       ///< the const packed read-stream type
+    typedef PackedStream<read_storage_iterator,uint8,READ_BITS,HI_BITS>             read_stream_type;   ///< the packed read-stream type
+    typedef PackedStream<const_read_storage_iterator,uint8,READ_BITS,HI_BITS> const_read_stream_type;   ///< the const packed read-stream type
 
-    typedef typename       read_stream_type::iterator                       read_stream_iterator;   ///< the read-stream iterator
-    typedef typename const_read_stream_type::iterator                 const_read_stream_iterator;   ///< the const read-stream iterator
+    typedef typename       read_stream_type::iterator                               read_stream_iterator;   ///< the read-stream iterator
+    typedef typename const_read_stream_type::iterator                         const_read_stream_iterator;   ///< the const read-stream iterator
 
-    typedef vector_view<read_stream_iterator>                               read_string;            ///< the read string type
-    typedef vector_view<const_read_stream_iterator>                   const_read_string;            ///< the const read string type
+    typedef vector_view<read_stream_iterator>                                       read_string;            ///< the read string type
+    typedef vector_view<const_read_stream_iterator>                           const_read_string;            ///< the const read string type
 
     typedef ConcatenatedStringSet<
         read_stream_iterator,
@@ -152,19 +152,19 @@ struct ReadDataView
         const_index_iterator>                                         const_read_string_set_type;   ///< const string-set type
 
     typedef ConcatenatedStringSet<
-        qual_iterator,
+        qual_storage_iterator,
         index_iterator>                                                     qual_string_set_type;   ///< quality string-set type
 
     typedef ConcatenatedStringSet<
-        const_qual_iterator,
+        const_qual_storage_iterator,
         const_index_iterator>                                         const_qual_string_set_type;   ///< const quality string-set type
 
     typedef ConcatenatedStringSet<
-        name_iterator,
+        name_storage_iterator,
         index_iterator>                                                     name_string_set_type;   ///< name string-set type
 
     typedef ConcatenatedStringSet<
-        const_name_iterator,
+        const_name_storage_iterator,
         const_index_iterator>                                         const_name_string_set_type;   ///< const name string-set type
 
     /// empty constructor
@@ -190,24 +190,32 @@ struct ReadDataView
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
     ReadDataView(const ReadDataView<InIndexIterator,InReadIterator,InQualIterator,InNameIterator>& in)
       : m_n_reads           (in.m_n_reads),
-        m_name_stream       (NameIterator(in.m_name_stream)),
+        m_name_stream       (NameStorageIterator(in.m_name_stream)),
         m_name_stream_len   (in.m_name_stream_len),
         m_name_index        (IndexIterator(in.m_name_index)),
-        m_read_stream       (ReadIterator(in.m_read_stream)),
+        m_read_stream       (ReadStorageIterator(in.m_read_stream)),
         m_read_stream_len   (in.m_read_stream_len),
         m_read_stream_words (in.m_read_stream_words),
         m_read_index        (IndexIterator(in.m_read_index)),
-        m_qual_stream       (QualIterator(in.m_qual_stream)),
+        m_qual_stream       (QualStorageIterator(in.m_qual_stream)),
         m_min_read_len      (in.m_min_read_len),
         m_max_read_len      (in.m_max_read_len),
         m_avg_read_len      (in.m_avg_read_len)
     {}
 
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_iterator  name_stream()     const { return m_name_stream; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator name_index()      const { return m_name_index;  }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE read_iterator  read_stream()     const { return m_read_stream; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator read_index()      const { return m_read_index;  }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE qual_iterator  qual_stream()     const { return m_qual_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator         name_index()             { return m_name_index;  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator         read_index()             { return m_read_index;  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_storage_iterator  name_stream()            { return m_name_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE read_storage_iterator  read_stream_storage()    { return m_read_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE read_stream_type       read_stream()            { return read_stream_type( m_read_stream ); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE qual_storage_iterator  qual_stream()            { return m_qual_stream; }
+
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator         name_index()             const { return m_name_index;  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator         read_index()             const { return m_read_index;  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_storage_iterator  name_stream()            const { return m_name_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_read_storage_iterator  read_stream_storage()    const { return m_read_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_read_stream_type       read_stream()            const { return const_read_stream_type( m_read_stream ); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_storage_iterator  qual_stream()            const { return m_qual_stream; }
 
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  size()                    const { return m_n_reads; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  bps()                     const { return m_read_stream_len; }
@@ -224,7 +232,7 @@ struct ReadDataView
     {
         return read_string_set_type(
             size(),
-            read_stream_type( read_stream() ).begin(),
+            read_stream().begin(),
             read_index() );
     }
 
@@ -234,7 +242,7 @@ struct ReadDataView
     {
         return const_read_string_set_type(
             size(),
-            const_read_stream_type( read_stream() ).begin(),
+            read_stream().begin(),
             read_index() );
     }
 
@@ -244,7 +252,7 @@ struct ReadDataView
     {
         return const_read_string_set_type(
             size(),
-            const_read_stream_type( read_stream() ).begin(),
+            read_stream().begin(),
             read_index() );
     }
 
@@ -253,8 +261,7 @@ struct ReadDataView
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE read_string get_read(const uint32 i) const
     {
         const uint2            read_range = get_range( i );
-        const read_stream_type reads( read_stream() );
-        return read_string( read_range.y - read_range.x, reads.begin() + read_range.x );
+        return read_string( read_range.y - read_range.x, read_stream().begin() + read_range.x );
     }
 
     /// return the a string-set view of this set of reads
@@ -319,33 +326,33 @@ struct ReadDataView
 
 public:
     // number of reads in this struct
-    uint32             m_n_reads;
+    uint32                  m_n_reads;
 
     // a pointer to a buffer containing the names of all the reads in this batch
-    name_iterator      m_name_stream;
+    name_storage_iterator   m_name_stream;
     // the length (in bytes) of the name_stream buffer
-    uint32             m_name_stream_len;
+    uint32                  m_name_stream_len;
     // an array of uint32 with the byte indices of the starting locations of each name in name_stream
-    index_iterator     m_name_index;
+    index_iterator          m_name_index;
 
     // a pointer to a buffer containing the read data
     // note that this could point at either host or device memory
-    read_iterator      m_read_stream;
+    read_storage_iterator   m_read_stream;
     // the length of read_stream in base pairs
-    uint32             m_read_stream_len;
+    uint32                  m_read_stream_len;
     // the number of words in read_stream
-    uint32             m_read_stream_words;
+    uint32                  m_read_stream_words;
     // an array of uint32 with the indices of the starting locations of each read in read_stream (in base pairs)
-    index_iterator     m_read_index;
+    index_iterator          m_read_index;
 
     // a pointer to a buffer containing quality data
     // (the indices in m_read_index are also valid for this buffer)
-    qual_iterator      m_qual_stream;
+    qual_storage_iterator   m_qual_stream;
 
     // statistics on the reads: minimum size, maximum size, average size
-    uint32             m_min_read_len;
-    uint32             m_max_read_len;
-    uint32             m_avg_read_len;
+    uint32                  m_min_read_len;
+    uint32                  m_max_read_len;
+    uint32                  m_avg_read_len;
 };
 
 ///

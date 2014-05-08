@@ -798,7 +798,7 @@
 /// 
 ///         const SparseStringSet<read_iterator,infix_iterator> read_infix_set(
 ///             hits_end - hits_begin,
-///             read_stream( reads.read_stream() ).begin(),
+///             reads.read_stream().begin(),
 ///             read_infix_coords.begin() );
 /// 
 ///         const SparseStringSet<genome_iterator,infix_iterator> genome_infix_set(

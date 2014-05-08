@@ -469,36 +469,13 @@
 ///
 /// #include "util.h"
 ///
-/// void main()
+/// void main(int argc, const char** argv)
 /// {
-///     //
 ///     // perform some basic option parsing
-///     //
-/// 
 ///     const char* reads = argv[argc-1];
 ///     const char* index = argv[argc-2];
 /// 
-///     Params params;
-///     params.seed_len         = 22;
-///     params.seed_intv        = 10;
-///     params.merge_intv       = 16;
-///     uint32 max_reads        = uint32(-1);
-///     int16  score_threshold  = -20;
-/// 
-///     for (int i = 0; i < argc; ++i)
-///     {
-///         if (strcmp( argv[i], "-s" ) == 0)
-///         {
-///             params.seed_len  = uint32( atoi( argv[++i] ) );
-///             params.seed_intv = uint32( atoi( argv[++i] ) );
-///         }
-///         if (strcmp( argv[i], "-m" ) == 0)
-///             params.merge_intv = uint32( atoi( argv[++i] ) );
-///         else if (strcmp( argv[i], "-max-reads" ) == 0)
-///             max_reads = uint32( atoi( argv[++i] ) );
-///         else if (strcmp( argv[i], "-t" ) == 0)
-///             score_threshold = int16( atoi( argv[++i] ) );
-///     }
+///     Params params( argc-2, argv );
 /// 
 ///     // Load an FM-index in RAM
 ///     io::FMIndexDataRAM h_fmi;
@@ -561,7 +538,7 @@
 ///         io::open_read_file(
 ///             reads,
 ///             io::Phred33,
-///             2*max_reads,
+///             2*params.max_reads,
 ///             uint32(-1),
 ///             io::ReadEncoding( io::FORWARD | io::REVERSE_COMPLEMENT ) ) );
 /// 

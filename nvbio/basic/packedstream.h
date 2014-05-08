@@ -356,7 +356,14 @@ struct PackedStream
 
     /// constructor
     ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStream(const InputStream stream) : m_stream( stream ) {}
+    template <typename UInputStream>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStream(const UInputStream stream) : m_stream( static_cast<InputStream>(stream) ) {}
+
+    /// constructor
+    ///
+    template <typename UInputStream, typename USymbol>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStream(const PackedStream<UInputStream,USymbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& other) :
+        m_stream( static_cast<InputStream>( other.stream() ) ) {}
 
     /// get the i-th symbol
     ///
@@ -381,6 +388,16 @@ struct PackedStream
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     InputStream stream() const { return m_stream; }
+
+    /// assignment operator
+    ///
+    template <typename UInputStream, typename USymbol>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    PackedStream& operator=(const PackedStream<UInputStream,USymbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& other)
+    {
+        m_stream = static_cast<InputStream>( other.stream() );
+        return *this;
+    }
 
 private:
     InputStream m_stream;

@@ -70,8 +70,8 @@ namespace nvbio {
 /// <i>Massively parallel read mapping on GPUs with PEANUT</i> \n
 /// Johannes Koester and Sven Rahmann \n
 /// http://arxiv.org/pdf/1403.1706v1.pdf \n
-/// this data-structure requires O(A^q) bits of storage in the alphabet-size <i>A</i> and the q-gram length <i>q</i>,
-///   and provides O(1) query time;
+/// this data-structure requires O(A^q) bits of storage in the alphabet-size <i>A</i> and the q-gram length <i>q</i>
+/// (to be precise, 2*A^q bits + (min(A^q,|T|) + |T|) words), and provides O(1) query time;
 ///@{
 ///
 

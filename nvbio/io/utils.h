@@ -195,11 +195,11 @@ uint32 length(const ReadStream<StreamType,QualType>& read) { return read.length(
 template <typename BatchType, typename Tag>
 struct ReadLoader
 {
-    typedef typename BatchType::read_storage_iterator                                              read_storage;
-    typedef typename BatchType::qual_storage_iterator                                              qual_iterator;
-    typedef PackedStringLoader<read_storage, io::ReadData::READ_BITS, io::ReadData::HI_BITS,Tag>   loader_type;
-    typedef typename loader_type::iterator                                                         read_iterator;
-    typedef ReadStream<read_iterator,qual_iterator>                                                string_type;
+    typedef typename BatchType::read_storage_iterator                                                       read_storage;
+    typedef typename BatchType::qual_storage_iterator                                                       qual_iterator;
+    typedef PackedStringLoader<read_storage, io::ReadData::READ_BITS, io::ReadData::READ_BIG_ENDIAN,Tag>    loader_type;
+    typedef typename loader_type::iterator                                                                  read_iterator;
+    typedef ReadStream<read_iterator,qual_iterator>                                                         string_type;
 
     /// load a read
     ///

@@ -80,13 +80,17 @@ struct AlignmentStream
 
     typedef nvbio::cuda::ldg_pointer<uint32>                                        base_iterator;
 
-    typedef nvbio::PackedStringLoader<base_iterator,4,io::ReadData::HI_BITS,cache_type> pattern_loader_type;
-    typedef typename pattern_loader_type::iterator                                      pattern_iterator;
-    typedef nvbio::vector_view<pattern_iterator>                                     pattern_string;
+    typedef nvbio::PackedStringLoader<base_iterator,
+        io::ReadData::READ_BITS,
+        io::ReadData::READ_BIG_ENDIAN,cache_type>                                               pattern_loader_type;
+    typedef typename pattern_loader_type::iterator                                              pattern_iterator;
+    typedef nvbio::vector_view<pattern_iterator>                                                pattern_string;
 
-    typedef nvbio::PackedStringLoader<base_iterator,2,false,uncached_tag_type>          text_loader_type;
-    typedef typename text_loader_type::iterator                                         text_iterator;
-    typedef nvbio::vector_view<text_iterator>                                        text_string;
+    typedef nvbio::PackedStringLoader<base_iterator,
+        io::FMIndexData::GENOME_BITS,
+        io::FMIndexData::GENOME_BIG_ENDIAN,uncached_tag_type>                                   text_loader_type;
+    typedef typename text_loader_type::iterator                                                 text_iterator;
+    typedef nvbio::vector_view<text_iterator>                                                   text_string;
 
     // an alignment context
     struct context_type
@@ -224,11 +228,15 @@ __global__ void alignment_test_kernel(
     typedef lmem_cache_tag_type                                                 lmem_cache_type;
     typedef nvbio::cuda::ldg_pointer<uint32>                                    base_iterator;
 
-    typedef nvbio::PackedStringLoader<base_iterator,4,io::ReadData::HI_BITS,lmem_cache_type>    pattern_loader_type;
+    typedef nvbio::PackedStringLoader<base_iterator,
+        io::ReadData::READ_BITS,
+        io::ReadData::READ_BIG_ENDIAN,lmem_cache_type>                                          pattern_loader_type;
     typedef typename pattern_loader_type::iterator                                              pattern_iterator;
     typedef nvbio::vector_view<pattern_iterator>                                                pattern_string;
 
-    typedef nvbio::PackedStringLoader<base_iterator,2,false,uncached_tag_type>                  text_loader_type;
+    typedef nvbio::PackedStringLoader<base_iterator,
+        io::FMIndexData::GENOME_BITS,
+        io::FMIndexData::GENOME_BIG_ENDIAN,uncached_tag_type>                                   text_loader_type;
     typedef typename text_loader_type::iterator                                                 text_iterator;
     typedef nvbio::vector_view<text_iterator>                                                   text_string;
 

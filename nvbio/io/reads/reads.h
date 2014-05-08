@@ -134,8 +134,10 @@ struct ReadDataView
     // symbols per word
     static const uint32 READ_SYMBOLS_PER_WORD = (4*sizeof(uint32))/READ_BITS;
 
-    typedef PackedStream<read_storage_iterator,uint8,READ_BITS,HI_BITS>             read_stream_type;   ///< the packed read-stream type
-    typedef PackedStream<const_read_storage_iterator,uint8,READ_BITS,HI_BITS> const_read_stream_type;   ///< the const packed read-stream type
+    typedef PackedStream<
+        read_storage_iterator,uint8,READ_BITS,READ_BIG_ENDIAN>                      read_stream_type;       ///< the packed read-stream type
+    typedef PackedStream<
+        const_read_storage_iterator,uint8,READ_BITS,READ_BIG_ENDIAN>          const_read_stream_type;       ///< the const packed read-stream type
 
     typedef typename       read_stream_type::iterator                               read_stream_iterator;   ///< the read-stream iterator
     typedef typename const_read_stream_type::iterator                         const_read_stream_iterator;   ///< the const read-stream iterator

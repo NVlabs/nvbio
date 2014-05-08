@@ -214,7 +214,7 @@ struct seed_mapper<EXACT_MAPPING>
         const ParamsPOD&    params)
     {
         //typedef const_cached_iterator<const uint32*> BaseStream;
-        typedef PackedStream<const uint32*,uint8,io::ReadData::READ_BITS,io::ReadData::HI_BITS> Reader;
+        typedef PackedStream<const uint32*,uint8,io::ReadData::READ_BITS,io::ReadData::READ_BIG_ENDIAN> Reader;
         Reader reader(S);
 
         // First we have to buffer the seed into shared memory.
@@ -304,7 +304,7 @@ struct seed_mapper<APPROX_MAPPING>
         const ParamsPOD&    params)
     {
         //typedef const_cached_iterator<const uint32*> BaseStream;
-        typedef PackedStream<const uint32*,uint8,io::ReadData::READ_BITS,io::ReadData::HI_BITS> Reader;
+        typedef PackedStream<const uint32*,uint8,io::ReadData::READ_BITS,io::ReadData::READ_BIG_ENDIAN> Reader;
         Reader reader(S);
 
         // First we have to buffer the seed into shared memory.
@@ -366,7 +366,7 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
         const ParamsPOD&    params)
     {
         //typedef const_cached_iterator<const uint32*> BaseStream;
-        typedef PackedStream<const uint32*,uint8,io::ReadData::READ_BITS,io::ReadData::HI_BITS> Reader;
+        typedef PackedStream<const uint32*,uint8,io::ReadData::READ_BITS,io::ReadData::READ_BIG_ENDIAN> Reader;
         Reader reader(S);
 
         // First we have to buffer the seed into shared memory.

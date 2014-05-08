@@ -775,8 +775,8 @@
 ///  - the reference genome
 ///
 ///\code
-///        ...
-///        // build the set of read infixes
+///         ...
+///         // build the set of read infixes
 ///         thrust::transform(
 ///             hits.begin(),
 ///             hits.begin() + hits_end - hits_begin,

@@ -356,7 +356,7 @@ void map(
             //aln::make_gotoh_aligner<aln::LOCAL>( gotoh ),
             read_infix_set,
             genome_infix_set,
-            nvbio::raw_pointer( sinks ),
+            sinks.begin(),
             aln::ThreadParallelScheduler(),
             reads.max_read_len(),
             reads.max_read_len() + BAND_LEN );

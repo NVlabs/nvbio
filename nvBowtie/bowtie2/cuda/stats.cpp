@@ -169,7 +169,7 @@ void generate_report(Stats& stats, const char* report)
     kernel_stats.push_back( &stats.read_HtoD );
     kernel_stats.push_back( &stats.read_io );
 
-    if (stats.params.keep_stats)
+    //if (stats.params.keep_stats)
     {
         for (uint32 i = 0; i < kernel_stats.size(); ++i)
             generate_kernel_table( report, *kernel_stats[i] );

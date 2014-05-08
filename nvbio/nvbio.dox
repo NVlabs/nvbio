@@ -472,12 +472,12 @@
 /// void main(int argc, const char** argv)
 /// {
 ///     // perform some basic option parsing
+///     Params params( argc-2, argv );
+///
 ///     const char* reads = argv[argc-1];
 ///     const char* index = argv[argc-2];
 /// 
-///     Params params( argc-2, argv );
-/// 
-///     // Load an FM-index in RAM
+///     // load an FM-index in RAM
 ///     io::FMIndexDataRAM h_fmi;
 ///     if (!h_fmi.load( index, io::FMIndexData::GENOME | io::FMIndexData::FORWARD | io::FMIndexData::SA ))
 ///     {

@@ -119,7 +119,7 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
               uint32 word_rem    = 0;
 
         typedef io::ReadData::const_read_stream_type src_read_stream_type;
-        const src_read_stream_type src( h_read_data->read_stream() );
+        const src_read_stream_type src( h_read_data->const_read_stream() );
 
         if (word_offset)
         {

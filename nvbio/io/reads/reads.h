@@ -212,12 +212,19 @@ struct ReadDataView
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE read_stream_type       read_stream()            { return read_stream_type( m_read_stream ); }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE qual_storage_iterator  qual_stream()            { return m_qual_stream; }
 
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator         name_index()             const { return m_name_index;  }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator         read_index()             const { return m_read_index;  }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_storage_iterator  name_stream()            const { return m_name_stream; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_read_storage_iterator  read_stream_storage()    const { return m_read_stream; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_read_stream_type       read_stream()            const { return const_read_stream_type( m_read_stream ); }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_storage_iterator  qual_stream()            const { return m_qual_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator         const_name_index()          const { return m_name_index;  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator         const_read_index()          const { return m_read_index;  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_storage_iterator  const_name_stream()         const { return m_name_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_read_storage_iterator  const_read_stream_storage() const { return m_read_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_read_stream_type       const_read_stream()         const { return const_read_stream_type( m_read_stream ); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_storage_iterator  const_qual_stream()         const { return m_qual_stream; }
+
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator         name_index()                const { return const_name_index();  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator         read_index()                const { return const_read_index();  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_storage_iterator  name_stream()               const { return const_name_stream(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_read_storage_iterator  read_stream_storage()       const { return const_read_stream_storage(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_read_stream_type       read_stream()               const { return const_read_stream(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_storage_iterator  qual_stream()               const { return const_qual_stream(); }
 
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  size()                    const { return m_n_reads; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  bps()                     const { return m_read_stream_len; }

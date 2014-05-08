@@ -260,10 +260,18 @@ struct ReadDataView
 
     /// return the i-th read as a string
     ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE read_string get_read(const uint32 i) const
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE read_string get_read(const uint32 i)
     {
         const uint2            read_range = get_range( i );
         return read_string( read_range.y - read_range.x, read_stream().begin() + read_range.x );
+    }
+
+    /// return the i-th read as a string
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE read_string get_read(const uint32 i) const
+    {
+        const uint2            read_range = get_range( i );
+        return const_read_string( read_range.y - read_range.x, read_stream().begin() + read_range.x );
     }
 
     /// return the a string-set view of this set of reads

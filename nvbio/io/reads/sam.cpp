@@ -326,7 +326,11 @@ bool ReadDataFile_SAM::parseReferenceSequenceLine(char *start)
     }
 
     char *endptr = NULL;
+#if WIN32
+    uint64 len = strtol(seq_len, &endptr, 10);
+#else
     uint64 len = strtoll(seq_len, &endptr, 10);
+#endif
     if (!endptr || endptr == seq_len || *endptr != '\0')
     {
         log_warning(stderr, "SAM file warning (line %d): invalid sequence length in @SQ record\n", numLines);

@@ -373,19 +373,22 @@ public:
 };
 
 ///
+/// The core ReadData class
+///
+typedef ReadDataView<uint32*,uint32*,char*,char*> ReadDataCore;
+
+///
 /// Base abstract class to encode a host-side read batch.
 /// This has no storage, it's meant to be a base for either host or device memory objects
 ///
-struct ReadData : public ReadDataView<uint32*,uint32*,char*,char*>
+struct ReadData : public ReadDataCore
 {
-    typedef ReadDataView<uint32*,uint32*,char*,char*>                               ReadDataBase;
-
     typedef ReadDataView<uint32*,uint32*,char*,char*>                               plain_view_type;
     typedef ReadDataView<const uint32*,const uint32*,const char*,const char*> const_plain_view_type;
 
     /// empty constructor
     ///
-    ReadData() : ReadDataBase()
+    ReadData() : ReadDataCore()
     {
         m_name_stream   = NULL;
         m_name_index    = NULL;

@@ -627,24 +627,19 @@ int32 ref_sw(
 //
 struct TestBacktracker
 {
-    void clear() { aln[0] = '\0'; }
+    void clear() { aln[0] = '\0'; aln_len = 0; }
 
     NVBIO_HOST_DEVICE
     void clip(const uint32 len)
     {
-        #if !defined(__CUDA_ARCH__)
-        const uint32 aln_len = uint32(strlen(aln));
         for (uint32 i = 0; i < len; ++i)
             aln[aln_len+i] = 'S';
         aln[aln_len+len] = '\0';
-        #endif
     }
     NVBIO_HOST_DEVICE
     void push(const uint8 op)
     {
-        #if !defined(__CUDA_ARCH__)
-        sprintf(aln + strlen(aln), "%c", "MID"[op]);
-        #endif
+        aln[ aln_len++ ] = "MID"[op];
     }
 
     // compute the score of the resulting alignment
@@ -656,8 +651,6 @@ struct TestBacktracker
         const uint8*                            str,
         const uint8*                            ref)
     {
-        const uint32 aln_len = uint32( strlen( aln ) );
-
         int32 score = 0;
 
         for (uint32 a = 0, j = 0, k = offset; a < aln_len; ++a)
@@ -704,8 +697,6 @@ struct TestBacktracker
         const uint8*                            ref)
     {
         const scoring_type& scoring = aligner.scheme;
-
-        const uint32 aln_len = uint32( strlen( aln ) );
 
         int32 score = 0;
 
@@ -754,8 +745,6 @@ struct TestBacktracker
     {
         const scoring_type& scoring = aligner.scheme;
 
-        const uint32 aln_len = uint32( strlen( aln ) );
-
         int32 score = 0;
         char  state = 'S';
 
@@ -796,7 +785,8 @@ struct TestBacktracker
         return score;
     }
 
-    char aln[1024];
+    char   aln[1024];
+    uint32 aln_len;
 };
 
 } // namespace sw

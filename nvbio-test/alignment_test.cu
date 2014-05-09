@@ -275,7 +275,7 @@ struct SingleTest
         const std::string aln_string = rle( backtracker.aln ).c_str();
         if (aln_score != ref_score)
         {
-            log_error(stderr, "    expected %d, got %d\n", ref_score, aln_score);
+            log_error(stderr, "    expected %s backtracking score %d, got %d\n", test, ref_score, aln_score);
             log_error(stderr, "    %s - %d - [%u, %u] x [%u, %u]\n", aln_string.c_str(), aln.score, aln.source.x, aln.sink.x, aln.source.y, aln.sink.y);
             //mat->print();
             exit(1);
@@ -336,7 +336,7 @@ struct SingleTest
         const std::string aln_string = rle( backtracker.aln ).c_str();
         if (aln_score != ref_score)
         {
-            log_error(stderr, "    expected %d, got %d\n", ref_score, aln_score);
+            log_error(stderr, "    expected %s backtracking score %d, got %d\n", ref_score, aln_score);
             log_error(stderr, "    %s - %d - [%u, %u] x [%u, %u]\n", aln_string.c_str(), aln.score, aln.source.x, aln.sink.x, aln.source.y, aln.sink.y);
             exit(1);
         }

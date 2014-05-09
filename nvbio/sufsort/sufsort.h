@@ -237,7 +237,7 @@ void suffix_sort(
 template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type, typename output_handler>
 void bwt(
     const ConcatenatedStringSet<
-        PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> >,
+        PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64>,
         uint64*>                    string_set,
         output_handler&             output,
         BWTParams*                  params = NULL);
@@ -277,7 +277,7 @@ void bwt(
 template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type, typename output_handler>
 void large_bwt(
     const ConcatenatedStringSet<
-        PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> >,
+        PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64>,
         uint64*>                    string_set,
         output_handler&             output,
         BWTParams*                  params = NULL);

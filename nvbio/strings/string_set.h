@@ -375,16 +375,15 @@ bool operator!= (
 /// thrust::host_vector<uint32> offsets_storage( n_reads+1 );
 /// thrust::host_vector<uint32> string_storage( n_words );
 /// typedef PackedStream<uint32*, uint8, 2u, false> packed_stream_type;
-/// typedef packed_stream::iterator                 packed_iterator;
 /// typedef uint32*                                 offsets_iterator;
-/// typedef ConcatenatedStringSet<packed_iterator, offsets_iterator> packed_string_set;
+/// typedef ConcatenatedStringSet<packed_stream_type, offsets_iterator> packed_string_set;
 ///
 /// packed_stream_type packed_stream( plain_view( string_storage ) );
 ///
 /// // build the string set
 /// packed_string_set string_set(
 ///     n_reads,
-///     packed_stream.begin(),
+///     packed_stream,
 ///     plain_view( offsets_storage ) );
 ///
 /// // setup the offsets, note we need to place a sentinel
@@ -518,17 +517,16 @@ ConcatenatedStringSet<StringIterator,OffsetIterator> make_concatenated_string_se
 ///     const thrust::device_vector<uint32>& genome_storage,
 ///     const thrust::device_vector<uint2>&  regions)
 /// {
-///     typedef PackedStream<const uint32*, uint8, 2u, true>        packed_stream_type;
-///     typedef packed_stream::iterator                             packed_iterator;
+///     typedef PackedStream<const uint32*, uint8, 2u, true>        packed_iterator;
 ///     typedef const uint2*                                        ranges_iterator;
 ///     typedef SparseStringSet<packed_iterator, ranges_iterator>   sparse_string_set;
 ///
-///     packed_stream_type packed_stream( plain_view( genome_storage ) );
+///     packed_iterator packed_stream( plain_view( genome_storage ) );
 ///
 ///     // build the string set
 ///     sparse_string_set string_set(
 ///         regions.size(),
-///         packed_stream.begin(),
+///         packed_stream,
 ///         plain_view( regions ) );
 ///
 ///     // work with the string set
@@ -1014,23 +1012,22 @@ struct CachedPackedConcatStringSet<
     typedef uint4_as_uint32_iterator<cached_base_iterator>                              uint4_iterator;
     typedef const_cached_iterator<uint4_iterator>                                       cached_stream_iterator;
     typedef PackedStream<cached_stream_iterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>  cached_packed_stream_type;
-    typedef typename cached_packed_stream_type::iterator                                cached_packed_stream_iterator;
-    typedef ConcatenatedStringSet<cached_packed_stream_iterator,LengthIterator>         cached_string_set;
+    typedef ConcatenatedStringSet<cached_packed_stream_type,LengthIterator>             cached_string_set;
 
     static cached_string_set make(
         const ConcatenatedStringSet<
-            PackedStreamIterator< PackedStream<StreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> >,
+            PackedStream<StreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>,
             LengthIterator> string_set)
     {
         cached_packed_stream_type cached_packed_stream(
             cached_stream_iterator(
-                uint4_iterator( cached_base_iterator( string_set.base_string().container().stream() ) )
+                uint4_iterator( cached_base_iterator( string_set.base_string().stream() ) )
                 )
             );
 
         return cached_string_set(
             string_set.size(),
-            cached_packed_stream.begin(),
+            cached_packed_stream,
             string_set.offsets() );
     }
 };
@@ -1051,22 +1048,21 @@ struct CachedPackedConcatStringSet<
 {
     typedef const_cached_iterator<StreamIterator>                                       cached_stream_iterator;
     typedef PackedStream<cached_stream_iterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>  cached_packed_stream_type;
-    typedef typename cached_packed_stream_type::iterator                                cached_packed_stream_iterator;
-    typedef ConcatenatedStringSet<cached_packed_stream_iterator,LengthIterator>         cached_string_set;
+    typedef ConcatenatedStringSet<cached_packed_stream_type,LengthIterator>             cached_string_set;
 
     static cached_string_set make(
         const ConcatenatedStringSet<
-            PackedStreamIterator< PackedStream<StreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> >,
+            PackedStream<StreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>,
             LengthIterator> string_set)
     {
         cached_packed_stream_type cached_packed_stream(
             cached_stream_iterator(
-                    string_set.base_string().container().stream() )
+                    string_set.base_string().stream() )
             );
 
         return cached_string_set(
             string_set.size(),
-            cached_packed_stream.begin(),
+            cached_packed_stream,
             string_set.offsets() );
     }
 };
@@ -1100,23 +1096,22 @@ struct CachedPackedSparseStringSet<
     typedef uint4_as_uint32_iterator<cached_base_iterator>                              uint4_iterator;
     typedef const_cached_iterator<uint4_iterator>                                       cached_stream_iterator;
     typedef PackedStream<cached_stream_iterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>  cached_packed_stream_type;
-    typedef typename cached_packed_stream_type::iterator                                cached_packed_stream_iterator;
-    typedef SparseStringSet<cached_packed_stream_iterator,LengthIterator>               cached_string_set;
+    typedef SparseStringSet<cached_packed_stream_type,LengthIterator>               cached_string_set;
 
     static cached_string_set make(
         const SparseStringSet<
-            PackedStreamIterator< PackedStream<StreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> >,
+            PackedStream<StreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>,
             LengthIterator> string_set)
     {
         cached_packed_stream_type cached_packed_stream(
             cached_stream_iterator(
-                uint4_iterator( cached_base_iterator( string_set.base_string().container().stream() ) )
+                uint4_iterator( cached_base_iterator( string_set.base_string().stream() ) )
                 )
             );
 
         return cached_string_set(
             string_set.size(),
-            cached_packed_stream.begin(),
+            cached_packed_stream,
             string_set.ranges() );
     }
 };
@@ -1137,22 +1132,21 @@ struct CachedPackedSparseStringSet<
 {
     typedef const_cached_iterator<StreamIterator>                                       cached_stream_iterator;
     typedef PackedStream<cached_stream_iterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>  cached_packed_stream_type;
-    typedef typename cached_packed_stream_type::iterator                                cached_packed_stream_iterator;
-    typedef SparseStringSet<cached_packed_stream_iterator,LengthIterator>               cached_string_set;
+    typedef SparseStringSet<cached_packed_stream_type,LengthIterator>                   cached_string_set;
 
     static cached_string_set make(
         const SparseStringSet<
-            PackedStreamIterator< PackedStream<StreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> >,
+            PackedStream<StreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>,
             LengthIterator> string_set)
     {
         cached_packed_stream_type cached_packed_stream(
             cached_stream_iterator(
-                    string_set.base_string().container().stream() )
+                    string_set.base_string().stream() )
             );
 
         return cached_string_set(
             string_set.size(),
-            cached_packed_stream.begin(),
+            cached_packed_stream,
             string_set.ranges() );
     }
 };
@@ -1175,7 +1169,7 @@ typename CachedPackedSparseStringSet<
     typename std::iterator_traits<StreamIterator>::value_type>::cached_string_set
 make_cached_string_set(
     const SparseStringSet<
-        PackedStreamIterator< PackedStream<StreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> >,
+        PackedStream<StreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>,
         LengthIterator> string_set)
 {
     typedef CachedPackedSparseStringSet<
@@ -1207,7 +1201,7 @@ typename CachedPackedConcatStringSet<
     typename std::iterator_traits<StreamIterator>::value_type>::cached_string_set
 make_cached_string_set(
     const ConcatenatedStringSet<
-        PackedStreamIterator< PackedStream<StreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> >,
+        PackedStream<StreamIterator,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>,
         LengthIterator> string_set)
 {
     typedef CachedPackedConcatStringSet<

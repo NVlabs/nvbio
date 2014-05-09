@@ -392,6 +392,7 @@ void benchmark(const uint32 n_tests, const uint32 min_size, const uint32 max_siz
 
     float times[16];
 
+    #if 0
     log_info( stderr, "    ordered work-queue, %u-byte payload", PAYLOAD*4u );
     for (uint32 m = 0; m < stream_doublings; ++m)
     {
@@ -430,6 +431,7 @@ void benchmark(const uint32 n_tests, const uint32 min_size, const uint32 max_siz
     for (uint32 i = 0; i < stream_doublings; ++i)
         log_info_cont( stderr, "  %7.2f", (float(bytes_copied<<i)/times[i]) / GB );
     log_info_nl( stderr );
+    #endif
 
     log_info( stderr, "    multi-pass work-queue, %u-byte payload", PAYLOAD*4u );
     for (uint32 m = 0; m < stream_doublings; ++m)
@@ -565,6 +567,7 @@ void benchmark(const uint32 n_tests, const uint32 min_size, const uint32 max_siz
     typedef WorkQueue<OrderedQueueTag,DynMemWorkUnit,BLOCKDIM>      DynMemWorkQueue;
     typedef WorkQueue<MultiPassQueueTag,DynMemWorkUnit,BLOCKDIM>    DynMemMKWorkQueue;
 
+    #if 0
     log_info( stderr, "    ordered dyn-mem work-queue, %u-byte payload", PAYLOAD*4u );
     for (uint32 m = 0; m < stream_doublings; ++m)
     {
@@ -608,6 +611,7 @@ void benchmark(const uint32 n_tests, const uint32 min_size, const uint32 max_siz
     for (uint32 i = 0; i < stream_doublings; ++i)
         log_info_cont( stderr, "  %7.2f", (float(bytes_copied<<i)/times[i]) / GB );
     log_info_nl( stderr );
+    #endif
 
     typedef BenchmarkStridedWorkUnit<PAYLOAD>                       StridedWorkUnit;
     typedef BenchmarkWorkStream<StridedWorkUnit>                    StridedWorkStream;
@@ -615,6 +619,7 @@ void benchmark(const uint32 n_tests, const uint32 min_size, const uint32 max_siz
     typedef WorkQueue<OrderedQueueTag,StridedWorkUnit,BLOCKDIM>     StridedWorkQueue;
     typedef WorkQueue<MultiPassQueueTag,StridedWorkUnit,BLOCKDIM>   StridedMKWorkQueue;
 
+    #if 0
     log_info( stderr, "    ordered strided work-queue, %u-byte payload", PAYLOAD*4u );
     for (uint32 m = 0; m < stream_doublings; ++m)
     {
@@ -653,6 +658,7 @@ void benchmark(const uint32 n_tests, const uint32 min_size, const uint32 max_siz
     for (uint32 i = 0; i < stream_doublings; ++i)
         log_info_cont( stderr, "  %7.2f", (float(bytes_copied<<i)/times[i]) / GB );
     log_info_nl( stderr );
+    #endif
 
     log_info( stderr, "    multi-pass strided work-queue, %u-byte payload", PAYLOAD*4u );
     for (uint32 m = 0; m < stream_doublings; ++m)
@@ -726,7 +732,7 @@ int work_queue_test(int argc, char* argv[])
     typedef WorkQueue<MultiPassQueueTag,TestWorkUnit,BLOCKDIM>          TestMKWorkQueue;
     typedef WorkQueue<PersistentWarpsQueueTag,TestWorkUnit,BLOCKDIM>    TestPWWorkQueue;
     typedef WorkQueue<PersistentThreadsQueueTag,TestWorkUnit,BLOCKDIM>  TestPTWorkQueue;
-
+    #if 0
     log_info( stderr, "  testing ordered work-queue:\n" );
     {
         const uint32 n_stream_size = 1024*1024;
@@ -750,6 +756,7 @@ int work_queue_test(int argc, char* argv[])
         }
         log_info( stderr, "    correctness test passed\n" );
     }
+    #endif
     log_info( stderr, "  testing multi-pass work-queue:\n" );
     {
         const uint32 n_stream_size = 1024*1024;

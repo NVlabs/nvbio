@@ -35,17 +35,11 @@
 #include <nvbio/basic/timer.h>
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/cuda/arch.h>
-#include <nvbio/basic/cuda/tex.h>
+#include <nvbio/basic/cuda/ldg.h>
 #include <nvbio/strings/string_set.h>
 #include <thrust/device_vector.h>
 
 namespace nvbio {
-
-namespace test
-{
-DECL_TEXTURE_WRAPPER_CLASS(string_set,uint32);
-INST_TEXTURE_WRAPPER_CLASS(string_set,uint32);
-}
 
 namespace string_set_private {
 
@@ -237,9 +231,8 @@ int string_set_test(int argc, char* argv[])
         const uint32 N_words = (N_spacing + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
 
         typedef PackedStream<uint32*,uint8,SYMBOL_SIZE,false> packed_stream_type;
-        typedef packed_stream_type::iterator                  packed_stream_iterator;
 
-        typedef SparseStringSet<packed_stream_iterator,const uint2*> input_set;
+        typedef SparseStringSet<packed_stream_type,const uint2*> input_set;
         typedef StridedStringSet<
             uint8*,
             uint32*>                                                  output_set;
@@ -260,7 +253,7 @@ int string_set_test(int argc, char* argv[])
 
         input_set h_in_string_set(
             N_strings,
-            h_packed_stream.begin(),
+            h_packed_stream,
             thrust::raw_pointer_cast( &h_in_ranges.front() ) );
 
         // build the host output string set
@@ -290,9 +283,8 @@ int string_set_test(int argc, char* argv[])
         const uint32 N_words = (N_spacing + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
 
         typedef PackedStream<uint32*,uint8,SYMBOL_SIZE,false> packed_stream_type;
-        typedef packed_stream_type::iterator                  packed_stream_iterator;
 
-        typedef SparseStringSet<packed_stream_iterator,const uint2*> input_set;
+        typedef SparseStringSet<packed_stream_type,const uint2*> input_set;
         typedef StridedPackedStringSet<
             uint32*,
             uint8,
@@ -316,7 +308,7 @@ int string_set_test(int argc, char* argv[])
 
         input_set h_in_string_set(
             N_strings,
-            h_packed_stream.begin(),
+            h_packed_stream,
             thrust::raw_pointer_cast( &h_in_ranges.front() ) );
 
         // build the output string set
@@ -385,10 +377,9 @@ int string_set_test(int argc, char* argv[])
         fprintf(stderr, "  test sparse         -> packed-concat  copy... started\n");
 
         typedef PackedStream<uint32*,uint8,SYMBOL_SIZE,false> packed_stream_type;
-        typedef packed_stream_type::iterator                  packed_stream_iterator;
 
-        typedef base_string_set                                             input_set;
-        typedef ConcatenatedStringSet<packed_stream_iterator,uint32*>       output_set;
+        typedef base_string_set                                         input_set;
+        typedef ConcatenatedStringSet<packed_stream_type,uint32*>       output_set;
 
         // build the device output string set
         thrust::device_vector<uint32>  d_out_string( N_strings * N_words );
@@ -399,7 +390,7 @@ int string_set_test(int argc, char* argv[])
 
         output_set d_out_string_set(
             N_strings,
-            d_packed_stream.begin(),
+            d_packed_stream,
             thrust::raw_pointer_cast( &d_out_offsets.front() ) );
 
         Timer timer;
@@ -419,7 +410,7 @@ int string_set_test(int argc, char* argv[])
 
         output_set h_out_string_set(
             N_strings,
-            h_packed_stream.begin(),
+            h_packed_stream,
             thrust::raw_pointer_cast( &h_out_offsets.front() ) );
 
         // check that the string sets match
@@ -432,10 +423,9 @@ int string_set_test(int argc, char* argv[])
         fprintf(stderr, "  test concat         -> packed-concat  copy... started\n");
 
         typedef PackedStream<uint32*,uint8,SYMBOL_SIZE,false> packed_stream_type;
-        typedef packed_stream_type::iterator                  packed_stream_iterator;
 
-        typedef ConcatenatedStringSet<uint8*,uint32*>                   input_set;
-        typedef ConcatenatedStringSet<packed_stream_iterator,uint32*>   output_set;
+        typedef ConcatenatedStringSet<uint8*,uint32*>               input_set;
+        typedef ConcatenatedStringSet<packed_stream_type,uint32*>   output_set;
 
         // build the device input string set
         thrust::device_vector<uint8>   d_in_string( N_strings * N );
@@ -458,7 +448,7 @@ int string_set_test(int argc, char* argv[])
 
         output_set d_out_string_set(
             N_strings,
-            d_packed_stream.begin(),
+            d_packed_stream,
             thrust::raw_pointer_cast( &d_out_offsets.front() ) );
 
         Timer timer;
@@ -478,7 +468,7 @@ int string_set_test(int argc, char* argv[])
 
         output_set h_out_string_set(
             N_strings,
-            h_packed_stream.begin(),
+            h_packed_stream,
             thrust::raw_pointer_cast( &h_out_offsets.front() ) );
 
         // check that the string sets match
@@ -532,12 +522,11 @@ int string_set_test(int argc, char* argv[])
         const uint32 N_words = (N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
 
         typedef PackedStream<uint32*,uint8,SYMBOL_SIZE,false> packed_stream_type;
-        typedef packed_stream_type::iterator                  packed_stream_iterator;
 
-        typedef ConcatenatedStringSet<packed_stream_iterator,uint32*> input_set;
+        typedef ConcatenatedStringSet<packed_stream_type,uint32*>   input_set;
         typedef StridedStringSet<
             uint8*,
-            uint32*>                                                  output_set;
+            uint32*>                                                output_set;
 
         // build the device input string set
         thrust::device_vector<uint32>  d_in_string( N_strings * N_words );
@@ -548,7 +537,7 @@ int string_set_test(int argc, char* argv[])
 
         input_set d_in_string_set(
             N_strings,
-            d_packed_stream.begin(),
+            d_packed_stream,
             thrust::raw_pointer_cast( &d_in_offsets.front() ) );
 
         // copy the base string set into the input set
@@ -594,13 +583,11 @@ int string_set_test(int argc, char* argv[])
         const uint32 N_words = (N_spacing + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
 
         typedef PackedStream<uint32*,uint8,SYMBOL_SIZE,false>                   packed_stream_type;
-        typedef packed_stream_type::iterator                                    packed_stream_iterator;
 
-        typedef PackedStream<test::string_set_texture,uint8,SYMBOL_SIZE,false>  tex_packed_stream_type;
-        typedef tex_packed_stream_type::iterator                                tex_packed_stream_iterator;
+        typedef PackedStream<cuda::ldg_pointer<uint32>,uint8,SYMBOL_SIZE,false> tex_packed_stream_type;
 
-        typedef SparseStringSet<packed_stream_iterator,const uint2*>         input_set;
-        typedef SparseStringSet<tex_packed_stream_iterator,const uint2*> tex_input_set;
+        typedef SparseStringSet<packed_stream_type,const uint2*>         input_set;
+        typedef SparseStringSet<tex_packed_stream_type,const uint2*> tex_input_set;
         typedef StridedStringSet<
             uint8*,
             uint32*>                                                        output_set;
@@ -628,7 +615,7 @@ int string_set_test(int argc, char* argv[])
 
         input_set d_in_string_set(
             N_strings,
-            d_packed_stream.begin(),
+            d_packed_stream,
             thrust::raw_pointer_cast( &d_in_ranges.front() ) );
 
         // build the device output string set
@@ -653,7 +640,7 @@ int string_set_test(int argc, char* argv[])
         // build the host input string set
         input_set h_in_string_set(
             N_strings,
-            h_packed_stream.begin(),
+            h_packed_stream,
             thrust::raw_pointer_cast( &h_in_ranges.front() ) );
 
         // build the host output string set
@@ -673,14 +660,11 @@ int string_set_test(int argc, char* argv[])
         fprintf(stderr, "  test packed-sparse (tex) -> strided   copy... started\n");
 
         // bind the texture
-        test::string_set_texture  tex;
-        test::string_set_texture::bind( thrust::raw_pointer_cast( thrust::raw_pointer_cast( &d_in_string.front() ) ), N_strings * N_words );
-
-        tex_packed_stream_type d_tex_packed_stream( tex );
+        tex_packed_stream_type d_tex_packed_stream( cuda::ldg_pointer<uint32>( thrust::raw_pointer_cast( &d_in_string.front() ) ) );
 
         tex_input_set d_tex_in_string_set(
             N_strings,
-            d_tex_packed_stream.begin(),
+            d_tex_packed_stream,
             thrust::raw_pointer_cast( &d_in_ranges.front() ) );
 
         timer.start();
@@ -816,15 +800,14 @@ int string_set_test(int argc, char* argv[])
         const uint32 N_words    = (N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
 
         typedef PackedStream<uint32*,uint8,SYMBOL_SIZE,false> packed_stream_type;
-        typedef packed_stream_type::iterator                  packed_stream_iterator;
 
-        typedef ConcatenatedStringSet<packed_stream_iterator,uint32*> input_set;
+        typedef ConcatenatedStringSet<packed_stream_type,uint32*>   input_set;
         typedef StridedPackedStringSet<
             uint32*,
             uint8,
             SYMBOL_SIZE,
             false,
-            uint32*>                                                  output_set;
+            uint32*>                                                 output_set;
 
         // build the device input string set
         thrust::device_vector<uint32>  d_in_string( N_strings * N_words );
@@ -835,7 +818,7 @@ int string_set_test(int argc, char* argv[])
 
         input_set d_in_string_set(
             N_strings,
-            d_packed_stream.begin(),
+            d_packed_stream,
             thrust::raw_pointer_cast( &d_in_offsets.front() ) );
 
         // copy the base string set into the input set
@@ -881,13 +864,11 @@ int string_set_test(int argc, char* argv[])
         const uint32 N_words = (N_spacing + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
 
         typedef PackedStream<uint32*,uint8,SYMBOL_SIZE,false> packed_stream_type;
-        typedef packed_stream_type::iterator                  packed_stream_iterator;
 
-        typedef PackedStream<test::string_set_texture,uint8,SYMBOL_SIZE,false>  tex_packed_stream_type;
-        typedef tex_packed_stream_type::iterator                                tex_packed_stream_iterator;
+        typedef PackedStream<cuda::ldg_pointer<uint32>,uint8,SYMBOL_SIZE,false> tex_packed_stream_type;
 
-        typedef SparseStringSet<packed_stream_iterator,const uint2*>         input_set;
-        typedef SparseStringSet<tex_packed_stream_iterator,const uint2*> tex_input_set;
+        typedef SparseStringSet<packed_stream_type,const uint2*>         input_set;
+        typedef SparseStringSet<tex_packed_stream_type,const uint2*> tex_input_set;
         typedef StridedPackedStringSet<
             uint32*,
             uint8,
@@ -918,7 +899,7 @@ int string_set_test(int argc, char* argv[])
 
         input_set d_in_string_set(
             N_strings,
-            d_packed_stream.begin(),
+            d_packed_stream,
             thrust::raw_pointer_cast( &d_in_ranges.front() ) );
 
         // build the device output string set
@@ -943,7 +924,7 @@ int string_set_test(int argc, char* argv[])
         // build the host input string set
         input_set h_in_string_set(
             N_strings,
-            h_packed_stream.begin(),
+            h_packed_stream,
             thrust::raw_pointer_cast( &h_in_ranges.front() ) );
 
         // build the host output string set

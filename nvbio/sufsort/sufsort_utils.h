@@ -118,9 +118,9 @@ struct HostBWTHandler : public BaseBWTHandler
 /// A class to output the BWT to a packed host string
 ///
 template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename word_type>
-struct HostBWTHandler< PackedStreamIterator< PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> > > : public BaseBWTHandler
+struct HostBWTHandler< PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> > : public BaseBWTHandler
 {
-    typedef PackedStreamIterator< PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> > OutputIterator;
+    typedef PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> OutputIterator;
 
     static const uint32 WORD_SIZE = uint32( 8u * sizeof(word_type) );
     static const uint32 SYMBOLS_PER_WORD = WORD_SIZE / SYMBOL_SIZE;
@@ -144,7 +144,7 @@ struct HostBWTHandler< PackedStreamIterator< PackedStream<word_type*,uint8,SYMBO
               uint32 word_rem    = 0;
               uint32 word_idx    = offset / SYMBOLS_PER_WORD;
 
-        word_type* words = output.container().stream();
+        word_type* words = output.stream();
 
         if (word_offset)
         {

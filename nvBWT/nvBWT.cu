@@ -453,7 +453,7 @@ int build(
 
     if (compute_crc)
     {
-        const uint32 crc = crcCalc( h_string.begin(), uint32(seq_length) );
+        const uint32 crc = crcCalc( h_string, uint32(seq_length) );
         log_info(stderr, "  crc: %u\n", crc);
     }
 
@@ -473,16 +473,16 @@ int build(
         log_info(stderr, "\nbuilding forward BWT... started\n");
         timer.start();
         {
-            StringBWTSSAHandler<const_stream_type::iterator,stream_type::iterator,uint32*> output(
+            StringBWTSSAHandler<const_stream_type,stream_type,uint32*> output(
                 seq_length,                         // string length
-                d_string.begin(),                   // string
+                d_string,                           // string
                 sa_intv,                            // SSA sampling interval
-                d_bwt.begin(),                      // output bwt iterator
+                d_bwt,                              // output bwt iterator
                 nvbio::plain_view( h_ssa ) );       // output ssa iterator
 
             cuda::blockwise_suffix_sort(
                 seq_length,
-                d_string.begin(),
+                d_string,
                 output,
                 &params );
 
@@ -505,7 +505,7 @@ int build(
             if (compute_crc)
             {
                 const_stream_type h_bwt( nvbio::plain_view( h_bwt_storage ) );
-                const uint32 crc = crcCalc( h_bwt.begin(), uint32(seq_length) );
+                const uint32 crc = crcCalc( h_bwt, uint32(seq_length) );
                 log_info(stderr, "  crc: %u\n", crc);
             }
 
@@ -535,16 +535,16 @@ int build(
         log_info(stderr, "\nbuilding reverse BWT... started\n");
         timer.start();
         {
-            StringBWTSSAHandler<const_stream_type::iterator,stream_type::iterator,uint32*> output(
+            StringBWTSSAHandler<const_stream_type,stream_type,uint32*> output(
                 seq_length,                         // string length
-                d_string.begin(),                   // string
+                d_string,                           // string
                 sa_intv,                            // SSA sampling interval
-                d_bwt.begin(),                      // output bwt iterator
+                d_bwt,                              // output bwt iterator
                 nvbio::plain_view( h_ssa ) );       // output ssa iterator
 
             cuda::blockwise_suffix_sort(
                 seq_length,
-                d_string.begin(),
+                d_string,
                 output,
                 &params );
 
@@ -567,7 +567,7 @@ int build(
             if (compute_crc)
             {
                 const_stream_type h_bwt( nvbio::plain_view( h_bwt_storage ) );
-                const uint32 crc = crcCalc( h_bwt.begin(), uint32(seq_length) );
+                const uint32 crc = crcCalc( h_bwt, uint32(seq_length) );
                 log_info(stderr, "  crc: %u\n", crc);
             }
 

@@ -40,7 +40,7 @@ template <typename StreamType,
           typename SymbolType,
           uint32 SYMBOL_SIZE_T,
           bool   BIG_ENDIAN_T>
-struct lmem_selector< vector_view< PackedStreamIterator< PackedStream<StreamType,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> > > >
+struct lmem_selector< vector_view< PackedStream<StreamType,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> > >
 {
     typedef typename std::iterator_traits<StreamType>::value_type type;
 
@@ -56,10 +56,10 @@ template <typename StreamType,
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 vector_view< typename PackedStream<const_cached_iterator<const W*>,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>::iterator >
 make_local_string(
-    vector_view< PackedStreamIterator< PackedStream<StreamType,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> > > string,
+    vector_view< PackedStream<StreamType,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T> > string,
     W* lmem)
 {
-    const StreamType in_stream = string.begin().container().stream();
+    const StreamType in_stream = string.begin().stream();
     const uint32     in_offset = string.begin().index();
     const uint32     N         = string.length();
 
@@ -76,7 +76,7 @@ make_local_string(
     typedef PackedStream<const_cached_iterator<const W*>,uint8,SYMBOL_SIZE_T,BIG_ENDIAN_T> const_stream_type;
     const_stream_type clmem_stream( lmem );
 
-    return vector_view<typename const_stream_type::iterator>( N, clmem_stream.begin() + word_offset );
+    return vector_view<const_stream_type>( N, clmem_stream + word_offset );
 }
 
 } // namespace nvbio

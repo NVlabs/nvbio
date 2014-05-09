@@ -58,31 +58,31 @@ template <>            struct word_selector<48> { typedef uint64 type; };
 template <>            struct word_selector<64> { typedef uint64 type; };
 
 typedef ConcatenatedStringSet<
-    PackedStream<uint32*,uint8,2u,false,uint64>::iterator,
+    PackedStream<uint32*,uint8,2u,false,uint64>,
     uint64*>                                                string_set_2bit;
 
 typedef ConcatenatedStringSet<
-    PackedStream<uint32*,uint8,2u,false,uint64>::iterator,
+    PackedStream<uint32*,uint8,2u,false,uint64>,
     uint64*>                                                string_set_4bit;
 
 typedef ConcatenatedStringSet<
-    PackedStream<uint32*,uint8,8u,false,uint64>::iterator,
+    PackedStream<uint32*,uint8,8u,false,uint64>,
     uint64*>                                                string_set_8bit;
 
 typedef ConcatenatedStringSet<
-    PackedStream<uint32*,uint8,2u,true,uint64>::iterator,
+    PackedStream<uint32*,uint8,2u,true,uint64>,
     uint64*>                                                string_set_2bit_be;
 
 typedef ConcatenatedStringSet<
-    PackedStream<uint64*,uint8,2u,true,uint64>::iterator,
+    PackedStream<uint64*,uint8,2u,true,uint64>,
     uint64*>                                                string_set_2bit_u64_be;
 
-typedef PackedStream<uint32*,uint8,2u,false,uint64>::iterator string_2bit_le;
-typedef PackedStream<uint32*,uint8,4u,false,uint64>::iterator string_4bit_le;
-typedef PackedStream<uint32*,uint8,8u,false,uint64>::iterator string_8bit_le;
-typedef PackedStream<uint32*,uint8,2u,true,uint64>::iterator  string_2bit_be;
-typedef PackedStream<uint32*,uint8,4u,true,uint64>::iterator  string_4bit_be;
-typedef PackedStream<uint32*,uint8,8u,true,uint64>::iterator  string_8bit_be;
+typedef PackedStream<uint32*,uint8,2u,false,uint64> string_2bit_le;
+typedef PackedStream<uint32*,uint8,4u,false,uint64> string_4bit_le;
+typedef PackedStream<uint32*,uint8,8u,false,uint64> string_8bit_le;
+typedef PackedStream<uint32*,uint8,2u,true,uint64>  string_2bit_be;
+typedef PackedStream<uint32*,uint8,4u,true,uint64>  string_4bit_be;
+typedef PackedStream<uint32*,uint8,8u,true,uint64>  string_8bit_be;
 
 void extract_radices(
     const priv::string_set_2bit_be  string_set,
@@ -611,11 +611,11 @@ struct local_set_suffix_word_functor
 template <uint32 SYMBOL_SIZE, uint32 WORD_BITS, uint32 DOLLAR_BITS, typename storage_type, typename word_type, typename index_type>
 struct local_set_suffix_word_functor<
     SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS,
-    ConcatenatedStringSet<PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,true,index_type> >,index_type*>,
+    ConcatenatedStringSet<PackedStream<storage_type,uint8,SYMBOL_SIZE,true,index_type>,index_type*>,
     word_type>
 {
     typedef ConcatenatedStringSet<
-        PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,true,index_type> >,
+        PackedStream<storage_type,uint8,SYMBOL_SIZE,true,index_type>,
         index_type*>        string_set_type;
 
     typedef uint2               argument_type;
@@ -642,7 +642,7 @@ struct local_set_suffix_word_functor<
         const index_type string_end = string_set.offsets()[ string_idx+1u ];
         const index_type string_len = uint32( string_end - string_off );
 
-        const storage_type base_words = string_set.base_string().container().stream();
+        const storage_type base_words = string_set.base_string().stream();
 
         return result_type( extract_word_packed<WORD_BITS,DOLLAR_BITS,SYMBOL_SIZE>(
             base_words,
@@ -721,7 +721,7 @@ struct string_suffix_word_functor
 template <uint32 SYMBOL_SIZE, uint32 WORD_BITS, uint32 DOLLAR_BITS, typename storage_type, typename symbol_type, typename index_type, typename word_type>
 struct string_suffix_word_functor<
     SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS,
-    PackedStreamIterator< PackedStream<storage_type,symbol_type,SYMBOL_SIZE,true,index_type> >,
+    PackedStream<storage_type,symbol_type,SYMBOL_SIZE,true,index_type>,
     word_type>
 {
     typedef typename PackedStream<storage_type,symbol_type,SYMBOL_SIZE,true,index_type>::iterator   string_type;
@@ -741,7 +741,7 @@ struct string_suffix_word_functor<
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     result_type operator() (const index_type suffix_idx) const
     {
-        const uint32* base_words = string.container().stream();
+        const uint32* base_words = string.stream();
 
         return result_type( extract_word_packed<WORD_BITS,DOLLAR_BITS,SYMBOL_SIZE>(
             base_words,
@@ -981,11 +981,11 @@ struct dispatch_set_suffix_radices
 template <uint32 SYMBOL_SIZE, uint32 WORD_BITS, uint32 DOLLAR_BITS, typename storage_type, typename index_type>
 struct dispatch_set_suffix_radices<
     SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS,
-    ConcatenatedStringSet<PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,true,index_type> >,index_type*>,
+    ConcatenatedStringSet<PackedStream<storage_type,uint8,SYMBOL_SIZE,true,index_type>,index_type*>,
     word_type>
 {
     typedef ConcatenatedStringSet<
-        PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,true,index_type> >,
+        PackedStream<storage_type,uint8,SYMBOL_SIZE,true,index_type>,
         index_type*>        string_set_type;
 
     template <typename radix_iterator>
@@ -1487,7 +1487,7 @@ struct HostChunkLoader
         const uint64 end_word    = (end_index + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
         const uint32 chunk_words = uint32( end_word - begin_word );
 
-        const word_type* base_words = string_set.base_string().container().stream();
+        const word_type* base_words = string_set.base_string().stream();
 
         alloc_storage( d_chunk_string, chunk_words );
 
@@ -2198,7 +2198,7 @@ template <typename input_iterator, typename output_iterator, typename index_type
 __global__ void simple_device_copy_kernel(
     const uint32            n,
     const input_iterator    input,
-    const output_iterator   output,
+          output_iterator   output,
     const index_type        offset)
 {
     const uint32 thread_id = threadIdx.x + blockIdx.x*blockDim.x;
@@ -2213,7 +2213,7 @@ template <typename input_iterator, typename storage_type, uint32 SYMBOL_SIZE, bo
 __global__ void packed_device_copy_kernel(
     const uint32                                                                                        n,
     const input_iterator                                                                                input,
-          PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type> >    output,
+          PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type>                            output,
     const index_type                                                                                    offset)
 {
     const uint32 thread_id = threadIdx.x + blockIdx.x*blockDim.x;
@@ -2260,10 +2260,10 @@ struct device_copy_dispatch
 template <typename input_iterator, typename storage_type, uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename index_type>
 struct device_copy_dispatch<
     input_iterator,
-    PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type> >,
+    PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type>,
     index_type>
 {
-    typedef PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type> >  output_iterator;
+    typedef PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type>  output_iterator;
 
     /// copy n elements from the input stream to the output
     ///
@@ -2305,7 +2305,7 @@ __global__ void device_scatter_kernel(
     const range_iterator                                                                                ranges,
     const input_iterator                                                                                input,
     const slot_iterator                                                                                 slots,
-          PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type> >    output)
+          PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type>                            output)
 {
     const uint32 thread_id = threadIdx.x + blockIdx.x*blockDim.x;
 
@@ -2352,9 +2352,9 @@ template <typename input_iterator, typename slot_iterator, typename storage_type
 struct device_scatter_dispatch<
     input_iterator,
     slot_iterator,
-    PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type> > >
+    PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type> >
 {
-    typedef PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type> > output_iterator;
+    typedef PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type> output_iterator;
 
     static void enact(
         const uint32           n,

@@ -565,13 +565,14 @@ struct packer<BIG_ENDIAN_T,4u,Symbol,InputStream,IndexType,uint64>
 template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Symbol PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::get(const index_type sym_idx) const
 {
-    return packer<BIG_ENDIAN_T, SYMBOL_SIZE,Symbol,InputStream,IndexType,storage_type>::get_symbol( m_stream, sym_idx );
+    return packer<BIG_ENDIAN_T, SYMBOL_SIZE,Symbol,InputStream,IndexType,storage_type>::get_symbol( m_stream, sym_idx + m_index );
 }
 template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::set(const index_type sym_idx, const Symbol sym)
 {
-    return packer<BIG_ENDIAN_T, SYMBOL_SIZE,Symbol,InputStream,IndexType,storage_type>::set_symbol( m_stream, sym_idx, sym );
+    return packer<BIG_ENDIAN_T, SYMBOL_SIZE,Symbol,InputStream,IndexType,storage_type>::set_symbol( m_stream, sym_idx + m_index, sym );
 }
+
 // return begin iterator
 //
 template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
@@ -579,56 +580,15 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 typename PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::iterator
 PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::begin() const
 {
-    return iterator( m_stream, 0 );
-}
-
-/*
-// dereference operator
-//
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename PackedStreamIterator<Stream>::Symbol
-PackedStreamIterator<Stream>::operator* () const
-{
-    return m_stream.get( m_index );
-}
-*/
-// dereference operator
-//
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE typename PackedStreamIterator<Stream>::reference PackedStreamIterator<Stream>::operator* () const
-{
-    return reference( m_stream, m_index );
-}
-
-// indexing operator
-//
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE typename PackedStreamIterator<Stream>::reference PackedStreamIterator<Stream>::operator[] (const sindex_type i) const
-{
-    return reference( m_stream, m_index + i );
-}
-/*
-// indexing operator
-//
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE typename PackedStreamIterator<Stream>::reference PackedStreamIterator<Stream>::operator[] (const index_type i) const
-{
-    return reference( m_stream, m_index + i );
-}
-*/
-// set value
-//
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void PackedStreamIterator<Stream>::set(const Symbol s)
-{
-    m_stream.set( m_index, s );
+    return iterator( m_stream, m_index );
 }
 
 // pre-increment operator
 //
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamIterator<Stream>& PackedStreamIterator<Stream>::operator++ ()
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>&
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator++ ()
 {
     ++m_index;
     return *this;
@@ -636,8 +596,10 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamIterator<Stream>& PackedStreamIt
 
 // post-increment operator
 //
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamIterator<Stream> PackedStreamIterator<Stream>::operator++ (int dummy)
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator++ (int dummy)
 {
     This r( m_stream, m_index );
     ++m_index;
@@ -646,8 +608,10 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamIterator<Stream> PackedStreamIte
 
 // pre-decrement operator
 //
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamIterator<Stream>& PackedStreamIterator<Stream>::operator-- ()
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>&
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator-- ()
 {
     --m_index;
     return *this;
@@ -655,8 +619,10 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamIterator<Stream>& PackedStreamIt
 
 // post-decrement operator
 //
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamIterator<Stream> PackedStreamIterator<Stream>::operator-- (int dummy)
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator-- (int dummy)
 {
     This r( m_stream, m_index );
     --m_index;
@@ -665,8 +631,10 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamIterator<Stream> PackedStreamIte
 
 // add offset
 //
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamIterator<Stream>& PackedStreamIterator<Stream>::operator+= (const sindex_type distance)
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>&
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator+= (const sindex_type distance)
 {
     m_index += distance;
     return *this;
@@ -674,8 +642,10 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamIterator<Stream>& PackedStreamIt
 
 // subtract offset
 //
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamIterator<Stream>& PackedStreamIterator<Stream>::operator-= (const sindex_type distance)
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>&
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator-= (const sindex_type distance)
 {
     m_index -= distance;
     return *this;
@@ -683,67 +653,32 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamIterator<Stream>& PackedStreamIt
 
 // add offset
 //
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamIterator<Stream> PackedStreamIterator<Stream>::operator+ (const sindex_type distance) const
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator+ (const sindex_type distance) const
 {
     return This( m_stream, m_index + distance );
 }
 
 // subtract offset
 //
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamIterator<Stream> PackedStreamIterator<Stream>::operator- (const sindex_type distance) const
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator- (const sindex_type distance) const
 {
     return This( m_stream, m_index - distance );
 }
 
 // difference
 //
-template <typename Stream>
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename PackedStreamIterator<Stream>::sindex_type
-PackedStreamIterator<Stream>::operator- (const PackedStreamIterator it) const
+typename PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::sindex_type
+PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator- (const PackedStream it) const
 {
     return sindex_type( m_index - it.m_index );
-}
-
-// less than
-//
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator< (
-    const PackedStreamIterator<Stream>& it1,
-    const PackedStreamIterator<Stream>& it2)
-{
-    return it1.m_index < it2.m_index;
-}
-
-// greater than
-//
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator>(
-    const PackedStreamIterator<Stream>& it1,
-    const PackedStreamIterator<Stream>& it2)
-{
-    return it1.m_index > it2.m_index;
-}
-
-// equality test
-//
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator== (
-    const PackedStreamIterator<Stream>& it1,
-    const PackedStreamIterator<Stream>& it2)
-{
-    return /*it1.m_stream == it2.m_stream &&*/ it1.m_index == it2.m_index;
-}
-// inequality test
-//
-template <typename Stream>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator!= (
-    const PackedStreamIterator<Stream>& it1,
-    const PackedStreamIterator<Stream>& it2)
-{
-    return /*it1.m_stream != it2.m_stream ||*/ it1.m_index != it2.m_index;
 }
 
 // assignment operator
@@ -759,7 +694,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamRef<Stream>& PackedStreamRef<Str
 template <typename Stream>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamRef<Stream>& PackedStreamRef<Stream>::operator= (const Symbol s)
 {
-    m_stream.set( m_index, s );
+    m_stream.set( 0u, s );
     return *this;
 }
 
@@ -768,7 +703,47 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamRef<Stream>& PackedStreamRef<Str
 template <typename Stream>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamRef<Stream>::operator Symbol() const
 {
-    return m_stream.get( m_index );
+    return m_stream.get( 0u );
+}
+
+/// less than
+///
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator< (
+    const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
+    const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2)
+{
+    return it1.index() < it2.index();
+}
+
+/// greater than
+///
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator> (
+    const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
+    const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2)
+{
+    return it1.index() > it2.index();
+}
+
+/// equality test
+///
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator== (
+    const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
+    const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2)
+{
+    return it1.stream() == it2.stream() && it1.index() == it2.index();
+}
+
+/// inequality test
+///
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator!= (
+    const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
+    const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2)
+{
+    return it1.stream() != it2.stream() || it1.index() != it2.index();
 }
 
 // assign a sequence to a packed stream
@@ -778,7 +753,7 @@ NVBIO_HOST_DEVICE
 void assign(
     const uint32                                                                                    input_len,
     InputIterator                                                                                   input_string,
-    PackedStreamIterator< PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> >   packed_string)
+    PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string)
 {
     typedef PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> packed_stream_type;
     typedef typename packed_stream_type::storage_type word_type;
@@ -791,7 +766,7 @@ void assign(
     const uint32 SYMBOL_COUNT     = 1u << SYMBOL_SIZE;
     const uint32 SYMBOL_MASK      = SYMBOL_COUNT - 1u;
 
-    word_type* words = packed_string.container().stream();
+    word_type* words = packed_string.stream();
 
     const IndexType stream_offset = packed_string.index();
     const uint32    word_offset   = stream_offset & (SYMBOLS_PER_WORD-1);

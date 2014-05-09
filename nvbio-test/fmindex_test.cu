@@ -85,7 +85,7 @@ __global__ void locate_kernel(
 
     const range_type range = match(
         fmi,
-        genome.begin() + input[ thread_id ],
+        genome + input[ thread_id ],
         QUERY_LEN );
 
     output[ thread_id ] = uint32( locate( fmi, range.x ) );
@@ -398,7 +398,7 @@ void synthetic_test_host(
             fprintf(stderr, "\r    cpu alignment... started:  %.1f%%   ", 100.0f*float(i)/float(REQS) );
         const range_type range = match(
             fmi,
-            text.begin() + data.input[i],
+            text + data.input[i],
             PLEN );
 
         if (range.y < range.x)
@@ -460,8 +460,8 @@ void synthetic_test(const uint32 LEN, const uint32 QUERIES)
     {
         char string[64];
         dna_to_string(
-            text.begin(),
-            text.begin() + LEN,
+            text,
+            text + LEN,
             string );
 
         fprintf(stderr, "  string : %s\n", string);
@@ -470,11 +470,11 @@ void synthetic_test(const uint32 LEN, const uint32 QUERIES)
     // generate the suffix array
     std::vector<int32> sa( LEN+1, 0u );
 
-    gen_sa( LEN, text.begin(), &sa[0] );
+    gen_sa( LEN, text, &sa[0] );
 
     stream_type bwt( &data.bwt[0] );
 
-    data.primary = gen_bwt_from_sa( LEN, text.begin(), &sa[0], bwt.begin() );
+    data.primary = gen_bwt_from_sa( LEN, text, &sa[0], bwt );
 
     // set sa[0] to -1 so as to get a modulo for free
     sa[0] = -1;
@@ -484,8 +484,8 @@ void synthetic_test(const uint32 LEN, const uint32 QUERIES)
     {
         char string[64];
         dna_to_string(
-            bwt.begin(),
-            bwt.begin() + LEN,
+            bwt,
+            bwt + LEN,
             string );
 
         fprintf(stderr, "  bwt    : %s\n", string);
@@ -494,8 +494,8 @@ void synthetic_test(const uint32 LEN, const uint32 QUERIES)
 
     // buld the occurrence table
     build_occurrence_table<OCC_INT>(
-        bwt.begin(),
-        bwt.begin() + LEN,
+        bwt,
+        bwt + LEN,
         &data.occ[0],
         &data.L2[1] );
 
@@ -645,8 +645,8 @@ void synthetic_test(const uint32 LEN, const uint32 QUERIES)
 
             char found_str[PLEN+1];
             dna_to_string(
-                text.begin() + prefix,
-                text.begin() + prefix + PLEN,
+                text + prefix,
+                text + prefix + PLEN,
                 found_str );
 
             if (strcmp( found_str, pattern_str ) != 0)
@@ -769,7 +769,7 @@ void count_core(
 
     hamming_backtrack(
         fmi,
-        read_stream.begin() + read_begin,
+        read_stream + read_begin,
         len,
         seed,
         mismatches,

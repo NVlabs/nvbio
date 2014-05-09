@@ -38,6 +38,8 @@
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/priority_deque.h>
 #include <nvbio/basic/strided_iterator.h>
+#include <nvbio/basic/transform_iterator.h>
+#include <nvbio/basic/index_transform_iterator.h>
 #include <nvbio/basic/algorithms.h>
 
 namespace nvbio {
@@ -224,16 +226,16 @@ struct seed_mapper<EXACT_MAPPING>
         for (uint32 i=0; i<nwords; ++i)
             S[i] = read_batch.read_stream_storage()[fword + i];
 
-        OffsetXform <Reader::index_type> forward_offset(seed_offs);
-        ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
-        typedef StreamRemapper< Reader, OffsetXform <Reader::index_type> > fSeedReader;
-        typedef StreamRemapper< Reader, ReverseXform<Reader::index_type> > rSeedReader;
+        const OffsetXform <Reader::index_type> forward_offset(seed_offs);
+        const ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
+        typedef index_transform_iterator< Reader, OffsetXform <Reader::index_type> > fSeedReader;
+        typedef index_transform_iterator< Reader, ReverseXform<Reader::index_type> > rSeedReader;
 
         SeedHit::Flags flags;
         uint2          range;
 
         // forward scan, forward index=0
-        fSeedReader f_reader(reader, forward_offset);
+        const fSeedReader f_reader(reader, forward_offset);
         if (util::count_occurrences( f_reader, seed_len, 4u, 1u ))
             return;
         range = make_uint2(0, fmi.length());
@@ -251,7 +253,7 @@ struct seed_mapper<EXACT_MAPPING>
 
     #if USE_REVERSE_INDEX
         // Complement seed=1, forward scan, reverse index=1
-        StreamTransform<fSeedReader, complement_functor<4> > cf_reader(f_reader, complement_functor<4>());
+        const transform_iterator<fSeedReader, complement_functor<4> > cf_reader(f_reader, complement_functor<4>());
 
         range = make_uint2(0, rfmi.length());
         range = match_range(range, rfmi, cf_reader, 0, seed_len);
@@ -264,8 +266,8 @@ struct seed_mapper<EXACT_MAPPING>
         }
     #else
         // Complement seed=1, reverse scan, forward index=0
-        rSeedReader r_reader(reader, reverse_offset);                        
-        StreamTransform<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
+        const rSeedReader r_reader(reader, reverse_offset);                        
+        const transform_iterator<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
 
         range = make_uint2(0, fmi.length());
         range = match_range(range, fmi, cr_reader, 0, seed_len);
@@ -314,30 +316,30 @@ struct seed_mapper<APPROX_MAPPING>
         for(uint32 i=0; i<nwords; ++i)
             S[i] = read_batch.read_stream_storage()[fword + i];
 
-        OffsetXform <Reader::index_type> forward_offset(seed_offs);
-        ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
-        typedef StreamRemapper< Reader, OffsetXform <Reader::index_type> > fSeedReader;
-        typedef StreamRemapper< Reader, ReverseXform<Reader::index_type> > rSeedReader;
+        const OffsetXform <Reader::index_type> forward_offset(seed_offs);
+        const ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
+        typedef index_transform_iterator< Reader, OffsetXform <Reader::index_type> > fSeedReader;
+        typedef index_transform_iterator< Reader, ReverseXform<Reader::index_type> > rSeedReader;
 
         SeedHit::Flags flags;
 
         // Standard seed=0, forward scan, forward index=0
-        fSeedReader f_reader(reader, forward_offset);
+        const fSeedReader f_reader(reader, forward_offset);
         flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-seed_len);
         map<CHECK_EXACT> (f_reader,  (seed_len  )/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
 
         // Standard seed=0, reverse scan, reverse index=1
-        rSeedReader r_reader(reader, reverse_offset);                        
+        const rSeedReader r_reader(reader, reverse_offset);                        
         flags = SeedHit::build_flags(STANDARD, REVERSE, read_range.y-pos-1);
         map<IGNORE_EXACT>(r_reader,  (seed_len+1)/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
 
         // Complement seed=1, forward scan, reverse index=1
-        StreamTransform<fSeedReader, complement_functor<4> > cf_reader(f_reader, complement_functor<4>());
+        const transform_iterator<fSeedReader, complement_functor<4> > cf_reader(f_reader, complement_functor<4>());
         flags = SeedHit::build_flags(COMPLEMENT, REVERSE, pos-read_range.x+seed_len-1);
         map<CHECK_EXACT> (cf_reader, (seed_len  )/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
         
         // Complement seed=1, reverse scan, forward  index=0
-        StreamTransform<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
+        const transform_iterator<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
         flags = SeedHit::build_flags(COMPLEMENT, FORWARD, pos-read_range.x);
         map<IGNORE_EXACT>(cr_reader, (seed_len+1)/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
     }
@@ -376,30 +378,30 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
         for(uint32 i=0; i<nwords; ++i)
             S[i] = read_batch.read_stream_storage()[fword + i];
 
-        OffsetXform <Reader::index_type> forward_offset(seed_offs);
-        ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
-        typedef StreamRemapper< Reader, OffsetXform <Reader::index_type> > fSeedReader;
-        typedef StreamRemapper< Reader, ReverseXform<Reader::index_type> > rSeedReader;
+        const OffsetXform <Reader::index_type> forward_offset(seed_offs);
+        const ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
+        typedef index_transform_iterator< Reader, OffsetXform <Reader::index_type> > fSeedReader;
+        typedef index_transform_iterator< Reader, ReverseXform<Reader::index_type> > rSeedReader;
 
         SeedHit::Flags flags;
 
         // Standard seed=0, forward scan, forward index=0
-        fSeedReader f_reader(reader, forward_offset);
+        const fSeedReader f_reader(reader, forward_offset);
         flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-seed_len);
         map<CHECK_EXACT> (f_reader,  (seed_len  )/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
 
         // Standard seed=0, reverse scan, reverse index=1
-        rSeedReader r_reader(reader, reverse_offset);                        
+        const rSeedReader r_reader(reader, reverse_offset);                        
         flags = SeedHit::build_flags(STANDARD, REVERSE, read_range.y-pos-1);
         map<IGNORE_EXACT>(r_reader,  (seed_len+1)/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
 
         // Complement seed=1, forward scan, reverse index=1
-        StreamTransform<fSeedReader, complement_functor<4> > cf_reader(f_reader, complement_functor<4>());
+        const transform_iterator<fSeedReader, complement_functor<4> > cf_reader(f_reader, complement_functor<4>());
         flags = SeedHit::build_flags(COMPLEMENT, REVERSE, pos-read_range.x+seed_len-1);
         map<CHECK_EXACT> (cf_reader, (seed_len  )/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
         
         // Complement seed=1, reverse scan, forward  index=0
-        StreamTransform<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
+        const transform_iterator<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
         flags = SeedHit::build_flags(COMPLEMENT, FORWARD, pos-read_range.x);
         map<IGNORE_EXACT>(cr_reader, (seed_len+1)/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
     }

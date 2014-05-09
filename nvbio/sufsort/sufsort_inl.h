@@ -275,7 +275,7 @@ struct HostBWTConfig
     static const uint32 BUCKETING_BITS  = BUCKETING_BITS_T;
 
     typedef ConcatenatedStringSet<
-            PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> >,
+            PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64>,
             uint64*>    string_set_type;
 
     typedef priv::HostChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type>                      chunk_loader;
@@ -295,7 +295,7 @@ struct DeviceBWTConfig
     static const uint32 BUCKETING_BITS  = BUCKETING_BITS_T;
 
     typedef ConcatenatedStringSet<
-            PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> >,
+            PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64>,
             uint64*>    string_set_type;
 
     typedef priv::DeviceChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type>                    chunk_loader;
@@ -956,7 +956,7 @@ struct LargeBWTSkeleton
 template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type, typename output_handler>
 void bwt(
     const ConcatenatedStringSet<
-        PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> >,
+        PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64>,
         uint64*>                    string_set,
         output_handler&             output,
         BWTParams*                  params)
@@ -999,7 +999,7 @@ void bwt(
 template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type, typename output_handler>
 void large_bwt(
     const ConcatenatedStringSet<
-        PackedStreamIterator< PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> >,
+        PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64>,
         uint64*>                    string_set,
         output_handler&             output,
         BWTParams*                  params)

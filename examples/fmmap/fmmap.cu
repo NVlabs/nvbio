@@ -336,17 +336,15 @@ void map(
         typedef nvbio::vector<device_tag,string_infix_coord_type>::const_iterator infix_iterator;
 
         typedef io::ReadDataDevice::const_read_stream_type      read_stream;
-        typedef read_stream::iterator                           read_iterator;
-        typedef typename genome_string::iterator                genome_iterator;
 
-        const SparseStringSet<read_iterator,infix_iterator> read_infix_set(
+        const SparseStringSet<read_stream,infix_iterator> read_infix_set(
             hits_end - hits_begin,
-            reads.read_stream().begin(),
+            reads.read_stream(),
             read_infix_coords.begin() );
 
-        const SparseStringSet<genome_iterator,infix_iterator> genome_infix_set(
+        const SparseStringSet<genome_string,infix_iterator> genome_infix_set(
             hits_end - hits_begin,
-            genome.begin(),
+            genome,
             genome_infix_coords.begin() );
 
         typedef aln::MyersTag<5u> myers_dna5_tag;

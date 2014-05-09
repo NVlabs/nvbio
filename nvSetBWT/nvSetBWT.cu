@@ -318,8 +318,7 @@ int main(int argc, char* argv[])
         log_stats(stderr,"    size    : %llu MB\n", input_size / uint64(1024*1024));
 
         typedef Reads::packed_stream_type                               packed_stream_type;
-        typedef packed_stream_type::iterator                            packed_stream_iterator;
-        typedef ConcatenatedStringSet<packed_stream_iterator,uint64*>   string_set;
+        typedef ConcatenatedStringSet<packed_stream_type,uint64*>       string_set;
 
         // start the real work
         log_info(stderr, "  bwt... started\n");
@@ -338,7 +337,7 @@ int main(int argc, char* argv[])
 
             const string_set d_string_set(
                 reads.n_reads,
-                d_packed_string.begin(),
+                d_packed_string,
                 nvbio::plain_view( d_read_index ) );
 
             cuda::bwt<SYMBOL_SIZE,true>(
@@ -354,7 +353,7 @@ int main(int argc, char* argv[])
 
             const string_set h_string_set(
                 reads.n_reads,
-                h_packed_string.begin(),
+                h_packed_string,
                 nvbio::plain_view( reads.h_read_index ) );
 
             large_bwt<SYMBOL_SIZE,true>(

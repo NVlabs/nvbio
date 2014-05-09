@@ -210,7 +210,6 @@ int sufsort_test(int argc, char* argv[])
     {
         typedef uint32                                                  index_type;
         typedef PackedStream<uint32*,uint8,SYMBOL_SIZE,true,index_type> packed_stream_type;
-        typedef packed_stream_type::iterator                            packed_stream_iterator;
 
         const index_type N_symbols  = 8u*1024u*1024u;
         const index_type N_words    = (N_symbols + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
@@ -245,7 +244,7 @@ int sufsort_test(int argc, char* argv[])
 
             cuda::suffix_sort(
                 N_symbols,
-                d_packed_string.begin(),
+                d_packed_string,
                 d_sa.begin(),
                 &params );
 
@@ -342,8 +341,7 @@ int sufsort_test(int argc, char* argv[])
     if (TEST_MASK & kGPU_SA_SET)
     {
         typedef PackedStream<uint32*,uint8,SYMBOL_SIZE,false>           packed_stream_type;
-        typedef packed_stream_type::iterator                            packed_stream_iterator;
-        typedef ConcatenatedStringSet<packed_stream_iterator,uint32*>   string_set;
+        typedef ConcatenatedStringSet<packed_stream_type,uint32*>       string_set;
 
         const uint32 N_strings  = 1024*1024;
         const uint32 N_tests    = 10;
@@ -365,7 +363,7 @@ int sufsort_test(int argc, char* argv[])
 
         string_set d_string_set(
             N_strings,
-            d_packed_string.begin(),
+            d_packed_string,
             nvbio::plain_view( d_offsets ) );
 
         cudaDeviceSynchronize();
@@ -399,7 +397,6 @@ int sufsort_test(int argc, char* argv[])
     if (TEST_MASK & kGPU_BWT_FUNCTIONAL)
     {
         typedef PackedStream<uint32*,uint8,SYMBOL_SIZE,true,uint32>     packed_stream_type;
-        typedef packed_stream_type::iterator                            packed_stream_iterator;
 
         const uint32 N_words    = 8;
         const uint32 N_symbols  = N_words * SYMBOLS_PER_WORD - 13u;
@@ -455,8 +452,8 @@ int sufsort_test(int argc, char* argv[])
 
         const uint32 primary = cuda::bwt(
             N_symbols,
-            d_packed_string.begin(),
-            d_packed_bwt.begin(),
+            d_packed_string,
+            d_packed_bwt,
             &params );
 
         timer.stop();
@@ -515,7 +512,7 @@ int sufsort_test(int argc, char* argv[])
         const_packed_stream_type d_packed_string( d_fmi.genome_stream() );
               packed_stream_type d_packed_bwt( nvbio::plain_view( d_bwt_storage ) );
 
-        const uint32 primary_ref = cuda::find_primary( N_symbols, d_packed_string.begin() );
+        const uint32 primary_ref = cuda::find_primary( N_symbols, d_packed_string );
         log_info(stderr, "    primary: %u\n", primary_ref);
         {
             const_packed_stream_type h_packed_string( h_fmi.genome_stream() );
@@ -530,8 +527,8 @@ int sufsort_test(int argc, char* argv[])
 
         const uint32 primary = cuda::bwt(
             N_symbols,
-            d_packed_string.begin(),
-            d_packed_bwt.begin(),
+            d_packed_string,
+            d_packed_bwt,
             &params );
 
         timer.stop();
@@ -571,7 +568,6 @@ int sufsort_test(int argc, char* argv[])
     if (TEST_MASK & kGPU_BWT)
     {
         typedef PackedStream<uint32*,uint8,SYMBOL_SIZE,true,uint64>     packed_stream_type;
-        typedef packed_stream_type::iterator                            packed_stream_iterator;
 
         const uint64 N_symbols  = 4llu*1024u*1024u*1024u - 1u;
         const uint64 N_words    = (N_symbols + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
@@ -605,8 +601,8 @@ int sufsort_test(int argc, char* argv[])
 
         cuda::bwt(
             N_symbols,
-            d_packed_string.begin(),
-            d_packed_bwt.begin(),
+            d_packed_string,
+            d_packed_bwt,
             &params );
 
         timer.stop();
@@ -619,11 +615,9 @@ int sufsort_test(int argc, char* argv[])
         typedef cuda::load_pointer<word_type,cuda::LOAD_DEFAULT> storage_type;
 
         typedef PackedStream<word_type*,uint8,SYMBOL_SIZE,true,uint64>      packed_stream_type;
-        typedef packed_stream_type::iterator                                packed_stream_iterator;
 
         typedef PackedStream<storage_type,uint8,SYMBOL_SIZE,true,uint64>    mod_packed_stream_type;
-        typedef mod_packed_stream_type::iterator                            mod_packed_stream_iterator;
-        typedef ConcatenatedStringSet<mod_packed_stream_iterator,uint64*>   string_set;
+        typedef ConcatenatedStringSet<mod_packed_stream_type,uint64*>       string_set;
 
         const uint32 N_strings   = gpu_bwt_size*1000*1000;
         const uint64 N_words     = util::divide_ri( uint64(N_strings)*(N+0), SYMBOLS_PER_WORD );
@@ -652,7 +646,7 @@ int sufsort_test(int argc, char* argv[])
 
         string_set d_string_set(
             N_strings,
-            d_packed_string.begin(),
+            d_packed_string,
             nvbio::plain_view( d_offsets ) );
 
         log_info(stderr, "  bwt... started\n");
@@ -664,7 +658,7 @@ int sufsort_test(int argc, char* argv[])
             thrust::device_vector<uint32> d_bwt( N_bwt_words );
             packed_stream_type            d_packed_bwt( (word_type*)nvbio::plain_view( d_bwt ) );
 
-            DeviceBWTHandler<packed_stream_iterator> output_handler( d_packed_bwt.begin() );
+            DeviceBWTHandler<packed_stream_type> output_handler( d_packed_bwt );
 
             timer.start();
 
@@ -696,8 +690,7 @@ int sufsort_test(int argc, char* argv[])
         typedef uint32 word_type;
 
         typedef PackedStream<word_type*,uint8,SYMBOL_SIZE,true,uint64>  packed_stream_type;
-        typedef packed_stream_type::iterator                            packed_stream_iterator;
-        typedef ConcatenatedStringSet<packed_stream_iterator,uint64*>   string_set;
+        typedef ConcatenatedStringSet<packed_stream_type,uint64*>       string_set;
 
         const uint32 N_strings   = cpu_bwt_size*1000*1000;
         const uint64 N_words     = util::divide_ri( uint64(N_strings)*(N+0), SYMBOLS_PER_WORD );
@@ -721,7 +714,7 @@ int sufsort_test(int argc, char* argv[])
 
         string_set h_string_set(
             N_strings,
-            h_packed_string.begin(),
+            h_packed_string,
             nvbio::plain_view( h_offsets ) );
 
         log_info(stderr, "  bwt... started\n");
@@ -733,7 +726,7 @@ int sufsort_test(int argc, char* argv[])
             thrust::host_vector<uint32>  h_bwt( N_bwt_words );
             packed_stream_type           h_packed_bwt( (word_type*)nvbio::plain_view( h_bwt ) );
 
-            HostBWTHandler<packed_stream_iterator> output_handler( h_packed_bwt.begin() );
+            HostBWTHandler<packed_stream_type> output_handler( h_packed_bwt );
 
             timer.start();
 

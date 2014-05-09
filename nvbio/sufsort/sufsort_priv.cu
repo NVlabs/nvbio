@@ -234,7 +234,7 @@ void extract_radices_16(
             const uint64 string_end = string_set.offsets()[ string_idx+1u ];
             const uint64 string_len = uint32( string_end - string_off );
 
-            const uint32* base_words = string_set.base_string().container().stream();
+            const uint32* base_words = string_set.base_string().stream();
 
             if (h_symbols != NULL)
                 h_symbols[i] = suffix_idx ? string_set.base_string()[ string_off + suffix_idx-1u ] : 255u;
@@ -282,7 +282,7 @@ void extract_radices_32(
             const uint64 string_end = string_set.offsets()[ string_idx+1u ];
             const uint64 string_len = uint32( string_end - string_off );
 
-            const uint32* base_words = string_set.base_string().container().stream();
+            const uint32* base_words = string_set.base_string().stream();
 
             if (h_symbols != NULL)
                 h_symbols[i] = suffix_idx ? string_set.base_string()[ string_off + suffix_idx-1u ] : 255u;
@@ -331,7 +331,7 @@ void extract_radices_64(
             const uint64 string_end = string_set.offsets()[ string_idx+1u ];
             const uint64 string_len = uint32( string_end - string_off );
 
-            const uint64* base_words = string_set.base_string().container().stream();
+            const uint64* base_words = string_set.base_string().stream();
 
             if (h_symbols != NULL)
                 h_symbols[i] = suffix_idx ? string_set.base_string()[ string_off + suffix_idx - 1u ] : 255u;

@@ -40,6 +40,7 @@ namespace nvbio {
 /// - strided_iterator
 /// - block_strided_iterator
 /// - transform_iterator
+/// - index_transform_iterator
 /// - cached_iterator
 /// - const_cached_iterator
 ///

@@ -103,8 +103,15 @@ enum PairedEndPolicy
 };
 
 ///
-/// Encodes a read batch
-/// this has no storage, it's meant to be a plain data view
+/// Encodes a (storage-less) plain-data view of a read batch.
+/// This class is templated over the iterators pointing to the actual storage, so as to allow
+/// them being both raw (const or non-const) pointers or fancier iterators (e.g. cuda::load_pointer
+/// or nvbio::vector<system_tag>::iterator's)
+///
+/// \tparam IndexIterator               the type of the iterator to the reads index
+/// \tparam ReadStorageIterator         the type of the iterator to the reads storage
+/// \tparam QualStorageIterator         the type of the iterator to the qualities storage
+/// \tparam NameStorageIterator         the type of the iterator to the names storage
 ///
 template <
     typename IndexIterator,

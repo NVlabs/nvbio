@@ -141,7 +141,6 @@ inline size_t max_active_blocks_per_multiprocessor(const cudaDeviceProp&        
     const size_t smemAllocationUnit     = smem_allocation_unit(properties);
     const size_t maxThreadsPerSM        = properties.maxThreadsPerMultiProcessor;  // 768, 1024, 1536, etc.
     const size_t maxBlocksPerSM         = max_blocks_per_multiprocessor(properties);
-    const size_t regAllocationUnit      = reg_allocation_unit(properties, attributes.numRegs);
 
     // Number of regs is regs per thread times number of warps times warp size
     const size_t regsPerCTA = num_regs_per_block( properties, attributes, CTA_SIZE );

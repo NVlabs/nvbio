@@ -54,12 +54,19 @@ inline void device_arch(uint32& major, uint32& minor);
 inline size_t smem_allocation_unit(const cudaDeviceProp& properties);
 
 // granularity of register allocation
-inline size_t reg_allocation_unit(const cudaDeviceProp& properties);
+inline size_t reg_allocation_unit(const cudaDeviceProp& properties, const size_t regsPerThread);
 
 // granularity of warp allocation
 inline size_t warp_allocation_multiple(const cudaDeviceProp& properties);
 
+// number of "sides" into which the multiprocessor is partitioned
+inline size_t num_sides_per_multiprocessor(const cudaDeviceProp& properties);
+
+// maximum number of blocks per multiprocessor
 inline size_t max_blocks_per_multiprocessor(const cudaDeviceProp& properties);
+
+// number of registers allocated per block
+inline size_t num_regs_per_block(const cudaDeviceProp& properties, const cudaFuncAttributes& attributes, const size_t CTA_SIZE);
 
 template <typename KernelFunction>
 inline cudaFuncAttributes function_attributes(KernelFunction kernel);

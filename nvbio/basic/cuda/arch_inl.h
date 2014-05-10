@@ -47,13 +47,28 @@ inline size_t smem_allocation_unit(const cudaDeviceProp& properties)
 }
 
 // granularity of register allocation
-inline size_t reg_allocation_unit(const cudaDeviceProp& properties)
+inline size_t reg_allocation_unit(const cudaDeviceProp& properties, const size_t regsPerThread)
 {
-    //return (properties.major < 2 && properties.minor < 2) ? 256 : 512;
-    return
-        (properties.major <= 1) ?
-            (properties.minor <= 1 ? 256 : 512) :
-            64;
+  switch(properties.major)
+  {
+    case 1:  return (properties.minor <= 1) ? 256 : 512;
+    case 2:  switch(regsPerThread)
+             {
+               case 21:
+               case 22:
+               case 29:
+               case 30:
+               case 37:
+               case 38:
+               case 45:
+               case 46:
+                 return 128;
+               default:
+                 return 64;
+             }
+    case 3:  return 256;
+    default: return 256; // unknown GPU; have to guess
+  }
 }
 
 // granularity of warp allocation
@@ -77,9 +92,43 @@ inline cudaFuncAttributes function_attributes(KernelFunction kernel)
     return attributes;
 }
 
+// maximum number of blocks per multiprocessor
 inline size_t max_blocks_per_multiprocessor(const cudaDeviceProp& properties)
 {
     return properties.major <= 2 ? 8 : 16;
+}
+
+// number of "sides" into which the multiprocessor is partitioned
+inline size_t num_sides_per_multiprocessor(const cudaDeviceProp& properties)
+{
+  switch(properties.major)
+  {
+    case 1:  return 1;
+    case 2:  return 2;
+    case 3:  return 4;
+    default: return 4; // unknown GPU; have to guess
+  }
+}
+
+// number of registers allocated per block
+inline size_t num_regs_per_block(const cudaDeviceProp& properties, const cudaFuncAttributes& attributes, const size_t CTA_SIZE)
+{
+    const size_t maxBlocksPerSM         = max_blocks_per_multiprocessor(properties);
+    const size_t regAllocationUnit      = reg_allocation_unit(properties, attributes.numRegs);
+    const size_t warpAllocationMultiple = warp_allocation_multiple(properties);
+
+    // Number of warps (round up to nearest whole multiple of warp size & warp allocation multiple)
+    const size_t numWarps = util::round_i(util::divide_ri(CTA_SIZE, properties.warpSize), warpAllocationMultiple);
+
+    if (properties.major < 2)
+        return util::round_i(attributes.numRegs * properties.warpSize * numWarps, regAllocationUnit);
+    else
+    {
+        const size_t regsPerWarp = util::round_i(attributes.numRegs * properties.warpSize, regAllocationUnit);
+        const size_t numSides = num_sides_per_multiprocessor(properties);
+        const size_t numRegsPerSide = properties.regsPerBlock / numSides;
+        return regsPerWarp > 0 ? ((numRegsPerSide / regsPerWarp) * numSides) / numWarps : maxBlocksPerSM;
+    }
 }
 
 inline size_t max_active_blocks_per_multiprocessor(const cudaDeviceProp&        properties,
@@ -89,19 +138,13 @@ inline size_t max_active_blocks_per_multiprocessor(const cudaDeviceProp&        
 {
     // Determine the maximum number of CTAs that can be run simultaneously per SM
     // This is equivalent to the calculation done in the CUDA Occupancy Calculator spreadsheet
-    const size_t regAllocationUnit      = reg_allocation_unit(properties);
-    const size_t warpAllocationMultiple = warp_allocation_multiple(properties);
     const size_t smemAllocationUnit     = smem_allocation_unit(properties);
     const size_t maxThreadsPerSM        = properties.maxThreadsPerMultiProcessor;  // 768, 1024, 1536, etc.
     const size_t maxBlocksPerSM         = max_blocks_per_multiprocessor(properties);
-
-    // Number of warps (round up to nearest whole multiple of warp size & warp allocation multiple)
-    const size_t numWarps = util::round_i(util::divide_ri(CTA_SIZE, properties.warpSize), warpAllocationMultiple);
+    const size_t regAllocationUnit      = reg_allocation_unit(properties, attributes.numRegs);
 
     // Number of regs is regs per thread times number of warps times warp size
-    const size_t regsPerCTA = properties.major < 2 ?
-      util::round_i(attributes.numRegs * properties.warpSize * numWarps, regAllocationUnit) :
-      util::round_i(attributes.numRegs * properties.warpSize, regAllocationUnit) * numWarps;
+    const size_t regsPerCTA = num_regs_per_block( properties, attributes, CTA_SIZE );
 
     const size_t smemBytes  = attributes.sharedSizeBytes + dynamic_smem_bytes;
     const size_t smemPerCTA = util::round_i(smemBytes, smemAllocationUnit);

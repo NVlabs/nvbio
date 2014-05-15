@@ -87,8 +87,6 @@ void suffix_sort(
     const uint32 SYMBOL_SIZE      = 2u;
     const uint32 SYMBOLS_PER_WORD = priv::symbols_per_word<SYMBOL_SIZE,WORD_BITS,DOLLAR_BITS>();
 
-    const uint32 n = string_set.size();
-
     int current_device;
     cudaGetDevice( &current_device );
     mgpu::ContextPtr mgpu_ctxt = mgpu::CreateCudaDevice( current_device ); 

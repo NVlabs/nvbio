@@ -30,6 +30,7 @@
 #include <nvbio/basic/console.h>
 #include <nvbio/io/vcf.h>
 #include <nvbio/io/bufferedtextfile.h>
+#include <nvbio/basic/dna.h>
 
 #include <stdlib.h>
 
@@ -118,18 +119,31 @@ bool loadVCF(SNPDatabase& output, const char *file_name)
             if (next_base)
                 *next_base = '\0';
 
-            output.chromosome.push_back(std::string(chrom));
-            output.position.push_back(position);
-            output.reference.push_back(std::string(ref));
-
+            char *var;
             // if this is a called monomorphic variant (i.e., a site which has been identified as always having the same allele)
-            // we push the reference string as the variant
+            // we store the reference string as the variant
             if (strcmp(alt, ".") == 0)
-                output.variant.push_back(std::string(ref));
+                var = ref;
             else
-                output.variant.push_back(std::string(alt));
+                var = alt;
 
-            output.variant_quality.push_back(quality);
+            const uint32 ref_len = strlen(ref);
+            const uint32 var_len = strlen(var);
+
+            SNP_sequence_index index(output.reference_sequences.size(), ref_len,
+                                     output.variants.size(), var_len);
+            output.ref_variant_index.push_back(index);
+
+            output.reference_sequence_names.push_back(std::string(chrom));
+            output.positions.push_back(position);
+
+            output.reference_sequences.resize(index.reference_start + ref_len);
+            string_to_dna16(ref, output.reference_sequences.begin() + index.reference_start);
+
+            output.variants.resize(index.variant_start + var_len);
+            string_to_dna16(var, output.variants.begin() + index.variant_start);
+
+            output.variant_qualities.push_back(quality);
 
             if (next_base)
                 alt = next_base + 1;

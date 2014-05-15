@@ -36,14 +36,31 @@ PackedVector<SystemTag,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>::PackedVector(const
     m_storage( util::divide_ri( size, SYMBOLS_PER_WORD ) ), m_size( size )
 {}
 
+// reserve
+//
+template <typename SystemTag, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+void PackedVector<SystemTag,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>::reserve(const index_type size)
+{
+    if (m_storage.size() < util::divide_ri( m_size, SYMBOLS_PER_WORD ))
+        m_storage.resize( util::divide_ri( m_size, SYMBOLS_PER_WORD ) );
+}
+
 // resize
 //
 template <typename SystemTag, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
 void PackedVector<SystemTag,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>::resize(const index_type size)
 {
     m_size = size;
-    if (m_storage.size() < util::divide_ri( m_size, SYMBOLS_PER_WORD ))
-        m_storage.resize( util::divide_ri( m_size, SYMBOLS_PER_WORD ) );
+    reserve(size);
+}
+
+
+// clear
+//
+template <typename SystemTag, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+void PackedVector<SystemTag,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>::clear(void)
+{
+    resize(0);
 }
 
 // return the begin iterator
@@ -95,6 +112,15 @@ void PackedVector<SystemTag,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>::push_back(con
         m_storage.resize( util::divide_ri( m_size+1, SYMBOLS_PER_WORD ) );
 
     begin()[ m_size++ ] = s;
+}
+
+// return the base address of a symbol in the stream
+// note that several symbols may share the same base address
+template <typename SystemTag, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+void *PackedVector<SystemTag, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::addrof(const index_type i)
+{
+    index_type off = i / SYMBOLS_PER_WORD;
+    return &m_storage[off];
 }
 
 } // namespace nvbio

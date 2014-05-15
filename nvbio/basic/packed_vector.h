@@ -85,17 +85,27 @@ struct PackedVector
     PackedVector(const PackedVector<other_tag,SYMBOL_SIZE,BIG_ENDIAN,IndexType>& other) :
         m_storage( other.m_storage ), m_size( other.m_size ) {}
 
+    /// reserve
+    ///
+    void reserve(const index_type size);
+
     /// resize
     ///
     void resize(const index_type size);
 
+    /// clear
+    ///
+    void clear(void);
+
     /// size
     ///
-    void size() const { return m_size; }
+    index_type size() const { return m_size; }
 
     /// length
     ///
-    void length() const { return m_size; }
+    index_type length() const { return m_size; }
+
+    index_type capacity() const { return m_storage.size(); }
 
     /// return the begin iterator
     ///
@@ -116,6 +126,27 @@ struct PackedVector
     /// push back a symbol
     ///
     void push_back(const uint8 s);
+
+    /// get the memory address of a symbol
+    void *addrof(const index_type i);
+
+    /// get the i-th symbol
+    /// note: no device implementation for this as PackedVectors are never used on device
+    /// (only their plain view, which is a PackedStream)
+    NVBIO_FORCEINLINE NVBIO_HOST typename stream_type::symbol_type operator[] (const index_type i) const
+    {
+        stream_type stream( &m_storage[0] );
+        return stream[i];
+    }
+
+    /// get the i-th symbol
+    /// note: no device implementation for this as PackedVectors are never used on device
+    /// (only their plain view, which is a PackedStream)
+    NVBIO_FORCEINLINE NVBIO_HOST typename stream_type::reference operator[] (const index_type i)
+    {
+        stream_type stream( &m_storage[0] );
+        return stream[i];
+    }
 
     nvbio::vector<system_tag,uint32> m_storage;
     index_type                       m_size;

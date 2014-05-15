@@ -677,7 +677,7 @@ int main(int argc, char* argv[])
         else if ((strcmp( arg, "-d" )               == 0) ||
                  (strcmp( arg, "--device" )         == 0))
         {
-            cuda_device = max_length = atoi( argv[++i] );
+            cuda_device = atoi( argv[++i] );
         }
         else
             file_names[ n_files++ ] = argv[i];

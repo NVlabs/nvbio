@@ -95,7 +95,7 @@ bool any(
 
 // return true if all items in the range [0,n) evaluate to true
 //
-template <typename PredicateIterator>
+template <typename system_tag, typename PredicateIterator>
 bool all(
     const uint32            n,
     const PredicateIterator pred)

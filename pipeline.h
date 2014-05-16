@@ -272,9 +272,9 @@ alignment_state<system_tag>& alignment_state<system_tag>::operator=(const alignm
     temp_queue.resize( n_active );
     stencil.resize( n_active );
 
-    thrust::copy( other.begin_chains.begin(), other.begin_chains.begin() + n_active,  begin_chains.begin() );
-    thrust::copy( other.end_chains.begin(),   other.end_chains.begin()   + n_active,  end_chains.begin() );
-    thrust::copy( other.query_spans.begin(),  other.query_spans.begin()   + n_active, query_spans.begin() );
-    thrust::copy( other.ref_spans.begin(),    other.ref_spans.begin()     + n_active, ref_spans.begin() );
+    thrust::copy( other.begin_chains.begin(),   other.begin_chains.begin() + n_active,  begin_chains.begin() );
+    thrust::copy( other.end_chains.begin(),     other.end_chains.begin()   + n_active,  end_chains.begin() );
+    thrust::copy( other.query_spans.begin(),    other.query_spans.begin()  + n_active,  query_spans.begin() );
+    thrust::copy( other.ref_spans.begin(),      other.ref_spans.begin()    + n_active,  ref_spans.begin() );
     return *this;
 }

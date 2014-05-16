@@ -70,20 +70,25 @@ struct mem_state
 
 /// the state of the MEM chains relative to a set of reads
 ///
+template <typename system_tag>
 struct chains_state
 {
     typedef mem_state::mem_type                     mem_type;
-    typedef nvbio::vector<device_tag, mem_type>     mem_vector_type;
+    typedef nvbio::vector<system_tag, mem_type>     mem_vector_type;
+
+    template <typename other_tag>
+    chains_state& operator=(const chains_state<other_tag>& other);
 
     mem_vector_type                  mems;              ///< the result vector for mem_search
+    uint32                           n_mems;            ///< the number of mems
 
-    nvbio::vector<device_tag,uint32> mems_index;        ///< a sorting index into the mems (initially by reference location, then by chain id)
-    nvbio::vector<device_tag,uint64> mems_chain;        ///< the chain IDs of each mem
+    nvbio::vector<system_tag,uint32> mems_index;        ///< a sorting index into the mems (initially by reference location, then by chain id)
+    nvbio::vector<system_tag,uint64> mems_chain;        ///< the chain IDs of each mem
 
     // the list of chains
-    nvbio::vector<device_tag,uint32> chain_offsets;     ///< the first seed of each chain
-    nvbio::vector<device_tag,uint32> chain_lengths;     ///< the number of seeds in each chain
-    nvbio::vector<device_tag,uint32> chain_reads;       ///< the read (strand) id of each chain
+    nvbio::vector<system_tag,uint32> chain_offsets;     ///< the first seed of each chain
+    nvbio::vector<system_tag,uint32> chain_lengths;     ///< the number of seeds in each chain
+    nvbio::vector<system_tag,uint32> chain_reads;       ///< the read (strand) id of each chain
     uint32                           n_chains;          ///< the number of chains
 };
 
@@ -97,15 +102,14 @@ struct chain_reference;
 ///
 struct chains_view
 {
-    typedef chains_state::mem_type                                  mem_type;
-    //typedef nvbio::vector<device_tag,uint32>::const_plain_view_type index_vector_type;
-    //typedef chains_state::mem_vector_type::const_plain_view_type    mem_vector_type;
+    typedef mem_state::mem_type                                     mem_type;
     typedef const uint32*                                           index_vector_type;
     typedef const mem_type*                                         mem_vector_type;
 
     /// constructor
     ///
-    chains_view(const chains_state& state) :
+    template <typename system_tag>
+    chains_view(const chains_state<system_tag>& state) :
         mems( plain_view( state.mems ) ),
         mems_index( plain_view( state.mems_index ) ),
         chain_offsets( plain_view( state.chain_offsets ) ),
@@ -132,7 +136,7 @@ struct chains_view
 ///
 struct chain_reference
 {
-    typedef chains_state::mem_type mem_type;
+    typedef mem_state::mem_type mem_type;
 
     /// constructor
     ///
@@ -198,25 +202,79 @@ struct read_chunk
 /// This is done keeping a set of (begin,end) pointers per read and advancing the
 /// begin field - when a range becomes empty, it's removed
 ///
+template <typename system_tag>
 struct alignment_state
 {
+    template <typename other_tag>
+    alignment_state& operator=(const alignment_state<other_tag>& other);
+
     uint32                               n_active;              ///< the number of active reads in the alignment queue
-    nvbio::vector<device_tag,uint32>     begin_chains;          ///< the first chain for each read in the processing queue
-    nvbio::vector<device_tag,uint32>     end_chains;            ///< the ending chain for each read in the processing queue
-    nvbio::vector<device_tag,uint2>      query_spans;           ///< the query chain spans
-    nvbio::vector<device_tag,uint2>      ref_spans;             ///< the reference chain spans
-    nvbio::vector<device_tag,uint32>     temp_queue;            ///< a temporary queue
-    nvbio::vector<device_tag,uint32>     stencil;               ///< a temporary stencil vector
+    nvbio::vector<system_tag,uint32>     begin_chains;          ///< the first chain for each read in the processing queue
+    nvbio::vector<system_tag,uint32>     end_chains;            ///< the ending chain for each read in the processing queue
+    nvbio::vector<system_tag,uint2>      query_spans;           ///< the query chain spans
+    nvbio::vector<system_tag,uint2>      ref_spans;             ///< the reference chain spans
+    nvbio::vector<system_tag,uint32>     temp_queue;            ///< a temporary queue
+    nvbio::vector<system_tag,uint32>     stencil;               ///< a temporary stencil vector
 };
+
+/// a flag to identify the system in use
+///
+enum SystemFlag { DEVICE = 0, HOST = 1 };
 
 /// the state of the pipeline
 ///
-struct pipeline_state 
+struct pipeline_state
 {
-    nvbio::io::OutputFile*  output;
-    mem_state               mem;
-    chains_state            chn;
-    alignment_state         aln;
-    read_chunk              chunk;
-    pipeline_stats          stats;
+    SystemFlag                  system;                         ///< specify whether we are using the device or the host
+    nvbio::io::OutputFile*      output;                         ///< the alignment output
+    mem_state                   mem;                            ///< the mem state
+    chains_state<device_tag>    chn;                            ///< the device chains state
+    alignment_state<device_tag> aln;                            ///< the device alignment state
+    chains_state<host_tag>      h_chn;                          ///< the host chains state
+    alignment_state<host_tag>   h_aln;                          ///< the host alignment state
+    read_chunk                  chunk;                          ///< the current read chunk
+    pipeline_stats              stats;                          ///< the pipeline stats
 };
+
+
+template <typename system_tag>
+template <typename other_tag>
+chains_state<system_tag>& chains_state<system_tag>::operator=(const chains_state<other_tag>& other)
+{
+    n_mems   = other.n_mems;
+    n_chains = other.n_chains;
+
+    mems.resize( n_mems );
+    mems_index.resize( n_mems );
+
+    chain_offsets.resize( n_chains );
+    chain_lengths.resize( n_chains );
+    chain_reads.resize( n_chains );
+
+    thrust::copy( other.mems.begin(),       other.mems.begin()       + n_mems,  mems.begin() );
+    thrust::copy( other.mems_index.begin(), other.mems_index.begin() + n_mems,  mems_index.begin() );
+
+    thrust::copy( other.chain_offsets.begin(),  other.chain_offsets.begin() + n_chains, chain_offsets.begin() );
+    thrust::copy( other.chain_lengths.begin(),  other.chain_lengths.begin() + n_chains, chain_lengths.begin() );
+    thrust::copy( other.chain_reads.begin(),    other.chain_reads.begin()   + n_chains, chain_reads.begin() );
+    return *this;
+}
+
+template <typename system_tag>
+template <typename other_tag>
+alignment_state<system_tag>& alignment_state<system_tag>::operator=(const alignment_state<other_tag>& other)
+{
+    n_active = other.n_active;
+    begin_chains.resize( n_active );
+    end_chains.resize( n_active );
+    query_spans.resize( n_active );
+    ref_spans.resize( n_active );
+    temp_queue.resize( n_active );
+    stencil.resize( n_active );
+
+    thrust::copy( other.begin_chains.begin(), other.begin_chains.begin() + n_active,  begin_chains.begin() );
+    thrust::copy( other.end_chains.begin(),   other.end_chains.begin()   + n_active,  end_chains.begin() );
+    thrust::copy( other.query_spans.begin(),  other.query_spans.begin()   + n_active, query_spans.begin() );
+    thrust::copy( other.ref_spans.begin(),    other.ref_spans.begin()     + n_active, ref_spans.begin() );
+    return *this;
+}

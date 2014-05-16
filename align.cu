@@ -37,11 +37,14 @@ using namespace nvbio;
 //
 void align_init(struct pipeline_state *pipeline, const nvbio::io::ReadDataDevice *batch)
 {
-    struct chains_state    *chn = &pipeline->chn;
-    struct alignment_state *aln = &pipeline->aln;
+    struct chains_state<device_tag>    *chn = &pipeline->chn;
+    struct alignment_state<device_tag> *aln = &pipeline->aln;
 
     const uint32 n_reads  = pipeline->chunk.read_end - pipeline->chunk.read_begin;
     const uint32 n_chains = chn->n_chains;
+
+    // initially, target the device
+    pipeline->system = DEVICE;
 
     // reserve enough storage
     if (aln->stencil.size() < n_reads)
@@ -77,6 +80,7 @@ void align_init(struct pipeline_state *pipeline, const nvbio::io::ReadDataDevice
 //
 struct query_span_functor
 {
+    NVBIO_HOST_DEVICE
     query_span_functor(const chains_view _chains) : chains( _chains ) {}
 
     // the functor operator
@@ -93,7 +97,7 @@ struct query_span_functor
         for (uint32 i = 0; i < len; ++i)
         {
             // fetch the i-th seed
-            const chains_state::mem_type seed = chain[i];
+            const chains_view::mem_type seed = chain[i];
 
             span.x = nvbio::min( span.x, seed.span().x );
             span.y = nvbio::max( span.y, seed.span().y );
@@ -108,6 +112,7 @@ struct query_span_functor
 //
 struct ref_span_functor
 {
+    NVBIO_HOST_DEVICE
     ref_span_functor(const chains_view _chains) : chains( _chains ) {}
 
     // the functor operator
@@ -124,7 +129,7 @@ struct ref_span_functor
         for (uint32 i = 0; i < len; ++i)
         {
             // fetch the i-th seed
-            const chains_state::mem_type seed = chain[i];
+            const chains_view::mem_type seed = chain[i];
 
             span.x = nvbio::min( span.x, seed.index_pos() );
             span.y = nvbio::max( span.y, seed.index_pos() + seed.span().y - seed.span().x );
@@ -137,10 +142,12 @@ struct ref_span_functor
 
 // perform banded alignment
 //
-uint32 align_short(pipeline_state *pipeline, const io::ReadDataDevice *batch)
+template <typename system_tag>
+uint32 align_short(
+    chains_state<system_tag>    *chn,
+    alignment_state<system_tag> *aln,
+    const io::ReadDataDevice    *batch)
 {
-    struct alignment_state *aln = &pipeline->aln;
-
     //
     // During alignment, we essentially keep a queue of "active" reads, corresponding
     // to those reads for which there's more chains to process; at every step, we select
@@ -157,7 +164,7 @@ uint32 align_short(pipeline_state *pipeline, const io::ReadDataDevice *batch)
         aln->stencil.begin(),
         nvbio::not_equal_functor<uint32>() );
 
-    nvbio::vector<device_tag,uint8> temp_storage;
+    nvbio::vector<system_tag,uint8> temp_storage;
 
     // filter away reads that are done processing because there's no more chains
     copy_flagged(
@@ -186,11 +193,11 @@ uint32 align_short(pipeline_state *pipeline, const io::ReadDataDevice *batch)
         return 0u;
 
     // now build a view of the chains
-    const chains_view chains( pipeline->chn );
+    const chains_view chains( *chn );
 
-    const nvbio::vector<device_tag,uint32>&     cur_chains  = aln->begin_chains;
-          nvbio::vector<device_tag,uint2>&      query_spans = aln->query_spans;
-          nvbio::vector<device_tag,uint2>&      ref_spans   = aln->ref_spans;
+    const nvbio::vector<system_tag,uint32>&     cur_chains  = aln->begin_chains;
+          nvbio::vector<system_tag,uint2>&      query_spans = aln->query_spans;
+          nvbio::vector<system_tag,uint2>&      ref_spans   = aln->ref_spans;
 
     // compute the chain query-spans
     thrust::transform(
@@ -215,4 +222,23 @@ uint32 align_short(pipeline_state *pipeline, const io::ReadDataDevice *batch)
         nvbio::add_functor() );
 
     return n_active;
+}
+
+// perform banded alignment
+//
+uint32 align_short(pipeline_state *pipeline, const io::ReadDataDevice *batch)
+{
+    if (pipeline->system == DEVICE &&       // if currently on the device,
+        pipeline->aln.n_active < 32*1024)   // but too little parallelism...
+    {
+        // copy the state of the pipeline to the host
+        pipeline->system = HOST;
+        pipeline->h_chn = pipeline->chn;
+        pipeline->h_aln = pipeline->aln;
+    }
+
+    if (pipeline->system == HOST)
+        return align_short( &pipeline->h_chn, &pipeline->h_aln, batch );
+    else
+        return align_short( &pipeline->chn, &pipeline->aln, batch );
 }

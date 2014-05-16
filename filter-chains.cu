@@ -42,7 +42,7 @@ void chain_coverage_kernel(
     const uint32*                                   chain_reads,        // the chain reads
     const uint32*                                   chain_offsets,      // the chain offsets
     const uint32*                                   chain_lengths,      // the chain lengths
-    const chains_state::mem_type*                      mems,               // the MEMs for this chunk of reads
+    const mem_state::mem_type*                      mems,               // the MEMs for this chunk of reads
     const uint32*                                   mems_index,         // a sorting index into the MEMs specifying their processing order
           uint2*                                    chain_ranges,       // the output chain ranges
           uint64*                                   chain_weights)      // the output chain weights
@@ -61,7 +61,7 @@ void chain_coverage_kernel(
     // NOTE: we assume here the MEMs of a chain appear sorted by their left coordinate
     for (uint32 i = begin; i < end; ++i)
     {
-        const chains_state::mem_type seed = mems[ mems_index[i] ];
+        const mem_state::mem_type seed = mems[ mems_index[i] ];
 
         const uint2 span = seed.span();
 
@@ -151,7 +151,7 @@ void filter_chains(pipeline_state *pipeline, const io::ReadDataDevice *batch)
 {
     const ScopedTimer<float> timer( &pipeline->stats.chain_time ); // keep track of the time spent here
 
-    struct chains_state *chn = &pipeline->chn;
+    struct chains_state<device_tag> *chn = &pipeline->chn;
 
     const uint32 n_reads = pipeline->chunk.read_end - pipeline->chunk.read_begin;
     const uint32 n_mems  = pipeline->chunk.mem_end  - pipeline->chunk.mem_begin;

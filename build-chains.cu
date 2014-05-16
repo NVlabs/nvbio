@@ -38,7 +38,7 @@ using namespace nvbio;
 // a functor to extract the read id from a mem
 struct mem_read_id_functor
 {
-    typedef chains_state::mem_type argument_type;
+    typedef mem_state::mem_type argument_type;
     typedef uint32              result_type;
 
     NVBIO_HOST_DEVICE
@@ -54,7 +54,7 @@ struct chain
 
     // construct a new chain from a single seed
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    chain(const uint32 _id, const chains_state::mem_type seed) :
+    chain(const uint32 _id, const mem_state::mem_type seed) :
         id( _id ),
         ref( seed.index_pos() ),
         span_beg( seed.span().x ),
@@ -63,7 +63,7 @@ struct chain
 
     // test whether we can merge the given mem into this chain
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    bool merge(const chains_state::mem_type seed, const uint32 w, const uint32 max_chain_gap)
+    bool merge(const mem_state::mem_type seed, const uint32 w, const uint32 max_chain_gap)
     {
         const uint32 seed_len = seed.span().y - seed.span().x;
         const uint32 last_len = last_span.y - last_span.x;
@@ -115,7 +115,7 @@ void build_chains_kernel(
     const uint32                                    w,                  // w parameter
     const uint32                                    max_chain_gap,      // max chain gap parameter
     const uint32                                    n_mems,             // the total number of MEMs for this chunk of reads
-    const chains_state::mem_type*                   mems,               // the MEMs for this chunk of reads
+    const mem_state::mem_type*                   mems,               // the MEMs for this chunk of reads
     const uint32*                                   mems_index,         // a sorting index into the MEMs specifying the processing order
           uint64*                                   mems_chains)        // the output chain IDs corresponding to the sorted MEMs
 {
@@ -163,7 +163,7 @@ void build_chains_kernel(
     for (uint32 i = mem_batch_begin; i < mem_batch_end; ++i)
     {
         const uint32 seed_idx             = mems_index[i];
-        const chains_state::mem_type seed = mems[ seed_idx ];
+        const mem_state::mem_type seed = mems[ seed_idx ];
 
         // the chain id for this seed, to be determined
         uint32 chain_id;
@@ -212,7 +212,7 @@ void build_chains(pipeline_state *pipeline, const io::ReadDataDevice *batch)
 {
     const ScopedTimer<float> timer( &pipeline->stats.chain_time ); // keep track of the time spent here
 
-    struct chains_state *chn = &pipeline->chn;
+    struct chains_state<device_tag> *chn = &pipeline->chn;
 
     const uint32 n_reads = pipeline->chunk.read_end - pipeline->chunk.read_begin;
     const uint32 n_mems  = pipeline->chunk.mem_end  - pipeline->chunk.mem_begin;

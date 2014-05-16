@@ -45,6 +45,9 @@ int run(int argc, char **argv)
 
     pipeline_state pipeline;
 
+    // start the pipeline on the device
+    pipeline.system = DEVICE;
+
     // load the fmindex and prepare the SMEM search
     mem_init(&pipeline);
 
@@ -129,9 +132,6 @@ int run(int argc, char **argv)
             // and loop until there's work to do
             while (align_short(&pipeline, &device_batch))
             {
-                if (pipeline.aln.n_active < 32*1024) // too little work to proceed on the device
-                    break;
-
                 log_verbose(stderr, "\r    active: %u", pipeline.aln.n_active);
             }
             log_verbose_cont(stderr, "\n");

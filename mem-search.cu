@@ -151,7 +151,7 @@ void fit_read_chunk(
 // a functor to extract the reference location from a mem
 struct mem_loc_functor
 {
-    typedef chains_state::mem_type argument_type;
+    typedef mem_state::mem_type argument_type;
     typedef uint64                result_type;
 
     NVBIO_HOST_DEVICE
@@ -164,7 +164,7 @@ struct mem_loc_functor
 // a functor to extract the reference left coordinate from a mem
 struct mem_left_coord_functor
 {
-    typedef chains_state::mem_type argument_type;
+    typedef mem_state::mem_type argument_type;
     typedef uint64                result_type;
 
     NVBIO_HOST_DEVICE
@@ -179,8 +179,8 @@ void mem_locate(struct pipeline_state *pipeline, const io::ReadDataDevice *batch
 {
     const ScopedTimer<float> timer( &pipeline->stats.locate_time ); // keep track of the time spent here
 
-    struct mem_state    *mem = &pipeline->mem;
-    struct chains_state *chn = &pipeline->chn;
+    struct mem_state                *mem = &pipeline->mem;
+    struct chains_state<device_tag> *chn = &pipeline->chn;
 
     if (chn->mems.size() < command_line_options.mems_batch)
     {
@@ -194,6 +194,8 @@ void mem_locate(struct pipeline_state *pipeline, const io::ReadDataDevice *batch
     // skip pathological cases
     if (n_mems == 0u)
         return;
+
+    chn->n_mems = n_mems;
 
     mem->mem_filter.locate(
         pipeline->chunk.mem_begin,

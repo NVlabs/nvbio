@@ -52,6 +52,8 @@ struct pipeline_stats
     uint64 n_chains;
 };
 
+/// the MEM-searching pipeline state
+///
 struct mem_state
 {
     typedef nvbio::io::FMIndexDataDevice::fm_index_type          fm_index_type;

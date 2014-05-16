@@ -33,7 +33,7 @@
 #include <thrust/device_vector.h>
 #include <cub/cub.cuh>
 
-/// \page primitives_page Parallel Primitives
+/// \page cuda_primitives_page Parallel Primitives
 ///
 /// This module provides a set of convenience wrappers to invoke device-wide
 /// CUB's parallel primitives without worrying about the memory management.
@@ -56,6 +56,9 @@ namespace nvbio {
 namespace cuda {
 
 ///@addtogroup Basic
+///@{
+
+///@addtogroup CUDA
 ///@{
 
 ///@defgroup Primitives Parallel Primitives
@@ -226,6 +229,7 @@ uint32 reduce_by_key(
     thrust::device_vector<uint8>& d_temp_storage);
 
 ///@} // end of the Primitives group
+///@} // end of the CUDA group
 ///@} // end of the Basic group
 
 } // namespace cuda

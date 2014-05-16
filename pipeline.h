@@ -56,9 +56,9 @@ struct pipeline_stats
 ///
 struct mem_state
 {
+    typedef nvbio::io::FMIndexDataDevice::stream_type            genome_type;
     typedef nvbio::io::FMIndexDataDevice::fm_index_type          fm_index_type;
     typedef nvbio::MEMFilterDevice<fm_index_type>                mem_filter_type;
-    typedef nvbio::io::FMIndexDataDevice::stream_type            genome_type;
     typedef mem_filter_type::mem_type                            mem_type;
 
     nvbio::io::FMIndexData       *fmindex_data_host;
@@ -267,6 +267,7 @@ template <typename other_tag>
 alignment_state<system_tag>& alignment_state<system_tag>::operator=(const alignment_state<other_tag>& other)
 {
     n_active = other.n_active;
+
     begin_chains.resize( n_active );
     end_chains.resize( n_active );
     query_spans.resize( n_active );

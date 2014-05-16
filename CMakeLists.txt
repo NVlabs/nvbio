@@ -11,6 +11,8 @@ build-chains.h
 build-chains.cu
 filter-chains.h
 filter-chains.cu
+align.h
+align.cu
 util.h
 util.cu
 )

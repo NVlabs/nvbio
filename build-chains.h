@@ -18,12 +18,10 @@
 
 #pragma once
 
-#include "mem-search.h"
-
-using namespace nvbio;
+#include <nvbio/io/reads/reads.h>
 
 // build chains for the current pipeline::chunk of reads
-void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *batch);
+void build_chains(struct pipeline_state *pipeline, const nvbio::io::ReadDataDevice *batch);
 
 // filter chains for the current pipeline::chunk of reads
-void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *batch);
+void filter_chains(struct pipeline_state *pipeline, const nvbio::io::ReadDataDevice *batch);

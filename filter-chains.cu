@@ -27,8 +27,8 @@
 #include <nvbio/basic/priority_queue.h>
 #include <nvbio/basic/timer.h>
 #include <nvbio/basic/transform_iterator.h>
-#include <nvbio/basic/vector_wrapper.h>
-#include <nvbio/basic/cuda/primitives.h>
+#include <nvbio/basic/vector_view.h>
+#include <nvbio/basic/primitives.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/iterator/transform_iterator.h>
 #include <thrust/sort.h>
@@ -42,7 +42,7 @@ void chain_coverage_kernel(
     const uint32*                                   chain_reads,        // the chain reads
     const uint32*                                   chain_offsets,      // the chain offsets
     const uint32*                                   chain_lengths,      // the chain lengths
-    const mem_state::mem_type*                      mems,               // the MEMs for this chunk of reads
+    const chains_state::mem_type*                      mems,               // the MEMs for this chunk of reads
     const uint32*                                   mems_index,         // a sorting index into the MEMs specifying their processing order
           uint2*                                    chain_ranges,       // the output chain ranges
           uint64*                                   chain_weights)      // the output chain weights
@@ -61,7 +61,7 @@ void chain_coverage_kernel(
     // NOTE: we assume here the MEMs of a chain appear sorted by their left coordinate
     for (uint32 i = begin; i < end; ++i)
     {
-        const mem_state::mem_type seed = mems[ mems_index[i] ];
+        const chains_state::mem_type seed = mems[ mems_index[i] ];
 
         const uint2 span = seed.span();
 
@@ -147,11 +147,11 @@ void chain_filter_kernel(
 }
 
 // filter chains for the current pipeline::chunk of reads
-void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *batch)
+void filter_chains(pipeline_state *pipeline, const io::ReadDataDevice *batch)
 {
     const ScopedTimer<float> timer( &pipeline->stats.chain_time ); // keep track of the time spent here
 
-    struct mem_state *mem = &pipeline->mem;
+    struct chains_state *chn = &pipeline->chn;
 
     const uint32 n_reads = pipeline->chunk.read_end - pipeline->chunk.read_begin;
     const uint32 n_mems  = pipeline->chunk.mem_end  - pipeline->chunk.mem_begin;
@@ -165,23 +165,20 @@ void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *
     nvbio::vector<device_tag,uint32> unique_counts( n_mems );
     nvbio::vector<device_tag,uint8>  temp_storage;
 
-    const uint32 n_chains = cuda::runlength_encode(
+    const uint32 n_chains = runlength_encode(
         n_mems,
-        mem->mems_chain.begin(),
-        unique_chains.begin(),
-        unique_counts.begin(),
-        temp_storage );
+        chn->mems_chain.begin(),                        // the input chain ids, one per seed
+        unique_chains.begin(),                          // the output "unique" chain ids
+        unique_counts.begin(),                          // the output repetition counts, i.e. the chain lengths
+        temp_storage );                                 // some temp storage
 
     // resize the chain vectors if needed
-    uint32 reserved_space = uint32( mem->chain_lengths.size() );
+    uint32 reserved_space = uint32( chn->chain_lengths.size() );
     if (n_chains > reserved_space)
     {
-        mem->chain_lengths.clear();
-        mem->chain_lengths.resize( n_chains );
-        mem->chain_offsets.clear();
-        mem->chain_offsets.resize( n_chains );
-        mem->chain_reads.clear();
-        mem->chain_reads.resize( n_chains );
+        chn->chain_lengths.clear();  chn->chain_lengths.resize( n_chains );
+        chn->chain_offsets.clear();  chn->chain_offsets.resize( n_chains );
+        chn->chain_reads.clear();    chn->chain_reads.resize( n_chains );
 
         reserved_space = n_chains;
     }
@@ -190,22 +187,36 @@ void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *
     thrust::copy(
         unique_counts.begin(),
         unique_counts.begin() + n_chains,
-        mem->chain_lengths.begin() );
+        chn->chain_lengths.begin() );
 
     // find the offset to the beginning of each chain
     thrust::lower_bound(
-        mem->mems_chain.begin(),                    // the beginning of the sorted list of keys to search in
-        mem->mems_chain.begin() + n_mems,           // the end of the sorted list of keys to search in
+        chn->mems_chain.begin(),                    // the beginning of the sorted list of keys to search in
+        chn->mems_chain.begin() + n_mems,           // the end of the sorted list of keys to search in
         unique_chains.begin(),                      // the beginning of the sequence of values to search
         unique_chains.begin() + n_chains,           // the end of the sequence of values to search
-        mem->chain_offsets.begin() );               // the output sequence
+        chn->chain_offsets.begin() );               // the output sequence
 
     // extract the read-id frome the chain ids
     thrust::transform(
         unique_chains.begin(),                      // the beginning of the input sequence to transform
         unique_chains.begin() + n_chains,           // the end of the input sequence to transform
-        mem->chain_reads.begin(),                   // the beginning othe output sequence
+        chn->chain_reads.begin(),                   // the beginning othe output sequence
         nvbio::hi_bits_functor<uint32,uint64>() );  // the functor to apply, in this case a 32-bit left shift
+
+    // debug check: make sure the chain offsets are sorted
+    if (is_sorted<device_tag>( n_chains, chn->chain_offsets.begin() ) == false)
+    {
+        log_error(stderr, "filter_chains: chain offsets are not sorted!\n");
+        exit(0);
+    }
+
+    // debug check: make sure the chains are sorted by read
+    if (is_sorted<device_tag>( n_chains, chn->chain_reads.begin() ) == false)
+    {
+        log_error(stderr, "filter_chains: chains are not sorted by read!\n");
+        exit(0);
+    }
 
     nvbio::vector<device_tag,uint2>  chain_ranges( n_chains );
     nvbio::vector<device_tag,uint64> chain_weights( n_chains );
@@ -222,11 +233,11 @@ void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *
 
         chain_coverage_kernel<<<n_blocks, block_dim>>>(
             n_chains,
-            nvbio::plain_view( mem->chain_reads ),
-            nvbio::plain_view( mem->chain_offsets ),
-            nvbio::plain_view( mem->chain_lengths ),
-            nvbio::plain_view( mem->mems ),
-            nvbio::plain_view( mem->mems_index ),
+            nvbio::plain_view( chn->chain_reads ),
+            nvbio::plain_view( chn->chain_offsets ),
+            nvbio::plain_view( chn->chain_lengths ),
+            nvbio::plain_view( chn->mems ),
+            nvbio::plain_view( chn->mems_index ),
             nvbio::plain_view( chain_ranges ),
             nvbio::plain_view( chain_weights ) );
 
@@ -256,7 +267,7 @@ void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *
         chain_filter_kernel<<<n_blocks, block_dim>>>(
             pipeline->chunk,
             n_chains,
-            nvbio::plain_view( mem->chain_reads ),
+            nvbio::plain_view( chn->chain_reads ),
             nvbio::plain_view( chain_index ),
             nvbio::plain_view( chain_ranges ),
             nvbio::plain_view( chain_weights ),
@@ -270,37 +281,44 @@ void filter_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *
     }
 
     // filter chain_reads
-    const uint32 n_filtered_chains = cuda::copy_flagged(
+    const uint32 n_filtered_chains = copy_flagged(
         n_chains,                                   // the number of input elements
-        mem->chain_reads.begin(),                   // the input sequence of flagged elements to copy
+        chn->chain_reads.begin(),                   // the input sequence of flagged elements to copy
         chain_flags.begin(),                        // the input sequence of flags
         chain_index.begin(),                        // the output sequence of copied elements
         temp_storage );                             // some temporary storage
 
-    mem->chain_reads.swap( chain_index );
+    chn->chain_reads.swap( chain_index );
+
+    // debug check: make sure the chains are sorted by read
+    if (is_sorted<device_tag>( n_filtered_chains, chn->chain_reads.begin() ) == false)
+    {
+        log_error(stderr, "filter_chains: filtered chains are not sorted by read!\n");
+        exit(0);
+    }
 
     // filter chain_offsets
     cuda::copy_flagged(
         n_chains,                                   // the number of input elements
-        mem->chain_offsets.begin(),                 // the input sequence of flagged elements to copy
+        chn->chain_offsets.begin(),                 // the input sequence of flagged elements to copy
         chain_flags.begin(),                        // the input sequence of flags
         chain_index.begin(),                        // the output sequence of copied elements
         temp_storage );                             // some temporary storage
 
-    mem->chain_offsets.swap( chain_index );
+    chn->chain_offsets.swap( chain_index );
 
     // filter chain_lengths
     cuda::copy_flagged(
         n_chains,                                   // the number of input elements
-        mem->chain_lengths.begin(),                 // the input sequence of flagged elements to copy
+        chn->chain_lengths.begin(),                 // the input sequence of flagged elements to copy
         chain_flags.begin(),                        // the input sequence of flags
         chain_index.begin(),                        // the output sequence of copied elements
         temp_storage );                             // some temporary storage
 
-    mem->chain_lengths.swap( chain_index );
+    chn->chain_lengths.swap( chain_index );
 
     // assign the output number of chains
-    mem->n_chains = n_filtered_chains;
+    chn->n_chains = n_filtered_chains;
 
     // keep stats
     pipeline->stats.n_chains += n_filtered_chains;

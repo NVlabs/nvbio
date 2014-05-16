@@ -30,6 +30,7 @@
 #include "mem-search.h"
 #include "build-chains.h"
 #include "filter-chains.h"
+#include "align.h"
 
 using namespace nvbio;
 
@@ -38,7 +39,12 @@ int run(int argc, char **argv)
     parse_command_line(argc, argv);
     gpu_init();
 
-    struct pipeline_context pipeline;
+    std::vector<uint32> vec( 1000 );
+    vector_view<uint32*> view( (uint32)vec.size(), &vec[0] );
+    uint32* ptr = view;
+
+    pipeline_state pipeline;
+
     // load the fmindex and prepare the SMEM search
     mem_init(&pipeline);
 
@@ -115,7 +121,20 @@ int run(int argc, char **argv)
             // filter the chains
             filter_chains(&pipeline, &device_batch);
 
-            log_verbose(stderr, "  chains: %u -> %u\n", pipeline.mem.n_chains);
+            log_verbose(stderr, "  chains: %u\n", pipeline.chn.n_chains);
+
+            // initialize the alignment sub-pipeline
+            align_init(&pipeline, &device_batch);
+
+            // and loop until there's work to do
+            while (align_short(&pipeline, &device_batch))
+            {
+                if (pipeline.aln.n_active < 32*1024) // too little work to proceed on the device
+                    break;
+
+                log_verbose(stderr, "\r    active: %u", pipeline.aln.n_active);
+            }
+            log_verbose_cont(stderr, "\n");
         }
         global_timer.stop();
         pipeline.stats.n_reads += batch->size()/2;

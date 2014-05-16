@@ -27,8 +27,8 @@
 #include <nvbio/basic/priority_queue.h>
 #include <nvbio/basic/timer.h>
 #include <nvbio/basic/transform_iterator.h>
-#include <nvbio/basic/vector_wrapper.h>
-#include <nvbio/basic/cuda/primitives.h>
+#include <nvbio/basic/vector_view.h>
+#include <nvbio/basic/primitives.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/iterator/transform_iterator.h>
 #include <thrust/sort.h>
@@ -38,7 +38,7 @@ using namespace nvbio;
 // a functor to extract the read id from a mem
 struct mem_read_id_functor
 {
-    typedef mem_state::mem_type argument_type;
+    typedef chains_state::mem_type argument_type;
     typedef uint32              result_type;
 
     NVBIO_HOST_DEVICE
@@ -54,7 +54,7 @@ struct chain
 
     // construct a new chain from a single seed
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    chain(const uint32 _id, const mem_state::mem_type seed) :
+    chain(const uint32 _id, const chains_state::mem_type seed) :
         id( _id ),
         ref( seed.index_pos() ),
         span_beg( seed.span().x ),
@@ -63,7 +63,7 @@ struct chain
 
     // test whether we can merge the given mem into this chain
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    bool merge(const mem_state::mem_type seed, const uint32 w, const uint32 max_chain_gap)
+    bool merge(const chains_state::mem_type seed, const uint32 w, const uint32 max_chain_gap)
     {
         const uint32 seed_len = seed.span().y - seed.span().x;
         const uint32 last_len = last_span.y - last_span.x;
@@ -115,7 +115,7 @@ void build_chains_kernel(
     const uint32                                    w,                  // w parameter
     const uint32                                    max_chain_gap,      // max chain gap parameter
     const uint32                                    n_mems,             // the total number of MEMs for this chunk of reads
-    const mem_state::mem_type*                      mems,               // the MEMs for this chunk of reads
+    const chains_state::mem_type*                   mems,               // the MEMs for this chunk of reads
     const uint32*                                   mems_index,         // a sorting index into the MEMs specifying the processing order
           uint64*                                   mems_chains)        // the output chain IDs corresponding to the sorted MEMs
 {
@@ -141,7 +141,7 @@ void build_chains_kernel(
     const uint32 MAX_CHAINS = 128;
 
     // keep a priority queue of the chains organized by the reference coordinate of their leftmost seed
-    typedef nvbio::vector_wrapper<chain*>                                       chain_vector_type;
+    typedef nvbio::vector_view<chain*>                                          chain_vector_type;
     typedef nvbio::priority_queue<chain, chain_vector_type, chain_compare>      chain_queue_type;
 
     chain            chain_queue_storage[MAX_CHAINS+1];
@@ -162,8 +162,8 @@ void build_chains_kernel(
     // process the seeds in order
     for (uint32 i = mem_batch_begin; i < mem_batch_end; ++i)
     {
-        const uint32 seed_idx           = mems_index[i];
-        const mem_state::mem_type seed  = mems[ seed_idx ];
+        const uint32 seed_idx             = mems_index[i];
+        const chains_state::mem_type seed = mems[ seed_idx ];
 
         // the chain id for this seed, to be determined
         uint32 chain_id;
@@ -208,11 +208,11 @@ void build_chains_kernel(
 }
 
 // build chains for the current pipeline::chunk of reads
-void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *batch)
+void build_chains(pipeline_state *pipeline, const io::ReadDataDevice *batch)
 {
     const ScopedTimer<float> timer( &pipeline->stats.chain_time ); // keep track of the time spent here
 
-    struct mem_state *mem = &pipeline->mem;
+    struct chains_state *chn = &pipeline->chn;
 
     const uint32 n_reads = pipeline->chunk.read_end - pipeline->chunk.read_begin;
     const uint32 n_mems  = pipeline->chunk.mem_end  - pipeline->chunk.mem_begin;
@@ -256,15 +256,15 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
             command_line_options.w,
             command_line_options.max_chain_gap,
             n_mems,
-            nvbio::plain_view( mem->mems ),
-            nvbio::plain_view( mem->mems_index ),
-            nvbio::plain_view( mem->mems_chain ) );
+            nvbio::plain_view( chn->mems ),
+            nvbio::plain_view( chn->mems_index ),
+            nvbio::plain_view( chn->mems_chain ) );
 
         optional_device_synchronize();
         cuda::check_error("build-chains kernel");
 
         // shrink the set of active reads
-        n_active = cuda::copy_flagged(
+        n_active = copy_flagged(
             n_active,                                   // the number of input elements
             active_reads.begin(),                       // the input sequence of elements to copy
             active_flags.begin(),                       // the input sequence of copy flags
@@ -278,9 +278,9 @@ void build_chains(struct pipeline_context *pipeline, const io::ReadDataDevice *b
     // NOTE: it's important here to use a stable-sort, so as to guarantee preserving
     // the ordering by left-coordinate of the MEMs
     thrust::sort_by_key(                                // TODO: this is slow, switch to nvbio::cuda::SortEnactor
-        mem->mems_chain.begin(),
-        mem->mems_chain.begin() + n_mems,
-        mem->mems_index.begin() );
+        chn->mems_chain.begin(),
+        chn->mems_chain.begin() + n_mems,
+        chn->mems_index.begin() );
 
     optional_device_synchronize();
     nvbio::cuda::check_error("build-chains kernel");

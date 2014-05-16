@@ -55,7 +55,7 @@ static io::FMIndexData *load_genome(const char *name, uint32 flags)
     return file_loader;
 }
 
-void mem_init(struct pipeline_context *pipeline)
+void mem_init(struct pipeline_state *pipeline)
 {
     // this specifies which portions of the FM index data to load
     const uint32 fm_flags = io::FMIndexData::GENOME  |
@@ -73,11 +73,11 @@ void mem_init(struct pipeline_context *pipeline)
 }
 
 // search MEMs for all reads in batch
-void mem_search(struct pipeline_context *pipeline, const io::ReadDataDevice *batch)
+void mem_search(struct pipeline_state *pipeline, const io::ReadDataDevice *batch)
 {
     ScopedTimer<float> timer( &pipeline->stats.search_time ); // keep track of the time spent here
 
-    struct mem_state *mem = &pipeline->mem;
+    struct mem_state    *mem = &pipeline->mem;
     const uint32 n_reads = batch->size();
 
     // reset the filter
@@ -104,7 +104,7 @@ void mem_search(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
 // given the first read in a chunk, determine a suitably sized chunk of reads
 // (for which we can locate all MEMs in one go), updating pipeline::chunk
 void fit_read_chunk(
-    struct pipeline_context     *pipeline,
+    struct pipeline_state       *pipeline,
     const io::ReadDataDevice    *batch,
     const uint32                read_begin)     // first read in the chunk
 {
@@ -123,9 +123,9 @@ void fit_read_chunk(
     // skip pathological cases
     if (mem->mem_filter.n_ranges() == 0)
     {
-        pipeline->chunk.read_end = batch->size();
+        pipeline->chunk.read_end  = batch->size();
         pipeline->chunk.mem_begin = 0u;
-        pipeline->chunk.mem_end = 0u;
+        pipeline->chunk.mem_end   = 0u;
         return;
     }
 
@@ -151,8 +151,8 @@ void fit_read_chunk(
 // a functor to extract the reference location from a mem
 struct mem_loc_functor
 {
-    typedef mem_state::mem_type argument_type;
-    typedef uint64              result_type;
+    typedef chains_state::mem_type argument_type;
+    typedef uint64                result_type;
 
     NVBIO_HOST_DEVICE
     uint64 operator() (const argument_type mem) const
@@ -164,8 +164,8 @@ struct mem_loc_functor
 // a functor to extract the reference left coordinate from a mem
 struct mem_left_coord_functor
 {
-    typedef mem_state::mem_type argument_type;
-    typedef uint64              result_type;
+    typedef chains_state::mem_type argument_type;
+    typedef uint64                result_type;
 
     NVBIO_HOST_DEVICE
     uint64 operator() (const argument_type mem) const
@@ -175,17 +175,18 @@ struct mem_left_coord_functor
 };
 
 // locate all mems in the range defined by pipeline::chunk
-void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *batch)
+void mem_locate(struct pipeline_state *pipeline, const io::ReadDataDevice *batch)
 {
     const ScopedTimer<float> timer( &pipeline->stats.locate_time ); // keep track of the time spent here
 
-    struct mem_state *mem = &pipeline->mem;
+    struct mem_state    *mem = &pipeline->mem;
+    struct chains_state *chn = &pipeline->chn;
 
-    if (mem->mems.size() < command_line_options.mems_batch)
+    if (chn->mems.size() < command_line_options.mems_batch)
     {
-        mem->mems.resize( command_line_options.mems_batch );
-        mem->mems_index.resize( command_line_options.mems_batch );
-        mem->mems_chain.resize( command_line_options.mems_batch );
+        chn->mems.resize( command_line_options.mems_batch );
+        chn->mems_index.resize( command_line_options.mems_batch );
+        chn->mems_chain.resize( command_line_options.mems_batch );
     }
 
     const uint32 n_mems = pipeline->chunk.mem_end - pipeline->chunk.mem_begin;
@@ -197,14 +198,14 @@ void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
     mem->mem_filter.locate(
         pipeline->chunk.mem_begin,
         pipeline->chunk.mem_end,
-        mem->mems.begin() );
+        chn->mems.begin() );
 
     // sort the mems by reference location
     nvbio::vector<device_tag,uint64> loc( n_mems );
 
     thrust::transform(
-        mem->mems.begin(),
-        mem->mems.begin() + n_mems,
+        chn->mems.begin(),
+        chn->mems.begin() + n_mems,
         loc.begin(),
         mem_left_coord_functor() );
         //mem_loc_functor() );
@@ -212,13 +213,13 @@ void mem_locate(struct pipeline_context *pipeline, const io::ReadDataDevice *bat
     thrust::copy(
         thrust::make_counting_iterator<uint32>(0u),
         thrust::make_counting_iterator<uint32>(0u) + n_mems,
-        mem->mems_index.begin() );
+        chn->mems_index.begin() );
 
     // TODO: this is slow, switch to nvbio::cuda::SortEnactor
     thrust::sort_by_key(
         loc.begin(),
         loc.begin() + n_mems,
-        mem->mems_index.begin() );
+        chn->mems_index.begin() );
 
     optional_device_synchronize();
     nvbio::cuda::check_error("mem-locate kernel");

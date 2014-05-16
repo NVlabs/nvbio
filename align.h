@@ -20,5 +20,12 @@
 
 #include <nvbio/io/reads/reads.h>
 
-// filter chains for the current pipeline::chunk of reads
-void filter_chains(struct pipeline_state *pipeline, const nvbio::io::ReadDataDevice *batch);
+/// initialize the alignment pipeline
+///
+void align_init(struct pipeline_state *pipeline, const nvbio::io::ReadDataDevice *batch);
+
+/// perform banded alignment
+///
+/// \return     the number of remaining active reads to align
+///
+nvbio::uint32 align_short(struct pipeline_state *pipeline, const nvbio::io::ReadDataDevice *batch);

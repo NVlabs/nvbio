@@ -157,6 +157,7 @@ uint32 align_short(
     //
     uint32 n_active = aln->n_active;
 
+    // build a stencil of the active reads, stencil[i] = (begin_chains[i] != end_chains[i])
     thrust::transform(
         aln->begin_chains.begin(),
         aln->begin_chains.begin() + n_active,
@@ -229,7 +230,7 @@ uint32 align_short(
 uint32 align_short(pipeline_state *pipeline, const io::ReadDataDevice *batch)
 {
     if (pipeline->system == DEVICE &&       // if currently on the device,
-        pipeline->aln.n_active < 32*1024)   // but too little parallelism...
+        pipeline->aln.n_active < 16*1024)   // but too little parallelism...
     {
         // copy the state of the pipeline to the host
         pipeline->system = HOST;

@@ -130,9 +130,9 @@ void WorkQueueStats::View::sample_iterations(const uint32 i)
     if (valid() == false)
         return;
 
-    atomicAdd( iterations,    i );      // add to the total sum
-    atomicMax( (uint32*)iterations+1u, i );      // take the maximum
-    atomicAdd( iterations+2u, 1u );     // increase the event counter
+    atomicAdd( iterations,    i );              // add to the total sum
+    atomicMax( (uint32*)(iterations+1u), i );   // take the maximum
+    atomicAdd( iterations+2u, 1u );             // increase the event counter
 }
 
 ///@} // WorkQueue

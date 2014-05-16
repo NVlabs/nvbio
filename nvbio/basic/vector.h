@@ -57,6 +57,9 @@ struct vector<host_tag,T> : public thrust::host_vector<T>
     typedef typename base_type::iterator        iterator;
     typedef typename base_type::value_type      value_type;
 
+    typedef nvbio::vector_view<T*,uint64>              plain_view_type;
+    typedef nvbio::vector_view<const T*,uint64>  const_plain_view_type;
+
     /// constructor
     ///
     vector<host_tag,T>(const size_t size = 0, const T val = T()) : base_type( size, val ) {}
@@ -78,6 +81,9 @@ struct vector<device_tag,T> : public thrust::device_vector<T>
     typedef typename base_type::const_iterator  const_iterator;
     typedef typename base_type::iterator        iterator;
     typedef typename base_type::value_type      value_type;
+
+    typedef nvbio::vector_view<T*,uint64>              plain_view_type;
+    typedef nvbio::vector_view<const T*,uint64>  const_plain_view_type;
 
     /// constructor
     ///

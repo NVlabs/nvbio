@@ -23,6 +23,9 @@
 #include <nvbio/io/fmi.h>
 #include <nvbio/io/output/output_file.h>
 #include <nvbio/io/reads/reads.h>
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 
 #include "options.h"
 #include "util.h"
@@ -39,9 +42,14 @@ int run(int argc, char **argv)
     parse_command_line(argc, argv);
     gpu_init();
 
-    std::vector<uint32> vec( 1000 );
-    vector_view<uint32*> view( (uint32)vec.size(), &vec[0] );
-    uint32* ptr = view;
+    #ifdef _OPENMP
+    // now set the number of CPU threads
+    omp_set_num_threads( omp_get_num_procs() );
+    #pragma omp parallel
+    {
+        log_verbose(stderr, "  running on multiple threads (%d)\n", omp_get_thread_num());
+    }
+    #endif
 
     pipeline_state pipeline;
 

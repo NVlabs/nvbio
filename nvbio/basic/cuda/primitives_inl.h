@@ -27,6 +27,8 @@
 
 #pragma once
 
+#include <nvbio/basic/numbers.h>
+
 namespace nvbio {
 namespace cuda {
 

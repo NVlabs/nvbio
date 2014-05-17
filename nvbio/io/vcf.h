@@ -65,7 +65,7 @@ struct SNPDatabase
     std::vector<std::string> reference_sequence_names;
 
     // position of the variant in the reference sequence (first base in the sequence is position 1)
-    nvbio::vector<host_tag, uint64> positions;
+    nvbio::vector<host_tag, uint32> sequence_positions;
 
     // packed reference sequences
     nvbio::PackedVector<host_tag, 4> reference_sequences;

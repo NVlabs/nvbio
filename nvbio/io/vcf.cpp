@@ -135,7 +135,7 @@ bool loadVCF(SNPDatabase& output, const char *file_name)
             output.ref_variant_index.push_back(index);
 
             output.reference_sequence_names.push_back(std::string(chrom));
-            output.positions.push_back(position);
+            output.sequence_positions.push_back(position);
 
             output.reference_sequences.resize(index.reference_start + ref_len);
             string_to_dna16(ref, output.reference_sequences.begin() + index.reference_start);

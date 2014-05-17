@@ -176,7 +176,8 @@
 ///\verbatim
 /// ./nvBowtie --help
 ///
-/// nvBowtie [options] reference-genome read-file output
+/// nvBowtie [options] reference-genome read-file output |
+/// nvBowtie --pe [options] reference-genome read-file1 read-file2 output
 ///  options:
 ///    General:
 ///      --max-reads        int [-1]      maximum number of reads to process

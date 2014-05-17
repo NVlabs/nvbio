@@ -59,6 +59,7 @@ int32 sw_alignment_score(
     uint2*                      sink,
     column_type                 temp)
 {
+#if __CUDA_ARCH__ >= 350
     typedef int32                        score_type;
     typedef alignment_result<score_type> alignment;
 
@@ -200,6 +201,10 @@ int32 sw_alignment_score(
 
     *sink = best_alignment.sink;
     return best_alignment.score;
+#else
+    // unsupported on compute capability < 3.5
+    return 0;
+#endif
 }
 
 // private dispatcher for the warp-parallel version of classic smith-waterman

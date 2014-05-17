@@ -86,8 +86,29 @@
 /// \section RecentNew Recent News
 ///\par
 /// <table>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">16/05/2014 \n NVBIO 0.9.7</td>
+/// <td style="vertical-align:text-top;" width="90%">
+/// - <b>New Features:</b> \n
+///   * Simplified the interfaces for \ref packed_streams_page
+///   * Added a suite of easy-to-use and highly efficient host / device parallel primitives
+///   * More uniform handling of nvbio::vector views
+/// - <b>Bug Fixes:</b> \n
+///   * Fixed option parsing bug in nvBWT.
+/// </td></tr>
+/// </table>
+///\par
+/// <table>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">08/05/2014 \n NVBIO 0.9.6</td>
+/// <td style="vertical-align:text-top;" width="90%">
+/// - <b>New Features:</b> \n
+///   * Added a set of step-by-step introductory tutorials
+///   * Sped up MEM filtering
+/// </td></tr>
+/// </table>
+///\par
+/// <table>
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">15/04/2014 \n NVBIO 0.9.5</td>
-/// <td style="vertical-align:text-top;">
+/// <td style="vertical-align:text-top;" width="90%">
 /// - <b>New Features:</b> \n
 ///   * Added a whole new \ref qgram_page for q-gram indexing and q-gram counting.
 ///   * Added a banded \ref AlignersAnchor "Myers bit-vector" edit-distance algorithm running just short of <b>1 TCUPS</b>!

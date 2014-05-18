@@ -70,9 +70,6 @@ int SequenceDataFile::next(SequenceDataEncoder* encoder, const uint32 batch_size
         assert(info->size() <= reads_to_load);
     }
 
-    if (info->size() == 0)
-        return 0;
-
     m_loaded += info->size();
 
     encoder->end_batch();

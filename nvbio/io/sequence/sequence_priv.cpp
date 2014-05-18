@@ -80,7 +80,6 @@ int SequenceDataFile::next(SequenceDataEncoder* encoder, const uint32 batch_size
 
 // factory method to open a read file, tries to detect file type based on file name
 SequenceDataStream *open_sequence_file(
-    const SequenceAlphabet   alphabet,
     const char *             sequence_file_name,
     const QualityEncoding    qualities,
     const uint32             max_seqs,

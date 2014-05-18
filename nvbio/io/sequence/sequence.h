@@ -666,7 +666,6 @@ struct SequenceDataStream
 
 /// factory method to open a read file
 ///
-/// \param alphabet             the alphabet used to encode the read sequence
 /// \param sequence_file_name   the file to open
 /// \param qualities            the encoding of the qualities
 /// \param max_seqs            maximum number of reads to input
@@ -677,12 +676,12 @@ struct SequenceDataStream
 ///                             will result in a stream containing BOTH the forward
 ///                             and reverse-complemented strands.
 ///
-SequenceDataStream *open_sequence_file(const SequenceAlphabet   alphabet,
-                                       const char *             sequence_file_name,
-                                       const QualityEncoding    qualities,
-                                       const uint32             max_seqs = uint32(-1),
-                                       const uint32             max_sequence_len = uint32(-1),
-                                       const SequenceEncoding   flags = REVERSE);
+SequenceDataStream *open_sequence_file(
+    const char *             sequence_file_name,
+    const QualityEncoding    qualities,
+    const uint32             max_seqs = uint32(-1),
+    const uint32             max_sequence_len = uint32(-1),
+    const SequenceEncoding   flags = REVERSE);
 
 ///@} // SequencesIO
 ///@} // IO

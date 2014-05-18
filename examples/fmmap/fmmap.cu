@@ -451,7 +451,6 @@ int main(int argc, char* argv[])
 
     SharedPointer<io::SequenceDataStream> read_data_file(
         io::open_sequence_file(
-            DNA_N,
             reads,
             io::Phred33,
             2*max_reads,
@@ -470,12 +469,12 @@ int main(int argc, char* argv[])
     Stats stats;
 
     io::SequenceDataHost<DNA_N> h_read_data;
-    SharedPointer<io::SequenceDataEncoder> read_encoder( io::create_encoder( &h_read_data ) );
+    SharedPointer<io::SequenceDataEncoder> h_read_encoder( io::create_encoder( &h_read_data ) );
 
     while (1)
     {
         // load a batch of reads
-        if (read_data_file->next( read_encoder.get(), batch_reads, batch_bps ) == 0)
+        if (read_data_file->next( h_read_encoder.get(), batch_reads, batch_bps ) == 0)
             break;
 
         log_info(stderr, "  loading reads... started\n");

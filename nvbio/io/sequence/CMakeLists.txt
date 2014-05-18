@@ -6,6 +6,8 @@ sequence_fastq.h
 sequence_txt.cpp
 sequence_txt.h
 sequence.h
+sequence_encoder.cpp
+sequence_encoder.h
 sequence_priv.cpp
 sequence_priv.h
 sequence_sam.cpp

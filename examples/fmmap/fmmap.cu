@@ -39,7 +39,8 @@
 #include <nvbio/strings/infix.h>
 #include <nvbio/strings/seeds.h>
 #include <nvbio/fmindex/filter.h>
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
+#include <nvbio/io/sequence/sequence_encoder.h>
 #include <nvbio/io/fmi.h>
 #include <nvbio/alignment/alignment.h>
 #include <nvbio/alignment/batched.h>
@@ -150,7 +151,7 @@ extract_seeds(
 //
 struct read_infixes
 {
-    typedef io::ReadDataDevice::const_plain_view_type       read_view_type;
+    typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type       read_view_type;
 
     // constructor
     NVBIO_HOST_DEVICE
@@ -175,7 +176,7 @@ struct read_infixes
 template <uint32 BAND_LEN>
 struct genome_infixes
 {
-    typedef io::ReadDataDevice::const_plain_view_type       read_view_type;
+    typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type       read_view_type;
 
     // constructor
     NVBIO_HOST_DEVICE
@@ -220,13 +221,14 @@ struct sink_score
 // perform q-gram index mapping
 //
 void map(
-    Pipeline&                           pipeline,
-    const io::ReadDataDevice&           reads,
-    nvbio::vector<device_tag,int16>&    best_scores,
-          Stats&                        stats)
+    Pipeline&                               pipeline,
+    const io::SequenceDataDevice<DNA_N>&    reads,
+    nvbio::vector<device_tag,int16>&        best_scores,
+          Stats&                            stats)
 {
     typedef io::FMIndexDataDevice::stream_type                                  genome_string;
-    typedef io::ReadDataDevice::const_read_string_set_type                      read_string_set_type;
+    typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type                read_view_type;
+    typedef read_view_type::sequence_string_set_type                            read_string_set_type;
     typedef string_set_infix_coord_type                                         infix_coord_type;
     typedef nvbio::vector<device_tag,infix_coord_type>                          infix_vector_type;
     typedef InfixSet<read_string_set_type, const string_set_infix_coord_type*>  seed_string_set_type;
@@ -250,7 +252,8 @@ void map(
     Timer timer;
     timer.start();
 
-    const read_string_set_type read_string_set = reads.const_read_string_set();
+    const read_view_type reads_view = reads;
+    const read_string_set_type read_string_set = reads_view.sequence_string_set();
     const seed_string_set_type seed_string_set = extract_seeds(
         read_string_set,
         params.seed_len,
@@ -335,11 +338,11 @@ void map(
 
         typedef nvbio::vector<device_tag,string_infix_coord_type>::const_iterator infix_iterator;
 
-        typedef io::ReadDataDevice::const_read_stream_type      read_stream;
+        typedef read_view_type::sequence_stream_type      read_stream;
 
         const SparseStringSet<read_stream,infix_iterator> read_infix_set(
             hits_end - hits_begin,
-            reads.read_stream(),
+            reads_view.sequence_stream(),
             read_infix_coords.begin() );
 
         const SparseStringSet<genome_string,infix_iterator> genome_infix_set(
@@ -356,8 +359,8 @@ void map(
             genome_infix_set,
             sinks.begin(),
             aln::ThreadParallelScheduler(),
-            reads.max_read_len(),
-            reads.max_read_len() + BAND_LEN );
+            reads.max_sequence_len(),
+            reads.max_sequence_len() + BAND_LEN );
 
         cudaDeviceSynchronize();
         timer.stop();
@@ -446,13 +449,14 @@ int main(int argc, char* argv[])
     // open a read file
     log_info(stderr, "  opening reads file... started\n");
 
-    SharedPointer<io::ReadDataStream> read_data_file(
-        io::open_read_file(
+    SharedPointer<io::SequenceDataStream> read_data_file(
+        io::open_sequence_file(
+            DNA_N,
             reads,
             io::Phred33,
             2*max_reads,
             uint32(-1),
-            io::ReadEncoding( io::FORWARD | io::REVERSE_COMPLEMENT ) ) );
+            io::SequenceEncoding( io::FORWARD | io::REVERSE_COMPLEMENT ) ) );
 
     // check whether the file opened correctly
     if (read_data_file == NULL || read_data_file->is_ok() == false)
@@ -465,17 +469,19 @@ int main(int argc, char* argv[])
     // keep stats
     Stats stats;
 
+    io::SequenceDataHost<DNA_N> h_read_data;
+    SharedPointer<io::SequenceDataEncoder> read_encoder( io::create_encoder( &h_read_data ) );
+
     while (1)
     {
         // load a batch of reads
-        SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_reads, batch_bps ) );
-        if (h_read_data == NULL)
+        if (read_data_file->next( read_encoder.get(), batch_reads, batch_bps ) == 0)
             break;
 
         log_info(stderr, "  loading reads... started\n");
 
         // copy it to the device
-        const io::ReadDataDevice d_read_data( *h_read_data );
+        const io::SequenceDataDevice<DNA_N> d_read_data = h_read_data;
 
         const uint32 n_reads = d_read_data.size() / 2;
 

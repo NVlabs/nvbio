@@ -311,7 +311,7 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
         }
 
         // encode the sequence data
-        SequenceDataView<SEQUENCE_ALPHABET>::sequence_stream_type stream( nvbio::raw_pointer( m_data->m_sequence_vec ) );
+        typename SequenceDataView<SEQUENCE_ALPHABET>::sequence_stream_type stream( nvbio::raw_pointer( m_data->m_sequence_vec ) );
         encode<SEQUENCE_ALPHABET>(
             conversion_flags,
             quality_encoding,

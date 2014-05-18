@@ -1,6 +1,6 @@
 addsources(
-bam.cpp
-bam.h
+sequence_bam.cpp
+sequence_bam.h
 sequence_fastq.cpp
 sequence_fastq.h
 sequence_txt.cpp
@@ -8,6 +8,6 @@ sequence_txt.h
 sequence.h
 sequence_priv.cpp
 sequence_priv.h
-sam.cpp
-sam.h
+sequence_sam.cpp
+sequence_sam.h
 )

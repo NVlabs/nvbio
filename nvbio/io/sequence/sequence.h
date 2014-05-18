@@ -278,30 +278,7 @@ struct SequenceDataView : public SequenceDataInfo
         m_sequence_index        (IndexIterator( sequence_index )),
         m_qual_stream           (QualStorageIterator( qual_stream ))
     {}
-/*
-    /// constructor
-    ///
-    template <
-        typename InIndexIterator,
-        typename InSequenceIterator,
-        typename InQualIterator,
-        typename InNameIterator>
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
-    SequenceDataView(
-        const SequenceDataInfo&     info,
-        const InSequenceIterator    sequence_stream,
-        const IndexIterator         sequence_index,
-        const InQualIterator        qual_stream,
-        const InNameIterator        name_stream,
-        const IndexIterator         name_index)
-      : SequenceDataInfo        ( info ),
-        m_name_stream           (NameStorageIterator( name_stream )),
-        m_name_index            (IndexIterator( name_index )),
-        m_sequence_stream       (SequenceStorageIterator( sequence_stream )),
-        m_sequence_index        (IndexIterator( sequence_index )),
-        m_qual_stream           (QualStorageIterator( qual_stream ))
-    {}
-*/
+
     /// copy constructor
     ///
     template <
@@ -338,6 +315,7 @@ struct SequenceDataView : public SequenceDataInfo
         m_sequence_stream   = SequenceStorageIterator( in.m_sequence_stream );
         m_sequence_index    = IndexIterator( in.m_sequence_index );
         m_qual_stream       = QualStorageIterator( in.m_qual_stream );
+        return *this;
     }
 
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator              name_index()                { return m_name_index;  }

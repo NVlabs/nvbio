@@ -538,7 +538,7 @@ struct SequenceDataStorage : public SequenceData<SEQUENCE_ALPHABET>
         // copy the vectors
         thrust_copy_vector( m_sequence_vec,       other.m_sequence_vec );
         thrust_copy_vector( m_sequence_index_vec, other.m_sequence_index_vec );
-        thrust_copy_vector( m_sequence_qual_vec,  other.m_qual_vec );
+        thrust_copy_vector( m_qual_vec,           other.m_qual_vec );
         thrust_copy_vector( m_name_vec,           other.m_name_vec );
         thrust_copy_vector( m_name_index_vec,     other.m_name_index_vec );
         return *this;

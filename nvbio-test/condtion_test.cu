@@ -35,6 +35,7 @@
 #include <algorithm>
 #include <nvbio/basic/timer.h>
 #include <nvbio/basic/console.h>
+#include <nvbio/basic/vector.h>
 #include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/cuda/condition.h>
 #include <cub/cub.cuh>

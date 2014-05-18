@@ -52,12 +52,12 @@ struct SequenceDataFile_FASTQ_parser : public SequenceDataFile
 {
 protected:
     SequenceDataFile_FASTQ_parser(
-        const char *read_file_name,
-        const QualityEncoding quality_encoding,
-        const uint32 max_reads,
-        const uint32 max_read_len,
-        const SequenceEncoding flags,
-        const uint32 buffer_size = 64536u)
+        const char*             read_file_name,
+        const QualityEncoding   quality_encoding,
+        const uint32            max_reads,
+        const uint32            max_read_len,
+        const SequenceEncoding  flags,
+        const uint32            buffer_size = 64536u)
       : SequenceDataFile(max_reads, max_read_len, flags),
         m_file_name(read_file_name),
         m_quality_encoding(quality_encoding),

@@ -615,20 +615,11 @@ struct SequenceDataStream
 
     /// next batch
     ///
-    template <SequenceAlphabet SEQUENCE_ALPHABET>
-    bool next(SequenceDataHost<SEQUENCE_ALPHABET>* batch, const uint32 batch_size, const uint32 batch_bps = uint32(-1))
-    {
-        return next_core( batch_size, batch_bps, (void*)batch );
-    }
+    bool next(struct SequenceDataEncoder* encoder, const uint32 batch_size, const uint32 batch_bps = uint32(-1)) {}
 
     /// is the stream ok?
     ///
     virtual bool is_ok() = 0;
-
-protected:
-    /// next batch
-    ///
-    virtual int next_core(struct SequenceDataEncoder* encoder, const uint32 batch_size, const uint32 batch_bps);
 };
 
 

@@ -37,7 +37,7 @@ namespace nvbio {
 namespace io {
 
 // grab the next batch of reads into a host memory buffer
-int SequenceDataFile::next_core(SequenceDataEncoder* encoder, const uint32 batch_size, const uint32 batch_bps)
+int SequenceDataFile::next(SequenceDataEncoder* encoder, const uint32 batch_size, const uint32 batch_bps)
 {
     const uint32 reads_to_load = std::min(m_max_reads - m_loaded, batch_size);
 

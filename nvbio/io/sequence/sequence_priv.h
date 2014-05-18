@@ -66,9 +66,9 @@ struct SequenceDataFile : public SequenceDataStream
 
 protected:
     SequenceDataFile(
-        const uint32 max_reads,
-        const uint32 truncate_read_len,
-        const SequenceEncoding flags)
+        const uint32            max_reads,
+        const uint32            truncate_read_len,
+        const SequenceEncoding  flags)
       : SequenceDataStream(),
         m_max_reads(max_reads),
         m_truncate_read_len( truncate_read_len ),
@@ -84,7 +84,7 @@ public:
 
     /// grab the next batch of reads into a host memory buffer
     ///
-    virtual int next_core(struct SequenceDataEncoder* encoder, const uint32 batch_size, const uint32 batch_bps);
+    virtual int next(struct SequenceDataEncoder* encoder, const uint32 batch_size, const uint32 batch_bps);
 
     /// returns true if the stream is ready to read from
     ///

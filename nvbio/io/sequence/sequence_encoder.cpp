@@ -348,29 +348,31 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
 
     /// return the sequence data info
     ///
-    SequenceDataInfo* info() const { return *m_data; }
+    SequenceDataInfo* info() const { return m_data; }
 
 private:
     SequenceDataHost<SEQUENCE_ALPHABET>* m_data;
 };
 
-/// create a sequence encoder
-///
-SequenceDataEncoder* create_sequence_encoder(const SequenceAlphabet alphabet, void* data)
+// create a sequence encoder
+//
+SequenceDataEncoder* create_encoder(SequenceDataHost<DNA>* data)
 {
-    switch (alphabet)
-    {
-    case DNA:
-        return new SequenceDataEncoderImpl<DNA>( (SequenceDataHost<DNA>*)data );
-        break;
-    case DNA_N:
-        return new SequenceDataEncoderImpl<DNA_N>( (SequenceDataHost<DNA_N>*)data );
-        break;
-    case PROTEIN:
-        return new SequenceDataEncoderImpl<PROTEIN>( (SequenceDataHost<PROTEIN>*)data );
-        break;
-    }
-    return NULL;
+    return new SequenceDataEncoderImpl<DNA>( data );
+}
+
+// create a sequence encoder
+//
+SequenceDataEncoder* create_encoder(SequenceDataHost<DNA_N>* data)
+{
+    return new SequenceDataEncoderImpl<DNA_N>( data );
+}
+
+// create a sequence encoder
+//
+SequenceDataEncoder* create_encoder(SequenceDataHost<PROTEIN>* data)
+{
+    return new SequenceDataEncoderImpl<PROTEIN>( data );
 }
 
 } // namespace io

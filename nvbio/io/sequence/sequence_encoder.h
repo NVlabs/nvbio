@@ -110,7 +110,15 @@ private:
 
 /// create a sequence encoder
 ///
-SequenceDataEncoder* create_sequence_encoder(const SequenceAlphabet alphabet, void* data);
+SequenceDataEncoder* create_encoder(SequenceDataHost<DNA>* data);
+
+/// create a sequence encoder
+///
+SequenceDataEncoder* create_encoder(SequenceDataHost<DNA_N>* data);
+
+/// create a sequence encoder
+///
+SequenceDataEncoder* create_encoder(SequenceDataHost<PROTEIN>* data);
 
 } // namespace io
 } // namespace nvbio

@@ -101,7 +101,7 @@ struct SequenceDataEncoder
     template <SequenceAlphabet SEQUENCE_ALPHABET>
     SequenceData<SEQUENCE_ALPHABET>* get() const
     {
-        return reinterpret_cast<SequenceData<SEQUENCE_ALPHABET>*>( get_data(); );
+        return reinterpret_cast<SequenceData<SEQUENCE_ALPHABET>*>( get_data() );
     }
 
 private:

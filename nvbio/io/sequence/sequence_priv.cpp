@@ -30,8 +30,8 @@
 
 #include <nvbio/io/sequence/sequence_fastq.h>
 #include <nvbio/io/sequence/sequence_txt.h>
-#include <nvbio/io/sequence/sam.h>
-#include <nvbio/io/sequence/bam.h>
+#include <nvbio/io/sequence/sequence_sam.h>
+#include <nvbio/io/sequence/sequence_bam.h>
 
 namespace nvbio {
 namespace io {

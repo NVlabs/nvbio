@@ -1,0 +1,13 @@
+addsources(
+bam.cpp
+bam.h
+sequence_fastq.cpp
+sequence_fastq.h
+sequence_txt.cpp
+sequence_txt.h
+sequence.h
+sequence_priv.cpp
+sequence_priv.h
+sam.cpp
+sam.h
+)

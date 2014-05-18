@@ -79,6 +79,10 @@ struct SequenceDataEncoder
         const uint32            truncate_sequence_len,
         const StrandOp          conversion_flags) {}
 
+    /// signals that a batch is to begin
+    ///
+    virtual void begin_batch(void) {}
+
     /// signals that the batch is complete
     ///
     virtual void end_batch(void) {}

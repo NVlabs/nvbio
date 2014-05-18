@@ -47,6 +47,7 @@ int SequenceDataFile::next(SequenceDataEncoder* encoder, const uint32 batch_size
     // a default average read length used to reserve enough space
     const uint32 AVG_READ_LENGTH = 100;
 
+    encoder->begin_batch();
     encoder->reserve(
         batch_size,
         batch_bps == uint32(-1) ? batch_size * AVG_READ_LENGTH : batch_bps ); // try to use a default read length

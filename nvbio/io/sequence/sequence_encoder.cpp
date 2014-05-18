@@ -265,6 +265,14 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
         m_data->reserve( n_sequences, n_bps );
     }
 
+    /// signals that the batch is to begin
+    ///
+    void begin_batch(void)
+    {
+        // reset the batch
+        m_data::SequenceDataInfo->operator=( SequenceDataInfo() );
+    }
+
     /// add a sequence to the end of this batch
     ///
     /// \param sequence_len                 input sequence length

@@ -532,6 +532,19 @@ struct SequenceDataStorage : public SequenceData<SEQUENCE_ALPHABET_T>
     typedef typename SequenceDataBase::plain_view_type                  plain_view_type;
     typedef typename SequenceDataBase::const_plain_view_type      const_plain_view_type;
 
+    /// constructor
+    ///
+    SequenceDataStorage() {}
+
+    /// copy constructor
+    ///
+    template <typename other_tag>
+    SequenceDataStorage(const SequenceDataStorage<other_tag,SEQUENCE_ALPHABET>& other)
+    {
+        // copy
+        this->operator=( other );
+    }
+
     /// assignment operator
     ///
     template <typename other_tag>
@@ -541,11 +554,11 @@ struct SequenceDataStorage : public SequenceData<SEQUENCE_ALPHABET_T>
         this->SequenceDataInfo::operator=( other );
 
         // copy the vectors
-        thrust_copy_vector( m_sequence_vec,       other.m_sequence_vec );
-        thrust_copy_vector( m_sequence_index_vec, other.m_sequence_index_vec );
-        thrust_copy_vector( m_qual_vec,           other.m_qual_vec );
-        thrust_copy_vector( m_name_vec,           other.m_name_vec );
-        thrust_copy_vector( m_name_index_vec,     other.m_name_index_vec );
+        cuda::thrust_copy_vector( m_sequence_vec,       other.m_sequence_vec );
+        cuda::thrust_copy_vector( m_sequence_index_vec, other.m_sequence_index_vec );
+        cuda::thrust_copy_vector( m_qual_vec,           other.m_qual_vec );
+        cuda::thrust_copy_vector( m_name_vec,           other.m_name_vec );
+        cuda::thrust_copy_vector( m_name_index_vec,     other.m_name_index_vec );
         return *this;
     }
 
@@ -601,13 +614,57 @@ struct SequenceDataStorage : public SequenceData<SEQUENCE_ALPHABET_T>
 /// A host memory sequence-data object
 ///
 template <SequenceAlphabet SEQUENCE_ALPHABET>
-struct SequenceDataHost : public SequenceDataStorage<host_tag,SEQUENCE_ALPHABET> {};
+struct SequenceDataHost : public SequenceDataStorage<host_tag,SEQUENCE_ALPHABET>
+{
+    typedef SequenceDataStorage<device_tag,SEQUENCE_ALPHABET> base_type;
+
+    /// constructor
+    ///
+    SequenceDataHost() {}
+
+    /// copy constructor
+    ///
+    template <typename other_tag>
+    SequenceDataHost(const SequenceDataStorage<other_tag,SEQUENCE_ALPHABET>& other) :
+        base_type( other ) {}
+
+    /// assignment operator
+    ///
+    template <typename other_tag>
+    SequenceDataHost& operator= (const SequenceDataStorage<other_tag,SEQUENCE_ALPHABET>& other)
+    {
+        this->base_type::operator=( other );
+        return *this;
+    }
+};
 
 ///
 /// A device memory sequence-data object
 ///
 template <SequenceAlphabet SEQUENCE_ALPHABET>
-struct SequenceDataDevice : public SequenceDataStorage<device_tag,SEQUENCE_ALPHABET> {};
+struct SequenceDataDevice : public SequenceDataStorage<device_tag,SEQUENCE_ALPHABET>
+{
+    typedef SequenceDataStorage<device_tag,SEQUENCE_ALPHABET> base_type;
+
+    /// constructor
+    ///
+    SequenceDataDevice() {}
+
+    /// copy constructor
+    ///
+    template <typename other_tag>
+    SequenceDataDevice(const SequenceDataStorage<other_tag,SEQUENCE_ALPHABET>& other) :
+        base_type( other ) {}
+
+    /// assignment operator
+    ///
+    template <typename other_tag>
+    SequenceDataDevice& operator= (const SequenceDataStorage<other_tag,SEQUENCE_ALPHABET>& other)
+    {
+        this->base_type::operator=( other );
+        return *this;
+    }
+};
 
 ///
 /// A stream of SequenceData, allowing to process the associated reads in batches.

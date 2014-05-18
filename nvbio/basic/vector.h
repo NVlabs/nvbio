@@ -39,6 +39,35 @@
 #include <thrust/device_vector.h>
 
 namespace nvbio {
+namespace cuda {
+
+// utility function to copy a thrust device vector to a thrust host vector
+// the sole reason for this is to eliminate warnings from thrust when using the assignment operator
+template<typename TTargetVector, typename TSourceVector>
+static NVBIO_FORCEINLINE void thrust_copy_vector(TTargetVector& target, TSourceVector& source)
+{
+    if (target.size() != source.size())
+    {
+        target.clear();
+        target.resize(source.size());
+    }
+
+    thrust::copy(source.begin(), source.end(), target.begin());
+}
+
+template<typename TTargetVector, typename TSourceVector>
+static NVBIO_FORCEINLINE void thrust_copy_vector(TTargetVector& target, TSourceVector& source, uint32 count)
+{
+    if (target.size() != count)
+    {
+        target.clear();
+        target.resize(count);
+    }
+
+    thrust::copy(source.begin(), source.begin() + count, target.begin());
+}
+
+} // namespace cuda
 
 /// a dynamic host/device vector class
 ///
@@ -66,8 +95,8 @@ struct vector<host_tag,T> : public thrust::host_vector<T>
     vector<host_tag,T>(const thrust::host_vector<T>&   v) : base_type( v ) {}
     vector<host_tag,T>(const thrust::device_vector<T>& v) : base_type( v ) {}
 
-    vector<host_tag,T>& operator= (const thrust::host_vector<T>& v)   { this->base_type::operator=(v); return *this; }
-    vector<host_tag,T>& operator= (const thrust::device_vector<T>& v) { this->base_type::operator=(v); return *this; }
+    vector<host_tag,T>& operator= (const thrust::host_vector<T>& v)   { cuda::thrust_copy_vector( *this, v ); return *this; }
+    vector<host_tag,T>& operator= (const thrust::device_vector<T>& v) { cuda::thrust_copy_vector( *this, v ); return *this; }
 
     /// conversion to plain_view_type
     ///
@@ -99,8 +128,8 @@ struct vector<device_tag,T> : public thrust::device_vector<T>
     vector<device_tag,T>(const thrust::host_vector<T>&   v) : base_type( v ) {}
     vector<device_tag,T>(const thrust::device_vector<T>& v) : base_type( v ) {}
 
-    vector<device_tag,T>& operator= (const thrust::host_vector<T>& v)   { this->base_type::operator=(v); return *this; }
-    vector<device_tag,T>& operator= (const thrust::device_vector<T>& v) { this->base_type::operator=(v); return *this; }
+    vector<device_tag,T>& operator= (const thrust::host_vector<T>& v)   { cuda::thrust_copy_vector( *this, v ); return *this; }
+    vector<device_tag,T>& operator= (const thrust::device_vector<T>& v) { cuda::thrust_copy_vector( *this, v ); return *this; }
 
     /// conversion to plain_view_type
     ///

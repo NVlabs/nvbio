@@ -32,6 +32,7 @@
 #include <nvbio/basic/exceptions.h>
 #include <nvbio/basic/dna.h>
 #include <nvbio/basic/packedstream.h>
+#include <nvbio/basic/vector.h>
 #include <nvbio/fmindex/bwt.h>
 #include <nvbio/fmindex/ssa.h>
 #include <nvbio/fmindex/fmindex.h>

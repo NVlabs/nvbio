@@ -91,32 +91,6 @@ template <uint32 N>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 void syncthreads();
 
-// utility function to copy a thrust device vector to a thrust host vector
-// the sole reason for this is to eliminate warnings from thrust when using the assignment operator
-template<typename TTargetVector, typename TSourceVector>
-static NVBIO_FORCEINLINE void thrust_copy_vector(TTargetVector& target, TSourceVector& source)
-{
-    if (target.size() != source.size())
-    {
-        target.clear();
-        target.resize(source.size());
-    }
-
-    thrust::copy(source.begin(), source.end(), target.begin());
-}
-
-template<typename TTargetVector, typename TSourceVector>
-static NVBIO_FORCEINLINE void thrust_copy_vector(TTargetVector& target, TSourceVector& source, uint32 count)
-{
-    if (target.size() != count)
-    {
-        target.clear();
-        target.resize(count);
-    }
-
-    thrust::copy(source.begin(), source.begin() + count, target.begin());
-}
-
 } // namespace cuda
 } // namespace nvbio
 

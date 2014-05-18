@@ -554,11 +554,11 @@ struct SequenceDataStorage : public SequenceData<SEQUENCE_ALPHABET_T>
         this->SequenceDataInfo::operator=( other );
 
         // copy the vectors
-        cuda::thrust_copy_vector( m_sequence_vec,       other.m_sequence_vec );
-        cuda::thrust_copy_vector( m_sequence_index_vec, other.m_sequence_index_vec );
-        cuda::thrust_copy_vector( m_qual_vec,           other.m_qual_vec );
-        cuda::thrust_copy_vector( m_name_vec,           other.m_name_vec );
-        cuda::thrust_copy_vector( m_name_index_vec,     other.m_name_index_vec );
+        m_sequence_vec       = other.m_sequence_vec;
+        m_sequence_index_vec = other.m_sequence_index_vec;
+        m_qual_vec           = other.m_qual_vec;
+        m_name_vec           = other.m_name_vec;
+        m_name_index_vec     = other.m_name_index_vec;
         return *this;
     }
 

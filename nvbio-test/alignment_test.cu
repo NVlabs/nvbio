@@ -36,6 +36,7 @@
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/packedstream_loader.h>
 #include <nvbio/basic/vector_view.h>
+#include <nvbio/basic/vector.h>
 #include <nvbio/basic/shared_pointer.h>
 #include <nvbio/basic/dna.h>
 #include <nvbio/alignment/alignment.h>

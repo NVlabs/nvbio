@@ -496,9 +496,9 @@ template <SequenceAlphabet SEQUENCE_ALPHABET_T>
 struct SequenceData : public SequenceDataInfo
 {
     static const SequenceAlphabet SEQUENCE_ALPHABET = SEQUENCE_ALPHABET_T;                                              ///< alphabet type
-    static const uint32 SEQUENCE_BITS = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BITS;                           ///< symbol size
-    static const bool   SEQUENCE_BIG_ENDIAN = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BIG_ENDIAN;               ///< endianness
-    static const uint32 SEQUENCE_SYMBOLS_PER_WORD = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_SYMBOLS_PER_WORD;   ///< number of symbols per word
+    static const uint32 SEQUENCE_BITS               = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BITS;             ///< symbol size
+    static const bool   SEQUENCE_BIG_ENDIAN         = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BIG_ENDIAN;       ///< endianness
+    static const uint32 SEQUENCE_SYMBOLS_PER_WORD   = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_SYMBOLS_PER_WORD; ///< number of symbols per word
 
     typedef SequenceDataView<SEQUENCE_ALPHABET,uint32*,uint32*,char*,char*>                               plain_view_type;
     typedef SequenceDataView<SEQUENCE_ALPHABET,const uint32*,const uint32*,const char*,const char*> const_plain_view_type;
@@ -519,9 +519,14 @@ struct SequenceData : public SequenceDataInfo
 ///
 /// A concrete SequenceData storage implementation in host/device memory
 ///
-template <typename system_tag, SequenceAlphabet SEQUENCE_ALPHABET>
-struct SequenceDataStorage : public SequenceData<SEQUENCE_ALPHABET>
+template <typename system_tag, SequenceAlphabet SEQUENCE_ALPHABET_T>
+struct SequenceDataStorage : public SequenceData<SEQUENCE_ALPHABET_T>
 {
+    static const SequenceAlphabet SEQUENCE_ALPHABET = SEQUENCE_ALPHABET_T;                                              ///< alphabet type
+    static const uint32 SEQUENCE_BITS               = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BITS;             ///< symbol size
+    static const bool   SEQUENCE_BIG_ENDIAN         = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BIG_ENDIAN;       ///< endianness
+    static const uint32 SEQUENCE_SYMBOLS_PER_WORD   = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_SYMBOLS_PER_WORD; ///< number of symbols per word
+
     typedef SequenceData<SEQUENCE_ALPHABET>                             SequenceDataBase;
 
     typedef typename SequenceDataBase::plain_view_type                  plain_view_type;

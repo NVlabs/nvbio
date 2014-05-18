@@ -270,7 +270,7 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
     void begin_batch(void)
     {
         // reset the batch
-        m_data::SequenceDataInfo->operator=( SequenceDataInfo() );
+        m_data->SequenceDataInfo::operator=( SequenceDataInfo() );
     }
 
     /// add a sequence to the end of this batch
@@ -381,6 +381,30 @@ SequenceDataEncoder* create_encoder(SequenceDataHost<DNA_N>* data)
 SequenceDataEncoder* create_encoder(SequenceDataHost<PROTEIN>* data)
 {
     return new SequenceDataEncoderImpl<PROTEIN>( data );
+}
+
+// next batch
+//
+int next(SequenceDataHost<DNA>* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps)
+{
+    SequenceDataEncoderImpl<DNA> encoder( data );
+    return stream->next( &encoder, batch_size, batch_bps );
+}
+
+// next batch
+//
+int next(SequenceDataHost<DNA_N>* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps)
+{
+    SequenceDataEncoderImpl<DNA_N> encoder( data );
+    return stream->next( &encoder, batch_size, batch_bps );
+}
+
+// next batch
+//
+int next(SequenceDataHost<PROTEIN>* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps)
+{
+    SequenceDataEncoderImpl<PROTEIN> encoder( data );
+    return stream->next( &encoder, batch_size, batch_bps );
 }
 
 } // namespace io

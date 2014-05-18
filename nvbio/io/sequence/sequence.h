@@ -662,7 +662,17 @@ struct SequenceDataStream
     virtual bool is_ok() = 0;
 };
 
+/// utility method to get the next batch from a SequenceDataStream
+///
+int next(SequenceDataHost<DNA>* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
 
+/// utility method to get the next batch from a SequenceDataStream
+///
+int next(SequenceDataHost<DNA_N>* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
+
+/// utility method to get the next batch from a SequenceDataStream
+///
+int next(SequenceDataHost<PROTEIN>* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
 
 /// factory method to open a read file
 ///

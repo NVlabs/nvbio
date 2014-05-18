@@ -620,7 +620,7 @@ struct SequenceDataStream
 
     /// next batch
     ///
-    bool next(struct SequenceDataEncoder* encoder, const uint32 batch_size, const uint32 batch_bps = uint32(-1)) {}
+    int next(struct SequenceDataEncoder* encoder, const uint32 batch_size, const uint32 batch_bps = uint32(-1)) {}
 
     /// is the stream ok?
     ///

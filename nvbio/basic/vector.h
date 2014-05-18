@@ -71,11 +71,11 @@ struct vector<host_tag,T> : public thrust::host_vector<T>
 
     /// conversion to plain_view_type
     ///
-    operator plain_view_type() { return plain_view_type( size(), nvbio::raw_pointer( *this ) ); }
+    operator plain_view_type() { return plain_view_type( base_type::size(), nvbio::raw_pointer( *this ) ); }
 
     /// conversion to const_plain_view_type
     ///
-    operator const_plain_view_type() const { return const_plain_view_type( size(), nvbio::raw_pointer( *this ) ); }
+    operator const_plain_view_type() const { return const_plain_view_type( base_type::size(), nvbio::raw_pointer( *this ) ); }
 };
 
 /// a dynamic device vector class
@@ -104,11 +104,11 @@ struct vector<device_tag,T> : public thrust::device_vector<T>
 
     /// conversion to plain_view_type
     ///
-    operator plain_view_type() { return plain_view_type( size(), nvbio::raw_pointer( *this ) ); }
+    operator plain_view_type() { return plain_view_type( base_type::size(), nvbio::raw_pointer( *this ) ); }
 
     /// conversion to const_plain_view_type
     ///
-    operator const_plain_view_type() const { return const_plain_view_type( size(), nvbio::raw_pointer( *this ) ); }
+    operator const_plain_view_type() const { return const_plain_view_type( base_type::size(), nvbio::raw_pointer( *this ) ); }
 };
 
 /// a utility meta-type to wrap naked device pointers as thrust::device_ptr

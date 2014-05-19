@@ -670,7 +670,7 @@ int main(int argc, char* argv[])
             timer.start();
 
             #pragma omp parallel for
-            for (int i = 0; i < int( h_read_data->size() ); ++i)
+            for (int i = 0; i < int( h_read_data.size() ); ++i)
             {
                 const uint32 read_off = reads_view.sequence_index()[i];
                 const uint32 read_len = reads_view.sequence_index()[i+1] - read_off;

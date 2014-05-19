@@ -271,6 +271,16 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
     {
         // reset the batch
         m_data->SequenceDataInfo::operator=( SequenceDataInfo() );
+
+        m_data->m_sequence_vec.resize( 0 );
+        m_data->m_qual_vec.resize( 0 );
+        m_data->m_name_vec.resize( 0 );
+
+        m_data->m_sequence_index_vec.resize( 1 );
+        m_data->m_sequence_index_vec[0] = 0;
+
+        m_data->m_name_index_vec.resize( 1 );
+        m_data->m_name_index_vec[0] = 0;
     }
 
     /// add a sequence to the end of this batch

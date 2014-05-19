@@ -224,16 +224,19 @@ uint32 length(const vector_view<Iterator>& vec) { return vec.length(); }
 /// return the raw pointer of a vector_view
 ///
 template <typename T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 T raw_pointer(const vector_view<T>& vec) { return vec.base(); }
 
 /// return the begin iterator of a vector_view
 ///
 template <typename T, typename I>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 T begin(vector_view<T,I>& vec) { return vec.begin(); }
 
 /// return the begin iterator of a vector_view
 ///
 template <typename T, typename I>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 T begin(const vector_view<T,I>& vec) { return vec.begin(); }
 
 //

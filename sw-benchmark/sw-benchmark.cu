@@ -50,7 +50,7 @@
 #include <nvbio/basic/packedstream_loader.h>
 #include <nvbio/basic/vector_view.h>
 #include <nvbio/basic/shared_pointer.h>
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 #include <nvbio/fasta/fasta.h>
 #include <nvbio/basic/dna.h>
 #include <nvbio/alignment/alignment.h>
@@ -84,8 +84,8 @@ struct AlignmentStream
     typedef nvbio::cuda::ldg_pointer<uint32>                                        base_iterator;
 
     typedef nvbio::PackedStringLoader<base_iterator,
-        io::ReadData::READ_BITS,
-        io::ReadData::READ_BIG_ENDIAN,cache_type>                                               pattern_loader_type;
+        io::SequenceDataTraits<DNA_N>::SEQUENCE_BITS,
+        io::SequenceDataTraits<DNA_N>::SEQUENCE_BIG_ENDIAN,cache_type>                          pattern_loader_type;
     typedef typename pattern_loader_type::iterator                                              pattern_iterator;
     typedef nvbio::vector_view<pattern_iterator>                                                pattern_string;
 
@@ -232,8 +232,8 @@ __global__ void alignment_test_kernel(
     typedef nvbio::cuda::ldg_pointer<uint32>                                    base_iterator;
 
     typedef nvbio::PackedStringLoader<base_iterator,
-        io::ReadData::READ_BITS,
-        io::ReadData::READ_BIG_ENDIAN,lmem_cache_type>                                          pattern_loader_type;
+        io::SequenceDataTraits<DNA_N>::SEQUENCE_BITS,
+        io::SequenceDataTraits<DNA_N>::SEQUENCE_BIG_ENDIAN,lmem_cache_type>                     pattern_loader_type;
     typedef typename pattern_loader_type::iterator                                              pattern_iterator;
     typedef nvbio::vector_view<pattern_iterator>                                                pattern_string;
 
@@ -498,8 +498,8 @@ int main(int argc, char* argv[])
     fprintf(stderr,"sw-benchmark... started\n");
 
     log_visible(stderr, "opening read file \"%s\"\n", reads_name);
-    SharedPointer<nvbio::io::ReadDataStream> read_data_file(
-        nvbio::io::open_read_file(reads_name,
+    SharedPointer<nvbio::io::SequenceDataStream> read_data_file(
+        nvbio::io::open_sequence_file(reads_name,
                                   qencoding)
     );
 
@@ -563,21 +563,19 @@ int main(int argc, char* argv[])
     }
   #endif
 
-    while (1)
+    io::SequenceDataHost<DNA_N> h_read_data;
+
+    while (io::next( &h_read_data, read_data_file.get(), batch_size ))
     {
-        SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_size ) );
-        if (h_read_data == NULL)
-            break;
-
         // build the device side representation
-        const io::ReadDataDevice d_read_data( *h_read_data );
+        const io::SequenceDataDevice<DNA_N> d_read_data( h_read_data );
 
-        const uint32 n_read_symbols = h_read_data->read_index()[ h_read_data->size() ];
+        const uint32 n_read_symbols = h_read_data.bps();
 
         fprintf(stderr,"  %u reads, avg: %u bps, max: %u bps\n",
-            h_read_data->size(),
-            h_read_data->avg_read_len(),
-            h_read_data->max_read_len());
+            h_read_data.size(),
+            h_read_data.avg_sequence_len(),
+            h_read_data.max_sequence_len());
 
         if (TEST_MASK & GOTOH)
         {
@@ -593,9 +591,9 @@ int main(int argc, char* argv[])
                 batch_score_profile_all(
                     aln::make_gotoh_aligner<aln::GLOBAL,aln::TextBlockingTag>( scoring ),
                     d_read_data.size(),
-                    d_read_data.read_index(),
-                    d_read_data.read_stream_storage(),
-                    d_read_data.max_read_len(),
+                    nvbio::plain_view( d_read_data ).sequence_index(),
+                    nvbio::plain_view( d_read_data ).sequence_stream_storage(),
+                    d_read_data.max_sequence_len(),
                     n_read_symbols,
                     nvbio::raw_pointer( d_ref_storage ),
                     ref_length,
@@ -607,9 +605,9 @@ int main(int argc, char* argv[])
                 batch_score_profile_all(
                     aln::make_gotoh_aligner<aln::SEMI_GLOBAL,aln::TextBlockingTag>( scoring ),
                     d_read_data.size(),
-                    d_read_data.read_index(),
-                    d_read_data.read_stream_storage(),
-                    d_read_data.max_read_len(),
+                    nvbio::plain_view( d_read_data ).sequence_index(),
+                    nvbio::plain_view( d_read_data ).sequence_stream_storage(),
+                    d_read_data.max_sequence_len(),
                     n_read_symbols,
                     nvbio::raw_pointer( d_ref_storage ),
                     ref_length,
@@ -620,9 +618,9 @@ int main(int argc, char* argv[])
                 batch_score_profile_all(
                     aln::make_gotoh_aligner<aln::LOCAL,aln::TextBlockingTag>( scoring ),
                     d_read_data.size(),
-                    d_read_data.read_index(),
-                    d_read_data.read_stream_storage(),
-                    d_read_data.max_read_len(),
+                    nvbio::plain_view( d_read_data ).sequence_index(),
+                    nvbio::plain_view( d_read_data ).sequence_stream_storage(),
+                    d_read_data.max_sequence_len(),
                     n_read_symbols,
                     nvbio::raw_pointer( d_ref_storage ),
                     ref_length,
@@ -637,9 +635,9 @@ int main(int argc, char* argv[])
                 batch_score_profile_all(
                     aln::make_edit_distance_aligner<aln::SEMI_GLOBAL,aln::TextBlockingTag>(),
                     d_read_data.size(),
-                    d_read_data.read_index(),
-                    d_read_data.read_stream_storage(),
-                    d_read_data.max_read_len(),
+                    nvbio::plain_view( d_read_data ).sequence_index(),
+                    nvbio::plain_view( d_read_data ).sequence_stream_storage(),
+                    d_read_data.max_sequence_len(),
                     n_read_symbols,
                     nvbio::raw_pointer( d_ref_storage ),
                     ref_length,
@@ -657,9 +655,12 @@ int main(int argc, char* argv[])
 
             std::vector<int8_t> unpacked_reads( n_read_symbols );
 
-            typedef io::ReadData::const_read_stream_type read_stream_type;
+            typedef io::SequenceDataHost<DNA_N>::const_plain_view_type read_view_type;
+            typedef read_view_type::sequence_stream_type read_stream_type;
 
-            const read_stream_type packed_reads( h_read_data->read_stream() );
+            const read_view_type reads_view = h_read_data;
+
+            const read_stream_type packed_reads( reads_view.sequence_stream() );
 
             #pragma omp parallel for
             for (int i = 0; i < int( n_read_symbols ); ++i)
@@ -671,8 +672,8 @@ int main(int argc, char* argv[])
             #pragma omp parallel for
             for (int i = 0; i < int( h_read_data->size() ); ++i)
             {
-                const uint32 read_off = h_read_data->read_index()[i];
-                const uint32 read_len = h_read_data->read_index()[i+1] - read_off;
+                const uint32 read_off = reads_view.sequence_index()[i];
+                const uint32 read_len = reads_view.sequence_index()[i+1] - read_off;
 
                 s_profile* prof = ssw_init( &unpacked_reads[read_off], read_len, mat, 4, 2 );
 

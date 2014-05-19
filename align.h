@@ -18,14 +18,14 @@
 
 #pragma once
 
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 
 /// initialize the alignment pipeline
 ///
-void align_init(struct pipeline_state *pipeline, const nvbio::io::ReadDataDevice *batch);
+void align_init(struct pipeline_state *pipeline, const nvbio::io::SequenceDataDevice<nvbio::DNA_N> *batch);
 
 /// perform banded alignment
 ///
 /// \return     the number of remaining active reads to align
 ///
-nvbio::uint32 align_short(struct pipeline_state *pipeline, const nvbio::io::ReadDataDevice *batch);
+nvbio::uint32 align_short(struct pipeline_state *pipeline, const nvbio::io::SequenceDataDevice<nvbio::DNA_N> *batch);

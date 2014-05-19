@@ -22,7 +22,7 @@
 #include <nvbio/basic/cuda/arch.h>          // cuda::check_error
 #include <nvbio/io/fmi.h>
 #include <nvbio/io/output/output_file.h>
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 #ifdef _OPENMP
 #include <omp.h>
 #endif
@@ -60,13 +60,13 @@ int run(int argc, char **argv)
     mem_init(&pipeline);
 
     // open the input read file
-    SharedPointer<io::ReadDataStream> input = SharedPointer<io::ReadDataStream>(
-        io::open_read_file(
+    SharedPointer<io::SequenceDataStream> input = SharedPointer<io::SequenceDataStream>(
+        io::open_sequence_file(
             command_line_options.input_file_name,
             io::Phred33,
             uint32(-1),
             uint32(-1),
-            io::ReadEncoding(io::FORWARD | io::REVERSE_COMPLEMENT) ) );
+            io::SequenceEncoding(io::FORWARD | io::REVERSE_COMPLEMENT) ) );
 
     if (input == NULL || input->is_ok() == false)
     {
@@ -88,6 +88,8 @@ int run(int argc, char **argv)
     Timer  global_timer;
     Timer  timer;
 
+    io::SequenceDataHost<DNA_N> batch;
+
     // go!
     for(;;)
     {
@@ -95,16 +97,13 @@ int run(int argc, char **argv)
         timer.start();
 
         // read the next batch
-        SharedPointer<io::ReadData> batch = SharedPointer<io::ReadData>( input->next(command_line_options.batch_size, uint32(-1)) );
-        if (batch == NULL)
-        {
-            // EOF
-            break;
-        }
-        log_info(stderr, "processing reads [%llu,%llu)\n", pipeline.stats.n_reads, pipeline.stats.n_reads + batch->size()/2);
+        if (io::next( &batch, input.get(), command_line_options.batch_size, uint32(-1) ) == 0)
+            break;  // EOF
+
+        log_info(stderr, "processing reads [%llu,%llu)\n", pipeline.stats.n_reads, pipeline.stats.n_reads + batch.size()/2);
 
         // copy batch to the device
-        const io::ReadDataDevice device_batch(*batch);
+        const io::SequenceDataDevice<DNA_N> device_batch( batch );
 
         timer.stop();
         pipeline.stats.io_time += timer.seconds();
@@ -114,7 +113,7 @@ int run(int argc, char **argv)
 
         // now start a loop where we break the read batch into smaller chunks for
         // which we can locate all MEMs and build all chains
-        for (uint32 read_begin = 0; read_begin < batch->size(); read_begin = pipeline.chunk.read_end)
+        for (uint32 read_begin = 0; read_begin < batch.size(); read_begin = pipeline.chunk.read_end)
         {
             // determine the next chunk of reads to process
             fit_read_chunk(&pipeline, &device_batch, read_begin);
@@ -145,7 +144,7 @@ int run(int argc, char **argv)
             log_verbose_cont(stderr, "\n");
         }
         global_timer.stop();
-        pipeline.stats.n_reads += batch->size()/2;
+        pipeline.stats.n_reads += batch.size()/2;
         pipeline.stats.time    += global_timer.seconds();
 
         log_stats(stderr, "  time: %5.1fs (%.1f K reads/s)\n", pipeline.stats.time, 1.0e-3f * float(pipeline.stats.n_reads)/pipeline.stats.time);

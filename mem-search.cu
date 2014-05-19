@@ -73,11 +73,12 @@ void mem_init(struct pipeline_state *pipeline)
 }
 
 // search MEMs for all reads in batch
-void mem_search(struct pipeline_state *pipeline, const io::ReadDataDevice *batch)
+void mem_search(struct pipeline_state *pipeline, const io::SequenceDataDevice<DNA_N> *batch)
 {
     ScopedTimer<float> timer( &pipeline->stats.search_time ); // keep track of the time spent here
 
-    struct mem_state    *mem = &pipeline->mem;
+    struct mem_state *mem = &pipeline->mem;
+
     const uint32 n_reads = batch->size();
 
     // reset the filter
@@ -87,7 +88,7 @@ void mem_search(struct pipeline_state *pipeline, const io::ReadDataDevice *batch
     mem->mem_filter.rank(
         mem->f_index,
         mem->r_index,
-        batch->const_read_string_set(),
+        plain_view( *batch ).sequence_string_set(),
         command_line_options.min_intv,
         command_line_options.max_intv,
         command_line_options.min_seed_len,
@@ -104,9 +105,9 @@ void mem_search(struct pipeline_state *pipeline, const io::ReadDataDevice *batch
 // given the first read in a chunk, determine a suitably sized chunk of reads
 // (for which we can locate all MEMs in one go), updating pipeline::chunk
 void fit_read_chunk(
-    struct pipeline_state       *pipeline,
-    const io::ReadDataDevice    *batch,
-    const uint32                read_begin)     // first read in the chunk
+    struct pipeline_state               *pipeline,
+    const io::SequenceDataDevice<DNA_N> *batch,
+    const uint32                        read_begin)     // first read in the chunk
 {
     const ScopedTimer<float> timer( &pipeline->stats.search_time ); // keep track of the time spent here
 
@@ -175,7 +176,7 @@ struct mem_left_coord_functor
 };
 
 // locate all mems in the range defined by pipeline::chunk
-void mem_locate(struct pipeline_state *pipeline, const io::ReadDataDevice *batch)
+void mem_locate(struct pipeline_state *pipeline, const io::SequenceDataDevice<DNA_N> *batch)
 {
     const ScopedTimer<float> timer( &pipeline->stats.locate_time ); // keep track of the time spent here
 

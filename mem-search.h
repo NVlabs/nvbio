@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 
 /// initialize the MEM-search pipeline
 ///
@@ -26,16 +26,16 @@ void mem_init(struct pipeline_state *pipeline);
 
 /// search MEMs for the given batch of reads
 ///
-void mem_search(struct pipeline_state *pipeline, const nvbio::io::ReadDataDevice *batch);
+void mem_search(struct pipeline_state *pipeline, const nvbio::io::SequenceDataDevice<nvbio::DNA_N> *batch);
 
 /// given the first read in a chunk, determine a suitably sized chunk of reads
 /// (for which we can locate all MEMs in one go), updating pipeline::chunk
 ///
 void fit_read_chunk(
-    struct pipeline_state              *pipeline,
-    const nvbio::io::ReadDataDevice    *batch,
-    const nvbio::uint32                 read_begin);    // first read in the chunk
+    struct pipeline_state                               *pipeline,
+    const nvbio::io::SequenceDataDevice<nvbio::DNA_N>   *batch,
+    const nvbio::uint32                                 read_begin);    // first read in the chunk
 
 /// locate all mems in the range defined by pipeline::chunk
 ///
-void mem_locate(struct pipeline_state *pipeline, const nvbio::io::ReadDataDevice *batch);
+void mem_locate(struct pipeline_state *pipeline, const nvbio::io::SequenceDataDevice<nvbio::DNA_N> *batch);

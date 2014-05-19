@@ -38,9 +38,11 @@
 
 namespace nvbio {
 
-template <typename T> struct device_view_subtype< thrust::device_vector<T> > { typedef vector_view<T*,uint64> type; };
-template <typename T> struct plain_view_subtype< thrust::host_vector<T> >   { typedef vector_view<T*,uint64> type; };
-template <typename T> struct plain_view_subtype< thrust::device_vector<T> > { typedef vector_view<T*,uint64> type; };
+template <typename T> struct device_view_subtype< thrust::device_vector<T> >        { typedef vector_view<T*,uint64> type; };
+template <typename T> struct plain_view_subtype< thrust::host_vector<T> >           { typedef vector_view<T*,uint64> type; };
+template <typename T> struct plain_view_subtype< thrust::device_vector<T> >         { typedef vector_view<T*,uint64> type; };
+template <typename T> struct plain_view_subtype< const thrust::host_vector<T> >     { typedef vector_view<const T*,uint64> type; };
+template <typename T> struct plain_view_subtype< const thrust::device_vector<T> >   { typedef vector_view<const T*,uint64> type; };
 
 /// return the plain view of a device vector
 ///

@@ -241,6 +241,11 @@ T begin(const vector_view<T>& vec) { return vec.begin; }
 ///
 template <typename T> struct plain_view_subtype< std::vector<T> > { typedef vector_view<T*,uint64> type; };
 
+/// define the plain view of a std::vector
+///
+template <typename T> struct plain_view_subtype< const std::vector<T> > { typedef vector_view<const T*,uint64> type; };
+
+
 /// return the plain view of a std::vector
 ///
 template <typename T>

@@ -189,10 +189,11 @@ template <typename T> struct device_view_subtype<T*>               { typedef T* 
 
 /// a meta-function to return the view subtype of a given container
 ///
-template <typename T> struct plain_view_subtype                   { typedef typename T::plain_view_type  type; };
-template <>           struct plain_view_subtype<null_type>        { typedef null_type                    type; };
-template <typename T> struct plain_view_subtype<const T*>         { typedef const T*                     type; };
-template <typename T> struct plain_view_subtype<T*>               { typedef T*                           type; };
+template <typename T> struct plain_view_subtype                   { typedef typename T::plain_view_type         type; };
+template <typename T> struct plain_view_subtype<const T>          { typedef typename T::const_plain_view_type   type; };
+template <>           struct plain_view_subtype<null_type>        { typedef null_type                           type; };
+template <typename T> struct plain_view_subtype<const T*>         { typedef const T*                            type; };
+template <typename T> struct plain_view_subtype<T*>               { typedef T*                                  type; };
 
 /// a meta-function to convert potentially unsigned integrals to their signed counter-part
 ///

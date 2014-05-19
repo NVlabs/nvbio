@@ -766,7 +766,7 @@ void assign(
     const uint32 SYMBOL_COUNT     = 1u << SYMBOL_SIZE;
     const uint32 SYMBOL_MASK      = SYMBOL_COUNT - 1u;
 
-    word_type* words = packed_string.stream();
+    InputStream words = packed_string.stream();
 
     const IndexType stream_offset = packed_string.index();
     const uint32    word_offset   = stream_offset & (SYMBOLS_PER_WORD-1);

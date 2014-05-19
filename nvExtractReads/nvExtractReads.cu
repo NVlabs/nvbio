@@ -30,7 +30,7 @@
 
 #include <nvbio/basic/timer.h>
 #include <nvbio/basic/shared_pointer.h>
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 #include <nvbio/basic/dna.h>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
@@ -41,11 +41,11 @@
 
 using namespace nvbio;
 
-bool read(const char* reads_name, FILE* output_file, const io::QualityEncoding qencoding, const io::ReadEncoding flags)
+bool read(const char* reads_name, FILE* output_file, const io::QualityEncoding qencoding, const io::SequenceEncoding flags)
 {
     log_visible(stderr, "opening read file \"%s\"\n", reads_name);
-    SharedPointer<nvbio::io::ReadDataStream> read_data_file(
-        nvbio::io::open_read_file(reads_name,
+    SharedPointer<nvbio::io::SequenceDataStream> read_data_file(
+        nvbio::io::open_sequence_file(reads_name,
         qencoding,
         uint32(-1),
         uint32(-1),
@@ -64,18 +64,19 @@ bool read(const char* reads_name, FILE* output_file, const io::QualityEncoding q
 
     uint32 n_reads = 0;
 
+    io::SequenceDataHost<DNA_N> h_read_data;
+
     // loop through all read batches
     while (1)
     {
         // load a new batch of reads
-        SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_size ) );
-        if (h_read_data == NULL)
+        if (io::next( &h_read_data, read_data_file.get(), batch_size ) == 0)
             break;
 
         // loop through all reads
-        for (uint32 i = 0; i < h_read_data->size(); ++i)
+        for (uint32 i = 0; i < h_read_data.size(); ++i)
         {
-            const io::ReadData::read_string read = h_read_data->get_read(i);
+            const io::SequenceDataView<DNA_N>::sequence_string read = plain_view( h_read_data ).get_read(i);
 
             dna_to_string( read, read.length(), &char_read[0] );
 
@@ -84,7 +85,7 @@ bool read(const char* reads_name, FILE* output_file, const io::QualityEncoding q
             fwrite( &char_read[0], sizeof(char), read.length()+1, output_file );
         }
 
-        n_reads += h_read_data->size();
+        n_reads += h_read_data.size();
 
         log_verbose(stderr,"\r    %u reads    ", n_reads);
     }
@@ -143,7 +144,7 @@ int main(int argc, char* argv[])
     if (forward) encoding_flags |= io::FORWARD;
     if (reverse) encoding_flags |= io::REVERSE_COMPLEMENT;
 
-    if (read( reads_name, output_file, qencoding, io::ReadEncoding(encoding_flags) ) == false)
+    if (read( reads_name, output_file, qencoding, io::SequenceEncoding(encoding_flags) ) == false)
         return 1;
 
     fclose( output_file );

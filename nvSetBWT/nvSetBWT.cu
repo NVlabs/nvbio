@@ -41,7 +41,7 @@
 #include <nvbio/basic/timer.h>
 #include <nvbio/strings/string_set.h>
 #include <nvbio/basic/shared_pointer.h>
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 #include <nvbio/basic/dna.h>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
@@ -74,7 +74,7 @@ struct Reads
     thrust::host_vector<uint64> h_read_index;       // read index
 };
 
-bool read(const char* reads_name, const io::QualityEncoding qencoding, const io::ReadEncoding flags, Reads* reads)
+bool read(const char* reads_name, const io::QualityEncoding qencoding, const io::SequenceEncoding flags, Reads* reads)
 {
     typedef Reads::word_type word_type;
     const uint32 WORD_SIZE        = Reads::WORD_SIZE;
@@ -82,8 +82,8 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
     const uint32 SYMBOLS_PER_WORD = Reads::SYMBOLS_PER_WORD;
 
     log_visible(stderr, "opening read file \"%s\"\n", reads_name);
-    SharedPointer<nvbio::io::ReadDataStream> read_data_file(
-        nvbio::io::open_read_file(reads_name,
+    SharedPointer<nvbio::io::SequenceDataStream> read_data_file(
+        nvbio::io::open_sequence_file(reads_name,
         qencoding,
         uint32(-1),
         uint32(-1),
@@ -101,16 +101,21 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
 
     float io_time = 0.0f;
 
+    io::SequenceDataHost<DNA_N> h_read_data;
+
     while (1)
     {
         nvbio::Timer timer;
         timer.start();
 
-        SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_size, batch_bps ) );
-        if (h_read_data == NULL)
+        // load a new batch of reads
+        if (io::next( &h_read_data, read_data_file.get(), batch_size, batch_bps ) == 0)
             break;
 
-        const uint64 required_words = util::divide_ri( reads->n_symbols + h_read_data->m_read_stream_len, SYMBOLS_PER_WORD );
+        // build a view
+        io::SequenceDataView<DNA_N> h_read_view = h_read_data;
+
+        const uint64 required_words = util::divide_ri( reads->n_symbols + h_read_data.bps(), SYMBOLS_PER_WORD );
 
         reads->h_read_storage.resize( required_words );
 
@@ -118,8 +123,8 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
         const uint32 word_offset = reads->n_symbols & (SYMBOLS_PER_WORD-1);
               uint32 word_rem    = 0;
 
-        typedef io::ReadData::const_read_stream_type src_read_stream_type;
-        const src_read_stream_type src( h_read_data->const_read_stream() );
+        typedef io::SequenceDataView<DNA_N>::const_sequence_stream_type src_read_stream_type;
+        const src_read_stream_type src( h_read_view.const_sequence_stream() );
 
         if (word_offset)
         {
@@ -146,12 +151,12 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
         }
 
         #pragma omp parallel for
-        for (int i = word_rem; i < int( h_read_data->m_read_stream_len ); i += SYMBOLS_PER_WORD)
+        for (int i = word_rem; i < int( h_read_data.bps() ); i += SYMBOLS_PER_WORD)
         {
             // encode a word's worth of characters
             word_type word = 0u;
 
-            const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, h_read_data->m_read_stream_len - i );
+            const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, h_read_data.bps() - i );
 
             for (uint32 j = 0; j < n_symbols; ++j)
             {
@@ -170,17 +175,17 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
         }
 
         // update the read index
-        reads->h_read_index.resize( reads->n_reads + h_read_data->size() + 1u );
+        reads->h_read_index.resize( reads->n_reads + h_read_data.size() + 1u );
 
-        const uint32* src_index = h_read_data->read_index();
-        for (uint32 i = 0; i < h_read_data->size(); ++i)
+        const uint32* src_index = h_read_view.sequence_index();
+        for (uint32 i = 0; i < h_read_data.size(); ++i)
             reads->h_read_index[ reads->n_reads + i ] = reads->n_symbols + src_index[i];
 
         // advance the destination pointer
-        reads->n_symbols += h_read_data->m_read_stream_len;
-        reads->n_reads   += h_read_data->size();
-        reads->min_len = nvbio::min( reads->min_len, h_read_data->min_read_len() );
-        reads->max_len = nvbio::max( reads->max_len, h_read_data->max_read_len() );
+        reads->n_symbols += h_read_data.bps();
+        reads->n_reads   += h_read_data.size();
+        reads->min_len = nvbio::min( reads->min_len, h_read_data.min_sequence_len() );
+        reads->max_len = nvbio::max( reads->max_len, h_read_data.max_sequence_len() );
 
         timer.stop();
         io_time += timer.seconds();
@@ -304,7 +309,7 @@ int main(int argc, char* argv[])
         if (forward) encoding_flags |= io::FORWARD;
         if (reverse) encoding_flags |= io::REVERSE_COMPLEMENT;
 
-        if (read( reads_name, qencoding, io::ReadEncoding(encoding_flags), &reads ) == false)
+        if (read( reads_name, qencoding, io::SequenceEncoding(encoding_flags), &reads ) == false)
             return 1;
 
         // push sentinel value

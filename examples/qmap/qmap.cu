@@ -40,7 +40,7 @@
 #include <nvbio/strings/seeds.h>
 #include <nvbio/qgram/qgram.h>
 #include <nvbio/qgram/filter.h>
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 #include <nvbio/io/fmi.h>
 
 #include "alignment.h"
@@ -145,16 +145,16 @@ void qgram_set_index_build(
 //
 template <typename qgram_index_type, typename qgram_filter_type, typename genome_string>
 void map(
-          qgram_index_type&             qgram_index,
-          qgram_filter_type&            qgram_filter,
-    const uint32                        merge_intv,
-    const io::ReadDataDevice&           reads,
-    const uint32                        n_queries,
-    const uint32                        genome_len,
-    const uint32                        genome_offset,
-    const genome_string                 genome,
-    nvbio::vector<device_tag,int16>&    best_scores,
-          Stats&                        stats)
+          qgram_index_type&                 qgram_index,
+          qgram_filter_type&                qgram_filter,
+    const uint32                            merge_intv,
+    const io::SequenceDataDevice<DNA_N>&    reads,
+    const uint32                            n_queries,
+    const uint32                            genome_len,
+    const uint32                            genome_offset,
+    const genome_string                     genome,
+    nvbio::vector<device_tag,int16>&        best_scores,
+          Stats&                            stats)
 {
     typedef typename qgram_index_type::system_tag system_tag;
 
@@ -217,9 +217,19 @@ void map(
     stats.rank_time   += timer.seconds();
     stats.occurrences += n_hits;
 
+    nvbio::vector<device_tag, aln::BestSink<int16> >  sinks( batch_size );
+    nvbio::vector<device_tag,string_infix_coord_type> genome_infix_coords( batch_size );
+    nvbio::vector<device_tag,string_infix_coord_type> read_infix_coords( batch_size );
+
+    const static uint32 BAND_LEN = 31;
+
     // loop through large batches of hits and locate & merge them
     for (uint64 hits_begin = 0; hits_begin < n_hits; hits_begin += batch_size)
     {
+        typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type        read_view_type;
+        typedef read_view_type::sequence_string_set_type                    read_string_set_type;
+        typedef read_view_type::sequence_stream_type                        read_stream;
+
         const uint64 hits_end = nvbio::min( hits_begin + batch_size, n_hits );
 
         timer.start();
@@ -243,17 +253,44 @@ void map(
 
         timer.start();
 
-        //const aln::SimpleGotohScheme gotoh( 2, -2, -5, -3 );
-        typedef aln::MyersTag<5u> myers_dna5_tag;
-        align(
-            aln::make_edit_distance_aligner<aln::SEMI_GLOBAL, myers_dna5_tag>(),
-            //aln::make_gotoh_aligner<aln::LOCAL>( gotoh ),
-            n_merged,
-            nvbio::plain_view( merged_hits ),
-            nvbio::plain_view( reads ),
-            genome_len,
+        // build the set of read infixes
+        thrust::transform(
+            merged_hits.begin(),
+            merged_hits.begin() + hits_end - hits_begin,
+            read_infix_coords.begin(),
+            read_infixes( nvbio::plain_view( reads ) ) );
+
+        // build the set of genome infixes
+        thrust::transform(
+            merged_hits.begin(),
+            merged_hits.begin() + hits_end - hits_begin,
+            genome_infix_coords.begin(),
+            genome_infixes<BAND_LEN>( genome_len, nvbio::plain_view( reads ) ) );
+
+        typedef nvbio::vector<device_tag,string_infix_coord_type>::const_iterator infix_iterator;
+
+        // build a view of the reads
+        const read_view_type reads_view = plain_view( reads );
+
+        const SparseStringSet<read_stream,infix_iterator> read_infix_set(
+            hits_end - hits_begin,
+            reads_view.sequence_stream(),
+            read_infix_coords.begin() );
+
+        const SparseStringSet<genome_string,infix_iterator> genome_infix_set(
+            hits_end - hits_begin,
             genome,
-            nvbio::plain_view( scores ) );
+            genome_infix_coords.begin() );
+
+        typedef aln::MyersTag<5u> myers_dna5_tag;
+        aln::batch_banded_alignment_score<BAND_LEN>(
+            aln::make_edit_distance_aligner<aln::SEMI_GLOBAL, myers_dna5_tag>(),
+            read_infix_set,
+            genome_infix_set,
+            sinks.begin(),
+            aln::ThreadParallelScheduler(),
+            reads.max_sequence_len(),
+            reads.max_sequence_len() + BAND_LEN );
 
         cudaDeviceSynchronize();
         timer.stop();
@@ -267,7 +304,7 @@ void map(
             thrust::make_transform_iterator(
                 merged_hits.begin(),
                 make_composition_functor( divide_by_two(), component_functor<diagonal_type>( 1u ) ) ), // take the second component divided by 2
-            scores.begin(),
+            thrust::make_transform_iterator( sinks.begin(), sink_score() ),
             out_reads.begin(),
             out_scores.begin(),
             thrust::maximum<int16>(),
@@ -338,13 +375,13 @@ int main(int argc, char* argv[])
     // open a read file
     log_info(stderr, "  opening reads file... started\n");
 
-    SharedPointer<io::ReadDataStream> read_data_file(
-        io::open_read_file(
+    SharedPointer<io::SequenceDataStream> read_data_file(
+        io::open_sequence_file(
             reads,
             io::Phred33,
             2*max_reads,
             uint32(-1),
-            io::ReadEncoding( io::FORWARD | io::REVERSE_COMPLEMENT ) ) );
+            io::SequenceEncoding( io::FORWARD | io::REVERSE_COMPLEMENT ) ) );
 
     // check whether the file opened correctly
     if (read_data_file == NULL || read_data_file->is_ok() == false)
@@ -357,17 +394,18 @@ int main(int argc, char* argv[])
     // keep stats
     Stats stats;
 
+    io::SequenceDataHost<DNA_N> h_read_data;
+
     while (1)
     {
         // load a batch of reads
-        SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_reads, batch_bps ) );
-        if (h_read_data == NULL)
+        if (io::next( &h_read_data, read_data_file.get(), batch_reads, batch_bps ) == 0)
             break;
 
         log_info(stderr, "  loading reads... started\n");
 
         // copy it to the device
-        const io::ReadDataDevice d_read_data( *h_read_data );
+        const io::SequenceDataDevice<DNA_N> d_read_data( h_read_data );
 
         const uint32 n_reads = d_read_data.size() / 2;
 
@@ -375,13 +413,14 @@ int main(int argc, char* argv[])
         log_info(stderr, "    %u reads\n", n_reads);
 
         // prepare some typedefs for the involved string-sets and infixes
-        typedef io::ReadData::const_read_string_set_type                        string_set_type;    // the read string-set
+        typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type            read_view_type;     // the read view type
+        typedef read_view_type::sequence_string_set_type                        string_set_type;    // the read string-set
         typedef string_set_infix_coord_type                                     infix_coord_type;   // the infix coordinate type, for string-sets
         typedef nvbio::vector<device_tag,infix_coord_type>                      infix_vector_type;  // the device vector type for infix coordinates
         typedef InfixSet<string_set_type, const string_set_infix_coord_type*>   seed_set_type;      // the infix-set type for representing seeds
 
         // fetch the actual read string-set
-        const string_set_type d_read_string_set = d_read_data.read_string_set();
+        const string_set_type d_read_string_set = plain_view( d_read_data ).sequence_string_set();
 
         // build the q-gram index
         QGramSetIndexDevice qgram_index;

@@ -229,6 +229,7 @@ void map(
     typedef io::FMIndexDataDevice::stream_type                                  genome_string;
     typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type                read_view_type;
     typedef read_view_type::sequence_string_set_type                            read_string_set_type;
+    typedef read_view_type::sequence_stream_type                                read_stream;
     typedef string_set_infix_coord_type                                         infix_coord_type;
     typedef nvbio::vector<device_tag,infix_coord_type>                          infix_vector_type;
     typedef InfixSet<read_string_set_type, const string_set_infix_coord_type*>  seed_string_set_type;
@@ -337,8 +338,6 @@ void map(
             genome_infixes<BAND_LEN>( genome_len, nvbio::plain_view( reads ) ) );
 
         typedef nvbio::vector<device_tag,string_infix_coord_type>::const_iterator infix_iterator;
-
-        typedef read_view_type::sequence_stream_type      read_stream;
 
         const SparseStringSet<read_stream,infix_iterator> read_infix_set(
             hits_end - hits_begin,

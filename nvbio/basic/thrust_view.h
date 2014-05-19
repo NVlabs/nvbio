@@ -92,4 +92,24 @@ T* raw_pointer(thrust::host_vector<T>& vec) { return vec.size() ? thrust::raw_po
 template <typename T>
 const T* raw_pointer(const thrust::host_vector<T>& vec) { return vec.size(), vec.size() ? thrust::raw_pointer_cast( &vec.front() ) : NULL; }
 
+/// return the begin iterator of a device vector
+///
+template <typename T>
+typename thrust::device_vector<T>::iterator begin(thrust::device_vector<T>& vec) { return vec.begin; }
+
+/// return the begin iterator of a device vector
+///
+template <typename T>
+typename thrust::device_vector<T>::const_iterator begin(const thrust::device_vector<T>& vec) { return vec.begin; }
+
+/// return the begin iterator of a host vector
+///
+template <typename T>
+typename thrust::host_vector<T>::iterator begin(thrust::host_vector<T>& vec) { return vec.begin; }
+
+/// return the begin iterator of a host vector
+///
+template <typename T>
+typename thrust::host_vector<T>::const_iterator begin(const thrust::host_vector<T>& vec) { return vec.begin; }
+
 } // namespace nvbio

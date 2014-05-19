@@ -223,6 +223,16 @@ uint32 length(const vector_view<Iterator>& vec) { return vec.length(); }
 template <typename T>
 T raw_pointer(const vector_view<T>& vec) { return vec.base(); }
 
+/// return the begin iterator of a vector_view
+///
+template <typename T>
+T begin(vector_view<T>& vec) { return vec.begin; }
+
+/// return the begin iterator of a vector_view
+///
+template <typename T>
+T begin(const vector_view<T>& vec) { return vec.begin; }
+
 //
 // --- std::vector views ----------------------------------------------------------------------------
 //
@@ -250,6 +260,14 @@ T* raw_pointer(std::vector<T>& vec) { return vec.size() ? &vec[0] : NULL; }
 ///
 template <typename T>
 const T* raw_pointer(const std::vector<T>& vec) { return vec.size() ? &vec[0] : NULL; }
+
+/// return the begin iterator of a raw pointer
+///
+template <typename T> T* begin(T* vec) { return vec; }
+
+/// return the begin iterator of a raw pointer
+///
+template <typename T> const T* begin(const T* vec) { return vec; }
 
 ///@} Basic
 

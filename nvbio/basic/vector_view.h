@@ -98,6 +98,9 @@ struct vector_view
     //typedef typename std::iterator_traits<Iterator>::distance_type     distance_type;
     typedef std::random_access_iterator_tag                             iterator_category;
 
+    typedef vector_view<Iterator,IndexType>                                   plain_view_type;
+    typedef vector_view<Iterator,IndexType>                             const_plain_view_type;
+
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
@@ -225,13 +228,13 @@ T raw_pointer(const vector_view<T>& vec) { return vec.base(); }
 
 /// return the begin iterator of a vector_view
 ///
-template <typename T>
-T begin(vector_view<T>& vec) { return vec.begin; }
+template <typename T, typename I>
+T begin(vector_view<T,I>& vec) { return vec.begin(); }
 
 /// return the begin iterator of a vector_view
 ///
-template <typename T>
-T begin(const vector_view<T>& vec) { return vec.begin; }
+template <typename T, typename I>
+T begin(const vector_view<T,I>& vec) { return vec.begin(); }
 
 //
 // --- std::vector views ----------------------------------------------------------------------------

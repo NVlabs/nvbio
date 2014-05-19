@@ -54,7 +54,7 @@
 #include <nvbio/fmindex/fmindex.h>
 #include <nvbio/fmindex/backtrack.h>
 #include <nvbio/io/fmi.h>
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 
 using namespace nvbio;
 
@@ -759,17 +759,13 @@ void count_core(
 {
     CountDelegate counter( count );
 
-    typedef io::ReadData::const_read_stream_type read_stream_type;
-    const read_stream_type read_stream( reads.read_stream() );
-
-    const uint32 read_begin = reads.read_index()[ read_id ];
-    //const uint32 read_end   = reads.read_index()[ read_id+1 ];
+    typedef typename ReadsView::sequence_stream_type read_stream_type;
 
     uint4 stack[32*4];
 
     hamming_backtrack(
         fmi,
-        read_stream + read_begin,
+        reads.get_read( read_id ).begin(),
         len,
         seed,
         mismatches,
@@ -819,7 +815,7 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
 
         cuda_fmindex_type fmindex_cuda = fmi_cuda.index();
 
-        io::ReadDataStream* reads_file = io::open_read_file(
+        io::SequenceDataStream* reads_file = io::open_sequence_file(
             reads_name,
             io::Phred,
             n_reads,
@@ -831,20 +827,21 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             exit(1);
         }
 
-        io::ReadData* reads_data = reads_file->next( n_reads );
-        if (reads_data == NULL)
+        io::SequenceDataHost<DNA_N> reads_data;
+        if (io::next( &reads_data, reads_file, n_reads ) == 0)
         {
             log_error(stderr, "unable to fetch reads from file \"%s\"\n", reads_name);
             exit(1);
         }
 
-        io::ReadDataDevice reads_data_cuda( *reads_data );
+        io::SequenceDataDevice<DNA_N> reads_data_cuda( reads_data );
 
         // create a host-side read batch
-        io::ReadDataView<const uint32*,const uint32*,const char*,const char*> host_reads_view( *reads_data );
+        typedef io::SequenceData<DNA_N>::const_plain_view_type read_view_type;
+        const read_view_type host_reads_view( reads_data );
 
         // create a device-side read batch
-        io::ReadDataView<const uint32*,const uint32*,const char*,const char*> reads_view_cuda( reads_data_cuda );
+        const read_view_type reads_view_cuda( reads_data_cuda );
 
         thrust::device_vector<uint32> counter(1);
         counter[0] = 0;
@@ -883,7 +880,7 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
 
             uint32 counter = 0;
             #pragma omp parallel for
-            for (int i = 0; i < (int)reads_data->size(); ++i)
+            for (int i = 0; i < (int)reads_data.size(); ++i)
             {
                 count_core(
                     i,
@@ -932,7 +929,7 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             uint32 counter = 0;
 
             #pragma omp parallel for
-            for (int i = 0; i < (int)reads_data->size(); ++i)
+            for (int i = 0; i < (int)reads_data.size(); ++i)
             {
                 count_core(
                     i,
@@ -981,7 +978,7 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             uint32 counter = 0;
 
             #pragma omp parallel for
-            for (int i = 0; i < (int)reads_data->size(); ++i)
+            for (int i = 0; i < (int)reads_data.size(); ++i)
             {
                 count_core(
                     i,
@@ -999,7 +996,6 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             fprintf(stderr, "  cpu backtracking (52,2,25)... done: %.1fms, A/s: %.3f M\n", time, reads_data_cuda.size()/(time*1000.0f) );
         }
 
-        delete reads_data;
         delete reads_file;
     }
     else

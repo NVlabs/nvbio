@@ -41,7 +41,7 @@
 #include <nvbio/strings/string_set.h>
 #include <nvbio/strings/seeds.h>
 #include <nvbio/basic/shared_pointer.h>
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 #include <nvbio/io/fmi.h>
 #include <nvbio/qgram/qgram.h>
 #include <nvbio/qgram/qgroup.h>
@@ -476,8 +476,8 @@ int qgram_test(int argc, char* argv[])
 
     log_info(stderr, "  loading reads... started\n");
 
-    SharedPointer<io::ReadDataStream> read_data_file(
-        io::open_read_file(
+    SharedPointer<io::SequenceDataStream> read_data_file(
+        io::open_sequence_file(
             reads,
             qencoding,
             uint32(-1),
@@ -493,21 +493,29 @@ int qgram_test(int argc, char* argv[])
     const uint32 batch_bps  = n_qgrams;
 
     // load a batch of reads
-    SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_size, batch_bps ) );
+    io::SequenceDataHost<DNA_N> h_read_data;
+
+    if (io::next( &h_read_data, read_data_file.get(), batch_size, batch_bps ) == 0)
+    {
+        log_error(stderr, "  unable to read input sequences\n");
+        return 1;
+    }
     
     // build its device version
-    io::ReadDataDevice d_read_data( *h_read_data );
+    const io::SequenceDataDevice<DNA_N> d_read_data( h_read_data );
 
     log_info(stderr, "  loading reads... done\n");
 
     // fetch the actual string
-    typedef io::ReadData::const_read_stream_type        string_type;
-    typedef io::ReadData::const_read_string_set_type    string_set_type;
+    typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type read_view_type;
+
+    typedef read_view_type::sequence_stream_type        string_type;
+    typedef read_view_type::sequence_string_set_type    string_set_type;
 
     const uint32          n_strings      = d_read_data.size();
-    const uint32          string_len     = h_read_data->read_index()[ n_strings ];
-    const string_type     string         = d_read_data.const_read_stream();
-    const string_set_type string_set     = d_read_data.const_read_string_set();
+    const uint32          string_len     = d_read_data.bps();
+    const string_type     string         = nvbio::plain_view( d_read_data ).sequence_stream();
+    const string_set_type string_set     = nvbio::plain_view( d_read_data ).sequence_string_set();
 
     log_info(stderr, "    strings: %u\n", n_strings);
     log_info(stderr, "    symbols: %.3f M\n", 1.0e-6f * float(string_len));

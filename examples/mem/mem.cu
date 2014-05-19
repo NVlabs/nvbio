@@ -40,7 +40,7 @@
 #include <nvbio/strings/infix.h>
 #include <nvbio/strings/seeds.h>
 #include <nvbio/fmindex/mem.h>
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 #include <nvbio/io/fmi.h>
 
 using namespace nvbio;
@@ -109,13 +109,13 @@ int main(int argc, char* argv[])
     // open a read file
     log_info(stderr, "  opening reads file... started\n");
 
-    SharedPointer<io::ReadDataStream> read_data_file(
-        io::open_read_file(
+    SharedPointer<io::SequenceDataStream> read_data_file(
+        io::open_sequence_file(
             reads,
             io::Phred33,
             2*max_reads,
             uint32(-1),
-            io::ReadEncoding( io::FORWARD | io::REVERSE_COMPLEMENT ) ) );
+            io::SequenceEncoding( io::FORWARD | io::REVERSE_COMPLEMENT ) ) );
 
     // check whether the file opened correctly
     if (read_data_file == NULL || read_data_file->is_ok() == false)
@@ -138,17 +138,15 @@ int main(int argc, char* argv[])
     const uint32 mems_batch = 16*1024*1024;
     nvbio::vector<device_tag,mem_filter_type::mem_type> mems( mems_batch );
 
-    while (1)
-    {
-        // load a batch of reads
-        SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_reads, batch_bps ) );
-        if (h_read_data == NULL)
-            break;
+    io::SequenceDataHost<DNA_N> h_read_data;
 
+    // load a batch of reads
+    while (io::next( &h_read_data, read_data_file.get(), batch_reads, batch_bps ))
+    {
         log_info(stderr, "  loading reads... started\n");
 
         // copy it to the device
-        const io::ReadDataDevice d_read_data( *h_read_data );
+        const io::SequenceDataDevice<DNA_N> d_read_data( h_read_data );
 
         const uint32 n_reads = d_read_data.size() / 2;
 
@@ -163,7 +161,7 @@ int main(int argc, char* argv[])
         mem_filter.rank(
             f_index,
             r_index,
-            d_read_data.const_read_string_set(),
+            nvbio::plain_view( d_read_data ).sequence_string_set(),
             min_intv,
             max_intv,
             min_span );

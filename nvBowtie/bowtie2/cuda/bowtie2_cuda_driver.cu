@@ -155,7 +155,7 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
 int driver(
     const char*                              output_name, 
     const io::FMIndexData&                   driver_data_host,
-          io::ReadDataStream&                read_data_stream,
+          io::SequenceDataStream&            read_data_stream,
     const std::map<std::string,std::string>& options)
 {
     log_visible(stderr, "Bowtie2 cuda driver... started\n");
@@ -292,21 +292,6 @@ int driver(
     // loop through the batches of reads
     for (uint32 read_begin = 0; true; read_begin += BATCH_SIZE)
     {
-        /*
-        // transfer the reads to the device
-        timer.start();
-
-        io::ReadData* read_data_host = read_data_stream.next( BATCH_SIZE );
-        if (read_data_host == NULL)
-        {
-            timer.stop();
-            break;
-        }
-
-        timer.stop();
-        stats.read_io_time += timer.seconds();
-        stats.max_read_io_speed = std::max( stats.max_read_io_speed, float(read_data_host->size()) / timer.seconds() );
-        */
         Timer polling_timer;
         polling_timer.start();
 
@@ -316,14 +301,14 @@ int driver(
         polling_timer.stop();
         polling_time += polling_timer.seconds();
 
-        io::ReadData* read_data_host = input_thread.read_data[ input_set ];
-        if (read_data_host == (io::ReadData*)InputThread::INVALID)
+        io::SequenceDataHost<DNA_N>* read_data_host = input_thread.read_data[ input_set ];
+        if (read_data_host == (io::SequenceDataHost<DNA_N>*)InputThread::INVALID)
             break;
 
-        if (read_data_host->max_read_len() > Aligner::MAX_READ_LEN)
+        if (read_data_host->max_sequence_len() > Aligner::MAX_READ_LEN)
         {
             log_error(stderr, "unsupported read length %u (maximum is %u)\n",
-                read_data_host->max_read_len(),
+                read_data_host->max_sequence_len(),
                 Aligner::MAX_READ_LEN );
             break;
         }
@@ -333,7 +318,7 @@ int driver(
 
         aligner.output_file->start_batch(read_data_host);
 
-        io::ReadDataDevice read_data( *read_data_host, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS );
+        io::SequenceDataDevice<DNA_N> read_data( *read_data_host );
         cudaThreadSynchronize();
 
         timer.stop();
@@ -347,9 +332,9 @@ int driver(
 
         const uint32 count = read_data_host->size();
         log_info(stderr, "aligning reads [%u, %u]\n", read_begin, read_begin + count - 1u);
-        log_verbose(stderr, "  %u reads\n", read_data_host->m_n_reads);
-        log_verbose(stderr, "  %.3f M bps (%.1f MB)\n", float(read_data_host->m_read_stream_len)/1.0e6f, float(read_data_host->m_read_stream_words*sizeof(uint32)+read_data_host->m_read_stream_len*sizeof(char))/float(1024*1024));
-        log_verbose(stderr, "  %.1f bps/read (min: %u, max: %u)\n", float(read_data_host->m_read_stream_len)/float(read_data_host->m_n_reads), read_data_host->m_min_read_len, read_data_host->m_max_read_len);
+        log_verbose(stderr, "  %u reads\n", read_data_host->size());
+        log_verbose(stderr, "  %.3f M bps (%.1f MB)\n", float(read_data_host->bps())/1.0e6f, float(read_data_host->words()*sizeof(uint32)+read_data_host->bps()*sizeof(char))/float(1024*1024));
+        log_verbose(stderr, "  %.1f bps/read (min: %u, max: %u)\n", float(read_data_host->bps())/float(read_data_host->size()), read_data_host->min_sequence_len(), read_data_host->max_sequence_len());
 
         if (params.mode == AllMapping)
         {
@@ -479,8 +464,8 @@ int driver(
     const char*                              output_name, 
     const io::FMIndexData&                   driver_data_host,
     const io::PairedEndPolicy                pe_policy,
-          io::ReadDataStream&                read_data_stream1,
-          io::ReadDataStream&                read_data_stream2,
+          io::SequenceDataStream&            read_data_stream1,
+          io::SequenceDataStream&            read_data_stream2,
     const std::map<std::string,std::string>& options)
 {
     log_visible(stderr, "Bowtie2 cuda driver... started\n");
@@ -637,17 +622,17 @@ int driver(
         polling_timer.stop();
         polling_time += polling_timer.seconds();
 
-        io::ReadData* read_data_host1 = input_thread.read_data1[ input_set ];
-        io::ReadData* read_data_host2 = input_thread.read_data2[ input_set ];
-        if (read_data_host1 == (io::ReadData*)InputThread::INVALID ||
-            read_data_host2 == (io::ReadData*)InputThread::INVALID)
+        io::SequenceDataHost<DNA_N>* read_data_host1 = input_thread.read_data1[ input_set ];
+        io::SequenceDataHost<DNA_N>* read_data_host2 = input_thread.read_data2[ input_set ];
+        if (read_data_host1 == (io::SequenceDataHost<DNA_N>*)InputThread::INVALID ||
+            read_data_host2 == (io::SequenceDataHost<DNA_N>*)InputThread::INVALID)
             break;
 
-        if ((read_data_host1->max_read_len() > Aligner::MAX_READ_LEN) ||
-            (read_data_host2->max_read_len() > Aligner::MAX_READ_LEN))
+        if ((read_data_host1->max_sequence_len() > Aligner::MAX_READ_LEN) ||
+            (read_data_host2->max_sequence_len() > Aligner::MAX_READ_LEN))
         {
             log_error(stderr, "unsupported read length %u (maximum is %u)\n",
-                nvbio::max(read_data_host1->max_read_len(), read_data_host2->max_read_len()),
+                nvbio::max(read_data_host1->max_sequence_len(), read_data_host2->max_sequence_len()),
                 Aligner::MAX_READ_LEN );
             break;
         }
@@ -657,8 +642,8 @@ int driver(
 
         aligner.output_file->start_batch(read_data_host1, read_data_host2);
 
-        io::ReadDataDevice read_data1( *read_data_host1, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS );
-        io::ReadDataDevice read_data2( *read_data_host2, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS );
+        io::SequenceDataDevice<DNA_N> read_data1( *read_data_host1/*, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS*/ );
+        io::SequenceDataDevice<DNA_N> read_data2( *read_data_host2/*, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS*/ );
 
         timer.stop();
         stats.read_HtoD.add( read_data1.size(), timer.seconds() );
@@ -672,15 +657,15 @@ int driver(
 
         const uint32 count = read_data_host1->size();
         log_info(stderr, "aligning reads [%u, %u]\n", read_begin, read_begin + count - 1u);
-        log_verbose(stderr, "  %u reads\n", read_data_host1->m_n_reads);
+        log_verbose(stderr, "  %u reads\n", read_data_host1->size());
         log_verbose(stderr, "  %.3f M bps (%.1f MB)\n",
-            float(read_data_host1->m_read_stream_len + read_data_host2->m_read_stream_len)/1.0e6f,
-            float(read_data_host1->m_read_stream_words*sizeof(uint32)+read_data_host1->m_read_stream_len*sizeof(char))/float(1024*1024)+
-            float(read_data_host2->m_read_stream_words*sizeof(uint32)+read_data_host2->m_read_stream_len*sizeof(char))/float(1024*1024));
+            float(read_data_host1->bps() + read_data_host2->bps())/1.0e6f,
+            float(read_data_host1->words()*sizeof(uint32)+read_data_host1->bps()*sizeof(char))/float(1024*1024)+
+            float(read_data_host2->words()*sizeof(uint32)+read_data_host2->bps()*sizeof(char))/float(1024*1024));
         log_verbose(stderr, "  %.1f bps/read (min: %u, max: %u)\n",
-            float(read_data_host1->m_read_stream_len+read_data_host2->m_read_stream_len)/float(read_data_host1->m_n_reads+read_data_host2->m_n_reads),
-            nvbio::min( read_data_host1->m_min_read_len, read_data_host2->m_min_read_len ),
-            nvbio::max( read_data_host1->m_max_read_len, read_data_host2->m_max_read_len ));
+            float(read_data_host1->bps()+read_data_host2->bps())/float(read_data_host1->size()+read_data_host2->size()),
+            nvbio::min( read_data_host1->min_sequence_len(), read_data_host2->min_sequence_len() ),
+            nvbio::max( read_data_host1->max_sequence_len(), read_data_host2->max_sequence_len() ));
 
         if (params.mode == AllMapping)
         {

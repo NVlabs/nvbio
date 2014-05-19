@@ -36,7 +36,7 @@
 #include <nvbio/strings/string_set.h>
 #include <nvbio/strings/infix.h>
 #include <nvbio/strings/seeds.h>
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 
 using namespace nvbio;
 
@@ -88,8 +88,8 @@ int main(int argc, char* argv[])
     // open a read file
     log_info(stderr, "  loading reads... started\n");
 
-    SharedPointer<io::ReadDataStream> read_data_file(
-        io::open_read_file(
+    SharedPointer<io::SequenceDataStream> read_data_file(
+        io::open_sequence_file(
             reads,
             io::Phred33,
             uint32(-1),
@@ -106,22 +106,25 @@ int main(int argc, char* argv[])
     const uint32 batch_bps  = n_bps;
 
     // load a batch of reads
-    SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_size, batch_bps ) );
+    io::SequenceDataHost<DNA_N> h_read_data;
+
+    io::next( &h_read_data, read_data_file.get(), batch_size, batch_bps );
 
     // copy it to the device
-    const io::ReadDataDevice d_read_data( *h_read_data );
+    const io::SequenceDataDevice<DNA_N> d_read_data( h_read_data );
 
     log_info(stderr, "  loading reads... done\n");
     log_info(stderr, "    %u reads\n", d_read_data.size());
 
     // prepare some typedefs for the involved string-sets and infixes
-    typedef io::ReadData::const_read_string_set_type                        string_set_type;    // the read string-set
+    typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type            read_view_type;
+    typedef read_view_type::sequence_string_set_type                        string_set_type;    // the read string-set
     typedef string_set_infix_coord_type                                     infix_coord_type;   // the infix coordinate type, for string-sets
     typedef nvbio::vector<device_tag,infix_coord_type>                      infix_vector_type;  // the device vector type for infix coordinates
     typedef InfixSet<string_set_type, const string_set_infix_coord_type*>   seed_set_type;      // the infix-set type for representing seeds
 
     // fetch the actual read string-set
-    const string_set_type d_read_string_set = d_read_data.read_string_set();
+    const string_set_type d_read_string_set = plain_view( d_read_data ).sequence_string_set();
 
     // prepare enough storage for the seed coordinates
     infix_vector_type d_seed_coords;

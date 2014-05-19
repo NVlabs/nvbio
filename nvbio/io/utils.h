@@ -29,6 +29,7 @@
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/packedstream_loader.h>
 #include <nvbio/basic/vector_view.h>
+#include <nvbio/io/sequence/sequence.h>
 
 #pragma once
 
@@ -201,9 +202,9 @@ uint32 length(const ReadStream<StreamType,QualType>& read) { return read.length(
 template <typename BatchType, typename Tag>
 struct ReadLoader
 {
-    typedef typename BatchType::read_storage_iterator                                                       read_storage;
+    typedef typename BatchType::sequence_storage_iterator                                                   read_storage;
     typedef typename BatchType::qual_storage_iterator                                                       qual_iterator;
-    typedef PackedStringLoader<read_storage, io::ReadData::READ_BITS, io::ReadData::READ_BIG_ENDIAN,Tag>    loader_type;
+    typedef PackedStringLoader<read_storage, BatchType::SEQUENCE_BITS, BatchType::SEQUENCE_BIG_ENDIAN,Tag>  loader_type;
     typedef typename loader_type::iterator                                                                  read_iterator;
     typedef ReadStream<read_iterator,qual_iterator>                                                         string_type;
 
@@ -215,7 +216,7 @@ struct ReadLoader
         const qual_iterator quals( batch.qual_stream() + range.x );
 
         string_type read(
-            loader.load( batch.read_stream_storage(), range.x, range.y - range.x ),
+            loader.load( batch.sequence_storage(), range.x, range.y - range.x ),
             quals,
             make_uint2( 0, range.y - range.x ) );
 
@@ -230,7 +231,7 @@ struct ReadLoader
         const qual_iterator quals( batch.qual_stream() + range.x );
 
         string_type read(
-            loader.load( batch.read_stream_storage(), range.x, range.y - range.x, subrange, dir == REVERSE ? true : false ),
+            loader.load( batch.sequence_storage(), range.x, range.y - range.x, subrange, dir == REVERSE ? true : false ),
             quals,
             make_uint2( 0, range.y - range.x ) );
 

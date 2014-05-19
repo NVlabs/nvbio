@@ -35,10 +35,10 @@ namespace io {
 ///@addtogroup IO
 ///@{
 
-///@addtogroup SequencesIO
+///@addtogroup SequenceIO
 ///@{
 
-///@addtogroup SequencesIODetail
+///@addtogroup SequenceIODetail
 ///@{
 
 /// abstract file-backed SequenceDataStream
@@ -105,8 +105,8 @@ protected:
     FileState               m_file_state;
 };
 
-///@} // SequencesIODetail
-///@} // SequencesIO
+///@} // SequenceIODetail
+///@} // SequenceIO
 ///@} // IO
 
 } // namespace io

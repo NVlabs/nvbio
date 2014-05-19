@@ -84,7 +84,7 @@ struct Aligner
     typedef typename binary_switch<uint32,uint4,USE_UINT4_PACKING>::type                                                     read_storage_type;
     typedef typename binary_switch<const read_storage_type*,nvbio::cuda::ldg_pointer<read_storage_type>,USE_TEX_READS>::type read_base_type;
     typedef typename binary_switch<const char*,             nvbio::cuda::ldg_pointer<char>,             USE_TEX_READS>::type read_qual_type;
-    typedef io::ReadDataView<const uint32*,read_base_type,read_qual_type,const char*>                                        read_batch_type;
+    typedef io::SequenceDataView<DNA_N,const uint32*,read_base_type,read_qual_type,const char*>                              read_batch_type;
 
     typedef typename binary_switch<uint32,uint4,USE_UINT4_PACKING>::type                                                     genome_storage_type;
     typedef nvbio::cuda::ldg_pointer<genome_storage_type>                                                                    genome_iterator_type;
@@ -168,80 +168,80 @@ struct Aligner
 
     template <typename scoring_tag>
     void best_approx(
-        const Params&                   params,
-        const fmi_type                  fmi,
-        const rfmi_type                 rfmi,
-        const UberScoringScheme&        scoring_scheme,
-        const io::FMIndexDataDevice&    driver_data,
-        io::ReadDataDevice&             read_data,
-        Stats&                          stats);
+        const Params&                           params,
+        const fmi_type                          fmi,
+        const rfmi_type                         rfmi,
+        const UberScoringScheme&                scoring_scheme,
+        const io::FMIndexDataDevice&            driver_data,
+        const io::SequenceDataDevice<DNA_N>&    read_data,
+        Stats&                                  stats);
 
     template <
         typename scoring_tag,
         typename scoring_scheme_type>
     void best_approx_score(
-        const Params&                   params,
-        const fmi_type                  fmi,
-        const rfmi_type                 rfmi,
-        const scoring_scheme_type&      scoring_scheme,
-        const io::FMIndexDataDevice&    driver_data,
-        io::ReadDataDevice&             read_data,
-        const uint32                    seeding_pass,
-        const uint32                    seed_queue_size,
-        const uint32*                   seed_queue,
-        Stats&                          stats);
+        const Params&                           params,
+        const fmi_type                          fmi,
+        const rfmi_type                         rfmi,
+        const scoring_scheme_type&              scoring_scheme,
+        const io::FMIndexDataDevice&            driver_data,
+        const io::SequenceDataDevice<DNA_N>&    read_data,
+        const uint32                            seeding_pass,
+        const uint32                            seed_queue_size,
+        const uint32*                           seed_queue,
+        Stats&                                  stats);
 
     template <typename scoring_tag>
     void best_approx(
-        const Params&                   params,
-        const FMIndexDef::type          fmi,
-        const FMIndexDef::type          rfmi,
-        const UberScoringScheme&        scoring_scheme,
-        const io::FMIndexDataDevice&    driver_data,
-        io::ReadDataDevice&             read_data1,
-        io::ReadDataDevice&             read_data2,
-        Stats&                          stats);
+        const Params&                           params,
+        const FMIndexDef::type                  fmi,
+        const FMIndexDef::type                  rfmi,
+        const UberScoringScheme&                scoring_scheme,
+        const io::FMIndexDataDevice&            driver_data,
+        const io::SequenceDataDevice<DNA_N>&    read_data1,
+        const io::SequenceDataDevice<DNA_N>&    read_data2,
+        Stats&                                  stats);
 
     template <
         typename scoring_tag,
         typename scoring_scheme_type>
     void best_approx_score(
-        const Params&                   params,
-        const fmi_type                  fmi,
-        const rfmi_type                 rfmi,
-        const scoring_scheme_type&      scoring_scheme,
-        const io::FMIndexDataDevice&    driver_data,
-        const uint32                    anchor,
-        io::ReadDataDevice&             read_data1,
-        io::ReadDataDevice&             read_data2,
-        const uint32                    seeding_pass,
-        const uint32                    seed_queue_size,
-        const uint32*                   seed_queue,
-        Stats&                          stats);
+        const Params&                           params,
+        const fmi_type                          fmi,
+        const rfmi_type                         rfmi,
+        const scoring_scheme_type&              scoring_scheme,
+        const io::FMIndexDataDevice&            driver_data,
+        const uint32                            anchor,
+        const io::SequenceDataDevice<DNA_N>&    read_data1,
+        const io::SequenceDataDevice<DNA_N>&    read_data2,
+        const uint32                            seeding_pass,
+        const uint32                            seed_queue_size,
+        const uint32*                           seed_queue,
+        Stats&                                  stats);
 
     template <typename scoring_tag>
     void all(
-        const Params&                   params,
-        const fmi_type                  fmi,
-        const rfmi_type                 rfmi,
-        const UberScoringScheme&        scoring_scheme,
-        const io::FMIndexDataDevice&    driver_data,
-        io::ReadDataDevice&             read_data,
-        Stats&                          stats);
+        const Params&                           params,
+        const fmi_type                          fmi,
+        const rfmi_type                         rfmi,
+        const UberScoringScheme&                scoring_scheme,
+        const io::FMIndexDataDevice&            driver_data,
+        const io::SequenceDataDevice<DNA_N>&    read_data,
+        Stats&                                  stats);
 
     template <typename scoring_scheme_type>
     void score_all(
-        const Params&                   params,
-        const fmi_type                  fmi,
-        const rfmi_type                 rfmi,
-        const UberScoringScheme&        input_scoring_scheme,
-        const scoring_scheme_type&      scoring_scheme,
-        const io::FMIndexDataDevice&    driver_data,
-        io::ReadDataDevice&             read_data,
-        const uint32                    seed_queue_size,
-        const uint32*                   seed_queue,
-        Stats&                          stats,
-        uint64&                         total_alignments);
+        const Params&                           params,
+        const fmi_type                          fmi,
+        const rfmi_type                         rfmi,
+        const UberScoringScheme&                input_scoring_scheme,
+        const scoring_scheme_type&              scoring_scheme,
+        const io::FMIndexDataDevice&            driver_data,
+        const io::SequenceDataDevice<DNA_N>&    read_data,
+        const uint32                            seed_queue_size,
+        const uint32*                           seed_queue,
+        Stats&                                  stats,
+        uint64&                                 total_alignments);
 
     // return a pointer to an "index" into the given keys sorted by their hi bits
     //

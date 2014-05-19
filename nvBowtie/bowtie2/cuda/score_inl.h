@@ -314,7 +314,7 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<SCORE_STREAM,Aligner
     /// return the maximum pattern length
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 max_pattern_length() const { return base_type::m_pipeline.reads_o.max_read_len(); }
+    uint32 max_pattern_length() const { return base_type::m_pipeline.reads_o.max_sequence_len(); }
 
     /// return the maximum text length
     ///
@@ -630,12 +630,12 @@ struct AllScoreStream : public AlignmentStreamBase<SCORE_STREAM,AlignerType,Pipe
     /// return the maximum pattern length
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 max_pattern_length() const { return base_type::m_pipeline.reads.max_read_len(); }
+    uint32 max_pattern_length() const { return base_type::m_pipeline.reads.max_sequence_len(); }
 
     /// return the maximum text length
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 max_text_length() const { return base_type::m_pipeline.reads.max_read_len() + m_band_len; }
+    uint32 max_text_length() const { return base_type::m_pipeline.reads.max_sequence_len() + m_band_len; }
 
     /// return the stream size
     ///

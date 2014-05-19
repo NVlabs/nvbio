@@ -40,10 +40,10 @@ namespace io {
 ///@addtogroup IO
 ///@{
 
-///@addtogroup SequencesIO
+///@addtogroup SequenceIO
 ///@{
 
-///@addtogroup SequencesIODetail
+///@addtogroup SequenceIODetail
 ///@{
 
 /// SequenceDataFile from a BAM file
@@ -75,8 +75,8 @@ private:
     gzFile fp;
 };
 
-///@} // SequencesIODetail
-///@} // SequencesIO
+///@} // SequenceIODetail
+///@} // SequenceIO
 ///@} // IO
 
 } // namespace io

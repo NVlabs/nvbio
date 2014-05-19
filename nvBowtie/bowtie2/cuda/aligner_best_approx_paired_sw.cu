@@ -39,8 +39,8 @@ void best_approx_sw(
     const FMIndexDef::type          rfmi,
     const UberScoringScheme&        scoring_scheme,
     const io::FMIndexDataDevice&    driver_data,
-    io::ReadDataDevice&             read_data1,
-    io::ReadDataDevice&             read_data2,
+    io::SequenceDataDevice<DNA_N>&  read_data1,
+    io::SequenceDataDevice<DNA_N>&  read_data2,
     Stats&                          stats)
 {
     aligner.best_approx<smith_waterman_scoring_tag>(

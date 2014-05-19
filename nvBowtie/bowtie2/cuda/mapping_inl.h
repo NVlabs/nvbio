@@ -216,7 +216,11 @@ struct seed_mapper<EXACT_MAPPING>
         const ParamsPOD&    params)
     {
         //typedef const_cached_iterator<const uint32*> BaseStream;
-        typedef PackedStream<const uint32*,uint8,io::ReadData::READ_BITS,io::ReadData::READ_BIG_ENDIAN> Reader;
+        typedef PackedStream<
+            const uint32*,uint8,
+            io::SequenceDataTraits<DNA_N>::SEQUENCE_BITS,
+            io::SequenceDataTraits<DNA_N>::SEQUENCE_BIG_ENDIAN> Reader;
+
         Reader reader(S);
 
         // First we have to buffer the seed into shared memory.
@@ -224,7 +228,7 @@ struct seed_mapper<EXACT_MAPPING>
         const uint32 nwords = (seed_offs + seed_len+8)>>3; //seed_len/8+1
         const uint32 fword  = pos >> 3; // pos / 8
         for (uint32 i=0; i<nwords; ++i)
-            S[i] = read_batch.read_stream_storage()[fword + i];
+            S[i] = read_batch.sequence_storage()[fword + i];
 
         const OffsetXform <Reader::index_type> forward_offset(seed_offs);
         const ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
@@ -306,7 +310,11 @@ struct seed_mapper<APPROX_MAPPING>
         const ParamsPOD&    params)
     {
         //typedef const_cached_iterator<const uint32*> BaseStream;
-        typedef PackedStream<const uint32*,uint8,io::ReadData::READ_BITS,io::ReadData::READ_BIG_ENDIAN> Reader;
+        typedef PackedStream<
+            const uint32*,uint8,
+            io::SequenceDataTraits<DNA_N>::SEQUENCE_BITS,
+            io::SequenceDataTraits<DNA_N>::SEQUENCE_BIG_ENDIAN> Reader;
+
         Reader reader(S);
 
         // First we have to buffer the seed into shared memory.
@@ -314,7 +322,7 @@ struct seed_mapper<APPROX_MAPPING>
         const uint32 nwords = (seed_offs + seed_len+8)>>3; //seed_len/8+1
         const uint32 fword  = pos >> 3; // pos / 8
         for(uint32 i=0; i<nwords; ++i)
-            S[i] = read_batch.read_stream_storage()[fword + i];
+            S[i] = read_batch.sequence_storage()[fword + i];
 
         const OffsetXform <Reader::index_type> forward_offset(seed_offs);
         const ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
@@ -368,7 +376,11 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
         const ParamsPOD&    params)
     {
         //typedef const_cached_iterator<const uint32*> BaseStream;
-        typedef PackedStream<const uint32*,uint8,io::ReadData::READ_BITS,io::ReadData::READ_BIG_ENDIAN> Reader;
+        typedef PackedStream<
+            const uint32*,uint8,
+            io::SequenceDataTraits<DNA_N>::SEQUENCE_BITS,
+            io::SequenceDataTraits<DNA_N>::SEQUENCE_BIG_ENDIAN> Reader;
+
         Reader reader(S);
 
         // First we have to buffer the seed into shared memory.
@@ -376,7 +388,7 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
         const uint32 nwords = (seed_offs + seed_len+8)>>3; //seed_len/8+1
         const uint32 fword  = pos >> 3; // pos / 8
         for(uint32 i=0; i<nwords; ++i)
-            S[i] = read_batch.read_stream_storage()[fword + i];
+            S[i] = read_batch.sequence_storage()[fword + i];
 
         const OffsetXform <Reader::index_type> forward_offset(seed_offs);
         const ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);

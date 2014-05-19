@@ -68,7 +68,7 @@
 #include <nvbio/basic/cached_iterator.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/pod.h>
-#include <nvbio/io/reads/reads.h> // FIXME: for PE_POLICY!
+#include <nvbio/io/sequence/sequence.h> // FIXME: for PE_POLICY!
 #include <algorithm>
 
 namespace nvbio {

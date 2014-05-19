@@ -38,10 +38,10 @@ namespace io {
 ///@addtogroup IO
 ///@{
 
-///@addtogroup SequencesIO
+///@addtogroup SequenceIO
 ///@{
 
-///@addtogroup SequencesIODetail
+///@addtogroup SequenceIODetail
 ///@{
 
 int SequenceDataFile_TXT::nextChunk(SequenceDataEncoder* output, uint32 max_reads, uint32 max_bps)
@@ -181,8 +181,8 @@ SequenceDataFile_TXT::FileState SequenceDataFile_TXT_gz::fillBuffer(void)
     return FILE_OK;
 }
 
-///@} // SequencesIODetail
-///@} // SequencesIO
+///@} // SequenceIODetail
+///@} // SequenceIO
 ///@} // IO
 
 } // namespace io

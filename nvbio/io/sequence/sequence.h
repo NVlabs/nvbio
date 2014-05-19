@@ -77,7 +77,7 @@ template <> struct SequenceAlphabetTraits<PROTEIN>
 namespace io {
 
 ///
-/// \page reads_io_page Sequence data input
+/// \page sequence_io_page Sequence Data Input
 /// This module contains a series of classes to load and represent read streams.
 /// The idea is that a read stream is an object implementing a simple interface, \ref SequenceDataStream,
 /// which allows to stream through a file or other set of reads in batches, which are represented in memory
@@ -98,7 +98,7 @@ namespace io {
 ///@{
 
 ///
-///@defgroup SequencesIO Sequence data input
+///@defgroup SequenceIO Sequence Data Input
 /// This module contains a series of classes to load and represent read streams.
 /// The idea is that a read stream is an object implementing a simple interface, \ref SequenceDataStream,
 /// which allows to stream through a file or other set of reads in batches, which are represented in memory
@@ -321,21 +321,21 @@ struct SequenceDataView : public SequenceDataInfo
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator              name_index()                { return m_name_index;  }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator              sequence_index()            { return m_sequence_index;  }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_storage_iterator       name_stream()               { return m_name_stream; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_storage_iterator   sequence_stream_storage()   { return m_sequence_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_storage_iterator   sequence_storage()          { return m_sequence_stream; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_stream_type        sequence_stream()           { return sequence_stream_type( m_sequence_stream ); }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE qual_storage_iterator       qual_stream()               { return m_qual_stream; }
 
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator            const_name_index()              const { return m_name_index;  }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator            const_sequence_index()          const { return m_sequence_index;  }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_storage_iterator     const_name_stream()             const { return m_name_stream; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_storage_iterator const_sequence_stream_storage() const { return m_sequence_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_storage_iterator const_sequence_storage()        const { return m_sequence_stream; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_stream_type      const_sequence_stream()         const { return const_sequence_stream_type( m_sequence_stream ); }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_storage_iterator     const_qual_stream()             const { return m_qual_stream; }
 
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator            name_index()                    const { return const_name_index();  }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator            sequence_index()                const { return const_sequence_index();  }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_storage_iterator     name_stream()                   const { return const_name_stream(); }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_storage_iterator sequence_stream_storage()       const { return const_sequence_stream_storage(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_storage_iterator sequence_storage()              const { return const_sequence_storage(); }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_stream_type      sequence_stream()               const { return const_sequence_stream(); }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_storage_iterator     qual_stream()                   const { return const_qual_stream(); }
 
@@ -693,7 +693,7 @@ SequenceDataStream *open_sequence_file(
     const uint32             max_sequence_len = uint32(-1),
     const SequenceEncoding   flags = REVERSE);
 
-///@} // SequencesIO
+///@} // SequenceIO
 ///@} // IO
 
 } // namespace io

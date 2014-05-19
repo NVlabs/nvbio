@@ -39,13 +39,13 @@ namespace cuda {
 
 template <typename scoring_tag>
 void Aligner::all(
-    const Params&               params,
-    const fmi_type              fmi,
-    const rfmi_type             rfmi,
-    const UberScoringScheme&    input_scoring_scheme,
-    const io::FMIndexDataDevice&  driver_data,
-    io::ReadDataDevice&           read_data,
-    Stats&                      stats)
+    const Params&                           params,
+    const fmi_type                          fmi,
+    const rfmi_type                         rfmi,
+    const UberScoringScheme&                input_scoring_scheme,
+    const io::FMIndexDataDevice&            driver_data,
+    const io::SequenceDataDevice<DNA_N>&    read_data,
+    Stats&                                  stats)
 {
     // prepare the scoring system
     typedef typename ScoringSchemeSelector<scoring_tag>::type           scoring_scheme_type;
@@ -54,7 +54,7 @@ void Aligner::all(
     scoring_scheme_type scoring_scheme = ScoringSchemeSelector<scoring_tag>::scheme( input_scoring_scheme );
 
     // cast the reads to use proper iterators
-    read_batch_type reads( read_data );
+    read_batch_type reads = plain_view( read_data );
 
     Timer timer;
     Timer global_timer;
@@ -78,7 +78,7 @@ void Aligner::all(
     uint64 n_alignments = 0;
 
     uint32 max_seeds = 0u;
-    for (uint32 s = read_data.min_read_len(); s <= read_data.max_read_len(); ++s)
+    for (uint32 s = read_data.min_sequence_len(); s <= read_data.max_sequence_len(); ++s)
         max_seeds = nvbio::max( max_seeds, uint32( s / params.seed_freq(s) ) );
 
     for (uint32 seed = 0; seed < max_seeds; ++seed)
@@ -147,17 +147,17 @@ void Aligner::all(
 
 template <typename scoring_scheme_type>
 void Aligner::score_all(
-    const Params&                   params,
-    const fmi_type                  fmi,
-    const rfmi_type                 rfmi,
-    const UberScoringScheme&        input_scoring_scheme,
-    const scoring_scheme_type&      scoring_scheme,
-    const io::FMIndexDataDevice&    driver_data,
-    io::ReadDataDevice&             read_data,
-    const uint32                    seed_queue_size,
-    const uint32*                   seed_queue,
-    Stats&                          stats,
-    uint64&                         total_alignments)
+    const Params&                           params,
+    const fmi_type                          fmi,
+    const rfmi_type                         rfmi,
+    const UberScoringScheme&                input_scoring_scheme,
+    const scoring_scheme_type&              scoring_scheme,
+    const io::FMIndexDataDevice&            driver_data,
+    const io::SequenceDataDevice<DNA_N>&  read_data,
+    const uint32                            seed_queue_size,
+    const uint32*                           seed_queue,
+    Stats&                                  stats,
+    uint64&                                 total_alignments)
 {
     // prepare the scoring system
     //typedef typename scoring_scheme_type::threshold_score_type          threshold_score_type;
@@ -172,7 +172,7 @@ void Aligner::score_all(
     const uint32 band_len = band_length( params.max_dist );
 
     // cast the reads to use proper iterators
-    read_batch_type reads( read_data );
+    read_batch_type reads = plain_view( read_data );
 
     // cast the genome to use proper iterators
     const uint32               genome_len = driver_data.genome_length();

@@ -53,21 +53,21 @@ void InputThread::run()
         Timer timer;
         timer.start();
 
-        io::ReadData* data = m_read_data_stream->next( m_batch_size );
+        const int ret = io::next( &read_data_storage[ m_set ], m_read_data_stream, m_batch_size );
 
         timer.stop();
 
-        if (data)
+        if (ret)
         {
-            m_stats.read_io.add( data->size(), timer.seconds() );
+            m_stats.read_io.add( read_data_storage[ m_set ].size(), timer.seconds() );
 
             // mark the set as done
-            read_data[ m_set ] = data;
+            read_data[ m_set ] = &read_data_storage[ m_set ];
         }
         else
         {
             // mark this as an invalid entry
-            read_data[ m_set ] = (io::ReadData*)INVALID;
+            read_data[ m_set ] = (io::SequenceDataHost<DNA_N>*)INVALID;
             break;
         }
 
@@ -91,28 +91,24 @@ void InputThreadPaired::run()
         Timer timer;
         timer.start();
 
-        io::ReadData* data1 = m_read_data_stream1->next( m_batch_size );
-        io::ReadData* data2 = m_read_data_stream2->next( m_batch_size );
+        const int ret1 = io::next( &read_data_storage1[ m_set ], m_read_data_stream1, m_batch_size );
+        const int ret2 = io::next( &read_data_storage2[ m_set ], m_read_data_stream2, m_batch_size );
 
         timer.stop();
 
-        if (data1 && data2)
+        if (ret1 && ret2)
         {
-            m_stats.read_io.add( data1->size(), timer.seconds() );
+            m_stats.read_io.add( read_data_storage1[ m_set ].size(), timer.seconds() );
 
             // mark the set as done
-            read_data1[ m_set ] = data1;
-            read_data2[ m_set ] = data2;
+            read_data1[ m_set ] = &read_data_storage1[ m_set ];
+            read_data2[ m_set ] = &read_data_storage2[ m_set ];
         }
         else
         {
             // mark this as an invalid entry
-            read_data1[ m_set ] = (io::ReadData*)INVALID;
-            read_data2[ m_set ] = (io::ReadData*)INVALID;
-
-            // delete unpaired segments
-            if (data1) delete data1;
-            if (data2) delete data2;
+            read_data1[ m_set ] = (io::SequenceDataHost<DNA_N>*)INVALID;
+            read_data2[ m_set ] = (io::SequenceDataHost<DNA_N>*)INVALID;
             break;
         }
 

@@ -30,7 +30,7 @@
 #include <nvbio/io/output/output_types.h>
 #include <nvbio/io/output/output_stats.h>
 #include <nvbio/io/fmi.h>
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 
 #include <stdio.h>
 
@@ -84,8 +84,8 @@ public:
     /// Begin a new batch of alignment results
     /// \param read_data_1 The (host-side) read data pointer for the first mate
     /// \param read_data_2 The (host-side) read data pointer for the second mate, if any (can be NULL for single-end alignment)
-    virtual void start_batch(const io::ReadData *read_data_1,
-                             const io::ReadData *read_data_2 = NULL);
+    virtual void start_batch(const io::SequenceDataHost<DNA_N> *read_data_1,
+                             const io::SequenceDataHost<DNA_N> *read_data_2 = NULL);
 
     /// Process a set of alignment results for the current batch.
     /// \param gpu_batch Handle to the GPU buffers containing the alignment results
@@ -129,8 +129,8 @@ protected:
 
     /// Host-side copies of the read data for the current batch.
     /// These are set by start_batch and invalidated by end_batch.
-    const io::ReadData *read_data_1;
-    const io::ReadData *read_data_2;
+    const io::SequenceDataHost<DNA_N> *read_data_1;
+    const io::SequenceDataHost<DNA_N> *read_data_2;
 
     /// I/O statistics
     IOStats iostats;

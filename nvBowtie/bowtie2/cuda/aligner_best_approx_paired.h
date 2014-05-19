@@ -48,14 +48,14 @@ namespace cuda {
 template <
     typename scoring_tag>
 void Aligner::best_approx(
-    const Params&                       params,
-    const fmi_type                      fmi,
-    const rfmi_type                     rfmi,
-    const UberScoringScheme&            input_scoring_scheme,
-    const io::FMIndexDataDevice&          driver_data,
-    io::ReadDataDevice&                   read_data1,
-    io::ReadDataDevice&                   read_data2,
-    Stats&                              stats)
+    const Params&                           params,
+    const fmi_type                          fmi,
+    const rfmi_type                         rfmi,
+    const UberScoringScheme&                input_scoring_scheme,
+    const io::FMIndexDataDevice&            driver_data,
+    const io::SequenceDataDevice<DNA_N>&    read_data1,
+    const io::SequenceDataDevice<DNA_N>&    read_data2,
+    Stats&                                  stats)
 {
     // prepare the scoring system
     typedef typename ScoringSchemeSelector<scoring_tag>::type           scoring_scheme_type;
@@ -78,8 +78,8 @@ void Aligner::best_approx(
     const genome_iterator_type genome_ptr( (const genome_storage_type*)driver_data.genome_stream() );
 
     // cast the reads to use proper iterators
-    read_batch_type reads1( read_data1 );
-    read_batch_type reads2( read_data2 );
+    read_batch_type reads1 = plain_view( read_data1 );
+    read_batch_type reads2 = plain_view( read_data2 );
 
     // initialize best-alignments
     init_alignments( reads1, threshold_score, best_data_dptr,   0u );
@@ -598,18 +598,18 @@ template <
     typename scoring_tag,
     typename scoring_scheme_type>
 void Aligner::best_approx_score(
-    const Params&                   params,
-    const fmi_type                  fmi,
-    const rfmi_type                 rfmi,
-    const scoring_scheme_type&      scoring_scheme,
-    const io::FMIndexDataDevice&    driver_data,
-    const uint32                    anchor,
-    io::ReadDataDevice&             read_data1,
-    io::ReadDataDevice&             read_data2,
-    const uint32                    seeding_pass,
-    const uint32                    seed_queue_size,
-    const uint32*                   seed_queue,
-    Stats&                          stats)
+    const Params&                           params,
+    const fmi_type                          fmi,
+    const rfmi_type                         rfmi,
+    const scoring_scheme_type&              scoring_scheme,
+    const io::FMIndexDataDevice&            driver_data,
+    const uint32                            anchor,
+    const io::SequenceDataDevice<DNA_N>&    read_data1,
+    const io::SequenceDataDevice<DNA_N>&    read_data2,
+    const uint32                            seeding_pass,
+    const uint32                            seed_queue_size,
+    const uint32*                           seed_queue,
+    Stats&                                  stats)
 {
     NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    score\n") );
     // prepare the scoring system
@@ -627,8 +627,8 @@ void Aligner::best_approx_score(
 
     const uint32 band_len = band_length( params.max_dist );
 
-    read_batch_type reads1( read_data1 );
-    read_batch_type reads2( read_data2 );
+    read_batch_type reads1 = plain_view( read_data1 );
+    read_batch_type reads2 = plain_view( read_data2 );
 
     const uint32 genome_len = driver_data.genome_length();
     const genome_iterator_type genome_ptr( (const genome_storage_type*)driver_data.genome_stream() );

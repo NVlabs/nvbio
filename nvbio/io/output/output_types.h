@@ -31,7 +31,7 @@
 #include <nvbio/io/alignments.h>
 
 #include <nvbio/io/fmi.h>
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 #include <nvbio/basic/vector_array.h>
 
 #include <thrust/host_vector.h>
@@ -144,6 +144,10 @@ typedef nvbio::HostVectorArray<uint8> HostMdsArray;
 /// pointers to the relevant bits of data pulled from the GPU buffers.
 struct AlignmentData
 {
+    typedef io::SequenceData<DNA_N>                         read_data_type;
+    typedef read_data_type::const_plain_view_type           read_view_type;
+    typedef read_view_type::sequence_stream_type            read_type;
+
     /// Set to true if this is a valid alignment
     bool valid;
 
@@ -158,9 +162,9 @@ struct AlignmentData
     // These are not really meant to be used outside AlignmentData and
     // should probably be removed
 
-    const io::ReadData   *read_data_batch_p;
-    const HostCigarArray *cigar_array_p;
-    const HostMdsArray   *mds_array_p;
+    const io::SequenceData<DNA_N>       *read_data_batch_p;
+    const HostCigarArray                *cigar_array_p;
+    const HostMdsArray                  *mds_array_p;
 
     // the remaining fields are derived from best, read_data_batch,
     // cigar_array and mds_array in the ctor
@@ -174,7 +178,7 @@ struct AlignmentData
     const char *read_name;
 
     /// The iterator for the read data, acts as an array of uint8
-    io::ReadData::const_read_stream_type::iterator read_data;
+    read_type read_data;
     /// quality data
     const char *qual;
 
@@ -210,7 +214,7 @@ struct AlignmentData
     AlignmentData(const Alignment *best,
                   const Alignment *second_best,
                   uint32 read_id,
-                  const io::ReadData *read_data_batch,
+                  const io::SequenceData<DNA_N> *read_data_batch,
                   const HostCigarArray *cigar_array,
                   const HostMdsArray *mds_array)
         : valid(true),
@@ -223,12 +227,14 @@ struct AlignmentData
     {
         uint2 cigar_coord;
 
-        read_offset = read_data_batch_p->read_index()[read_id_p];
-        read_len = read_data_batch_p->read_index()[read_id_p + 1] - read_offset;
-        read_name = read_data_batch_p->name_stream() + read_data_batch_p->name_index()[read_id];
+        io::SequenceData<DNA_N>::const_plain_view_type read_data_view( *read_data_batch );
 
-        read_data = read_data_batch_p->read_stream().begin() + read_offset;
-        qual = read_data_batch_p->qual_stream() + read_offset;
+        read_offset = read_data_view.sequence_index()[read_id_p];
+        read_len    = read_data_view.sequence_index()[read_id_p + 1] - read_offset;
+        read_name   = read_data_view.name_stream() + read_data_view.name_index()[read_id];
+
+        read_data   = read_data_view.sequence_stream() + read_offset;
+        qual        = read_data_view.qual_stream() + read_offset;
 
         cigar       = cigar_array_p->array[read_id_p];
         cigar_coord = cigar_array_p->coords[read_id_p];

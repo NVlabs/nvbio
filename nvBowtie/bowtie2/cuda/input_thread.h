@@ -32,6 +32,7 @@
 #include <nvBowtie/bowtie2/cuda/stats.h>
 #include <nvbio/basic/threads.h>
 #include <nvbio/basic/timer.h>
+#include <nvbio/io/sequence/sequence.h>
 
 namespace nvbio {
 namespace bowtie2 {
@@ -48,7 +49,7 @@ struct InputThread : public Thread<InputThread>
     static const uint32 BUFFERS = 4;
     static const uint32 INVALID = 1u;
 
-    InputThread(io::ReadDataStream* read_data_stream, Stats& _stats, const uint32 batch_size) :
+    InputThread(io::SequenceDataStream* read_data_stream, Stats& _stats, const uint32 batch_size) :
         m_read_data_stream( read_data_stream ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0)
     {
         for (uint32 i = 0; i < BUFFERS; ++i)
@@ -57,12 +58,13 @@ struct InputThread : public Thread<InputThread>
 
     void run();
 
-    io::ReadDataStream* m_read_data_stream;
+    io::SequenceDataStream* m_read_data_stream;
     Stats&              m_stats;
     uint32              m_batch_size;
     volatile uint32     m_set;
 
-    io::ReadData* volatile read_data[BUFFERS];
+    io::SequenceDataHost<DNA_N>           read_data_storage[BUFFERS];
+    io::SequenceDataHost<DNA_N>* volatile read_data[BUFFERS];
 };
 
 //
@@ -76,7 +78,7 @@ struct InputThreadPaired : public Thread<InputThreadPaired>
     static const uint32 BUFFERS = 4;
     static const uint32 INVALID = 1u;
 
-    InputThreadPaired(io::ReadDataStream* read_data_stream1, io::ReadDataStream* read_data_stream2, Stats& _stats, const uint32 batch_size) :
+    InputThreadPaired(io::SequenceDataStream* read_data_stream1, io::SequenceDataStream* read_data_stream2, Stats& _stats, const uint32 batch_size) :
         m_read_data_stream1( read_data_stream1 ), m_read_data_stream2( read_data_stream2 ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0)
     {
         for (uint32 i = 0; i < BUFFERS; ++i)
@@ -85,14 +87,17 @@ struct InputThreadPaired : public Thread<InputThreadPaired>
 
     void run();
 
-    io::ReadDataStream* m_read_data_stream1;
-    io::ReadDataStream* m_read_data_stream2;
-    Stats&              m_stats;
-    uint32              m_batch_size;
-    volatile uint32     m_set;
+    io::SequenceDataStream* m_read_data_stream1;
+    io::SequenceDataStream* m_read_data_stream2;
+    Stats&                  m_stats;
+    uint32                  m_batch_size;
+    volatile uint32         m_set;
 
-    io::ReadData* volatile read_data1[BUFFERS];
-    io::ReadData* volatile read_data2[BUFFERS];
+    io::SequenceDataHost<DNA_N> read_data_storage1[BUFFERS];
+    io::SequenceDataHost<DNA_N> read_data_storage2[BUFFERS];
+
+    io::SequenceDataHost<DNA_N>* volatile read_data1[BUFFERS];
+    io::SequenceDataHost<DNA_N>* volatile read_data2[BUFFERS];
 };
 
 } // namespace cuda

@@ -28,7 +28,7 @@
 #pragma once
 
 #include <nvbio/io/fmi.h>
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 #include <map>
 #include <string>
 
@@ -38,14 +38,14 @@ namespace cuda {
 
 int driver(const char*                              output_name,
            const io::FMIndexData&                   driver_data,
-                 io::ReadDataStream&                read_data_stream,
+                 io::SequenceDataStream&            read_data_stream,
            const std::map<std::string,std::string>& options);
 
 int driver(const char*                              output_name,
            const io::FMIndexData&                   driver_data,
            const io::PairedEndPolicy                pe_policy,
-                 io::ReadDataStream&                read_data_stream1,
-                 io::ReadDataStream&                read_data_stream2,
+                 io::SequenceDataStream&            read_data_stream1,
+                 io::SequenceDataStream&            read_data_stream2,
            const std::map<std::string,std::string>& options);
 
 } // namespace cuda

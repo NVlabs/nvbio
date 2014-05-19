@@ -36,7 +36,7 @@
 #include <nvbio/basic/exceptions.h>
 #include <nvbio/basic/shared_pointer.h>
 #include <nvbio/io/fmi.h>
-#include <nvbio/io/reads/reads.h>
+#include <nvbio/io/sequence/sequence.h>
 #include <nvBowtie/bowtie2/cuda/bowtie2_cuda_driver.h>
 
 void crcInit();
@@ -295,8 +295,8 @@ int main(int argc, char* argv[])
         if (paired_end)
         {
             log_visible(stderr, "opening read file [1] \"%s\"\n", argv[arg_offset+1]);
-            SharedPointer<nvbio::io::ReadDataStream> read_data_file1(
-                nvbio::io::open_read_file(argv[arg_offset+1],
+            SharedPointer<nvbio::io::SequenceDataStream> read_data_file1(
+                nvbio::io::open_sequence_file(argv[arg_offset+1],
                                           qencoding,
                                           max_reads,
                                           max_read_len,
@@ -310,8 +310,8 @@ int main(int argc, char* argv[])
             }
 
             log_visible(stderr, "opening read file [2] \"%s\"\n", argv[arg_offset+2]);
-            SharedPointer<nvbio::io::ReadDataStream> read_data_file2(
-                nvbio::io::open_read_file(argv[arg_offset+2],
+            SharedPointer<nvbio::io::SequenceDataStream> read_data_file2(
+                nvbio::io::open_sequence_file(argv[arg_offset+2],
                                           qencoding,
                                           max_reads,
                                           max_read_len,
@@ -329,8 +329,8 @@ int main(int argc, char* argv[])
         else
         {
             log_visible(stderr, "opening read file \"%s\"\n", argv[arg_offset+1]);
-            SharedPointer<nvbio::io::ReadDataStream> read_data_file(
-                nvbio::io::open_read_file(argv[arg_offset+1],
+            SharedPointer<nvbio::io::SequenceDataStream> read_data_file(
+                nvbio::io::open_sequence_file(argv[arg_offset+1],
                                           qencoding,
                                           max_reads,
                                           max_read_len,

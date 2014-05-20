@@ -220,16 +220,13 @@ struct BNTLoader : public nvbio::BNTSeqLoader
         m_name_vec->resize( name_offset + info.name.length() + 1u );
         strcpy( &m_name_vec->front() + name_offset, info.name.c_str() );
 
-        // compute the length of this sequence
-        const uint32 seq_len = data.offset - m_index_vec->back();
-
         // push back the name and sequence offsets
-        m_name_index_vec->push_back( name_offset );
-        m_index_vec->push_back( uint32( data.offset ) );
+        m_name_index_vec->push_back( uint32( m_name_vec->size() ) );
+        m_index_vec->push_back( uint32( data.offset + data.len ) );
 
         // keep sequence stats
-        m_info.m_min_sequence_len = nvbio::min( m_info.m_min_sequence_len, seq_len );
-        m_info.m_max_sequence_len = nvbio::min( m_info.m_max_sequence_len, seq_len );
+        m_info.m_min_sequence_len = nvbio::min( m_info.m_min_sequence_len, uint32( data.len ) );
+        m_info.m_max_sequence_len = nvbio::max( m_info.m_max_sequence_len, uint32( data.len ) );
     }
 
     void read_amb(const nvbio::BNTAmb& amb) {}

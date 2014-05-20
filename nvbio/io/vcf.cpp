@@ -138,10 +138,10 @@ bool loadVCF(SNPDatabase& output, const char *file_name)
             output.sequence_positions.push_back(position);
 
             output.reference_sequences.resize(index.reference_start + ref_len);
-            string_to_dna16(ref, output.reference_sequences.begin() + index.reference_start);
+            string_to_iupac16(ref, output.reference_sequences.begin() + index.reference_start);
 
             output.variants.resize(index.variant_start + var_len);
-            string_to_dna16(var, output.variants.begin() + index.variant_start);
+            string_to_iupac16(var, output.variants.begin() + index.variant_start);
 
             output.variant_qualities.push_back(quality);
 

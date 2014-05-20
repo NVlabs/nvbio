@@ -89,7 +89,7 @@ struct SequenceDataEncoder
 
     /// fetch the actual SequenceData object
     ///
-    virtual void* get_data() const { return NULL; }
+    virtual SequenceData* data() const { return NULL; }
 
     /// return the sequence data info
     ///
@@ -99,30 +99,13 @@ struct SequenceDataEncoder
     ///
     SequenceAlphabet alphabet() const { return m_alphabet; }
 
-    /// fetch the actual SequenceData object of the specified alphabet
-    /// NOTE: this only works for the proper alphabet
-    ///
-    template <SequenceAlphabet SEQUENCE_ALPHABET>
-    SequenceData<SEQUENCE_ALPHABET>* get() const
-    {
-        return reinterpret_cast<SequenceData<SEQUENCE_ALPHABET>*>( get_data() );
-    }
-
 private:
     SequenceAlphabet m_alphabet;
 };
 
 /// create a sequence encoder
 ///
-SequenceDataEncoder* create_encoder(SequenceDataHost<DNA>* data);
-
-/// create a sequence encoder
-///
-SequenceDataEncoder* create_encoder(SequenceDataHost<DNA_N>* data);
-
-/// create a sequence encoder
-///
-SequenceDataEncoder* create_encoder(SequenceDataHost<PROTEIN>* data);
+SequenceDataEncoder* create_encoder(const SequenceAlphabet alphabet, SequenceDataHost* data);
 
 } // namespace io
 } // namespace nvbio

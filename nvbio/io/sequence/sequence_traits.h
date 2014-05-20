@@ -25,33 +25,29 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <nvBowtie/bowtie2/cuda/aligner_inst.h>
-#include <nvBowtie/bowtie2/cuda/aligner_best_approx.h>
+#pragma once
+
+#include <nvbio/io/sequence/sequence_alphabet.h>
 
 namespace nvbio {
-namespace bowtie2 {
-namespace cuda {
+namespace io {
 
-void best_approx_ed(
-          Aligner&                  aligner,
-    const Params&                   params,
-    const FMIndexDef::type          fmi,
-    const FMIndexDef::type          rfmi,
-    const UberScoringScheme&        scoring_scheme,
-    const io::FMIndexDataDevice&    driver_data,
-    io::SequenceDataDevice&         read_data,
-    Stats&                          stats)
+///@addtogroup IO
+///@{
+
+///@addtogroup SequenceIO
+///@{
+
+template <SequenceAlphabet SEQUENCE_ALPHABET>
+struct SequenceDataTraits
 {
-    aligner.best_approx<edit_distance_scoring_tag>(
-        params,
-        fmi,
-        rfmi,
-        scoring_scheme,
-        driver_data,
-        read_data,
-        stats );
-}
+    static const uint32 SEQUENCE_BITS             = SequenceAlphabetTraits<SEQUENCE_ALPHABET>::SYMBOL_SIZE;     ///< symbol size for reads
+    static const bool   SEQUENCE_BIG_ENDIAN       = false;                                                      ///< big endian?
+    static const uint32 SEQUENCE_SYMBOLS_PER_WORD = (4*sizeof(uint32))/SEQUENCE_BITS;                           ///< symbols per word
+};
 
-} // namespace cuda
-} // namespace bowtie2
+///@} // SequenceIO
+///@} // IO
+
+} // namespace io
 } // namespace nvbio

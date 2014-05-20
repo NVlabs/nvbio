@@ -44,7 +44,7 @@ void Aligner::all(
     const rfmi_type                         rfmi,
     const UberScoringScheme&                input_scoring_scheme,
     const io::FMIndexDataDevice&            driver_data,
-    const io::SequenceDataDevice<DNA_N>&    read_data,
+    const io::SequenceDataDevice&           read_data,
     Stats&                                  stats)
 {
     // prepare the scoring system
@@ -54,7 +54,7 @@ void Aligner::all(
     scoring_scheme_type scoring_scheme = ScoringSchemeSelector<scoring_tag>::scheme( input_scoring_scheme );
 
     // cast the reads to use proper iterators
-    read_batch_type reads = plain_view( read_data );
+    const read_batch_type reads( plain_view( read_data ) );
 
     Timer timer;
     Timer global_timer;
@@ -153,7 +153,7 @@ void Aligner::score_all(
     const UberScoringScheme&                input_scoring_scheme,
     const scoring_scheme_type&              scoring_scheme,
     const io::FMIndexDataDevice&            driver_data,
-    const io::SequenceDataDevice<DNA_N>&  read_data,
+    const io::SequenceDataDevice&           read_data,
     const uint32                            seed_queue_size,
     const uint32*                           seed_queue,
     Stats&                                  stats,
@@ -172,7 +172,7 @@ void Aligner::score_all(
     const uint32 band_len = band_length( params.max_dist );
 
     // cast the reads to use proper iterators
-    read_batch_type reads = plain_view( read_data );
+    const read_batch_type reads( plain_view( read_data ) );
 
     // cast the genome to use proper iterators
     const uint32               genome_len = driver_data.genome_length();

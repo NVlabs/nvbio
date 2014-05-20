@@ -64,19 +64,21 @@ bool read(const char* reads_name, FILE* output_file, const io::QualityEncoding q
 
     uint32 n_reads = 0;
 
-    io::SequenceDataHost<DNA_N> h_read_data;
+    io::SequenceDataHost h_read_data;
 
     // loop through all read batches
     while (1)
     {
         // load a new batch of reads
-        if (io::next( &h_read_data, read_data_file.get(), batch_size ) == 0)
+        if (io::next( DNA_N, &h_read_data, read_data_file.get(), batch_size ) == 0)
             break;
+
+        const io::SequenceDataAccess<DNA_N> h_read_access( h_read_data );
 
         // loop through all reads
         for (uint32 i = 0; i < h_read_data.size(); ++i)
         {
-            const io::SequenceDataView<DNA_N>::sequence_string read = plain_view( h_read_data ).get_read(i);
+            const io::SequenceDataAccess<DNA_N>::sequence_string read = h_read_access.get_read(i);
 
             dna_to_string( read, read.length(), &char_read[0] );
 

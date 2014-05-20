@@ -84,7 +84,8 @@ struct Aligner
     typedef typename binary_switch<uint32,uint4,USE_UINT4_PACKING>::type                                                     read_storage_type;
     typedef typename binary_switch<const read_storage_type*,nvbio::cuda::ldg_pointer<read_storage_type>,USE_TEX_READS>::type read_base_type;
     typedef typename binary_switch<const char*,             nvbio::cuda::ldg_pointer<char>,             USE_TEX_READS>::type read_qual_type;
-    typedef io::SequenceDataView<DNA_N,const uint32*,read_base_type,read_qual_type,const char*>                              read_batch_type;
+    typedef io::SequenceDataViewCore<const uint32*,read_base_type,read_qual_type,const char*>                                read_view_type;
+    typedef io::SequenceDataAccess<DNA_N,read_view_type>                                                                     read_batch_type;
 
     typedef typename binary_switch<uint32,uint4,USE_UINT4_PACKING>::type                                                     genome_storage_type;
     typedef nvbio::cuda::ldg_pointer<genome_storage_type>                                                                    genome_iterator_type;
@@ -173,7 +174,7 @@ struct Aligner
         const rfmi_type                         rfmi,
         const UberScoringScheme&                scoring_scheme,
         const io::FMIndexDataDevice&            driver_data,
-        const io::SequenceDataDevice<DNA_N>&    read_data,
+        const io::SequenceDataDevice&           read_data,
         Stats&                                  stats);
 
     template <
@@ -185,7 +186,7 @@ struct Aligner
         const rfmi_type                         rfmi,
         const scoring_scheme_type&              scoring_scheme,
         const io::FMIndexDataDevice&            driver_data,
-        const io::SequenceDataDevice<DNA_N>&    read_data,
+        const io::SequenceDataDevice&           read_data,
         const uint32                            seeding_pass,
         const uint32                            seed_queue_size,
         const uint32*                           seed_queue,
@@ -198,8 +199,8 @@ struct Aligner
         const FMIndexDef::type                  rfmi,
         const UberScoringScheme&                scoring_scheme,
         const io::FMIndexDataDevice&            driver_data,
-        const io::SequenceDataDevice<DNA_N>&    read_data1,
-        const io::SequenceDataDevice<DNA_N>&    read_data2,
+        const io::SequenceDataDevice&           read_data1,
+        const io::SequenceDataDevice&           read_data2,
         Stats&                                  stats);
 
     template <
@@ -212,8 +213,8 @@ struct Aligner
         const scoring_scheme_type&              scoring_scheme,
         const io::FMIndexDataDevice&            driver_data,
         const uint32                            anchor,
-        const io::SequenceDataDevice<DNA_N>&    read_data1,
-        const io::SequenceDataDevice<DNA_N>&    read_data2,
+        const io::SequenceDataDevice&           read_data1,
+        const io::SequenceDataDevice&           read_data2,
         const uint32                            seeding_pass,
         const uint32                            seed_queue_size,
         const uint32*                           seed_queue,
@@ -226,7 +227,7 @@ struct Aligner
         const rfmi_type                         rfmi,
         const UberScoringScheme&                scoring_scheme,
         const io::FMIndexDataDevice&            driver_data,
-        const io::SequenceDataDevice<DNA_N>&    read_data,
+        const io::SequenceDataDevice&           read_data,
         Stats&                                  stats);
 
     template <typename scoring_scheme_type>
@@ -237,7 +238,7 @@ struct Aligner
         const UberScoringScheme&                input_scoring_scheme,
         const scoring_scheme_type&              scoring_scheme,
         const io::FMIndexDataDevice&            driver_data,
-        const io::SequenceDataDevice<DNA_N>&    read_data,
+        const io::SequenceDataDevice&           read_data,
         const uint32                            seed_queue_size,
         const uint32*                           seed_queue,
         Stats&                                  stats,

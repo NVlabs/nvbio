@@ -54,8 +54,8 @@ void OutputFile::configure_mapq_evaluator(const io::MapQEvaluator *mapq, int map
     OutputFile::mapq_filter = mapq_filter;
 }
 
-void OutputFile::start_batch(const io::SequenceDataHost<DNA_N> *read_data_1,
-                             const io::SequenceDataHost<DNA_N> *read_data_2)
+void OutputFile::start_batch(const io::SequenceDataHost *read_data_1,
+                             const io::SequenceDataHost *read_data_2)
 {
     // stash the current host pointer for the read data
     OutputFile::read_data_1 = read_data_1;

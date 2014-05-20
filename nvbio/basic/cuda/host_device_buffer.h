@@ -30,6 +30,7 @@
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <nvbio/basic/types.h>
+#include <nvbio/basic/vector.h>
 #include <cuda_runtime.h>
 
 namespace nvbio {

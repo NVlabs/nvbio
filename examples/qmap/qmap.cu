@@ -148,7 +148,7 @@ void map(
           qgram_index_type&                 qgram_index,
           qgram_filter_type&                qgram_filter,
     const uint32                            merge_intv,
-    const io::SequenceDataDevice<DNA_N>&    reads,
+    const io::SequenceDataDevice&           reads,
     const uint32                            n_queries,
     const uint32                            genome_len,
     const uint32                            genome_offset,
@@ -226,9 +226,12 @@ void map(
     // loop through large batches of hits and locate & merge them
     for (uint64 hits_begin = 0; hits_begin < n_hits; hits_begin += batch_size)
     {
-        typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type        read_view_type;
-        typedef read_view_type::sequence_string_set_type                    read_string_set_type;
-        typedef read_view_type::sequence_stream_type                        read_stream;
+        typedef io::SequenceDataAccess<DNA_N>                               read_access_type;
+        typedef read_access_type::sequence_string_set_type                  read_string_set_type;
+        typedef read_access_type::sequence_stream_type                      read_stream;
+
+        // build an access pointer to the sequence data
+        const read_access_type reads_access( reads );
 
         const uint64 hits_end = nvbio::min( hits_begin + batch_size, n_hits );
 
@@ -270,11 +273,9 @@ void map(
         typedef nvbio::vector<device_tag,string_infix_coord_type>::const_iterator infix_iterator;
 
         // build a view of the reads
-        const read_view_type reads_view = plain_view( reads );
-
         const SparseStringSet<read_stream,infix_iterator> read_infix_set(
             hits_end - hits_begin,
-            reads_view.sequence_stream(),
+            reads_access.sequence_stream(),
             read_infix_coords.begin() );
 
         const SparseStringSet<genome_string,infix_iterator> genome_infix_set(
@@ -394,18 +395,19 @@ int main(int argc, char* argv[])
     // keep stats
     Stats stats;
 
-    io::SequenceDataHost<DNA_N> h_read_data;
+    io::SequenceDataHost h_read_data;
 
     while (1)
     {
         // load a batch of reads
-        if (io::next( &h_read_data, read_data_file.get(), batch_reads, batch_bps ) == 0)
+        if (io::next( DNA_N, &h_read_data, read_data_file.get(), batch_reads, batch_bps ) == 0)
             break;
 
         log_info(stderr, "  loading reads... started\n");
 
         // copy it to the device
-        const io::SequenceDataDevice<DNA_N> d_read_data( h_read_data );
+        const io::SequenceDataDevice d_read_data( h_read_data );
+        const io::SequenceDataAccess<DNA_N> d_read_access( d_read_data );
 
         const uint32 n_reads = d_read_data.size() / 2;
 
@@ -413,14 +415,14 @@ int main(int argc, char* argv[])
         log_info(stderr, "    %u reads\n", n_reads);
 
         // prepare some typedefs for the involved string-sets and infixes
-        typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type            read_view_type;     // the read view type
-        typedef read_view_type::sequence_string_set_type                        string_set_type;    // the read string-set
+        typedef io::SequenceDataAccess<DNA_N>                                   read_access_type;     // the read view type
+        typedef read_access_type::sequence_string_set_type                      string_set_type;    // the read string-set
         typedef string_set_infix_coord_type                                     infix_coord_type;   // the infix coordinate type, for string-sets
         typedef nvbio::vector<device_tag,infix_coord_type>                      infix_vector_type;  // the device vector type for infix coordinates
         typedef InfixSet<string_set_type, const string_set_infix_coord_type*>   seed_set_type;      // the infix-set type for representing seeds
 
         // fetch the actual read string-set
-        const string_set_type d_read_string_set = plain_view( d_read_data ).sequence_string_set();
+        const string_set_type d_read_string_set = d_read_access.sequence_string_set();
 
         // build the q-gram index
         QGramSetIndexDevice qgram_index;

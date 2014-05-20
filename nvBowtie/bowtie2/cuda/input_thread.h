@@ -63,8 +63,8 @@ struct InputThread : public Thread<InputThread>
     uint32              m_batch_size;
     volatile uint32     m_set;
 
-    io::SequenceDataHost<DNA_N>           read_data_storage[BUFFERS];
-    io::SequenceDataHost<DNA_N>* volatile read_data[BUFFERS];
+    io::SequenceDataHost           read_data_storage[BUFFERS];
+    io::SequenceDataHost* volatile read_data[BUFFERS];
 };
 
 //
@@ -93,11 +93,11 @@ struct InputThreadPaired : public Thread<InputThreadPaired>
     uint32                  m_batch_size;
     volatile uint32         m_set;
 
-    io::SequenceDataHost<DNA_N> read_data_storage1[BUFFERS];
-    io::SequenceDataHost<DNA_N> read_data_storage2[BUFFERS];
+    io::SequenceDataHost read_data_storage1[BUFFERS];
+    io::SequenceDataHost read_data_storage2[BUFFERS];
 
-    io::SequenceDataHost<DNA_N>* volatile read_data1[BUFFERS];
-    io::SequenceDataHost<DNA_N>* volatile read_data2[BUFFERS];
+    io::SequenceDataHost* volatile read_data1[BUFFERS];
+    io::SequenceDataHost* volatile read_data2[BUFFERS];
 };
 
 } // namespace cuda

@@ -53,7 +53,7 @@ void InputThread::run()
         Timer timer;
         timer.start();
 
-        const int ret = io::next( &read_data_storage[ m_set ], m_read_data_stream, m_batch_size );
+        const int ret = io::next( DNA_N, &read_data_storage[ m_set ], m_read_data_stream, m_batch_size );
 
         timer.stop();
 
@@ -67,7 +67,7 @@ void InputThread::run()
         else
         {
             // mark this as an invalid entry
-            read_data[ m_set ] = (io::SequenceDataHost<DNA_N>*)INVALID;
+            read_data[ m_set ] = (io::SequenceDataHost*)INVALID;
             break;
         }
 
@@ -91,8 +91,8 @@ void InputThreadPaired::run()
         Timer timer;
         timer.start();
 
-        const int ret1 = io::next( &read_data_storage1[ m_set ], m_read_data_stream1, m_batch_size );
-        const int ret2 = io::next( &read_data_storage2[ m_set ], m_read_data_stream2, m_batch_size );
+        const int ret1 = io::next( DNA_N, &read_data_storage1[ m_set ], m_read_data_stream1, m_batch_size );
+        const int ret2 = io::next( DNA_N, &read_data_storage2[ m_set ], m_read_data_stream2, m_batch_size );
 
         timer.stop();
 
@@ -107,8 +107,8 @@ void InputThreadPaired::run()
         else
         {
             // mark this as an invalid entry
-            read_data1[ m_set ] = (io::SequenceDataHost<DNA_N>*)INVALID;
-            read_data2[ m_set ] = (io::SequenceDataHost<DNA_N>*)INVALID;
+            read_data1[ m_set ] = (io::SequenceDataHost*)INVALID;
+            read_data2[ m_set ] = (io::SequenceDataHost*)INVALID;
             break;
         }
 

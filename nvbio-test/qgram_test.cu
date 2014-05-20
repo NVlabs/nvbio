@@ -493,29 +493,30 @@ int qgram_test(int argc, char* argv[])
     const uint32 batch_bps  = n_qgrams;
 
     // load a batch of reads
-    io::SequenceDataHost<DNA_N> h_read_data;
+    io::SequenceDataHost h_read_data;
 
-    if (io::next( &h_read_data, read_data_file.get(), batch_size, batch_bps ) == 0)
+    if (io::next( DNA_N, &h_read_data, read_data_file.get(), batch_size, batch_bps ) == 0)
     {
         log_error(stderr, "  unable to read input sequences\n");
         return 1;
     }
     
     // build its device version
-    const io::SequenceDataDevice<DNA_N> d_read_data( h_read_data );
+    const io::SequenceDataDevice d_read_data( h_read_data );
+    const io::SequenceDataAccess<DNA_N> d_read_access( d_read_data );
 
     log_info(stderr, "  loading reads... done\n");
 
     // fetch the actual string
-    typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type read_view_type;
+    typedef io::SequenceDataAccess<DNA_N> read_access_type;
 
-    typedef read_view_type::sequence_stream_type        string_type;
-    typedef read_view_type::sequence_string_set_type    string_set_type;
+    typedef read_access_type::sequence_stream_type        string_type;
+    typedef read_access_type::sequence_string_set_type    string_set_type;
 
-    const uint32          n_strings      = d_read_data.size();
-    const uint32          string_len     = d_read_data.bps();
-    const string_type     string         = nvbio::plain_view( d_read_data ).sequence_stream();
-    const string_set_type string_set     = nvbio::plain_view( d_read_data ).sequence_string_set();
+    const uint32          n_strings      = d_read_access.size();
+    const uint32          string_len     = d_read_access.bps();
+    const string_type     string         = d_read_access.sequence_stream();
+    const string_set_type string_set     = d_read_access.sequence_string_set();
 
     log_info(stderr, "    strings: %u\n", n_strings);
     log_info(stderr, "    symbols: %.3f M\n", 1.0e-6f * float(string_len));

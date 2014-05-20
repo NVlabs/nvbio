@@ -51,7 +51,7 @@ void Aligner::best_approx(
     const rfmi_type                         rfmi,
     const UberScoringScheme&                input_scoring_scheme,
     const io::FMIndexDataDevice&            driver_data,
-    const io::SequenceDataDevice<DNA_N>&    read_data,
+    const io::SequenceDataDevice&           read_data,
     Stats&                                  stats)
 {
     // cast the genome to use proper iterators
@@ -76,7 +76,7 @@ void Aligner::best_approx(
     const uint32 band_len = band_length( params.max_dist );
 
     // create a device-side read batch
-    read_batch_type reads = plain_view( read_data );
+    const read_batch_type reads( plain_view( read_data ) );
 
     // initialize best-alignments
     init_alignments( reads, threshold_score, best_data_dptr );
@@ -370,7 +370,7 @@ void Aligner::best_approx_score(
     const rfmi_type                         rfmi,
     const scoring_scheme_type&              scoring_scheme,
     const io::FMIndexDataDevice&            driver_data,
-    const io::SequenceDataDevice<DNA_N>&    read_data,
+    const io::SequenceDataDevice&           read_data,
     const uint32                            seeding_pass,
     const uint32                            seed_queue_size,
     const uint32*                           seed_queue,
@@ -390,7 +390,7 @@ void Aligner::best_approx_score(
     const uint32 band_len = band_length( params.max_dist );
 
     // cast the reads to use proper iterators
-    read_batch_type reads = plain_view( read_data );
+    const read_batch_type reads( plain_view( read_data ) );
 
     // cast the genome to use proper iterators
     const uint32               genome_len = driver_data.genome_length();

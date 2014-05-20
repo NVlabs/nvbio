@@ -25,33 +25,55 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <nvBowtie/bowtie2/cuda/aligner_inst.h>
-#include <nvBowtie/bowtie2/cuda/aligner_best_approx.h>
+#pragma once
+
+#include <nvbio/basic/types.h>
 
 namespace nvbio {
-namespace bowtie2 {
-namespace cuda {
 
-void best_approx_ed(
-          Aligner&                  aligner,
-    const Params&                   params,
-    const FMIndexDef::type          fmi,
-    const FMIndexDef::type          rfmi,
-    const UberScoringScheme&        scoring_scheme,
-    const io::FMIndexDataDevice&    driver_data,
-    io::SequenceDataDevice&         read_data,
-    Stats&                          stats)
+///
+/// The supported sequence alphabet types
+///
+enum SequenceAlphabet
 {
-    aligner.best_approx<edit_distance_scoring_tag>(
-        params,
-        fmi,
-        rfmi,
-        scoring_scheme,
-        driver_data,
-        read_data,
-        stats );
+    DNA     = 0u,
+    DNA_N   = 1u,
+    PROTEIN = 2u
+};
+
+/// A traits class for SequenceAlphabet
+///
+template <SequenceAlphabet ALPHABET> struct SequenceAlphabetTraits {};
+
+/// A traits class for DNA SequenceAlphabet
+///
+template <> struct SequenceAlphabetTraits<DNA>
+{
+    static const uint32 SYMBOL_SIZE  = 2;
+    static const uint32 SYMBOL_COUNT = 4;
+};
+/// A traits class for DNA_N SequenceAlphabet
+///
+template <> struct SequenceAlphabetTraits<DNA_N>
+{
+    static const uint32 SYMBOL_SIZE  = 4;
+    static const uint32 SYMBOL_COUNT = 5;
+};
+/// A traits class for Protein SequenceAlphabet
+///
+template <> struct SequenceAlphabetTraits<PROTEIN>
+{
+    static const uint32 SYMBOL_SIZE  = 8;
+    static const uint32 SYMBOL_COUNT = 24;
+};
+
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 bits_per_symbol(const SequenceAlphabet alphabet)
+{
+    return alphabet == DNA     ? 2 :
+           alphabet == DNA_N   ? 4 :
+           alphabet == PROTEIN ? 8 :
+           8u;
 }
 
-} // namespace cuda
-} // namespace bowtie2
 } // namespace nvbio

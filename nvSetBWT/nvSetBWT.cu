@@ -101,7 +101,7 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
 
     float io_time = 0.0f;
 
-    io::SequenceDataHost<DNA_N> h_read_data;
+    io::SequenceDataHost h_read_data;
 
     while (1)
     {
@@ -109,11 +109,11 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
         timer.start();
 
         // load a new batch of reads
-        if (io::next( &h_read_data, read_data_file.get(), batch_size, batch_bps ) == 0)
+        if (io::next( DNA_N, &h_read_data, read_data_file.get(), batch_size, batch_bps ) == 0)
             break;
 
         // build a view
-        io::SequenceDataView<DNA_N> h_read_view = h_read_data;
+        io::SequenceDataAccess<DNA_N> h_read_view( h_read_data );
 
         const uint64 required_words = util::divide_ri( reads->n_symbols + h_read_data.bps(), SYMBOLS_PER_WORD );
 
@@ -123,8 +123,8 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
         const uint32 word_offset = reads->n_symbols & (SYMBOLS_PER_WORD-1);
               uint32 word_rem    = 0;
 
-        typedef io::SequenceDataView<DNA_N>::const_sequence_stream_type src_read_stream_type;
-        const src_read_stream_type src( h_read_view.const_sequence_stream() );
+        typedef io::SequenceDataAccess<DNA_N>::sequence_stream_type src_read_stream_type;
+        const src_read_stream_type src( h_read_view.sequence_stream() );
 
         if (word_offset)
         {

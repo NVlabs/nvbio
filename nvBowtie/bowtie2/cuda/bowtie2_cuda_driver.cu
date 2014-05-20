@@ -301,8 +301,8 @@ int driver(
         polling_timer.stop();
         polling_time += polling_timer.seconds();
 
-        io::SequenceDataHost<DNA_N>* read_data_host = input_thread.read_data[ input_set ];
-        if (read_data_host == (io::SequenceDataHost<DNA_N>*)InputThread::INVALID)
+        io::SequenceDataHost* read_data_host = input_thread.read_data[ input_set ];
+        if (read_data_host == (io::SequenceDataHost*)InputThread::INVALID)
             break;
 
         if (read_data_host->max_sequence_len() > Aligner::MAX_READ_LEN)
@@ -318,7 +318,7 @@ int driver(
 
         aligner.output_file->start_batch(read_data_host);
 
-        io::SequenceDataDevice<DNA_N> read_data( *read_data_host );
+        io::SequenceDataDevice read_data( *read_data_host );
         cudaThreadSynchronize();
 
         timer.stop();
@@ -622,10 +622,10 @@ int driver(
         polling_timer.stop();
         polling_time += polling_timer.seconds();
 
-        io::SequenceDataHost<DNA_N>* read_data_host1 = input_thread.read_data1[ input_set ];
-        io::SequenceDataHost<DNA_N>* read_data_host2 = input_thread.read_data2[ input_set ];
-        if (read_data_host1 == (io::SequenceDataHost<DNA_N>*)InputThread::INVALID ||
-            read_data_host2 == (io::SequenceDataHost<DNA_N>*)InputThread::INVALID)
+        io::SequenceDataHost* read_data_host1 = input_thread.read_data1[ input_set ];
+        io::SequenceDataHost* read_data_host2 = input_thread.read_data2[ input_set ];
+        if (read_data_host1 == (io::SequenceDataHost*)InputThread::INVALID ||
+            read_data_host2 == (io::SequenceDataHost*)InputThread::INVALID)
             break;
 
         if ((read_data_host1->max_sequence_len() > Aligner::MAX_READ_LEN) ||
@@ -642,8 +642,8 @@ int driver(
 
         aligner.output_file->start_batch(read_data_host1, read_data_host2);
 
-        io::SequenceDataDevice<DNA_N> read_data1( *read_data_host1/*, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS*/ );
-        io::SequenceDataDevice<DNA_N> read_data2( *read_data_host2/*, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS*/ );
+        io::SequenceDataDevice read_data1( *read_data_host1/*, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS*/ );
+        io::SequenceDataDevice read_data2( *read_data_host2/*, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS*/ );
 
         timer.stop();
         stats.read_HtoD.add( read_data1.size(), timer.seconds() );

@@ -27,53 +27,14 @@
 
 #pragma once
 
-#include <nvbio/basic/strided_iterator.h>
+#include <nvbio/io/sequence/sequence_alphabet.h>
+#include <nvbio/io/sequence/sequence_traits.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/vector_view.h>
 #include <nvbio/basic/vector.h>
 #include <nvbio/strings/string_set.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <vector>
 
 namespace nvbio {
-
-///
-/// The supported sequence alphabet types
-///
-enum SequenceAlphabet
-{
-    DNA     = 0u,
-    DNA_N   = 1u,
-    PROTEIN = 2u
-};
-
-/// A traits class for SequenceAlphabet
-///
-template <SequenceAlphabet ALPHABET> struct SequenceAlphabetTraits {};
-
-/// A traits class for DNA SequenceAlphabet
-///
-template <> struct SequenceAlphabetTraits<DNA>
-{
-    static const uint32 SYMBOL_SIZE  = 2;
-    static const uint32 SYMBOL_COUNT = 4;
-};
-/// A traits class for DNA_N SequenceAlphabet
-///
-template <> struct SequenceAlphabetTraits<DNA_N>
-{
-    static const uint32 SYMBOL_SIZE  = 4;
-    static const uint32 SYMBOL_COUNT = 5;
-};
-/// A traits class for Protein SequenceAlphabet
-///
-template <> struct SequenceAlphabetTraits<PROTEIN>
-{
-    static const uint32 SYMBOL_SIZE  = 8;
-    static const uint32 SYMBOL_COUNT = 24;
-};
-
 namespace io {
 
 ///
@@ -130,6 +91,14 @@ enum SequenceEncoding
     REVERSE_COMPLEMENT = 0x0008,
 };
 
+// a set of flags describing what to load
+enum SequenceFlags
+{
+    SEQUENCE_DATA   = 0x0001,
+    SEQUENCE_QUALS  = 0x0002,
+    SEQUENCE_NAMES  = 0x0004,
+};
+
 // how mates of a paired-end read are encoded
 // F = forward, R = reverse
 enum PairedEndPolicy
@@ -149,7 +118,8 @@ struct SequenceDataInfo
     ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
     SequenceDataInfo()
-      : m_n_seqs(0),
+      : m_alphabet(PROTEIN),
+        m_n_seqs(0),
         m_name_stream_len(0),
         m_sequence_stream_len(0),
         m_sequence_stream_words(0),
@@ -158,37 +128,28 @@ struct SequenceDataInfo
         m_avg_sequence_len(0)
     {};
 
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  size()                    const { return m_n_seqs; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  bps()                     const { return m_sequence_stream_len; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  words()                   const { return m_sequence_stream_words; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  name_stream_len()         const { return m_name_stream_len; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  max_sequence_len()        const { return m_max_sequence_len; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  min_sequence_len()        const { return m_min_sequence_len; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32  avg_sequence_len()        const { return m_avg_sequence_len; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE SequenceAlphabet alphabet()         const { return m_alphabet; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           size()             const { return m_n_seqs; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           bps()              const { return m_sequence_stream_len; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           words()            const { return m_sequence_stream_words; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           name_stream_len()  const { return m_name_stream_len; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           max_sequence_len() const { return m_max_sequence_len; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           min_sequence_len() const { return m_min_sequence_len; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           avg_sequence_len() const { return m_avg_sequence_len; }
 
-    uint32  m_n_seqs;                   ///< number of reads in this struct
-    uint32  m_name_stream_len;          ///< the length (in bytes) of the name_stream buffer
-    uint32  m_sequence_stream_len;      ///< the length of sequence_stream in base pairs
-    uint32  m_sequence_stream_words;    ///< the number of words in sequence_stream
+    SequenceAlphabet    m_alphabet;                 ///< the alphabet
+    uint32              m_n_seqs;                   ///< number of reads in this struct
+    uint32              m_name_stream_len;          ///< the length (in bytes) of the name_stream buffer
+    uint32              m_sequence_stream_len;      ///< the length of sequence_stream in base pairs
+    uint32              m_sequence_stream_words;    ///< the number of words in sequence_stream
 
-    uint32  m_min_sequence_len;         ///< statistics on the reads
-    uint32  m_max_sequence_len;         ///< statistics on the reads
-    uint32  m_avg_sequence_len;         ///< statistics on the reads
-};
-
-template <SequenceAlphabet SEQUENCE_ALPHABET>
-struct SequenceDataTraits
-{
-    // symbol size for reads
-    static const uint32 SEQUENCE_BITS = SequenceAlphabetTraits<SEQUENCE_ALPHABET>::SYMBOL_SIZE;
-    // big endian?
-    static const bool   SEQUENCE_BIG_ENDIAN = false;
-    // symbols per word
-    static const uint32 SEQUENCE_SYMBOLS_PER_WORD = (4*sizeof(uint32))/SEQUENCE_BITS;
+    uint32              m_min_sequence_len;         ///< statistics on the reads
+    uint32              m_max_sequence_len;         ///< statistics on the reads
+    uint32              m_avg_sequence_len;         ///< statistics on the reads
 };
 
 ///
-/// A storage-less plain-view class to represent and access sequence data.
+/// A storage-less plain-view class to represent the core sequence data iterators.
 ///
 /// This class is templated over the iterators pointing to the actual storage, so as to allow
 /// them being both raw (const or non-const) pointers or fancier iterators (e.g. cuda::load_pointer
@@ -200,71 +161,31 @@ struct SequenceDataTraits
 /// \tparam NameStorageIterator         the type of the iterator to the names storage
 ///
 template <
-    SequenceAlphabet    SEQUENCE_ALPHABET_T,
-    typename            IndexIterator               = uint32*,
-    typename            SequenceStorageIterator     = uint32*,
-    typename            QualStorageIterator         = char*,
-    typename            NameStorageIterator         = char*>
-struct SequenceDataView : public SequenceDataInfo
+    typename IndexIterator           = uint32*,
+    typename SequenceStorageIterator = uint32*,
+    typename QualStorageIterator     = char*,
+    typename NameStorageIterator     = char*>
+struct SequenceDataViewCore : public SequenceDataInfo
 {
-    static const SequenceAlphabet SEQUENCE_ALPHABET = SEQUENCE_ALPHABET_T;                                              ///< alphabet type
-    static const uint32 SEQUENCE_BITS = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BITS;                           ///< symbol size
-    static const bool   SEQUENCE_BIG_ENDIAN = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BIG_ENDIAN;               ///< endianness
-    static const uint32 SEQUENCE_SYMBOLS_PER_WORD = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_SYMBOLS_PER_WORD;   ///< number of symbols per word
+    typedef IndexIterator                   index_iterator;               ///< the index iterator
+    typedef SequenceStorageIterator         sequence_storage_iterator;    ///< the read storage iterator
+    typedef QualStorageIterator             qual_storage_iterator;        ///< the qualities iterator
+    typedef NameStorageIterator             name_storage_iterator;        ///< the names string iterator
 
-    typedef IndexIterator                                                             index_iterator;               ///< the index iterator
-    typedef typename to_const<index_iterator>::type                             const_index_iterator;               ///< the const index iterator
-
-    typedef SequenceStorageIterator                                                   sequence_storage_iterator;    ///< the read storage iterator
-    typedef typename to_const<sequence_storage_iterator>::type                  const_sequence_storage_iterator;    ///< the const read storage iterator
-
-    typedef QualStorageIterator                                                       qual_storage_iterator;        ///< the qualities iterator
-    typedef typename to_const<qual_storage_iterator>::type                      const_qual_storage_iterator;        ///< the const qualities iterator
-
-    typedef NameStorageIterator                                                       name_storage_iterator;        ///< the names string iterator
-    typedef typename to_const<name_storage_iterator>::type                      const_name_storage_iterator;        ///< the names string iterator
-
-    typedef PackedStream<
-        sequence_storage_iterator,uint8,SEQUENCE_BITS,SEQUENCE_BIG_ENDIAN>              sequence_stream_type;       ///< the packed read-stream type
-    typedef PackedStream<
-        const_sequence_storage_iterator,uint8,SEQUENCE_BITS,SEQUENCE_BIG_ENDIAN>  const_sequence_stream_type;       ///< the const packed read-stream type
-
-    typedef vector_view<sequence_stream_type>                                         sequence_string;            ///< the read string type
-    typedef vector_view<const_sequence_stream_type>                             const_sequence_string;            ///< the const read string type
-
-    typedef ConcatenatedStringSet<
-        sequence_stream_type,
-        index_iterator>                                                         sequence_string_set_type;   ///< string-set type
-
-    typedef ConcatenatedStringSet<
-        const_sequence_stream_type,
-        const_index_iterator>                                             const_sequence_string_set_type;   ///< const string-set type
-
-    typedef ConcatenatedStringSet<
-        qual_storage_iterator,
-        index_iterator>                                                         qual_string_set_type;   ///< quality string-set type
-
-    typedef ConcatenatedStringSet<
-        const_qual_storage_iterator,
-        const_index_iterator>                                             const_qual_string_set_type;   ///< const quality string-set type
-
-    typedef ConcatenatedStringSet<
-        name_storage_iterator,
-        index_iterator>                                                         name_string_set_type;   ///< name string-set type
-
-    typedef ConcatenatedStringSet<
-        const_name_storage_iterator,
-        const_index_iterator>                                             const_name_string_set_type;   ///< const name string-set type
+    typedef typename to_const<IndexIterator>::type                   const_index_iterator;               ///< the index iterator
+    typedef typename to_const<SequenceStorageIterator>::type         const_sequence_storage_iterator;    ///< the read storage iterator
+    typedef typename to_const<QualStorageIterator>::type             const_qual_storage_iterator;        ///< the qualities iterator
+    typedef typename to_const<NameStorageIterator>::type             const_name_storage_iterator;        ///< the names string iterator
 
     /// empty constructor
     ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
-    SequenceDataView() : SequenceDataInfo() {}
+    SequenceDataViewCore() : SequenceDataInfo() {}
 
     /// constructor
     ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
-    SequenceDataView(
+    SequenceDataViewCore(
         const SequenceDataInfo&         info,
         const SequenceStorageIterator   sequence_stream,
         const IndexIterator             sequence_index,
@@ -287,7 +208,7 @@ struct SequenceDataView : public SequenceDataInfo
         typename InQualIterator,
         typename InNameIterator>
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
-    SequenceDataView(const SequenceDataView<SEQUENCE_ALPHABET_T,InIndexIterator,InSequenceIterator,InQualIterator,InNameIterator>& in)
+    SequenceDataViewCore(const SequenceDataViewCore<InIndexIterator,InSequenceIterator,InQualIterator,InNameIterator>& in)
       : SequenceDataInfo        ( in ),
         m_name_stream           (NameStorageIterator( in.m_name_stream )),
         m_name_index            (IndexIterator( in.m_name_index )),
@@ -304,7 +225,7 @@ struct SequenceDataView : public SequenceDataInfo
         typename InQualIterator,
         typename InNameIterator>
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
-    SequenceDataView& operator=(const SequenceDataView<SEQUENCE_ALPHABET_T,InIndexIterator,InSequenceIterator,InQualIterator,InNameIterator>& in)
+    SequenceDataViewCore& operator=(const SequenceDataViewCore<InIndexIterator,InSequenceIterator,InQualIterator,InNameIterator>& in)
     {
         // copy the info
         this->SequenceDataInfo::operator=( in );
@@ -318,168 +239,43 @@ struct SequenceDataView : public SequenceDataInfo
         return *this;
     }
 
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator              name_index()                { return m_name_index;  }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator              sequence_index()            { return m_sequence_index;  }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_storage_iterator       name_stream()               { return m_name_stream; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_storage_iterator   sequence_storage()          { return m_sequence_stream; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_stream_type        sequence_stream()           { return sequence_stream_type( m_sequence_stream ); }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE qual_storage_iterator       qual_stream()               { return m_qual_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator                  name_index()                { return m_name_index;  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator                  sequence_index()            { return m_sequence_index;  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_storage_iterator           name_stream()               { return m_name_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_storage_iterator       sequence_storage()          { return m_sequence_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE qual_storage_iterator           qual_stream()               { return m_qual_stream; }
 
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator            const_name_index()              const { return m_name_index;  }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator            const_sequence_index()          const { return m_sequence_index;  }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_storage_iterator     const_name_stream()             const { return m_name_stream; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_storage_iterator const_sequence_storage()        const { return m_sequence_stream; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_stream_type      const_sequence_stream()         const { return const_sequence_stream_type( m_sequence_stream ); }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_storage_iterator     const_qual_stream()             const { return m_qual_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator            name_index()          const { return m_name_index;  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator            sequence_index()      const { return m_sequence_index;  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_storage_iterator     name_stream()         const { return m_name_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_storage_iterator sequence_storage()    const { return m_sequence_stream; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_storage_iterator     qual_stream()         const { return m_qual_stream; }
 
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator            name_index()                    const { return const_name_index();  }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator            sequence_index()                const { return const_sequence_index();  }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_storage_iterator     name_stream()                   const { return const_name_stream(); }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_storage_iterator sequence_storage()              const { return const_sequence_storage(); }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_stream_type      sequence_stream()               const { return const_sequence_stream(); }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_storage_iterator     qual_stream()                   const { return const_qual_stream(); }
-
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint2 get_range(const uint32 i) const { return make_uint2(m_sequence_index[i],m_sequence_index[i+1]); }
-
-    /// return the a string-set view of this set of reads
+    /// get the range of a read in the sequence stream
     ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_string_set_type sequence_string_set()
-    {
-        return sequence_string_set_type(
-            size(),
-            sequence_stream().begin(),
-            sequence_index() );
-    }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint2 get_range(const uint32 i) const { return make_uint2( sequence_index()[i], sequence_index()[i+1] ); }
 
-    /// return the a string-set view of this set of reads
-    ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_string_set_type sequence_string_set() const
-    {
-        return const_sequence_string_set_type(
-            size(),
-            sequence_stream().begin(),
-            sequence_index() );
-    }
+    name_storage_iterator       m_name_stream;      ///< a pointer to a buffer containing the names of all the reads in this batch
+    index_iterator              m_name_index;       ///< an array of uint32 with the byte indices of the starting locations of each name in name_stream
+    sequence_storage_iterator   m_sequence_stream;  ///< a pointer to a buffer containing the read data
+                                                    ///< note that this could point at either host or device memory
 
-    /// return the a string-set view of this set of reads
-    ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_string_set_type const_sequence_string_set() const
-    {
-        return const_sequence_string_set_type(
-            size(),
-            sequence_stream().begin(),
-            sequence_index() );
-    }
+    index_iterator              m_sequence_index;   ///< an array of uint32 with the indices of the starting locations of each read in sequence_stream (in base pairs)
+    qual_storage_iterator       m_qual_stream;      ///< a pointer to a buffer containing quality data
 
-    /// return the i-th read as a string
-    ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_string get_read(const uint32 i)
-    {
-        const uint2 sequence_range = get_range( i );
-        return sequence_string( sequence_range.y - sequence_range.x, sequence_stream().begin() + sequence_range.x );
-    }
-
-    /// return the i-th read as a string
-    ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_string get_read(const uint32 i) const
-    {
-        const uint2 sequence_range = get_range( i );
-        return const_sequence_string( sequence_range.y - sequence_range.x, sequence_stream().begin() + sequence_range.x );
-    }
-
-    /// return the a string-set view of this set of reads
-    ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE qual_string_set_type qual_string_set()
-    {
-        return qual_string_set_type(
-            size(),
-            qual_stream(),
-            sequence_index() );
-    }
-
-    /// return the a string-set view of this set of reads
-    ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_string_set_type qual_string_set() const
-    {
-        return const_qual_string_set_type(
-            size(),
-            qual_stream(),
-            sequence_index() );
-    }
-
-    /// return the a string-set view of this set of reads
-    ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_string_set_type const_qual_string_set() const
-    {
-        return const_qual_string_set_type(
-            size(),
-            qual_stream(),
-            sequence_index() );
-    }
-
-    /// return the a string-set view of this set of reads
-    ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_string_set_type name_string_set()
-    {
-        return name_string_set_type(
-            size(),
-            name_stream(),
-            name_index() );
-    }
-
-    /// return the a string-set view of this set of reads
-    ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_string_set_type name_string_set() const
-    {
-        return const_name_string_set_type(
-            size(),
-            name_stream(),
-            name_index() );
-    }
-
-    /// return the a string-set view of this set of reads
-    ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_string_set_type const_name_string_set() const
-    {
-        return const_name_string_set_type(
-            size(),
-            name_stream(),
-            name_index() );
-    }
-
-public:
-    // a pointer to a buffer containing the names of all the reads in this batch
-    name_storage_iterator       m_name_stream;
-
-    // an array of uint32 with the byte indices of the starting locations of each name in name_stream
-    index_iterator              m_name_index;
-
-    // a pointer to a buffer containing the read data
-    // note that this could point at either host or device memory
-    sequence_storage_iterator   m_sequence_stream;
-
-    // an array of uint32 with the indices of the starting locations of each read in sequence_stream (in base pairs)
-    index_iterator              m_sequence_index;
-
-    // a pointer to a buffer containing quality data
-    // (the indices in m_sequence_index are also valid for this buffer)
-    qual_storage_iterator       m_qual_stream;
 };
+
+typedef SequenceDataViewCore<uint32*,uint32*,char*,char*>                              SequenceDataView;
+typedef SequenceDataViewCore<const uint32*,const uint32*,const char*,const char*> ConstSequenceDataView;
 
 ///
 /// Base abstract class to encapsulate a sequence data object.
 /// This class is meant to be a base for either host, shared or device memory objects
 ///
-template <SequenceAlphabet SEQUENCE_ALPHABET_T>
 struct SequenceData : public SequenceDataInfo
 {
-    static const SequenceAlphabet SEQUENCE_ALPHABET = SEQUENCE_ALPHABET_T;                                              ///< alphabet type
-    static const uint32 SEQUENCE_BITS               = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BITS;             ///< symbol size
-    static const bool   SEQUENCE_BIG_ENDIAN         = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BIG_ENDIAN;       ///< endianness
-    static const uint32 SEQUENCE_SYMBOLS_PER_WORD   = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_SYMBOLS_PER_WORD; ///< number of symbols per word
-
-    typedef SequenceDataView<SEQUENCE_ALPHABET,uint32*,uint32*,char*,char*>                               plain_view_type;
-    typedef SequenceDataView<SEQUENCE_ALPHABET,const uint32*,const uint32*,const char*,const char*> const_plain_view_type;
+    typedef      SequenceDataView             plain_view_type;
+    typedef ConstSequenceDataView       const_plain_view_type;
 
     /// virtual destructor
     ///
@@ -497,18 +293,23 @@ struct SequenceData : public SequenceDataInfo
 ///
 /// A concrete SequenceData storage implementation in host/device memory
 ///
-template <typename system_tag, SequenceAlphabet SEQUENCE_ALPHABET_T>
-struct SequenceDataStorage : public SequenceData<SEQUENCE_ALPHABET_T>
+template <typename system_tag>
+struct SequenceDataStorage : public SequenceData
 {
-    static const SequenceAlphabet SEQUENCE_ALPHABET = SEQUENCE_ALPHABET_T;                                              ///< alphabet type
-    static const uint32 SEQUENCE_BITS               = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BITS;             ///< symbol size
-    static const bool   SEQUENCE_BIG_ENDIAN         = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BIG_ENDIAN;       ///< endianness
-    static const uint32 SEQUENCE_SYMBOLS_PER_WORD   = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_SYMBOLS_PER_WORD; ///< number of symbols per word
+    typedef SequenceData                                                SequenceDataBase;
 
-    typedef SequenceData<SEQUENCE_ALPHABET>                             SequenceDataBase;
+    typedef      SequenceDataView                                       plain_view_type;
+    typedef ConstSequenceDataView                                 const_plain_view_type;
 
-    typedef typename SequenceDataBase::plain_view_type                  plain_view_type;
-    typedef typename SequenceDataBase::const_plain_view_type      const_plain_view_type;
+    typedef typename nvbio::vector<system_tag,uint32>::iterator                  index_iterator;
+    typedef typename nvbio::vector<system_tag,uint32>::iterator                  sequence_storage_iterator;
+    typedef typename nvbio::vector<system_tag,char>::iterator                    qual_storage_iterator;
+    typedef typename nvbio::vector<system_tag,char>::iterator                    name_storage_iterator;
+
+    typedef typename nvbio::vector<system_tag,uint32>::const_iterator            const_index_iterator;
+    typedef typename nvbio::vector<system_tag,uint32>::const_iterator            const_sequence_storage_iterator;
+    typedef typename nvbio::vector<system_tag,char>::const_iterator              const_qual_storage_iterator;
+    typedef typename nvbio::vector<system_tag,char>::const_iterator              const_name_storage_iterator;
 
     /// constructor
     ///
@@ -517,7 +318,7 @@ struct SequenceDataStorage : public SequenceData<SEQUENCE_ALPHABET_T>
     /// copy constructor
     ///
     template <typename other_tag>
-    SequenceDataStorage(const SequenceDataStorage<other_tag,SEQUENCE_ALPHABET>& other)
+    SequenceDataStorage(const SequenceDataStorage<other_tag>& other)
     {
         // copy
         this->operator=( other );
@@ -526,7 +327,7 @@ struct SequenceDataStorage : public SequenceData<SEQUENCE_ALPHABET_T>
     /// assignment operator
     ///
     template <typename other_tag>
-    SequenceDataStorage& operator= (const SequenceDataStorage<other_tag,SEQUENCE_ALPHABET>& other)
+    SequenceDataStorage& operator= (const SequenceDataStorage<other_tag>& other)
     {
         // copy the info
         this->SequenceDataInfo::operator=( other );
@@ -572,7 +373,7 @@ struct SequenceDataStorage : public SequenceData<SEQUENCE_ALPHABET_T>
         // a default read id length used to reserve enough space upfront and avoid frequent allocations
         const uint32 AVG_NAME_LENGTH = 250;
 
-        const uint32 bps_per_word = 32u / SEQUENCE_BITS;
+        const uint32 bps_per_word = 32u / bits_per_symbol( SequenceDataInfo::m_alphabet );
 
         m_sequence_index_vec.reserve( n_seqs+1 );
         m_sequence_vec.reserve( n_bps / bps_per_word );
@@ -581,6 +382,18 @@ struct SequenceDataStorage : public SequenceData<SEQUENCE_ALPHABET_T>
         m_name_index_vec.reserve( n_seqs+1 );
     }
 
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator                  name_index()                { return m_name_index_vec.begin();  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator                  sequence_index()            { return m_sequence_index_vec.begin();  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_storage_iterator           name_stream()               { return m_name_vec.begin(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_storage_iterator       sequence_storage()          { return m_sequence_vec.begin(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE qual_storage_iterator           qual_stream()               { return m_qual_vec.begin(); }
+
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator            name_index()          const { return m_name_index_vec.begin();  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator            sequence_index()      const { return m_sequence_index_vec.begin();  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_storage_iterator     name_stream()         const { return m_name_vec.begin(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_storage_iterator sequence_storage()    const { return m_sequence_vec.begin(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_storage_iterator     qual_stream()         const { return m_qual_vec.begin(); }
+
     nvbio::vector<system_tag,uint32> m_sequence_vec;
     nvbio::vector<system_tag,uint32> m_sequence_index_vec;
     nvbio::vector<system_tag,char>   m_qual_vec;
@@ -588,61 +401,8 @@ struct SequenceDataStorage : public SequenceData<SEQUENCE_ALPHABET_T>
     nvbio::vector<system_tag,uint32> m_name_index_vec;
 };
 
-///
-/// A host memory sequence-data object
-///
-template <SequenceAlphabet SEQUENCE_ALPHABET>
-struct SequenceDataHost : public SequenceDataStorage<host_tag,SEQUENCE_ALPHABET>
-{
-    typedef SequenceDataStorage<device_tag,SEQUENCE_ALPHABET> base_type;
-
-    /// constructor
-    ///
-    SequenceDataHost() {}
-
-    /// copy constructor
-    ///
-    template <typename other_tag>
-    SequenceDataHost(const SequenceDataStorage<other_tag,SEQUENCE_ALPHABET>& other) :
-        base_type( other ) {}
-
-    /// assignment operator
-    ///
-    template <typename other_tag>
-    SequenceDataHost& operator= (const SequenceDataStorage<other_tag,SEQUENCE_ALPHABET>& other)
-    {
-        this->base_type::operator=( other );
-        return *this;
-    }
-};
-
-///
-/// A device memory sequence-data object
-///
-template <SequenceAlphabet SEQUENCE_ALPHABET>
-struct SequenceDataDevice : public SequenceDataStorage<device_tag,SEQUENCE_ALPHABET>
-{
-    typedef SequenceDataStorage<device_tag,SEQUENCE_ALPHABET> base_type;
-
-    /// constructor
-    ///
-    SequenceDataDevice() {}
-
-    /// copy constructor
-    ///
-    template <typename other_tag>
-    SequenceDataDevice(const SequenceDataStorage<other_tag,SEQUENCE_ALPHABET>& other) :
-        base_type( other ) {}
-
-    /// assignment operator
-    ///
-    template <typename other_tag>
-    SequenceDataDevice& operator= (const SequenceDataStorage<other_tag,SEQUENCE_ALPHABET>& other)
-    {
-        this->base_type::operator=( other );
-        return *this;
-    }
-};
+typedef SequenceDataStorage<host_tag>   SequenceDataHost;
+typedef SequenceDataStorage<device_tag> SequenceDataDevice;
 
 ///
 /// A stream of SequenceData, allowing to process the associated reads in batches.
@@ -664,21 +424,13 @@ struct SequenceDataStream
 
 /// utility method to get the next batch from a SequenceDataStream
 ///
-int next(SequenceDataHost<DNA>* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
-
-/// utility method to get the next batch from a SequenceDataStream
-///
-int next(SequenceDataHost<DNA_N>* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
-
-/// utility method to get the next batch from a SequenceDataStream
-///
-int next(SequenceDataHost<PROTEIN>* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
+int next(const SequenceAlphabet alphabet, SequenceDataHost* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
 
 /// factory method to open a read file
 ///
 /// \param sequence_file_name   the file to open
 /// \param qualities            the encoding of the qualities
-/// \param max_seqs            maximum number of reads to input
+/// \param max_seqs             maximum number of reads to input
 /// \param max_sequence_len     maximum read length - reads will be truncated
 /// \param flags                a set of flags indicating which strands to encode
 ///                             in the batch for each read.
@@ -686,12 +438,33 @@ int next(SequenceDataHost<PROTEIN>* data, SequenceDataStream* stream, const uint
 ///                             will result in a stream containing BOTH the forward
 ///                             and reverse-complemented strands.
 ///
-SequenceDataStream *open_sequence_file(
-    const char *             sequence_file_name,
+SequenceDataStream* open_sequence_file(
+    const char*              sequence_file_name,
     const QualityEncoding    qualities,
-    const uint32             max_seqs = uint32(-1),
+    const uint32             max_seqs         = uint32(-1),
     const uint32             max_sequence_len = uint32(-1),
-    const SequenceEncoding   flags = REVERSE);
+    const SequenceEncoding   flags            = REVERSE);
+
+/// load a sequence file
+///
+/// \param sequence_file_name   the file to open
+/// \param qualities            the encoding of the qualities
+/// \param max_seqs             maximum number of reads to input
+/// \param max_sequence_len     maximum read length - reads will be truncated
+/// \param flags                a set of flags indicating which strands to encode
+///                             in the batch for each read.
+///                             For example, passing FORWARD | REVERSE_COMPLEMENT
+///                             will result in a stream containing BOTH the forward
+///                             and reverse-complemented strands.
+///
+void load_sequence_file(
+    struct SequenceDataEncoder* encoder,
+    const char*                 sequence_file_name,
+    const SequenceFlags         load_flags,
+    const QualityEncoding       qualities,
+    const uint32                max_seqs         = uint32(-1),
+    const uint32                max_sequence_len = uint32(-1),
+    const SequenceEncoding      flags            = REVERSE);
 
 ///@} // SequenceIO
 ///@} // IO
@@ -700,18 +473,20 @@ SequenceDataStream *open_sequence_file(
 
 /// return a plain view of a SequenceData object
 ///
-template <SequenceAlphabet SEQUENCE_ALPHABET>
-typename io::SequenceData<SEQUENCE_ALPHABET>::plain_view_type plain_view(io::SequenceData<SEQUENCE_ALPHABET>& sequence_data)
+inline
+io::SequenceData::plain_view_type plain_view(io::SequenceData& sequence_data)
 {
-    return typename io::SequenceData<SEQUENCE_ALPHABET>::plain_view_type( sequence_data );
+    return io::SequenceData::plain_view_type( sequence_data );
 }
 
 /// return a plain view of a const SequenceData object
 ///
-template <SequenceAlphabet SEQUENCE_ALPHABET>
-typename io::SequenceData<SEQUENCE_ALPHABET>::const_plain_view_type plain_view(const io::SequenceData<SEQUENCE_ALPHABET>& sequence_data)
+inline
+io::SequenceData::const_plain_view_type plain_view(const io::SequenceData& sequence_data)
 {
-    return typename io::SequenceData<SEQUENCE_ALPHABET>::const_plain_view_type( sequence_data );
+    return io::SequenceData::const_plain_view_type( sequence_data );
 }
 
 } // namespace nvbio
+
+#include <nvbio/io/sequence/sequence_access.h>

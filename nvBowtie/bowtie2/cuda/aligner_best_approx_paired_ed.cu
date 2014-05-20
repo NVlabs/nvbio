@@ -39,8 +39,8 @@ void best_approx_ed(
     const FMIndexDef::type          rfmi,
     const UberScoringScheme&        scoring_scheme,
     const io::FMIndexDataDevice&    driver_data,
-    io::SequenceDataDevice<DNA_N>&  read_data1,
-    io::SequenceDataDevice<DNA_N>&  read_data2,
+    io::SequenceDataDevice&         read_data1,
+    io::SequenceDataDevice&         read_data2,
     Stats&                          stats)
 {
     aligner.best_approx<edit_distance_scoring_tag>(

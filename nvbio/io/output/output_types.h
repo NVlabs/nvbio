@@ -144,9 +144,9 @@ typedef nvbio::HostVectorArray<uint8> HostMdsArray;
 /// pointers to the relevant bits of data pulled from the GPU buffers.
 struct AlignmentData
 {
-    typedef io::SequenceData<DNA_N>                         read_data_type;
-    typedef read_data_type::const_plain_view_type           read_view_type;
-    typedef read_view_type::sequence_stream_type            read_type;
+    typedef io::SequenceData                                read_data_type;
+    typedef io::SequenceDataAccess<DNA_N>                   read_access_type;
+    typedef read_access_type::sequence_stream_type          read_type;
 
     /// Set to true if this is a valid alignment
     bool valid;
@@ -162,7 +162,7 @@ struct AlignmentData
     // These are not really meant to be used outside AlignmentData and
     // should probably be removed
 
-    const io::SequenceData<DNA_N>       *read_data_batch_p;
+    const io::SequenceData              *read_data_batch_p;
     const HostCigarArray                *cigar_array_p;
     const HostMdsArray                  *mds_array_p;
 
@@ -214,7 +214,7 @@ struct AlignmentData
     AlignmentData(const Alignment *best,
                   const Alignment *second_best,
                   uint32 read_id,
-                  const io::SequenceData<DNA_N> *read_data_batch,
+                  const io::SequenceData *read_data_batch,
                   const HostCigarArray *cigar_array,
                   const HostMdsArray *mds_array)
         : valid(true),
@@ -227,14 +227,14 @@ struct AlignmentData
     {
         uint2 cigar_coord;
 
-        io::SequenceData<DNA_N>::const_plain_view_type read_data_view( *read_data_batch );
+        read_access_type read_data_access( *read_data_batch );
 
-        read_offset = read_data_view.sequence_index()[read_id_p];
-        read_len    = read_data_view.sequence_index()[read_id_p + 1] - read_offset;
-        read_name   = read_data_view.name_stream() + read_data_view.name_index()[read_id];
+        read_offset = read_data_access.sequence_index()[read_id_p];
+        read_len    = read_data_access.sequence_index()[read_id_p + 1] - read_offset;
+        read_name   = read_data_access.name_stream() + read_data_access.name_index()[read_id];
 
-        read_data   = read_data_view.sequence_stream() + read_offset;
-        qual        = read_data_view.qual_stream() + read_offset;
+        read_data   = read_data_access.sequence_stream() + read_offset;
+        qual        = read_data_access.qual_stream() + read_offset;
 
         cigar       = cigar_array_p->array[read_id_p];
         cigar_coord = cigar_array_p->coords[read_id_p];

@@ -151,24 +151,24 @@ extract_seeds(
 //
 struct read_infixes
 {
-    typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type       read_view_type;
-
     // constructor
     NVBIO_HOST_DEVICE
-    read_infixes(const read_view_type reads) :
+    read_infixes(const io::ConstSequenceDataView reads) :
         m_reads( reads ) {}
 
     // functor operator
     NVBIO_HOST_DEVICE
     string_infix_coord_type operator() (const uint2 diagonal) const
     {
+        const io::SequenceDataAccess<DNA_N> reads( m_reads );
+
         const uint32 read_id = diagonal.y;
 
         // fetch the read range
-        return m_reads.get_range( read_id );
+        return reads.get_range( read_id );
     }
 
-    const read_view_type m_reads;
+    const io::ConstSequenceDataView m_reads;
 };
 
 // a functor to extract the genome infixes from the hit diagonals
@@ -176,11 +176,11 @@ struct read_infixes
 template <uint32 BAND_LEN>
 struct genome_infixes
 {
-    typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type       read_view_type;
+    typedef const io::SequenceDataAccess<DNA_N,io::ConstSequenceDataView> read_access_type;
 
     // constructor
     NVBIO_HOST_DEVICE
-    genome_infixes(const uint32 genome_len, const read_view_type reads) :
+    genome_infixes(const uint32 genome_len, const io::ConstSequenceDataView reads) :
         m_genome_len( genome_len ),
         m_reads( reads ) {}
 
@@ -188,11 +188,13 @@ struct genome_infixes
     NVBIO_HOST_DEVICE
     string_infix_coord_type operator() (const uint2 diagonal) const
     {
+        const io::SequenceDataAccess<DNA_N> reads( m_reads );
+
         const uint32 read_id  = diagonal.y;
         const uint32 text_pos = diagonal.x;
 
         // fetch the read range
-        const uint2  read_range = m_reads.get_range( read_id );
+        const uint2  read_range = reads.get_range( read_id );
         const uint32 read_len   = read_range.y - read_range.x;
 
         // compute the segment of text to align to
@@ -202,8 +204,8 @@ struct genome_infixes
         return make_uint2( genome_begin, genome_end );
     }
 
-    const uint32         m_genome_len;
-    const read_view_type m_reads;
+    const uint32                    m_genome_len;
+    const io::ConstSequenceDataView m_reads;
 };
 
 // a functor to extract the score from a sink
@@ -222,14 +224,14 @@ struct sink_score
 //
 void map(
     Pipeline&                               pipeline,
-    const io::SequenceDataDevice<DNA_N>&    reads,
+    const io::SequenceDataDevice&           reads,
     nvbio::vector<device_tag,int16>&        best_scores,
           Stats&                            stats)
 {
     typedef io::FMIndexDataDevice::stream_type                                  genome_string;
-    typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type                read_view_type;
-    typedef read_view_type::sequence_string_set_type                            read_string_set_type;
-    typedef read_view_type::sequence_stream_type                                read_stream;
+    typedef io::SequenceDataAccess<DNA_N,const io::ConstSequenceDataView>       read_access_type;
+    typedef read_access_type::sequence_string_set_type                          read_string_set_type;
+    typedef read_access_type::sequence_stream_type                              read_stream;
     typedef string_set_infix_coord_type                                         infix_coord_type;
     typedef nvbio::vector<device_tag,infix_coord_type>                          infix_vector_type;
     typedef InfixSet<read_string_set_type, const string_set_infix_coord_type*>  seed_string_set_type;
@@ -253,8 +255,8 @@ void map(
     Timer timer;
     timer.start();
 
-    const read_view_type reads_view = reads;
-    const read_string_set_type read_string_set = reads_view.sequence_string_set();
+    const read_access_type reads_access( reads );
+    const read_string_set_type read_string_set = reads_access.sequence_string_set();
     const seed_string_set_type seed_string_set = extract_seeds(
         read_string_set,
         params.seed_len,
@@ -341,7 +343,7 @@ void map(
 
         const SparseStringSet<read_stream,infix_iterator> read_infix_set(
             hits_end - hits_begin,
-            reads_view.sequence_stream(),
+            reads_access.sequence_stream(),
             read_infix_coords.begin() );
 
         const SparseStringSet<genome_string,infix_iterator> genome_infix_set(
@@ -467,18 +469,18 @@ int main(int argc, char* argv[])
     // keep stats
     Stats stats;
 
-    io::SequenceDataHost<DNA_N> h_read_data;
+    io::SequenceDataHost h_read_data;
 
     while (1)
     {
         // load a batch of reads
-        if (io::next( &h_read_data, read_data_file.get(), batch_reads, batch_bps ) == 0)
+        if (io::next( DNA_N, &h_read_data, read_data_file.get(), batch_reads, batch_bps ) == 0)
             break;
 
         log_info(stderr, "  loading reads... started\n");
 
         // copy it to the device
-        const io::SequenceDataDevice<DNA_N> d_read_data = h_read_data;
+        const io::SequenceDataDevice d_read_data = h_read_data;
 
         const uint32 n_reads = d_read_data.size() / 2;
 

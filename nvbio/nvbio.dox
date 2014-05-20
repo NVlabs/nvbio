@@ -464,7 +464,7 @@
 /// #include <nvbio/basic/vector.h>
 /// #include <nvbio/basic/shared_pointer.h>
 /// #include <nvbio/basic/dna.h>
-/// #include <nvbio/io/reads/reads.h>
+/// #include <nvbio/io/sequence/sequence.h>
 /// #include <nvbio/io/fmi.h>
 ///
 /// #include "util.h"
@@ -534,13 +534,13 @@
 ///     const uint32 batch_bps     = 100*1024*1024;
 ///
 ///     // open a read file, storing for each read both its forward and its reverse-complemented representations
-///     SharedPointer<io::ReadDataStream> read_data_file(
-///         io::open_read_file(
+///     SharedPointer<io::SequenceDataStream> read_data_file(
+///         io::open_sequence_file(
 ///             reads,
 ///             io::Phred33,
 ///             2*params.max_reads,
 ///             uint32(-1),
-///             io::ReadEncoding( io::FORWARD | io::REVERSE_COMPLEMENT ) ) );
+///             io::SequenceEncoding( io::FORWARD | io::REVERSE_COMPLEMENT ) ) );
 /// 
 ///     // check whether the file opened correctly
 ///     if (read_data_file == NULL || read_data_file->is_ok() == false)
@@ -548,19 +548,20 @@
 ///         log_error(stderr, "    failed opening file \"%s\"\n", reads);
 ///         return 1u;
 ///     }
+///
+///		io::SequenceDataHost h_read_data;
 /// 
 ///     // start looping to consume the input reads
 ///     while (1)
 ///     {
 ///         // load a batch of reads
-///         SharedPointer<io::ReadData> h_read_data( read_data_file->next( batch_reads, batch_bps ) );
-///         if (h_read_data == NULL)
+///         if (io::next( DNA_N, &h_read_data, read_data_file, batch_reads, batch_bps ) == 0);
 ///             break;
 /// 
 ///         log_info(stderr, "  loading reads... started\n");
 /// 
 ///         // copy it to the device
-///         const io::ReadDataDevice d_read_data( *h_read_data );
+///         const io::SequenceDataDevice d_read_data( *h_read_data );
 /// 
 ///         // remember we generated two strands per input read...
 ///         const uint32 n_reads = d_read_data.size() / 2;
@@ -602,13 +603,13 @@
 /// Let's start with some boiler-plate code to make sure we have everythin we need:
 ///
 ///\code
-/// void map(Pipeline& pipeline, const io::ReadDataDevice& reads)
+/// void map(Pipeline& pipeline, const io::SequenceDataAccess<DNA_N> reads)
 /// {
 ///     // the FM-index data contains the packed genome stream, of this type
 ///     typedef io::FMIndexDataDevice::stream_type                                  genome_string;
 ///
 ///     // the reads can be accessed as a string-set, of this type
-///     typedef io::ReadDataDevice::const_read_string_set_type                      read_string_set_type;
+///     typedef io::SequenceDataAccess<DNA_N>::sequence_string_set_type             read_string_set_type;
 ///
 ///     // the seeds will be infixes of a string-set, with this coordinates type
 ///     typedef string_set_infix_coord_type                                         infix_coord_type;
@@ -637,7 +638,7 @@
 ///     infix_vector_type seed_coords;
 /// 
 ///     // extract the seeds
-///     const read_string_set_type read_string_set = reads.const_read_string_set();
+///     const read_string_set_type read_string_set = reads.sequence_string_set();
 ///     const seed_string_set_type seed_string_set = extract_seeds(
 ///         read_string_set,
 ///         params.seed_len,
@@ -769,11 +770,11 @@
 /// 
 ///         typedef nvbio::vector<device_tag,string_infix_coord_type>::const_iterator infix_iterator;
 /// 
-///         typedef io::ReadDataDevice::const_read_stream_type      read_stream;
+///         typedef io::SequenceDataAccess<DNA_N>::sequence_stream_type      read_stream;
 /// 
 ///         const SparseStringSet<read_stream,infix_iterator> read_infix_set(
 ///             hits_end - hits_begin,
-///             reads.read_stream(),
+///             reads.sequence_stream(),
 ///             read_infix_coords.begin() );
 /// 
 ///         const SparseStringSet<genome_string,infix_iterator> genome_infix_set(

@@ -158,9 +158,9 @@ struct sequence_string
 //
 template <SequenceAlphabet ALPHABET, QualityEncoding quality_encoding, typename sequence_type>
 void encode(
-    const sequence_type                                         sequence,
-    typename SequenceDataView<ALPHABET>::sequence_stream_type   stream,
-    char*                                                       qual_stream)
+    const sequence_type                                                            sequence,
+    typename SequenceDataEdit<ALPHABET,SequenceDataView>::sequence_stream_type     stream,
+    char*                                                                          qual_stream)
 {
   #if 1
 
@@ -185,10 +185,10 @@ void encode(
 //
 template <SequenceAlphabet ALPHABET, typename sequence_type>
 void encode(
-    const QualityEncoding                                       quality_encoding,
-    const sequence_type                                         sequence,
-    typename SequenceDataView<ALPHABET>::sequence_stream_type   stream,
-    char*                                                       qual_stream)
+    const QualityEncoding                                                           quality_encoding,
+    const sequence_type                                                             sequence,
+    typename SequenceDataEdit<ALPHABET,SequenceDataView>::sequence_stream_type      stream,
+    char*                                                                           qual_stream)
 {
     switch (quality_encoding)
     {
@@ -211,13 +211,13 @@ void encode(
 //
 template <SequenceAlphabet ALPHABET>
 void encode(
-    const SequenceDataEncoder::StrandOp                         conversion_flags,
-    const QualityEncoding                                       quality_encoding,
-    const uint32                                                sequence_len,
-    const uint8*                                                sequence,
-    const uint8*                                                quality,
-    typename SequenceDataView<ALPHABET>::sequence_stream_type   stream,
-    char*                                                       qual_stream)
+    const SequenceDataEncoder::StrandOp                                             conversion_flags,
+    const QualityEncoding                                                           quality_encoding,
+    const uint32                                                                    sequence_len,
+    const uint8*                                                                    sequence,
+    const uint8*                                                                    quality,
+    typename SequenceDataEdit<ALPHABET,SequenceDataView>::sequence_stream_type      stream,
+    char*                                                                           qual_stream)
 {
 
     const sequence_string<SequenceDataEncoder::REVERSE_OP>              r_sequence( sequence_len, sequence, quality );
@@ -254,7 +254,7 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
 
     /// constructor
     ///
-    SequenceDataEncoderImpl(SequenceDataHost<SEQUENCE_ALPHABET>* data) :
+    SequenceDataEncoderImpl(SequenceDataHost* data) :
         SequenceDataEncoder( SEQUENCE_ALPHABET ),
         m_data( data ) {}
 
@@ -271,6 +271,9 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
     {
         // reset the batch
         m_data->SequenceDataInfo::operator=( SequenceDataInfo() );
+
+        // assign the alphabet
+        m_data->m_alphabet = SEQUENCE_ALPHABET;
 
         m_data->m_sequence_vec.resize( 0 );
         m_data->m_qual_vec.resize( 0 );
@@ -321,7 +324,7 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
         }
 
         // encode the sequence data
-        typename SequenceDataView<SEQUENCE_ALPHABET>::sequence_stream_type stream( nvbio::raw_pointer( m_data->m_sequence_vec ) );
+        typename SequenceDataEdit<SEQUENCE_ALPHABET,SequenceDataView>::sequence_stream_type stream( nvbio::raw_pointer( m_data->m_sequence_vec ) );
         encode<SEQUENCE_ALPHABET>(
             conversion_flags,
             quality_encoding,
@@ -362,59 +365,61 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
     /// fetch the actual SequenceData object of the specified alphabet
     /// NOTE: this only works for the proper alphabet
     ///
-    void* get_data() const { return (void*)m_data; }
+    SequenceData* data() const { return m_data; }
 
     /// return the sequence data info
     ///
     SequenceDataInfo* info() const { return m_data; }
 
 private:
-    SequenceDataHost<SEQUENCE_ALPHABET>* m_data;
+    SequenceDataHost* m_data;
 };
 
 // create a sequence encoder
 //
-SequenceDataEncoder* create_encoder(SequenceDataHost<DNA>* data)
+SequenceDataEncoder* create_encoder(const SequenceAlphabet alphabet, SequenceDataHost* data)
 {
-    return new SequenceDataEncoderImpl<DNA>( data );
-}
-
-// create a sequence encoder
-//
-SequenceDataEncoder* create_encoder(SequenceDataHost<DNA_N>* data)
-{
-    return new SequenceDataEncoderImpl<DNA_N>( data );
-}
-
-// create a sequence encoder
-//
-SequenceDataEncoder* create_encoder(SequenceDataHost<PROTEIN>* data)
-{
-    return new SequenceDataEncoderImpl<PROTEIN>( data );
-}
-
-// next batch
-//
-int next(SequenceDataHost<DNA>* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps)
-{
-    SequenceDataEncoderImpl<DNA> encoder( data );
-    return stream->next( &encoder, batch_size, batch_bps );
+    switch (alphabet)
+    {
+    case DNA:
+        return new SequenceDataEncoderImpl<DNA>( data );
+        break;
+    case DNA_N:
+        return new SequenceDataEncoderImpl<DNA_N>( data );
+        break;
+    case PROTEIN:
+        return new SequenceDataEncoderImpl<PROTEIN>( data );
+        break;
+    }
+    return NULL;
 }
 
 // next batch
 //
-int next(SequenceDataHost<DNA_N>* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps)
+int next(const SequenceAlphabet alphabet, SequenceDataHost* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps)
 {
-    SequenceDataEncoderImpl<DNA_N> encoder( data );
-    return stream->next( &encoder, batch_size, batch_bps );
-}
-
-// next batch
-//
-int next(SequenceDataHost<PROTEIN>* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps)
-{
-    SequenceDataEncoderImpl<PROTEIN> encoder( data );
-    return stream->next( &encoder, batch_size, batch_bps );
+    switch (alphabet)
+    {
+    case DNA:
+        {
+            SequenceDataEncoderImpl<DNA> encoder( data );
+            return stream->next( &encoder, batch_size, batch_bps );
+        }
+        break;
+    case DNA_N:
+        {
+            SequenceDataEncoderImpl<DNA_N> encoder( data );
+            return stream->next( &encoder, batch_size, batch_bps );
+        }
+        break;
+    case PROTEIN:
+        {
+            SequenceDataEncoderImpl<PROTEIN> encoder( data );
+            return stream->next( &encoder, batch_size, batch_bps );
+        }
+        break;
+    }
+    return 0;
 }
 
 } // namespace io

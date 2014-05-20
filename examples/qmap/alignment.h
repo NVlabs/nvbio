@@ -43,24 +43,24 @@ using namespace nvbio;
 //
 struct read_infixes
 {
-    typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type       read_view_type;
-
     // constructor
     NVBIO_HOST_DEVICE
-    read_infixes(const read_view_type reads) :
+    read_infixes(const io::ConstSequenceDataView reads) :
         m_reads( reads ) {}
 
     // functor operator
     NVBIO_HOST_DEVICE
     string_infix_coord_type operator() (const uint2 diagonal) const
     {
+        const io::SequenceDataAccess<DNA_N> reads( m_reads );
+
         const uint32 read_id = diagonal.y;
 
         // fetch the read range
-        return m_reads.get_range( read_id );
+        return reads.get_range( read_id );
     }
 
-    const read_view_type m_reads;
+    const io::ConstSequenceDataView m_reads;
 };
 
 // a functor to extract the genome infixes from the hit diagonals
@@ -68,11 +68,9 @@ struct read_infixes
 template <uint32 BAND_LEN>
 struct genome_infixes
 {
-    typedef io::SequenceDataDevice<DNA_N>::const_plain_view_type       read_view_type;
-
     // constructor
     NVBIO_HOST_DEVICE
-    genome_infixes(const uint32 genome_len, const read_view_type reads) :
+    genome_infixes(const uint32 genome_len, const io::ConstSequenceDataView reads) :
         m_genome_len( genome_len ),
         m_reads( reads ) {}
 
@@ -80,11 +78,13 @@ struct genome_infixes
     NVBIO_HOST_DEVICE
     string_infix_coord_type operator() (const uint2 diagonal) const
     {
+        const io::SequenceDataAccess<DNA_N> reads( m_reads );
+
         const uint32 read_id  = diagonal.y;
         const uint32 text_pos = diagonal.x;
 
         // fetch the read range
-        const uint2  read_range = m_reads.get_range( read_id );
+        const uint2  read_range = reads.get_range( read_id );
         const uint32 read_len   = read_range.y - read_range.x;
 
         // compute the segment of text to align to
@@ -94,8 +94,8 @@ struct genome_infixes
         return make_uint2( genome_begin, genome_end );
     }
 
-    const uint32         m_genome_len;
-    const read_view_type m_reads;
+    const uint32                    m_genome_len;
+    const io::ConstSequenceDataView m_reads;
 };
 
 // a functor to extract the score from a sink

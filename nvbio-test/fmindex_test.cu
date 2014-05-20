@@ -803,17 +803,16 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
     omp_set_num_threads( omp_get_num_procs() );
 #endif
 
-    io::FMIndexDataRAM fmi;
-    if (fmi.load( index_file, io::FMIndexData::FORWARD ))
+    io::FMIndexDataRAM h_fmi;
+    if (h_fmi.load( index_file, io::FMIndexData::FORWARD ))
     {
         typedef io::FMIndexData::partial_fm_index_type     host_fmindex_type;
         typedef io::FMIndexDataDevice::fm_index_type       cuda_fmindex_type;
 
-        io::FMIndexDataDevice fmi_cuda( fmi, io::FMIndexDataDevice::FORWARD );
+        io::FMIndexDataDevice d_fmi( h_fmi, io::FMIndexDataDevice::FORWARD );
 
-        host_fmindex_type host_fmindex = fmi.partial_index();
-
-        cuda_fmindex_type fmindex_cuda = fmi_cuda.index();
+        host_fmindex_type h_fmindex = h_fmi.partial_index();
+        cuda_fmindex_type d_fmindex = d_fmi.index();
 
         io::SequenceDataStream* reads_file = io::open_sequence_file(
             reads_name,
@@ -827,27 +826,31 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             exit(1);
         }
 
-        io::SequenceDataHost<DNA_N> reads_data;
-        if (io::next( &reads_data, reads_file, n_reads ) == 0)
+        // create a host-side read batch
+        io::SequenceDataHost h_reads_data;
+
+        // load a batch
+        if (io::next( DNA_N, &h_reads_data, reads_file, n_reads ) == 0)
         {
             log_error(stderr, "unable to fetch reads from file \"%s\"\n", reads_name);
             exit(1);
         }
 
-        io::SequenceDataDevice<DNA_N> reads_data_cuda( reads_data );
+        // create a device-side read_batch
+        const io::SequenceDataDevice d_reads_data( h_reads_data );
 
         // create a host-side read batch
-        typedef io::SequenceData<DNA_N>::const_plain_view_type read_view_type;
-        const read_view_type host_reads_view( reads_data );
+        typedef io::SequenceDataAccess<DNA_N> read_access_type;
 
-        // create a device-side read batch
-        const read_view_type reads_view_cuda( reads_data_cuda );
+        // create a read access
+        const read_access_type h_reads_view( h_reads_data );
+        const read_access_type d_reads_view( d_reads_data );
 
         thrust::device_vector<uint32> counter(1);
         counter[0] = 0;
 
         const uint32 blockdim = 128;
-        const uint32 n_blocks = (reads_data_cuda.size() + blockdim - 1) / blockdim;
+        const uint32 n_blocks = (d_reads_data.size() + blockdim - 1) / blockdim;
 
         // 20-mers, distance=0
         {
@@ -858,8 +861,8 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             cudaEventRecord( start, 0 );
 
             count_kernel<<<n_blocks,blockdim>>>(
-                reads_view_cuda,
-                fmindex_cuda,
+                d_reads_view,
+                d_fmindex,
                 20u,
                 0u,
                 0u,
@@ -872,7 +875,7 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             cudaEventSynchronize( stop );
             cudaEventElapsedTime( &time, start, stop );
 
-            fprintf(stderr, "  gpu backtracking (20,0,0)... done: %.1fms, A/s: %.3f M\n", time, reads_data_cuda.size()/(time*1000.0f) );
+            fprintf(stderr, "  gpu backtracking (20,0,0)... done: %.1fms, A/s: %.3f M\n", time, d_reads_data.size()/(time*1000.0f) );
         }
         {
             Timer timer;
@@ -880,12 +883,12 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
 
             uint32 counter = 0;
             #pragma omp parallel for
-            for (int i = 0; i < (int)reads_data.size(); ++i)
+            for (int i = 0; i < (int)h_reads_data.size(); ++i)
             {
                 count_core(
                     i,
-                    host_reads_view,
-                    host_fmindex,
+                    h_reads_view,
+                    h_fmindex,
                     20u,
                     0u,
                     0u,
@@ -895,7 +898,7 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             timer.stop();
             float time = timer.seconds() * 1000.0f;
 
-            fprintf(stderr, "  cpu backtracking (20,0,0)... done: %.1fms, A/s: %.3f M\n", time, reads_data_cuda.size()/(time*1000.0f) );
+            fprintf(stderr, "  cpu backtracking (20,0,0)... done: %.1fms, A/s: %.3f M\n", time, d_reads_data.size()/(time*1000.0f) );
         }
         // 32-mers, distance=1
         {
@@ -906,8 +909,8 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             cudaEventRecord( start, 0 );
 
             count_kernel<<<n_blocks,blockdim>>>(
-                reads_view_cuda,
-                fmindex_cuda,
+                d_reads_view,
+                d_fmindex,
                 32u,
                 0u,
                 1u,
@@ -920,7 +923,7 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             cudaEventSynchronize( stop );
             cudaEventElapsedTime( &time, start, stop );
 
-            fprintf(stderr, "  gpu backtracking (32,1,0)... done: %.1fms, A/s: %.3f M\n", time, reads_data_cuda.size()/(time*1000.0f) );
+            fprintf(stderr, "  gpu backtracking (32,1,0)... done: %.1fms, A/s: %.3f M\n", time, d_reads_data.size()/(time*1000.0f) );
         }
         {
             Timer timer;
@@ -929,12 +932,12 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             uint32 counter = 0;
 
             #pragma omp parallel for
-            for (int i = 0; i < (int)reads_data.size(); ++i)
+            for (int i = 0; i < (int)h_reads_data.size(); ++i)
             {
                 count_core(
                     i,
-                    host_reads_view,
-                    host_fmindex,
+                    h_reads_view,
+                    h_fmindex,
                     32u,
                     0u,
                     1u,
@@ -944,7 +947,7 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             timer.stop();
             float time = timer.seconds() * 1000.0f;
 
-            fprintf(stderr, "  cpu backtracking (32,1,0)... done: %.1fms, A/s: %.3f M\n", time, reads_data_cuda.size()/(time*1000.0f) );
+            fprintf(stderr, "  cpu backtracking (32,1,0)... done: %.1fms, A/s: %.3f M\n", time, d_reads_data.size()/(time*1000.0f) );
         }
         // 50-mers, distance=2, seed=25
         {
@@ -955,8 +958,8 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             cudaEventRecord( start, 0 );
 
             count_kernel<<<n_blocks,blockdim>>>(
-                reads_view_cuda,
-                fmindex_cuda,
+                d_reads_view,
+                d_fmindex,
                 50u,
                 25u,
                 2u,
@@ -969,7 +972,7 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             cudaEventSynchronize( stop );
             cudaEventElapsedTime( &time, start, stop );
 
-            fprintf(stderr, "  gpu backtracking (50,2,25)... done: %.1fms, A/s: %.3f M\n", time, reads_data_cuda.size()/(time*1000.0f) );
+            fprintf(stderr, "  gpu backtracking (50,2,25)... done: %.1fms, A/s: %.3f M\n", time, d_reads_data.size()/(time*1000.0f) );
         }
         {
             Timer timer;
@@ -978,12 +981,12 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             uint32 counter = 0;
 
             #pragma omp parallel for
-            for (int i = 0; i < (int)reads_data.size(); ++i)
+            for (int i = 0; i < (int)h_reads_data.size(); ++i)
             {
                 count_core(
                     i,
-                    host_reads_view,
-                    host_fmindex,
+                    h_reads_view,
+                    h_fmindex,
                     50u,
                     25u,
                     2u,
@@ -993,7 +996,7 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
             timer.stop();
             float time = timer.seconds() * 1000.0f;
 
-            fprintf(stderr, "  cpu backtracking (52,2,25)... done: %.1fms, A/s: %.3f M\n", time, reads_data_cuda.size()/(time*1000.0f) );
+            fprintf(stderr, "  cpu backtracking (52,2,25)... done: %.1fms, A/s: %.3f M\n", time, d_reads_data.size()/(time*1000.0f) );
         }
 
         delete reads_file;

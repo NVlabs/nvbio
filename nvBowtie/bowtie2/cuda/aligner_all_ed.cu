@@ -39,7 +39,7 @@ void all_ed(
     const FMIndexDef::type          rfmi,
     const UberScoringScheme&        scoring_scheme,
     const io::FMIndexDataDevice&    driver_data,
-    io::SequenceDataDevice<DNA_N>&  read_data,
+    io::SequenceDataDevice&         read_data,
     Stats&                          stats)
 {
     aligner.all<edit_distance_scoring_tag>(

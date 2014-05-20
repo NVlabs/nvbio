@@ -55,7 +55,7 @@ struct CPUOutputBatch
     HostMdsArray                                 mds[2];
 
     // pointer to the host-side read data for each mate
-    const io::SequenceDataHost<DNA_N>*           read_data[2];
+    const io::SequenceDataHost*                  read_data[2];
 
     CPUOutputBatch()
         : count(0)
@@ -79,13 +79,13 @@ public:
     DeviceCigarArray                           cigar;
     nvbio::DeviceVectorArray<uint8>&           mds;
 
-    const io::SequenceDataDevice<DNA_N>&       read_data;
+    const io::SequenceDataDevice&              read_data;
 
     GPUOutputBatch(uint32                                         _count,
                    thrust::device_vector<io::BestAlignments>&     _best_data_dvec,
                    DeviceCigarArray                               _cigar,
                    nvbio::DeviceVectorArray<uint8>&               _mds,
-                   const io::SequenceDataDevice<DNA_N>&           _read_data)
+                   const io::SequenceDataDevice&                  _read_data)
             : count(_count),
               best_data_dvec(_best_data_dvec),
               cigar(_cigar),

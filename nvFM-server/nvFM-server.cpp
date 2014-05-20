@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// nvbwa-server.cpp : Defines the entry point for the console application.
+// nvFM-server.cpp : Defines the entry point for the console application.
 //
 
 #include <nvbio/io/fmi.h>

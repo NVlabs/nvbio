@@ -563,12 +563,12 @@ int main(int argc, char* argv[])
     }
   #endif
 
-    io::SequenceDataHost<DNA_N> h_read_data;
+    io::SequenceDataHost h_read_data;
 
-    while (io::next( &h_read_data, read_data_file.get(), batch_size ))
+    while (io::next( DNA_N, &h_read_data, read_data_file.get(), batch_size ))
     {
         // build the device side representation
-        const io::SequenceDataDevice<DNA_N> d_read_data( h_read_data );
+        const io::SequenceDataDevice d_read_data( h_read_data );
 
         const uint32 n_read_symbols = h_read_data.bps();
 
@@ -655,12 +655,12 @@ int main(int argc, char* argv[])
 
             std::vector<int8_t> unpacked_reads( n_read_symbols );
 
-            typedef io::SequenceDataHost<DNA_N>::const_plain_view_type read_view_type;
-            typedef read_view_type::sequence_stream_type read_stream_type;
+            typedef io::SequenceDataAccess<DNA_N>           read_access_type;
+            typedef read_access_type::sequence_stream_type  read_stream_type;
 
-            const read_view_type reads_view = h_read_data;
+            const read_access_type reads_access( h_read_data );
 
-            const read_stream_type packed_reads( reads_view.sequence_stream() );
+            const read_stream_type packed_reads( reads_access.sequence_stream() );
 
             #pragma omp parallel for
             for (int i = 0; i < int( n_read_symbols ); ++i)
@@ -672,8 +672,8 @@ int main(int argc, char* argv[])
             #pragma omp parallel for
             for (int i = 0; i < int( h_read_data.size() ); ++i)
             {
-                const uint32 read_off = reads_view.sequence_index()[i];
-                const uint32 read_len = reads_view.sequence_index()[i+1] - read_off;
+                const uint32 read_off = reads_access.sequence_index()[i];
+                const uint32 read_len = reads_access.sequence_index()[i+1] - read_off;
 
                 s_profile* prof = ssw_init( &unpacked_reads[read_off], read_len, mat, 4, 2 );
 

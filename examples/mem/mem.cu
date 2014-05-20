@@ -138,15 +138,16 @@ int main(int argc, char* argv[])
     const uint32 mems_batch = 16*1024*1024;
     nvbio::vector<device_tag,mem_filter_type::mem_type> mems( mems_batch );
 
-    io::SequenceDataHost<DNA_N> h_read_data;
+    io::SequenceDataHost h_read_data;
 
     // load a batch of reads
-    while (io::next( &h_read_data, read_data_file.get(), batch_reads, batch_bps ))
+    while (io::next( DNA_N, &h_read_data, read_data_file.get(), batch_reads, batch_bps ))
     {
         log_info(stderr, "  loading reads... started\n");
 
         // copy it to the device
-        const io::SequenceDataDevice<DNA_N> d_read_data( h_read_data );
+        const io::SequenceDataDevice d_read_data( h_read_data );
+        const io::SequenceDataAccess<DNA_N> d_read_access( d_read_data );
 
         const uint32 n_reads = d_read_data.size() / 2;
 
@@ -161,7 +162,7 @@ int main(int argc, char* argv[])
         mem_filter.rank(
             f_index,
             r_index,
-            nvbio::plain_view( d_read_data ).sequence_string_set(),
+            d_read_access.sequence_string_set(),
             min_intv,
             max_intv,
             min_span );

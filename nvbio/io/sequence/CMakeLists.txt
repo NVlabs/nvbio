@@ -12,4 +12,8 @@ sequence_priv.cpp
 sequence_priv.h
 sequence_sam.cpp
 sequence_sam.h
+sequence_mmap.cpp
+sequence_mmap.h
+sequence_pac.cpp
+sequence_pac.h
 )

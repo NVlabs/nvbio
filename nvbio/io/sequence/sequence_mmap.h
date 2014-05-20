@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include <string>
 
 namespace nvbio {
 namespace io {
@@ -50,10 +51,21 @@ struct SequenceDataMMAPServer
     /// load a sequence from file
     ///
     /// \param alphabet                 the alphabet to use for encoding
-    /// \param prefix                   prefix file name
+    /// \param file_name                file name
     /// \param mapped_name              memory mapped object name
-    int load(
-        const SequenceAlphabet alphabet, const char* prefix, const char* mapped_name);
+    bool load(
+        const SequenceAlphabet  alphabet,
+        const char*             file_name,
+        const char*             mapped_name,
+        const SequenceFlags     load_flags,
+        const QualityEncoding   qualities = Phred33);
+
+    static std::string info_file_name(const char* name);
+    static std::string sequence_file_name(const char* name);
+    static std::string sequence_index_file_name(const char* name);
+    static std::string qual_file_name(const char* name);
+    static std::string name_file_name(const char* name);
+    static std::string name_index_file_name(const char* name);
 
     ServerMappedFile m_info_file;                    ///< internal memory-mapped info object server
     ServerMappedFile m_sequence_file;                ///< internal memory-mapped genome object server
@@ -84,7 +96,7 @@ struct SequenceDataMMAP : public SequenceData
     /// load from a memory mapped object
     ///
     /// \param name          memory mapped object name
-    int load(
+    bool load(
         const char* name);
 
     /// convert to a plain_view

@@ -28,25 +28,54 @@
 #pragma once
 
 #include <nvbio/io/sequence/sequence_mmap.h>
+#include <nvbio/io/sequence/sequence_pac.h>
 #include <nvbio/basic/console.h>
 
 namespace nvbio {
 namespace io {
 
+// load a sequence from file
+//
+// \param alphabet                 the alphabet to use for encoding
+// \param prefix                   prefix file name
+// \param mapped_name              memory mapped object name
+bool SequenceDataMMAPServer::load(
+    const SequenceAlphabet  alphabet,
+    const char*             file_name,
+    const char*             mapped_name,
+    const SequenceFlags     load_flags,
+    const QualityEncoding   qualities)
+{
+    log_visible(stderr, "SequenceDataMMAPServer::loading... started\n");
+
+    // TODO: check the extension; if there's no extension, assume it's a pac index
+    bool r = load_pac( alphabet, this, file_name, mapped_name, load_flags, qualities );
+
+    log_visible(stderr, "SequenceDataMMAPServer::loading... done\n");
+    return r;
+}
+
+std::string SequenceDataMMAPServer::info_file_name(const char* name)            { return std::string("nvbio.") + std::string( name ) + ".seq_info";}
+std::string SequenceDataMMAPServer::sequence_file_name(const char* name)        { return std::string("nvbio.") + std::string( name ) + ".seq"; }
+std::string SequenceDataMMAPServer::sequence_index_file_name(const char* name)  { return std::string("nvbio.") + std::string( name ) + ".seq_index"; }
+std::string SequenceDataMMAPServer::qual_file_name(const char* name)            { return std::string("nvbio.") + std::string( name ) + ".qual"; }
+std::string SequenceDataMMAPServer::name_file_name(const char* name)            { return std::string("nvbio.") + std::string( name ) + ".name"; }
+std::string SequenceDataMMAPServer::name_index_file_name(const char* name)      { return std::string("nvbio.") + std::string( name ) + ".name_index"; }
+
 // load from a memory mapped object
 //
 // \param name          memory mapped object name
-int SequenceDataMMAP::load(const char* file_name)
+bool SequenceDataMMAP::load(const char* file_name)
 {
     log_visible(stderr, "SequenceData (MMAP) : loading... started\n");
     log_visible(stderr, "  file : %s\n", file_name);
 
-    std::string infoName        = std::string("nvbio.") + std::string( file_name ) + ".seq_info";
-    std::string seqName         = std::string("nvbio.") + std::string( file_name ) + ".seq";
-    std::string seqIndexName    = std::string("nvbio.") + std::string( file_name ) + ".seq_index";
-    std::string qualName        = std::string("nvbio.") + std::string( file_name ) + ".qual";
-    std::string nameName        = std::string("nvbio.") + std::string( file_name ) + ".name";
-    std::string nameIndexName   = std::string("nvbio.") + std::string( file_name ) + ".name_index";
+    std::string infoName        = SequenceDataMMAPServer::info_file_name( file_name );
+    std::string seqName         = SequenceDataMMAPServer::sequence_file_name( file_name );
+    std::string seqIndexName    = SequenceDataMMAPServer::sequence_index_file_name( file_name );
+    std::string qualName        = SequenceDataMMAPServer::qual_file_name( file_name );
+    std::string nameName        = SequenceDataMMAPServer::name_file_name( file_name );
+    std::string nameIndexName   = SequenceDataMMAPServer::name_index_file_name( file_name );
 
     try {
         const SequenceDataInfo* info = (const SequenceDataInfo*)m_info_file.init( infoName.c_str(), sizeof(SequenceDataInfo) );
@@ -67,21 +96,21 @@ int SequenceDataMMAP::load(const char* file_name)
     catch (MappedFile::mapping_error error)
     {
         log_error(stderr, "SequenceDataMMAP: error mapping file \"%s\" (%d)!\n", error.m_file_name, error.m_code);
-        return 0;
+        return false;
     }
     catch (MappedFile::view_error error)
     {
         log_error(stderr, "SequenceDataMMAP: error viewing file \"%s\" (%d)!\n", error.m_file_name, error.m_code);
-        return 0;
+        return false;
     }
     catch (...)
     {
         log_error(stderr, "SequenceDataMMAP: error mapping file (unknown)!\n");
-        return 0;
+        return false;
     }
 
     log_visible(stderr, "SequenceData (MMAP) : loading... done\n");
-    return 1;
+    return true;
 }
 
 } // namespace io

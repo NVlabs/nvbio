@@ -53,6 +53,7 @@ int work_queue_test(int argc, char* argv[]);
 int string_set_test(int argc, char* argv[]);
 int sum_tree_test();
 int qgram_test(int argc, char* argv[]);
+int sequence_test(int argc, char* argv[]);
 
 namespace cuda { void scan_test(); }
 namespace aln { void test(int argc, char* argv[]); }
@@ -78,6 +79,7 @@ enum Tests {
     kAlignment      = 16384u,
     kRank           = 32768u,
     kQGram          = 65536u,
+    kSequence       = 131072u,
     kALL            = 0xFFFFFFFFu
 };
 
@@ -133,6 +135,8 @@ int main(int argc, char* argv[])
                 tests = kCondition;
             else if (strcmp( argv[arg], "-work-queue" ) == 0)
                 tests = kWorkQueue;
+            else if (strcmp( argv[arg], "-sequence" ) == 0)
+                tests = kSequence;
 
             ++arg;
         }
@@ -195,6 +199,7 @@ int main(int argc, char* argv[])
     if (tests & kRank)          rank_test( argc, argv+arg );
     if (tests & kFMIndex)       fmindex_test( argc, argv+arg );
     if (tests & kQGram)         qgram_test( argc, argv+arg );
+    if (tests & kSequence)      sequence_test( argc, argv+arg );
 
     cudaDeviceReset();
 	return 0;

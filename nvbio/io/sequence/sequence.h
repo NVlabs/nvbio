@@ -79,13 +79,10 @@ namespace io {
 // describes the quality encoding for a given read file
 enum QualityEncoding
 {
-    // phred quality
-    Phred = 0,
-    // phred quality + 33
-    Phred33 = 1,
-    // phred quality + 64
-    Phred64 = 2,
-    Solexa = 3,
+    Phred   = 0,    ///< phred quality
+    Phred33 = 1,    ///< phred quality + 33
+    Phred64 = 2,    ///< phred quality + 64
+    Solexa  = 3,    ///< Solexa quality
 };
 
 // a set of flags describing the types of supported read strands
@@ -450,7 +447,7 @@ int next(const SequenceAlphabet alphabet, SequenceDataHost* data, SequenceDataSt
 ///
 SequenceDataStream* open_sequence_file(
     const char*              sequence_file_name,
-    const QualityEncoding    qualities,
+    const QualityEncoding    qualities        = Phred33,
     const uint32             max_seqs         = uint32(-1),
     const uint32             max_sequence_len = uint32(-1),
     const SequenceEncoding   flags            = FORWARD);
@@ -467,12 +464,12 @@ SequenceDataStream* open_sequence_file(
 ///                             will result in a stream containing BOTH the forward
 ///                             and reverse-complemented strands.
 ///
-void load_sequence_file(
+bool load_sequence_file(
     const SequenceAlphabet      alphabet,
     SequenceDataHost*           sequence_data,
     const char*                 sequence_file_name,
-    const SequenceFlags         load_flags,
-    const QualityEncoding       qualities);
+    const SequenceFlags         load_flags  = io::SequenceFlags( io::SEQUENCE_DATA | io::SEQUENCE_QUALS | io::SEQUENCE_NAMES ),
+    const QualityEncoding       qualities   = Phred33);
 
 ///@} // SequenceIO
 ///@} // IO

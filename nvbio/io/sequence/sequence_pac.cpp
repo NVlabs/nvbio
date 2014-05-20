@@ -25,8 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#pragma once
-
 #include <nvbio/io/sequence/sequence.h>
 #include <nvbio/io/sequence/sequence_mmap.h>
 #include <nvbio/basic/bnt.h>
@@ -62,19 +60,29 @@ uint64 block_fread(T* dst, const uint64 n, FILE* file)
 
 template <SequenceAlphabet ALPHABET>
 bool load_pac(
-    const char*     file_name,
+    const char*     prefix,
     uint32*         stream,
     uint32          seq_length,
     uint32          seq_words)
 {
-    FILE* file = fopen( file_name, "rb" );
+    std::string wpac_file_name = std::string( prefix ) + ".wpac";
+    std::string  pac_file_name = std::string( prefix ) + ".pac";
+    const char*  file_name     = wpac_file_name.c_str();
+    bool         wpac          = true;
+
+    FILE* file = fopen( wpac_file_name.c_str(), "rb" );
     if (file == NULL)
     {
-        log_warning(stderr, "unable to open %s\n", file_name);
-        return false;
+        file        = fopen( pac_file_name.c_str(), "rb" );
+        file_name   = pac_file_name.c_str();
+        wpac        = false;
     }
 
-    const bool wpac = (strcmp( file_name + strlen( file_name ) - 5u, ".wpac" ) == 0);
+    if (file == NULL)
+    {
+        log_warning(stderr, "unable to open %s.[w]pac\n", prefix);
+        return false;
+    }
 
     typedef SequenceDataTraits<ALPHABET> sequence_traits;
 
@@ -125,12 +133,15 @@ bool load_pac(
                 return false;
             }
 
-            // copy the pac stream into the output
+            // build the input wpac stream
             typedef PackedStream<uint32*,uint8,2,true> pac_stream_type;
             pac_stream_type pac( pac_stream );
 
+            // build the output stream
             output_stream_type out( stream );
-            assign( seq_length, pac, out );
+
+            // copy the pac stream into the output
+            assign( seq_length, pac, out ); // TODO: transform pac using a DNA -> ALPHABET conversion
         }
     }
     else
@@ -165,12 +176,15 @@ bool load_pac(
             return false;
         }
 
-        // copy the pac stream into the output
+        // build the input pac stream
         typedef PackedStream<uint8*,uint8,2,true> pac_stream_type;
         pac_stream_type pac( pac_stream );
 
+        // build the output stream
         output_stream_type out( stream );
-        assign( seq_length, pac, out );
+
+        // copy the pac stream into the output
+        assign( seq_length, pac, out ); // TODO: transform pac using a DNA -> ALPHABET conversion
     }
     fclose( file );
     return true;
@@ -230,15 +244,10 @@ struct BNTLoader : public nvbio::BNTSeqLoader
 bool load_pac(
     const SequenceAlphabet      alphabet,
     SequenceDataHost*           sequence_data,
-    const char*                 sequence_file_name,
+    const char*                 prefix,
     const SequenceFlags         load_flags,
     const QualityEncoding       qualities)
 {
-    std::string prefix = sequence_file_name;
-    const size_t s = prefix.rfind( "." );
-    if (s != std::string::npos)
-        prefix[s] = '\0';
-
     // prepare the sequence index
     sequence_data->m_sequence_index_vec.resize( 1 );
     sequence_data->m_sequence_index_vec[0] = 0;
@@ -247,22 +256,36 @@ bool load_pac(
     sequence_data->m_name_index_vec.resize( 1 );
     sequence_data->m_name_index_vec[0] = 0;
 
+    // load the BNS files
     BNTInfo bnt_info;
-    load_bns_info( bnt_info, prefix.c_str() );
+    try
+    {
+        load_bns_info( bnt_info, prefix );
 
-    BNTLoader loader( sequence_data->m_sequence_index_vec, sequence_data->m_name_index_vec, sequence_data->m_name_vec );
-    load_bns( &loader, prefix.c_str() );
+        BNTLoader loader(
+            sequence_data->m_sequence_index_vec,
+            sequence_data->m_name_index_vec,
+            sequence_data->m_name_vec );
+
+        load_bns( &loader, prefix );
+    }
+    catch (...)
+    {
+        log_error(stderr, "loading BNS files failed\n");
+        return false;
+    }
 
     const uint32 bits             = bits_per_symbol( alphabet );
     const uint32 symbols_per_word = 32 / bits;
 
+    const uint32 n_seqs             = bnt_info.n_seqs;
     const uint32 seq_length         = uint32( bnt_info.l_pac );
     const uint32 seq_words          = uint32( util::divide_ri( seq_length, symbols_per_word ) );
     const uint32 aligned_seq_words  = align<4>( seq_words );
 
     // set all basic info
     sequence_data->m_alphabet               = alphabet;
-    sequence_data->m_n_seqs                 = bnt_info.n_seqs;
+    sequence_data->m_n_seqs                 = n_seqs;
     sequence_data->m_sequence_stream_len    = seq_length;
     sequence_data->m_sequence_stream_words  = aligned_seq_words;
     sequence_data->m_name_stream_len        = uint32( sequence_data->m_name_vec.size() );
@@ -279,13 +302,13 @@ bool load_pac(
     switch (alphabet)
     {
     case DNA:
-        return load_pac<DNA>( sequence_file_name, &sequence_data->m_sequence_vec[0], seq_length, seq_words );
+        return load_pac<DNA>( prefix, &sequence_data->m_sequence_vec[0], seq_length, seq_words );
         break;
     case DNA_N:
-        return load_pac<DNA>( sequence_file_name, &sequence_data->m_sequence_vec[0], seq_length, seq_words );
+        return load_pac<DNA>( prefix, &sequence_data->m_sequence_vec[0], seq_length, seq_words );
         break;
     case PROTEIN:
-        return load_pac<PROTEIN>( sequence_file_name, &sequence_data->m_sequence_vec[0], seq_length, seq_words );
+        return load_pac<PROTEIN>( prefix, &sequence_data->m_sequence_vec[0], seq_length, seq_words );
         break;
     }
     return false;
@@ -306,21 +329,16 @@ bool load_pac(
 bool load_pac(
     const SequenceAlphabet      alphabet,
     SequenceDataMMAPServer*     sequence_data,
-    const char*                 sequence_file_name,
+    const char*                 prefix,
     const char*                 mapped_name,
     const SequenceFlags         load_flags,
     const QualityEncoding       qualities)
 {
-    std::string prefix = sequence_file_name;
-    const size_t s = prefix.rfind( "." );
-    if (s != std::string::npos)
-        prefix[s] = '\0';
-
-    std::string info_name           = std::string("nvbio.") + std::string( mapped_name ) + ".seq_info";
-    std::string sequence_name       = std::string("nvbio.") + std::string( mapped_name ) + ".seq";
-    std::string sequence_index_name = std::string("nvbio.") + std::string( mapped_name ) + ".seq_index";
-    std::string name_name           = std::string("nvbio.") + std::string( mapped_name ) + ".name";
-    std::string name_index_name     = std::string("nvbio.") + std::string( mapped_name ) + ".name_index";
+    std::string info_name           = SequenceDataMMAPServer::info_file_name( mapped_name );
+    std::string sequence_name       = SequenceDataMMAPServer::sequence_file_name( mapped_name );
+    std::string sequence_index_name = SequenceDataMMAPServer::sequence_index_file_name( mapped_name );
+    std::string name_name           = SequenceDataMMAPServer::name_file_name( mapped_name );
+    std::string name_index_name     = SequenceDataMMAPServer::name_index_file_name( mapped_name );
 
     // prepare the sequence index
     nvbio::vector<host_tag,uint32> sequence_index_vec;
@@ -334,11 +352,20 @@ bool load_pac(
     name_index_vec.resize( 1 );
     name_index_vec[0] = 0;
 
+    // load the BNS files
     BNTInfo bnt_info;
-    load_bns_info( bnt_info, prefix.c_str() );
+    try
+    {
+        load_bns_info( bnt_info, prefix );
 
-    BNTLoader loader( sequence_index_vec, name_index_vec, name_vec );
-    load_bns( &loader, prefix.c_str() );
+        BNTLoader loader( sequence_index_vec, name_index_vec, name_vec );
+        load_bns( &loader, prefix );
+    }
+    catch (...)
+    {
+        log_error(stderr, "loading BNS files failed\n");
+        return false;
+    }
 
     const uint32 bits             = bits_per_symbol( alphabet );
     const uint32 symbols_per_word = 32 / bits;
@@ -358,59 +385,70 @@ bool load_pac(
     info.m_has_qualities            = false;
     // TODO: m_{avg,min,max}_sequence_len
 
-    // alloc sequence storage
-    uint32* sequence_ptr = (uint32*)sequence_data->m_sequence_file.init(
-        sequence_name.c_str(),
-        aligned_seq_words * sizeof(uint32),
-        NULL );
-
-    // initialize the alignment slack
-    for (uint32 i = seq_words; i < aligned_seq_words; ++i)
-        sequence_ptr[i] = 0u;
-
-    // alloc sequence_index storage
-    uint32* sequence_index_ptr = (uint32*)sequence_data->m_sequence_index_file.init(
-        sequence_index_name.c_str(),
-        sequence_index_vec.size() * sizeof(uint32),
-        NULL );
-
-    // alloc name_index storage
-    uint32* name_index_ptr = (uint32*)sequence_data->m_name_index_file.init(
-        name_index_name.c_str(),
-        name_index_vec.size() * sizeof(uint32),
-        NULL );
-
-    // alloc name storage
-    char* name_ptr = (char*)sequence_data->m_name_file.init(
-        name_name.c_str(),
-        name_vec.size() * sizeof(char),
-        NULL );
-
-    // alloc info storage
-    SequenceDataInfo* info_ptr = (SequenceDataInfo*)sequence_data->m_info_file.init(
-        info_name.c_str(),
-        sizeof(SequenceDataInfo),
-        NULL );
-
-    // copy the loaded index and names vectors
-    memcpy( sequence_index_ptr, &sequence_index_vec[0], sequence_index_vec.size() * sizeof(uint32) );
-    memcpy( name_index_ptr,     &name_index_vec[0],     name_index_vec.size()     * sizeof(uint32) );
-    memcpy( name_ptr,           &name_vec[0],           name_vec.size()           * sizeof(char) );
-
-    *info_ptr = info;
-
-    // load the actual sequence
-    switch (alphabet)
+    try
     {
-    case DNA:
-        return load_pac<DNA>( sequence_file_name, sequence_ptr, seq_length, seq_words );
-        break;
-    case DNA_N:
-        return load_pac<DNA>( sequence_file_name, sequence_ptr, seq_length, seq_words );
-        break;
-    case PROTEIN:
-        return load_pac<PROTEIN>( sequence_file_name, sequence_ptr, seq_length, seq_words );
-        break;
+        // alloc sequence storage
+        uint32* sequence_ptr = (uint32*)sequence_data->m_sequence_file.init(
+            sequence_name.c_str(),
+            aligned_seq_words * sizeof(uint32),
+            NULL );
+
+        // initialize the alignment slack
+        for (uint32 i = seq_words; i < aligned_seq_words; ++i)
+            sequence_ptr[i] = 0u;
+
+        // alloc sequence_index storage
+        uint32* sequence_index_ptr = (uint32*)sequence_data->m_sequence_index_file.init(
+            sequence_index_name.c_str(),
+            sequence_index_vec.size() * sizeof(uint32),
+            NULL );
+
+        // alloc name_index storage
+        uint32* name_index_ptr = (uint32*)sequence_data->m_name_index_file.init(
+            name_index_name.c_str(),
+            name_index_vec.size() * sizeof(uint32),
+            NULL );
+
+        // alloc name storage
+        char* name_ptr = (char*)sequence_data->m_name_file.init(
+            name_name.c_str(),
+            name_vec.size() * sizeof(char),
+            NULL );
+
+        // alloc info storage
+        SequenceDataInfo* info_ptr = (SequenceDataInfo*)sequence_data->m_info_file.init(
+            info_name.c_str(),
+            sizeof(SequenceDataInfo),
+            NULL );
+
+        // copy the loaded index and names vectors
+        memcpy( sequence_index_ptr, &sequence_index_vec[0], sequence_index_vec.size() * sizeof(uint32) );
+        memcpy( name_index_ptr,     &name_index_vec[0],     name_index_vec.size()     * sizeof(uint32) );
+        memcpy( name_ptr,           &name_vec[0],           name_vec.size()           * sizeof(char) );
+
+        *info_ptr = info;
+
+        // load the actual sequence
+        switch (alphabet)
+        {
+        case DNA:
+            return load_pac<DNA>( prefix, sequence_ptr, seq_length, seq_words );
+            break;
+        case DNA_N:
+            return load_pac<DNA>( prefix, sequence_ptr, seq_length, seq_words );
+            break;
+        case PROTEIN:
+            return load_pac<PROTEIN>( prefix, sequence_ptr, seq_length, seq_words );
+            break;
+        }
+    }
+    catch (ServerMappedFile::mapping_error e)
+    {
+        log_error(stderr, "  mapping error while mapping file: %s (code: %u)\n", e.m_file_name, e.m_code );
+    }
+    catch (ServerMappedFile::view_error e)
+    {
+        log_error(stderr, "  view error while mapping file: %s (code: %u)\n", e.m_file_name, e.m_code );
     }
     return false;
 }

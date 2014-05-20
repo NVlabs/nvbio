@@ -47,12 +47,18 @@ namespace io {
 /// Additionally, the same container can be viewed with different SequenceDataView's, in order to allow reinterpreting
 /// the base arrays as arrays of different types, e.g. to perform vector loads or use LDG.
 ///
-/// Specifically, it exposes the following classes and methods:
+/// Specifically, it exposes the following core classes and methods:
 ///
 /// - SequenceData
-/// - SequenceDataView
 /// - SequenceDataStream
 /// - open_sequence_file()
+///
+/// as well as some additional accessor classes:
+///
+/// - SequenceDataViewCore
+/// - SequenceDataView
+/// - ConstSequenceDataView
+/// - SequenceDataAccess
 ///
 
 ///@addtogroup IO

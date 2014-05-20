@@ -141,7 +141,7 @@ struct SequenceDataInfo
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           words()            const { return m_sequence_stream_words; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           qs()               const { return m_has_qualities ? m_sequence_stream_len : 0u; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           name_stream_len()  const { return m_name_stream_len; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool             has_qualities()    const { return m_has_qualities; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool             has_qualities()    const { return m_has_qualities ? true : false; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           max_sequence_len() const { return m_max_sequence_len; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           min_sequence_len() const { return m_min_sequence_len; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           avg_sequence_len() const { return m_avg_sequence_len; }

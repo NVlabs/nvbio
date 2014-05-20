@@ -205,26 +205,39 @@ struct BNTLoader : public nvbio::BNTSeqLoader
 
     void set_info(const nvbio::BNTInfo info)
     {
-        m_info = info;
+        m_info.m_n_seqs              = uint32( info.n_seqs );
+        m_info.m_sequence_stream_len = uint32( info.l_pac );
+        m_info.m_avg_sequence_len    = uint32( info.l_pac / info.n_seqs );
+        m_info.m_min_sequence_len    = uint32(-1);
+        m_info.m_max_sequence_len    = 0u;
     }
     void read_ann(const nvbio::BNTAnnInfo& info, nvbio::BNTAnnData& data)
     {
+        // keep track of the current name offset
         const uint32 name_offset = (uint32)m_name_vec->size();
+
+        // copy the name of this sequence into the output vector
         m_name_vec->resize( name_offset + info.name.length() + 1u );
         strcpy( &m_name_vec->front() + name_offset, info.name.c_str() );
 
+        // compute the length of this sequence
+        const uint32 seq_len = data.offset - m_index_vec->back();
+
+        // push back the name and sequence offsets
         m_name_index_vec->push_back( name_offset );
         m_index_vec->push_back( uint32( data.offset ) );
+
+        // keep sequence stats
+        m_info.m_min_sequence_len = nvbio::min( m_info.m_min_sequence_len, seq_len );
+        m_info.m_max_sequence_len = nvbio::min( m_info.m_max_sequence_len, seq_len );
     }
 
-    void read_amb(const nvbio::BNTAmb& amb)
-    {
-    }
+    void read_amb(const nvbio::BNTAmb& amb) {}
 
-    nvbio::BNTInfo  m_info;
-    StringVector*   m_name_vec;
-    IndexVector*    m_name_index_vec;
-    IndexVector*    m_index_vec;
+    SequenceDataInfo m_info;
+    StringVector*    m_name_vec;
+    IndexVector*     m_name_index_vec;
+    IndexVector*     m_index_vec;
 };
 
 } // anonymous namespace
@@ -257,17 +270,17 @@ bool load_pac(
     sequence_data->m_name_index_vec[0] = 0;
 
     // load the BNS files
-    BNTInfo bnt_info;
+    SequenceDataInfo info;
     try
     {
-        load_bns_info( bnt_info, prefix );
-
         BNTLoader loader(
             sequence_data->m_sequence_index_vec,
             sequence_data->m_name_index_vec,
             sequence_data->m_name_vec );
 
         load_bns( &loader, prefix );
+
+        info = loader.m_info;
     }
     catch (...)
     {
@@ -278,15 +291,13 @@ bool load_pac(
     const uint32 bits             = bits_per_symbol( alphabet );
     const uint32 symbols_per_word = 32 / bits;
 
-    const uint32 n_seqs             = bnt_info.n_seqs;
-    const uint32 seq_length         = uint32( bnt_info.l_pac );
+    const uint32 seq_length         = info.bps();
     const uint32 seq_words          = uint32( util::divide_ri( seq_length, symbols_per_word ) );
     const uint32 aligned_seq_words  = align<4>( seq_words );
 
-    // set all basic info
+    // setup all basic info
+    sequence_data->SequenceDataInfo::operator=( info );
     sequence_data->m_alphabet               = alphabet;
-    sequence_data->m_n_seqs                 = n_seqs;
-    sequence_data->m_sequence_stream_len    = seq_length;
     sequence_data->m_sequence_stream_words  = aligned_seq_words;
     sequence_data->m_name_stream_len        = uint32( sequence_data->m_name_vec.size() );
     sequence_data->m_has_qualities          = false;
@@ -353,13 +364,13 @@ bool load_pac(
     name_index_vec[0] = 0;
 
     // load the BNS files
-    BNTInfo bnt_info;
+    SequenceDataInfo info;
     try
     {
-        load_bns_info( bnt_info, prefix );
-
         BNTLoader loader( sequence_index_vec, name_index_vec, name_vec );
         load_bns( &loader, prefix );
+
+        info = loader.m_info;
     }
     catch (...)
     {
@@ -370,16 +381,12 @@ bool load_pac(
     const uint32 bits             = bits_per_symbol( alphabet );
     const uint32 symbols_per_word = 32 / bits;
 
-    const uint32 n_seqs             = bnt_info.n_seqs;
-    const uint32 seq_length         = uint32( bnt_info.l_pac );
+    const uint32 seq_length         = info.bps();
     const uint32 seq_words          = uint32( util::divide_ri( seq_length, symbols_per_word ) );
     const uint32 aligned_seq_words  = align<4>( seq_words );
 
     // setup all basic info
-    SequenceDataInfo info;
     info.m_alphabet                 = alphabet;
-    info.m_n_seqs                   = n_seqs;
-    info.m_sequence_stream_len      = seq_length;
     info.m_sequence_stream_words    = aligned_seq_words;
     info.m_name_stream_len          = uint32( name_vec.size() );
     info.m_has_qualities            = false;

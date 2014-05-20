@@ -284,6 +284,8 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
 
         m_data->m_name_index_vec.resize( 1 );
         m_data->m_name_index_vec[0] = 0;
+
+        m_data->has_qualities = true;
     }
 
     /// add a sequence to the end of this batch

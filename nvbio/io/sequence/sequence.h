@@ -53,7 +53,7 @@ namespace io {
 /// - SequenceDataStream
 /// - open_sequence_file()
 ///
-/// as well as some additional accessor classes:
+/// as well as some additional accessors:
 ///
 /// - SequenceDataViewCore
 /// - SequenceDataView
@@ -129,6 +129,7 @@ struct SequenceDataInfo
         m_name_stream_len(0),
         m_sequence_stream_len(0),
         m_sequence_stream_words(0),
+        m_has_qualities(0),
         m_min_sequence_len(uint32(-1)),
         m_max_sequence_len(0),
         m_avg_sequence_len(0)
@@ -138,7 +139,9 @@ struct SequenceDataInfo
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           size()             const { return m_n_seqs; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           bps()              const { return m_sequence_stream_len; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           words()            const { return m_sequence_stream_words; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           qs()               const { return m_has_qualities ? m_sequence_stream_len : 0u; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           name_stream_len()  const { return m_name_stream_len; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool             has_qualities()    const { return m_has_qualities; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           max_sequence_len() const { return m_max_sequence_len; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           min_sequence_len() const { return m_min_sequence_len; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           avg_sequence_len() const { return m_avg_sequence_len; }
@@ -148,6 +151,7 @@ struct SequenceDataInfo
     uint32              m_name_stream_len;          ///< the length (in bytes) of the name_stream buffer
     uint32              m_sequence_stream_len;      ///< the length of sequence_stream in base pairs
     uint32              m_sequence_stream_words;    ///< the number of words in sequence_stream
+    uint32              m_has_qualities;            ///< has qualities
 
     uint32              m_min_sequence_len;         ///< statistics on the reads
     uint32              m_max_sequence_len;         ///< statistics on the reads
@@ -449,7 +453,7 @@ SequenceDataStream* open_sequence_file(
     const QualityEncoding    qualities,
     const uint32             max_seqs         = uint32(-1),
     const uint32             max_sequence_len = uint32(-1),
-    const SequenceEncoding   flags            = REVERSE);
+    const SequenceEncoding   flags            = FORWARD);
 
 /// load a sequence file
 ///
@@ -464,13 +468,11 @@ SequenceDataStream* open_sequence_file(
 ///                             and reverse-complemented strands.
 ///
 void load_sequence_file(
-    struct SequenceDataEncoder* encoder,
+    const SequenceAlphabet      alphabet,
+    SequenceDataHost*           sequence_data,
     const char*                 sequence_file_name,
     const SequenceFlags         load_flags,
-    const QualityEncoding       qualities,
-    const uint32                max_seqs         = uint32(-1),
-    const uint32                max_sequence_len = uint32(-1),
-    const SequenceEncoding      flags            = REVERSE);
+    const QualityEncoding       qualities);
 
 ///@} // SequenceIO
 ///@} // IO

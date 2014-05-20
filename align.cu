@@ -35,7 +35,7 @@ using namespace nvbio;
 
 // initialize the alignment pipeline
 //
-void align_init(struct pipeline_state *pipeline, const io::SequenceDataDevice<DNA_N> *batch)
+void align_init(struct pipeline_state *pipeline, const io::SequenceDataDevice *batch)
 {
     struct chains_state<device_tag>    *chn = &pipeline->chn;
     struct alignment_state<device_tag> *aln = &pipeline->aln;
@@ -146,7 +146,7 @@ template <typename system_tag>
 uint32 align_short(
     chains_state<system_tag>            *chn,
     alignment_state<system_tag>         *aln,
-    const io::SequenceDataDevice<DNA_N> *batch)
+    const io::SequenceDataDevice        *batch)
 {
     //
     // During alignment, we essentially keep a queue of "active" reads, corresponding
@@ -227,7 +227,7 @@ uint32 align_short(
 
 // perform banded alignment
 //
-uint32 align_short(pipeline_state *pipeline, const io::SequenceDataDevice<DNA_N> *batch)
+uint32 align_short(pipeline_state *pipeline, const io::SequenceDataDevice *batch)
 {
     if (pipeline->system == DEVICE &&       // if currently on the device,
         pipeline->aln.n_active < 16*1024)   // but too little parallelism...

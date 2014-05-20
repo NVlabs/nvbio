@@ -88,7 +88,7 @@ int run(int argc, char **argv)
     Timer  global_timer;
     Timer  timer;
 
-    io::SequenceDataHost<DNA_N> batch;
+    io::SequenceDataHost batch;
 
     // go!
     for(;;)
@@ -97,13 +97,13 @@ int run(int argc, char **argv)
         timer.start();
 
         // read the next batch
-        if (io::next( &batch, input.get(), command_line_options.batch_size, uint32(-1) ) == 0)
+        if (io::next( DNA_N, &batch, input.get(), command_line_options.batch_size, uint32(-1) ) == 0)
             break;  // EOF
 
         log_info(stderr, "processing reads [%llu,%llu)\n", pipeline.stats.n_reads, pipeline.stats.n_reads + batch.size()/2);
 
         // copy batch to the device
-        const io::SequenceDataDevice<DNA_N> device_batch( batch );
+        const io::SequenceDataDevice device_batch( batch );
 
         timer.stop();
         pipeline.stats.io_time += timer.seconds();

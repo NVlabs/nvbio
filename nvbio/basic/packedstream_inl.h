@@ -751,7 +751,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator!= (
 template <typename InputIterator, typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
 NVBIO_HOST_DEVICE
 void assign(
-    const uint32                                                                                    input_len,
+    const IndexType                                                                                 input_len,
     InputIterator                                                                                   input_string,
     PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string)
 {
@@ -807,7 +807,7 @@ void assign(
         // encode a word's worth of characters
         word_type word = 0u;
 
-        const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, input_len - uint32(i) );
+        const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, uint32( input_len - IndexType(i) ) );
 
         // loop through the word's bp's
         for (uint32 j = 0; j < SYMBOLS_PER_WORD; ++j)
@@ -827,7 +827,7 @@ void assign(
         }
 
         // write out the word
-        const uint32 word_idx = (stream_offset + i) / SYMBOLS_PER_WORD;
+        const uint32 word_idx = uint32( (stream_offset + IndexType(i)) / SYMBOLS_PER_WORD );
 
         words[ word_idx ] = word;
     }

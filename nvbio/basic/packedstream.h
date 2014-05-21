@@ -339,7 +339,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator!= (
 template <typename InputIterator, typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
 NVBIO_HOST_DEVICE
 void assign(
-    const uint32                                                                                    input_len,
+    const IndexType                                                                                 input_len,
     InputIterator                                                                                   input_string,
     PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string);
 

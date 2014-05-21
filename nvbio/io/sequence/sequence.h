@@ -155,6 +155,35 @@ struct SequenceDataInfo
     uint32              m_avg_sequence_len;         ///< statistics on the reads
 };
 
+/// comparison operator for SequenceDataInfo
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator== (
+    const SequenceDataInfo& op1,
+    const SequenceDataInfo& op2)
+{
+    return
+        op1.m_alphabet              == op2.m_alphabet               &&
+        op1.m_n_seqs                == op2.m_n_seqs                 &&
+        op1.m_name_stream_len       == op2.m_name_stream_len        &&
+        op1.m_sequence_stream_len   == op2.m_sequence_stream_len    &&
+        op1.m_sequence_stream_words == op2.m_sequence_stream_words  &&
+        op1.m_has_qualities         == op2.m_has_qualities          &&
+        op1.m_min_sequence_len      == op2.m_min_sequence_len       &&
+        op1.m_max_sequence_len      == op2.m_max_sequence_len       &&
+        op1.m_avg_sequence_len      == op2.m_avg_sequence_len;
+}
+
+/// comparison operator for SequenceDataInfo
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!= (
+    const SequenceDataInfo& op1,
+    const SequenceDataInfo& op2)
+{
+    return !(op1 == op2);
+}
+
 ///
 /// A storage-less plain-view class to represent the core sequence data iterators.
 ///
@@ -290,11 +319,11 @@ struct SequenceData : public SequenceDataInfo
 
     /// convert to a plain_view
     ///
-    virtual operator       plain_view_type() = 0;
+    virtual operator       plain_view_type() { return plain_view_type(); }
 
     /// convert to a const plain_view
     ///
-    virtual operator const_plain_view_type() const = 0;
+    virtual operator const_plain_view_type() const { return const_plain_view_type(); }
 };
 
 ///

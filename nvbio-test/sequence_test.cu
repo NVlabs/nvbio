@@ -59,44 +59,89 @@ int sequence_test(int argc, char* argv[])
 
     log_info(stderr,"testing sequence-data... started\n");
 
-    if (index_name != NULL)
+    try
     {
-        io::SequenceDataMMAPServer server;
-        if (server.load( DNA, index_name, "test", io::SequenceFlags( io::SEQUENCE_DATA | io::SEQUENCE_NAMES ) ) == false)
+        if (index_name != NULL)
         {
-            log_error(stderr,"  server mapping of file %s failed\n", index_name);
-            return 0;
-        }
+            log_verbose(stderr, "  loading sequence file %s\n", index_name );
 
-        io::SequenceDataMMAP client;
-        if (client.load( "test" ) == false)
+            // try to load the index in memory
+            io::SequenceDataHost index;
+            if (io::load_sequence_file(
+                DNA,
+                &index,
+                index_name ) == false)
+            {
+                log_error(stderr,"  loading file %s failed\n", index_name);
+                return 0;
+            }
+
+            log_verbose(stderr, "  sequences : %u\n", index.size() );
+            log_verbose(stderr, "  bps       : %u\n", index.bps() );
+            log_verbose(stderr, "  avg bps   : %u (min: %u, max: %u)\n",
+                index.avg_sequence_len(),
+                index.min_sequence_len(),
+                index.max_sequence_len() );
+
+            // try to load the index in mapped-memory
+            io::SequenceDataMMAPServer server;
+            if (server.load( DNA, index_name, "test", io::SequenceFlags( io::SEQUENCE_DATA | io::SEQUENCE_NAMES ) ) == false)
+            {
+                log_error(stderr,"  server mapping of file %s failed\n", index_name);
+                return 0;
+            }
+
+            // scope the client so as to make sure it's destroyed before the server
+            {
+                // and map it into a client
+                io::SequenceDataMMAP client;
+                if (client.load( "test" ) == false)
+                {
+                    log_error(stderr,"  client mapping of file %s failed\n", index_name);
+                    return 0;
+                }
+
+                log_verbose(stderr, "  sequences : %u\n", client.size() );
+                log_verbose(stderr, "  bps       : %u\n", client.bps() );
+                log_verbose(stderr, "  avg bps   : %u (min: %u, max: %u)\n",
+                    client.avg_sequence_len(),
+                    client.min_sequence_len(),
+                    client.max_sequence_len() );
+
+                // check whether the stats match
+                if (static_cast<const io::SequenceDataInfo&>( index ) !=
+                    static_cast<const io::SequenceDataInfo&>( client ))
+                {
+                    log_error(stderr,"  loaded and mapped versions of file %s do not match!\n", index_name);
+                    return 0;
+                }
+            }
+        }
+        if (reads_name != NULL)
         {
-            log_error(stderr,"  client mapping of file %s failed\n", index_name);
-            return 0;
-        }
+            SharedPointer<io::SequenceDataStream> read_file( io::open_sequence_file( reads_name ) );
+            if (read_file == NULL || read_file->is_ok() == false)
+            {
+                log_error(stderr,"  failed opening reads file %s\n", reads_name);
+                return 0;
+            }
 
-        log_verbose(stderr, "  sequences : %u\n", client.size() );
-        log_verbose(stderr, "  bps       : %u\n", client.bps() );
+            io::SequenceDataHost read_data;
+
+            io::next( DNA_N, &read_data, read_file.get(), 10000 );
+
+            log_verbose(stderr, "  sequences : %u\n", read_data.size() );
+            log_verbose(stderr, "  bps       : %u\n", read_data.bps() );
+            log_verbose(stderr, "  avg bps   : %u (min: %u, max: %u)\n",
+                read_data.avg_sequence_len(),
+                read_data.min_sequence_len(),
+                read_data.max_sequence_len() );
+        }
     }
-    if (reads_name != NULL)
+    catch (...)
     {
-        SharedPointer<io::SequenceDataStream> read_file( io::open_sequence_file( reads_name ) );
-        if (read_file == NULL || read_file->is_ok() == false)
-        {
-            log_error(stderr,"  failed opening reads file %s\n", reads_name);
-            return 0;
-        }
-
-        io::SequenceDataHost read_data;
-
-        io::next( DNA_N, &read_data, read_file.get(), 10000 );
-
-        log_verbose(stderr, "  sequences : %u\n", read_data.size() );
-        log_verbose(stderr, "  bps       : %u\n", read_data.bps() );
-        log_verbose(stderr, "  avg bps   : %u (min: %u, max: %u)\n",
-            read_data.avg_sequence_len(),
-            read_data.min_sequence_len(),
-            read_data.max_sequence_len() );
+        log_error(stderr, "caught an unknown exception!\n");
+        return 0;
     }
 
     log_info(stderr,"testing sequence-data... done\n");

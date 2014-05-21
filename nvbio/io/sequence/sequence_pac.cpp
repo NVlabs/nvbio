@@ -108,7 +108,7 @@ bool load_pac(
             return false;
         }
 
-        if (ALPHABET == 2 && sequence_traits::SEQUENCE_BIG_ENDIAN == true)
+        if (ALPHABET == DNA && sequence_traits::SEQUENCE_BIG_ENDIAN == true)
         {
             // read the 2-bit per symbol words in the final destination
             const uint32 n_words = (uint32)block_fread( stream, seq_words, file );
@@ -121,7 +121,7 @@ bool load_pac(
         else
         {
             // read the 2-bit per symbol words in a temporary array
-            const uint32 pac_words = uint32( (seq_length + 15u)/16u );
+            const uint32 pac_words = uint32( util::divide_ri( seq_length, 16u ) );
 
             std::vector<uint32> pac_vec( pac_words );
             uint32* pac_stream = &pac_vec[0];
@@ -164,7 +164,7 @@ bool load_pac(
 
         fseek( file, 0, SEEK_SET );
 
-        const uint32 seq_bytes = uint32( (seq_length + 3u)/4u );
+        const uint32 seq_bytes = uint32( util::divide_ri( seq_length, 4u ) );
 
         std::vector<uint8> pac_vec( seq_bytes );
         uint8* pac_stream = &pac_vec[0];
@@ -243,8 +243,8 @@ struct BNTLoader : public nvbio::BNTSeqLoader
 //
 bool is_pac_archive(const char* sequence_file_name)
 {
-    const std::string ann = std::string(sequence_file_name) + ".ann";
-    const std::string pac = std::string(sequence_file_name) + ".pac";
+    const std::string ann  = std::string(sequence_file_name) + ".ann";
+    const std::string pac  = std::string(sequence_file_name) + ".pac";
     const std::string wpac = std::string(sequence_file_name) + ".wpac";
     FILE* ann_file  = fopen( ann.c_str(), "rb" );
     FILE* pac_file  = fopen( pac.c_str(), "rb" );
@@ -253,9 +253,9 @@ bool is_pac_archive(const char* sequence_file_name)
     bool ann_ok = ann_file != NULL;
     bool seq_ok = (pac_file != NULL || wpac_file != NULL);
 
-    fclose( ann_file );
-    fclose( pac_file );
-    fclose( wpac_file );
+    if (ann_file)  fclose( ann_file );
+    if (pac_file)  fclose( pac_file );
+    if (wpac_file) fclose( wpac_file );
 
     return ann_ok && seq_ok;
 }

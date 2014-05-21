@@ -28,6 +28,9 @@
 #pragma once
 
 #include <nvbio/basic/cached_iterator.h>
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 namespace nvbio {
 
@@ -801,9 +804,9 @@ void assign(
         words[ stream_offset / SYMBOLS_PER_WORD ] = word;
     }
 
-  //#if !defined(NVBIO_DEVICE_COMPILATION)
-  //  #pragma omp parallel for if (input_len > 1000000)
-  //#endif
+  #if defined(_OPENMP) && !defined(NVBIO_DEVICE_COMPILATION)
+    #pragma omp parallel for if (input_len > 1000000)
+  #endif
     for (int64 i = word_rem; i < int64( input_len ); i += SYMBOLS_PER_WORD)
     {
         // encode a word's worth of characters

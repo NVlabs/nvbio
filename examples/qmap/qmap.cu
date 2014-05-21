@@ -358,16 +358,17 @@ int main(int argc, char* argv[])
     log_info(stderr, "qmap... started\n");
 
     // load a genome archive...
-    log_visible(stderr, "  loading reference index \"%s\"... started\n", index);
+    log_visible(stderr, "  loading reference index ... started\n");
+    log_info(stderr, "  file: \"%s\"\n", index);
 
     io::SequenceDataHost h_genome_data;
-    if (io::load_sequence_file( DNA, &h_genome_data, index ) == 0)
+    if (io::load_sequence_file( DNA, &h_genome_data, index ) == false)
     {
         log_error(stderr, "    failed loading index \"%s\"\n", index);
         return 1u;
     }
 
-    log_visible(stderr, "  loading reference index \"%s\"... done\n", index);
+    log_visible(stderr, "  loading reference index ... done\n");
     log_verbose(stderr, "    sequences : %u\n", h_genome_data.size() );
     log_verbose(stderr, "    bps       : %u\n", h_genome_data.bps() );
     log_verbose(stderr, "    avg bps   : %u (min: %u, max: %u)\n",

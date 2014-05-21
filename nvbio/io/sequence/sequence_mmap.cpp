@@ -67,9 +67,6 @@ std::string SequenceDataMMAPServer::name_index_file_name(const char* name)      
 // \param name          memory mapped object name
 bool SequenceDataMMAP::load(const char* file_name)
 {
-    log_visible(stderr, "SequenceData (MMAP) : loading... started\n");
-    log_visible(stderr, "  file : %s\n", file_name);
-
     std::string infoName        = SequenceDataMMAPServer::info_file_name( file_name );
     std::string seqName         = SequenceDataMMAPServer::sequence_file_name( file_name );
     std::string seqIndexName    = SequenceDataMMAPServer::sequence_index_file_name( file_name );
@@ -108,8 +105,6 @@ bool SequenceDataMMAP::load(const char* file_name)
         log_error(stderr, "SequenceDataMMAP: error mapping file (unknown)!\n");
         return false;
     }
-
-    log_visible(stderr, "SequenceData (MMAP) : loading... done\n");
     return true;
 }
 

@@ -355,8 +355,10 @@ int main(int argc, char* argv[])
             score_threshold = int16( atoi( argv[++i] ) );
     }
 
+    log_info(stderr, "qmap... started\n");
+
     // load a genome archive...
-    log_visible(stderr, "loading reference index \"%s\"... started\n", index);
+    log_visible(stderr, "  loading reference index \"%s\"... started\n", index);
 
     io::SequenceDataHost h_genome_data;
     if (io::load_sequence_file( DNA, &h_genome_data, index ) == 0)
@@ -365,7 +367,13 @@ int main(int argc, char* argv[])
         return 1u;
     }
 
-    log_visible(stderr, "loading reference index \"%s\"... done\n", index);
+    log_visible(stderr, "  loading reference index \"%s\"... done\n", index);
+    log_verbose(stderr, "    sequences : %u\n", h_genome_data.size() );
+    log_verbose(stderr, "    bps       : %u\n", h_genome_data.bps() );
+    log_verbose(stderr, "    avg bps   : %u (min: %u, max: %u)\n",
+        h_genome_data.avg_sequence_len(),
+        h_genome_data.min_sequence_len(),
+        h_genome_data.max_sequence_len() );
 
     // build its device version
     const io::SequenceDataDevice      d_genome_data( h_genome_data );
@@ -500,5 +508,7 @@ int main(int argc, char* argv[])
         log_verbose(stderr, "    occurrences        : %.3f B\n", 1.0e-9f * float( stats.occurrences ) );
         log_verbose(stderr, "    merged occurrences : %.3f B (%.1f %%)\n", 1.0e-9f * float( stats.merged ), 100.0f * float(stats.merged)/float(stats.occurrences));
     }
+
+    log_info(stderr, "qmap... done\n");
     return 0;
 }

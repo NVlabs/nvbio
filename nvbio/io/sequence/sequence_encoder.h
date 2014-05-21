@@ -87,10 +87,6 @@ struct SequenceDataEncoder
     ///
     virtual void end_batch(void) {}
 
-    /// fetch the actual SequenceData object
-    ///
-    virtual SequenceData* data() const { return NULL; }
-
     /// return the sequence data info
     ///
     virtual SequenceDataInfo* info() const { return NULL; }

@@ -364,11 +364,6 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
         m_data->m_avg_sequence_len = (uint32) ceilf(float(m_data->m_sequence_stream_len) / float(m_data->m_n_seqs));
     }
 
-    /// fetch the actual SequenceData object of the specified alphabet
-    /// NOTE: this only works for the proper alphabet
-    ///
-    SequenceData* data() const { return m_data; }
-
     /// return the sequence data info
     ///
     SequenceDataInfo* info() const { return m_data; }

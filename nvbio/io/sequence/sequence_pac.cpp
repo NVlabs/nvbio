@@ -134,7 +134,7 @@ bool load_pac(
             }
 
             // build the input wpac stream
-            typedef PackedStream<uint32*,uint8,2,true> pac_stream_type;
+            typedef PackedStream<const uint32*,uint8,2,true> pac_stream_type;
             pac_stream_type pac( pac_stream );
 
             // build the output stream
@@ -177,7 +177,7 @@ bool load_pac(
         }
 
         // build the input pac stream
-        typedef PackedStream<uint8*,uint8,2,true> pac_stream_type;
+        typedef PackedStream<const uint8*,uint8,2,true> pac_stream_type;
         pac_stream_type pac( pac_stream );
 
         // build the output stream
@@ -333,7 +333,7 @@ bool load_pac(
         return load_pac<DNA>( prefix, &sequence_data->m_sequence_vec[0], seq_length, seq_words );
         break;
     case DNA_N:
-        return load_pac<DNA>( prefix, &sequence_data->m_sequence_vec[0], seq_length, seq_words );
+        return load_pac<DNA_N>( prefix, &sequence_data->m_sequence_vec[0], seq_length, seq_words );
         break;
     case PROTEIN:
         return load_pac<PROTEIN>( prefix, &sequence_data->m_sequence_vec[0], seq_length, seq_words );
@@ -458,7 +458,7 @@ bool load_pac(
             return load_pac<DNA>( prefix, sequence_ptr, seq_length, seq_words );
             break;
         case DNA_N:
-            return load_pac<DNA>( prefix, sequence_ptr, seq_length, seq_words );
+            return load_pac<DNA_N>( prefix, sequence_ptr, seq_length, seq_words );
             break;
         case PROTEIN:
             return load_pac<PROTEIN>( prefix, sequence_ptr, seq_length, seq_words );

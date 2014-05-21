@@ -377,6 +377,38 @@ struct SequenceDataStorage : public SequenceDataInfo
         return *this;
     }
 
+    /// assignment operator, from a view object
+    /// NOTE: if the view contains raw pointers, this method works if only if the pointers refer to host data.
+    /// If the view refers to device data instead, it must provide proper device iterators.
+    ///
+    template <
+        typename IndexIterator,
+        typename SequenceStorageIterator,
+        typename QualStorageIterator,
+        typename NameStorageIterator>
+    SequenceDataStorage& operator= (const SequenceDataViewCore<IndexIterator,SequenceStorageIterator,QualStorageIterator,NameStorageIterator>& other)
+    {
+        // copy the info
+        this->SequenceDataInfo::operator=( other );
+
+        // resize the vectors
+        m_sequence_vec.resize( m_sequence_stream_words );
+        m_sequence_index_vec.resize( m_n_seqs + 1u );
+        m_name_vec.resize( m_name_stream_len );
+        m_name_index_vec( m_n_seqs + 1u );
+        if (m_has_qualities)
+            m_qual_vec.resize( m_sequence_stream_len );
+
+        // and copy the contents
+        thrust::copy( other.sequence_storage(), other.sequence_storage() + m_sequence_stream_words, m_sequence_vec.begin() );
+        thrust::copy( other.sequence_index(),   other.sequence_index()   + m_n_seqs + 1u,           m_sequence_index_vec.begin() );
+        thrust::copy( other.name_stream(),      other.name_stream()      + m_name_stream_len,       m_name_vec.begin() );
+        thrust::copy( other.name_index(),       other.name_index()       + m_n_seqs + 1u,           m_name_index_vec.begin() );
+        if (m_has_qualities)
+            thrust::copy( other.qual_stream(),  other.qual_stream()      + m_sequence_stream_len,   m_qual_vec.begin() );
+
+        return *this;
+    }
     /// convert to a plain_view
     ///
     operator plain_view_type()

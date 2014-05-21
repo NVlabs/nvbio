@@ -144,7 +144,7 @@ typedef nvbio::HostVectorArray<uint8> HostMdsArray;
 /// pointers to the relevant bits of data pulled from the GPU buffers.
 struct AlignmentData
 {
-    typedef io::SequenceData                                read_data_type;
+    typedef io::SequenceDataHost                            read_data_type;
     typedef io::SequenceDataAccess<DNA_N>                   read_access_type;
     typedef read_access_type::sequence_stream_type          read_type;
 
@@ -162,7 +162,7 @@ struct AlignmentData
     // These are not really meant to be used outside AlignmentData and
     // should probably be removed
 
-    const io::SequenceData              *read_data_batch_p;
+    const io::SequenceDataHost          *read_data_batch_p;
     const HostCigarArray                *cigar_array_p;
     const HostMdsArray                  *mds_array_p;
 
@@ -214,7 +214,7 @@ struct AlignmentData
     AlignmentData(const Alignment *best,
                   const Alignment *second_best,
                   uint32 read_id,
-                  const io::SequenceData *read_data_batch,
+                  const io::SequenceDataHost *read_data_batch,
                   const HostCigarArray *cigar_array,
                   const HostMdsArray *mds_array)
         : valid(true),

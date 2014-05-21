@@ -802,12 +802,12 @@ void assign(
     }
 
     //#pragma omp parallel for
-    for (int i = word_rem; i < int( input_len ); i += SYMBOLS_PER_WORD)
+    for (int64 i = word_rem; i < int64( input_len ); i += SYMBOLS_PER_WORD)
     {
         // encode a word's worth of characters
         word_type word = 0u;
 
-        const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, input_len - i );
+        const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, input_len - uint32(i) );
 
         // loop through the word's bp's
         for (uint32 j = 0; j < SYMBOLS_PER_WORD; ++j)

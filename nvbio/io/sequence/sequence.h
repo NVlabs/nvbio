@@ -517,6 +517,24 @@ io::SequenceData::const_plain_view_type plain_view(const io::SequenceData& seque
     return io::SequenceData::const_plain_view_type( sequence_data );
 }
 
+/// return a plain view of a SequenceData object
+///
+template <typename system_tag>
+typename io::SequenceDataStorage<system_tag>::plain_view_type
+plain_view(io::SequenceDataStorage<system_tag>& sequence_data)
+{
+    return typename io::SequenceDataStorage<system_tag>::plain_view_type( sequence_data );
+}
+
+/// return a plain view of a const SequenceData object
+///
+template <typename system_tag>
+typename io::SequenceDataStorage<system_tag>::const_plain_view_type
+plain_view(const io::SequenceDataStorage<system_tag>& sequence_data)
+{
+    return typename io::SequenceDataStorage<system_tag>::const_plain_view_type( sequence_data );
+}
+
 } // namespace nvbio
 
 #include <nvbio/io/sequence/sequence_access.h>

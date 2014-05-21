@@ -41,7 +41,6 @@
 #include <nvbio/qgram/qgram.h>
 #include <nvbio/qgram/filter.h>
 #include <nvbio/io/sequence/sequence.h>
-#include <nvbio/io/fmi.h>
 
 #include "alignment.h"
 #include "util.h"
@@ -356,22 +355,27 @@ int main(int argc, char* argv[])
             score_threshold = int16( atoi( argv[++i] ) );
     }
 
-    // TODO: load a genome archive...
-    io::FMIndexDataRAM h_fmi;
-    if (!h_fmi.load( index, io::FMIndexData::GENOME ))
+    // load a genome archive...
+    log_visible(stderr, "loading reference index \"%s\"... started\n", index);
+
+    io::SequenceDataHost h_genome_data;
+    if (io::load_sequence_file( DNA, &h_genome_data, index ) == 0)
     {
         log_error(stderr, "    failed loading index \"%s\"\n", index);
         return 1u;
     }
 
-    // build its device version
-    const io::FMIndexDataDevice d_fmi( h_fmi, io::FMIndexDataDevice::GENOME );
+    log_visible(stderr, "loading reference index \"%s\"... done\n", index);
 
-    typedef io::FMIndexDataDevice::stream_type genome_type;
+    // build its device version
+    const io::SequenceDataDevice      d_genome_data( h_genome_data );
+    const io::SequenceDataAccess<DNA> d_genome_access( d_genome_data );
+
+    typedef io::SequenceDataAccess<DNA>::sequence_stream_type genome_type;
 
     // fetch the genome string
-    const uint32      genome_len = d_fmi.genome_length();
-    const genome_type d_genome( d_fmi.genome_stream() );
+    const uint32      genome_len = d_genome_data.bps();
+    const genome_type d_genome( d_genome_access.sequence_stream() );
 
     // open a read file
     log_info(stderr, "  opening reads file... started\n");

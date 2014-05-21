@@ -49,6 +49,8 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc(const uint32 i)
 {
 #if defined(NVBIO_DEVICE_COMPILATION)
     return device_popc( i );
+#elif defined(__GNUC__)
+    return __builtin_popcount( i );
 #else
     uint32 v = i;
     v = v - ((v >> 1) & 0x55555555);
@@ -64,6 +66,8 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc(const uint64 i)
 {
 #if defined(NVBIO_DEVICE_COMPILATION)
     return device_popc( i );
+#elif defined(__GNUC__)
+    return __builtin_popcountll( i );
 #else
     //return popc( uint32(i & 0xFFFFFFFFU) ) + popc( uint32(i >> 32) );
     uint64 v = i;
@@ -204,6 +208,8 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 ffs(const int32 x)
 {
 #if defined(NVBIO_DEVICE_COMPILATION)
     return ffs_device(x);
+#elif defined(__GNUC__)
+    return __builtin_ffs(x);
 #else
     return x ? popc(x ^ (~(-x))) : 0u;
 #endif
@@ -215,6 +221,8 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 lzc(const uint32 x)
 {
 #if defined(NVBIO_DEVICE_COMPILATION)
     return lzc_device(x);
+#elif defined(__GNUC__)
+    return __builtin_clz(x);
 #else
     uint32 y = x;
     y |= (y >> 1);

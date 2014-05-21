@@ -454,10 +454,9 @@ SequenceDataStream* open_sequence_file(
 
 /// load a sequence file
 ///
+/// \param alphabet             the alphabet used to encode the sequence data
+/// \param sequence_data        the output sequence data
 /// \param sequence_file_name   the file to open
-/// \param qualities            the encoding of the qualities
-/// \param max_seqs             maximum number of reads to input
-/// \param max_sequence_len     maximum read length - reads will be truncated
 /// \param load_flags           a set of flags indicating what to load
 /// \param qualities            the encoding of the qualities
 ///

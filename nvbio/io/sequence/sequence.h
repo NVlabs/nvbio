@@ -360,6 +360,19 @@ struct SequenceDataStorage : public SequenceDataInfo
         this->operator=( other );
     }
 
+    /// copy constructor
+    ///
+    template <
+        typename IndexIterator,
+        typename SequenceStorageIterator,
+        typename QualStorageIterator,
+        typename NameStorageIterator>
+    SequenceDataStorage(const SequenceDataViewCore<IndexIterator,SequenceStorageIterator,QualStorageIterator,NameStorageIterator>& other)
+    {
+        // copy
+        this->operator=( other );
+    }
+
     /// assignment operator
     ///
     template <typename other_tag>
@@ -395,7 +408,7 @@ struct SequenceDataStorage : public SequenceDataInfo
         m_sequence_vec.resize( m_sequence_stream_words );
         m_sequence_index_vec.resize( m_n_seqs + 1u );
         m_name_vec.resize( m_name_stream_len );
-        m_name_index_vec( m_n_seqs + 1u );
+        m_name_index_vec.resize( m_n_seqs + 1u );
         if (m_has_qualities)
             m_qual_vec.resize( m_sequence_stream_len );
 

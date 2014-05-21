@@ -801,7 +801,9 @@ void assign(
         words[ stream_offset / SYMBOLS_PER_WORD ] = word;
     }
 
-    //#pragma omp parallel for
+  //#if !defined(NVBIO_DEVICE_COMPILATION)
+  //  #pragma omp parallel for if (input_len > 1000000)
+  //#endif
     for (int64 i = word_rem; i < int64( input_len ); i += SYMBOLS_PER_WORD)
     {
         // encode a word's worth of characters
@@ -815,7 +817,7 @@ void assign(
             if (j < n_symbols)
             {
                 // fetch the bp
-                const uint8 bp = input_string[i + j];
+                const uint8 bp = input_string[IndexType(i) + j];
 
                 const uint32       bit_idx = j * SYMBOL_SIZE;
                 const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;

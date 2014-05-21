@@ -32,6 +32,10 @@
 namespace nvbio {
 namespace io {
 
+/// check whether the file name points to a pac archive
+///
+bool is_pac_archive(const char* sequence_file_name);
+
 /// load a sequence file
 ///
 /// \param sequence_file_name   the file to open
@@ -64,12 +68,12 @@ bool load_pac(
 ///                             and reverse-complemented strands.
 ///
 bool load_pac(
-    const SequenceAlphabet      alphabet,
-    SequenceDataMMAPServer*     sequence_data,
-    const char*                 prefix,
-    const char*                 mapped_name,
-    const SequenceFlags         load_flags,
-    const QualityEncoding       qualities);
+    const SequenceAlphabet          alphabet,
+    struct SequenceDataMMAPServer*  sequence_data,
+    const char*                     prefix,
+    const char*                     mapped_name,
+    const SequenceFlags             load_flags,
+    const QualityEncoding           qualities);
 
 ///@} // SequenceIO
 ///@} // IO

@@ -239,6 +239,27 @@ struct BNTLoader : public nvbio::BNTSeqLoader
 
 } // anonymous namespace
 
+// check whether the file name points to a pac archive
+//
+bool is_pac_archive(const char* sequence_file_name)
+{
+    const std::string ann = std::string(sequence_file_name) + ".ann";
+    const std::string pac = std::string(sequence_file_name) + ".pac";
+    const std::string wpac = std::string(sequence_file_name) + ".wpac";
+    FILE* ann_file  = fopen( ann.c_str(), "rb" );
+    FILE* pac_file  = fopen( pac.c_str(), "rb" );
+    FILE* wpac_file = fopen( wpac.c_str(), "rb" );
+
+    bool ann_ok = ann_file != NULL;
+    bool seq_ok = (pac_file != NULL || wpac_file != NULL);
+
+    fclose( ann_file );
+    fclose( pac_file );
+    fclose( wpac_file );
+
+    return ann_ok && seq_ok;
+}
+
 // load a sequence file
 //
 // \param sequence_file_name   the file to open
@@ -298,7 +319,6 @@ bool load_pac(
     sequence_data->m_sequence_stream_words  = aligned_seq_words;
     sequence_data->m_name_stream_len        = uint32( sequence_data->m_name_vec.size() );
     sequence_data->m_has_qualities          = false;
-    // TODO: m_{avg,min,max}_sequence_len
 
     // alloc sequence storage
     sequence_data->m_sequence_vec.resize( sequence_data->m_sequence_stream_words );
@@ -387,7 +407,6 @@ bool load_pac(
     info.m_sequence_stream_words    = aligned_seq_words;
     info.m_name_stream_len          = uint32( name_vec.size() );
     info.m_has_qualities            = false;
-    // TODO: m_{avg,min,max}_sequence_len
 
     try
     {

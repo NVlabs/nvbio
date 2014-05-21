@@ -32,6 +32,9 @@
 #include <nvbio/io/sequence/sequence_txt.h>
 #include <nvbio/io/sequence/sequence_sam.h>
 #include <nvbio/io/sequence/sequence_bam.h>
+#include <nvbio/io/sequence/sequence_pac.h>
+
+#include <nvbio/basic/shared_pointer.h>
 
 namespace nvbio {
 namespace io {
@@ -196,6 +199,35 @@ SequenceDataStream *open_sequence_file(
         max_seqs,
         max_sequence_len,
         flags);
+}
+
+// load a sequence file
+//
+// \param sequence_file_name   the file to open
+// \param qualities            the encoding of the qualities
+// \param max_seqs             maximum number of reads to input
+// \param max_sequence_len     maximum read length - reads will be truncated
+// \param load_flags           a set of flags indicating what to load
+// \param qualities            the encoding of the qualities
+//
+bool load_sequence_file(
+    const SequenceAlphabet      alphabet,
+    SequenceDataHost*           sequence_data,
+    const char*                 sequence_file_name,
+    const SequenceFlags         load_flags,
+    const QualityEncoding       qualities)
+{
+    // check whether this is a pac archive
+    if (is_pac_archive( sequence_file_name ))
+        return load_pac( alphabet, sequence_data, sequence_file_name, load_flags, qualities );
+
+    // open a regular stream
+    SharedPointer<SequenceDataStream> sequence_file( open_sequence_file( sequence_file_name, qualities ) );
+    if (sequence_file == NULL || sequence_file->is_ok() == false)
+        return false;
+
+    // load as many sequences as possible in one go
+    return io::next( alphabet, sequence_data, sequence_file.get(), uint32(-1), uint32(-1) ) > 0;
 }
 
 } // namespace io

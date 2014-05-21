@@ -458,11 +458,8 @@ SequenceDataStream* open_sequence_file(
 /// \param qualities            the encoding of the qualities
 /// \param max_seqs             maximum number of reads to input
 /// \param max_sequence_len     maximum read length - reads will be truncated
-/// \param flags                a set of flags indicating which strands to encode
-///                             in the batch for each read.
-///                             For example, passing FORWARD | REVERSE_COMPLEMENT
-///                             will result in a stream containing BOTH the forward
-///                             and reverse-complemented strands.
+/// \param load_flags           a set of flags indicating what to load
+/// \param qualities            the encoding of the qualities
 ///
 bool load_sequence_file(
     const SequenceAlphabet      alphabet,

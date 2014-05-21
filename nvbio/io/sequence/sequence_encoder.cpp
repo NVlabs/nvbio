@@ -366,7 +366,7 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
 
     /// return the sequence data info
     ///
-    SequenceDataInfo* info() const { return m_data; }
+    const SequenceDataInfo* info() const { return m_data; }
 
 private:
     SequenceDataHost* m_data;
@@ -417,6 +417,14 @@ int next(const SequenceAlphabet alphabet, SequenceDataHost* data, SequenceDataSt
         break;
     }
     return 0;
+}
+
+// next batch
+//
+int skip(SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps)
+{
+    SequenceDataEncoder encoder;
+    return stream->next( &encoder, batch_size );
 }
 
 } // namespace io

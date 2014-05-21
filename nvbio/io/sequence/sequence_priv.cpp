@@ -56,7 +56,7 @@ int SequenceDataFile::next(SequenceDataEncoder* encoder, const uint32 batch_size
         batch_bps == uint32(-1) ? batch_size * AVG_READ_LENGTH : batch_bps ); // try to use a default read length
 
     // fetch the sequence info
-    SequenceDataInfo* info = encoder->info();
+    const SequenceDataInfo* info = encoder->info();
 
     while (info->size() < reads_to_load &&
            info->bps()  < batch_bps)
@@ -79,7 +79,6 @@ int SequenceDataFile::next(SequenceDataEncoder* encoder, const uint32 batch_size
 
     return info->size();
 }
-
 
 // factory method to open a read file, tries to detect file type based on file name
 SequenceDataStream *open_sequence_file(

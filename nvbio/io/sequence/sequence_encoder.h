@@ -77,11 +77,16 @@ struct SequenceDataEncoder
         const uint8*            quality,
         const QualityEncoding   quality_encoding,
         const uint32            truncate_sequence_len,
-        const StrandOp          conversion_flags) {}
+        const StrandOp          conversion_flags)
+    {
+        // keep stats, needed for the implementation of io::skip()
+        m_info.m_sequence_stream_len += nvbio::min( sequence_len, truncate_sequence_len );
+        m_info.m_n_seqs++;
+    }
 
     /// signals that a batch is to begin
     ///
-    virtual void begin_batch(void) {}
+    virtual void begin_batch(void) { m_info = SequenceDataInfo(); }
 
     /// signals that the batch is complete
     ///
@@ -89,7 +94,7 @@ struct SequenceDataEncoder
 
     /// return the sequence data info
     ///
-    virtual SequenceDataInfo* info() const { return NULL; }
+    virtual const SequenceDataInfo* info() const { return &m_info; }
 
     /// get the alphabet
     ///
@@ -97,6 +102,7 @@ struct SequenceDataEncoder
 
 private:
     SequenceAlphabet m_alphabet;
+    SequenceDataInfo m_info;
 };
 
 /// create a sequence encoder

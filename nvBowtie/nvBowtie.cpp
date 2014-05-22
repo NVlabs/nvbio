@@ -275,31 +275,9 @@ int main(int argc, char* argv[])
 
     try
     {
-        nvbio::io::SequenceDataHost         reference_data;
-        nvbio::io::SequenceDataMMAP         reference_data_mmap;
-        nvbio::io::ConstSequenceDataView    reference_view;
-
         nvbio::io::FMIndexData* driver_data;
         if (from_file)
         {
-            log_visible(stderr, "loading reference index... started\n");
-            log_info(stderr, "  file: \"%s\"\n", argv[arg_offset]);
-
-            // load the reference data
-            if (io::load_sequence_file(
-                DNA,
-                &reference_data,
-                argv[arg_offset] ) == false)
-            {
-                log_error(stderr, "unable to load reference index \"%s\"\n", argv[arg_offset]);
-                return 1;
-            }
-
-            log_visible(stderr, "loading reference index... done\n");
-
-            // fetch its view
-            reference_view = reference_data;
-
             nvbio::io::FMIndexDataRAM* loader = new nvbio::io::FMIndexDataRAM;
             if (!loader->load( argv[arg_offset] ))
                 return 1;
@@ -308,21 +286,6 @@ int main(int argc, char* argv[])
         }
         else
         {
-            log_visible(stderr, "mapping reference index... started\n");
-            log_info(stderr, "  file: \"%s\"\n", argv[arg_offset]);
-
-            // map the reference data
-            if (reference_data_mmap.load( argv[arg_offset] ) == false)
-            {
-                log_error(stderr, "mapping reference index \"%s\" failed\n", argv[arg_offset]);
-                return 1;
-            }
-
-            log_visible(stderr, "mapping reference index... done\n");
-
-            // fetch its view
-            reference_view = reference_data;
-
             nvbio::io::FMIndexDataMMAP* loader = new nvbio::io::FMIndexDataMMAP;
             if (!loader->load( argv[arg_offset] ))
                 return 1;

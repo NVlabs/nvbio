@@ -43,7 +43,7 @@ struct SequenceDataTraits
 {
     static const uint32 SEQUENCE_BITS             = SequenceAlphabetTraits<SEQUENCE_ALPHABET>::SYMBOL_SIZE;     ///< symbol size for reads
     static const bool   SEQUENCE_BIG_ENDIAN       = false;                                                      ///< big endian?
-    static const uint32 SEQUENCE_SYMBOLS_PER_WORD = (4*sizeof(uint32))/SEQUENCE_BITS;                           ///< symbols per word
+    static const uint32 SEQUENCE_SYMBOLS_PER_WORD = (8*sizeof(uint32))/SEQUENCE_BITS;                           ///< symbols per word
 };
 
 ///@} // SequenceIO

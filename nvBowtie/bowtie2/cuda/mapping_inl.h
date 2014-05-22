@@ -224,10 +224,11 @@ struct seed_mapper<EXACT_MAPPING>
         Reader reader(S);
 
         // First we have to buffer the seed into shared memory.
-        const uint32 seed_offs = pos & 7; // pos % 8, there are 8 bases per uint32
-        const uint32 nwords = (seed_offs + seed_len+8)>>3; //seed_len/8+1
-        const uint32 fword  = pos >> 3; // pos / 8
-        for (uint32 i=0; i<nwords; ++i)
+        const uint32 SYMBOLS_PER_WORD = io::SequenceDataTraits<DNA_N>::SEQUENCE_SYMBOLS_PER_WORD;
+        const uint32 seed_offs = pos & (SYMBOLS_PER_WORD-1); // pos % 8, there are 8 bases per uint32
+        const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD) / SYMBOLS_PER_WORD; //seed_len/8+1
+        const uint32 fword     = pos / SYMBOLS_PER_WORD;
+        for (uint32 i = 0; i < nwords; ++i)
             S[i] = read_batch.sequence_storage()[fword + i];
 
         const OffsetXform <Reader::index_type> forward_offset(seed_offs);
@@ -318,10 +319,11 @@ struct seed_mapper<APPROX_MAPPING>
         Reader reader(S);
 
         // First we have to buffer the seed into shared memory.
-        const uint32 seed_offs = pos & 7; // pos % 8, there are 8 bases per uint32
-        const uint32 nwords = (seed_offs + seed_len+8)>>3; //seed_len/8+1
-        const uint32 fword  = pos >> 3; // pos / 8
-        for(uint32 i=0; i<nwords; ++i)
+        const uint32 SYMBOLS_PER_WORD = io::SequenceDataTraits<DNA_N>::SEQUENCE_SYMBOLS_PER_WORD;
+        const uint32 seed_offs = pos & (SYMBOLS_PER_WORD-1); // pos % 8, there are 8 bases per uint32
+        const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD) / SYMBOLS_PER_WORD; //seed_len/8+1
+        const uint32 fword     = pos / SYMBOLS_PER_WORD;
+        for (uint32 i = 0; i < nwords; ++i)
             S[i] = read_batch.sequence_storage()[fword + i];
 
         const OffsetXform <Reader::index_type> forward_offset(seed_offs);
@@ -384,10 +386,11 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
         Reader reader(S);
 
         // First we have to buffer the seed into shared memory.
-        const uint32 seed_offs = pos & 7; // pos % 8, there are 8 bases per uint32
-        const uint32 nwords = (seed_offs + seed_len+8)>>3; //seed_len/8+1
-        const uint32 fword  = pos >> 3; // pos / 8
-        for(uint32 i=0; i<nwords; ++i)
+        const uint32 SYMBOLS_PER_WORD = io::SequenceDataTraits<DNA_N>::SEQUENCE_SYMBOLS_PER_WORD;
+        const uint32 seed_offs = pos & (SYMBOLS_PER_WORD-1); // pos % 8, there are 8 bases per uint32
+        const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD) / SYMBOLS_PER_WORD; //seed_len/8+1
+        const uint32 fword     = pos / SYMBOLS_PER_WORD;
+        for (uint32 i = 0; i < nwords; ++i)
             S[i] = read_batch.sequence_storage()[fword + i];
 
         const OffsetXform <Reader::index_type> forward_offset(seed_offs);

@@ -78,8 +78,10 @@ void Aligner::best_approx(
     const genome_iterator_type genome_ptr( (const genome_storage_type*)driver_data.genome_stream() );
 
     // cast the reads to use proper iterators
-    const read_batch_type reads1( plain_view( read_data1 ) );
-    const read_batch_type reads2( plain_view( read_data2 ) );
+    const read_view_type  reads_view1 = plain_view( read_data1 );
+    const read_view_type  reads_view2 = plain_view( read_data2 );
+    const read_batch_type reads1( reads_view1 );
+    const read_batch_type reads2( reads_view2 );
 
     // initialize best-alignments
     init_alignments( reads1, threshold_score, best_data_dptr,   0u );
@@ -627,8 +629,10 @@ void Aligner::best_approx_score(
 
     const uint32 band_len = band_length( params.max_dist );
 
-    const read_batch_type reads1( plain_view( read_data1 ) );
-    const read_batch_type reads2( plain_view( read_data2 ) );
+    const read_view_type  reads_view1 = plain_view( read_data1 );
+    const read_view_type  reads_view2 = plain_view( read_data2 );
+    const read_batch_type reads1( reads_view1 );
+    const read_batch_type reads2( reads_view2 );
 
     const uint32 genome_len = driver_data.genome_length();
     const genome_iterator_type genome_ptr( (const genome_storage_type*)driver_data.genome_stream() );

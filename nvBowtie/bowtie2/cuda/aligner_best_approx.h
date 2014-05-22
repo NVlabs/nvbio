@@ -76,7 +76,8 @@ void Aligner::best_approx(
     const uint32 band_len = band_length( params.max_dist );
 
     // create a device-side read batch
-    const read_batch_type reads( plain_view( read_data ) );
+    const read_view_type  reads_view = plain_view( read_data );
+    const read_batch_type reads( reads_view );
 
     // initialize best-alignments
     init_alignments( reads, threshold_score, best_data_dptr );
@@ -390,7 +391,8 @@ void Aligner::best_approx_score(
     const uint32 band_len = band_length( params.max_dist );
 
     // cast the reads to use proper iterators
-    const read_batch_type reads( plain_view( read_data ) );
+    const read_view_type  reads_view = plain_view( read_data );
+    const read_batch_type reads( reads_view );
 
     // cast the genome to use proper iterators
     const uint32               genome_len = driver_data.genome_length();

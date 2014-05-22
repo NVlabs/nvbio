@@ -116,8 +116,8 @@ int32 sw_alignment_score(
         for(uint32 block_diag = 2; block_diag <= warp_block_width + N; block_diag += WARP_SIZE)
         {
             // reload caches every WARP_SIZE diagonals
-            temp_cache = (block_diag - 2) + warp_tid() < N ? temp[(block_diag - 2) + warp_tid()] : 0;
-            reference_cache = (block_diag - 2) + warp_tid() < N ? ref[(block_diag - 2) + warp_tid()] : 0;
+            temp_cache      = (block_diag - 2) + warp_tid() < N ? temp[(block_diag - 2) + warp_tid()] : 0;
+            reference_cache = (block_diag - 2) + warp_tid() < N ?  ref[(block_diag - 2) + warp_tid()] : 0;
 
             for(uint32 diag = block_diag; diag < block_diag + WARP_SIZE; diag++)
             {
@@ -142,7 +142,7 @@ int32 sw_alignment_score(
 
                     // determine the current cell score
                     hi = nvbio::max3(h_diag + S_ij,
-                                     h_top + SCORE_GAP,
+                                     h_top  + SCORE_GAP,
                                      h_left + SCORE_INSERTION);
 
                     if (TYPE == LOCAL)
@@ -159,7 +159,7 @@ int32 sw_alignment_score(
 
                     // save the best score across the entire matrix for local scoring
                     // save the best score across the last column for semi-global scoring
-                    if (TYPE == LOCAL ||
+                    if ((TYPE == LOCAL) ||
                         (TYPE == SEMI_GLOBAL && i == M))
                     {
                         if (hi > best_alignment.score)
@@ -178,7 +178,7 @@ int32 sw_alignment_score(
                 h_left = __shfl_up(hi, 1);
 
                 // push temp_cache and reference_cache values down the warp
-                temp_cache = __shfl_down(temp_cache, 1);
+                temp_cache      = __shfl_down(temp_cache, 1);
                 reference_cache = __shfl_down(reference_cache, 1);
             }
         }

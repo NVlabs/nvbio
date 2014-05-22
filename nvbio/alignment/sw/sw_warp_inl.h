@@ -93,10 +93,10 @@ int32 sw_alignment_score(
     const uint32 wi = warp_tid() + 1;
 
     // initialize the leftmost matrix column
-    for(uint32 i = warp_tid(); i <= N; i += WARP_SIZE)
+    for (uint32 i = warp_tid(); i <= N; i += WARP_SIZE)
         temp[i] = (TYPE == GLOBAL ? SCORE_GAP * (i + 1) : 0);
 
-    for(uint32 warp_block = 0; warp_block < M; warp_block += WARP_SIZE)
+    for (uint32 warp_block = 0; warp_block < M; warp_block += WARP_SIZE)
     {
         // width of this block
         warp_block_width = (warp_block + WARP_SIZE >= M ? M % WARP_SIZE : WARP_SIZE);
@@ -109,17 +109,17 @@ int32 sw_alignment_score(
         h_diag = (TYPE != LOCAL ? SCORE_GAP * (i - 1) : 0);
 
         // load the query string character for the current thread
-        const uint8 s_i = (i <= M ? str[i - 1] : 0);
+        const uint8 s_i = (i <= M ?   str[i - 1] : 0);
         const uint8 q_i = (i <= M ? quals[i - 1] : 0);
 
         // loop over all DP anti-diagonals, excluding the border row/column
-        for(uint32 block_diag = 2; block_diag <= warp_block_width + N; block_diag += WARP_SIZE)
+        for (uint32 block_diag = 2; block_diag <= warp_block_width + N; block_diag += WARP_SIZE)
         {
             // reload caches every WARP_SIZE diagonals
             temp_cache      = (block_diag - 2) + warp_tid() < N ? temp[(block_diag - 2) + warp_tid()] : 0;
             reference_cache = (block_diag - 2) + warp_tid() < N ?  ref[(block_diag - 2) + warp_tid()] : 0;
 
-            for(uint32 diag = block_diag; diag < block_diag + WARP_SIZE; diag++)
+            for (uint32 diag = block_diag; diag < block_diag + WARP_SIZE; diag++)
             {
                 // compute the length of this anti-diagonal (excluding border row/column)
                 const uint32 diag_len = nvbio::min3(diag - 1, WARP_SIZE, warp_block_width);
@@ -153,9 +153,7 @@ int32 sw_alignment_score(
 
                     // save off the last column
                     if (wi == WARP_SIZE)
-                    {
                         temp[j - 1] = hi;
-                    }
 
                     // save the best score across the entire matrix for local scoring
                     // save the best score across the last column for semi-global scoring

@@ -230,7 +230,7 @@ __global__ void warp_persistent_batched_alignment_score_kernel(stream_type strea
 template <typename stream_type>
 struct BatchedAlignmentScore<stream_type,HostThreadScheduler>
 {
-    static const uint32 BLOCKDIM = 128;
+    static const uint32 MAX_THREADS = 128; // whatever CPU we have, we assume we are never going to have more than this number of threads
 
     typedef typename stream_type::aligner_type                  aligner_type;
     typedef typename column_storage_type<aligner_type>::type    cell_type;
@@ -264,7 +264,7 @@ struct BatchedAlignmentScore<stream_type,HostThreadScheduler>
 template <typename stream_type>
 uint64 BatchedAlignmentScore<stream_type,HostThreadScheduler>::min_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
 {
-    return column_storage( max_pattern_len, max_text_len ) * 1024;
+    return column_storage( max_pattern_len, max_text_len ) * MAX_THREADS;
 }
 
 // return the maximum number of bytes required by the algorithm
@@ -272,7 +272,7 @@ uint64 BatchedAlignmentScore<stream_type,HostThreadScheduler>::min_temp_storage(
 template <typename stream_type>
 uint64 BatchedAlignmentScore<stream_type,HostThreadScheduler>::max_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
 {
-    return align<32>( column_storage( max_pattern_len, max_text_len ) * stream_size );
+    return column_storage( max_pattern_len, max_text_len ) * MAX_THREADS;
 }
 
 // enact the batch execution
@@ -289,41 +289,29 @@ void BatchedAlignmentScore<stream_type,HostThreadScheduler>::enact(stream_type s
         stream.max_text_length(),
         stream.size() );
 
-    nvbio::vector<host_tag,uint8> temp_vec;
-    if (temp == NULL)
+    nvbio::vector<host_tag,uint8> temp_vec( min_temp_size );
+    cell_type* columns = (cell_type*)nvbio::raw_pointer( temp_vec );
+
+    #if defined(_OPENMP)
+    #pragma omp parallel for
+    #endif
+    for (int work_id = 0; work_id < int( stream.size() ); ++work_id)
     {
-        temp_size = nvbio::max( min_temp_size, temp_size );
-        temp_vec.resize( temp_size );
-        temp = nvbio::plain_view( temp_vec );
-    }
-
-    // set the queue capacity based on available memory
-    const uint32 queue_capacity = uint32( temp_size / column_storage( stream.max_pattern_length(), stream.max_text_length() ) );
-
-    cell_type* columns = (cell_type*)temp;
-
-    // consume the alignments in batches
-    for (uint32 batch_begin = 0; batch_begin < stream.size(); batch_begin += queue_capacity)
-    {
-        const uint32 batch_end = nvbio::min( batch_begin + queue_capacity, stream.size() );
-
       #if defined(_OPENMP)
-        #pragma omp parallel for
+        const uint32 thread_id = omp_get_thread_num();
+      #else
+        const uint32 thread_id = 0;
       #endif
-        for (int work_id = batch_begin; work_id < int( batch_end ); ++work_id)
-        {
-            const uint32 thread_id = work_id - batch_begin;
 
-            // fetch the proper column storage
-            //typedef strided_iterator<cell_type*> column_type;
-            //column_type column = column_type( columns + thread_id, queue_capacity );
+        // fetch the proper column storage
+        //typedef strided_iterator<cell_type*> column_type;
+        //column_type column = column_type( columns + thread_id, queue_capacity );
 
-            // for the CPU it might be better to keep column storage contiguous
-            cell_type* column = columns + thread_id * column_size;
+        // for the CPU it might be better to keep column storage contiguous
+        cell_type* column = columns + thread_id * column_size;
 
-            // and solve the actual alignment problem
-            batched_alignment_score( stream, column, work_id, thread_id );
-        }
+        // and solve the actual alignment problem
+        batched_alignment_score( stream, column, work_id, thread_id );
     }
 }
 

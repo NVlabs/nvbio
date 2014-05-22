@@ -330,7 +330,7 @@ struct SequenceData : public SequenceDataInfo
 /// A concrete SequenceData storage implementation in host/device memory
 ///
 template <typename system_tag>
-struct SequenceDataStorage : public SequenceDataInfo
+struct SequenceDataStorage : public SequenceData
 {
     typedef SequenceData                                                SequenceDataBase;
 

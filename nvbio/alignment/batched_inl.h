@@ -315,8 +315,11 @@ void BatchedAlignmentScore<stream_type,HostThreadScheduler>::enact(stream_type s
             const uint32 thread_id = work_id - batch_begin;
 
             // fetch the proper column storage
-            typedef strided_iterator<cell_type*> column_type;
-            column_type column = column_type( columns + thread_id, queue_capacity );
+            //typedef strided_iterator<cell_type*> column_type;
+            //column_type column = column_type( columns + thread_id, queue_capacity );
+
+            // for the CPU it might be better to keep column storage contiguous
+            cell_type* column = columns + thread_id * column_size;
 
             // and solve the actual alignment problem
             batched_alignment_score( stream, column, work_id, thread_id );

@@ -218,23 +218,23 @@ struct seed_mapper<EXACT_MAPPING>
         //typedef const_cached_iterator<const uint32*> BaseStream;
         typedef PackedStream<
             const uint32*,uint8,
-            io::SequenceDataTraits<DNA_N>::SEQUENCE_BITS,
-            io::SequenceDataTraits<DNA_N>::SEQUENCE_BIG_ENDIAN> Reader;
+            BatchType::SEQUENCE_BITS,
+            BatchType::SEQUENCE_BIG_ENDIAN> Reader;
 
         Reader reader(S);
 
         // First we have to buffer the seed into shared memory.
-        const uint32 SYMBOLS_PER_WORD = io::SequenceDataTraits<DNA_N>::SEQUENCE_SYMBOLS_PER_WORD;
+        const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
         const uint32 seed_offs = pos & (SYMBOLS_PER_WORD-1); // pos % 8, there are 8 bases per uint32
         const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD) / SYMBOLS_PER_WORD; //seed_len/8+1
         const uint32 fword     = pos / SYMBOLS_PER_WORD;
         for (uint32 i = 0; i < nwords; ++i)
             S[i] = read_batch.sequence_storage()[fword + i];
 
-        const OffsetXform <Reader::index_type> forward_offset(seed_offs);
-        const ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
-        typedef index_transform_iterator< Reader, OffsetXform <Reader::index_type> > fSeedReader;
-        typedef index_transform_iterator< Reader, ReverseXform<Reader::index_type> > rSeedReader;
+        const OffsetXform <typename Reader::index_type> forward_offset(seed_offs);
+        const ReverseXform<typename Reader::index_type> reverse_offset(seed_offs+seed_len);
+        typedef index_transform_iterator< Reader, OffsetXform <typename Reader::index_type> > fSeedReader;
+        typedef index_transform_iterator< Reader, ReverseXform<typename Reader::index_type> > rSeedReader;
 
         SeedHit::Flags flags;
         uint2          range;
@@ -313,23 +313,23 @@ struct seed_mapper<APPROX_MAPPING>
         //typedef const_cached_iterator<const uint32*> BaseStream;
         typedef PackedStream<
             const uint32*,uint8,
-            io::SequenceDataTraits<DNA_N>::SEQUENCE_BITS,
-            io::SequenceDataTraits<DNA_N>::SEQUENCE_BIG_ENDIAN> Reader;
+            BatchType::SEQUENCE_BITS,
+            BatchType::SEQUENCE_BIG_ENDIAN> Reader;
 
         Reader reader(S);
 
         // First we have to buffer the seed into shared memory.
-        const uint32 SYMBOLS_PER_WORD = io::SequenceDataTraits<DNA_N>::SEQUENCE_SYMBOLS_PER_WORD;
+        const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
         const uint32 seed_offs = pos & (SYMBOLS_PER_WORD-1); // pos % 8, there are 8 bases per uint32
         const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD) / SYMBOLS_PER_WORD; //seed_len/8+1
         const uint32 fword     = pos / SYMBOLS_PER_WORD;
         for (uint32 i = 0; i < nwords; ++i)
             S[i] = read_batch.sequence_storage()[fword + i];
 
-        const OffsetXform <Reader::index_type> forward_offset(seed_offs);
-        const ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
-        typedef index_transform_iterator< Reader, OffsetXform <Reader::index_type> > fSeedReader;
-        typedef index_transform_iterator< Reader, ReverseXform<Reader::index_type> > rSeedReader;
+        const OffsetXform <typename Reader::index_type> forward_offset(seed_offs);
+        const ReverseXform<typename Reader::index_type> reverse_offset(seed_offs+seed_len);
+        typedef index_transform_iterator< Reader, OffsetXform <typename Reader::index_type> > fSeedReader;
+        typedef index_transform_iterator< Reader, ReverseXform<typename Reader::index_type> > rSeedReader;
 
         SeedHit::Flags flags;
 
@@ -380,23 +380,23 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
         //typedef const_cached_iterator<const uint32*> BaseStream;
         typedef PackedStream<
             const uint32*,uint8,
-            io::SequenceDataTraits<DNA_N>::SEQUENCE_BITS,
-            io::SequenceDataTraits<DNA_N>::SEQUENCE_BIG_ENDIAN> Reader;
+            BatchType::SEQUENCE_BITS,
+            BatchType::SEQUENCE_BIG_ENDIAN> Reader;
 
         Reader reader(S);
 
         // First we have to buffer the seed into shared memory.
-        const uint32 SYMBOLS_PER_WORD = io::SequenceDataTraits<DNA_N>::SEQUENCE_SYMBOLS_PER_WORD;
+        const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
         const uint32 seed_offs = pos & (SYMBOLS_PER_WORD-1); // pos % 8, there are 8 bases per uint32
         const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD) / SYMBOLS_PER_WORD; //seed_len/8+1
         const uint32 fword     = pos / SYMBOLS_PER_WORD;
         for (uint32 i = 0; i < nwords; ++i)
             S[i] = read_batch.sequence_storage()[fword + i];
 
-        const OffsetXform <Reader::index_type> forward_offset(seed_offs);
-        const ReverseXform<Reader::index_type> reverse_offset(seed_offs+seed_len);
-        typedef index_transform_iterator< Reader, OffsetXform <Reader::index_type> > fSeedReader;
-        typedef index_transform_iterator< Reader, ReverseXform<Reader::index_type> > rSeedReader;
+        const OffsetXform <typename Reader::index_type> forward_offset(seed_offs);
+        const ReverseXform<typename Reader::index_type> reverse_offset(seed_offs+seed_len);
+        typedef index_transform_iterator< Reader, OffsetXform <typename Reader::index_type> > fSeedReader;
+        typedef index_transform_iterator< Reader, ReverseXform<typename Reader::index_type> > rSeedReader;
 
         SeedHit::Flags flags;
 

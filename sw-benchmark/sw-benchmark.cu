@@ -402,11 +402,11 @@ void batch_score_profile_all(
             text_len,
             score_dvec );
 
-        // test the ThreadParallelScheduler
-        batch_score_profile<aln::ThreadParallelScheduler>( stream );
+        // test the DeviceThreadScheduler
+        batch_score_profile<aln::DeviceThreadScheduler>( stream );
 
-        // test the StagedThreadParallelScheduler
-        //batch_score_profile<aln::StagedThreadParallelScheduler>( stream );
+        // test the DeviceStagedThreadScheduler
+        //batch_score_profile<aln::DeviceStagedThreadScheduler>( stream );
     }
     {
         const uint32 BLOCKDIM = 128;

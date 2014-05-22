@@ -185,6 +185,7 @@ struct select_dispatch
         score_type r = 0;
 
         const uint32 M_mod = (M-1) & (BAND_LEN-1);
+
         #pragma unroll
         for (uint32 j = 1; j <= BAND_LEN; ++j)
         {

@@ -92,12 +92,12 @@ __global__ void batched_banded_alignment_score_kernel(const stream_type stream)
 ///@} // end of private group
 
 ///
-/// ThreadParallelScheduler specialization of BatchedBandedAlignmentScore.
+/// HostThreadScheduler specialization of BatchedBandedAlignmentScore.
 ///
 /// \tparam stream_type     the stream of alignment jobs
 ///
 template <uint32 BAND_LEN, typename stream_type>
-struct BatchedBandedAlignmentScore<BAND_LEN,stream_type,ThreadParallelScheduler>
+struct BatchedBandedAlignmentScore<BAND_LEN,stream_type,HostThreadScheduler>
 {
     static const uint32 BLOCKDIM = 128;
 
@@ -120,7 +120,45 @@ struct BatchedBandedAlignmentScore<BAND_LEN,stream_type,ThreadParallelScheduler>
 // enact the batch execution
 //
 template <uint32 BAND_LEN, typename stream_type>
-void BatchedBandedAlignmentScore<BAND_LEN,stream_type,ThreadParallelScheduler>::enact(stream_type stream, uint64 temp_size, uint8* temp)
+void BatchedBandedAlignmentScore<BAND_LEN,stream_type,HostThreadScheduler>::enact(stream_type stream, uint64 temp_size, uint8* temp)
+{
+  #if defined(_OPENMP)
+    #pragma omp parallel for
+  #endif
+    for (int tid = 0; tid < int( stream.size() ); ++tid)
+        batched_banded_alignment_score<BAND_LEN>( stream, tid );
+}
+
+///
+/// DeviceThreadScheduler specialization of BatchedBandedAlignmentScore.
+///
+/// \tparam stream_type     the stream of alignment jobs
+///
+template <uint32 BAND_LEN, typename stream_type>
+struct BatchedBandedAlignmentScore<BAND_LEN,stream_type,DeviceThreadScheduler>
+{
+    static const uint32 BLOCKDIM = 128;
+
+    typedef typename stream_type::aligner_type                  aligner_type;
+    typedef typename column_storage_type<aligner_type>::type    cell_type;
+
+    /// return the minimum number of bytes required by the algorithm
+    ///
+    static uint64 min_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size) { return 0u; }
+
+    /// return the maximum number of bytes required by the algorithm
+    ///
+    static uint64 max_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size) { return 0u; }
+
+    /// enact the batch execution
+    ///
+    void enact(stream_type stream, uint64 temp_size = 0u, uint8* temp = NULL);
+};
+
+// enact the batch execution
+//
+template <uint32 BAND_LEN, typename stream_type>
+void BatchedBandedAlignmentScore<BAND_LEN,stream_type,DeviceThreadScheduler>::enact(stream_type stream, uint64 temp_size, uint8* temp)
 {
     const uint32 n_blocks = (stream.size() + BLOCKDIM-1) / BLOCKDIM;
 
@@ -129,12 +167,12 @@ void BatchedBandedAlignmentScore<BAND_LEN,stream_type,ThreadParallelScheduler>::
 
 
 ///
-/// StagedThreadParallelScheduler specialization of BatchedBandedAlignmentScore.
+/// DeviceStagedThreadScheduler specialization of BatchedBandedAlignmentScore.
 ///
 /// \tparam stream_type     the stream of alignment jobs
 ///
 template <uint32 BAND_LEN, typename stream_type>
-struct BatchedBandedAlignmentScore<BAND_LEN,stream_type,StagedThreadParallelScheduler>
+struct BatchedBandedAlignmentScore<BAND_LEN,stream_type,DeviceStagedThreadScheduler>
 {
     static const uint32 BLOCKDIM = 128;
 
@@ -294,12 +332,12 @@ __global__ void persistent_banded_batched_alignment_traceback_kernel(stream_type
 ///@} // end of private group
 
 ///
-/// ThreadParallelScheduler specialization of BatchedAlignmentTraceback.
+/// DeviceThreadScheduler specialization of BatchedAlignmentTraceback.
 ///
 /// \tparam stream_type     the stream of alignment jobs
 ///
 template <uint32 BAND_LEN, uint32 CHECKPOINTS, typename stream_type>
-struct BatchedBandedAlignmentTraceback<BAND_LEN,CHECKPOINTS, stream_type,ThreadParallelScheduler>
+struct BatchedBandedAlignmentTraceback<BAND_LEN,CHECKPOINTS, stream_type,DeviceThreadScheduler>
 {
     static const uint32 BLOCKDIM = 128;
 
@@ -347,7 +385,7 @@ struct BatchedBandedAlignmentTraceback<BAND_LEN,CHECKPOINTS, stream_type,ThreadP
 // return the minimum number of bytes required by the algorithm
 //
 template <uint32 BAND_LEN, uint32 CHECKPOINTS, typename stream_type>
-uint64 BatchedBandedAlignmentTraceback<BAND_LEN,CHECKPOINTS, stream_type,ThreadParallelScheduler>::min_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
+uint64 BatchedBandedAlignmentTraceback<BAND_LEN,CHECKPOINTS, stream_type,DeviceThreadScheduler>::min_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
 {
     return element_storage( max_pattern_len, max_text_len ) * 1024;
 }
@@ -355,7 +393,7 @@ uint64 BatchedBandedAlignmentTraceback<BAND_LEN,CHECKPOINTS, stream_type,ThreadP
 // return the maximum number of bytes required by the algorithm
 //
 template <uint32 BAND_LEN, uint32 CHECKPOINTS, typename stream_type>
-uint64 BatchedBandedAlignmentTraceback<BAND_LEN,CHECKPOINTS,stream_type,ThreadParallelScheduler>::max_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
+uint64 BatchedBandedAlignmentTraceback<BAND_LEN,CHECKPOINTS,stream_type,DeviceThreadScheduler>::max_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
 {
     return element_storage( max_pattern_len, max_text_len ) * stream_size;
 }
@@ -363,7 +401,7 @@ uint64 BatchedBandedAlignmentTraceback<BAND_LEN,CHECKPOINTS,stream_type,ThreadPa
 // enact the batch execution
 //
 template <uint32 BAND_LEN, uint32 CHECKPOINTS, typename stream_type>
-void BatchedBandedAlignmentTraceback<BAND_LEN,CHECKPOINTS,stream_type,ThreadParallelScheduler>::enact(stream_type stream, uint64 temp_size, uint8* temp)
+void BatchedBandedAlignmentTraceback<BAND_LEN,CHECKPOINTS,stream_type,DeviceThreadScheduler>::enact(stream_type stream, uint64 temp_size, uint8* temp)
 {
     const uint64 min_temp_size = min_temp_storage(
         stream.max_pattern_length(),

@@ -433,14 +433,14 @@ void batch_score_profile_all(
             nvbio::raw_pointer( text_dvec ),
             nvbio::raw_pointer( score_dvec ) );
 
-        // test the ThreadParallelScheduler
-        batch_score_profile<ThreadParallelScheduler,N,M>(
+        // test the DeviceThreadScheduler
+        batch_score_profile<DeviceThreadScheduler,N,M>(
             stream,
             n_tests,
             n_tasks );
 
-        // test the StagedThreadParallelScheduler
-        batch_score_profile<StagedThreadParallelScheduler,N,M>(
+        // test the DeviceStagedThreadScheduler
+        batch_score_profile<DeviceStagedThreadScheduler,N,M>(
             stream,
             n_tests,
             n_tasks );
@@ -456,8 +456,8 @@ void batch_score_profile_all(
             nvbio::raw_pointer( text_dvec ),
             nvbio::raw_pointer( score_dvec ) );
 
-        // test the WarpParallelScheduler
-        batch_score_profile<WarpParallelScheduler,N,M>(
+        // test the DeviceWarpScheduler
+        batch_score_profile<DeviceWarpScheduler,N,M>(
             stream,
             n_tests,
             n_tasks );
@@ -535,19 +535,19 @@ void batch_banded_score_profile_all(
         nvbio::raw_pointer( text_dvec ),
         nvbio::raw_pointer( score_dvec ) );
 
-    // test the ThreadParallelScheduler
-    batch_banded_score_profile<BAND_LEN,ThreadParallelScheduler,N,M>(
+    // test the DeviceThreadScheduler
+    batch_banded_score_profile<BAND_LEN,DeviceThreadScheduler,N,M>(
         stream,
         n_tests,
         n_tasks );
 
-    // test the StagedThreadParallelScheduler
-    batch_banded_score_profile<BAND_LEN,StagedThreadParallelScheduler,N,M>(
+    // test the DeviceStagedThreadScheduler
+    batch_banded_score_profile<BAND_LEN,DeviceStagedThreadScheduler,N,M>(
         stream,
         n_tests,
         n_tasks );
 
-    // TODO: test WarpParallelScheduler
+    // TODO: test DeviceWarpScheduler
     fprintf(stderr, " GCUPS\n");
 }
 

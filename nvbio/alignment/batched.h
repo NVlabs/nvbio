@@ -40,22 +40,32 @@ namespace aln {
 /// A Batch Scheduler is a tag specifying the algorithm used to execute a batch of jobs in parallel.
 /// Three such algorithms are currently available:
 ///
-///     - ThreadParallelScheduler
-///     - StagedThreadParallelScheduler
-///     - WarpParallelScheduler
+///     - HostThreadScheduler
+///     - DeviceThreadScheduler
+///     - DeviceStagedThreadScheduler
+///     - DeviceWarpScheduler
 ///@{
 
 /// Identify a thread-parallel batch execution algorithm
 ///
-struct ThreadParallelScheduler {};
+template <typename system_tag>
+struct ThreadScheduler {};
+
+/// Identify a thread-parallel batch execution algorithm
+///
+typedef ThreadScheduler<host_tag> HostThreadScheduler;
 
 /// Identify a staged thread-parallel batch execution algorithm
 ///
-struct StagedThreadParallelScheduler {};
+typedef ThreadScheduler<device_tag> DeviceThreadScheduler;
+
+/// Identify a staged thread-parallel batch execution algorithm
+///
+struct DeviceStagedThreadScheduler {};
 
 /// Identify a warp-parallel batch execution algorithm
 ///
-struct WarpParallelScheduler {};
+struct DeviceWarpScheduler {};
 
 ///@} // end of BatchScheduler group
 
@@ -265,7 +275,7 @@ void batch_banded_alignment_score(
 ///
 template <
     typename stream_type,
-    typename algorithm_type = ThreadParallelScheduler>
+    typename algorithm_type = DeviceThreadScheduler>
 struct BatchedAlignmentScore
 {
     typedef typename stream_type::aligner_type                      aligner_type;
@@ -289,7 +299,7 @@ struct BatchedAlignmentScore
 template <
     uint32 BAND_LEN,
     typename stream_type,
-    typename algorithm_type = ThreadParallelScheduler>
+    typename algorithm_type = DeviceThreadScheduler>
 struct BatchedBandedAlignmentScore
 {
     typedef typename stream_type::aligner_type                      aligner_type;
@@ -388,7 +398,7 @@ struct BatchedBandedAlignmentScore
 template <
     uint32      CHECKPOINTS,
     typename    stream_type,
-    typename    algorithm_type = ThreadParallelScheduler>
+    typename    algorithm_type = DeviceThreadScheduler>
 struct BatchedAlignmentTraceback
 {
     /// return the minimum number of bytes required by the algorithm
@@ -416,7 +426,7 @@ template <
     uint32      BAND_LEN,
     uint32      CHECKPOINTS,
     typename    stream_type,
-    typename    algorithm_type = ThreadParallelScheduler>
+    typename    algorithm_type = DeviceThreadScheduler>
 struct BatchedBandedAlignmentTraceback
 {
     /// return the minimum number of bytes required by the algorithm

@@ -105,7 +105,12 @@ struct SequenceDataAccess
 
     /// constructor
     ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE SequenceDataAccess(const SequenceDataT& data) : m_data( data ) {}
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE SequenceDataAccess(const SequenceDataT& data) : m_data( data )
+    {
+      #if !defined(NVBIO_DEVICE_COMPILATION) || defined(NVBIO_CUDA_DEBUG)
+        assert( m_data.m_alphabet == SEQUENCE_ALPHABET );
+      #endif
+    }
 
     /// get the range of a read in the sequence stream
     ///
@@ -226,7 +231,12 @@ struct SequenceDataEdit
 
     /// constructor
     ///
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE SequenceDataEdit(SequenceDataT& data) : m_data( data ) {}
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE SequenceDataEdit(SequenceDataT& data) : m_data( data )
+    {
+      #if !defined(NVBIO_DEVICE_COMPILATION) || defined(NVBIO_CUDA_DEBUG)
+        assert( m_data.m_alphabet == SEQUENCE_ALPHABET );
+      #endif
+    }
 
     /// get the range of a read in the sequence stream
     ///

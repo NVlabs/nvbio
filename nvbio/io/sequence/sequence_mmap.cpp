@@ -108,5 +108,20 @@ bool SequenceDataMMAP::load(const char* file_name)
     return true;
 }
 
+// map a sequence file
+//
+// \param sequence_file_name   the file to open
+//
+SequenceDataMMAP* map_sequence_file(const char* sequence_file_name)
+{
+    SequenceDataMMAP* ret = new SequenceDataMMAP; 
+    if (ret->load( sequence_file_name ) == false)
+    {
+        delete ret;
+        return NULL;
+    }
+    return ret;
+}
+
 } // namespace io
 } // namespace nvbio

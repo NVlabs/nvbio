@@ -228,5 +228,28 @@ bool load_sequence_file(
     return io::next( alphabet, sequence_data, sequence_file.get(), uint32(-1), uint32(-1) ) > 0;
 }
 
+
+/// load a sequence file
+///
+/// \param alphabet             the alphabet used to encode the sequence data
+/// \param sequence_file_name   the file to open
+/// \param load_flags           a set of flags indicating what to load
+/// \param qualities            the encoding of the qualities
+///
+SequenceDataHost* load_sequence_file(
+    const SequenceAlphabet      alphabet,
+    const char*                 sequence_file_name,
+    const SequenceFlags         load_flags,
+    const QualityEncoding       qualities)
+{
+    SequenceDataHost* ret = new SequenceDataHost;
+    if (load_sequence_file( alphabet, sequence_file_name, load_flags, qualities ) == false)
+    {
+        delete ret;
+        return NULL;
+    }
+    return ret;
+}
+
 } // namespace io
 } // namespace nvbio

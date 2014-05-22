@@ -545,6 +545,19 @@ bool load_sequence_file(
     const SequenceFlags         load_flags  = io::SequenceFlags( io::SEQUENCE_DATA | io::SEQUENCE_QUALS | io::SEQUENCE_NAMES ),
     const QualityEncoding       qualities   = Phred33);
 
+/// load a sequence file
+///
+/// \param alphabet             the alphabet used to encode the sequence data
+/// \param sequence_file_name   the file to open
+/// \param load_flags           a set of flags indicating what to load
+/// \param qualities            the encoding of the qualities
+///
+SequenceDataHost* load_sequence_file(
+    const SequenceAlphabet      alphabet,
+    const char*                 sequence_file_name,
+    const SequenceFlags         load_flags  = io::SequenceFlags( io::SEQUENCE_DATA | io::SEQUENCE_QUALS | io::SEQUENCE_NAMES ),
+    const QualityEncoding       qualities   = Phred33);
+
 ///@} // SequenceIO
 ///@} // IO
 

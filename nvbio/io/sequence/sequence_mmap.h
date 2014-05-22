@@ -138,6 +138,12 @@ struct SequenceDataMMAP : public SequenceData
     MappedFile m_name_index_file;              ///< internal memory-mapped reverse BWT object server
 };
 
+/// map a sequence file
+///
+/// \param sequence_file_name   the file to open
+///
+SequenceDataMMAP* map_sequence_file(const char* sequence_file_name);
+
 ///@} // SequenceIO
 ///@} // IO
 

@@ -288,7 +288,7 @@ void map(
             read_infix_set,
             genome_infix_set,
             sinks.begin(),
-            aln::ThreadParallelScheduler(),
+            aln::DeviceThreadScheduler(),
             reads.max_sequence_len(),
             reads.max_sequence_len() + BAND_LEN );
 

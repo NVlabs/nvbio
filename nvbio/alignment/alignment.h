@@ -218,7 +218,7 @@
 ///     make_concatenated_string_set( n_strings, pattern_storage.begin(), pattern_offsets.begin() ),
 ///     make_concatenated_string_set( n_strings, text_storage.begin(),    text_offsets.begin() ),
 ///     sinks.begin(),
-///     aln::ThreadParallelScheduler() );
+///     aln::DeviceThreadScheduler() );
 ///\endcode
 ///
 /// \section TechnicalOverviewSection Technical Overview

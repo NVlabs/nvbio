@@ -38,11 +38,11 @@ namespace nvbio {
 template<uint32 STRIDE, uint32 WHICH, typename BaseIterator>
 struct deinterleaved_iterator
 {
-    typedef typename BaseIterator::value_type   value_type;
-    typedef typename BaseIterator::reference    reference;
-    typedef const value_type*                   pointer;
-    typedef int32                               difference_type;
-    typedef std::random_access_iterator_tag     iterator_category;
+    typedef typename std::iterator_traits<BaseIterator>::value_type     value_type;
+    typedef typename std::iterator_traits<BaseIterator>::reference      reference;
+    typedef const value_type*                                           pointer;
+    typedef int32                                                       difference_type;
+    typedef std::random_access_iterator_tag                             iterator_category;
 
     typedef deinterleaved_iterator<STRIDE,WHICH,BaseIterator> this_type;
 

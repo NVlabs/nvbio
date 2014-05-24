@@ -2,6 +2,7 @@ nvbio_module(nvbio)
 
 # note: the order here matters as it determines link order
 nvbio_add_module_directory(io)
+nvbio_add_module_directory(io/fmindex)
 nvbio_add_module_directory(io/sequence)
 nvbio_add_module_directory(io/reads)
 nvbio_add_module_directory(io/output)

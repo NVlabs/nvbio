@@ -188,8 +188,8 @@ struct FMIndexData : public FMIndexDataCore
 
     count_table_type count_table_iterator() const { return count_table_type( count_table() ); }
 
-    rank_dict_type  rank_dict() const { return rank_dict_type(  bwt_iterator(),  occ_iterator(), count_table_iterator() ); }
-    rank_dict_type rrank_dict() const { return rank_dict_type( rbwt_iterator(), rocc_iterator(), count_table_iterator() ); }
+    rank_dict_type  rank_dict() const { return rank_dict_type( bwt_stream_type(  bwt_iterator() ),  occ_iterator(), count_table_iterator() ); }
+    rank_dict_type rrank_dict() const { return rank_dict_type( bwt_stream_type( rbwt_iterator() ), rocc_iterator(), count_table_iterator() ); }
 
     fm_index_type  index() const { return fm_index_type( length(),  primary(),  L2(),  rank_dict(),  ssa_iterator() ); }
     fm_index_type rindex() const { return fm_index_type( length(), rprimary(),  L2(), rrank_dict(), rssa_iterator() ); }
@@ -340,8 +340,8 @@ struct FMIndexDataDevice : public FMIndexData
 
     count_table_type count_table_iterator() const { return count_table_type( count_table() ); }
 
-    rank_dict_type  rank_dict() const { return rank_dict_type(  bwt_iterator(),  occ_iterator(), count_table_iterator() ); }
-    rank_dict_type rrank_dict() const { return rank_dict_type( rbwt_iterator(), rocc_iterator(), count_table_iterator() ); }
+    rank_dict_type  rank_dict() const { return rank_dict_type( bwt_stream_type(  bwt_iterator() ),  occ_iterator(), count_table_iterator() ); }
+    rank_dict_type rrank_dict() const { return rank_dict_type( bwt_stream_type( rbwt_iterator() ), rocc_iterator(), count_table_iterator() ); }
 
     fm_index_type  index() const { return fm_index_type( length(),  primary(), L2(),  rank_dict(),  ssa_iterator() ); }
     fm_index_type rindex() const { return fm_index_type( length(), rprimary(), L2(), rrank_dict(), rssa_iterator() ); }

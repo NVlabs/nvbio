@@ -28,6 +28,7 @@
 #pragma once
 
 #include <nvBowtie/bowtie2/cuda/defs.h>
+#include <nvBowtie/bowtie2/cuda/reads_def.h>
 #include <nvBowtie/bowtie2/cuda/fmindex_def.h>
 #include <nvBowtie/bowtie2/cuda/seed_hit.h>
 #include <nvBowtie/bowtie2/cuda/seed_hit_deque_array.h>
@@ -82,11 +83,11 @@ struct Aligner
     typedef FMIndexDef::type                                                                                                 fmi_type;
     typedef FMIndexDef::type                                                                                                 rfmi_type;
 
-    typedef typename binary_switch<uint32,uint4,USE_UINT4_PACKING>::type                                                     read_storage_type;
-    typedef typename binary_switch<const read_storage_type*,nvbio::cuda::ldg_pointer<read_storage_type>,USE_TEX_READS>::type read_base_type;
-    typedef typename binary_switch<const char*,             nvbio::cuda::ldg_pointer<char>,             USE_TEX_READS>::type read_qual_type;
-    typedef io::SequenceDataViewCore<const uint32*,read_base_type,read_qual_type,const char*>                                read_view_type;
-    typedef io::SequenceDataAccess<DNA_N,read_view_type>                                                                     read_batch_type;
+    typedef ReadsDef::read_storage_type                                                                                      read_storage_type;
+    typedef ReadsDef::read_base_type                                                                                         read_base_type;
+    typedef ReadsDef::read_qual_type                                                                                         read_qual_type;
+    typedef ReadsDef::read_view_type                                                                                         read_view_type;
+    typedef ReadsDef::type                                                                                                   read_batch_type;
 
     typedef io::SequenceDataAccess<DNA,io::LdgSequenceDataView>                                                              genome_access_type;
     typedef genome_access_type::sequence_stream_type                                                                         genome_iterator_type;

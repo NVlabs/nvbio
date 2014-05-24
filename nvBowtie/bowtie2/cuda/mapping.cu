@@ -31,10 +31,10 @@ namespace nvbio {
 namespace bowtie2 {
 namespace cuda {
 
-///
-/// For all i in [0, #seed hit ranges[, output the seed hit range size in
-/// out_ranges[i].
-///
+//
+// For all i in [0, #seed hit ranges[, output the seed hit range size in
+// out_ranges[i].
+//
 __global__ 
 void gather_ranges_kernel(
     const uint32                        count,
@@ -77,6 +77,96 @@ void gather_ranges(
     const int blocks = (count + BLOCKDIM-1) / BLOCKDIM;
 
     gather_ranges_kernel<<<blocks, BLOCKDIM>>>( count, n_reads, hits, hit_counts_scan, out_ranges );
+}
+
+
+//
+// perform exact read mapping
+//
+void map_whole_read(
+    const ReadsDef::type&                           read_batch,
+    const FMIndexDef::type                          fmi,
+    const FMIndexDef::type                          rfmi,
+    const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    SeedHitDequeArrayDeviceView                     hits,
+    const ParamsPOD                                 params)
+{
+    map_whole_read_t( read_batch, fmi, rfmi, queues, hits, params );
+}
+
+//
+// perform one run of exact seed mapping for all the reads in the input queue,
+// writing reads that need another run in the output queue
+//
+void map_exact(
+    const ReadsDef::type&                           read_batch,
+    const FMIndexDef::type                          fmi,
+    const FMIndexDef::type                          rfmi,
+    const uint32                                    retry,
+    const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    SeedHitDequeArrayDeviceView                     hits,
+    const ParamsPOD                                 params)
+{
+    map_exact_t( read_batch, fmi, rfmi, retry, queues, hits, params );
+}
+
+//
+// perform multiple runs of exact seed mapping in one go and keep the best
+//
+void map_exact(
+    const ReadsDef::type&                           read_batch,
+    const FMIndexDef::type                          fmi,
+    const FMIndexDef::type                          rfmi,
+    SeedHitDequeArrayDeviceView                     hits,
+    const uint2                                     seed_range,
+    const ParamsPOD                                 params)
+{
+    map_exact_t( read_batch, fmi, rfmi, hits, seed_range, params );
+}
+
+//
+// perform one run of approximate seed mapping for all the reads in the input queue,
+// writing reads that need another run in the output queue
+//
+void map_approx(
+    const ReadsDef::type&                           read_batch,
+    const FMIndexDef::type                          fmi,
+    const FMIndexDef::type                          rfmi,
+    const uint32                                    retry,
+    const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    SeedHitDequeArrayDeviceView                     hits,
+    const ParamsPOD                                 params)
+{
+    map_approx_t( read_batch, fmi, rfmi, retry, queues, hits, params );
+}
+
+//
+// perform multiple runs of approximate seed mapping in one go and keep the best
+//
+void map_approx(
+    const ReadsDef::type&                           read_batch,
+    const FMIndexDef::type                          fmi,
+    const FMIndexDef::type                          rfmi,
+    SeedHitDequeArrayDeviceView                     hits,
+    const uint2                                     seed_range,
+    const ParamsPOD                                 params)
+{
+    map_approx_t( read_batch, fmi, rfmi, hits, seed_range, params );
+}
+
+//
+// perform one run of seed mapping
+//
+void map(
+    const ReadsDef::type&                           read_batch,
+    const FMIndexDef::type                          fmi,
+    const FMIndexDef::type                          rfmi,
+    const uint32                                    retry,
+    const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    SeedHitDequeArrayDeviceView                     hits,
+    const ParamsPOD                                 params)
+{
+    map_t( read_batch, fmi, rfmi, retry, queues, hits, params );
 }
 
 } // namespace cuda

@@ -36,6 +36,8 @@
 #include <nvBowtie/bowtie2/cuda/params.h>
 #include <nvBowtie/bowtie2/cuda/seed_hit.h>
 #include <nvBowtie/bowtie2/cuda/seed_hit_deque_array.h>
+#include <nvBowtie/bowtie2/cuda/reads_def.h>
+#include <nvBowtie/bowtie2/cuda/fmindex_def.h>
 #include <nvbio/io/utils.h>
 #include <nvbio/basic/cuda/pingpong_queues.h>
 #include <nvbio/basic/cached_iterator.h>
@@ -87,7 +89,7 @@ void gather_ranges(
 /// perform exact read mapping
 ///
 template <typename BatchType, typename FMType, typename rFMType>
-void map_whole_read(
+void map_whole_read_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     SeedHitDequeArrayDeviceView                     hits,
@@ -98,7 +100,7 @@ void map_whole_read(
 /// writing reads that need another run in the output queue
 ///
 template <typename BatchType, typename FMType, typename rFMType>
-void map_exact(
+void map_exact_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
@@ -109,7 +111,7 @@ void map_exact(
 /// perform multiple runs of exact seed mapping in one go and keep the best
 ///
 template <typename BatchType, typename FMType, typename rFMType>
-void map_exact(
+void map_exact_t(
     const BatchType&            read_batch, const FMType fmi, const rFMType rfmi,
     SeedHitDequeArrayDeviceView hits,
     const uint2                 seed_range,
@@ -120,7 +122,7 @@ void map_exact(
 /// the input queue, writing reads that need another run in the output queue
 ///
 template <typename BatchType, typename FMType, typename rFMType>
-void map_case_pruning(
+void map_case_pruning_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
@@ -132,7 +134,7 @@ void map_case_pruning(
 /// writing reads that need another run in the output queue
 ///
 template <typename BatchType, typename FMType, typename rFMType>
-void map_approx(
+void map_approx_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
@@ -143,7 +145,7 @@ void map_approx(
 /// perform multiple runs of approximate seed mapping in one go and keep the best
 ///
 template <typename BatchType, typename FMType, typename rFMType>
-void map_approx(
+void map_approx_t(
     const BatchType&            read_batch, const FMType fmi, const rFMType rfmi,
     SeedHitDequeArrayDeviceView hits,
     const uint2                 seed_range,
@@ -153,8 +155,79 @@ void map_approx(
 /// perform one run of seed mapping
 ///
 template <typename BatchType, typename FMType, typename rFMType>
-void map(
+void map_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
+    const uint32                                    retry,
+    const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    SeedHitDequeArrayDeviceView                     hits,
+    const ParamsPOD                                 params);
+
+///
+/// perform exact read mapping
+///
+void map_whole_read(
+    const ReadsDef::type&                           read_batch,
+    const FMIndexDef::type                          fmi,
+    const FMIndexDef::type                          rfmi,
+    const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    SeedHitDequeArrayDeviceView                     hits,
+    const ParamsPOD                                 params);
+
+///
+/// perform one run of exact seed mapping for all the reads in the input queue,
+/// writing reads that need another run in the output queue
+///
+void map_exact(
+    const ReadsDef::type&                           read_batch,
+    const FMIndexDef::type                          fmi,
+    const FMIndexDef::type                          rfmi,
+    const uint32                                    retry,
+    const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    SeedHitDequeArrayDeviceView                     hits,
+    const ParamsPOD                                 params);
+
+///
+/// perform multiple runs of exact seed mapping in one go and keep the best
+///
+void map_exact(
+    const ReadsDef::type&                           read_batch,
+    const FMIndexDef::type                          fmi,
+    const FMIndexDef::type                          rfmi,
+    SeedHitDequeArrayDeviceView                     hits,
+    const uint2                                     seed_range,
+    const ParamsPOD                                 params);
+
+///
+/// perform one run of approximate seed mapping for all the reads in the input queue,
+/// writing reads that need another run in the output queue
+///
+void map_approx(
+    const ReadsDef::type&                           read_batch,
+    const FMIndexDef::type                          fmi,
+    const FMIndexDef::type                          rfmi,
+    const uint32                                    retry,
+    const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    SeedHitDequeArrayDeviceView                     hits,
+    const ParamsPOD                                 params);
+
+///
+/// perform multiple runs of approximate seed mapping in one go and keep the best
+///
+void map_approx(
+    const ReadsDef::type&                           read_batch,
+    const FMIndexDef::type                          fmi,
+    const FMIndexDef::type                          rfmi,
+    SeedHitDequeArrayDeviceView                     hits,
+    const uint2                                     seed_range,
+    const ParamsPOD                                 params);
+
+///
+/// perform one run of seed mapping
+///
+void map(
+    const ReadsDef::type&                           read_batch,
+    const FMIndexDef::type                          fmi,
+    const FMIndexDef::type                          rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     SeedHitDequeArrayDeviceView                     hits,

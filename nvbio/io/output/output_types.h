@@ -30,7 +30,6 @@
 #include <nvbio/basic/types.h>
 #include <nvbio/io/alignments.h>
 
-#include <nvbio/io/fmi.h>
 #include <nvbio/io/sequence/sequence.h>
 #include <nvbio/basic/vector_array.h>
 
@@ -74,13 +73,17 @@ namespace io {
 /// This is a simple convenience wrapper for FMIndexData.
 struct BNT
 {
-    const struct io::BNTInfo& info;
-    const struct io::BNTSeqPOD& data;
+    uint32          n_seqs;
+    const char*     names;
+    const uint32*   names_index;
+    const uint32*   sequence_index;
 
-    BNT(const struct FMIndexData& fm_index)
-    : info(fm_index.m_bnt_info), data(fm_index.m_bnt_data)
-    {
-    }
+    BNT(const io::ConstSequenceDataView& reference)
+        : n_seqs( reference.size() ),
+          names( reference.name_stream() ),
+          names_index( reference.name_index() ),
+          sequence_index( reference.sequence_index() )
+    {}
 };
 
 /// Helper enum to identify the type of alignment we're doing

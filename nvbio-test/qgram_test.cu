@@ -42,7 +42,6 @@
 #include <nvbio/strings/seeds.h>
 #include <nvbio/basic/shared_pointer.h>
 #include <nvbio/io/sequence/sequence.h>
-#include <nvbio/io/fmi.h>
 #include <nvbio/qgram/qgram.h>
 #include <nvbio/qgram/qgroup.h>
 #include <nvbio/qgram/filter.h>
@@ -521,21 +520,26 @@ int qgram_test(int argc, char* argv[])
     log_info(stderr, "    strings: %u\n", n_strings);
     log_info(stderr, "    symbols: %.3f M\n", 1.0e-6f * float(string_len));
 
-    io::FMIndexDataRAM fmi;
-    if (!fmi.load( index, io::FMIndexData::GENOME ))
+    io::SequenceDataHost ref;
+    if (!io::load_sequence_file( DNA, &ref, index ))
     {
         log_error(stderr, "    failed loading index \"%s\"\n", index);
         return 1u;
     }
 
     // build its device version
-    const io::FMIndexDataDevice fmi_cuda( fmi, io::FMIndexDataDevice::GENOME );
+    const io::SequenceDataDevice ref_cuda( ref );
 
-    typedef io::FMIndexData::stream_type genome_type;
+    typedef io::SequenceDataAccess<DNA>                       genome_access_type;
+    typedef genome_access_type::sequence_stream_type          genome_type;
 
-    const uint32      genome_len = fmi_cuda.genome_length();
-    const genome_type d_genome( fmi_cuda.genome_stream() );
-    const genome_type h_genome( fmi.genome_stream() );
+    const uint32                genome_len = ref.bps();
+
+    const genome_access_type    h_genome_access( ref );
+    const genome_type           h_genome( h_genome_access.sequence_stream() );
+
+    const genome_access_type    d_genome_access( ref_cuda );
+    const genome_type           d_genome( d_genome_access.sequence_stream() );
 
     // clamp the total number of queries
     n_queries = nvbio::min( n_queries, genome_len );

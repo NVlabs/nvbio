@@ -35,7 +35,6 @@
 #include <nvbio/io/output/output_databuffer.h>
 #include <nvbio/io/output/output_gzip.h>
 
-#include <nvbio/io/fmi.h>
 #include <nvbio/io/sequence/sequence.h>
 
 #include <nvbio/io/bam_format.h>

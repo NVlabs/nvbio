@@ -53,8 +53,8 @@
 #include <nvbio/fmindex/ssa.h>
 #include <nvbio/fmindex/fmindex.h>
 #include <nvbio/fmindex/backtrack.h>
-#include <nvbio/io/fmi.h>
 #include <nvbio/io/sequence/sequence.h>
+#include <nvbio/io/fmindex/fmindex.h>
 
 using namespace nvbio;
 
@@ -79,9 +79,11 @@ __global__ void locate_kernel(
     if (thread_id >= n_queries)
         return;
 
-    typedef PackedStream<const_cached_iterator<const word_type*>,uint8,2,true,index_type> GenomeStream;
-    const_cached_iterator<const word_type*> cached_base_stream( genome_stream );
-    GenomeStream genome( cached_base_stream );
+    typedef const_cached_iterator<const word_type*>                     cached_stream_type;
+    typedef PackedStream<cached_stream_type,uint8,2,true,index_type>    genome_stream_type;
+
+    const cached_stream_type cached_genome_stream( genome_stream );
+    const genome_stream_type genome( cached_genome_stream );
 
     const range_type range = match(
         fmi,
@@ -798,12 +800,12 @@ void count_kernel(
 //
 void backtrack_test(const char* index_file, const char* reads_name, const uint32 n_reads)
 {
-#ifdef _OPENMP
+  #ifdef _OPENMP
     // Now set the number of threads
     omp_set_num_threads( omp_get_num_procs() );
-#endif
+  #endif
 
-    io::FMIndexDataRAM h_fmi;
+    io::FMIndexDataHost h_fmi;
     if (h_fmi.load( index_file, io::FMIndexData::FORWARD ))
     {
         typedef io::FMIndexData::partial_fm_index_type     host_fmindex_type;
@@ -869,6 +871,7 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
                 thrust::raw_pointer_cast( &counter.front() ) );
 
             cudaThreadSynchronize();
+            nvbio::cuda::check_error("count_kernel");
 
             float time;
             cudaEventRecord( stop, 0 );
@@ -917,6 +920,7 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
                 thrust::raw_pointer_cast( &counter.front() ) );
 
             cudaThreadSynchronize();
+            nvbio::cuda::check_error("count_kernel");
 
             float time;
             cudaEventRecord( stop, 0 );
@@ -966,6 +970,7 @@ void backtrack_test(const char* index_file, const char* reads_name, const uint32
                 thrust::raw_pointer_cast( &counter.front() ) );
 
             cudaThreadSynchronize();
+            nvbio::cuda::check_error("count_kernel");
 
             float time;
             cudaEventRecord( stop, 0 );

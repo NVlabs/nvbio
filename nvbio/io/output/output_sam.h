@@ -31,7 +31,6 @@
 #include <nvbio/io/output/output_utils.h>
 #include <nvbio/io/output/output_file.h>
 #include <nvbio/io/output/output_batch.h>
-#include <nvbio/io/fmi.h>
 #include <nvbio/io/sequence/sequence.h>
 
 #include <stdio.h>

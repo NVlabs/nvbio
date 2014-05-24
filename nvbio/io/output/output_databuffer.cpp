@@ -26,7 +26,6 @@
  */
 
 #include <nvbio/io/output/output_bam.h>
-#include <nvbio/io/fmi.h>
 #include <nvbio/basic/numbers.h>
 
 #include <stdio.h>

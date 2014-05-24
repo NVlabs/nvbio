@@ -39,6 +39,7 @@ void all_ed(
     const FMIndexDef::type                  fmi,
     const FMIndexDef::type                  rfmi,
     const UberScoringScheme&                scoring_scheme,
+    const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     io::SequenceDataDevice&                 read_data,
     Stats&                                  stats);
@@ -49,6 +50,7 @@ void best_approx_ed(
     const FMIndexDef::type                  fmi,
     const FMIndexDef::type                  rfmi,
     const UberScoringScheme&                scoring_scheme,
+    const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     io::SequenceDataDevice&                 read_data,
     Stats&                                  stats);
@@ -59,6 +61,7 @@ void best_approx_sw(
     const FMIndexDef::type                  fmi,
     const FMIndexDef::type                  rfmi,
     const UberScoringScheme&                scoring_scheme,
+    const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     io::SequenceDataDevice&                 read_data,
     Stats&                                  stats);
@@ -69,6 +72,7 @@ void best_approx_ed(
     const FMIndexDef::type                  fmi,
     const FMIndexDef::type                  rfmi,
     const UberScoringScheme&                scoring_scheme,
+    const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     io::SequenceDataDevice&                 read_data1,
     io::SequenceDataDevice&                 read_data2,
@@ -80,6 +84,7 @@ void best_approx_sw(
     const FMIndexDef::type                  fmi,
     const FMIndexDef::type                  rfmi,
     const UberScoringScheme&                scoring_scheme,
+    const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     io::SequenceDataDevice&                 read_data1,
     io::SequenceDataDevice&                 read_data2,

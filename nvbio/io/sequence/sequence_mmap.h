@@ -57,8 +57,8 @@ struct SequenceDataMMAPServer
         const SequenceAlphabet  alphabet,
         const char*             file_name,
         const char*             mapped_name,
-        const SequenceFlags     load_flags,
-        const QualityEncoding   qualities = Phred33);
+        const SequenceFlags     load_flags  = io::SequenceFlags( io::SEQUENCE_DATA | io::SEQUENCE_QUALS | io::SEQUENCE_NAMES ),
+        const QualityEncoding   qualities   = Phred33);
 
     static std::string info_file_name(const char* name);
     static std::string sequence_file_name(const char* name);

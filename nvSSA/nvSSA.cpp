@@ -33,7 +33,7 @@
 #include <string.h>
 #include <string>
 #include <nvbio/basic/console.h>
-#include <nvbio/io/fmi.h>
+#include <nvbio/io/fmindex/fmindex.h>
 
 void crcInit();
 
@@ -68,11 +68,11 @@ int main(int argc, char* argv[])
     //
     // Save sampled suffix array in a format compatible with BWA's
     //
-    nvbio::io::FMIndexDataRAM driver_data;
+    nvbio::io::FMIndexDataHost driver_data;
     if (!driver_data.load( input ))
         return 1;
 
-    nvbio::io::FMIndexData::SSA_type ssa, rssa;
+    nvbio::io::FMIndexData::ssa_storage_type ssa, rssa;
 
     if (strcmp( argv[1], "-gpu" ) == 0)
     {
@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
             driver_data,
             nvbio::io::FMIndexDataDevice::FORWARD | nvbio::io::FMIndexDataDevice::REVERSE );
 
-        nvbio::io::FMIndexDataDevice::SSA_device_type ssa_cuda, rssa_cuda;
+        nvbio::io::FMIndexDataDevice::ssa_storage_type ssa_cuda, rssa_cuda;
 
         init_ssa( driver_data_cuda, ssa_cuda, rssa_cuda );
 
@@ -91,17 +91,17 @@ int main(int argc, char* argv[])
         init_ssa( driver_data, ssa, rssa );
 
     const uint32 sa_intv = nvbio::io::FMIndexData::SA_INT;
-    const uint32 ssa_len = (driver_data.seq_length + sa_intv) / sa_intv;
+    const uint32 ssa_len = (driver_data.m_seq_length + sa_intv) / sa_intv;
 
     log_info(stderr, "saving SSA... started\n");
     {
         std::string file_name = std::string( output ) + std::string(".sa");
         FILE* file = fopen( file_name.c_str(), "wb" );
 
-        fwrite( &driver_data.primary,       sizeof(uint32), 1u, file );
-        fwrite( &driver_data.L2+1,          sizeof(uint32), 4u, file );
+        fwrite( &driver_data.m_primary,     sizeof(uint32), 1u, file );
+        fwrite( &driver_data.m_L2+1,        sizeof(uint32), 4u, file );
         fwrite( &sa_intv,                   sizeof(uint32), 1u, file );
-        fwrite( &driver_data.seq_length,    sizeof(uint32), 1u, file );
+        fwrite( &driver_data.m_seq_length,  sizeof(uint32), 1u, file );
         fwrite( &ssa.m_ssa[1],              sizeof(uint32), ssa_len-1, file );
         fclose( file );
     }
@@ -109,10 +109,10 @@ int main(int argc, char* argv[])
         std::string file_name = std::string( output ) + std::string(".rsa");
         FILE* file = fopen( file_name.c_str(), "wb" );
 
-        fwrite( &driver_data.rprimary,      sizeof(uint32), 1u, file );
-        fwrite( &driver_data.rL2+1,         sizeof(uint32), 4u, file );
+        fwrite( &driver_data.m_rprimary,    sizeof(uint32), 1u, file );
+        fwrite( &driver_data.m_L2+1,        sizeof(uint32), 4u, file );
         fwrite( &sa_intv,                   sizeof(uint32), 1u, file );
-        fwrite( &driver_data.seq_length,    sizeof(uint32), 1u, file );
+        fwrite( &driver_data.m_seq_length,  sizeof(uint32), 1u, file );
         fwrite( &rssa.m_ssa[1],             sizeof(uint32), ssa_len-1, file );
         fclose( file );
     }

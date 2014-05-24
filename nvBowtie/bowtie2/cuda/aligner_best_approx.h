@@ -50,13 +50,16 @@ void Aligner::best_approx(
     const fmi_type                          fmi,
     const rfmi_type                         rfmi,
     const UberScoringScheme&                input_scoring_scheme,
+    const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     const io::SequenceDataDevice&           read_data,
     Stats&                                  stats)
 {
     // cast the genome to use proper iterators
-    const uint32         genome_len = driver_data.genome_length();
-    genome_iterator_type genome_ptr( (const genome_storage_type*)driver_data.genome_stream() );
+    const io::LdgSequenceDataView   genome_view( plain_view( reference_data ) );
+    const genome_access_type        genome_access( genome_view );
+    const uint32                    genome_len = genome_access.bps();
+    const genome_iterator_type      genome_ptr = genome_access.sequence_stream();
 
     // prepare the scoring system
     typedef typename ScoringSchemeSelector<scoring_tag>::type           scoring_scheme_type;
@@ -137,6 +140,7 @@ void Aligner::best_approx(
             fmi,
             rfmi,
             scoring_scheme,
+            reference_data,
             driver_data,
             read_data,
             uint32(-1),
@@ -199,6 +203,7 @@ void Aligner::best_approx(
             fmi,
             rfmi,
             scoring_scheme,
+            reference_data,
             driver_data,
             read_data,
             seeding_pass,
@@ -347,7 +352,6 @@ void Aligner::best_approx(
         stats.finalize.add( n_second, timer.seconds(), device_timer.seconds() );
     }
 
-
     // wrap the results in a GPUOutputBatch and process them
     {
         io::GPUOutputBatch gpu_batch(count,
@@ -370,6 +374,7 @@ void Aligner::best_approx_score(
     const fmi_type                          fmi,
     const rfmi_type                         rfmi,
     const scoring_scheme_type&              scoring_scheme,
+    const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     const io::SequenceDataDevice&           read_data,
     const uint32                            seeding_pass,
@@ -395,8 +400,10 @@ void Aligner::best_approx_score(
     const read_batch_type reads( reads_view );
 
     // cast the genome to use proper iterators
-    const uint32               genome_len = driver_data.genome_length();
-    const genome_iterator_type genome_ptr( (const genome_storage_type*)driver_data.genome_stream() );
+    const io::LdgSequenceDataView   genome_view( plain_view( reference_data ) );
+    const genome_access_type        genome_access( genome_view );
+    const uint32                    genome_len = genome_access.bps();
+    const genome_iterator_type      genome_ptr = genome_access.sequence_stream();
 
     NVBIO_VAR_UNUSED thrust::device_vector<uint32>::iterator         hit_read_id_iterator = scoring_queues.hits.read_id.begin();
     NVBIO_VAR_UNUSED thrust::device_vector<uint32>::iterator         loc_queue_iterator   = scoring_queues.hits.loc.begin();

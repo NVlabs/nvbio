@@ -26,7 +26,6 @@
  */
 
 #include <nvbio/io/output/output_debug.h>
-#include <nvbio/io/fmi.h>
 #include <nvbio/basic/numbers.h>
 #include <crc/crc.h>
 
@@ -193,31 +192,26 @@ void DebugOutput::process_one_mate(DbgAlignment& al,
     if (alignment.best->is_aligned())
     {
         // setup alignment information
-        const io::BNTAnn* ann = std::upper_bound(
-            bnt.data.anns,
-            bnt.data.anns + bnt.info.n_seqs,
-            alignment.cigar_pos,
-            SeqFinder() ) - 1u;
+       const uint32 seq_index = uint32(std::upper_bound(
+            bnt.sequence_index,
+            bnt.sequence_index + bnt.n_seqs,
+            alignment.cigar_pos ) - bnt.sequence_index) - 1u;
 
-        al.alignment_pos = alignment.cigar_pos - int32(ann->offset) + 1u;
+        al.alignment_pos = alignment.cigar_pos - int32(bnt.sequence_index[ seq_index ]) + 1u;
         info.flag = (alignment.best->mate() ? DbgInfo::READ_2 : DbgInfo::READ_1) |
                     (alignment.best->is_rc() ? DbgInfo::REVERSE : 0u);
 
         if (alignment_type == PAIRED_END)
         {
             if (alignment.best->is_paired()) // FIXME: this should be other_mate.is_concordant()
-            {
                 info.flag |= DbgInfo::PROPER_PAIR;
-            }
 
             if (mate.best->is_aligned() == false)
-            {
                 info.flag |= DbgInfo::MATE_UNMAPPED;
-            }
         }
 
         const uint32 ref_cigar_len = reference_cigar_length(alignment.cigar, alignment.cigar_len);
-        if (alignment.cigar_pos + ref_cigar_len > ann->offset + ann->len)
+        if (alignment.cigar_pos + ref_cigar_len > bnt.sequence_index[ seq_index+1 ])
         {
             // flag UNMAPPED as this alignment bridges two adjacent reference sequences
             info.flag |= DbgInfo::UNMAPPED;
@@ -229,7 +223,7 @@ void DebugOutput::process_one_mate(DbgAlignment& al,
 
         analyze_md_string(alignment.mds_vec, n_mm, n_gapo, n_gape);
 
-        info.ref_id = uint32(ann - bnt.data.anns);
+        info.ref_id = seq_index;
         info.mate   = alignment.best->mate();
         info.score  = alignment.best->score();
         info.mapQ   = mapq;

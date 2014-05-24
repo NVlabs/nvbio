@@ -41,7 +41,7 @@
 #include <nvbio/fmindex/filter.h>
 #include <nvbio/io/sequence/sequence.h>
 #include <nvbio/io/sequence/sequence_encoder.h>
-#include <nvbio/io/fmi.h>
+#include <nvbio/io/fmindex/fmindex.h>
 #include <nvbio/alignment/alignment.h>
 #include <nvbio/alignment/batched.h>
 
@@ -91,9 +91,10 @@ struct Pipeline
     typedef io::FMIndexDataDevice::fm_index_type        fm_index_type;
     typedef FMIndexFilterDevice<fm_index_type>          fm_filter_type;
 
-    Params                               params;    // program options
-    SharedPointer<io::FMIndexDataDevice> fm_data;   // fm-index data
-    fm_filter_type                       fm_filter; // fm-index filter
+    Params                                  params;    // program options
+    SharedPointer<io::SequenceDataDevice>   ref_data;  // reference data
+    SharedPointer<io::FMIndexDataDevice>    fm_data;   // fm-index data
+    fm_filter_type                          fm_filter; // fm-index filter
 };
 
 // transform an (index-pos,seed-id) hit into a diagonal (text-pos = index-pos - seed-pos, read-id)
@@ -228,8 +229,9 @@ void map(
     nvbio::vector<device_tag,int16>&        best_scores,
           Stats&                            stats)
 {
-    typedef io::FMIndexDataDevice::stream_type                                  genome_string;
-    typedef io::SequenceDataAccess<DNA_N,const io::ConstSequenceDataView>       read_access_type;
+    typedef io::SequenceDataAccess<DNA>                                         genome_access_type;
+    typedef genome_access_type::sequence_stream_type                            genome_string;
+    typedef io::SequenceDataAccess<DNA_N>                                       read_access_type;
     typedef read_access_type::sequence_string_set_type                          read_string_set_type;
     typedef read_access_type::sequence_stream_type                              read_stream;
     typedef string_set_infix_coord_type                                         infix_coord_type;
@@ -240,8 +242,9 @@ void map(
     const Params& params = pipeline.params;
 
     // fetch the genome string
-    const uint32        genome_len = pipeline.fm_data->genome_length();
-    const genome_string genome( pipeline.fm_data->genome_stream() );
+    const genome_access_type genome_access( *pipeline.ref_data );
+    const uint32             genome_len = genome_access.bps();
+    const genome_string      genome( genome_access.sequence_stream() );
 
     // fetch an fm-index view
     const Pipeline::fm_index_type fm_index = pipeline.fm_data->index();
@@ -429,9 +432,15 @@ int main(int argc, char* argv[])
             score_threshold = int16( atoi( argv[++i] ) );
     }
 
-    // TODO: load a genome archive...
-    io::FMIndexDataRAM h_fmi;
-    if (!h_fmi.load( index, io::FMIndexData::GENOME | io::FMIndexData::FORWARD | io::FMIndexData::SA ))
+    io::SequenceDataHost h_ref;
+    if (!io::load_sequence_file( DNA, &h_ref, index ))
+    {
+        log_error(stderr, "    failed loading reference \"%s\"\n", index);
+        return 1u;
+    }
+
+    io::FMIndexDataHost h_fmi;
+    if (!h_fmi.load( index, io::FMIndexData::FORWARD | io::FMIndexData::SA ))
     {
         log_error(stderr, "    failed loading index \"%s\"\n", index);
         return 1u;
@@ -443,8 +452,10 @@ int main(int argc, char* argv[])
     pipeline.params = params;
 
     // build its device version
-    pipeline.fm_data = new io::FMIndexDataDevice( h_fmi, io::FMIndexData::GENOME  |
-                                                         io::FMIndexData::FORWARD |
+    pipeline.ref_data = new io::SequenceDataDevice( h_ref );
+
+    // build its device version
+    pipeline.fm_data = new io::FMIndexDataDevice( h_fmi, io::FMIndexData::FORWARD |
                                                          io::FMIndexData::SA );
 
     // open a read file

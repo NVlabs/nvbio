@@ -35,7 +35,6 @@
 #include <thrust/device_vector.h>
 
 #include <nvbio/basic/vector_array.h>
-#include <nvbio/io/fmi.h>
 #include <nvbio/io/sequence/sequence.h>
 
 #include <stdio.h>

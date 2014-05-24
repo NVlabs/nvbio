@@ -27,7 +27,6 @@
 
 #include <nvbio/io/output/output_bam.h>
 #include <nvbio/io/output/output_sam.h>
-#include <nvbio/io/fmi.h>
 #include <nvbio/basic/numbers.h>
 
 #include <stdio.h>
@@ -250,11 +249,10 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
     const uint32 ref_cigar_len = reference_cigar_length(alignment.cigar, alignment.cigar_len);
 
     // setup alignment information
-    const io::BNTAnn* ann = std::upper_bound(
-        bnt.data.anns,
-        bnt.data.anns + bnt.info.n_seqs,
-        alignment.cigar_pos,
-        SeqFinder() ) - 1u;
+   const uint32 seq_index = uint32(std::upper_bound(
+        bnt.sequence_index,
+        bnt.sequence_index + bnt.n_seqs,
+        alignment.cigar_pos ) - bnt.sequence_index) - 1u;
 
     // fill out read name and length
     alnd.name = alignment.read_name;
@@ -378,7 +376,7 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
         }
     }
 
-    if (alignment.cigar_pos + ref_cigar_len > ann->offset + ann->len)
+    if (alignment.cigar_pos + ref_cigar_len > bnt.sequence_index[ seq_index+1 ])
     {
         // flag UNMAP as this alignment bridges two adjacent reference sequences
         // xxxnsubtil: we still output the rest of the alignment data, does that make sense?
@@ -396,8 +394,8 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
     }
 
     // fill out alignment reference ID and position
-    alnh.refID = uint32(ann - bnt.data.anns);
-    alnh.pos = uint32(alignment.cigar_pos - ann->offset);
+    alnh.refID = seq_index;
+    alnh.pos = uint32(alignment.cigar_pos - bnt.sequence_index[ seq_index ]);
 
     // write out mapq
     alnh.bin_mq_nl |= (mapq << 8);
@@ -422,37 +420,36 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
             const uint32 o_ref_cigar_len = reference_cigar_length(mate.cigar, mate.cigar_len);
 
             // setup alignment information for the opposite mate
-            const io::BNTAnn* o_ann = std::upper_bound(
-                bnt.data.anns,
-                bnt.data.anns + bnt.info.n_seqs,
-                mate.cigar_pos,
-                SeqFinder() ) - 1u;
+            const uint32 o_seq_index = uint32(std::upper_bound(
+                bnt.sequence_index,
+                bnt.sequence_index + bnt.n_seqs,
+                mate.cigar_pos ) - bnt.sequence_index) - 1u;
 
-            alnh.next_refID = uint32(o_ann - bnt.data.anns);
+            alnh.next_refID = uint32(o_seq_index - seq_index);
             // next_pos here is equivalent to SAM's PNEXT,
             // but it's zero-based in BAM and one-based in SAM
-            alnh.next_pos = int32( mate.cigar_pos - o_ann->offset );
+            alnh.next_pos = int32( mate.cigar_pos - bnt.sequence_index[ o_seq_index ] );
 
-            if (o_ann != ann)
-            {
+            if (o_seq_index != seq_index)
                 alnh.tlen = 0;
-            } else {
+            else
+            {
                 alnh.tlen = nvbio::max(mate.cigar_pos + o_ref_cigar_len,
                                        alignment.cigar_pos + ref_cigar_len) -
                             nvbio::min(mate.cigar_pos, alignment.cigar_pos);
 
                 if (mate.cigar_pos < alignment.cigar_pos)
-                {
                     alnh.tlen = -alnh.tlen;
-                }
             }
-        } else {
+        }
+        else
+        {
             // other mate is unmapped
             // xxxnsubtil: this follows the same convention that was documented in the old code for SAM,
             // except that BAM does not have an encoding for '=' here
             // it's somewhat unclear whether this is correct
             alnh.next_refID = alnh.refID;
-            alnh.next_pos = int32( alignment.cigar_pos - ann->offset );
+            alnh.next_pos = int32( alignment.cigar_pos - bnt.sequence_index[ seq_index ] );
             // xxx: check whether this is really correct
             alnh.tlen = 0;
         }
@@ -641,12 +638,11 @@ void BamOutput::output_header(void)
     data_buffer.poke_int32(pos_l_text, header_len);
 
     // output the number of reference sequences (n_ref)...
-    data_buffer.append_int32(bnt.info.n_seqs);
+    data_buffer.append_int32(bnt.n_seqs);
     // ... and the information for each
-    for(uint32 i = 0; i < bnt.info.n_seqs; i++)
+    for (uint32 i = 0; i < bnt.n_seqs; i++)
     {
-        const io::BNTAnn& ann = bnt.data.anns[i];
-        const char *name = bnt.data.names + ann.name_offset;
+        const char *name = bnt.names + bnt.names_index[i];
 
         // sequence name length including null terminator (l_name)
         data_buffer.append_int32(strlen(name) + 1);
@@ -654,7 +650,7 @@ void BamOutput::output_header(void)
         data_buffer.append_string(name);
         data_buffer.append_int8(0);
         // sequence length (l_ref)
-        data_buffer.append_int32(ann.len);
+        data_buffer.append_int32(bnt.sequence_index[i+1] - bnt.sequence_index[i]);
     }
 
     // compress and write out the header block separately

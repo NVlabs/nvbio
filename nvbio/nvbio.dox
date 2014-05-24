@@ -465,7 +465,7 @@
 /// #include <nvbio/basic/shared_pointer.h>
 /// #include <nvbio/basic/dna.h>
 /// #include <nvbio/io/sequence/sequence.h>
-/// #include <nvbio/io/fmi.h>
+/// #include <nvbio/io/fmindex/fmindex.h>
 ///
 /// #include "util.h"
 ///
@@ -477,9 +477,17 @@
 ///     const char* reads = argv[argc-1];
 ///     const char* index = argv[argc-2];
 /// 
+///     // load a reference sequence in RAM
+///     io::SequenceDataHost h_ref;
+///     if (!io::load_sequence_file( DNA, &h_ref, index ))
+///     {
+///         log_error(stderr, "    failed loading reference \"%s\"\n", index);
+///         return 1u;
+///     }
+///
 ///     // load an FM-index in RAM
-///     io::FMIndexDataRAM h_fmi;
-///     if (!h_fmi.load( index, io::FMIndexData::GENOME | io::FMIndexData::FORWARD | io::FMIndexData::SA ))
+///     io::FMIndexDataHost h_fmi;
+///     if (!h_fmi.load( index, io::FMIndexData::FORWARD | io::FMIndexData::SA ))
 ///     {
 ///         log_error(stderr, "    failed loading index \"%s\"\n", index);
 ///         return 1u;
@@ -511,9 +519,11 @@
 ///     pipeline.params = params;
 ///
 ///     // build the device index
-///     pipeline.fm_data = new io::FMIndexDataDevice( io::FMIndexData::GENOME  |
-///                                                   io::FMIndexData::FORWARD |
-///                                                   io::FMIndexData::SA );
+///     pipeline.ref_data = new io::SequenceDataDevice( h_ref );
+///
+///     // build the device index
+///     pipeline.fm_data = new io::FMIndexDataDevice( h_fmi, io::FMIndexData::FORWARD |
+///                                                          io::FMIndexData::SA );
 /// ...
 ///\endcode
 ///
@@ -587,9 +597,10 @@
 ///     typedef io::FMIndexDataDevice::fm_index_type        fm_index_type;  // the fm-index view type
 ///     typedef FMIndexFilterDevice<fm_index_type>          fm_filter_type; // the fm-index filter type
 ///
-///     Params                               params;    // the mapping params
-///     SharedPointer<io::FMIndexDataDevice> fm_data;   // the device FM-index
-///     fm_filter_type                       fm_filter; // the FM-index filter
+///     Params                                params;    // the mapping params
+///     SharedPointer<io::SequenceDataDevice> ref_data;  // the device reference
+///     SharedPointer<io::FMIndexDataDevice>  fm_data;   // the device FM-index
+///     fm_filter_type                        fm_filter; // the FM-index filter
 /// };
 ///\endcode
 ///\par
@@ -605,8 +616,8 @@
 ///\code
 /// void map(Pipeline& pipeline, const io::SequenceDataAccess<DNA_N> reads)
 /// {
-///     // the FM-index data contains the packed genome stream, of this type
-///     typedef io::FMIndexDataDevice::stream_type                                  genome_string;
+///     // the reads can be accessed as a string-set, of this type
+///     typedef io::SequenceDataAccess<DNA>::sequence_string_set_type               genome_string;
 ///
 ///     // the reads can be accessed as a string-set, of this type
 ///     typedef io::SequenceDataAccess<DNA_N>::sequence_string_set_type             read_string_set_type;
@@ -625,8 +636,9 @@
 ///     const Params& params = pipeline.params;
 /// 
 ///     // fetch the genome string
-///     const uint32        genome_len = pipeline.fm_data->genome_length();
-///     const genome_string genome( pipeline.fm_data->genome_stream() );
+///     const io::SequenceDataAccess<DNA> genome_access( *pipeline.ref_data );
+///     const uint32        genome_len = genome_access.bps();
+///     const genome_string genome( genome_access.sequence_stream() );
 /// 
 ///     // fetch an fm-index view
 ///     const Pipeline::fm_index_type fm_index = pipeline.fm_data->index();

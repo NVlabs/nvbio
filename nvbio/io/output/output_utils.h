@@ -28,28 +28,10 @@
 #pragma once
 
 #include <nvbio/io/alignments.h>
-#include <nvbio/io/fmi.h>
-
 #include <nvbio/basic/dna.h>
 
 namespace nvbio {
 namespace io {
-
-struct SeqFinder
-{
-    bool operator() (const io::BNTAnn& ann1, const io::BNTAnn& ann2) const
-    {
-        return ann1.offset < ann2.offset;
-    }
-    bool operator() (const io::BNTAnn& ann, const uint32 x) const
-    {
-        return ann.offset < x;
-    }
-    bool operator() (const uint32 x, const io::BNTAnn& ann) const
-    {
-        return x < ann.offset;
-    }
-};
 
 // compute the CIGAR alignment position given the alignment base and the sink offset
 inline uint32 compute_cigar_pos(const uint32 sink, const uint32 alignment)

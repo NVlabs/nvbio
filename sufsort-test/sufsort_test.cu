@@ -44,7 +44,8 @@
 #include <nvbio/strings/string_set.h>
 #include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/cuda/ldg.h>
-#include <nvbio/io/fmi.h>
+#include <nvbio/io/fmindex/fmindex.h>
+#include <nvbio/io/sequence/sequence.h>
 #include <nvbio/basic/dna.h>
 #include <nvbio/fmindex/bwt.h>
 #include <thrust/device_vector.h>
@@ -490,18 +491,26 @@ int sufsort_test(int argc, char* argv[])
     if (TEST_MASK & kGPU_BWT_GENOME)
     {
         // load a genome
-        io::FMIndexDataRAM h_fmi;
-        if (h_fmi.load( index_name, io::FMIndexData::GENOME | io::FMIndexData::FORWARD ) == false)
+        io::SequenceDataHost h_ref;
+        io::FMIndexDataHost  h_fmi;
+
+        if (io::load_sequence_file( DNA, &h_ref, index_name ) == false)
+            return 0;
+
+        if (h_fmi.load( index_name, io::FMIndexData::FORWARD ) == false)
             return 0;
 
         // copy it to the gpu
-        io::FMIndexDataDevice d_fmi( h_fmi, io::FMIndexData::GENOME );
+        io::SequenceDataDevice d_ref( h_ref );
+        io::FMIndexDataDevice d_fmi( h_fmi, 0u );
 
-        typedef io::FMIndexData::stream_type                const_packed_stream_type;
-        typedef io::FMIndexData::nonconst_stream_type             packed_stream_type;
+        typedef io::SequenceDataAccess<DNA,io::ConstSequenceDataView> const_reference_access_type;
+        typedef io::SequenceDataEdit<DNA,io::SequenceDataView>              reference_access_type;
+        typedef const_reference_access_type::sequence_stream_type     const_packed_stream_type;
+        typedef       reference_access_type::sequence_stream_type           packed_stream_type;
 
-        const uint32 N_symbols = d_fmi.genome_length();
-        const uint32 N_words   = d_fmi.seq_words;
+        const uint32 N_symbols = d_ref.bps();
+        const uint32 N_words   = d_ref.words();
 
         log_info(stderr, "  gpu bwt test\n");
         log_info(stderr, "    %5.1f G symbols\n",  (1.0e-6f*float(N_symbols)));
@@ -509,13 +518,15 @@ int sufsort_test(int argc, char* argv[])
 
         thrust::device_vector<uint32> d_bwt_storage( N_words+1 );
 
-        const_packed_stream_type d_packed_string( d_fmi.genome_stream() );
+        const const_reference_access_type d_ref_access( d_ref );
+        const_packed_stream_type d_packed_string( d_ref_access.sequence_stream() );
               packed_stream_type d_packed_bwt( nvbio::plain_view( d_bwt_storage ) );
 
         const uint32 primary_ref = cuda::find_primary( N_symbols, d_packed_string );
         log_info(stderr, "    primary: %u\n", primary_ref);
         {
-            const_packed_stream_type h_packed_string( h_fmi.genome_stream() );
+            const const_reference_access_type h_ref_access( h_ref );
+            const_packed_stream_type h_packed_string( h_ref_access.sequence_stream() );
             const uint32 crc = crcCalc( h_packed_string, N_symbols );
             log_info(stderr, "    crc    : %u\n", crc);
         }
@@ -545,8 +556,8 @@ int sufsort_test(int argc, char* argv[])
 
         log_info(stderr, "  testing correctness... started\n");
         thrust::host_vector<uint32> h_bwt_storage( d_bwt_storage );
-        const_packed_stream_type h_packed_bwt( nvbio::plain_view( h_bwt_storage ) );
-        const_packed_stream_type h_ref_bwt( h_fmi.bwt_stream() );
+        const const_packed_stream_type  h_packed_bwt( nvbio::plain_view( h_bwt_storage ) );
+        const io::FMIndexData::bwt_type h_ref_bwt( h_fmi.bwt_iterator() );
         for (uint32 i = 0; i < N_symbols; ++i)
         {
             const uint8 c0 = h_ref_bwt[i];

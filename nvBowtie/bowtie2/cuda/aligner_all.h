@@ -43,6 +43,7 @@ void Aligner::all(
     const fmi_type                          fmi,
     const rfmi_type                         rfmi,
     const UberScoringScheme&                input_scoring_scheme,
+    const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     const io::SequenceDataDevice&           read_data,
     Stats&                                  stats)
@@ -136,6 +137,7 @@ void Aligner::all(
             rfmi,
             input_scoring_scheme,
             scoring_scheme,
+            reference_data,
             driver_data,
             read_data,
             count,
@@ -152,6 +154,7 @@ void Aligner::score_all(
     const rfmi_type                         rfmi,
     const UberScoringScheme&                input_scoring_scheme,
     const scoring_scheme_type&              scoring_scheme,
+    const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     const io::SequenceDataDevice&           read_data,
     const uint32                            seed_queue_size,
@@ -175,8 +178,10 @@ void Aligner::score_all(
     const read_batch_type reads( plain_view( read_data ) );
 
     // cast the genome to use proper iterators
-    const uint32               genome_len = driver_data.genome_length();
-    const genome_iterator_type genome_ptr( (const genome_storage_type*)driver_data.genome_stream() );
+    const io::LdgSequenceDataView   genome_view( plain_view( reference_data ) );
+    const genome_access_type        genome_access( genome_view );
+    const uint32                    genome_len = genome_access.bps();
+    const genome_iterator_type      genome_ptr = genome_access.sequence_stream();
 
     //
     // At this point we have a queue full of reads, each with an associated set of

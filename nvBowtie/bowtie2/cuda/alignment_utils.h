@@ -214,8 +214,13 @@ struct AlignmentStreamBase
     typedef typename pattern_loader_type::string_type                               pattern_string;
     typedef typename pattern_string::qual_string_type                               qual_string;
 
-    typedef GenomeLoader<genome_iterator,lmem_cache_type>                           text_loader_type;
-    typedef typename text_loader_type::string_type                                  text_string;
+    typedef PackedStringLoader<
+        genome_iterator,
+        io::SequenceDataTraits<DNA>::SEQUENCE_BITS,
+        io::SequenceDataTraits<DNA>::SEQUENCE_BIG_ENDIAN,
+        lmem_cache_type>                                                            text_loader_type;
+    typedef typename text_loader_type::iterator                                     text_iterator;
+    typedef vector_view<text_iterator>                                              text_string;
 
     /// an alignment context
     ///
@@ -300,7 +305,9 @@ struct AlignmentStreamBase
             read_subrange );
 
         strings->quals   = strings->pattern.qualities();
-        strings->text    = strings->text_loader.load( m_pipeline.genome, context->genome_begin, context->genome_end - context->genome_begin );
+        strings->text    = text_string(
+            context->genome_end - context->genome_begin,
+            strings->text_loader.load( m_pipeline.genome, context->genome_begin, context->genome_end - context->genome_begin ) );
     }
 
     PipelineType    m_pipeline;     ///< the pipeline object

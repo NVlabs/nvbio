@@ -35,7 +35,7 @@
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/exceptions.h>
 #include <nvbio/basic/shared_pointer.h>
-#include <nvbio/io/fmi.h>
+#include <nvbio/io/fmindex/fmindex.h>
 #include <nvbio/io/sequence/sequence.h>
 #include <nvbio/io/sequence/sequence_mmap.h>
 #include <nvBowtie/bowtie2/cuda/bowtie2_cuda_driver.h>
@@ -275,10 +275,24 @@ int main(int argc, char* argv[])
 
     try
     {
-        nvbio::io::FMIndexData* driver_data;
+        SharedPointer<nvbio::io::SequenceData> reference_data;
+        SharedPointer<nvbio::io::FMIndexData>  driver_data;
         if (from_file)
         {
-            nvbio::io::FMIndexDataRAM* loader = new nvbio::io::FMIndexDataRAM;
+            log_visible(stderr, "loading reference index... started\n");
+            log_info(stderr, "  file: \"%s\"\n", argv[arg_offset]);
+
+            // load the reference data
+            reference_data = io::load_sequence_file( DNA, argv[arg_offset] );
+            if (reference_data == NULL)
+            {
+                log_error(stderr, "unable to load reference index \"%s\"\n", argv[arg_offset]);
+                return 1;
+            }
+
+            log_visible(stderr, "loading reference index... done\n");
+
+            nvbio::io::FMIndexDataHost* loader = new nvbio::io::FMIndexDataHost;
             if (!loader->load( argv[arg_offset] ))
                 return 1;
 
@@ -286,6 +300,19 @@ int main(int argc, char* argv[])
         }
         else
         {
+            log_visible(stderr, "mapping reference index... started\n");
+            log_info(stderr, "  file: \"%s\"\n", argv[arg_offset]);
+
+            // map the reference data
+            reference_data = io::map_sequence_file( argv[arg_offset] );
+            if (reference_data == NULL)
+            {
+                log_error(stderr, "mapping reference index \"%s\" failed\n", argv[arg_offset]);
+                return 1;
+            }
+
+            log_visible(stderr, "mapping reference index... done\n");
+
             nvbio::io::FMIndexDataMMAP* loader = new nvbio::io::FMIndexDataMMAP;
             if (!loader->load( argv[arg_offset] ))
                 return 1;
@@ -325,7 +352,7 @@ int main(int argc, char* argv[])
                 return 1;
             }
 
-            nvbio::bowtie2::cuda::driver( argv[argc-1], *driver_data, pe_policy, *read_data_file1, *read_data_file2, string_options );
+            nvbio::bowtie2::cuda::driver( argv[argc-1], *reference_data, *driver_data, pe_policy, *read_data_file1, *read_data_file2, string_options );
         }
         else
         {
@@ -344,9 +371,8 @@ int main(int argc, char* argv[])
                 return 1;
             }
 
-            nvbio::bowtie2::cuda::driver( argv[argc-1], *driver_data, *read_data_file, string_options );
+            nvbio::bowtie2::cuda::driver( argv[argc-1], *reference_data, *driver_data, *read_data_file, string_options );
         }
-        delete driver_data;
 
         log_info( stderr, "nvBowtie... done\n" );
     }

@@ -32,6 +32,7 @@
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/vector_view.h>
 #include <nvbio/basic/vector.h>
+#include <nvbio/basic/cuda/ldg.h>
 #include <nvbio/strings/string_set.h>
 
 namespace nvbio {
@@ -301,8 +302,9 @@ struct SequenceDataViewCore : public SequenceDataInfo
 
 };
 
-typedef SequenceDataViewCore<uint32*,uint32*,char*,char*>                              SequenceDataView;
-typedef SequenceDataViewCore<const uint32*,const uint32*,const char*,const char*> ConstSequenceDataView;
+typedef SequenceDataViewCore<uint32*,uint32*,char*,char*>                                                   SequenceDataView;
+typedef SequenceDataViewCore<const uint32*,const uint32*,const char*,const char*>                           ConstSequenceDataView;
+typedef SequenceDataViewCore<cuda::ldg_pointer<uint32>,cuda::ldg_pointer<uint32>,const char*,const char*>   LdgSequenceDataView;
 
 ///
 /// Base abstract class to encapsulate a sequence data object.
@@ -372,6 +374,10 @@ struct SequenceDataStorage : public SequenceData
         // copy
         this->operator=( other );
     }
+
+    /// copy constructor
+    ///
+    SequenceDataStorage(const SequenceData& other);
 
     /// assignment operator
     ///
@@ -563,16 +569,16 @@ SequenceDataHost* load_sequence_file(
 
 } // namespace io
 
-/// return a plain view of a SequenceData object
-///
+// return a plain view of a SequenceData object
+//
 inline
 io::SequenceData::plain_view_type plain_view(io::SequenceData& sequence_data)
 {
     return io::SequenceData::plain_view_type( sequence_data );
 }
 
-/// return a plain view of a const SequenceData object
-///
+// return a plain view of a const SequenceData object
+//
 inline
 io::SequenceData::const_plain_view_type plain_view(const io::SequenceData& sequence_data)
 {
@@ -596,6 +602,19 @@ plain_view(const io::SequenceDataStorage<system_tag>& sequence_data)
 {
     return typename io::SequenceDataStorage<system_tag>::const_plain_view_type( sequence_data );
 }
+
+namespace io {
+
+// copy constructor
+//
+template <typename system_tag>
+SequenceDataStorage<system_tag>::SequenceDataStorage(const SequenceData& other)
+{
+    // copy
+    this->operator=( plain_view( other ) );
+}
+
+} // namespace io
 
 } // namespace nvbio
 

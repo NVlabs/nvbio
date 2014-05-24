@@ -38,6 +38,7 @@ void all_ed(
     const FMIndexDef::type          fmi,
     const FMIndexDef::type          rfmi,
     const UberScoringScheme&        scoring_scheme,
+    const io::SequenceDataDevice&   reference_data,
     const io::FMIndexDataDevice&    driver_data,
     io::SequenceDataDevice&         read_data,
     Stats&                          stats)
@@ -47,6 +48,7 @@ void all_ed(
         fmi,
         rfmi,
         scoring_scheme,
+        reference_data,
         driver_data,
         read_data,
         stats );

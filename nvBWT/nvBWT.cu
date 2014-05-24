@@ -47,7 +47,7 @@
 #include <nvbio/basic/dna.h>
 #include <nvbio/fmindex/bwt.h>
 #include <nvbio/fasta/fasta.h>
-#include <nvbio/io/fmi.h>
+#include <nvbio/io/fmindex/fmindex.h>
 #include <nvbio/sufsort/sufsort.h>
 #include "filelist.h"
 
@@ -108,12 +108,11 @@ struct Counter
     uint32 m_reads;
 };
 
+template <typename stream_type>
 struct Writer
 {
-    typedef io::FMIndexData::nonconst_stream_type       stream_type;
-
-    Writer(uint32* storage, const uint32 reads, const uint64 max_size) :
-        m_max_size(max_size), m_size(0), m_stream( storage )
+    Writer(stream_type stream, const uint32 reads, const uint64 max_size) :
+        m_max_size(max_size), m_size(0), m_stream( stream )
     {
         m_bntseq.seed = 11;
         m_bntseq.anns_data.resize( reads );
@@ -223,7 +222,7 @@ void save_wpac(const uint32 seq_length, const uint32* string_storage, const char
 {
     log_info(stderr, "\nwriting \"%s\"... started\n", pac_name);
 
-    const uint32 seq_words = uint32( (seq_length+15)/16 );
+    const uint32 seq_words = util::divide_ri( seq_length, 16 );
 
     FILE* output_file = fopen( pac_name, "wb" );
     if (output_file == NULL)
@@ -252,8 +251,8 @@ void save_wpac(const uint32 seq_length, const uint32* string_storage, const char
 //
 void save_bpac(const uint32 seq_length, const uint32* string_storage, const char* pac_name)
 {
-    typedef io::FMIndexData::stream_type                stream_type;
-    typedef PackedStream<uint8*,uint8,2,true,int64> pac_stream_type;
+    typedef PackedStream<const uint32*,uint8,2,true,int64>       stream_type;
+    typedef PackedStream<      uint8*, uint8,2,true,int64>   pac_stream_type;
 
     log_info(stderr, "\nwriting \"%s\"... started\n", pac_name);
 
@@ -408,8 +407,8 @@ int build(
     thrust::host_vector<uint32> h_bwt_storage( seq_words+1 );
     thrust::host_vector<uint32> h_ssa( ssa_len );
 
-    typedef io::FMIndexData::stream_type                const_stream_type;
-    typedef io::FMIndexData::nonconst_stream_type             stream_type;
+    typedef PackedStream<const uint32*,uint8,io::FMIndexData::BWT_BITS,io::FMIndexData::BWT_BIG_ENDIAN> const_stream_type;
+    typedef PackedStream<      uint32*,uint8,io::FMIndexData::BWT_BITS,io::FMIndexData::BWT_BIG_ENDIAN>       stream_type;
 
     stream_type h_string( nvbio::plain_view( h_string_storage ) );
 
@@ -418,7 +417,7 @@ int build(
     log_info(stderr, "\nbuffering bps... started\n");
     // read all files
     {
-        Writer writer( nvbio::plain_view( h_string_storage ), counter.m_reads, seq_length );
+        Writer<stream_type> writer( h_string, counter.m_reads, seq_length );
 
         for (uint32 i = 0; i < n_inputs; ++i)
         {

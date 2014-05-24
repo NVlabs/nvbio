@@ -199,19 +199,19 @@ uint32 length(const ReadStream<StreamType,QualType>& read) { return read.length(
 /// Utility class to load a read with a StringLoader.
 /// The Tag type allows to specify the caching policy.
 ///
-template <typename BatchType, typename Tag>
+template <typename SequenceDataT, typename Tag>
 struct ReadLoader
 {
-    typedef typename BatchType::sequence_storage_iterator                                                   read_storage;
-    typedef typename BatchType::qual_storage_iterator                                                       qual_iterator;
-    typedef PackedStringLoader<read_storage, BatchType::SEQUENCE_BITS, BatchType::SEQUENCE_BIG_ENDIAN,Tag>  loader_type;
-    typedef typename loader_type::iterator                                                                  read_iterator;
-    typedef ReadStream<read_iterator,qual_iterator>                                                         string_type;
+    typedef typename SequenceDataT::sequence_storage_iterator                                                       read_storage;
+    typedef typename SequenceDataT::qual_storage_iterator                                                           qual_iterator;
+    typedef PackedStringLoader<read_storage, SequenceDataT::SEQUENCE_BITS, SequenceDataT::SEQUENCE_BIG_ENDIAN,Tag>  loader_type;
+    typedef typename loader_type::iterator                                                                          read_iterator;
+    typedef ReadStream<read_iterator,qual_iterator>                                                                 string_type;
 
     /// load a read
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    string_type load(const BatchType& batch, const uint2 range, const DirType dir, const ReadType op)
+    string_type load(const SequenceDataT& batch, const uint2 range, const DirType dir, const ReadType op)
     {
         const qual_iterator quals( batch.qual_stream() + range.x );
 
@@ -226,7 +226,7 @@ struct ReadLoader
     /// load a read substring
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    string_type load(const BatchType& batch, const uint2 range, const DirType dir, const ReadType op, const uint2 subrange)
+    string_type load(const SequenceDataT& batch, const uint2 range, const DirType dir, const ReadType op, const uint2 subrange)
     {
         const qual_iterator quals( batch.qual_stream() + range.x );
 
@@ -243,29 +243,25 @@ struct ReadLoader
 };
 
 ///
-/// Utility class to load a genome substring with a StringLoader.
+/// Utility class to load the full stream of a SequenceData.
 /// The Tag type allows to specify the caching policy.
 ///
-template <typename GenomeStorage, typename Tag>
-struct GenomeLoader
+template <typename SequenceDataT, typename Tag>
+struct SequenceStreamLoader
 {
-    typedef PackedStringLoader<GenomeStorage,2,true,Tag>    loader_type;
-    typedef typename loader_type::iterator                  iterator;
-    typedef vector_view<iterator>                           string_type;
+    typedef typename SequenceDataT::sequence_storage_iterator                                                           stream_storage;
+    typedef PackedStringLoader<stream_storage, SequenceDataT::SEQUENCE_BITS, SequenceDataT::SEQUENCE_BIG_ENDIAN,Tag>    loader_type;
+    typedef typename loader_type::iterator                                                                              stream_iterator;
+    typedef vector_view<stream_iterator>                                                                                string_type;
 
-    /// load a genome segment
+    /// load a subset of the stream
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    string_type load(const GenomeStorage ptr, const uint32 offset, const uint32 len)
+    string_type load(const SequenceDataT& batch, const uint2 range)
     {
-        return string_type( len, loader.load( ptr, offset, len ) );
-    }
-    /// load a substring of a genome segment
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    string_type load(const GenomeStorage ptr, const uint32 offset, const uint32 len, const uint2 subrange)
-    {
-        return string_type( len, loader.load( ptr, offset, len, subrange, STANDARD ) );
+        return string_type(
+            range.y - range.x,
+            loader.load( batch.sequence_storage(), range.x, range.y - range.x ) );
     }
 
     loader_type loader;

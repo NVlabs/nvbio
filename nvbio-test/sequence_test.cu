@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// alignment_test.cu
+// sequence_test.cu
 //
 
 #include <nvbio/basic/timer.h>
@@ -43,6 +43,7 @@
 using namespace nvbio;
 
 namespace nvbio {
+
 
 int sequence_test(int argc, char* argv[])
 {

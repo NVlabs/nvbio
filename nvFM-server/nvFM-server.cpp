@@ -28,24 +28,13 @@
 // nvFM-server.cpp : Defines the entry point for the console application.
 //
 
-#include <nvbio/io/fmi.h>
+#include <nvbio/io/fmindex/fmindex.h>
+#include <nvbio/io/sequence/sequence_mmap.h>
 #include <nvbio/basic/mmap.h>
 #include <string.h>
 #include <string>
 
 using namespace nvbio;
-
-struct Info
-{
-    uint32 sequence_length;
-    uint32 sequence_words;
-    uint32 occ_words;
-    uint32 sa_words;
-    uint32 primary;
-    uint32 rprimary;
-    uint32 L2[5];
-    uint32 rL2[5];
-};
 
 int main(int argc, char* argv[])
 {
@@ -60,8 +49,11 @@ int main(int argc, char* argv[])
     const char* file_name = argv[1];
     const char* mapped_name = argc == 3 ? argv[2] : argv[1];
 
-    io::FMIndexDataMMAPServer driver;
-    driver.load( file_name, mapped_name );
+    io::SequenceDataMMAPServer reference_driver;
+    reference_driver.load( DNA, file_name, mapped_name );
+
+    io::FMIndexDataMMAPServer fmindex_driver;
+    fmindex_driver.load( file_name, mapped_name );
 
     getc(stdin);
     return 0;

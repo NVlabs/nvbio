@@ -154,6 +154,7 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
 //
 int driver(
     const char*                              output_name, 
+    const io::SequenceData&                  reference_data_host,
     const io::FMIndexData&                   driver_data_host,
           io::SequenceDataStream&            read_data_stream,
     const std::map<std::string,std::string>& options)
@@ -217,11 +218,14 @@ int driver(
     Timer timer;
 
     timer.start();
+
+    io::SequenceDataDevice reference_data( reference_data_host );
+
     io::FMIndexDataDevice driver_data( driver_data_host,
-                        io::FMIndexDataDevice::GENOME  |
                         io::FMIndexDataDevice::FORWARD |
         (need_reverse ? io::FMIndexDataDevice::REVERSE : 0u) |
                         io::FMIndexDataDevice::SA );
+
     timer.stop();
 
     log_stats(stderr, "  allocated device driver data (%.2f GB - %.1fs)\n", float(driver_data.allocated()) / 1.0e9f, timer.seconds() );
@@ -277,7 +281,7 @@ int driver(
 
     aligner.output_file = io::OutputFile::open(output_name,
                                                io::SINGLE_END,
-                                               io::BNT(driver_data_host));
+                                               io::BNT(reference_data_host));
 
     nvbio::bowtie2::cuda::BowtieMapq< BowtieMapq2< SmithWatermanScoringScheme<> > > new_mapq_eval(scoring_scheme.sw);
     aligner.output_file->configure_mapq_evaluator(&new_mapq_eval, params.mapq_filter);
@@ -344,6 +348,7 @@ int driver(
                 fmi,
                 rfmi,
                 scoring_scheme,
+                reference_data,
                 driver_data,
                 read_data,
                 stats );
@@ -358,6 +363,7 @@ int driver(
                     fmi,
                     rfmi,
                     scoring_scheme,
+                    reference_data,
                     driver_data,
                     read_data,
                     stats );
@@ -370,6 +376,7 @@ int driver(
                     fmi,
                     rfmi,
                     scoring_scheme,
+                    reference_data,
                     driver_data,
                     read_data,
                     stats );
@@ -462,6 +469,7 @@ int driver(
 //
 int driver(
     const char*                              output_name, 
+    const io::SequenceData&                  reference_data_host,
     const io::FMIndexData&                   driver_data_host,
     const io::PairedEndPolicy                pe_policy,
           io::SequenceDataStream&            read_data_stream1,
@@ -534,8 +542,9 @@ int driver(
         (params.allow_sub == 0 && USE_REVERSE_INDEX) ||
         (params.allow_sub == 1 && params.subseed_len == 0 && params.mode == BestMappingApprox);
 
+    io::SequenceDataDevice reference_data( reference_data_host );
+
     io::FMIndexDataDevice driver_data( driver_data_host,
-                        io::FMIndexDataDevice::GENOME  |
                         io::FMIndexDataDevice::FORWARD |
         (need_reverse ? io::FMIndexDataDevice::REVERSE : 0u) |
                         io::FMIndexDataDevice::SA );
@@ -597,7 +606,7 @@ int driver(
 
     aligner.output_file = io::OutputFile::open(output_name,
                                                io::PAIRED_END,
-                                               io::BNT(driver_data_host));
+                                               io::BNT(reference_data_host));
 
     nvbio::bowtie2::cuda::BowtieMapq< BowtieMapq2< SmithWatermanScoringScheme<> > > new_mapq_eval(scoring_scheme.sw);
     aligner.output_file->configure_mapq_evaluator(&new_mapq_eval, params.mapq_filter);
@@ -674,6 +683,7 @@ int driver(
                 fmi,
                 rfmi,
                 scoring_scheme,
+                reference_data,
                 driver_data,
                 read_data,
                 stats );
@@ -689,6 +699,7 @@ int driver(
                     fmi,
                     rfmi,
                     scoring_scheme,
+                    reference_data,
                     driver_data,
                     read_data1,
                     read_data2,
@@ -702,6 +713,7 @@ int driver(
                     fmi,
                     rfmi,
                     scoring_scheme,
+                    reference_data,
                     driver_data,
                     read_data1,
                     read_data2,

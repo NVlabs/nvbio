@@ -26,7 +26,6 @@
  */
 
 #include <nvbio/io/output/output_sam.h>
-#include <nvbio/io/fmi.h>
 #include <nvbio/basic/numbers.h>
 
 #include <stdio.h>
@@ -177,13 +176,12 @@ void SamOutput::output_header(void)
     linebreak();
 
     // output the sequence info
-    for(uint32 i = 0; i < bnt.info.n_seqs; i++)
+    for (uint32 i = 0; i < bnt.n_seqs; i++)
     {
-        const io::BNTAnn& ann = bnt.data.anns[i];
         // sequence header
         write_string("@SQ", false);
-        write_formatted_string("SN:%s", bnt.data.names + ann.name_offset);
-        write_formatted_string("LN:%d", ann.len);
+        write_formatted_string("SN:%s", bnt.names + bnt.names_index[i]);
+        write_formatted_string("LN:%d", bnt.sequence_index[i+1] - bnt.sequence_index[i]);
         linebreak();
     }
 }
@@ -361,11 +359,10 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
     const uint32 ref_cigar_len = reference_cigar_length(alignment.cigar, alignment.cigar_len);
 
     // setup alignment information
-    const io::BNTAnn* ann = std::upper_bound(
-        bnt.data.anns,
-        bnt.data.anns + bnt.info.n_seqs,
-        alignment.cigar_pos,
-        SeqFinder() ) - 1u;
+    const uint32 seq_index = uint32(std::upper_bound(
+        bnt.sequence_index,
+        bnt.sequence_index + bnt.n_seqs,
+        alignment.cigar_pos ) - bnt.sequence_index) - 1u;
 
     // if we're doing paired-end alignment, the mate must be valid
     NVBIO_CUDA_ASSERT(alignment_type == SINGLE_END || mate.valid == true);
@@ -468,7 +465,7 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
         }
     }
 
-    if (alignment.cigar_pos + ref_cigar_len > ann->offset + ann->len)
+    if (alignment.cigar_pos + ref_cigar_len > bnt.sequence_index[ seq_index+1 ])
     {
         // flag UNMAP as this alignment bridges two adjacent reference sequences
         // xxxnsubtil: we still output the rest of the alignment data, does that make sense?
@@ -477,8 +474,8 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
         sam_align.mapq = 0;
     }
 
-    sam_align.rname = bnt.data.names + ann->name_offset;
-    sam_align.pos = uint32( alignment.cigar_pos - ann->offset + 1 );
+    sam_align.rname = bnt.names + bnt.names_index[ seq_index ];
+    sam_align.pos = uint32( alignment.cigar_pos - bnt.sequence_index[ seq_index ] + 1 );
 
     // fill out the cigar string...
     uint32 computed_cigar_len = generate_cigar_string(sam_align, alignment);
@@ -498,24 +495,21 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
             const uint32 o_ref_cigar_len = reference_cigar_length(mate.cigar, mate.cigar_len);
 
             // setup alignment information for the mate
-            const io::BNTAnn* o_ann = std::upper_bound(
-                bnt.data.anns,
-                bnt.data.anns + bnt.info.n_seqs,
-                mate.cigar_pos,
-                SeqFinder() ) - 1u;
+            const uint32 o_seq_index = uint32(std::upper_bound(
+                bnt.sequence_index,
+                bnt.sequence_index + bnt.n_seqs,
+                mate.cigar_pos ) - bnt.sequence_index) - 1u;
 
-            if (o_ann == ann)
-            {
+            if (o_seq_index == seq_index)
                 sam_align.rnext = "=";
-            } else {
-                sam_align.rnext = bnt.data.names + o_ann->name_offset;
-            }
+            else
+                sam_align.rnext = bnt.names + bnt.names_index[ o_seq_index ];
 
-            sam_align.pnext = uint32( mate.cigar_pos - o_ann->offset + 1 );
-            if (o_ann != ann)
-            {
+            sam_align.pnext = uint32( mate.cigar_pos - bnt.sequence_index[ o_seq_index ] + 1 );
+            if (o_seq_index != seq_index)
                 sam_align.tlen = 0;
-            } else {
+            else
+            {
                 sam_align.tlen = nvbio::max(mate.cigar_pos + o_ref_cigar_len,
                                             alignment.cigar_pos + ref_cigar_len) -
                                  nvbio::min(mate.cigar_pos, alignment.cigar_pos);
@@ -528,7 +522,7 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
         } else {
             // other mate is unmapped
             sam_align.rnext = "=";
-            sam_align.pnext = (int)(alignment.cigar_pos - ann->offset + 1);
+            sam_align.pnext = (int)(alignment.cigar_pos - bnt.sequence_index[ seq_index ] + 1);
             // xxx: check whether this is really correct...
             sam_align.tlen = 0;
         }

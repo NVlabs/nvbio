@@ -441,18 +441,6 @@ int FMIndexDataHost::load(
     if (flags & FORWARD) log_visible(stderr, "   primary : %u\n", uint32(m_primary));
     if (flags & REVERSE) log_visible(stderr, "  rprimary : %u\n", uint32(m_rprimary));
 
-    const uint32 SA_INT  = FMIndexData::SA_INT;
-
-    const uint32 has_fw     = (flags & FORWARD) ? 1u : 0;
-    const uint32 has_rev    = (flags & REVERSE) ? 1u : 0;
-    const uint32 has_sa     = (flags & SA)      ? 1u : 0;
-
-    const uint64 memory_footprint =
-                 (has_fw + has_rev) * sizeof(uint32)*m_bwt_occ_words +
-        has_sa * (has_fw + has_rev) * sizeof(uint32)*uint64(seq_length+SA_INT)/SA_INT;
-
-    log_visible(stderr, "  memory   : %.1f MB\n", float(memory_footprint)/float(1024*1024));
-
     // read ssa
     if (flags & SA)
     {
@@ -485,6 +473,16 @@ int FMIndexDataHost::load(
     // generate the count table
     gen_bwt_count_table( m_count_table );
 
+    const uint32 has_fw     = (m_flags & FORWARD) ? 1u : 0;
+    const uint32 has_rev    = (m_flags & REVERSE) ? 1u : 0;
+    const uint32 has_sa     = (m_flags & SA)      ? 1u : 0;
+
+    const uint64 memory_footprint =
+                 (has_fw + has_rev) * sizeof(uint32)*m_bwt_occ_words +
+        has_sa * (has_fw + has_rev) * sizeof(uint32)*m_sa_words;
+
+    log_visible(stderr, "  memory   : %.1f MB\n", float(memory_footprint)/float(1024*1024));
+
     log_visible(stderr, "FMIndexData: loading... done\n");
     return 1;
 }
@@ -516,6 +514,8 @@ int FMIndexDataMMAPServer::load(const char* genome_prefix, const char* mapped_na
     // bind pointers to static vectors
     m_count_table = &m_count_table_vec[0];
     m_L2          = &m_L2_vec[0];
+
+    m_flags = FORWARD | REVERSE | SA;
 
     try
     {
@@ -621,6 +621,16 @@ int FMIndexDataMMAPServer::load(const char* genome_prefix, const char* mapped_na
         // generate the count table
         gen_bwt_count_table( m_count_table );
 
+        const uint32 has_fw     = (m_flags & FORWARD) ? 1u : 0;
+        const uint32 has_rev    = (m_flags & REVERSE) ? 1u : 0;
+        const uint32 has_sa     = (m_flags & SA)      ? 1u : 0;
+
+        const uint64 memory_footprint =
+                     (has_fw + has_rev) * sizeof(uint32)*m_bwt_occ_words +
+            has_sa * (has_fw + has_rev) * sizeof(uint32)*m_sa_words;
+
+        log_visible(stderr, "  memory   : %.1f MB\n", float(memory_footprint)/float(1024*1024));
+
         m_info.sequence_length = m_seq_length;
         m_info.bwt_occ_words   = m_bwt_occ_words;
         m_info.sa_words        = m_sa_words;
@@ -682,7 +692,7 @@ int FMIndexDataMMAP::load(
         {
             m_ssa.m_ssa  = (uint32*) m_sa_file.init(  saName.c_str(), sa_file_size );
             m_rssa.m_ssa = (uint32*)m_rsa_file.init( rsaName.c_str(), sa_file_size );
-            m_sa_words   = (info->sequence_length + SA_INT) / SA_INT;
+            m_sa_words   = info->sa_words;
         }
         else
         {

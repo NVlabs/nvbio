@@ -192,7 +192,7 @@ void DebugOutput::process_one_mate(DbgAlignment& al,
     if (alignment.best->is_aligned())
     {
         // setup alignment information
-       const uint32 seq_index = uint32(std::upper_bound(
+        const uint32 seq_index = uint32(std::upper_bound(
             bnt.sequence_index,
             bnt.sequence_index + bnt.n_seqs,
             alignment.cigar_pos ) - bnt.sequence_index) - 1u;

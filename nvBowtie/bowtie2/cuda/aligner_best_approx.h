@@ -59,7 +59,7 @@ void Aligner::best_approx(
     const genome_view_type          genome_view( plain_view( reference_data ) );
     const genome_access_type        genome_access( genome_view );
     const uint32                    genome_len = genome_access.bps();
-    const genome_storage_iterator   genome_ptr = genome_access.sequence_storage();
+    const genome_iterator           genome     = genome_access.sequence_stream();
 
     // prepare the scoring system
     typedef typename ScoringSchemeSelector<scoring_tag>::type           scoring_scheme_type;
@@ -225,7 +225,7 @@ void Aligner::best_approx(
         reads,
         reads,
         genome_len,
-        genome_ptr,
+        genome,
         scoring_scheme,
         *this );
 
@@ -403,7 +403,7 @@ void Aligner::best_approx_score(
     const genome_view_type          genome_view( plain_view( reference_data ) );
     const genome_access_type        genome_access( genome_view );
     const uint32                    genome_len = genome_access.bps();
-    const genome_storage_iterator   genome_ptr = genome_access.sequence_storage();
+    const genome_iterator           genome     = genome_access.sequence_stream();
 
     NVBIO_VAR_UNUSED thrust::device_vector<uint32>::iterator         hit_read_id_iterator = scoring_queues.hits.read_id.begin();
     NVBIO_VAR_UNUSED thrust::device_vector<uint32>::iterator         loc_queue_iterator   = scoring_queues.hits.loc.begin();
@@ -441,7 +441,7 @@ void Aligner::best_approx_score(
         reads,
         reads,
         genome_len,
-        genome_ptr,
+        genome,
         fmi,
         rfmi,
         scoring_scheme,

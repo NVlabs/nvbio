@@ -216,7 +216,7 @@ struct ReadLoader
         const qual_iterator quals( batch.qual_stream() + range.x );
 
         string_type read(
-            loader.load( batch.sequence_storage(), range.x, range.y - range.x ),
+            loader.load( batch.sequence_stream(), range.x, range.y - range.x ),
             quals,
             make_uint2( 0, range.y - range.x ) );
 
@@ -231,7 +231,7 @@ struct ReadLoader
         const qual_iterator quals( batch.qual_stream() + range.x );
 
         string_type read(
-            loader.load( batch.sequence_storage(), range.x, range.y - range.x, subrange, dir == REVERSE ? true : false ),
+            loader.load( batch.sequence_stream(), range.x, range.y - range.x, subrange, dir == REVERSE ? true : false ),
             quals,
             make_uint2( 0, range.y - range.x ) );
 
@@ -261,7 +261,7 @@ struct SequenceStreamLoader
     {
         return string_type(
             range.y - range.x,
-            loader.load( batch.sequence_storage(), range.x, range.y - range.x ) );
+            loader.load( batch.sequence_stream(), range.x, range.y - range.x ) );
     }
 
     loader_type loader;

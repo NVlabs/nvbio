@@ -202,7 +202,7 @@ struct AlignmentStreamContext<TRACEBACK_STREAM>
 template <AlignmentStreamType TYPE, typename AlignerType, typename PipelineType>
 struct AlignmentStreamBase
 {
-    typedef typename PipelineType::genome_storage_iterator                          genome_storage_iterator;
+    typedef typename PipelineType::genome_iterator                                  genome_iterator;
     typedef typename PipelineType::read_batch_type                                  read_batch_type;
     typedef typename PipelineType::scheme_type                                      scheme_type;
     typedef AlignerType                                                             aligner_type;
@@ -215,9 +215,9 @@ struct AlignmentStreamBase
     typedef typename pattern_string::qual_string_type                               qual_string;
 
     typedef PackedStringLoader<
-        genome_storage_iterator,
-        io::SequenceDataTraits<DNA>::SEQUENCE_BITS,
-        io::SequenceDataTraits<DNA>::SEQUENCE_BIG_ENDIAN,
+        typename genome_iterator::storage_iterator,
+        genome_iterator::SYMBOL_SIZE,
+        genome_iterator::BIG_ENDIAN,
         lmem_cache_type>                                                            text_loader_type;
     typedef typename text_loader_type::iterator                                     text_iterator;
     typedef vector_view<text_iterator>                                              text_string;

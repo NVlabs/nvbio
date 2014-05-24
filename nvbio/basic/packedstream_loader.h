@@ -76,9 +76,10 @@ struct PackedStringLoader {};
 template <typename StorageIterator, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, uint32 CACHE_SIZE>
 struct PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,lmem_cache_tag<CACHE_SIZE> >
 {
-    typedef PackedStream<StorageIterator,uint8,SYMBOL_SIZE_T,BIG_ENDIAN_T>                                              input_stream;
-    typedef typename std::iterator_traits<StorageIterator>::value_type                                                  storage_type;
-    typedef typename PackedStream<const_cached_iterator<const storage_type*>,uint8,SYMBOL_SIZE_T,BIG_ENDIAN_T>::iterator iterator;
+    typedef PackedStream<StorageIterator,uint8,SYMBOL_SIZE_T,BIG_ENDIAN_T>                                                  input_stream;
+    typedef input_stream                                                                                                    input_iterator;
+    typedef typename std::iterator_traits<StorageIterator>::value_type                                                      storage_type;
+    typedef typename PackedStream<const_cached_iterator<const storage_type*>,uint8,SYMBOL_SIZE_T,BIG_ENDIAN_T>::iterator    iterator;
 
     /// given a packed stream, load part of it starting at the given offset, and return an iterator
     /// to the first loaded symbol
@@ -88,7 +89,7 @@ struct PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,lmem_cache_
     /// \param length       length of the substring to load
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    iterator load(const StorageIterator stream, const uint32 offset, const uint32 length);
+    iterator load(const input_stream stream, const uint32 offset, const uint32 length);
 
     /// given a packed stream, and a window of symbols that is virtually mapped to the cache,
     /// load a substring of it and return an iterator to the first symbol of the window.
@@ -109,7 +110,7 @@ struct PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,lmem_cache_
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     iterator load(
-        const StorageIterator   stream,
+        const input_stream      stream,
         const uint32            offset,
         const uint32            length,
         const uint2             loaded_range,
@@ -126,6 +127,7 @@ struct PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,uncached_ta
 {
     typedef typename std::iterator_traits<StorageIterator>::value_type                           storage_type;
     typedef PackedStream<StorageIterator,uint8,SYMBOL_SIZE_T,BIG_ENDIAN_T>                       input_stream;
+    typedef input_stream                                                                         input_iterator;
     typedef typename PackedStream<StorageIterator,uint8,SYMBOL_SIZE_T,BIG_ENDIAN_T>::iterator    iterator;
 
     /// given a packed stream, load part of it starting at the given offset, and return an iterator
@@ -136,7 +138,7 @@ struct PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,uncached_ta
     /// \param length       length of the substring to load
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    iterator load(const StorageIterator stream, const uint32 offset, const uint32 length);
+    iterator load(const input_stream stream, const uint32 offset, const uint32 length);
 
     /// given a packed stream, and a window of symbols that is virtually mapped to the cache,
     /// load a substring of it and return an iterator to the first symbol of the window.
@@ -157,7 +159,7 @@ struct PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,uncached_ta
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     iterator load(
-        const StorageIterator   stream,
+        const input_stream      stream,
         const uint32            offset,
         const uint32            length,
         const uint2             substring_range,

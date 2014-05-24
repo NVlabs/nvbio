@@ -81,17 +81,26 @@ struct AlignmentStream
 {
     typedef t_aligner_type                                                          aligner_type;
 
-    typedef nvbio::cuda::ldg_pointer<uint32>                                        base_iterator;
+    typedef nvbio::cuda::ldg_pointer<uint32>                                        storage_iterator;
 
-    typedef nvbio::PackedStringLoader<base_iterator,
+    typedef nvbio::PackedStringLoader<
+        storage_iterator,
         io::SequenceDataTraits<DNA_N>::SEQUENCE_BITS,
         io::SequenceDataTraits<DNA_N>::SEQUENCE_BIG_ENDIAN,cache_type>                          pattern_loader_type;
+    typedef typename pattern_loader_type::input_iterator                                        uncached_pattern_iterator;
     typedef typename pattern_loader_type::iterator                                              pattern_iterator;
     typedef nvbio::vector_view<pattern_iterator>                                                pattern_string;
 
-    typedef nvbio::PackedStringLoader<base_iterator,
+    typedef nvbio::PackedStream<
+        storage_iterator,
+        uint8,
+        REF_BITS,
+        REF_BIG_ENDIAN>                                                                         uncached_text_iterator;
+    typedef nvbio::PackedStringLoader<
+        storage_iterator,
         REF_BITS,
         REF_BIG_ENDIAN,uncached_tag_type>                                                       text_loader_type;
+    typedef typename text_loader_type::input_iterator                                           uncached_text_iterator;
     typedef typename text_loader_type::iterator                                                 text_iterator;
     typedef nvbio::vector_view<text_iterator>                                                   text_string;
 
@@ -128,8 +137,8 @@ struct AlignmentStream
         m_total_pattern_len (_total_pattern_len),
         m_text_len          (_text_len),
         m_offsets           (_offsets),
-        m_patterns          (_patterns),
-        m_text              (_text),
+        m_patterns          (storage_iterator(_patterns)),
+        m_text              (storage_iterator(_text)),
         m_scores            (_scores) {}
 
     // get the aligner
@@ -203,15 +212,15 @@ struct AlignmentStream
         m_scores[i] = context->sink.score;
     }
 
-    aligner_type    m_aligner;
-    uint32          m_count;
-    uint32          m_max_pattern_len;
-    uint32          m_total_pattern_len;
-    uint32          m_text_len;
-    const uint32*   m_offsets;
-    base_iterator   m_patterns;
-    base_iterator   m_text;
-    int16*          m_scores;
+    aligner_type                m_aligner;
+    uint32                      m_count;
+    uint32                      m_max_pattern_len;
+    uint32                      m_total_pattern_len;
+    uint32                      m_text_len;
+    const uint32*               m_offsets;
+    uncached_pattern_iterator   m_patterns;
+    uncached_text_iterator      m_text;
+    int16*                      m_scores;
 };
 
 // A simple kernel to test the speed of alignment without the possible overheads of the BatchAlignmentScore interface
@@ -229,17 +238,21 @@ __global__ void alignment_test_kernel(
     const uint32 tid = blockIdx.x * BLOCKDIM + threadIdx.x;
 
     typedef lmem_cache_tag_type                                                 lmem_cache_type;
-    typedef nvbio::cuda::ldg_pointer<uint32>                                    base_iterator;
+    typedef nvbio::cuda::ldg_pointer<uint32>                                    storage_iterator;
 
-    typedef nvbio::PackedStringLoader<base_iterator,
+    typedef nvbio::PackedStringLoader<
+        storage_iterator,
         io::SequenceDataTraits<DNA_N>::SEQUENCE_BITS,
         io::SequenceDataTraits<DNA_N>::SEQUENCE_BIG_ENDIAN,lmem_cache_type>                     pattern_loader_type;
+    typedef typename pattern_loader_type::input_iterator                                        uncached_pattern_iterator;
     typedef typename pattern_loader_type::iterator                                              pattern_iterator;
     typedef nvbio::vector_view<pattern_iterator>                                                pattern_string;
 
-    typedef nvbio::PackedStringLoader<base_iterator,
+    typedef nvbio::PackedStringLoader<
+        storage_iterator,
         REF_BITS,
         REF_BIG_ENDIAN,uncached_tag_type>                                                       text_loader_type;
+    typedef typename text_loader_type::input_iterator                                           uncached_text_iterator;
     typedef typename text_loader_type::iterator                                                 text_iterator;
     typedef nvbio::vector_view<text_iterator>                                                   text_string;
 
@@ -250,10 +263,10 @@ __global__ void alignment_test_kernel(
     const uint32 pattern_len = offsets[tid+1] - pattern_off;
 
     pattern_loader_type pattern_loader;
-    pattern_string pattern = pattern_string( pattern_len, pattern_loader.load( pattern_ptr, pattern_off, pattern_len ) );
+    pattern_string pattern = pattern_string( pattern_len, pattern_loader.load( uncached_pattern_iterator( pattern_ptr ), pattern_off, pattern_len ) );
 
     text_loader_type text_loader;
-    text_string text = text_string( text_len, text_loader.load( text_ptr, 0, text_len ) );
+    text_string text = text_string( text_len, text_loader.load( uncached_text_iterator( text_ptr ), 0, text_len ) );
 
     aln::BestSink<int32> sink;
 

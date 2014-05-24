@@ -197,6 +197,7 @@ struct PackedStream
     typedef typename std::iterator_traits<InputStream>::value_type  storage_type;
 
     typedef InputStream                                                     stream_type;
+    typedef InputStream                                                     storage_iterator;
     typedef Symbol                                                          symbol_type;
     typedef This                                                            iterator;
     typedef PackedStreamRef<This>                                           reference;

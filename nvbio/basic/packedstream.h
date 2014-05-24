@@ -214,7 +214,7 @@ struct PackedStream
     /// constructor
     ///
     template <typename UInputStream>
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStream(const UInputStream stream, const index_type index = 0) : m_stream( static_cast<InputStream>(stream) ), m_index( index ) {}
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE explicit PackedStream(const UInputStream stream, const index_type index = 0) : m_stream( static_cast<InputStream>(stream) ), m_index( index ) {}
 
     /// constructor
     ///

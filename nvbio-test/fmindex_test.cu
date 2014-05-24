@@ -165,7 +165,7 @@ void do_synthetic_test_device(
     typedef PackedStream<BwtIterator,uint8,2u,true,index_type> bwt_type;
     typedef rank_dictionary< 2u, OCC_INT, bwt_type, OccIterator, count_table_type > rank_dict_type;
     rank_dict_type rank_dict(
-        bwt_it,
+        bwt_type( bwt_it ),
         occ_it,
         count_table );
 
@@ -556,7 +556,7 @@ void synthetic_test(const uint32 LEN, const uint32 QUERIES)
         data.primary,
         &data.L2[0],
         rank_dict_type(
-            &data.bwt[0],
+            bwt_type( &data.bwt[0] ),
             &data.occ[0],
             &data.count_table[0] ),
         ssa_nop() );
@@ -599,7 +599,7 @@ void synthetic_test(const uint32 LEN, const uint32 QUERIES)
         data.primary,
         &data.L2[0],
         rank_dict_type(
-            &data.bwt[0],
+            bwt_type( &data.bwt[0] ),
             &data.occ[0],
             &data.count_table[0] ),
         ssa_context );

@@ -392,8 +392,6 @@ int driver(
         // increase the total reads counter
         n_reads += count;
 
-        delete read_data_host;
-
         log_verbose(stderr, "  %.1f K reads/s\n", 1.0e-3f * float(n_reads) / stats.global_time);
     }
 
@@ -729,9 +727,6 @@ int driver(
 
         // increase the total reads counter
         n_reads += count;
-
-        delete read_data_host1;
-        delete read_data_host2;
 
         log_verbose(stderr, "  %.1f K reads/s\n", 1.0e-3f * float(n_reads) / stats.global_time);
     }

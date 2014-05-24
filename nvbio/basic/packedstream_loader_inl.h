@@ -57,9 +57,10 @@ make_local_string(
     const StreamType in_storage = in_stream.stream();
 
     const uint32 SYMBOLS_PER_WORD = (sizeof(word_type)*8) / SYMBOL_SIZE_T;
-    const uint32 word_offset      = in_offset & (SYMBOLS_PER_WORD-1);
-    const uint32 begin_word       = in_offset / SYMBOLS_PER_WORD;
-    const uint32 end_word         = (in_offset + N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
+    const uint32 storage_offset   = in_offset + in_stream.index();
+    const uint32 word_offset      = storage_offset & (SYMBOLS_PER_WORD-1);
+    const uint32 begin_word       = storage_offset / SYMBOLS_PER_WORD;
+    const uint32 end_word         = (storage_offset + N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
     //NVBIO_CUDA_DEBUG_ASSERT( (end_word - begin_word) <= LMEM_STRING_WORDS, "make_local_string(): out of bounds!\n  (%u, %u)\n", begin_word, end_word );
 
     for (uint32 word = begin_word; word < end_word; ++word)
@@ -92,10 +93,11 @@ make_local_string(
     const StreamType in_storage = in_stream.stream();
 
     const uint32 SYMBOLS_PER_WORD = (sizeof(word_type)*8) / SYMBOL_SIZE_T;
-    const uint32 word_offset      = in_offset & (SYMBOLS_PER_WORD-1);
-    const uint32 base_word        = in_offset / SYMBOLS_PER_WORD;
-    const uint32 begin_word       = (in_offset + (rev_flag ? N - substring_range.y : substring_range.x)) / SYMBOLS_PER_WORD;
-    const uint32 end_word         = (in_offset + (rev_flag ? N - substring_range.x : substring_range.y) + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
+    const uint32 storage_offset   = in_offset + in_stream.index();
+    const uint32 word_offset      = storage_offset & (SYMBOLS_PER_WORD-1);
+    const uint32 base_word        = storage_offset / SYMBOLS_PER_WORD;
+    const uint32 begin_word       = (storage_offset + (rev_flag ? N - substring_range.y : substring_range.x)) / SYMBOLS_PER_WORD;
+    const uint32 end_word         = (storage_offset + (rev_flag ? N - substring_range.x : substring_range.y) + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
     //NVBIO_CUDA_DEBUG_ASSERT( (begin_word - base_word) < LMEM_STRING_WORDS && (end_word - base_word) <= LMEM_STRING_WORDS, "make_local_string(): out of bounds!\n  (%u, %u)\n", begin_word, end_word );
 
     for (uint32 word = begin_word; word < end_word; ++word)

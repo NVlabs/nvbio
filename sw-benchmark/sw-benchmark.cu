@@ -91,11 +91,6 @@ struct AlignmentStream
     typedef typename pattern_loader_type::iterator                                              pattern_iterator;
     typedef nvbio::vector_view<pattern_iterator>                                                pattern_string;
 
-    typedef nvbio::PackedStream<
-        storage_iterator,
-        uint8,
-        REF_BITS,
-        REF_BIG_ENDIAN>                                                                         uncached_text_iterator;
     typedef nvbio::PackedStringLoader<
         storage_iterator,
         REF_BITS,

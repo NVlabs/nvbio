@@ -78,7 +78,7 @@ void Aligner::best_approx(
     const io::LdgSequenceDataView   genome_view( plain_view( reference_data ) );
     const genome_access_type        genome_access( genome_view );
     const uint32                    genome_len = genome_access.bps();
-    const genome_iterator_type      genome_ptr = genome_access.sequence_stream();
+    const genome_storage_iterator   genome_ptr = genome_access.sequence_storage();
 
     // cast the reads to use proper iterators
     const read_view_type  reads_view1 = plain_view( read_data1 );
@@ -642,7 +642,7 @@ void Aligner::best_approx_score(
     const io::LdgSequenceDataView   genome_view( plain_view( reference_data ) );
     const genome_access_type        genome_access( genome_view );
     const uint32                    genome_len = genome_access.bps();
-    const genome_iterator_type      genome_ptr = genome_access.sequence_stream();
+    const genome_storage_iterator   genome_ptr = genome_access.sequence_storage();
 
     NVBIO_VAR_UNUSED thrust::device_vector<uint32>::iterator          loc_queue_iterator   = scoring_queues.hits.loc.begin();
                      thrust::device_vector<int32>::iterator           score_queue_iterator = scoring_queues.hits.score.begin();

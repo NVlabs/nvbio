@@ -61,20 +61,20 @@ struct BaseScoringPipelineState
     typedef Aligner::fmi_type                           fmi_type;
     typedef Aligner::rfmi_type                          rfmi_type;
     typedef Aligner::read_batch_type                    read_batch_type;
-    typedef Aligner::genome_iterator_type               genome_iterator;
+    typedef Aligner::genome_storage_iterator            genome_storage_iterator;
     typedef ScoringScheme                               scheme_type;
 
     BaseScoringPipelineState(
-        const uint32                _anchor,
-        const read_batch_type       _reads,
-        const read_batch_type       _reads_o,
-        const uint32                _genome_len,
-        const genome_iterator       _genome,
-        const fmi_type              _fmi,
-        const rfmi_type             _rfmi,
-        const ScoringScheme         _scoring_scheme,
-        const int32                 _score_limit,
-        Aligner&                    _aligner) :
+        const uint32                    _anchor,
+        const read_batch_type           _reads,
+        const read_batch_type           _reads_o,
+        const uint32                    _genome_len,
+        const genome_storage_iterator   _genome,
+        const fmi_type                  _fmi,
+        const rfmi_type                 _rfmi,
+        const ScoringScheme             _scoring_scheme,
+        const int32                     _score_limit,
+        Aligner&                        _aligner) :
         anchor                  ( _anchor ),
         reads                   ( _reads ),
         reads_o                 ( _reads_o ),
@@ -101,7 +101,7 @@ struct BaseScoringPipelineState
     const read_batch_type           reads_o;
 
     const uint32                    genome_length;
-    const genome_iterator           genome;
+    const genome_storage_iterator   genome;
 
     const fmi_type                  fmi;
     const rfmi_type                 rfmi;
@@ -133,20 +133,20 @@ struct BestApproxScoringPipelineState : public BaseScoringPipelineState<ScoringS
     typedef Aligner::fmi_type                           fmi_type;
     typedef Aligner::rfmi_type                          rfmi_type;
     typedef Aligner::read_batch_type                    read_batch_type;
-    typedef Aligner::genome_iterator_type               genome_iterator;
+    typedef Aligner::genome_storage_iterator            genome_storage_iterator;
     typedef ScoringScheme                               scheme_type;
 
     BestApproxScoringPipelineState(
-        const uint32                _anchor,
-        const read_batch_type       _reads,
-        const read_batch_type       _reads_o,
-        const uint32                _genome_len,
-        const genome_iterator       _genome,
-        const fmi_type              _fmi,
-        const rfmi_type             _rfmi,
-        const ScoringScheme         _scoring_scheme,
-        const int32                 _score_limit,
-        Aligner&                    _aligner) :
+        const uint32                    _anchor,
+        const read_batch_type           _reads,
+        const read_batch_type           _reads_o,
+        const uint32                    _genome_len,
+        const genome_storage_iterator   _genome,
+        const fmi_type                  _fmi,
+        const rfmi_type                 _rfmi,
+        const ScoringScheme             _scoring_scheme,
+        const int32                     _score_limit,
+        Aligner&                        _aligner) :
         base_type(
             _anchor,
             _reads,
@@ -181,20 +181,20 @@ struct AllMappingPipelineState : public BaseScoringPipelineState<ScoringScheme>
     typedef Aligner::fmi_type                           fmi_type;
     typedef Aligner::rfmi_type                          rfmi_type;
     typedef Aligner::read_batch_type                    read_batch_type;
-    typedef Aligner::genome_iterator_type               genome_iterator;
+    typedef Aligner::genome_storage_iterator            genome_storage_iterator;
     typedef ScoringScheme                               scheme_type;
 
     AllMappingPipelineState(
-        const uint32                _anchor,
-        const read_batch_type       _reads,
-        const read_batch_type       _reads_o,
-        const uint32                _genome_len,
-        const genome_iterator       _genome,
-        const fmi_type              _fmi,
-        const rfmi_type             _rfmi,
-        const ScoringScheme         _scoring_scheme,
-        const int32                 _score_limit,
-        Aligner&                    _aligner) :
+        const uint32                    _anchor,
+        const read_batch_type           _reads,
+        const read_batch_type           _reads_o,
+        const uint32                    _genome_len,
+        const genome_storage_iterator   _genome,
+        const fmi_type                  _fmi,
+        const rfmi_type                 _rfmi,
+        const ScoringScheme             _scoring_scheme,
+        const int32                     _score_limit,
+        Aligner&                        _aligner) :
         base_type(
             _anchor,
             _reads,
@@ -241,7 +241,7 @@ template <typename ScoringScheme>
 struct TracebackPipelineState
 {
     typedef Aligner::read_batch_type                    read_batch_type;
-    typedef Aligner::genome_iterator_type               genome_iterator;
+    typedef Aligner::genome_storage_iterator            genome_storage_iterator;
     typedef ScoringScheme                               scheme_type;
 
     /// constructor
@@ -252,12 +252,12 @@ struct TracebackPipelineState
     /// \param  _genome         the genome iterator
     /// \param  _aligner        the aligner object
     TracebackPipelineState(
-        const read_batch_type       _reads1,
-        const read_batch_type       _reads2,
-        const uint32                _genome_len,
-        const genome_iterator       _genome,
-        const ScoringScheme         _scoring_scheme,
-        Aligner&                    _aligner) :
+        const read_batch_type           _reads1,
+        const read_batch_type           _reads2,
+        const uint32                    _genome_len,
+        const genome_storage_iterator   _genome,
+        const ScoringScheme             _scoring_scheme,
+        Aligner&                        _aligner) :
         reads                   ( _reads1 ),
         reads_o                 ( _reads2 ),
         genome_length           ( _genome_len ),
@@ -279,7 +279,7 @@ struct TracebackPipelineState
     const read_batch_type                           reads_o;        ///< second mates
 
     const uint32                                    genome_length;  ///< genome length
-    const genome_iterator                           genome;         ///< genome iterator
+    const genome_storage_iterator                   genome;         ///< genome iterator
 
     const ScoringScheme                             scoring_scheme; ///< scoring scheme
 

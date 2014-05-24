@@ -181,7 +181,7 @@ void Aligner::score_all(
     const io::LdgSequenceDataView   genome_view( plain_view( reference_data ) );
     const genome_access_type        genome_access( genome_view );
     const uint32                    genome_len = genome_access.bps();
-    const genome_iterator_type      genome_ptr = genome_access.sequence_stream();
+    const genome_storage_iterator   genome_ptr = genome_access.sequence_storage();
 
     //
     // At this point we have a queue full of reads, each with an associated set of

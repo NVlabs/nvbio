@@ -89,8 +89,10 @@ struct Aligner
     typedef ReadsDef::read_view_type                                                                                         read_view_type;
     typedef ReadsDef::type                                                                                                   read_batch_type;
 
-    typedef io::SequenceDataAccess<DNA,io::LdgSequenceDataView>                                                              genome_access_type;
-    typedef genome_access_type::sequence_stream_type                                                                         genome_iterator_type;
+    typedef io::LdgSequenceDataView                                                                                          genome_view_type;
+    typedef io::SequenceDataAccess<DNA,genome_view_type>                                                                     genome_access_type;
+    typedef genome_access_type::sequence_storage_iterator                                                                    genome_storage_iterator;
+    typedef genome_access_type::sequence_stream_type                                                                         genome_stream_type;
 
 
     uint32                              BATCH_SIZE;

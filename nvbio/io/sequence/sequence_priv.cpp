@@ -243,7 +243,7 @@ SequenceDataHost* load_sequence_file(
     const QualityEncoding       qualities)
 {
     SequenceDataHost* ret = new SequenceDataHost;
-    if (load_sequence_file( alphabet, sequence_file_name, load_flags, qualities ) == false)
+    if (load_sequence_file( alphabet, ret, sequence_file_name, load_flags, qualities ) == false)
     {
         delete ret;
         return NULL;

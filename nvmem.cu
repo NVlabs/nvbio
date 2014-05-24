@@ -20,7 +20,7 @@
 #include <nvbio/basic/shared_pointer.h>
 #include <nvbio/basic/exceptions.h>
 #include <nvbio/basic/cuda/arch.h>          // cuda::check_error
-#include <nvbio/io/fmi.h>
+#include <nvbio/io/fmindex/fmindex.h>
 #include <nvbio/io/output/output_file.h>
 #include <nvbio/io/sequence/sequence.h>
 #ifdef _OPENMP
@@ -77,7 +77,7 @@ int run(int argc, char **argv)
     // open the output file
     pipeline.output = io::OutputFile::open(command_line_options.output_file_name,
             io::SINGLE_END,
-            io::BNT(*pipeline.mem.fmindex_data_host));
+            io::BNT(*pipeline.mem.reference_data_host));
 
     if (!pipeline.output)
     {

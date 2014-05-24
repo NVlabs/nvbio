@@ -24,47 +24,69 @@
 #include <nvbio/basic/numbers.h>
 #include <nvbio/basic/algorithms.h>
 #include <nvbio/basic/timer.h>
+#include <nvbio/io/sequence/sequence_mmap.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/iterator/transform_iterator.h>
 #include <thrust/sort.h>
 
 using namespace nvbio;
 
-static io::FMIndexData *load_genome(const char *name, uint32 flags)
+static io::SequenceData *load_genome(const char *name)
+{
+    if (command_line_options.genome_use_mmap)
+    {
+        // try loading via mmap first
+        io::SequenceDataMMAP *mmap_loader = io::map_sequence_file( name );
+        if (mmap_loader)
+            return mmap_loader;
+    }
+
+    // fall back to file name
+    io::SequenceDataHost *file_loader = io::load_sequence_file( DNA, name );
+    if (file_loader == NULL)
+    {
+        log_error(stderr, "could not load genome %s\n");
+        exit(1);
+    }
+    return file_loader;
+}
+
+static io::FMIndexData *load_index(const char *name, uint32 flags)
 {
     if (command_line_options.genome_use_mmap)
     {
         // try loading via mmap first
         io::FMIndexDataMMAP *mmap_loader = new io::FMIndexDataMMAP();
         if (mmap_loader->load(name))
-        {
             return mmap_loader;
-        }
 
         delete mmap_loader;
     }
 
     // fall back to file name
-    io::FMIndexDataRAM *file_loader = new io::FMIndexDataRAM();
+    io::FMIndexDataHost *file_loader = new io::FMIndexDataHost();
     if (!file_loader->load(name, flags))
     {
-        log_error(stderr, "could not load genome %s\n");
+        log_error(stderr, "could not load index %s\n");
         exit(1);
     }
-
     return file_loader;
 }
 
 void mem_init(struct pipeline_state *pipeline)
 {
+    // load the genome on the host
+    pipeline->mem.reference_data_host = load_genome(command_line_options.genome_file_name);
+    // copy genome data to device
+    pipeline->mem.reference_data_device = new io::SequenceDataDevice(*pipeline->mem.reference_data_host);
+
     // this specifies which portions of the FM index data to load
-    const uint32 fm_flags = io::FMIndexData::GENOME  |
-                            io::FMIndexData::FORWARD |
+    const uint32 fm_flags = io::FMIndexData::FORWARD |
                             io::FMIndexData::REVERSE |
                             io::FMIndexData::SA;
 
     // load the genome on the host
-    pipeline->mem.fmindex_data_host = load_genome(command_line_options.genome_file_name, fm_flags);
+    pipeline->mem.fmindex_data_host = load_index(command_line_options.genome_file_name, fm_flags);
     // copy genome data to device
     pipeline->mem.fmindex_data_device = new io::FMIndexDataDevice(*pipeline->mem.fmindex_data_host, fm_flags);
 

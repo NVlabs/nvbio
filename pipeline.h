@@ -19,7 +19,8 @@
 #pragma once
 
 #include <nvbio/io/output/output_file.h>
-#include <nvbio/io/fmi.h>
+#include <nvbio/io/sequence/sequence.h>
+#include <nvbio/io/fmindex/fmindex.h>
 #include <nvbio/fmindex/mem.h>
 
 #include "mem-search.h"
@@ -56,13 +57,15 @@ struct pipeline_stats
 ///
 struct mem_state
 {
-    typedef nvbio::io::FMIndexDataDevice::stream_type            genome_type;
-    typedef nvbio::io::FMIndexDataDevice::fm_index_type          fm_index_type;
-    typedef nvbio::MEMFilterDevice<fm_index_type>                mem_filter_type;
-    typedef mem_filter_type::mem_type                            mem_type;
+    typedef nvbio::io::SequenceDataAccess<DNA>::sequence_stream_type    genome_type;
+    typedef nvbio::io::FMIndexDataDevice::fm_index_type                 fm_index_type;
+    typedef nvbio::MEMFilterDevice<fm_index_type>                       mem_filter_type;
+    typedef mem_filter_type::mem_type                                   mem_type;
 
-    nvbio::io::FMIndexData       *fmindex_data_host;
-    nvbio::io::FMIndexDataDevice *fmindex_data_device;
+    nvbio::io::SequenceData         *reference_data_host;
+    nvbio::io::SequenceDataDevice   *reference_data_device;
+    nvbio::io::FMIndexData          *fmindex_data_host;
+    nvbio::io::FMIndexDataDevice    *fmindex_data_device;
 
     fm_index_type                    f_index;           ///< the forward FM-index object
     fm_index_type                    r_index;           ///< the reverse FM-index object

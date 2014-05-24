@@ -154,22 +154,23 @@ public:
 /// calls.
 struct FMIndexData : public FMIndexDataCore
 {
-    typedef const uint4*                                        bwt_occ_type;
-    typedef deinterleaved_iterator<2,0,bwt_occ_type>            bwt_type;
-    typedef deinterleaved_iterator<2,1,bwt_occ_type>            occ_type;
+    typedef const uint4*                                            bwt_occ_type;
+    typedef deinterleaved_iterator<2,0,bwt_occ_type>                bwt_type;
+    typedef deinterleaved_iterator<2,1,bwt_occ_type>                occ_type;
 
-    typedef const uint32*                                       count_table_type;
-    typedef SSA_index_multiple<SA_INT>                          ssa_storage_type;
+    typedef const uint32*                                           count_table_type;
+    typedef SSA_index_multiple<SA_INT>                              ssa_storage_type;
+    typedef PackedStream<bwt_type,uint8,BWT_BITS,BWT_BIG_ENDIAN>    bwt_stream_type;
 
     typedef rank_dictionary<
         BWT_BITS,
         FMIndexDataCore::OCC_INT,
-        PackedStream<bwt_type,uint8,BWT_BITS,BWT_BIG_ENDIAN>,
+        bwt_stream_type,
         occ_type,
-        count_table_type>                                                       rank_dict_type;
+        count_table_type>                                            rank_dict_type;
 
-    typedef fm_index<rank_dict_type, ssa_type>                                  fm_index_type;
-    typedef fm_index<rank_dict_type, null_type>                         partial_fm_index_type;
+    typedef fm_index<rank_dict_type, ssa_type>                       fm_index_type;
+    typedef fm_index<rank_dict_type, null_type>              partial_fm_index_type;
 
              FMIndexData();                                                 ///< empty constructor
     virtual ~FMIndexData() {}                                               ///< virtual destructor
@@ -290,38 +291,33 @@ struct FMIndexDataMMAP : public FMIndexData
 ///
 struct FMIndexDataDevice : public FMIndexData
 {
-    typedef SSA_index_multiple_device<SA_INT>                   ssa_storage_type;
-
     static const uint32 FORWARD = 0x02;
     static const uint32 REVERSE = 0x04;
     static const uint32 SA      = 0x10;
 
     // FM-index type interfaces
     //
-    typedef cuda::ldg_pointer<uint4>                            bwt_occ_type;
-    typedef deinterleaved_iterator<2,0,bwt_occ_type>            bwt_type;
-    typedef deinterleaved_iterator<2,1,bwt_occ_type>            occ_type;
-    typedef cuda::ldg_pointer<uint32>                           count_table_type;
-    typedef cuda::ldg_pointer<uint32>                           ssa_ldg_type;
+    typedef cuda::ldg_pointer<uint4>                                bwt_occ_type;
+    typedef deinterleaved_iterator<2,0,bwt_occ_type>                bwt_type;
+    typedef deinterleaved_iterator<2,1,bwt_occ_type>                occ_type;
+    typedef cuda::ldg_pointer<uint32>                               count_table_type;
+    typedef cuda::ldg_pointer<uint32>                               ssa_ldg_type;
+    typedef SSA_index_multiple_device<SA_INT>                       ssa_storage_type;
+    typedef PackedStream<bwt_type,uint8,BWT_BITS,BWT_BIG_ENDIAN>    bwt_stream_type;
+
+    typedef SSA_index_multiple_context<
+        FMIndexDataCore::SA_INT,
+        ssa_ldg_type>                                               ssa_type;
 
     typedef rank_dictionary<
         BWT_BITS,
         FMIndexDataCore::OCC_INT,
-        PackedStream<bwt_type,uint8,BWT_BITS,BWT_BIG_ENDIAN>,
+        bwt_stream_type,
         occ_type,
-        count_table_type>                                       rank_dict_type;
+        count_table_type>                                           rank_dict_type;
 
-    typedef SSA_index_multiple_context<
-        FMIndexDataCore::SA_INT,
-        ssa_ldg_type>                                           ssa_type;
-
-    typedef fm_index<
-        rank_dict_type,
-        ssa_type>                                               fm_index_type;
-
-    typedef fm_index<
-        rank_dict_type,
-        null_type>                                              partial_fm_index_type;
+    typedef fm_index<rank_dict_type,ssa_type>                       fm_index_type;
+    typedef fm_index<rank_dict_type,null_type>              partial_fm_index_type;
 
     /// load a host-memory FM-index in device memory
     ///

@@ -555,9 +555,9 @@ int sufsort_test(int argc, char* argv[])
         }
 
         log_info(stderr, "  testing correctness... started\n");
-        thrust::host_vector<uint32> h_bwt_storage( d_bwt_storage );
-        const const_packed_stream_type  h_packed_bwt( nvbio::plain_view( h_bwt_storage ) );
-        const io::FMIndexData::bwt_type h_ref_bwt( h_fmi.bwt_iterator() );
+        thrust::host_vector<uint32>            h_bwt_storage( d_bwt_storage );
+        const const_packed_stream_type         h_packed_bwt( nvbio::plain_view( h_bwt_storage ) );
+        const io::FMIndexData::bwt_stream_type h_ref_bwt( h_fmi.bwt_iterator() );
         for (uint32 i = 0; i < N_symbols; ++i)
         {
             const uint8 c0 = h_ref_bwt[i];

@@ -307,7 +307,7 @@ struct AlignmentStreamBase
         strings->quals   = strings->pattern.qualities();
         strings->text    = text_string(
             context->genome_end - context->genome_begin,
-            strings->text_loader.load( m_pipeline.genome, context->genome_begin, context->genome_end - context->genome_begin ) );
+            strings->text_loader.load( m_pipeline.genome + context->genome_begin, context->genome_end - context->genome_begin ) );
     }
 
     PipelineType    m_pipeline;     ///< the pipeline object

@@ -48,7 +48,6 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 typename PackedStream<const_cached_iterator<const W*>,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>::iterator
 make_local_string(
     const PackedStream<StreamType,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>    in_stream,
-    const uint32                                                            in_offset,
     const uint32                                                            N,
     W*                                                                      lmem)
 {
@@ -57,7 +56,7 @@ make_local_string(
     const StreamType in_storage = in_stream.stream();
 
     const uint32 SYMBOLS_PER_WORD = (sizeof(word_type)*8) / SYMBOL_SIZE_T;
-    const uint32 storage_offset   = in_offset + in_stream.index();
+    const uint32 storage_offset   = in_stream.index();
     const uint32 word_offset      = storage_offset & (SYMBOLS_PER_WORD-1);
     const uint32 begin_word       = storage_offset / SYMBOLS_PER_WORD;
     const uint32 end_word         = (storage_offset + N + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
@@ -82,7 +81,6 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 typename PackedStream<const_cached_iterator<const W*>,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>::iterator
 make_local_string(
     const PackedStream<StreamType,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T>    in_stream,
-    const uint32                                                            in_offset,
     const uint32                                                            N,
     const uint2                                                             substring_range,
     const uint32                                                            rev_flag,
@@ -93,7 +91,7 @@ make_local_string(
     const StreamType in_storage = in_stream.stream();
 
     const uint32 SYMBOLS_PER_WORD = (sizeof(word_type)*8) / SYMBOL_SIZE_T;
-    const uint32 storage_offset   = in_offset + in_stream.index();
+    const uint32 storage_offset   = in_stream.index();
     const uint32 word_offset      = storage_offset & (SYMBOLS_PER_WORD-1);
     const uint32 base_word        = storage_offset / SYMBOLS_PER_WORD;
     const uint32 begin_word       = (storage_offset + (rev_flag ? N - substring_range.y : substring_range.x)) / SYMBOLS_PER_WORD;
@@ -118,9 +116,9 @@ make_local_string(
 template <typename StorageIterator, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, uint32 CACHE_SIZE>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 typename PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,lmem_cache_tag<CACHE_SIZE> >::iterator
-PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,lmem_cache_tag<CACHE_SIZE> >::load(const input_stream stream, const uint32 offset, const uint32 length)
+PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,lmem_cache_tag<CACHE_SIZE> >::load(const input_stream stream, const uint32 length)
 {
-    return priv::make_local_string( stream, offset, length, lmem );
+    return priv::make_local_string( stream, length, lmem );
 }
 
 template <typename StorageIterator, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, uint32 CACHE_SIZE>
@@ -128,12 +126,11 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 typename PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,lmem_cache_tag<CACHE_SIZE> >::iterator
 PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,lmem_cache_tag<CACHE_SIZE> >::load(
     const input_stream      stream,
-    const uint32            offset,
     const uint32            length,
     const uint2             substring_range,
     const uint32            rev_flag)
 {
-    return priv::make_local_string( stream, offset, length, substring_range, rev_flag, lmem );
+    return priv::make_local_string( stream, length, substring_range, rev_flag, lmem );
 }
 
 //
@@ -143,9 +140,9 @@ PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,lmem_cache_tag<CAC
 template <typename StorageIterator, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 typename PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,uncached_tag>::iterator
-PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,uncached_tag>::load(const input_stream stream, const uint32 offset, const uint32 length)
+PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,uncached_tag>::load(const input_stream stream, const uint32 length)
 {
-    return stream + offset;
+    return stream;
 }
 
 template <typename StorageIterator, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T>
@@ -153,12 +150,11 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 typename PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,uncached_tag>::iterator
 PackedStringLoader<StorageIterator,SYMBOL_SIZE_T,BIG_ENDIAN_T,uncached_tag>::load(
     const input_stream      stream,
-    const uint32            offset,
     const uint32            length,
     const uint2             substring_range,
     const uint32            rev_flag)
 {
-    return stream + offset;
+    return stream;
 }
 
 } // namespace nvbio

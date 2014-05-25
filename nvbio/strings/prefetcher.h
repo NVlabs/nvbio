@@ -110,7 +110,6 @@ struct StringPrefetcher<
         return string_type(
             string.size(),
             loader.load( string.base(),
-                         0u,
                          string.size() ) );
     }
 
@@ -128,7 +127,6 @@ struct StringPrefetcher<
         return string_type(
             string.size(),
             loader.load( string.base(),
-                         0u,
                          string.size(),
                          range,
                          false ) );
@@ -166,8 +164,7 @@ struct StringPrefetcher<
     {
         return string_type(
             string.size(),
-            loader.load( string.m_string,
-                         string.range().x,
+            loader.load( string.m_string + string.range().x,
                          string.size() ) );
     }
 
@@ -184,8 +181,7 @@ struct StringPrefetcher<
     {
         return string_type(
             string.size(),
-            loader.load( string.m_string,
-                         string.range().x,
+            loader.load( string.m_string + string.range().x,
                          string.size(),
                          range,
                          false ) );
@@ -223,8 +219,7 @@ struct StringPrefetcher<
     {
         return string_type(
             string.size(),
-            loader.load( string.m_string.base(),
-                         string.range().x,
+            loader.load( string.m_string.base() + string.range().x,
                          string.size() ) );
     }
 
@@ -241,8 +236,7 @@ struct StringPrefetcher<
     {
         return string_type(
             string.size(),
-            loader.load( string.m_string.base(),
-                         string.range().x,
+            loader.load( string.m_string.base() + string.range().x,
                          string.size(),
                          range,
                          false ) );

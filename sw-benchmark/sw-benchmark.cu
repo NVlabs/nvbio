@@ -188,13 +188,12 @@ struct AlignmentStream
         strings->text = text_string( m_text_len,
             strings->text_loader.load(
                 m_text,
-                0u,
                 m_text_len,
                 make_uint2( window_begin, window_end ),
                 false ) );
 
         strings->pattern = pattern_string( length,
-            strings->pattern_loader.load( m_patterns, offset, length ) );
+            strings->pattern_loader.load( m_patterns + offset, length ) );
     }
 
     // handle the output
@@ -258,10 +257,10 @@ __global__ void alignment_test_kernel(
     const uint32 pattern_len = offsets[tid+1] - pattern_off;
 
     pattern_loader_type pattern_loader;
-    pattern_string pattern = pattern_string( pattern_len, pattern_loader.load( uncached_pattern_iterator( pattern_ptr ), pattern_off, pattern_len ) );
+    pattern_string pattern = pattern_string( pattern_len, pattern_loader.load( uncached_pattern_iterator( pattern_ptr ) + pattern_off, pattern_len ) );
 
     text_loader_type text_loader;
-    text_string text = text_string( text_len, text_loader.load( uncached_text_iterator( text_ptr ), 0, text_len ) );
+    text_string text = text_string( text_len, text_loader.load( uncached_text_iterator( text_ptr ), text_len ) );
 
     aln::BestSink<int32> sink;
 

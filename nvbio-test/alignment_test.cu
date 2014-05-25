@@ -147,13 +147,12 @@ struct AlignmentStream
     {
         strings->pattern = pattern_string( M,
             strings->pattern_loader.load(
-                m_patterns,
-                i * M,
+                m_patterns + i * M,
                 M,
                 make_uint2( window_begin, window_end ),
                 false ) );
 
-        strings->text = text_string( N, strings->text_loader.load( m_text, i * N, N ) );
+        strings->text = text_string( N, strings->text_loader.load( m_text + i * N, N ) );
     }
 
     // handle the output
@@ -194,10 +193,10 @@ __global__ void alignment_test_kernel(const aligner_type aligner, const uint32 N
     typedef nvbio::vector_view<text_iterator>                                       text_string;
 
     pattern_loader_type pattern_loader;
-    pattern_string pattern = pattern_string( M, pattern_loader.load( uncached_pattern_iterator( strptr ), tid * M, tid < N_probs ? M : 0u ) );
+    pattern_string pattern = pattern_string( M, pattern_loader.load( uncached_pattern_iterator( strptr ) + tid * M, tid < N_probs ? M : 0u ) );
 
     text_loader_type text_loader;
-    text_string text = text_string( N, text_loader.load( uncached_text_iterator( refptr ), tid * N, tid < N_probs ? N : 0u ) );
+    text_string text = text_string( N, text_loader.load( uncached_text_iterator( refptr ) + tid * N, tid < N_probs ? N : 0u ) );
 
     aln::BestSink<int32> sink;
 

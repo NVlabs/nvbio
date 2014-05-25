@@ -42,7 +42,7 @@ template <SequenceAlphabet SEQUENCE_ALPHABET>
 struct SequenceDataTraits
 {
     static const uint32 SEQUENCE_BITS             = SequenceAlphabetTraits<SEQUENCE_ALPHABET>::SYMBOL_SIZE;     ///< symbol size for reads
-    static const bool   SEQUENCE_BIG_ENDIAN       = false;                                                      ///< big endian?
+    static const bool   SEQUENCE_BIG_ENDIAN       = true;                                                       ///< big endian?
     static const uint32 SEQUENCE_SYMBOLS_PER_WORD = (8*sizeof(uint32))/SEQUENCE_BITS;                           ///< symbols per word
 };
 

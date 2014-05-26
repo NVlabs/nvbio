@@ -68,7 +68,7 @@
 ///
 /// <a href="https://github.com/NVlabs/nvbio"><img src="download-icon.png" style="position:relative; bottom:-10px; border:0px;"/></a>
 /// &nbsp;&nbsp;
-/// <a href="https://github.com/NVlabs/nvbio">Download NVBIO 0.9.7</a>
+/// <a href="https://github.com/NVlabs/nvbio">Download NVBIO 0.9.9</a>
 /// </div>
 ///\endhtmlonly
 ///
@@ -84,6 +84,21 @@
 /// - \subpage nvsetbwt_page - a tool to perform BWT-based read indexing
 ///
 /// \section RecentNew Recent News
+///\par
+/// <table>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">16/05/2014 \n NVBIO 0.9.9</td>
+/// <td style="vertical-align:text-top;" width="90%">
+/// - <b>New Features:</b> \n
+///   * Added a new \ref sequence_io_page "Sequence IO" module for managing all kinds of sequence data;
+///		unlike the old io::ReadData, the containers in this module support various types
+///		of alphabet encodings, and can be used both for loading reads as well as for reading or mapping
+///		large reference data.
+///   * Rewrote the \ref fmindex_io_page "FM-Index IO" module; the new io::FMIndexData offers more uniform
+///		interfaces, and unlike its predecessor no longer holds any reference data, which can now be separately
+///		loaded through the new \ref sequence_io_page "Sequence IO" module.
+///   * Rewrote the \ref BatchScheduler "Batch Alignment Schedulers", adding support for a new OpenMP host backend.
+/// </td></tr>
+/// </table>
 ///\par
 /// <table>
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">16/05/2014 \n NVBIO 0.9.7</td>

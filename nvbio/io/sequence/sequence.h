@@ -88,13 +88,20 @@ namespace io {
 ///\code
 /// typedef io::SequenceDataAccess<DNA>::sequence_string_set_type reads_string_set_type;
 ///
+/// // load a SequenceData object
 /// SharedPointer<io::SequenceDataHost> reads = io::load_sequence_data( DNA, "reads.fastq" );
+///
+/// // access it specifying the alphabet at compile-time
 /// io::SequenceDataAccess<DNA> reads_access( reads.get() );
 ///
+/// // fetch the decoding string-set
 /// const reads_string_set_type reads_string_set = reads_access.sequence_string_set();
 /// for (uint32 i = 0; i < n; ++i)
 /// {
+///     // fetch the i-th sequence
 ///     const reads_string_set_type::string_type read = reads_string_set[i];
+///
+///     // and do something with it...
 ///     printf("read %u contains %u bps\n", i, read.length() );
 /// }
 ///\endcode
@@ -104,12 +111,17 @@ namespace io {
 /// Sometimes it is convenient to stream through sequences in batches.
 /// SequenceDataStream provides an abstract interface for doing just this:
 ///\code
-/// io::SequenceDataHost reads;
+/// // open a sequence file
 /// SharedPointer<io::SequenceDataStream> reads_file = io::open_sequence_file( "reads.fastq" );
 ///
-/// const uint32 reads_per_batch = 128*1024;
-/// const uint32   bps_per_batch = 128*1024*100;
-/// while (io::next( DNA_N, &reads, reads_file.get(), reads_per_batch, bps_per_batch )
+/// // instantiate a host SequenceData object
+/// io::SequenceDataHost reads;
+///
+/// // declare how much sequence data we want to load in each batch
+/// const uint32  seqs_per_batch = 128*1024;        // the maximum number of sequences
+/// const uint32   bps_per_batch = 128*1024*100;    // the maximum number of base pairs
+///
+/// while (io::next( DNA_N, &reads, reads_file.get(), seqs_per_batch, bps_per_batch )
 /// {
 ///     // copy the loaded batch on the device
 ///     io::SequenceDataDevice device_reads( reads );

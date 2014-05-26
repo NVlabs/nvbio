@@ -151,8 +151,8 @@ static __device__ __forceinline__ unsigned int vaddus2 (unsigned int a, unsigned
          "}"
          : "=r"(alo), "=r"(blo), "=r"(ahi), "=r"(bhi) 
          : "r"(a), "r"(b));
-    rlo = min (alo + blo, 65535);
-    rhi = min (ahi + bhi, 65535);
+    rlo = ::min (alo + blo, 65535);
+    rhi = ::min (ahi + bhi, 65535);
     r = (rhi << 16) + rlo;
 #endif /* __CUDA_ARCH__ >= 300 */
     return r;
@@ -365,12 +365,12 @@ static __device__ __forceinline__ unsigned int vabsdiffu2(unsigned int a, unsign
     unsigned int t, u, v;
     s = a & 0x0000ffff; // extract low halfword
     r = b & 0x0000ffff; // extract low halfword
-    u = max (r, s);     // maximum of low halfwords
-    v = min (r, s);     // minimum of low halfwords
+    u = ::max (r, s);     // maximum of low halfwords
+    v = ::min (r, s);     // minimum of low halfwords
     s = a & 0xffff0000; // extract high halfword
     r = b & 0xffff0000; // extract high halfword
-    t = max (r, s);     // maximum of high halfwords
-    s = min (r, s);     // minimum of high halfwords
+    t = ::max (r, s);     // maximum of high halfwords
+    s = ::min (r, s);     // minimum of high halfwords
     r = u | t;          // maximum of both halfwords
     s = v | s;          // minimum of both halfwords
     r = r - s;          // |a - b| = max(a,b) - min(a,b);
@@ -388,10 +388,10 @@ static __device__ __forceinline__ unsigned int vmaxu2(unsigned int a, unsigned i
     unsigned int t, u;
     r = a & 0x0000ffff; // extract low halfword
     s = b & 0x0000ffff; // extract low halfword
-    t = max (r, s);     // maximum of low halfwords
+    t = ::max (r, s);     // maximum of low halfwords
     r = a & 0xffff0000; // extract high halfword
     s = b & 0xffff0000; // extract high halfword
-    u = max (r, s);     // maximum of high halfwords
+    u = ::max (r, s);     // maximum of high halfwords
     r = t | u;          // combine halfword maximums
 #endif /* __CUDA_ARCH__ >= 300 */
     return r;           // halfword-wise unsigned maximum
@@ -407,10 +407,10 @@ static __device__ __forceinline__ unsigned int vminu2(unsigned int a, unsigned i
     unsigned int t, u;
     r = a & 0x0000ffff; // extract low halfword
     s = b & 0x0000ffff; // extract low halfword
-    t = min (r, s);     // minimum of low halfwords
+    t = ::min (r, s);     // minimum of low halfwords
     r = a & 0xffff0000; // extract high halfword
     s = b & 0xffff0000; // extract high halfword
-    u = min (r, s);     // minimum of high halfwords
+    u = ::min (r, s);     // minimum of high halfwords
     r = t | u;          // combine halfword minimums
 #endif /* __CUDA_ARCH__ >= 300 */
     return r;           // halfword-wise unsigned minimum

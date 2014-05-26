@@ -96,7 +96,7 @@ namespace io {
 /// SharedPointer<io::SequenceDataHost> genome = io::load_sequence_data( DNA, "drosophila" );
 ///
 /// // access it specifying the alphabet at compile-time
-/// io::SequenceDataAccess<DNA> genome_access( genome.get() );
+/// const io::SequenceDataAccess<DNA> genome_access( genome.get() );
 ///
 /// // fetch the decoding string-set
 /// const sequence_string_set_type genome_string_set = genome_access.sequence_string_set();
@@ -128,7 +128,7 @@ namespace io {
 /// while (io::next( DNA_N, &reads, reads_file.get(), seqs_per_batch, bps_per_batch ))
 /// {
 ///     // copy the loaded batch on the device
-///     io::SequenceDataDevice device_reads( reads );
+///     const io::SequenceDataDevice device_reads( reads );
 ///     ...
 /// }
 ///\endcode

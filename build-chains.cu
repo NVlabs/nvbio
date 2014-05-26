@@ -58,6 +58,7 @@ struct chain
         id( _id ),
         ref( seed.index_pos() ),
         span_beg( seed.span().x ),
+        last_ref( seed.index_pos() ),
         last_span( seed.span() )
     {}
 

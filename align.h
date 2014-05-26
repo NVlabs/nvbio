@@ -28,4 +28,7 @@ void align_init(struct pipeline_state *pipeline, const nvbio::io::SequenceDataDe
 ///
 /// \return     the number of remaining active reads to align
 ///
-nvbio::uint32 align_short(struct pipeline_state *pipeline, const nvbio::io::SequenceDataDevice *batch);
+nvbio::uint32 align(
+    struct pipeline_state               *pipeline,
+    const nvbio::io::SequenceDataHost   *reads_host,
+    const nvbio::io::SequenceDataDevice *reads_device);

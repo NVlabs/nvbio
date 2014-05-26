@@ -88,7 +88,7 @@ int run(int argc, char **argv)
     Timer  global_timer;
     Timer  timer;
 
-    io::SequenceDataHost batch;
+    io::SequenceDataHost host_reads;
 
     // go!
     for(;;)
@@ -97,54 +97,54 @@ int run(int argc, char **argv)
         timer.start();
 
         // read the next batch
-        if (io::next( DNA_N, &batch, input.get(), command_line_options.batch_size, uint32(-1) ) == 0)
+        if (io::next( DNA_N, &host_reads, input.get(), command_line_options.batch_size, uint32(-1) ) == 0)
             break;  // EOF
 
-        log_info(stderr, "processing reads [%llu,%llu)\n", pipeline.stats.n_reads, pipeline.stats.n_reads + batch.size()/2);
+        log_info(stderr, "processing reads [%llu,%llu)\n", pipeline.stats.n_reads, pipeline.stats.n_reads + host_reads.size()/2);
 
         // copy batch to the device
-        const io::SequenceDataDevice device_batch( batch );
+        const io::SequenceDataDevice device_reads( host_reads );
 
         timer.stop();
         pipeline.stats.io_time += timer.seconds();
 
         // search for MEMs
-        mem_search(&pipeline, &device_batch);
+        mem_search(&pipeline, &device_reads);
 
         // now start a loop where we break the read batch into smaller chunks for
         // which we can locate all MEMs and build all chains
-        for (uint32 read_begin = 0; read_begin < batch.size(); read_begin = pipeline.chunk.read_end)
+        for (uint32 read_begin = 0; read_begin < host_reads.size(); read_begin = pipeline.chunk.read_end)
         {
             // determine the next chunk of reads to process
-            fit_read_chunk(&pipeline, &device_batch, read_begin);
+            fit_read_chunk(&pipeline, &device_reads, read_begin);
 
             log_verbose(stderr, "processing chunk\n");
             log_verbose(stderr, "  reads : [%u,%u)\n", pipeline.chunk.read_begin, pipeline.chunk.read_end);
             log_verbose(stderr, "  mems  : [%u,%u)\n", pipeline.chunk.mem_begin,  pipeline.chunk.mem_end);
 
             // locate all MEMs in the current chunk
-            mem_locate(&pipeline, &device_batch);
+            mem_locate(&pipeline, &device_reads);
 
             // build the chains
-            build_chains(&pipeline, &device_batch);
+            build_chains(&pipeline, &device_reads);
 
             // filter the chains
-            filter_chains(&pipeline, &device_batch);
+            filter_chains(&pipeline, &device_reads);
 
             log_verbose(stderr, "  chains: %u\n", pipeline.chn.n_chains);
 
             // initialize the alignment sub-pipeline
-            align_init(&pipeline, &device_batch);
+            align_init(&pipeline, &device_reads);
 
             // and loop until there's work to do
-            while (align_short(&pipeline, &device_batch))
+            while (align(&pipeline, &host_reads, &device_reads))
             {
                 log_verbose(stderr, "\r    active: %u", pipeline.aln.n_active);
             }
             log_verbose_cont(stderr, "\n");
         }
         global_timer.stop();
-        pipeline.stats.n_reads += batch.size()/2;
+        pipeline.stats.n_reads += host_reads.size()/2;
         pipeline.stats.time    += global_timer.seconds();
 
         log_stats(stderr, "  time: %5.1fs (%.1f K reads/s)\n", pipeline.stats.time, 1.0e-3f * float(pipeline.stats.n_reads)/pipeline.stats.time);

@@ -21,6 +21,7 @@
 #include <nvbio/io/output/output_file.h>
 #include <nvbio/io/sequence/sequence.h>
 #include <nvbio/io/fmindex/fmindex.h>
+#include <nvbio/alignment/sink.h>
 #include <nvbio/fmindex/mem.h>
 
 #include "mem-search.h"
@@ -210,6 +211,8 @@ struct read_chunk
 template <typename system_tag>
 struct alignment_state
 {
+    typedef aln::Best2Sink<int16> sink_type;
+
     template <typename other_tag>
     alignment_state& operator=(const alignment_state<other_tag>& other);
 
@@ -219,7 +222,8 @@ struct alignment_state
     nvbio::vector<system_tag,uint2>      query_spans;           ///< the query chain spans
     nvbio::vector<system_tag,uint2>      ref_spans;             ///< the reference chain spans
     nvbio::vector<system_tag,uint32>     temp_queue;            ///< a temporary queue
-    nvbio::vector<system_tag,uint32>     stencil;               ///< a temporary stencil vector
+    nvbio::vector<system_tag,uint8>      stencil;                   ///< a temporary stencil vector
+    nvbio::vector<system_tag,sink_type>  sinks;  ///< a temporary stencil vector
 };
 
 /// a flag to identify the system in use

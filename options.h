@@ -48,6 +48,7 @@ struct runtime_options
     float  mask_level;
     float  chain_drop_ratio;
 
+    NVBIO_HOST_DEVICE
     runtime_options()
     {
         genome_file_name = NULL;

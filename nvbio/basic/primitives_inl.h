@@ -175,7 +175,7 @@ typename std::iterator_traits<InputIterator>::value_type reduce(
     BinaryOp                            op,
     nvbio::vector<host_tag,uint8>&      temp_storage)
 {
-    return thrust::reduce( in, in + n, op );
+    return thrust::reduce( in, in + n, 0u, op );
 }
 
 // host-wide inclusive scan

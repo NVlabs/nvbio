@@ -69,40 +69,43 @@ namespace io {
 ///
 ///\section SequenceDataSection Sequence Data
 ///\par
-/// The SequenceData class is the base class for all containers holding storage of sequence data, which
-/// is represented as a packed string-set of symbols, accompanied by corresponding string-sets of sequence quality scores
-/// and sequence names.
+/// The SequenceData class is the base class for all containers holding storage of sequence data.
 /// These containers are:
 ///\par
 /// - io::SequenceDataHost
 /// - io::SequenceDataDevice
 /// - io::SequenceDataMMAP
 ///\par
-/// The packed sequences can be encoded with a user-specified \ref SequenceAlphabet "alphabet".
+/// Each SequenceData object might contain several distinct sequences, which are represented
+/// as a packed string-set of sequence symbols accompanied by corresponding string-sets of
+/// sequence quality scores and sequence names.
+/// Internally, all the string-sets are stored as \ref ConcatenatedStringSet's, with an index
+/// specifying the position of the i-th sequence in the concatenated arrays.
+/// The packed sequences can in turn be encoded with a user-specified \ref SequenceAlphabet "alphabet".
 /// However, SequenceData has only runtime knowledge of the alphabet encoding, and hence does not provide
-/// any method to perform decoding - rather, it only exposes methods to \ref SequenceDataView "plain-views"
+/// any method to perform decoding - rather, it only exposes methods to obtain \ref SequenceDataView "plain-views"
 /// of the underlying sequence storage.
 /// However, by providing compile-time knowledge of the alphabet, one can construct a SequenceDataAccess wrapper
-/// around any SequenceData (or SequenceDataView) object, and access the decoded string-sets transparently.
+/// around any SequenceData (or SequenceDataView) object and access the decoded string-sets transparently.
 /// The following example shows how to load a sequence file and access it at compile-time:
 ///\code
-/// typedef io::SequenceDataAccess<DNA>::sequence_string_set_type reads_string_set_type;
+/// typedef io::SequenceDataAccess<DNA>::sequence_string_set_type sequence_string_set_type;
 ///
 /// // load a SequenceData object
-/// SharedPointer<io::SequenceDataHost> reads = io::load_sequence_data( DNA, "reads.fastq" );
+/// SharedPointer<io::SequenceDataHost> genome = io::load_sequence_data( DNA, "drosophila" );
 ///
 /// // access it specifying the alphabet at compile-time
-/// io::SequenceDataAccess<DNA> reads_access( reads.get() );
+/// io::SequenceDataAccess<DNA> genome_access( genome.get() );
 ///
 /// // fetch the decoding string-set
-/// const reads_string_set_type reads_string_set = reads_access.sequence_string_set();
+/// const sequence_string_set_type genome_string_set = genome_access.sequence_string_set();
 /// for (uint32 i = 0; i < n; ++i)
 /// {
 ///     // fetch the i-th sequence
-///     const reads_string_set_type::string_type read = reads_string_set[i];
+///     const sequence_string_set_type::string_type gene = genome_string_set[i];
 ///
 ///     // and do something with it...
-///     printf("read %u contains %u bps\n", i, read.length() );
+///     printf("gene %u contains %u bps\n", i, gene.length() );
 /// }
 ///\endcode
 ///
@@ -121,7 +124,7 @@ namespace io {
 /// const uint32  seqs_per_batch = 128*1024;        // the maximum number of sequences
 /// const uint32   bps_per_batch = 128*1024*100;    // the maximum number of base pairs
 ///
-/// while (io::next( DNA_N, &reads, reads_file.get(), seqs_per_batch, bps_per_batch )
+/// while (io::next( DNA_N, &reads, reads_file.get(), seqs_per_batch, bps_per_batch ))
 /// {
 ///     // copy the loaded batch on the device
 ///     io::SequenceDataDevice device_reads( reads );

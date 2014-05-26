@@ -40,6 +40,7 @@ namespace io {
 
 ///
 /// \page sequence_io_page Sequence Data Input
+///\par
 /// This module contains a series of classes to load and represent read streams.
 /// The idea is that a read stream is an object implementing a simple interface, \ref SequenceDataStream,
 /// which allows to stream through a file or other set of reads in batches, which are represented in memory
@@ -47,19 +48,26 @@ namespace io {
 /// There are several kinds of SequenceData containers to keep the reads in the host RAM, or in CUDA device memory.
 /// Additionally, the same container can be viewed with different SequenceDataView's, in order to allow reinterpreting
 /// the base arrays as arrays of different types, e.g. to perform vector loads or use LDG.
-///
+///\par
 /// Specifically, it exposes the following core classes and methods:
-///
-/// - SequenceData
-/// - SequenceDataStream
-/// - open_sequence_file()
-///
+///\par
+/// - io::SequenceData
+/// - io::SequenceDataHost
+/// - io::SequenceDataDevice
+/// - io::SequenceDataMMAP
+/// - io::SequenceDataStream
+/// - io::open_sequence_file()
+/// - io::load_sequence_file()
+/// - io::map_sequence_file()
+///\par
 /// as well as some additional accessors:
-///
-/// - SequenceDataViewCore
-/// - SequenceDataView
-/// - ConstSequenceDataView
-/// - SequenceDataAccess
+///\par
+/// - io::SequenceDataViewCore
+/// - io::SequenceDataView
+/// - io::ConstSequenceDataView
+/// - io::SequenceDataAccess
+///\par
+/// More documentation is available in the \ref SequenceIO module.
 ///
 
 ///@addtogroup IO
@@ -302,9 +310,9 @@ struct SequenceDataViewCore : public SequenceDataInfo
 
 };
 
-typedef SequenceDataViewCore<uint32*,uint32*,char*,char*>                                                   SequenceDataView;
-typedef SequenceDataViewCore<const uint32*,const uint32*,const char*,const char*>                           ConstSequenceDataView;
-typedef SequenceDataViewCore<cuda::ldg_pointer<uint32>,cuda::ldg_pointer<uint32>,const char*,const char*>   LdgSequenceDataView;
+typedef SequenceDataViewCore<uint32*,uint32*,char*,char*>                                                   SequenceDataView;           ///< \n A non-const SequenceData view
+typedef SequenceDataViewCore<const uint32*,const uint32*,const char*,const char*>                           ConstSequenceDataView;      ///< \n A const SequenceData view
+typedef SequenceDataViewCore<cuda::ldg_pointer<uint32>,cuda::ldg_pointer<uint32>,const char*,const char*>   LdgSequenceDataView;        ///< \n An LDG-based SequenceData view
 
 ///
 /// Base abstract class to encapsulate a sequence data object.
@@ -488,8 +496,8 @@ struct SequenceDataStorage : public SequenceData
     nvbio::vector<system_tag,uint32> m_name_index_vec;
 };
 
-typedef SequenceDataStorage<host_tag>   SequenceDataHost;
-typedef SequenceDataStorage<device_tag> SequenceDataDevice;
+typedef SequenceDataStorage<host_tag>   SequenceDataHost;           ///< a SequenceData object stored in host memory
+typedef SequenceDataStorage<device_tag> SequenceDataDevice;         ///< a SequenceData object stored in device memory
 
 ///
 /// A stream of SequenceData, allowing to process the associated reads in batches.

@@ -49,9 +49,9 @@ namespace io {
 ///\par
 /// This module contains a series of classes to load FM-indices from disk into:
 ///\par
-///  - RAM
-///  - mapped memory
-///  - CUDA device memory
+///  - host memory
+///  - device memory
+///  - mapped system memory
 ///\par
 /// Specifically, it exposes the following classes:
 ///\par

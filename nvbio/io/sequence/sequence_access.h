@@ -43,13 +43,36 @@ namespace io {
 ///@{
 
 ///
+///\par
 /// An interface class to access a referenced sequence data object.
-///
+///\par
 /// This class is templated over the a SequenceDataT type which needs to provide the
 /// core iterators to access itself
 ///
 /// \tparam SEQUENCE_ALPHABET_T         the alphabet used to access the data
-/// \tparam SequenceDataT               the type of the underlying sequence data
+/// \tparam SequenceDataT               the type of the underlying sequence data;
+///                                     must provide the following interface:
+///
+///\code
+/// interface SequenceDataT : public SequenceDataInfo
+/// {
+///     typedef ...                   index_iterator;               // the index iterator
+///     typedef ...         sequence_storage_iterator;              // the read storage iterator
+///     typedef ...             qual_storage_iterator;              // the qualities iterator
+///     typedef ...             name_storage_iterator;              // the names string iterator
+///
+///     typedef ...                    const_index_iterator;        // the index iterator
+///     typedef ...         const_sequence_storage_iterator;        // the read storage iterator
+///     typedef ...             const_qual_storage_iterator;        // the qualities iterator
+///     typedef ...             const_name_storage_iterator;        // the names string iterator
+///
+///     NVBIO_HOST_DEVICE const_index_iterator            name_index()          const;
+///     NVBIO_HOST_DEVICE const_index_iterator            sequence_index()      const;
+///     NVBIO_HOST_DEVICE const_name_storage_iterator     name_stream()         const;
+///     NVBIO_HOST_DEVICE const_sequence_storage_iterator sequence_storage()    const;
+///     NVBIO_HOST_DEVICE const_qual_storage_iterator     qual_stream()         const;
+/// };
+///\endcode
 ///
 template <
     SequenceAlphabet SEQUENCE_ALPHABET_T,

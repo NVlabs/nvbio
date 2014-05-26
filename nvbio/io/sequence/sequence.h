@@ -41,8 +41,8 @@ namespace io {
 ///
 /// \page sequence_io_page Sequence Data Input
 ///\par
-/// This module contains a series of classes to load and represent read streams.
-/// The idea is that a read stream is an object implementing a simple interface, \ref SequenceDataStream,
+/// This module contains a series of classes to load and represent sequence streams.
+/// The idea is that a sequence stream is an object implementing a simple interface, \ref SequenceDataStream,
 /// which allows to stream through a file or other set of reads in batches, which are represented in memory
 /// with an object inheriting from SequenceData.
 /// There are several kinds of SequenceData containers to keep the reads in the host RAM, or in CUDA device memory.
@@ -66,6 +66,58 @@ namespace io {
 /// - io::SequenceDataView
 /// - io::ConstSequenceDataView
 /// - io::SequenceDataAccess
+///
+///\section SequenceDataSection Sequence Data
+///\par
+/// The SequenceData class is the base class for all containers holding storage of sequence data, which
+/// is represented as a string-set of symbols, accompanied by corresponding string-sets of sequence quality scores
+/// and sequence names.
+/// These containers are:
+///\par
+/// - io::SequenceDataHost
+/// - io::SequenceDataDevice
+/// - io::SequenceDataMMAP
+///\par
+/// The actual sequences can be encoded with a user-specified \ref SequenceAlphabet "alphabet".
+/// However, SequenceData has only runtime knowledge of the alphabet encoding, and hence does not provide
+/// any method to perform decoding - rather, it only exposes methods to \ref SequenceDataView "plain-views"
+/// of the underlying sequence storage.
+/// However, by providing compile-time knowledge of the alphabet, one can construct a SequenceDataAccess wrapper
+/// around any SequenceData (or SequenceDataView) object, and access the decoded string-sets transparently.
+/// The following example shows how to load a sequence file and access it at compile-time:
+///\code
+/// typedef io::SequenceDataAccess<DNA>::sequence_string_set_type reads_string_set_type;
+///
+/// SharedPointer<io::SequenceDataHost> reads = io::load_sequence_data( DNA, "reads.fastq" );
+/// io::SequenceDataAccess<DNA> reads_access( reads.get() );
+///
+/// const reads_string_set_type reads_string_set = reads_access.sequence_string_set();
+/// for (uint32 i = 0; i < n; ++i)
+/// {
+///     const reads_string_set_type::string_type read = reads_string_set[i];
+///     printf("read %u contains %u bps\n", i, read.length() );
+/// }
+///\endcode
+///
+///\section SequenceDataStreamSection Sequence Data Streams
+///\par
+/// Sometimes it is convenient to stream through sequences in batches.
+/// SequenceDataStream provides an abstract interface for doing just this:
+///\code
+/// io::SequenceDataHost reads;
+/// SharedPointer<io::SequenceDataStream> reads_file = io::open_sequence_file( "reads.fastq" );
+///
+/// const uint32 reads_per_batch = 128*1024;
+/// const uint32   bps_per_batch = 128*1024*100;
+/// while (io::next( DNA_N, &reads, reads_file.get(), reads_per_batch, bps_per_batch )
+/// {
+///     // copy the loaded batch on the device
+///     io::SequenceDataDevice device_reads( reads );
+///     ...
+/// }
+///\endcode
+///
+///\section SequenceDataTechnicalSection Technical Documentation
 ///\par
 /// More documentation is available in the \ref SequenceIO module.
 ///
@@ -194,8 +246,15 @@ bool operator!= (
 }
 
 ///
+///\par
 /// A storage-less plain-view class to represent the core sequence data iterators.
+/// Notice that this class only has runtime knowledge of the underlying alphabet encoding,
+/// and as such does provide any direct access to the stored sequences (except for pointers
+/// to underlying storage).
+/// In order to access the decoded sequences, one needs to provide compile-time knowledge
+/// of the alphabet, and create a SequenceDataAccess wrapper.
 ///
+///\par
 /// This class is templated over the iterators pointing to the actual storage, so as to allow
 /// them being both raw (const or non-const) pointers or fancier iterators (e.g. cuda::load_pointer
 /// or nvbio::vector<system_tag>::iterator's)
@@ -315,8 +374,11 @@ typedef SequenceDataViewCore<const uint32*,const uint32*,const char*,const char*
 typedef SequenceDataViewCore<cuda::ldg_pointer<uint32>,cuda::ldg_pointer<uint32>,const char*,const char*>   LdgSequenceDataView;        ///< \n An LDG-based SequenceData view
 
 ///
+///\par
 /// Base abstract class to encapsulate a sequence data object.
-/// This class is meant to be a base for either host, shared or device memory objects
+/// This class is meant to be a base for either host, shared or device memory objects, and
+/// provides almost no interface, except for virtual methods to obtain a \ref SequenceDataView "plain view" of the
+/// class itself.
 ///
 struct SequenceData : public SequenceDataInfo
 {

@@ -86,7 +86,7 @@
 /// \section RecentNew Recent News
 ///\par
 /// <table>
-/// <tr><td style="white-space: nowrap; vertical-align:text-top;">16/05/2014 \n NVBIO 0.9.9</td>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">26/05/2014 \n NVBIO 0.9.9</td>
 /// <td style="vertical-align:text-top;" width="90%">
 /// - <b>New Features:</b> \n
 ///   * Added a new \ref sequence_io_page "Sequence IO" module for managing all kinds of sequence data;

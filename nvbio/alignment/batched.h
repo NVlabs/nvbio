@@ -38,7 +38,7 @@ namespace aln {
 ///
 ///@defgroup BatchScheduler Batch Schedulers
 /// A Batch Scheduler is a tag specifying the algorithm used to execute a batch of jobs in parallel.
-/// Three such algorithms are currently available:
+/// Four such algorithms are currently available:
 ///
 ///     - HostThreadScheduler
 ///     - DeviceThreadScheduler

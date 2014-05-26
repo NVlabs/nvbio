@@ -70,7 +70,7 @@ namespace io {
 ///\section SequenceDataSection Sequence Data
 ///\par
 /// The SequenceData class is the base class for all containers holding storage of sequence data, which
-/// is represented as a string-set of symbols, accompanied by corresponding string-sets of sequence quality scores
+/// is represented as a packed string-set of symbols, accompanied by corresponding string-sets of sequence quality scores
 /// and sequence names.
 /// These containers are:
 ///\par
@@ -78,7 +78,7 @@ namespace io {
 /// - io::SequenceDataDevice
 /// - io::SequenceDataMMAP
 ///\par
-/// The actual sequences can be encoded with a user-specified \ref SequenceAlphabet "alphabet".
+/// The packed sequences can be encoded with a user-specified \ref SequenceAlphabet "alphabet".
 /// However, SequenceData has only runtime knowledge of the alphabet encoding, and hence does not provide
 /// any method to perform decoding - rather, it only exposes methods to \ref SequenceDataView "plain-views"
 /// of the underlying sequence storage.

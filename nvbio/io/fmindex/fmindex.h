@@ -46,18 +46,21 @@ namespace io {
 
 ///
 /// \page fmindex_io_page FM-Index I/O
+///\par
 /// This module contains a series of classes to load FM-indices from disk into:
+///\par
 ///  - RAM
 ///  - mapped memory
 ///  - CUDA device memory
-///
+///\par
 /// Specifically, it exposes the following classes:
-///
-/// - FMIndexData
-/// - FMIndexDataRAM
-/// - FMIndexDataMMAPServer
-/// - FMIndexDataMMAP
-/// - FMIndexDataDevice
+///\par
+/// - io::FMIndexData
+/// - io::FMIndexDataHost
+/// - io::FMIndexDataDevice
+/// - io::FMIndexDataMMAPServer
+/// - io::FMIndexDataMMAP
+/// - io::FMIndexDataDevice
 ///
 
 ///@addtogroup IO

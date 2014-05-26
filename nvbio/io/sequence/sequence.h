@@ -55,6 +55,7 @@ namespace io {
 /// - io::SequenceDataHost
 /// - io::SequenceDataDevice
 /// - io::SequenceDataMMAP
+/// - io::SequenceDataMMAPServer
 /// - io::SequenceDataStream
 /// - io::open_sequence_file()
 /// - io::load_sequence_file()

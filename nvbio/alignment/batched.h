@@ -115,7 +115,9 @@ void batch_alignment_score(
     const pattern_set_type  patterns,
     const text_set_type     texts,
           sink_iterator     sinks,
-    const scheduler_type    scheduler);
+    const scheduler_type    scheduler,
+    const uint32            max_pattern_length = 1000,
+    const uint32            max_text_length = 1000);
 
 ///
 /// A convenience function for aligning a batch of patterns to a corresponding batch of texts on
@@ -155,7 +157,9 @@ void batch_alignment_score(
     const qualities_set_type    quals,
     const text_set_type         texts,
           sink_iterator         sinks,
-    const scheduler_type        scheduler);
+    const scheduler_type        scheduler,
+    const uint32                max_pattern_length = 1000,
+    const uint32                max_text_length = 1000);
 
 ///
 /// A convenience function for aligning a batch of patterns to a corresponding batch of texts on

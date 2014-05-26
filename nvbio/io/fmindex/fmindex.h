@@ -58,9 +58,8 @@ namespace io {
 /// - io::FMIndexData
 /// - io::FMIndexDataHost
 /// - io::FMIndexDataDevice
-/// - io::FMIndexDataMMAPServer
 /// - io::FMIndexDataMMAP
-/// - io::FMIndexDataDevice
+/// - io::FMIndexDataMMAPServer
 ///
 
 ///@addtogroup IO

@@ -26,7 +26,7 @@ void mem_init(struct pipeline_state *pipeline);
 
 /// search MEMs for the given batch of reads
 ///
-void mem_search(struct pipeline_state *pipeline, const nvbio::io::SequenceDataDevice *batch);
+void mem_search(struct pipeline_state *pipeline, const nvbio::io::SequenceDataDevice *reads);
 
 /// given the first read in a chunk, determine a suitably sized chunk of reads
 /// (for which we can locate all MEMs in one go), updating pipeline::chunk
@@ -38,4 +38,4 @@ void fit_read_chunk(
 
 /// locate all mems in the range defined by pipeline::chunk
 ///
-void mem_locate(struct pipeline_state *pipeline, const nvbio::io::SequenceDataDevice *batch);
+void mem_locate(struct pipeline_state *pipeline, const nvbio::io::SequenceDataDevice *reads);

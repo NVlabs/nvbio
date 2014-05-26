@@ -208,7 +208,7 @@ void build_chains_kernel(
 }
 
 // build chains for the current pipeline::chunk of reads
-void build_chains(pipeline_state *pipeline, const io::SequenceDataDevice *batch)
+void build_chains(pipeline_state *pipeline, const io::SequenceDataDevice *reads)
 {
     const ScopedTimer<float> timer( &pipeline->stats.chain_time ); // keep track of the time spent here
 

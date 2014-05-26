@@ -147,7 +147,7 @@ void chain_filter_kernel(
 }
 
 // filter chains for the current pipeline::chunk of reads
-void filter_chains(pipeline_state *pipeline, const io::SequenceDataDevice *batch)
+void filter_chains(pipeline_state *pipeline, const io::SequenceDataDevice *reads)
 {
     const ScopedTimer<float> timer( &pipeline->stats.chain_time ); // keep track of the time spent here
 

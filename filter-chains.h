@@ -22,4 +22,4 @@
 
 /// filter chains for the current pipeline::chunk of reads
 ///
-void filter_chains(struct pipeline_state *pipeline, const nvbio::io::SequenceDataDevice *batch);
+void filter_chains(struct pipeline_state *pipeline, const nvbio::io::SequenceDataDevice *reads);

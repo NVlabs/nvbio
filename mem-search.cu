@@ -95,18 +95,18 @@ void mem_init(struct pipeline_state *pipeline)
 }
 
 // search MEMs for all reads in batch
-void mem_search(struct pipeline_state *pipeline, const io::SequenceDataDevice *batch)
+void mem_search(struct pipeline_state *pipeline, const io::SequenceDataDevice *reads)
 {
     ScopedTimer<float> timer( &pipeline->stats.search_time ); // keep track of the time spent here
 
     struct mem_state *mem = &pipeline->mem;
 
-    const uint32 n_reads = batch->size();
+    const uint32 n_reads = reads->size();
 
     // reset the filter
     mem->mem_filter = mem_state::mem_filter_type();
 
-    const io::SequenceDataAccess<DNA_N> read_access( *batch );
+    const io::SequenceDataAccess<DNA_N> read_access( *reads );
 
     // search for MEMs
     mem->mem_filter.rank(
@@ -130,7 +130,7 @@ void mem_search(struct pipeline_state *pipeline, const io::SequenceDataDevice *b
 // (for which we can locate all MEMs in one go), updating pipeline::chunk
 void fit_read_chunk(
     struct pipeline_state               *pipeline,
-    const io::SequenceDataDevice        *batch,
+    const io::SequenceDataDevice        *reads,
     const uint32                        read_begin)     // first read in the chunk
 {
     const ScopedTimer<float> timer( &pipeline->stats.search_time ); // keep track of the time spent here
@@ -148,7 +148,7 @@ void fit_read_chunk(
     // skip pathological cases
     if (mem->mem_filter.n_ranges() == 0)
     {
-        pipeline->chunk.read_end  = batch->size();
+        pipeline->chunk.read_end  = reads->size();
         pipeline->chunk.mem_begin = 0u;
         pipeline->chunk.mem_end   = 0u;
         return;
@@ -168,7 +168,7 @@ void fit_read_chunk(
         pipeline->chunk.mem_end < mem->mem_filter.n_mems())
     {
         const uint32 mem_count = mem->mem_filter.first_hit( read_begin+1 ) - pipeline->chunk.mem_begin;
-        log_error(stderr,"read %u/%u has too many MEMs (%u), exceeding maximum batch size\n", read_begin, batch->size(), mem_count );
+        log_error(stderr,"read %u/%u has too many MEMs (%u), exceeding maximum batch size\n", read_begin, reads->size(), mem_count );
         exit(1);
     }
 }
@@ -200,7 +200,7 @@ struct mem_left_coord_functor
 };
 
 // locate all mems in the range defined by pipeline::chunk
-void mem_locate(struct pipeline_state *pipeline, const io::SequenceDataDevice *batch)
+void mem_locate(struct pipeline_state *pipeline, const io::SequenceDataDevice *reads)
 {
     const ScopedTimer<float> timer( &pipeline->stats.locate_time ); // keep track of the time spent here
 

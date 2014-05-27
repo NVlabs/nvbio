@@ -53,7 +53,7 @@ namespace nvbio {
 ///\par
 /// This module provides a set of operators to work with various alphabets:
 ///\par
-/// - \ref Alphabet = { DNA, DNA_N, IUPAC16, PROTEIN }
+/// - \ref Alphabet = { DNA, DNA_N, DNA_IUPAC, RNA, RNA_N, PROTEIN }
 /// - \ref to_char
 /// - \ref from_char
 /// - \ref to_string

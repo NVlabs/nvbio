@@ -52,6 +52,12 @@ namespace nvbio {
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">PROTEIN</td>
 /// <td style="vertical-align:text-top;">24-letter Protein alphabet</td>
 /// <td style="vertical-align:text-top;">A,C,D,E,F,G,H,I,K,L,M,N,O,P,Q,R,S,T,V,W,Y,B,Z,X</td></tr>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">RNA</td>
+/// <td style="vertical-align:text-top;">4-letter RNA alphabet</td>
+/// <td style="vertical-align:text-top;">A,C,G,U</td></tr>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">RNA_N</td>
+/// <td style="vertical-align:text-top;">5-letter RNA + N alphabet</td>
+/// <td style="vertical-align:text-top;">A,C,G,U,N</td></tr>
 /// </table>
 ///
 ///@{

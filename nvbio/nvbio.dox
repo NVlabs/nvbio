@@ -504,8 +504,9 @@
 ///\code
 /// struct Pipeline
 /// {
-///     Params                               params;    // the mapping params
-///     SharedPointer<io::FMIndexDataDevice> fm_data;   // the device FM-index
+///     Params                                params;    // the mapping params
+///     SharedPointer<io::SequenceDataDevice> ref_data;  // the device reference
+///     SharedPointer<io::FMIndexDataDevice>  fm_data;   // the device FM-index
 /// };
 ///\endcode
 ///

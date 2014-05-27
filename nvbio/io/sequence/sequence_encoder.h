@@ -50,7 +50,7 @@ struct SequenceDataEncoder
 
     /// constructor
     ///
-    SequenceDataEncoder(const SequenceAlphabet alphabet) : m_alphabet( alphabet ) {}
+    SequenceDataEncoder(const Alphabet alphabet) : m_alphabet( alphabet ) {}
 
     /// destructor
     ///
@@ -98,16 +98,16 @@ struct SequenceDataEncoder
 
     /// get the alphabet
     ///
-    SequenceAlphabet alphabet() const { return m_alphabet; }
+    Alphabet         alphabet() const { return m_alphabet; }
 
 private:
-    SequenceAlphabet m_alphabet;
+    Alphabet         m_alphabet;
     SequenceDataInfo m_info;
 };
 
 /// create a sequence encoder
 ///
-SequenceDataEncoder* create_encoder(const SequenceAlphabet alphabet, SequenceDataHost* data);
+SequenceDataEncoder* create_encoder(const Alphabet         alphabet, SequenceDataHost* data);
 
 } // namespace io
 } // namespace nvbio

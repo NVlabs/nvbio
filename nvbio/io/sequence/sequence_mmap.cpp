@@ -40,7 +40,7 @@ namespace io {
 // \param prefix                   prefix file name
 // \param mapped_name              memory mapped object name
 bool SequenceDataMMAPServer::load(
-    const SequenceAlphabet  alphabet,
+    const Alphabet          alphabet,
     const char*             file_name,
     const char*             mapped_name,
     const SequenceFlags     load_flags,

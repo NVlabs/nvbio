@@ -49,7 +49,7 @@ bool is_pac_archive(const char* sequence_file_name);
 ///                             and reverse-complemented strands.
 ///
 bool load_pac(
-    const SequenceAlphabet      alphabet,
+    const Alphabet              alphabet,
     SequenceDataHost*           sequence_data,
     const char*                 prefix,
     const SequenceFlags         load_flags,
@@ -68,7 +68,7 @@ bool load_pac(
 ///                             and reverse-complemented strands.
 ///
 bool load_pac(
-    const SequenceAlphabet          alphabet,
+    const Alphabet                  alphabet,
     struct SequenceDataMMAPServer*  sequence_data,
     const char*                     prefix,
     const char*                     mapped_name,

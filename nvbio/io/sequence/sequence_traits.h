@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include <nvbio/io/sequence/sequence_alphabet.h>
+#include <nvbio/strings/alphabet.h>
 
 namespace nvbio {
 namespace io {
@@ -38,10 +38,10 @@ namespace io {
 ///@addtogroup SequenceIO
 ///@{
 
-template <SequenceAlphabet SEQUENCE_ALPHABET>
+template <Alphabet         SEQUENCE_ALPHABET>
 struct SequenceDataTraits
 {
-    static const uint32 SEQUENCE_BITS             = SequenceAlphabetTraits<SEQUENCE_ALPHABET>::SYMBOL_SIZE;     ///< symbol size for reads
+    static const uint32 SEQUENCE_BITS             = AlphabetTraits<SEQUENCE_ALPHABET>::SYMBOL_SIZE;     ///< symbol size for reads
     static const bool   SEQUENCE_BIG_ENDIAN       = true;                                                       ///< big endian?
     static const uint32 SEQUENCE_SYMBOLS_PER_WORD = (8*sizeof(uint32))/SEQUENCE_BITS;                           ///< symbols per word
 };

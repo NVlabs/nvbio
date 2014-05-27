@@ -54,7 +54,7 @@ struct SequenceDataMMAPServer
     /// \param file_name                file name
     /// \param mapped_name              memory mapped object name
     bool load(
-        const SequenceAlphabet  alphabet,
+        const Alphabet          alphabet,
         const char*             file_name,
         const char*             mapped_name,
         const SequenceFlags     load_flags  = io::SequenceFlags( io::SEQUENCE_DATA | io::SEQUENCE_QUALS | io::SEQUENCE_NAMES ),

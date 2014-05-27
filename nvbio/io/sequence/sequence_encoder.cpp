@@ -156,7 +156,7 @@ struct sequence_string
 
 // encode a sequence according to a compile-time quality-encoding
 //
-template <SequenceAlphabet ALPHABET, QualityEncoding quality_encoding, typename sequence_type>
+template <Alphabet ALPHABET, QualityEncoding quality_encoding, typename sequence_type>
 void encode(
     const sequence_type                                                            sequence,
     typename SequenceDataEdit<ALPHABET,SequenceDataView>::sequence_stream_type     stream,
@@ -183,7 +183,7 @@ void encode(
 
 // encode a sequence according to some compile-time flags and run-time quality-encoding
 //
-template <SequenceAlphabet ALPHABET, typename sequence_type>
+template <Alphabet ALPHABET, typename sequence_type>
 void encode(
     const QualityEncoding                                                           quality_encoding,
     const sequence_type                                                             sequence,
@@ -209,7 +209,7 @@ void encode(
 
 // encode a sequence according to some given run-time flags and quality-encoding
 //
-template <SequenceAlphabet ALPHABET>
+template <Alphabet         ALPHABET>
 void encode(
     const SequenceDataEncoder::StrandOp                                             conversion_flags,
     const QualityEncoding                                                           quality_encoding,
@@ -244,7 +244,7 @@ void encode(
 ///
 /// Concrete class to encode a host-side SequenceData object.
 ///
-template <SequenceAlphabet SEQUENCE_ALPHABET>
+template <Alphabet SEQUENCE_ALPHABET>
 struct SequenceDataEncoderImpl : public SequenceDataEncoder
 {
     // symbol size for sequences
@@ -374,7 +374,7 @@ private:
 
 // create a sequence encoder
 //
-SequenceDataEncoder* create_encoder(const SequenceAlphabet alphabet, SequenceDataHost* data)
+SequenceDataEncoder* create_encoder(const Alphabet         alphabet, SequenceDataHost* data)
 {
     switch (alphabet)
     {
@@ -393,7 +393,7 @@ SequenceDataEncoder* create_encoder(const SequenceAlphabet alphabet, SequenceDat
 
 // next batch
 //
-int next(const SequenceAlphabet alphabet, SequenceDataHost* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps)
+int next(const Alphabet alphabet, SequenceDataHost* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps)
 {
     switch (alphabet)
     {

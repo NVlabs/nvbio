@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include <nvbio/io/sequence/sequence_alphabet.h>
+#include <nvbio/strings/alphabet.h>
 #include <nvbio/io/sequence/sequence_traits.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/vector_view.h>
@@ -82,7 +82,7 @@ namespace io {
 /// sequence quality scores and sequence names.
 /// Internally, all the string-sets are stored as \ref ConcatenatedStringSet's, with an index
 /// specifying the position of the i-th sequence in the concatenated arrays.
-/// The packed sequences can in turn be encoded with a user-specified \ref SequenceAlphabet "alphabet".
+/// The packed sequences can in turn be encoded with a user-specified \ref Alphabet "alphabet".
 /// However, SequenceData has only runtime knowledge of the alphabet encoding, and hence does not provide
 /// any method to perform decoding - rather, it only exposes methods to obtain \ref SequenceDataView "plain-views"
 /// of the underlying sequence storage.
@@ -210,7 +210,7 @@ struct SequenceDataInfo
         m_avg_sequence_len(0)
     {};
 
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE SequenceAlphabet alphabet()         const { return m_alphabet; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE Alphabet         alphabet()         const { return m_alphabet; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           size()             const { return m_n_seqs; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           bps()              const { return m_sequence_stream_len; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           words()            const { return m_sequence_stream_words; }
@@ -221,7 +221,7 @@ struct SequenceDataInfo
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           min_sequence_len() const { return m_min_sequence_len; }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32           avg_sequence_len() const { return m_avg_sequence_len; }
 
-    SequenceAlphabet    m_alphabet;                 ///< the alphabet
+    Alphabet            m_alphabet;                 ///< the alphabet
     uint32              m_n_seqs;                   ///< number of reads in this struct
     uint32              m_name_stream_len;          ///< the length (in bytes) of the name_stream buffer
     uint32              m_sequence_stream_len;      ///< the length of sequence_stream in base pairs
@@ -598,7 +598,7 @@ struct SequenceDataStream
 
 /// utility method to get the next batch from a SequenceDataStream
 ///
-int next(const SequenceAlphabet alphabet, SequenceDataHost* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
+int next(const Alphabet alphabet, SequenceDataHost* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
 
 /// utility method to skip a batch from a SequenceDataStream
 ///
@@ -632,7 +632,7 @@ SequenceDataStream* open_sequence_file(
 /// \param qualities            the encoding of the qualities
 ///
 bool load_sequence_file(
-    const SequenceAlphabet      alphabet,
+    const Alphabet              alphabet,
     SequenceDataHost*           sequence_data,
     const char*                 sequence_file_name,
     const SequenceFlags         load_flags  = io::SequenceFlags( io::SEQUENCE_DATA | io::SEQUENCE_QUALS | io::SEQUENCE_NAMES ),
@@ -646,7 +646,7 @@ bool load_sequence_file(
 /// \param qualities            the encoding of the qualities
 ///
 SequenceDataHost* load_sequence_file(
-    const SequenceAlphabet      alphabet,
+    const Alphabet              alphabet,
     const char*                 sequence_file_name,
     const SequenceFlags         load_flags  = io::SequenceFlags( io::SEQUENCE_DATA | io::SEQUENCE_QUALS | io::SEQUENCE_NAMES ),
     const QualityEncoding       qualities   = Phred33);

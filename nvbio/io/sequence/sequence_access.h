@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include <nvbio/io/sequence/sequence_alphabet.h>
+#include <nvbio/strings/alphabet.h>
 #include <nvbio/io/sequence/sequence_traits.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/vector_view.h>
@@ -75,14 +75,14 @@ namespace io {
 ///\endcode
 ///
 template <
-    SequenceAlphabet SEQUENCE_ALPHABET_T,
-    typename         SequenceDataT = ConstSequenceDataView>
+    Alphabet  SEQUENCE_ALPHABET_T,
+    typename  SequenceDataT = ConstSequenceDataView>
 struct SequenceDataAccess
 {
-    static const SequenceAlphabet SEQUENCE_ALPHABET = SEQUENCE_ALPHABET_T;                                              ///< alphabet type
-    static const uint32 SEQUENCE_BITS               = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BITS;             ///< symbol size
-    static const bool   SEQUENCE_BIG_ENDIAN         = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BIG_ENDIAN;       ///< endianness
-    static const uint32 SEQUENCE_SYMBOLS_PER_WORD   = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_SYMBOLS_PER_WORD; ///< number of symbols per word
+    static const Alphabet SEQUENCE_ALPHABET = SEQUENCE_ALPHABET_T;                                                        ///< alphabet type
+    static const uint32   SEQUENCE_BITS               = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BITS;             ///< symbol size
+    static const bool     SEQUENCE_BIG_ENDIAN         = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BIG_ENDIAN;       ///< endianness
+    static const uint32   SEQUENCE_SYMBOLS_PER_WORD   = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_SYMBOLS_PER_WORD; ///< number of symbols per word
 
     typedef typename SequenceDataT::const_index_iterator                              index_iterator;               ///< the index iterator
     typedef typename SequenceDataT::const_sequence_storage_iterator                   sequence_storage_iterator;    ///< the read storage iterator
@@ -185,7 +185,7 @@ struct SequenceDataAccess
     const sequence_reference m_data;
 };
 
-template <SequenceAlphabet ALPHABET, typename SequenceDataT>
+template <Alphabet         ALPHABET, typename SequenceDataT>
 SequenceDataAccess<ALPHABET,SequenceDataT> make_access(const SequenceDataT& data)
 {
     return SequenceDataAccess<ALPHABET,SequenceDataT>( data );
@@ -201,14 +201,14 @@ SequenceDataAccess<ALPHABET,SequenceDataT> make_access(const SequenceDataT& data
 /// \tparam SequenceDataT               the type of the underlying sequence data
 ///
 template <
-    SequenceAlphabet SEQUENCE_ALPHABET_T,
-    typename         SequenceDataT>
+    Alphabet  SEQUENCE_ALPHABET_T,
+    typename  SequenceDataT>
 struct SequenceDataEdit
 {
-    static const SequenceAlphabet SEQUENCE_ALPHABET = SEQUENCE_ALPHABET_T;                                              ///< alphabet type
-    static const uint32 SEQUENCE_BITS               = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BITS;             ///< symbol size
-    static const bool   SEQUENCE_BIG_ENDIAN         = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BIG_ENDIAN;       ///< endianness
-    static const uint32 SEQUENCE_SYMBOLS_PER_WORD   = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_SYMBOLS_PER_WORD; ///< number of symbols per word
+    static const Alphabet SEQUENCE_ALPHABET = SEQUENCE_ALPHABET_T;                                                        ///< alphabet type
+    static const uint32   SEQUENCE_BITS               = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BITS;             ///< symbol size
+    static const bool     SEQUENCE_BIG_ENDIAN         = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_BIG_ENDIAN;       ///< endianness
+    static const uint32   SEQUENCE_SYMBOLS_PER_WORD   = SequenceDataTraits<SEQUENCE_ALPHABET>::SEQUENCE_SYMBOLS_PER_WORD; ///< number of symbols per word
 
     typedef typename SequenceDataT::index_iterator                                    index_iterator;               ///< the index iterator
     typedef typename SequenceDataT::sequence_storage_iterator                         sequence_storage_iterator;    ///< the read storage iterator

@@ -634,11 +634,11 @@ void PrefixDoublingSufSort::sort(
             // before shrinking the set of active suffixes scatter the already sorted indices to the output
             // in their proper place
             thrust::scatter_if(
-                d_sort_indices.begin(),                                                             // input begin
-                d_sort_indices.begin() + n_active_suffixes,                                         // input end
-                d_active_slots.begin(),                                                             // map
-                make_transform_iterator( d_partial_flags.begin() + 4u, is_false_functor<uint32>() ),// stencil
-                d_suffixes );                                                                       // output
+                d_sort_indices.begin(),                                                                     // input begin
+                d_sort_indices.begin() + n_active_suffixes,                                                 // input end
+                d_active_slots.begin(),                                                                     // map
+                thrust::make_transform_iterator( d_partial_flags.begin() + 4u, is_false_functor<uint32>() ),// stencil
+                d_suffixes );                                                                               // output
 
             // now keep only the slots we are interested in
             compact(

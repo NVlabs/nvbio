@@ -85,7 +85,7 @@ template <> struct AlphabetTraits<DNA_N>
     static const uint32 SYMBOL_SIZE  = 4;
     static const uint32 SYMBOL_COUNT = 5;
 };
-/// A traits class for DNA_N Alphabet
+/// A traits class for DNA_IUPAC Alphabet
 ///
 template <> struct AlphabetTraits<DNA_IUPAC>
 {

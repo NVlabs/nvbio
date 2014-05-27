@@ -51,7 +51,7 @@ struct transform_iterator
     typedef value_type*                                         pointer;
     typedef typename std::iterator_traits<T>::difference_type   difference_type;
     //typedef typename std::iterator_traits<T>::distance_type     distance_type;
-    typedef std::random_access_iterator_tag                     iterator_category;
+    typedef typename std::iterator_traits<T>::iterator_category iterator_category;
 
     /// constructor
     ///

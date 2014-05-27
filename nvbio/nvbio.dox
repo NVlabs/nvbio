@@ -262,6 +262,7 @@
 ///
 ///\code
 /// #include <nvbio/basic/packed_vector.h>
+/// #include <nvbio/basic/primitives.h>
 /// #include <nvbio/strings/alphabet.h>
 /// #include <nvbio/strings/infix.h>
 /// #include <nvbio/strings/seeds.h>
@@ -315,20 +316,20 @@
 /// Technically, we could just loop through the strings in the set, and print them on the host.
 /// However, suppose we want to do it in the native space of the set, i.e. on the device, and
 /// suppose we want to do it in parallel: how can we do this?
-/// Well, we will do it here using <a href="http://docs.nvidia.com/cuda/thrust/">Thrust</a>, and particularly
-/// the <a href="http://thrust.github.io/doc/group__modifying.html">thrust::for_each</a> construct:
+/// Well, we will do it here using a \ref parallel_primitives "parallel primitive", and particularly
+/// the  \ref for_each() construct:
 ///
 ///\code
 ///     ...
 ///
-///     thrust::for_each(
+///     nvbio::for_each<device_tag>(
+//          n_seeds,
 ///         seeds.begin(),                                // the loop's begin iterator
-///         seeds.end(),                                  // the loop's end iterator
 ///         print_strings<infix_set_type>() );            // the loop's body
 /// }
 ///\endcode
 ///\par
-/// Thrust's for_each takes a functor encoding the body of our loop, and applies it to all elements
+/// \ref for_each() takes a functor encoding the body of our loop, and applies it to all elements
 /// of a sequence. In this case, the sequence is the string-set, and the body of our loop will be
 /// the following:
 ///
@@ -706,14 +707,14 @@
 /// At this point, remember the hit coordinates refer to the seeds, not to the reads
 /// they belong to.
 /// We hence want to convert them to <i>diagonals</i> of the genome/read matrices,
-/// and we do this employing <a href="http://docs.nvidia.com/cuda/thrust/">thrust::transform()</a>:
+/// and we do this employing the \ref transform() \ref parallel_primitives_page "parallel primitive"</a>:
 ///
 ///\code
 ///     ...
 ///         // transform the (index-pos,seed-id) hit coordinates into diagonals
-///         thrust::transform(
+///         nvbio::transform<device_tag>(
+///             hits_end - hits_begin,
 ///             hits.begin(),
-///             hits.begin() + hits_end - hits_begin,
 ///             hits.begin(),
 ///             hit_to_diagonal( nvbio::plain_view( seed_coords ) ) );
 ///     ...
@@ -764,16 +765,16 @@
 ///\code
 ///         ...
 ///         // build the set of read infixes
-///         thrust::transform(
+///         nvbio::transform<device_tag>(
+///             hits_end - hits_begin
 ///             hits.begin(),
-///             hits.begin() + hits_end - hits_begin,
 ///             read_infix_coords.begin(),
 ///             read_infixes( nvbio::plain_view( reads ) ) );
 /// 
 ///         // build the set of genome infixes
-///         thrust::transform(
+///         nvbio::transform<device_tag>(
+///             hits_end - hits_begin
 ///             hits.begin(),
-///             hits.begin() + hits_end - hits_begin,
 ///             genome_infix_coords.begin(),
 ///             genome_infixes<BAND_LEN>( genome_len, nvbio::plain_view( reads ) ) );
 /// 

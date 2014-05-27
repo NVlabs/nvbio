@@ -103,7 +103,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE char to_char(const uint8 c)
         return dna_to_char( c );
     else if (ALPHABET == DNA_N)
         return dna_to_char( c );
-    else if (ALPHABET == IUPAC16)
+    else if (ALPHABET == DNA_IUPAC)
         return iupac16_to_char( c );
     else if (ALPHABET == PROTEIN) // TODO!
         return protein_to_char( c );
@@ -118,7 +118,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 from_char(const char c)
         return char_to_dna( c );
     else if (ALPHABET == DNA_N)
         return char_to_dna( c );
-    else if (ALPHABET == IUPAC16)
+    else if (ALPHABET == DNA_IUPAC)
         return char_to_iupac16( c );
     else if (ALPHABET == PROTEIN) // TODO!
         return char_to_protein( c );

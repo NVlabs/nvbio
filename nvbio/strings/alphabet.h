@@ -46,7 +46,7 @@ namespace nvbio {
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">DNA_N</td>
 /// <td style="vertical-align:text-top;">5-letter DNA + N alphabet</td>
 /// <td style="vertical-align:text-top;">A,C,G,T,N</td></tr>
-/// <tr><td style="white-space: nowrap; vertical-align:text-top;">IUPAC16</td>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">DNA_IUPAC</td>
 /// <td style="vertical-align:text-top;">16-letter DNA IUPAC alphabet</td>
 /// <td style="vertical-align:text-top;">=,A,C,M,G,R,S,V,T,W,Y,H,K,D,B,N</td></tr>
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">PROTEIN</td>
@@ -61,10 +61,10 @@ namespace nvbio {
 ///
 enum Alphabet
 {
-    DNA     = 0u,           ///< 4-letter DNA alphabet { A,C,G,T }
-    DNA_N   = 1u,           ///< 5-letter DNA + N alphabet { A,C,G,T,N }
-    PROTEIN = 2u,           ///< 24-letter Protein alphabet { A,C,D,E,F,G,H,I,K,L,M,N,O,P,Q,R,S,T,V,W,Y,B,Z,X }
-    IUPAC16 = 3u            ///< 16-letter DNA IUPAC alphabet { =,A,C,M,G,R,S,V,T,W,Y,H,K,D,B,N }
+    DNA       = 0u,           ///< 4-letter DNA alphabet { A,C,G,T }
+    DNA_N     = 1u,           ///< 5-letter DNA + N alphabet { A,C,G,T,N }
+    DNA_IUPAC = 2u,           ///< 16-letter DNA IUPAC alphabet { =,A,C,M,G,R,S,V,T,W,Y,H,K,D,B,N }
+    PROTEIN   = 3u,           ///< 24-letter Protein alphabet { A,C,D,E,F,G,H,I,K,L,M,N,O,P,Q,R,S,T,V,W,Y,B,Z,X }
 };
 
 /// A traits class for Alphabet
@@ -87,7 +87,7 @@ template <> struct AlphabetTraits<DNA_N>
 };
 /// A traits class for DNA_N Alphabet
 ///
-template <> struct AlphabetTraits<IUPAC16>
+template <> struct AlphabetTraits<DNA_IUPAC>
 {
     static const uint32 SYMBOL_SIZE  = 4;
     static const uint32 SYMBOL_COUNT = 16;
@@ -105,7 +105,7 @@ uint32 bits_per_symbol(const Alphabet alphabet)
 {
     return alphabet == DNA     ? 2 :
            alphabet == DNA_N   ? 4 :
-           alphabet == IUPAC16 ? 4 :
+           alphabet == DNA_IUPAC ? 4 :
            alphabet == PROTEIN ? 8 :
            8u;
 }

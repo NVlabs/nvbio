@@ -131,6 +131,8 @@ uint32 bits_per_symbol(const Alphabet alphabet)
            alphabet == DNA_N     ? 4 :
            alphabet == DNA_IUPAC ? 4 :
            alphabet == PROTEIN   ? 8 :
+           alphabet == RNA       ? 2 :
+           alphabet == RNA_N     ? 4 :
            8u;
 }
 

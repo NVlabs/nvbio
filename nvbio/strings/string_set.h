@@ -49,25 +49,19 @@ namespace nvbio {
 /// And the support string might be either encoded with ascii characters, or packed
 /// using a few bits per symbol.
 ///
-/// \section AtAGlanceSection At a Glance
+/// \section AlphabetsSection Alphabets
 ///\par
-/// This module provides a few generic adaptors that can be "configured" by means of
-/// the underlying template iterators.
-/// The philosohpy behind all of these containers is that they are just <i>shallow representations</i>,
-/// holding no storage. Hence they can be used both in host and device code.
+/// This module provides a set of operators to work with various alphabets:
 ///\par
-/// - ConcatenatedStringSet
-/// - SparseStringSet
-/// - StridedPackedStringSet
-/// - StridedStringSet
-/// - InfixSet
-/// - PrefixSet
-/// - SuffixSet
+/// - \ref Alphabet = { DNA, DNA_N, IUPAC16, PROTEIN }
+/// - \ref to_char
+/// - \ref from_char
+/// - \ref to_string
+/// - \ref from_string
 ///\par
-/// Furthermore, the module provides efficient generic copy() (resp. cuda::copy()) implementations to copy
-/// a given host (resp. device) string set from a given layout into another with a different layout.
+/// The list of all available operators is available in the \ref AlphabetsModule "Alphabet Module".
 ///
-/// \section StringSetInterface String-Set Interface
+/// \section StringSetInterface String-Set Interfaces
 ///\par
 /// String sets are generic, interchangeable containers that expose the same interface:
 ///\anchor StringSetAnchor
@@ -84,6 +78,22 @@ namespace nvbio {
 ///     string_type operator[] (const uint32) [const];
 /// }
 ///\endcode
+///\par
+/// This module provides a few generic string set adaptors that can be "configured" by means of
+/// the underlying template iterators.
+/// The philosophy behind all of these containers is that they are just <i>shallow representations</i>,
+/// holding no storage. Hence they can be used both in host and device code.
+///\par
+/// - ConcatenatedStringSet
+/// - SparseStringSet
+/// - StridedPackedStringSet
+/// - StridedStringSet
+/// - InfixSet
+/// - PrefixSet
+/// - SuffixSet
+///\par
+/// Furthermore, the module provides efficient generic copy() (resp. cuda::copy()) implementations to copy
+/// a given host (resp. device) string set from a given layout into another with a different layout.
 ///
 /// \section SeedingSection Seeding
 ///\par

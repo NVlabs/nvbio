@@ -32,15 +32,29 @@
 
 namespace nvbio {
 
+///@addtogroup Strings
+///@{
+
+///\defgroup AlphabetsModule Alphabets
+///
+/// This module provides various operators to work with the following alphabets:
+///
+/// - DNA
+/// - DNA_N
+/// - IUPAC16
+/// - PROTEIN
+///
+///@{
+
 ///
 /// The supported sequence alphabet types
 ///
 enum Alphabet
 {
-    DNA     = 0u,
-    DNA_N   = 1u,
-    PROTEIN = 2u,
-    IUPAC16 = 3u
+    DNA     = 0u,           ///< 4-letter DNA alphabet { A,C,G,T }
+    DNA_N   = 1u,           ///< 5-letter DNA + N alphabet { A,C,G,T,N }
+    PROTEIN = 2u,           ///< 23-letter Protein alphabet { A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y,B,Z,X }
+    IUPAC16 = 3u            ///< 16-letter DNA IUPAC alphabet { =,A,C,M,G,R,S,V,T,W,Y,H,K,D,B,N }
 };
 
 /// A traits class for Alphabet
@@ -172,6 +186,9 @@ from_string(Iterator it)
 {
     return make_transform_iterator( it, from_char_functor<ALPHABET>() );
 }
+
+///@} AlphabetsModule
+///@} Strings
 
 } // namespace nvbio
 

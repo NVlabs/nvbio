@@ -187,7 +187,7 @@ struct to_char_functor
 
     /// functor operator
     ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE char operator() (const uint8 c) { return to_char<ALPHABET>( c ); }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE char operator() (const uint8 c) const { return to_char<ALPHABET>( c ); }
 };
 
 /// conversion functor from a given alphabet to ASCII char
@@ -200,7 +200,7 @@ struct from_char_functor
 
     /// functor operator
     ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 operator() (const char c) { return from_char<ALPHABET>( c ); }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 operator() (const char c) const { return from_char<ALPHABET>( c ); }
 };
 
 /// convert a string iterator from a given alphabet to an ASCII string iterator

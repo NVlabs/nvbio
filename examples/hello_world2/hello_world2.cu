@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <nvbio/basic/packed_vector.h>
-#include <nvbio/basic/dna.h>
+#include <nvbio/strings/alphabet.h>
 #include <nvbio/strings/infix.h>
 #include <nvbio/strings/seeds.h>
 
@@ -71,9 +71,7 @@ int main(int argc, char* argv[])
     nvbio::PackedVector<host_tag,ALPHABET_SIZE> h_dna( len );
 
     // pack our ASCII string
-    string_to_dna(
-        dna_string,         // begin iterator of our ASCII string
-        h_dna.begin() );    // begin iterator of our output string
+    nvbio::assign( len, nvbio::from_string<DNA>( dna_string ), h_dna.begin() );
 
     // instantiate a packed host vector
     nvbio::PackedVector<device_tag,ALPHABET_SIZE> d_dna( h_dna );

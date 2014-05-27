@@ -241,9 +241,7 @@
 ///
 ///     // and fill it in with the contents of our original string, converted
 ///     // to a 2-bit DNA alphabet (i.e. A = 0, C = 1, G = 2, T = 3)
-///     nvbio::from_string<DNA>(
-///         dna_string,               // the input ASCII string
-///         h_dna.begin() );          // the output iterator
+///     nvbio::assign( len, nvbio::from_string<DNA>( dna_string ), h_dna.begin() );
 ///
 ///     // copy the packed vector to the device
 ///     nvbio::PackedVector<device_tag,ALPHABET_SIZE> d_dna( h_dna );
@@ -284,9 +282,7 @@
 ///
 ///     // and fill it in with the contents of our original string, converted
 ///     // to a 2-bit DNA alphabet (i.e. A = 0, C = 1, G = 2, T = 3)
-///     nvbio::from_string<DNA>(
-///         dna_string,               // the input ASCII string
-///         h_dna.begin() );          // the output iterator
+///     nvbio::assign( len, nvbio::from_string<DNA>( dna_string ), h_dna.begin() );
 ///
 ///     // copy the packed vector to the device
 ///     nvbio::PackedVector<device_tag,ALPHABET_SIZE> d_dna( h_dna );

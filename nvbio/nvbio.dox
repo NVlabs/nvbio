@@ -323,7 +323,7 @@
 ///     ...
 ///
 ///     nvbio::for_each<device_tag>(
-//          n_seeds,
+///         n_seeds,
 ///         seeds.begin(),                                // the loop's begin iterator
 ///         print_strings<infix_set_type>() );            // the loop's body
 /// }

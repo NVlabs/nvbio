@@ -61,10 +61,10 @@ namespace nvbio {
 ///
 enum Alphabet
 {
-    DNA       = 0u,           ///< 4-letter DNA alphabet { A,C,G,T }
-    DNA_N     = 1u,           ///< 5-letter DNA + N alphabet { A,C,G,T,N }
+    DNA       = 0u,           ///< 4-letter DNA alphabet        { A,C,G,T }
+    DNA_N     = 1u,           ///< 5-letter DNA + N alphabet    { A,C,G,T,N }
     DNA_IUPAC = 2u,           ///< 16-letter DNA IUPAC alphabet { =,A,C,M,G,R,S,V,T,W,Y,H,K,D,B,N }
-    PROTEIN   = 3u,           ///< 24-letter Protein alphabet { A,C,D,E,F,G,H,I,K,L,M,N,O,P,Q,R,S,T,V,W,Y,B,Z,X }
+    PROTEIN   = 3u,           ///< 24-letter Protein alphabet   { A,C,D,E,F,G,H,I,K,L,M,N,O,P,Q,R,S,T,V,W,Y,B,Z,X }
 };
 
 /// A traits class for Alphabet

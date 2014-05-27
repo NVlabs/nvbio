@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
     const uint32 len = (uint32)strlen( dna_string );
 
     // our DNA alphabet size
-    const uint32 ALPHABET_SIZE = 2u;
+    const uint32 ALPHABET_SIZE = AlphabetTraits<DNA>::SYMBOL_SIZE;
 
     // instantiate a packed host vector
     nvbio::PackedVector<host_tag,ALPHABET_SIZE> h_dna( len );

@@ -106,7 +106,10 @@ namespace io {
 ///     const sequence_string_set_type::string_type gene = genome_string_set[i];
 ///
 ///     // and do something with it...
-///     printf("gene %u contains %u bps\n", i, gene.length() );
+///     printf("gene %u contains %u bps:\n", i, length( gene ) );
+///     for (uint32 j = 0; j < length( gene ); ++j)
+///         printf("%c", to_char<DNA>( gene[j] ));
+///     printf("\n");
 /// }
 ///\endcode
 ///

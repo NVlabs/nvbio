@@ -36,13 +36,23 @@ namespace nvbio {
 ///@{
 
 ///\defgroup AlphabetsModule Alphabets
-///
+///\par
 /// This module provides various operators to work with the following alphabets:
-///
-/// - DNA
-/// - DNA_N
-/// - IUPAC16
-/// - PROTEIN
+///\par
+/// <table>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">DNA</td>
+/// <td style="vertical-align:text-top;">4-letter DNA alphabet</td>
+/// <td style="vertical-align:text-top;">A,C,G,T</td></tr>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">DNA_N</td>
+/// <td style="vertical-align:text-top;">5-letter DNA + N alphabet</td>
+/// <td style="vertical-align:text-top;">A,C,G,T,N</td></tr>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">IUPAC16</td>
+/// <td style="vertical-align:text-top;">16-letter DNA IUPAC alphabet</td>
+/// <td style="vertical-align:text-top;">=,A,C,M,G,R,S,V,T,W,Y,H,K,D,B,N</td></tr>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">PROTEIN</td>
+/// <td style="vertical-align:text-top;">23-letter Protein alphabet</td>
+/// <td style="vertical-align:text-top;">A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y,B,Z,X</td></tr>
+/// </table>
 ///
 ///@{
 

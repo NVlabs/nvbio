@@ -30,10 +30,7 @@
 #include <nvbio/basic/types.h>
 #include <nvbio/basic/numbers.h>
 #include <nvbio/basic/console.h>
-#include <nvbio/basic/thrust_view.h>
-#include <thrust/device_vector.h>
-#include <thrust/host_vector.h>
-#include <thrust/copy.h>
+#include <nvbio/basic/vector.h>
 #include <thrust/reduce.h>
 #include <thrust/scan.h>
 #include <thrust/iterator/constant_iterator.h>

@@ -125,6 +125,7 @@ namespace io {
 /// const uint32  seqs_per_batch = 128*1024;        // the maximum number of sequences
 /// const uint32   bps_per_batch = 128*1024*100;    // the maximum number of base pairs
 ///
+/// // loop through the stream in batches
 /// while (io::next( DNA_N, &reads, reads_file.get(), seqs_per_batch, bps_per_batch ))
 /// {
 ///     // copy the loaded batch on the device

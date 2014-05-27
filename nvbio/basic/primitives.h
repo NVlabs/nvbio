@@ -48,9 +48,9 @@
 
 /// \page primitives_page Parallel Primitives
 ///
-/// This module provides a set of convenience wrappers to invoke system-wide
-/// CUB's parallel primitives without worrying about the memory management.
-/// All temporary storage is in fact allocated within a single nvbio::vector
+/// This module provides a set of system-wide parallel primitives.
+/// The backend system is specified at compile-time by a \ref SystemTags "system_tag".
+/// All temporary storage is allocated within a single nvbio::vector
 /// passed by the user, which can be safely reused across function calls.
 ///
 /// - any()

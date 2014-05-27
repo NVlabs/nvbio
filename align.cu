@@ -210,9 +210,9 @@ uint32 align_short(
     uint32 n_active = aln->n_active;
 
     // build a stencil of the active reads, stencil[i] = (begin_chains[i] != end_chains[i])
-    thrust::transform(
+    transform<system_tag>(
+        n_active,
         aln->begin_chains.begin(),
-        aln->begin_chains.begin() + n_active,
         aln->end_chains.begin(),
         aln->stencil.begin(),
         nvbio::not_equal_functor<uint32>() );
@@ -258,10 +258,9 @@ uint32 align_short(
           nvbio::vector<system_tag,sink_type>&  sinks       = aln->sinks;
 
     // compute the chain query-spans
-    thrust::for_each(
-        system_tag(),
+    for_each<system_tag>(
+        n_active,
         thrust::make_counting_iterator<uint32>(0u),
-        thrust::make_counting_iterator<uint32>(0u) + n_active,
         span_functor(
             command_line_options,
             reads_access,
@@ -331,9 +330,9 @@ uint32 align_short(
         //  - perform a reverse alignment to find the source cell of each alignment
     }
     // add one to the processed chains
-    thrust::transform(
+    nvbio::transform<system_tag>(
+        n_active,
         aln->begin_chains.begin(),
-        aln->begin_chains.begin() + n_active,
         thrust::make_constant_iterator<uint32>( 1u ),
         aln->begin_chains.begin(),
         nvbio::add_functor() );

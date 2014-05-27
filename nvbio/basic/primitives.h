@@ -42,6 +42,10 @@
 #include <nvbio/basic/cuda/primitives.h>
 #endif
 
+#if defined (_OPENMP)
+#include <omp.h>
+#endif
+
 /// \page primitives_page Parallel Primitives
 ///
 /// This module provides a set of convenience wrappers to invoke system-wide
@@ -102,6 +106,34 @@ bool is_segment_sorted(
     const uint32            n,
     const Iterator          values,
     const Headflags         flags);
+
+
+/// invoke a functor for each element of the given sequence
+///
+template <typename system_tag, typename Iterator, typename Functor>
+void for_each(
+    const uint32            n,
+    const Iterator          in,
+    const Functor           functor);
+
+/// apply a functor to each element of the given sequence
+///
+template <typename system_tag, typename Iterator, typename Output, typename Functor>
+void transform(
+    const uint32            n,
+    const Iterator          in,
+    const Output            out,
+    const Functor           functor);
+
+/// apply a binary functor to each pair of elements of the given sequences
+///
+template <typename system_tag, typename Iterator1, typename Iterator2, typename Output, typename Functor>
+void transform(
+    const uint32            n,
+    const Iterator1         in1,
+    const Iterator2         in2,
+    const Output            out,
+    const Functor           functor);
 
 /// system-wide reduce
 ///

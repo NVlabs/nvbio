@@ -160,6 +160,132 @@ bool is_segment_sorted(
     return all<system_tag>( n-1, is_segment_sorted_iterator<Iterator,Iterator,Headflags>( values, values+1, flags+1 ) );
 }
 
+// invoke a functor for each element of the given sequence
+//
+template <typename Iterator, typename Functor>
+void for_each(
+    const host_tag          tag,
+    const uint32            n,
+    const Iterator          in,
+    const Functor           functor)
+{
+    #if defined(_OPENMP)
+    #pragma omp parallel for if (n >= 256)
+    #endif
+    for (int64 i = 0; i < int64(n); ++i)
+        functor( in[i] );
+}
+
+// invoke a functor for each element of the given sequence
+//
+template <typename Iterator, typename Functor>
+void for_each(
+    const device_tag        tag,
+    const uint32            n,
+    const Iterator          in,
+    const Functor           functor)
+{
+    thrust::for_each( in, in + n, functor );
+}
+
+// invoke a functor for each element of the given sequence
+//
+template <typename system_tag, typename Iterator, typename Functor>
+void for_each(
+    const uint32            n,
+    const Iterator          in,
+    const Functor           functor)
+{
+    return for_each( system_tag(), n, in, functor );
+}
+
+// apply a functor to each element of the given sequence
+//
+template <typename Iterator, typename Output, typename Functor>
+void transform(
+    const device_tag        tag,
+    const uint32            n,
+    const Iterator          in,
+    const Output            out,
+    const Functor           functor)
+{
+    thrust::transform( in, in + n, out, functor );
+}
+
+// apply a functor to each element of the given sequence
+//
+template <typename Iterator, typename Output, typename Functor>
+void transform(
+    const host_tag          tag,
+    const uint32            n,
+    const Iterator          in,
+    const Output            out,
+    const Functor           functor)
+{
+    #if defined(_OPENMP)
+    #pragma omp parallel for if (n >= 256)
+    #endif
+    for (int64 i = 0; i < int64(n); ++i)
+        out[i] = functor( in[i] );
+}
+
+// apply a functor to each element of the given sequence
+//
+template <typename Iterator1, typename Iterator2, typename Output, typename Functor>
+void transform(
+    const device_tag        tag,
+    const uint32            n,
+    const Iterator1         in1,
+    const Iterator2         in2,
+    const Output            out,
+    const Functor           functor)
+{
+    thrust::transform( in1, in1 + n, in2, out, functor );
+}
+
+// apply a functor to each element of the given sequence
+//
+template <typename Iterator1, typename Iterator2, typename Output, typename Functor>
+void transform(
+    const host_tag          tag,
+    const uint32            n,
+    const Iterator1         in1,
+    const Iterator2         in2,
+    const Output            out,
+    const Functor           functor)
+{
+    #if defined(_OPENMP)
+    #pragma omp parallel for if (n >= 256)
+    #endif
+    for (int64 i = 0; i < int64(n); ++i)
+        out[i] = functor( in1[i], in2[i] );
+}
+
+// apply a functor to each element of the given sequence
+//
+template <typename system_tag, typename Iterator, typename Output, typename Functor>
+void transform(
+    const uint32            n,
+    const Iterator          in,
+    const Output            out,
+    const Functor           functor)
+{
+    transform( system_tag(), n, in, out, functor );
+}
+
+// apply a binary functor to each pair of elements of the given sequences
+//
+template <typename system_tag, typename Iterator1, typename Iterator2, typename Output, typename Functor>
+void transform(
+    const uint32            n,
+    const Iterator1         in1,
+    const Iterator2         in2,
+    const Output            out,
+    const Functor           functor)
+{
+    transform( system_tag(), n, in1, in2, out, functor );
+}
+
 // host-wide reduce
 //
 // \param n                    number of items to reduce

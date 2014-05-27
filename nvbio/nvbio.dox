@@ -450,7 +450,8 @@
 /// \section InputSection Input
 ///\par
 /// The first step for a reference-based aligner is loading a reference index, and streaming a set of reads.
-/// Let's start by loading the FM-index, using the corresponding \ref fmindex_io_page "I/O" classes.
+/// Let's start by loading the reference sequence and its FM-index, using the corresponding \ref sequence_io_page "Sequence"
+/// and \ref fmindex_io_page "FM-Index I/O" classes.
 ///
 ///\code
 /// #include <stdio.h>

@@ -46,8 +46,9 @@ namespace io {
 /// which allows to stream through a file or other set of reads in batches, which are represented in memory
 /// with an object inheriting from SequenceData.
 /// There are several kinds of SequenceData containers to keep the reads in the host or in CUDA device memory.
-/// Additionally, the same containers can be viewed with different \ref SequenceDataViews, in order to allow reinterpreting
-/// the base arrays as iterators of different types, e.g. to perform vector loads or use LDG.
+/// Additionally, the same containers can be \ref PlainViewsSection "viewed" with different \ref SequenceDataViews,
+/// in order to allow reinterpreting the base arrays with iterators of different types, e.g. to perform vector loads
+/// or use LDG.
 ///\par
 /// Specifically, it exposes the following core classes and methods:
 ///\par
@@ -267,8 +268,8 @@ bool operator!= (
 
 ///@defgroup SequenceDataViews SequenceData Views
 ///\par
-/// This module contains plain-view classes for \ref SequenceData objects that can
-/// be adapted to use iterators of a user-specified type, so as to allow reinterpreting
+/// This module contains \ref \ref PlainViewsSection "plain-view" classes for \ref SequenceData objects
+/// that can be adapted to use iterators of a user-specified type, so as to allow reinterpreting
 /// the base arrays, e.g. using LDG loads.
 ///@{
 

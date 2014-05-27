@@ -133,6 +133,8 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE char to_char(const uint8 c)
         return rna_to_char( c );
     else if (ALPHABET == RNA_N)
         return rna_to_char( c );
+
+    return 0u;
 }
 
 // convert a given symbol to its ASCII character
@@ -152,6 +154,8 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 from_char(const char c)
         return char_to_rna( c );
     else if (ALPHABET == RNA_N)
         return char_to_rna( c );
+
+    return 0u;
 }
 
 // convert from the given alphabet to an ASCII string

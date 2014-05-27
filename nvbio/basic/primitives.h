@@ -33,6 +33,7 @@
 #include <nvbio/basic/vector.h>
 #include <thrust/reduce.h>
 #include <thrust/scan.h>
+#include <thrust/copy.h>
 #include <thrust/iterator/constant_iterator.h>
 
 #if defined(__CUDACC__)

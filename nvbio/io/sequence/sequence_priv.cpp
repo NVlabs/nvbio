@@ -28,6 +28,7 @@
 #include <nvbio/io/sequence/sequence_priv.h>
 #include <nvbio/io/sequence/sequence_encoder.h>
 
+#include <nvbio/io/sequence/sequence_fasta.h>
 #include <nvbio/io/sequence/sequence_fastq.h>
 #include <nvbio/io/sequence/sequence_txt.h>
 #include <nvbio/io/sequence/sequence_sam.h>
@@ -99,6 +100,33 @@ SequenceDataStream *open_sequence_file(
         {
             is_gzipped = true;
             len = uint32(len - strlen(".gz"));
+        }
+    }
+
+    // check for fasta suffix
+    if (len >= strlen(".fasta"))
+    {
+        if (strncmp(&sequence_file_name[len - strlen(".fasta")], ".fasta", strlen(".fasta")) == 0)
+        {
+            return new SequenceDataFile_FASTA_gz(
+                sequence_file_name,
+                qualities,
+                max_seqs,
+                max_sequence_len,
+                flags);
+        }
+    }
+    // check for fastq suffix
+    if (len >= strlen(".fa"))
+    {
+        if (strncmp(&sequence_file_name[len - strlen(".fa")], ".fa", strlen(".fa")) == 0)
+        {
+            return new SequenceDataFile_FASTA_gz(
+                sequence_file_name,
+                qualities,
+                max_seqs,
+                max_sequence_len,
+                flags);
         }
     }
 

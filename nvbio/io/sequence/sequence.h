@@ -45,9 +45,9 @@ namespace io {
 /// The idea is that a sequence stream is an object implementing a simple interface, \ref SequenceDataStream,
 /// which allows to stream through a file or other set of reads in batches, which are represented in memory
 /// with an object inheriting from SequenceData.
-/// There are several kinds of SequenceData containers to keep the reads in the host RAM, or in CUDA device memory.
-/// Additionally, the same container can be viewed with different SequenceDataView's, in order to allow reinterpreting
-/// the base arrays as arrays of different types, e.g. to perform vector loads or use LDG.
+/// There are several kinds of SequenceData containers to keep the reads in the host or in CUDA device memory.
+/// Additionally, the same containers can be viewed with different \ref SequenceDataViews, in order to allow reinterpreting
+/// the base arrays as iterators of different types, e.g. to perform vector loads or use LDG.
 ///\par
 /// Specifically, it exposes the following core classes and methods:
 ///\par
@@ -152,7 +152,7 @@ namespace io {
 /// which allows to stream through a file or other set of reads in batches, which are represented in memory
 /// with an object inheriting from SequenceData.
 /// There are several kinds of SequenceData containers to keep the reads in the host RAM, or in CUDA device memory.
-/// Additionally, the same container can be viewed with different SequenceDataView's, in order to allow reinterpreting
+/// Additionally, the same container can be viewed with different \ref SequenceDataViews, in order to allow reinterpreting
 /// the base arrays as arrays of different types, e.g. to perform vector loads or use LDG.
 ///@{
 ///
@@ -264,6 +264,9 @@ bool operator!= (
 {
     return !(op1 == op2);
 }
+
+///@defgroup SequenceDataViews SequenceData Views
+///@{
 
 ///
 ///\par
@@ -392,6 +395,8 @@ struct SequenceDataViewCore : public SequenceDataInfo
 typedef SequenceDataViewCore<uint32*,uint32*,char*,char*>                                                   SequenceDataView;           ///< \n A non-const SequenceData view
 typedef SequenceDataViewCore<const uint32*,const uint32*,const char*,const char*>                           ConstSequenceDataView;      ///< \n A const SequenceData view
 typedef SequenceDataViewCore<cuda::ldg_pointer<uint32>,cuda::ldg_pointer<uint32>,const char*,const char*>   LdgSequenceDataView;        ///< \n An LDG-based SequenceData view
+
+///@} // SequenceDataViews
 
 ///
 ///\par

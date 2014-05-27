@@ -229,7 +229,7 @@ void transform(
         out[i] = functor( in[i] );
 }
 
-// apply a functor to each element of the given sequence
+// apply a binary functor to each pair of elements of the given sequences
 //
 template <typename Iterator1, typename Iterator2, typename Output, typename Functor>
 void transform(
@@ -243,7 +243,7 @@ void transform(
     thrust::transform( in1, in1 + n, in2, out, functor );
 }
 
-// apply a functor to each element of the given sequence
+// apply a binary functor to each pair of elements of the given sequences
 //
 template <typename Iterator1, typename Iterator2, typename Output, typename Functor>
 void transform(

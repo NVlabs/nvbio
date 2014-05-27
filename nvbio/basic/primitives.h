@@ -57,6 +57,8 @@
 /// - all()
 /// - is_sorted()
 /// - is_segment_sorted()
+/// - for_each()
+/// - transform()
 /// - reduce()
 /// - inclusive_scan()
 /// - exclusive_scan()

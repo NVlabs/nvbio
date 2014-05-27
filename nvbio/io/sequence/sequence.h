@@ -266,11 +266,10 @@ bool operator!= (
 }
 
 ///@defgroup SequenceDataViews SequenceData Views
-///
+///\par
 /// This module contains plain-view classes for \ref SequenceData objects that can
 /// be adapted to use iterators of a user-specified type, so as to allow reinterpreting
 /// the base arrays, e.g. using LDG loads.
-///
 ///@{
 
 ///

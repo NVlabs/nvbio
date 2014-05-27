@@ -48,17 +48,18 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE char protein_to_char(const uint8 c)
            c ==  9 ? 'L' :
            c == 10 ? 'M' :
            c == 11 ? 'N' :
-           c == 12 ? 'P' :
-           c == 13 ? 'Q' :
-           c == 14 ? 'R' :
-           c == 15 ? 'S' :
-           c == 16 ? 'T' :
-           c == 17 ? 'V' :
-           c == 18 ? 'W' :
-           c == 19 ? 'Y' :
-           c == 20 ? 'B' :
-           c == 21 ? 'Z' :
-           c == 22 ? 'X' :
+           c == 12 ? 'O' :
+           c == 13 ? 'P' :
+           c == 14 ? 'Q' :
+           c == 15 ? 'R' :
+           c == 16 ? 'S' :
+           c == 17 ? 'T' :
+           c == 18 ? 'V' :
+           c == 19 ? 'W' :
+           c == 20 ? 'Y' :
+           c == 21 ? 'B' :
+           c == 22 ? 'Z' :
+           c == 23 ? 'X' :
                      'N';
 }
 
@@ -78,17 +79,18 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 char_to_protein(const char c)
            c == 'L' ? 9u  :
            c == 'M' ? 10u :
            c == 'N' ? 11u :
-           c == 'P' ? 12u :
-           c == 'Q' ? 13u :
-           c == 'R' ? 14u :
-           c == 'S' ? 15u :
-           c == 'T' ? 16u :
-           c == 'V' ? 17u :
-           c == 'W' ? 18u :
-           c == 'Y' ? 19u :
-           c == 'B' ? 20u :
-           c == 'Z' ? 21u :
-           c == 'X' ? 22u :
+           c == 'O' ? 12u :
+           c == 'P' ? 13u :
+           c == 'Q' ? 14u :
+           c == 'R' ? 15u :
+           c == 'S' ? 16u :
+           c == 'T' ? 17u :
+           c == 'V' ? 18u :
+           c == 'W' ? 19u :
+           c == 'Y' ? 20u :
+           c == 'B' ? 21u :
+           c == 'Z' ? 22u :
+           c == 'X' ? 23u :
                       11u;
 }
 

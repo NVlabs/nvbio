@@ -50,8 +50,8 @@ namespace nvbio {
 /// <td style="vertical-align:text-top;">16-letter DNA IUPAC alphabet</td>
 /// <td style="vertical-align:text-top;">=,A,C,M,G,R,S,V,T,W,Y,H,K,D,B,N</td></tr>
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">PROTEIN</td>
-/// <td style="vertical-align:text-top;">23-letter Protein alphabet</td>
-/// <td style="vertical-align:text-top;">A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y,B,Z,X</td></tr>
+/// <td style="vertical-align:text-top;">24-letter Protein alphabet</td>
+/// <td style="vertical-align:text-top;">A,C,D,E,F,G,H,I,K,L,M,N,O,P,Q,R,S,T,V,W,Y,B,Z,X</td></tr>
 /// </table>
 ///
 ///@{
@@ -63,7 +63,7 @@ enum Alphabet
 {
     DNA     = 0u,           ///< 4-letter DNA alphabet { A,C,G,T }
     DNA_N   = 1u,           ///< 5-letter DNA + N alphabet { A,C,G,T,N }
-    PROTEIN = 2u,           ///< 23-letter Protein alphabet { A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y,B,Z,X }
+    PROTEIN = 2u,           ///< 24-letter Protein alphabet { A,C,D,E,F,G,H,I,K,L,M,N,O,P,Q,R,S,T,V,W,Y,B,Z,X }
     IUPAC16 = 3u            ///< 16-letter DNA IUPAC alphabet { =,A,C,M,G,R,S,V,T,W,Y,H,K,D,B,N }
 };
 

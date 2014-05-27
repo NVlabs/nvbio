@@ -47,9 +47,9 @@ namespace io {
 
 namespace { // anonymous namespace
 
-struct Writer
+struct FASTAHandler
 {
-    Writer(
+    FASTAHandler(
         SequenceDataEncoder*    output,
         const uint32            flags,
         const uint32            truncate_read_len) :
@@ -139,7 +139,7 @@ int SequenceDataFile_FASTA_gz::nextChunk(SequenceDataEncoder *output, uint32 max
         ((m_flags & REVERSE_COMPLEMENT) ? 1u : 0u);
 
     // build a writer
-    Writer writer( output, m_flags, m_truncate_read_len );
+    FASTAHandler writer( output, m_flags, m_truncate_read_len );
 
     return m_fasta_reader.read( max_reads / read_mult, writer );
 }

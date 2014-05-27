@@ -60,7 +60,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE char protein_to_char(const uint8 c)
            c == 21 ? 'B' :
            c == 22 ? 'Z' :
            c == 23 ? 'X' :
-                     'N';
+                     'X';
 }
 
 /// convert an ASCII character to a Protein symbol
@@ -91,7 +91,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 char_to_protein(const char c)
            c == 'B' ? 21u :
            c == 'Z' ? 22u :
            c == 'X' ? 23u :
-                      11u;
+                      23u;
 }
 
 // convert a given symbol to its ASCII character

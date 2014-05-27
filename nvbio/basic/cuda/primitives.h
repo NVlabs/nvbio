@@ -61,7 +61,7 @@ namespace cuda {
 ///@addtogroup CUDA
 ///@{
 
-///@defgroup Primitives Parallel Primitives
+///@defgroup CUDAPrimitives Parallel Primitives
 /// This module provides a set of convenience wrappers to invoke device-wide
 /// CUB's parallel primitives without worrying about the memory management.
 /// All temporary storage is in fact allocated within a single thrust::device_vector
@@ -228,7 +228,7 @@ uint32 reduce_by_key(
     ReductionOp                   reduction_op,
     thrust::device_vector<uint8>& d_temp_storage);
 
-///@} // end of the Primitives group
+///@} // end of the CUDAPrimitives group
 ///@} // end of the CUDA group
 ///@} // end of the Basic group
 

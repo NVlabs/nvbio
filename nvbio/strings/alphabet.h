@@ -100,6 +100,8 @@ template <> struct AlphabetTraits<PROTEIN>
     static const uint32 SYMBOL_COUNT = 24;
 };
 
+/// return the number of bits per symbol for a given alphabet
+///
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 uint32 bits_per_symbol(const Alphabet alphabet)
 {

@@ -93,7 +93,7 @@ namespace io {
 /// typedef io::SequenceDataAccess<DNA>::sequence_string_set_type sequence_string_set_type;
 ///
 /// // load a SequenceData object
-/// SharedPointer<io::SequenceDataHost> genome = io::load_sequence_data( DNA, "drosophila" );
+/// SharedPointer<io::SequenceDataHost> genome = io::load_sequence_data( DNA, "drosophila.fa" );
 ///
 /// // access it specifying the alphabet at compile-time
 /// const io::SequenceDataAccess<DNA> genome_access( genome.get() );

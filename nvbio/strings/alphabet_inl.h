@@ -32,6 +32,28 @@
 
 namespace nvbio {
 
+/// convert a 2-bit RNA symbol to its ASCII character
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE char rna_to_char(const uint8 c)
+{
+    return c == 0 ? 'A' :
+           c == 1 ? 'C' :
+           c == 2 ? 'G' :
+           c == 3 ? 'U' :
+                    'N';
+}
+
+/// convert an ASCII RNA representation to its 2-bit symbol
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 char_to_rna(const char c)
+{
+    return c == 'A' ? 0u :
+           c == 'C' ? 1u :
+           c == 'G' ? 2u :
+           c == 'U' ? 3u :
+                      4u;
+}
+
 /// convert a Protein symbol to its ASCII character
 ///
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE char protein_to_char(const uint8 c)
@@ -107,6 +129,10 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE char to_char(const uint8 c)
         return iupac16_to_char( c );
     else if (ALPHABET == PROTEIN) // TODO!
         return protein_to_char( c );
+    else if (ALPHABET == RNA)
+        return rna_to_char( c );
+    else if (ALPHABET == RNA_N)
+        return rna_to_char( c );
 }
 
 // convert a given symbol to its ASCII character
@@ -122,6 +148,10 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 from_char(const char c)
         return char_to_iupac16( c );
     else if (ALPHABET == PROTEIN) // TODO!
         return char_to_protein( c );
+    else if (ALPHABET == RNA)
+        return char_to_rna( c );
+    else if (ALPHABET == RNA_N)
+        return char_to_rna( c );
 }
 
 // convert from the given alphabet to an ASCII string

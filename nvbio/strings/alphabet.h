@@ -65,6 +65,8 @@ enum Alphabet
     DNA_N     = 1u,           ///< 5-letter DNA + N alphabet    { A,C,G,T,N }
     DNA_IUPAC = 2u,           ///< 16-letter DNA IUPAC alphabet { =,A,C,M,G,R,S,V,T,W,Y,H,K,D,B,N }
     PROTEIN   = 3u,           ///< 24-letter Protein alphabet   { A,C,D,E,F,G,H,I,K,L,M,N,O,P,Q,R,S,T,V,W,Y,B,Z,X }
+    RNA       = 4u,           ///< 4-letter RNA alphabet        { A,C,G,U }
+    RNA_N     = 5u,           ///< 5-letter RNA + N alphabet    { A,C,G,U,N }
 };
 
 /// A traits class for Alphabet
@@ -99,16 +101,30 @@ template <> struct AlphabetTraits<PROTEIN>
     static const uint32 SYMBOL_SIZE  = 8;
     static const uint32 SYMBOL_COUNT = 24;
 };
+/// A traits class for DNA Alphabet
+///
+template <> struct AlphabetTraits<RNA>
+{
+    static const uint32 SYMBOL_SIZE  = 2;
+    static const uint32 SYMBOL_COUNT = 4;
+};
+/// A traits class for DNA_N Alphabet
+///
+template <> struct AlphabetTraits<RNA_N>
+{
+    static const uint32 SYMBOL_SIZE  = 4;
+    static const uint32 SYMBOL_COUNT = 5;
+};
 
 /// return the number of bits per symbol for a given alphabet
 ///
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 uint32 bits_per_symbol(const Alphabet alphabet)
 {
-    return alphabet == DNA     ? 2 :
-           alphabet == DNA_N   ? 4 :
+    return alphabet == DNA       ? 2 :
+           alphabet == DNA_N     ? 4 :
            alphabet == DNA_IUPAC ? 4 :
-           alphabet == PROTEIN ? 8 :
+           alphabet == PROTEIN   ? 8 :
            8u;
 }
 

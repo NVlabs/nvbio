@@ -53,18 +53,18 @@
 /// All temporary storage is allocated within a single nvbio::vector
 /// passed by the user, which can be safely reused across function calls.
 ///
-/// - any()
-/// - all()
-/// - is_sorted()
-/// - is_segment_sorted()
-/// - for_each()
-/// - transform()
-/// - reduce()
-/// - inclusive_scan()
-/// - exclusive_scan()
-/// - copy_flagged()
-/// - copy_if()
-/// - runlength_encode()
+/// - nvbio::any()
+/// - nvbio::all()
+/// - nvbio::is_sorted()
+/// - nvbio::is_segment_sorted()
+/// - nvbio::for_each()
+/// - nvbio::transform()
+/// - nvbio::reduce()
+/// - nvbio::inclusive_scan()
+/// - nvbio::exclusive_scan()
+/// - nvbio::copy_flagged()
+/// - nvbio::copy_if()
+/// - nvbio::runlength_encode()
 ///
 
 namespace nvbio {

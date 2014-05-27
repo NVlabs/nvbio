@@ -168,14 +168,14 @@ template <Alphabet ALPHABET, typename SymbolIterator>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void from_string(
     const char*             begin,
     const char*             end,
-    const SymbolIterator    symbols);
+    SymbolIterator          symbols);
 
 /// convert from an ASCII string to the given alphabet
 ///
 template <Alphabet ALPHABET, typename SymbolIterator>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void from_string(
     const char*             begin,
-    const SymbolIterator    symbols);
+    SymbolIterator          symbols);
 
 /// conversion functor from a given alphabet to ASCII char
 ///
@@ -213,7 +213,7 @@ to_string(Iterator it)
     return make_transform_iterator( it, to_char_functor<ALPHABET>() );
 }
 
-/// convert an ASCII string iterator from to a given alphabet string iterator
+/// convert an ASCII string iterator to a given alphabet string iterator
 ///
 template <Alphabet ALPHABET, typename Iterator>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE

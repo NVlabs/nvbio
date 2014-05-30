@@ -167,7 +167,7 @@ void for_each(
     const host_tag          tag,
     const uint32            n,
     const Iterator          in,
-    const Functor           functor)
+          Functor           functor)
 {
     #if defined(_OPENMP)
     #pragma omp parallel for if (n >= 256)
@@ -183,7 +183,7 @@ void for_each(
     const device_tag        tag,
     const uint32            n,
     const Iterator          in,
-    const Functor           functor)
+          Functor           functor)
 {
     thrust::for_each( in, in + n, functor );
 }
@@ -194,7 +194,7 @@ template <typename system_tag, typename Iterator, typename Functor>
 void for_each(
     const uint32            n,
     const Iterator          in,
-    const Functor           functor)
+          Functor           functor)
 {
     return for_each( system_tag(), n, in, functor );
 }

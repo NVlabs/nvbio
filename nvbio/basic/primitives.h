@@ -114,7 +114,7 @@ template <typename system_tag, typename Iterator, typename Functor>
 void for_each(
     const uint32            n,
     const Iterator          in,
-    const Functor           functor);
+          Functor           functor);
 
 /// apply a functor to each element of the given sequence
 ///

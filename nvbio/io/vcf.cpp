@@ -33,9 +33,63 @@
 #include <nvbio/basic/dna.h>
 
 #include <stdlib.h>
+#include <string.h>
 
 namespace nvbio {
 namespace io {
+
+// parse the INFO field looking for an END tag
+// INFO is a set of ID=val entries separated by semicolons
+// returns false if a parse error occurs
+static bool get_end_position(uint32 *out, char *info)
+{
+    char *sc, *eq;
+
+    do {
+        // search for the next semi-colon
+        sc = strchr(info, ';');
+        if (sc)
+        {
+            // null it out
+            *sc = '\0';
+        }
+
+        // now search for the next equal sign
+        eq = strchr(info, '=');
+        if (!eq)
+        {
+            // no equal sign, malformed header
+            return false;
+        }
+
+        // zero out the equal sign
+        *eq = 0;
+
+        // check the key name
+        if (strcmp(info, "END") == 0)
+        {
+            // parse the END value
+            char *endptr = NULL;
+            uint32 position = strtoll(eq + 1, &endptr, 10);
+            if (!endptr || endptr == eq || *endptr != '\0')
+            {
+                return false;
+            }
+
+            *out = position;
+            return true;
+        }
+
+        if (sc)
+        {
+            info = sc + 1;
+        } else {
+            info = NULL;
+        }
+    } while (info && *info);
+
+    return true;
+}
 
 // loads a VCF 4.2 file, appending the data to output
 bool loadVCF(SNPDatabase& output, const char *file_name)
@@ -67,18 +121,27 @@ bool loadVCF(SNPDatabase& output, const char *file_name)
         }
 
         // parse the entries in each record
-        char *chrom, *pos, *id, *ref, *alt, *qual, *filter;
+        char *chrom  = NULL;
+        char *pos    = NULL;
+        char *id     = NULL;
+        char *ref    = NULL;
+        char *alt    = NULL;
+        char *qual   = NULL;
+        char *filter = NULL;
+        char *info   = NULL;
 
 // ugly macro to tokenize the string based on strchr
 #define NEXT(prev, next)                        \
     {                                           \
-        next = strchr(prev, '\t');              \
-        if (!next) {                                                    \
-            log_error(stderr, "Error parsing VCF file (line %d): incomplete variant\n", line_counter); \
-            return false;                                               \
-        }                                                               \
-        *next = '\0';                                                   \
-        next++;                                                         \
+        if (prev)                               \
+        {                                       \
+            next = strchr(prev, '\t');          \
+            if (next)                           \
+            {                                   \
+                *next = '\0';                   \
+                next++;                         \
+            }                                   \
+        }                                       \
     }
 
         chrom = line;
@@ -88,12 +151,19 @@ bool loadVCF(SNPDatabase& output, const char *file_name)
         NEXT(ref, alt);
         NEXT(alt, qual);
         NEXT(qual, filter);
+        NEXT(filter, info);
+
+        if (!chrom || !pos || !id || !ref || !alt || !qual || !filter)
+        {
+            log_error(stderr, "Error parsing VCF file (line %d): incomplete variant\n", line_counter);
+            return false;
+        }
 
 #undef NEXT
 
         // convert position and quality
         char *endptr = NULL;
-        uint64 position = strtoll(pos, &endptr, 10);
+        uint32 position = strtoll(pos, &endptr, 10);
         if (!endptr || endptr == pos || *endptr != '\0')
         {
             log_error(stderr, "VCF file error (line %d): invalid position\n", line_counter);
@@ -110,6 +180,19 @@ bool loadVCF(SNPDatabase& output, const char *file_name)
             {
                 log_warning(stderr, "VCF file error (line %d): invalid quality\n", line_counter);
                 quality = 0xff;
+            }
+        }
+
+        uint32 stop = position + strlen(ref);
+        // parse the info header looking for a stop position
+        if (info)
+        {
+            bool ret;
+            ret = get_end_position(&stop, info);
+            if (ret == false)
+            {
+                log_warning(stderr, "VCF file error (line %d): error parsing INFO line\n", line_counter);
+                return false;
             }
         }
 
@@ -135,7 +218,7 @@ bool loadVCF(SNPDatabase& output, const char *file_name)
             output.ref_variant_index.push_back(index);
 
             output.reference_sequence_names.push_back(std::string(chrom));
-            output.sequence_positions.push_back(position);
+            output.sequence_positions.push_back(make_uint2(position, stop));
 
             output.reference_sequences.resize(index.reference_start + ref_len);
             string_to_iupac16(ref, output.reference_sequences.begin() + index.reference_start);

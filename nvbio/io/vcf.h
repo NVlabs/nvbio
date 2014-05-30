@@ -40,9 +40,9 @@ namespace io {
 struct SNP_sequence_index
 {
     // these indices are stored in base-pairs since variants are extremely short
-    uint64 reference_start;
+    uint32 reference_start;
     uint32 reference_len;
-    uint64 variant_start;
+    uint32 variant_start;
     uint32 variant_len;
 
     SNP_sequence_index()
@@ -50,7 +50,8 @@ struct SNP_sequence_index
           variant_start(0), variant_len(0)
     { }
 
-    SNP_sequence_index(uint64 reference_start, uint32 reference_len, uint64 variant_start, uint32 variant_len)
+    SNP_sequence_index(uint32 reference_start, uint32 reference_len,
+                       uint32 variant_start, uint32 variant_len)
         : reference_start(reference_start), reference_len(reference_len),
           variant_start(variant_start), variant_len(variant_len)
     { }
@@ -58,14 +59,14 @@ struct SNP_sequence_index
 
 struct SNPDatabase
 {
-
     // the name of the reference sequence
     // note: VCF allows this to be an integer ID encoded in a string that references
     // a contig from an assembly referenced in the header; this is not supported yet
     std::vector<std::string> reference_sequence_names;
 
-    // position of the variant in the reference sequence (first base in the sequence is position 1)
-    nvbio::vector<host_tag, uint32> sequence_positions;
+    // start (x) and stop (y) positions of the variant in the reference sequence (first base in the sequence is position 1)
+    // the "stop" position is either start + len or the contents of the END= info tag
+    nvbio::vector<host_tag, uint2> sequence_positions;
 
     // packed reference sequences
     nvbio::PackedVector<host_tag, 4> reference_sequences;

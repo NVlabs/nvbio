@@ -83,11 +83,12 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
 
     log_visible(stderr, "opening read file \"%s\"\n", reads_name);
     SharedPointer<nvbio::io::SequenceDataStream> read_data_file(
-        nvbio::io::open_sequence_file(reads_name,
-        qencoding,
-        uint32(-1),
-        uint32(-1),
-        flags )
+        nvbio::io::open_sequence_file(
+            reads_name,
+            qencoding,
+            uint32(-1),
+            uint32(-1),
+            flags )
     );
 
     if (read_data_file == NULL || read_data_file->is_ok() == false)
@@ -109,11 +110,11 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
         timer.start();
 
         // load a new batch of reads
-        if (io::next( DNA_N, &h_read_data, read_data_file.get(), batch_size, batch_bps ) == 0)
+        if (io::next( DNA, &h_read_data, read_data_file.get(), batch_size, batch_bps ) == 0)
             break;
 
         // build a view
-        io::SequenceDataAccess<DNA_N> h_read_view( h_read_data );
+        io::SequenceDataAccess<DNA> h_read_view( h_read_data );
 
         const uint64 required_words = util::divide_ri( reads->n_symbols + h_read_data.bps(), SYMBOLS_PER_WORD );
 
@@ -123,7 +124,7 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
         const uint32 word_offset = reads->n_symbols & (SYMBOLS_PER_WORD-1);
               uint32 word_rem    = 0;
 
-        typedef io::SequenceDataAccess<DNA_N>::sequence_stream_type src_read_stream_type;
+        typedef io::SequenceDataAccess<DNA>::sequence_stream_type src_read_stream_type;
         const src_read_stream_type src( h_read_view.sequence_stream() );
 
         if (word_offset)

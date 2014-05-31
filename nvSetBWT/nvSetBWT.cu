@@ -114,7 +114,7 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
             break;
 
         // build a view
-        io::SequenceDataAccess<DNA> h_read_view( h_read_data );
+        const io::SequenceDataAccess<DNA> h_read_view( h_read_data );
 
         const uint64 required_words = util::divide_ri( reads->n_symbols + h_read_data.bps(), SYMBOLS_PER_WORD );
 
@@ -209,6 +209,7 @@ int main(int argc, char* argv[])
         log_info(stderr, "   -cpu-mem | --cpu-memory    int (MB)  [8192]\n");
         log_info(stderr, "   -gpu-mem | --gpu-memory    int (MB)  [2048]\n");
         log_info(stderr, "   -c       | --compression   string    [1R]   (e.g. \"1\", ..., \"9\", \"1R\")\n");
+        log_info(stderr, "   -t       | --threads       int       [auto]\n");
         log_info(stderr, "   -F       | --skip-forward\n");
         log_info(stderr, "   -R       | --skip-reverse\n");
         log_info(stderr, "  output formats:\n");
@@ -233,6 +234,7 @@ int main(int argc, char* argv[])
     bool  reverse                 = true;
     const char* comp_level        = "1R";
     io::QualityEncoding qencoding = io::Phred33;
+    int   threads                 = 0;
 
     BWTParams params;
 
@@ -271,6 +273,11 @@ int main(int argc, char* argv[])
         {
             comp_level = argv[++i];
         }
+        else if ((strcmp( argv[i], "-t" )             == 0) ||
+                 (strcmp( argv[i], "--threads" )      == 0))  // setup number of threads
+        {
+            threads = atoi( argv[++i] );
+        }
     }
 
     try
@@ -292,7 +299,7 @@ int main(int argc, char* argv[])
 
 #ifdef _OPENMP
         // now set the number of CPU threads
-        omp_set_num_threads( omp_get_num_procs() );
+        omp_set_num_threads( threads > 0 ? threads : omp_get_num_procs() );
         #pragma omp parallel
         {
             log_verbose(stderr, "  running on multiple threads (%d)\n", omp_get_thread_num());
@@ -302,9 +309,6 @@ int main(int argc, char* argv[])
         Reads reads;
 
         log_info(stderr,"  reading input... started\n");
-
-        // NOTE: at the moment the forward and reverse strands are not interleaved: we place
-        // first all the forward and then all the reverse strands - might want to fix this.
 
         uint32       encoding_flags  = 0u;
         if (forward) encoding_flags |= io::FORWARD;

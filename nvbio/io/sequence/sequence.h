@@ -613,6 +613,10 @@ struct SequenceDataStream
 ///
 int next(const Alphabet alphabet, SequenceDataHost* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
 
+/// utility method to append the next batch from a SequenceDataStream
+///
+int append(const Alphabet alphabet, SequenceDataHost* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
+
 /// utility method to skip a batch from a SequenceDataStream
 ///
 int skip(SequenceDataStream* stream, const uint32 batch_size);

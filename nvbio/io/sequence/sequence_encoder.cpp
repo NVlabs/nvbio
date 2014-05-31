@@ -254,37 +254,43 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
 
     /// constructor
     ///
-    SequenceDataEncoderImpl(SequenceDataHost* data) :
+    SequenceDataEncoderImpl(SequenceDataHost* data, bool append = false) :
         SequenceDataEncoder( SEQUENCE_ALPHABET ),
-        m_data( data ) {}
+        m_data( data ),
+        m_append( append ) {}
 
     /// reserve enough storage for a given number of sequences and bps
     ///
     void reserve(const uint32 n_sequences, const uint32 n_bps)
     {
-        m_data->reserve( n_sequences, n_bps );
+        if (m_append)
+            m_data->reserve( m_data->size() + n_sequences, m_data->bps() + n_bps );
+        else
+            m_data->reserve( n_sequences, n_bps );
     }
 
     /// signals that the batch is to begin
     ///
     void begin_batch(void)
     {
-        // reset the batch
-        m_data->SequenceDataInfo::operator=( SequenceDataInfo() );
+        if (m_append == false)
+        {
+            // reset the batch
+            m_data->SequenceDataInfo::operator=( SequenceDataInfo() );
+
+            m_data->m_sequence_vec.resize( 0 );
+            m_data->m_qual_vec.resize( 0 );
+            m_data->m_name_vec.resize( 0 );
+
+            m_data->m_sequence_index_vec.resize( 1 );
+            m_data->m_sequence_index_vec[0] = 0;
+
+            m_data->m_name_index_vec.resize( 1 );
+            m_data->m_name_index_vec[0] = 0;
+        }
 
         // assign the alphabet
         m_data->m_alphabet = SEQUENCE_ALPHABET;
-
-        m_data->m_sequence_vec.resize( 0 );
-        m_data->m_qual_vec.resize( 0 );
-        m_data->m_name_vec.resize( 0 );
-
-        m_data->m_sequence_index_vec.resize( 1 );
-        m_data->m_sequence_index_vec[0] = 0;
-
-        m_data->m_name_index_vec.resize( 1 );
-        m_data->m_name_index_vec[0] = 0;
-
         m_data->m_has_qualities = true;
     }
 
@@ -370,6 +376,7 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
 
 private:
     SequenceDataHost* m_data;
+    bool              m_append;
 };
 
 // create a sequence encoder
@@ -412,6 +419,34 @@ int next(const Alphabet alphabet, SequenceDataHost* data, SequenceDataStream* st
     case PROTEIN:
         {
             SequenceDataEncoderImpl<PROTEIN> encoder( data );
+            return stream->next( &encoder, batch_size, batch_bps );
+        }
+        break;
+    }
+    return 0;
+}
+
+// next batch
+//
+int append(const Alphabet alphabet, SequenceDataHost* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps)
+{
+    switch (alphabet)
+    {
+    case DNA:
+        {
+            SequenceDataEncoderImpl<DNA> encoder( data, true );
+            return stream->next( &encoder, batch_size, batch_bps );
+        }
+        break;
+    case DNA_N:
+        {
+            SequenceDataEncoderImpl<DNA_N> encoder( data, true );
+            return stream->next( &encoder, batch_size, batch_bps );
+        }
+        break;
+    case PROTEIN:
+        {
+            SequenceDataEncoderImpl<PROTEIN> encoder( data, true );
             return stream->next( &encoder, batch_size, batch_bps );
         }
         break;

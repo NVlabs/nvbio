@@ -85,7 +85,7 @@ namespace io {
 /// specifying the position of the i-th sequence in the concatenated arrays.
 /// The packed sequences can in turn be encoded with a user-specified \ref Alphabet "alphabet".
 /// However, SequenceData has only runtime knowledge of the alphabet encoding, and hence does not provide
-/// any method to perform decoding - rather, it only exposes methods to obtain \ref SequenceDataView "plain-views"
+/// any method to perform decoding - rather, it only exposes methods to obtain \ref SequenceDataViews "plain-views"
 /// of the underlying sequence storage.
 /// However, by providing compile-time knowledge of the alphabet, one can construct a SequenceDataAccess wrapper
 /// around any SequenceData (or SequenceDataView) object and access the decoded string-sets transparently.

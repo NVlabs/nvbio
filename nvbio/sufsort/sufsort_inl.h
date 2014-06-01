@@ -557,12 +557,13 @@ struct LargeBWTSkeleton
             const uint32 chunk_end   = nvbio::min( chunk_begin + M, N );
 
             //
-            // load a chunk in device memory
+            // load a chunk in device memory and do bucket-counting
             //
 
             Timer timer;
             timer.start();
 
+            // load a chunk in device memory
             const chunk_set_type d_chunk_set = chunk.load( string_set, chunk_begin, chunk_end );
 
             NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
@@ -704,10 +705,7 @@ struct LargeBWTSkeleton
                 const uint32 chunk_end   = nvbio::min( chunk_begin + M, N );
                 const uint32 chunk_size  = chunk_end - chunk_begin;
 
-                //
                 // load a chunk in device memory
-                //
-
                 const chunk_set_type d_chunk_set = chunk.load( string_set, chunk_begin, chunk_end );
 
                 // collect the chunk's suffixes within the bucket range

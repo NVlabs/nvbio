@@ -278,14 +278,16 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
             // reset the batch
             m_data->SequenceDataInfo::operator=( SequenceDataInfo() );
 
-            m_data->m_sequence_vec.resize( 0 );
-            m_data->m_qual_vec.resize( 0 );
-            m_data->m_name_vec.resize( 0 );
+            //m_data->m_sequence_vec.resize( 0 );
+            //m_data->m_qual_vec.resize( 0 );
+            //m_data->m_name_vec.resize( 0 );
 
-            m_data->m_sequence_index_vec.resize( 1 );
+            if (m_data->m_sequence_index_vec.size() < 1)
+                m_data->m_sequence_index_vec.resize( 1 );
             m_data->m_sequence_index_vec[0] = 0;
 
-            m_data->m_name_index_vec.resize( 1 );
+            if (m_data->m_name_index_vec.size() < 1)
+                m_data->m_name_index_vec.resize( 1 );
             m_data->m_name_index_vec[0] = 0;
         }
 
@@ -325,8 +327,10 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
             const uint32 stream_len = m_data->m_sequence_stream_len + sequence_len;
             const uint32 words      = (stream_len + bps_per_word - 1) / bps_per_word;
 
-            m_data->m_sequence_vec.resize( words );
-            m_data->m_qual_vec.resize( stream_len );
+            if (m_data->m_sequence_vec.size() < words)
+                m_data->m_sequence_vec.resize( words );
+            if (m_data->m_qual_vec.size() < stream_len)
+                m_data->m_qual_vec.resize( stream_len );
 
             m_data->m_sequence_stream_words = words;
         }
@@ -345,7 +349,10 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
         // update sequence and bp counts
         m_data->m_n_seqs++;
         m_data->m_sequence_stream_len += sequence_len;
-        m_data->m_sequence_index_vec.push_back( m_data->m_sequence_stream_len );
+        //m_data->m_sequence_index_vec.push_back( m_data->m_sequence_stream_len );
+        if (m_data->m_sequence_index_vec.size() < m_data->m_n_seqs + 1u)
+            m_data->m_sequence_index_vec.resize(  m_data->m_n_seqs + 1u );
+        m_data->m_sequence_index_vec[ m_data->m_n_seqs ] = m_data->m_sequence_stream_len;
 
         m_data->m_min_sequence_len = nvbio::min( m_data->m_min_sequence_len, sequence_len );
         m_data->m_max_sequence_len = nvbio::max( m_data->m_max_sequence_len, sequence_len );
@@ -354,11 +361,15 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
         const uint32 name_len = uint32(strlen(name));
         const uint32 name_offset = m_data->m_name_stream_len;
 
-        m_data->m_name_vec.resize(name_offset + name_len + 1);
+        if (m_data->m_name_vec.size() < name_offset + name_len + 1)
+            m_data->m_name_vec.resize(name_offset + name_len + 1);
         memcpy( nvbio::raw_pointer( m_data->m_name_vec ) + name_offset, name, name_len + 1 );
 
         m_data->m_name_stream_len += name_len + 1;
-        m_data->m_name_index_vec.push_back( m_data->m_name_stream_len );
+        //m_data->m_name_index_vec.push_back( m_data->m_name_stream_len );
+        if (m_data->m_name_index_vec.size() < m_data->m_n_seqs + 1u)
+            m_data->m_name_index_vec.resize(  m_data->m_n_seqs + 1u );
+        m_data->m_name_index_vec[ m_data->m_n_seqs ] = m_data->m_name_stream_len;
     }
 
     /// signals that the batch is complete
@@ -381,7 +392,7 @@ private:
 
 // create a sequence encoder
 //
-SequenceDataEncoder* create_encoder(const Alphabet         alphabet, SequenceDataHost* data)
+SequenceDataEncoder* create_encoder(const Alphabet alphabet, SequenceDataHost* data)
 {
     switch (alphabet)
     {

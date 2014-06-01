@@ -340,7 +340,7 @@ struct LargeBWTSkeleton
     //
     static uint32 max_subbucket_size(
         const thrust::host_vector<uint32>&  h_buckets,
-        const uint32                        max_super_block_size,
+        const uint64                        max_super_block_size,
         const uint32                        limit,
         LargeBWTStatus*                     status)
     {
@@ -354,7 +354,7 @@ struct LargeBWTSkeleton
         for (uint32 bucket_begin = 0, bucket_end = 0; bucket_begin < h_buckets.size(); bucket_begin = bucket_end)
         {
             // grow the block of buckets until we can
-            uint32 bucket_size;
+            uint64 bucket_size;
             for (bucket_size = 0; (bucket_end < h_buckets.size()) && (bucket_size + h_buckets[bucket_end] <= max_super_block_size); ++bucket_end)
                 bucket_size += h_buckets[bucket_end];
 
@@ -394,7 +394,7 @@ struct LargeBWTSkeleton
     static void build_subbuckets(
         const thrust::host_vector<uint32>&  h_buckets,
         thrust::host_vector<uint32>&        h_subbuckets,
-        const uint32                        max_super_block_size,
+        const uint64                        max_super_block_size,
         const uint32                        max_block_size)
     {
         NVBIO_VAR_UNUSED const uint32 DOLLAR_BITS = ConfigType::DOLLAR_BITS;
@@ -404,7 +404,7 @@ struct LargeBWTSkeleton
         for (uint32 bucket_begin = 0, bucket_end = 0; bucket_begin < h_buckets.size(); bucket_begin = bucket_end)
         {
             // grow the block of buckets until we can
-            uint32 bucket_size;
+            uint64 bucket_size;
             for (bucket_size = 0; (bucket_end < h_buckets.size()) && (bucket_size + h_buckets[bucket_end] <= max_super_block_size); ++bucket_end)
                 bucket_size += h_buckets[bucket_end];
 
@@ -465,8 +465,8 @@ struct LargeBWTSkeleton
         string_set_handler_type string_set_handler( string_set );
         cuda::CompressionSort   string_sorter( mgpu_ctxt );
 
-        const uint32 max_super_block_size = params ?              // requires max_super_block_size*8 host memory bytes
-            (params->host_memory - (128u*1024u*1024u)) / 8u :     // leave 128MB for the bucket counters
+        const uint64 max_super_block_size = params ?                    // requires max_super_block_size*8 host memory bytes
+            (params->host_memory - uint64(128u*1024u*1024u)) / 8u :     // leave 128MB for the bucket counters
             512*1024*1024;
         uint32 max_block_size = params ?
             params->device_memory / 32 :                          // requires max_block_size*32 device memory bytes
@@ -538,6 +538,10 @@ struct LargeBWTSkeleton
             timer.stop();
             output_time += timer.seconds();
         }
+
+        //
+        // do a single global scan to count how many suffixes fall in each bucket
+        //
 
         float load_time  = 0.0f;
         float merge_time = 0.0f;
@@ -678,15 +682,19 @@ struct LargeBWTSkeleton
         for (uint32 bucket_begin = 0, bucket_end = 0; bucket_begin < h_buckets.size(); bucket_begin = bucket_end)
         {
             // grow the block of buckets until we can
-            uint32 bucket_size;
+            uint64 bucket_size;
             for (bucket_size = 0; (bucket_end < h_buckets.size()) && (bucket_size + h_buckets[bucket_end] <= max_super_block_size); ++bucket_end)
                 bucket_size += h_buckets[bucket_end];
 
-            uint32 suffix_count   = 0;
+            //
+            // do a global scan to find all suffixes falling in the current super-bucket
+            //
+
+            uint64 suffix_count   = 0;
             uint32 string_count   = 0;
             uint32 max_suffix_len = 0;
 
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  collect buckets[%u:%u] (%u suffixes)\n", bucket_begin, bucket_end, bucket_size) );
+            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  collect buckets[%u:%u] (%llu suffixes)\n", bucket_begin, bucket_end, bucket_size) );
             Timer collect_timer;
             collect_timer.start();
 
@@ -717,7 +725,7 @@ struct LargeBWTSkeleton
 
                 if (suffix_count + n_collected > max_super_block_size)
                 {
-                    log_error(stderr,"buffer size exceeded! (%u/%u)\n", suffix_count, max_super_block_size);
+                    log_error(stderr,"buffer size exceeded! (%llu/%llu)\n", suffix_count, max_super_block_size);
                     exit(1);
                 }
 

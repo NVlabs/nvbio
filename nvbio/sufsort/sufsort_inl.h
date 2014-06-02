@@ -28,6 +28,7 @@
 #pragma once
 
 #include <nvbio/sufsort/sufsort_priv.h>
+#include <nvbio/sufsort/sufsort_bucketing.h>
 #include <nvbio/sufsort/sufsort_utils.h>
 #include <nvbio/sufsort/compression_sort.h>
 #include <nvbio/sufsort/prefix_doubling_sufsort.h>
@@ -276,11 +277,13 @@ struct HostBWTConfig
             PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64>,
             uint64*>    string_set_type;
 
-    typedef priv::HostChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type>                      chunk_loader;
     typedef priv::HostStringSetRadices<string_set_type,SYMBOL_SIZE,DOLLAR_BITS,WORD_BITS>   string_set_handler;
 
-    typedef typename priv::word_selector<BUCKETING_BITS>::type                              bucket_type;
-    typedef priv::SetSuffixBucketer<SYMBOL_SIZE,BUCKETING_BITS,DOLLAR_BITS,bucket_type>     suffix_bucketer;
+    typedef typename priv::word_selector<BUCKETING_BITS>::type  bucket_type;
+    typedef priv::DeviceSetSuffixBucketer<
+        SYMBOL_SIZE,BIG_ENDIAN,storage_type,
+        BUCKETING_BITS,DOLLAR_BITS,bucket_type,
+        host_tag>                                              suffix_bucketer;
 };
 
 template <uint32 BUCKETING_BITS_T, uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type>
@@ -296,11 +299,13 @@ struct DeviceBWTConfig
             PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64>,
             uint64*>    string_set_type;
 
-    typedef priv::DeviceChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type>                    chunk_loader;
     typedef priv::DeviceStringSetRadices<string_set_type,SYMBOL_SIZE,DOLLAR_BITS,WORD_BITS> string_set_handler;
 
-    typedef typename priv::word_selector<BUCKETING_BITS>::type                              bucket_type;
-    typedef priv::SetSuffixBucketer<SYMBOL_SIZE,BUCKETING_BITS,DOLLAR_BITS,bucket_type>     suffix_bucketer;
+    typedef typename priv::word_selector<BUCKETING_BITS>::type  bucket_type;
+    typedef priv::DeviceSetSuffixBucketer<
+        SYMBOL_SIZE,BIG_ENDIAN,storage_type,
+        BUCKETING_BITS,DOLLAR_BITS,bucket_type,
+        device_tag>                                             suffix_bucketer;
 };
 
 // simple status class
@@ -327,8 +332,6 @@ struct LargeBWTSkeleton
 {
     typedef typename std::iterator_traits<storage_type>::value_type word_type;
     typedef typename ConfigType::string_set_handler                 string_set_handler_type;
-    typedef typename ConfigType::chunk_loader                       chunk_loader_type;
-    typedef typename chunk_loader_type::chunk_set_type              chunk_set_type;
     typedef typename ConfigType::bucket_type                        bucket_type;
     typedef typename ConfigType::suffix_bucketer                    suffix_bucketer_type;
 
@@ -452,16 +455,13 @@ struct LargeBWTSkeleton
         NVBIO_VAR_UNUSED const uint32 DOLLAR_MASK    = (1u << DOLLAR_BITS) - 1u;
         NVBIO_VAR_UNUSED const uint32 SLICE_SIZE     = 4;
 
-        const uint32 M              = 128*1024;
-        const uint32 N              = string_set.size();
-        const uint32 n_chunks       = (N + M-1) / M;
+        const uint32 N = string_set.size();
 
         LargeBWTStatus          status;
 
         mgpu::ContextPtr        mgpu_ctxt = mgpu::CreateCudaDevice(0); 
 
         suffix_bucketer_type    bucketer( mgpu_ctxt );
-        chunk_loader_type       chunk;
         string_set_handler_type string_set_handler( string_set );
         cuda::CompressionSort   string_sorter( mgpu_ctxt );
 
@@ -475,18 +475,13 @@ struct LargeBWTSkeleton
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  super-block-size: %.1f M\n", float(max_super_block_size)/float(1024*1024)) );
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"        block-size: %.1f M\n", float(max_block_size)/float(1024*1024)) );
         thrust::host_vector<uint2>       h_suffixes( max_super_block_size );
-        thrust::host_vector<uint2>       h_block_suffixes;
-        thrust::host_vector<bucket_type> h_block_radices;
         thrust::host_vector<uint8>       h_block_bwt;
 
         // reuse some buffers
-        thrust::device_vector<uint32>&   d_indices = bucketer.d_indices;
+        thrust::device_vector<uint32>    d_indices;
         thrust::device_vector<uint2>     d_bucket_suffixes;
         thrust::device_vector<uint8>     d_block_bwt;
         //thrust::device_vector<uint8>     d_temp_storage;
-
-        // global bucket sizes
-        thrust::device_vector<uint32> d_buckets( 1u << BUCKETING_BITS, 0u );
 
         // allocate an MGPU context
         mgpu::ContextPtr mgpu = mgpu::CreateCudaDevice(0);
@@ -540,79 +535,23 @@ struct LargeBWTSkeleton
         }
 
         //
-        // do a single global scan to count how many suffixes fall in each bucket
+        // split the suffixes in buckets, and count them
         //
 
-        float load_time  = 0.0f;
-        float merge_time = 0.0f;
-        float count_time = 0.0f;
-        Timer count_timer;
-        count_timer.start();
+        const uint32 n_buckets = 1u << BUCKETING_BITS;
 
-        uint64 total_suffixes = 0;
+        thrust::host_vector<uint32> h_buckets( n_buckets );
+        thrust::host_vector<uint32> h_subbuckets( n_buckets );
 
-        for (uint32 chunk_id = 0; chunk_id < n_chunks; ++chunk_id)
-        {
-            const uint32 chunk_begin = chunk_id * M;
-            const uint32 chunk_end   = nvbio::min( chunk_begin + M, N );
+        // count how many suffixes fall in each bucket
+        const uint64 total_suffixes = bucketer.count( string_set, h_buckets );
 
-            //
-            // load a chunk in device memory and do bucket-counting
-            //
-
-            Timer timer;
-            timer.start();
-
-            // load a chunk in device memory
-            const chunk_set_type d_chunk_set = chunk.load( string_set, chunk_begin, chunk_end );
-
-            NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
-            timer.stop();
-            load_time += timer.seconds();
-
-            timer.start();
-
-            // count the chunk's buckets
-            bucketer.count( d_chunk_set );
-
-            total_suffixes += bucketer.suffixes.n_suffixes;
-
-            NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
-            timer.stop();
-            count_time += timer.seconds();
-
-            timer.start();
-
-            // and merge them in with the global buckets
-            thrust::transform(
-                bucketer.d_buckets.begin(),
-                bucketer.d_buckets.end(),
-                d_buckets.begin(),
-                d_buckets.begin(),
-                thrust::plus<uint32>() );
-
-            NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
-            timer.stop();
-            merge_time += timer.seconds();
-        }
-
-        count_timer.stop();
-
-        thrust::host_vector<uint32> h_buckets( d_buckets );
-        thrust::host_vector<uint64> h_bucket_offsets( d_buckets.size() );
-        thrust::host_vector<uint32> h_subbuckets( d_buckets.size() );
-
+        // find the maximum bucket size
         const uint32 max_bucket_size = thrust::reduce(
-            d_buckets.begin(),
-            d_buckets.end(),
+            h_buckets.begin(),
+            h_buckets.end(),
             0u,
             thrust::maximum<uint32>() );
-
-        // scan the bucket offsets so as to have global positions
-        thrust::exclusive_scan(
-            thrust::make_transform_iterator( h_buckets.begin(), priv::cast_functor<uint32,uint64>() ),
-            thrust::make_transform_iterator( h_buckets.end(),   priv::cast_functor<uint32,uint64>() ),
-            h_bucket_offsets.begin() );
 
         // compute the largest non-elementary bucket
         const uint32 largest_subbucket = max_subbucket_size( h_buckets, max_super_block_size, max_block_size, &status );
@@ -620,16 +559,7 @@ struct LargeBWTSkeleton
             return status;
 
         NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    max bucket size: %u (%u)\n", largest_subbucket, max_bucket_size) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    counting : %.1fs\n", count_timer.seconds() ) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"      load   : %.1fs\n", load_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"      merge  : %.1fs\n", merge_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"      setup    : %.1fs\n", bucketer.d_setup_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"        scan   : %.1fs\n", bucketer.suffixes.d_scan_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"        search : %.1fs\n", bucketer.suffixes.d_search_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"      count  : %.1fs\n", count_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"        flatten : %.1fs\n", bucketer.d_flatten_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"        sort    : %.1fs\n", bucketer.d_count_sort_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"        search  : %.1fs\n", bucketer.d_search_time) );
+        NVBIO_CUDA_DEBUG_STATEMENT( bucketer.log_count_stats() );
 
         bucketer.clear_timers();
 
@@ -640,7 +570,6 @@ struct LargeBWTSkeleton
 
         float sufsort_time = 0.0f;
         float collect_time = 0.0f;
-        float bin_time     = 0.0f;
 
         // reduce the scratchpads size if possible
         const uint32 optimal_block_size = 32*1024*1024;
@@ -654,8 +583,6 @@ struct LargeBWTSkeleton
             string_set_handler.reserve( max_block_size, SLICE_SIZE );
             string_sorter.reserve( max_block_size );
 
-            priv::alloc_storage( h_block_radices,   max_block_size );
-            priv::alloc_storage( h_block_suffixes,  max_block_size );
             priv::alloc_storage( h_block_bwt,       max_block_size );
             priv::alloc_storage( d_block_bwt,       max_block_size );
             priv::alloc_storage( d_indices,         max_block_size );
@@ -692,80 +619,24 @@ struct LargeBWTSkeleton
             //
 
             uint64 suffix_count   = 0;
-            uint32 string_count   = 0;
             uint32 max_suffix_len = 0;
 
             NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  collect buckets[%u:%u] (%llu suffixes)\n", bucket_begin, bucket_end, bucket_size) );
             Timer collect_timer;
             collect_timer.start();
 
-            for (uint32 chunk_id = 0; chunk_id < n_chunks; ++chunk_id)
-            {
-                const uint32 chunk_begin = chunk_id * M;
-                const uint32 chunk_end   = nvbio::min( chunk_begin + M, N );
-                const uint32 chunk_size  = chunk_end - chunk_begin;
+            suffix_count = bucketer.collect(
+                string_set,
+                bucket_begin,
+                bucket_end,
+                max_suffix_len,
+                h_subbuckets,
+                h_suffixes );
 
-                // load a chunk in device memory
-                const chunk_set_type d_chunk_set = chunk.load( string_set, chunk_begin, chunk_end );
-
-                // collect the chunk's suffixes within the bucket range
-                uint32 suffix_len;
-
-                const uint32 n_collected = bucketer.collect(
-                    d_chunk_set,
-                    bucket_begin,
-                    bucket_end,
-                    string_count,
-                    suffix_len,
-                    d_subbuckets.begin(),
-                    h_block_radices,
-                    h_block_suffixes );
-
-                if (suffix_count + n_collected > max_super_block_size)
-                {
-                    log_error(stderr,"buffer size exceeded! (%llu/%llu)\n", suffix_count, max_super_block_size);
-                    exit(1);
-                }
-
-                Timer timer;
-                timer.start();
-
-                // dispatch each suffix to their respective bucket
-                for (uint32 i = 0; i < n_collected; ++i)
-                {
-                    const uint2  loc    = h_block_suffixes[i];
-                    const uint32 bucket = h_block_radices[i];
-                    const uint64 slot   = h_bucket_offsets[bucket]++; // this could be done in parallel using atomics
-
-                    NVBIO_CUDA_DEBUG_ASSERT(
-                        slot >= global_suffix_offset,
-                        slot <  global_suffix_offset + max_super_block_size,
-                        "[%u] = (%u,%u) placed at %llu - %llu (%u)\n", i, loc.x, loc.y, slot, global_suffix_offset, bucket );
-
-                    h_suffixes[ slot - global_suffix_offset ] = loc;
-                }
-
-                timer.stop();
-                bin_time += timer.seconds();
-
-                suffix_count += n_collected;
-                string_count += chunk_size;
-
-                max_suffix_len = nvbio::max( max_suffix_len, suffix_len );
-            }
             collect_timer.stop();
             collect_time += collect_timer.seconds();
             NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  collect : %.1fs (%.1f M suffixes/s - %.1f M scans/s)\n", collect_time, 1.0e-6f*float(global_suffix_offset + suffix_count)/collect_time, 1.0e-6f*float(total_suffixes)/collect_time) );
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    setup    : %.1fs\n", bucketer.d_setup_time) );
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"      scan   : %.1fs\n", bucketer.suffixes.d_scan_time) );
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"      search : %.1fs\n", bucketer.suffixes.d_search_time) );
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    flatten  : %.1fs\n", bucketer.d_flatten_time) );
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    filter   : %.1fs\n", bucketer.d_filter_time) );
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    remap    : %.1fs\n", bucketer.d_remap_time) );
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    max      : %.1fs\n", bucketer.d_max_time) );
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    sort     : %.1fs\n", bucketer.d_collect_sort_time) );
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    copy     : %.1fs\n", bucketer.d_copy_time) );
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    bin      : %.1fs\n", bin_time) );
+            NVBIO_CUDA_DEBUG_STATEMENT( bucketer.log_collect_stats() );
 
             //
             // at this point we have a large collection of localized suffixes to sort in h_suffixes;

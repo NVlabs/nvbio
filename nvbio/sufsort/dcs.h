@@ -160,11 +160,11 @@ struct DCS
     /// estimate sample size
     ///
     template <uint32 QT>
-    static uint32 estimated_sample_size(const uint64 string_len) { return (string_len * DCTable<QT>::N) / QT + 1u; }
+    static uint32 estimated_sample_size(const uint64 string_len) { return uint32( (string_len * DCTable<QT>::N) / QT + 1u ); }
 
     /// estimate sample size
     ///
-    uint32 estimate_sample_size(const uint64 string_len) const { return (string_len * N) / Q + 1u; }
+    uint32 estimate_sample_size(const uint64 string_len) const { return uint32( (string_len * N) / Q + 1u ); }
 
     uint32                        Q;            ///< difference cover period
     uint32                        N;            ///< difference cover quorum

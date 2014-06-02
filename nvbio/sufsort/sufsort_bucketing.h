@@ -38,6 +38,7 @@
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <thrust/adjacent_difference.h>
+#include <nvbio/basic/omp.h>
 
 namespace nvbio {
 namespace priv {
@@ -622,7 +623,7 @@ struct HostCoreSetSuffixBucketer
 
         const uint32 n_strings = string_set.size();
 
-        uint64 n_suffixes = 0u;
+        n_suffixes = 0u;
 
         // loop through all the strings in the set
         for (uint32 i = 0; i < n_strings; ++i)
@@ -717,6 +718,7 @@ public:
     thrust::host_vector<uint32>      h_buckets;
     thrust::host_vector<bucket_type> h_radices;
     thrust::host_vector<uint2>       h_suffixes;
+    uint32                           n_suffixes;
     uint32                           n_collected;
     uint32                           max_suffix_len;
 };
@@ -739,11 +741,7 @@ struct HostSetSuffixBucketer
     ///
     HostSetSuffixBucketer(mgpu::ContextPtr _mgpu)
     {
-      #if defined(_OPENMP)
         m_bucketers.resize( omp_get_num_procs() );
-      #else
-        m_bucketers.resize( 1u );
-      #endif
     }
 
     /// clear internal timers
@@ -751,6 +749,7 @@ struct HostSetSuffixBucketer
     void clear_timers()
     {
         collect_time = 0.0f;
+        merge_time   = 0.0f;
         bin_time     = 0.0f;
     }
 
@@ -762,24 +761,25 @@ struct HostSetSuffixBucketer
         const string_set_type&             string_set,
               thrust::host_vector<uint32>& h_buckets)
     {
-        Timer count_timer;
-        count_timer.start();
+        ScopedTimer<float> count_timer( &count_time );
 
         const uint32 n_buckets  = 1u << N_BITS;
         const uint32 batch_size = 1024*1024;
         const uint32 n_strings  = string_set.size();
 
-      #if defined(_OPENMP)
+        // initialize bucket counters
+        #pragma omp parallel for
+        for (int b = 0; b < int(n_buckets); ++b)
+            h_buckets[b] = 0u;
+
         const uint32 n_threads = omp_get_max_threads();
-      #else
-        const uint32 n_threads = 1u;
-      #endif
 
         const uint32 chunk_size = batch_size / n_threads;
 
         // declare a chunk loader
         chunk_loader_type chunk_loader;
 
+        // keep track of the total number of suffixes
         uint64 n_suffixes = 0u;
 
         // split the string-set in batches
@@ -791,40 +791,39 @@ struct HostSetSuffixBucketer
             // split the batch in chunks, one per core
             #pragma omp parallel
             {
-              #if defined(_OPENMP)
                 const uint32 tid         = omp_get_thread_num();
                 const uint32 chunk_begin = batch_begin + tid * chunk_size;
-              #else
-                const uint32 tid         = 0u;
-                const uint32 chunk_begin = batch_begin;
-              #endif
 
                 const uint32 chunk_end = nvbio::min( chunk_begin + chunk_size, batch_end );
 
-                const chunk_set_type chunk_set = chunk_loader.load( string_set, chunk_begin, chunk_end );
+                if (chunk_begin < batch_end)
+                {
+                    const chunk_set_type chunk_set = chunk_loader.load( string_set, chunk_begin, chunk_end );
 
-                n_suffixes += m_bucketers[tid].count( chunk_set );
+                    m_bucketers[tid].count( chunk_set );
+                }
+            }
+
+            // merge all buckets
+            {
+                ScopedTimer<float> timer( &merge_time );
+
+                for (uint32 i = 0; i < n_threads; ++i)
+                {
+                    const uint32 chunk_begin = batch_begin + i * chunk_size;
+
+                    if (chunk_begin < batch_end)
+                    {
+                        // sum the number of suffixes
+                        n_suffixes += m_bucketers[i].n_suffixes;
+
+                        #pragma omp parallel for
+                        for (int b = 0; b < int(n_buckets); ++b)
+                            h_buckets[b] += m_bucketers[i].h_buckets[b];
+                    }
+                }
             }
         }
-
-        Timer timer;
-        timer.start();
-
-        // initialize bucket counters
-        #pragma omp parallel for
-        for (int b = 0; b < int(n_buckets); ++b)
-            h_buckets[b] = 0u;
-
-        // merge all buckets
-        for (uint32 i = 0; i < n_threads; ++i)
-        {
-            #pragma omp parallel for
-            for (int b = 0; b < int(n_buckets); ++b)
-                h_buckets[b] += m_bucketers[i].h_buckets[b];
-        }
-
-        timer.stop();
-        merge_time += timer.seconds();
 
         //
         // initialize internal bucketing helpers
@@ -838,9 +837,6 @@ struct HostSetSuffixBucketer
             thrust::make_transform_iterator( h_buckets.begin(), priv::cast_functor<uint32,uint64>() ),
             thrust::make_transform_iterator( h_buckets.end(),   priv::cast_functor<uint32,uint64>() ),
             h_bucket_offsets.begin() );
-
-        count_timer.stop();
-        count_time += count_timer.seconds();
 
         return n_suffixes;
     }
@@ -860,11 +856,7 @@ struct HostSetSuffixBucketer
         const uint32 batch_size = 1024*1024;
         const uint32 n_strings  = string_set.size();
 
-      #if defined(_OPENMP)
         const uint32 n_threads = omp_get_max_threads();
-      #else
-        const uint32 n_threads = 1u;
-      #endif
 
         const uint32 chunk_size = batch_size / n_threads;
 
@@ -885,13 +877,8 @@ struct HostSetSuffixBucketer
             // split the batch in chunks, one per core
             #pragma omp parallel
             {
-              #if defined(_OPENMP)
                 const uint32 tid         = omp_get_thread_num();
                 const uint32 chunk_begin = batch_begin + tid * chunk_size;
-              #else
-                const uint32 tid         = 0u;
-                const uint32 chunk_begin = batch_begin;
-              #endif
 
                 const uint32 chunk_end = nvbio::min( chunk_begin + chunk_size, batch_end );
 

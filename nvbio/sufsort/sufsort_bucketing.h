@@ -765,6 +765,7 @@ struct HostSetSuffixBucketer
         Timer count_timer;
         count_timer.start();
 
+        const uint32 n_buckets  = 1u << N_BITS;
         const uint32 batch_size = 1024*1024;
         const uint32 n_strings  = string_set.size();
 
@@ -926,25 +927,26 @@ struct HostSetSuffixBucketer
                 timer.start();
 
                 // dispatch each suffix to their respective bucket
-                for (uint32 i = 0; i < m_bucketers[i].n_collected; ++i)
+                for (uint32 j = 0; j < m_bucketers[i].n_collected; ++j)
                 {
-                    const uint2  loc    = m_bucketers[i].h_suffixes[i];
-                    const uint32 bucket = m_bucketers[i].h_radices[i];
+                    const uint2  loc    = m_bucketers[i].h_suffixes[j];
+                    const uint32 bucket = m_bucketers[i].h_radices[j];
                     const uint64 slot   = h_bucket_offsets[bucket]++; // this could be done in parallel using atomics
 
                     NVBIO_CUDA_DEBUG_ASSERT(
                         slot >= m_global_offset,
                         slot <  m_global_offset + h_suffixes.size(),
-                        "[%u] = (%u,%u) placed at %llu - %llu (%u)\n", i, loc.x, loc.y, slot, m_global_offset, bucket );
+                        "[%u:%u] = (%u,%u) placed at %llu - %llu (%u)\n", i, j, loc.x, loc.y, slot, m_global_offset, bucket );
 
                     h_suffixes[ slot - m_global_offset ] = loc;
                 }
 
+                // keep stats
+                n_collected += m_bucketers[i].n_collected;
+
                 timer.stop();
                 bin_time += timer.seconds();
             }
-
-            n_collected += m_bucketers[i].n_collected;
         }
 
         // keep track of how many suffixes we have collected globally

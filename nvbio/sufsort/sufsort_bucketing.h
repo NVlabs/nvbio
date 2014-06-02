@@ -689,10 +689,10 @@ struct HostCoreSetSuffixBucketer
                 // check whether the extracted radix is in the given bucket
                 if (in_range( radix ))
                 {
-                    if (n_collected >= h_radices.size())
+                    if (n_collected + 1u > h_radices.size())
                     {
-                        h_radices.resize( n_collected * 2u );
-                        h_suffixes.resize( n_collected * 2u );
+                        h_radices.resize( (n_collected + 1u) * 2u );
+                        h_suffixes.resize( (n_collected + 1u) * 2u );
                     }
 
                     // remap the radix
@@ -796,6 +796,7 @@ struct HostSetSuffixBucketer
 
                 const uint32 chunk_end = nvbio::min( chunk_begin + chunk_size, batch_end );
 
+                // make sure this thread is active
                 if (chunk_begin < batch_end)
                 {
                     const chunk_set_type chunk_set = chunk_loader.load( string_set, chunk_begin, chunk_end );
@@ -812,6 +813,7 @@ struct HostSetSuffixBucketer
                 {
                     const uint32 chunk_begin = batch_begin + i * chunk_size;
 
+                    // make sure this thread is active
                     if (chunk_begin < batch_end)
                     {
                         // sum the number of suffixes
@@ -871,68 +873,75 @@ struct HostSetSuffixBucketer
             // determine the end of this batch
             const uint32 batch_end = nvbio::min( batch_begin + batch_size, n_strings );
 
-            Timer timer;
-            timer.start();
-
-            // split the batch in chunks, one per core
-            #pragma omp parallel
+            // perform bucketing for all the suffixes in the current batch
             {
-                const uint32 tid         = omp_get_thread_num();
-                const uint32 chunk_begin = batch_begin + tid * chunk_size;
+                // time collection
+                ScopedTimer<float> timer( &collect_time );
 
-                const uint32 chunk_end = nvbio::min( chunk_begin + chunk_size, batch_end );
+                // split the batch in chunks, one per core
+                #pragma omp parallel
+                {
+                    const uint32 tid         = omp_get_thread_num();
+                    const uint32 chunk_begin = batch_begin + tid * chunk_size;
 
-                const chunk_set_type chunk_set = chunk_loader.load( string_set, chunk_begin, chunk_end );
+                    const uint32 chunk_end = nvbio::min( chunk_begin + chunk_size, batch_end );
 
-                m_bucketers[tid].collect(
-                    chunk_set,
-                    bucket_begin,
-                    bucket_end,
-                    chunk_begin,
-                    h_subbuckets.begin() );
+                    // make sure this thread is active
+                    if (chunk_begin < batch_end)
+                    {
+                        const chunk_set_type chunk_set = chunk_loader.load( string_set, chunk_begin, chunk_end );
+
+                        m_bucketers[tid].collect(
+                            chunk_set,
+                            bucket_begin,
+                            bucket_end,
+                            chunk_begin,
+                            h_subbuckets.begin() );
+                    }
+                }
             }
-
-            timer.stop();
-            collect_time += timer.seconds();
 
             max_suffix_len = 0u;
 
-            // merge all output vectors
+            // merge all output vectors, binning the output suffixes
             for (uint32 i = 0; i < n_threads; ++i)
             {
-                // keep stats on the maximum suffix length
-                max_suffix_len = nvbio::max( max_suffix_len, m_bucketers[i].max_suffix_len );
+                const uint32 chunk_begin = batch_begin + i * chunk_size;
 
-                // check whether we are overflowing our output buffer
-                if (n_collected + m_bucketers[i].n_collected > h_suffixes.size())
+                // make sure this thread is active
+                if (chunk_begin < batch_end)
                 {
-                    log_error(stderr,"buffer size exceeded! (%llu/%llu)\n", n_collected + m_bucketers[i].n_collected, uint64( h_suffixes.size() ));
-                    exit(1);
+                    // time binning
+                    ScopedTimer<float> timer( &bin_time );
+
+                    // keep stats on the maximum suffix length
+                    max_suffix_len = nvbio::max( max_suffix_len, m_bucketers[i].max_suffix_len );
+
+                    // check whether we are overflowing our output buffer
+                    if (n_collected + m_bucketers[i].n_collected > h_suffixes.size())
+                    {
+                        log_error(stderr,"buffer size exceeded! (%llu/%llu)\n", n_collected + m_bucketers[i].n_collected, uint64( h_suffixes.size() ));
+                        exit(1);
+                    }
+
+                    // dispatch each suffix to their respective bucket
+                    for (uint32 j = 0; j < m_bucketers[i].n_collected; ++j)
+                    {
+                        const uint2  loc    = m_bucketers[i].h_suffixes[j];
+                        const uint32 bucket = m_bucketers[i].h_radices[j];
+                        const uint64 slot   = h_bucket_offsets[bucket]++; // this could be done in parallel using atomics
+
+                        NVBIO_CUDA_DEBUG_ASSERT(
+                            slot >= m_global_offset,
+                            slot <  m_global_offset + h_suffixes.size(),
+                            "[%u:%u] = (%u,%u) placed at %llu - %llu (%u)\n", i, j, loc.x, loc.y, slot, m_global_offset, bucket );
+
+                        h_suffixes[ slot - m_global_offset ] = loc;
+                    }
+
+                    // keep stats
+                    n_collected += m_bucketers[i].n_collected;
                 }
-
-                Timer timer;
-                timer.start();
-
-                // dispatch each suffix to their respective bucket
-                for (uint32 j = 0; j < m_bucketers[i].n_collected; ++j)
-                {
-                    const uint2  loc    = m_bucketers[i].h_suffixes[j];
-                    const uint32 bucket = m_bucketers[i].h_radices[j];
-                    const uint64 slot   = h_bucket_offsets[bucket]++; // this could be done in parallel using atomics
-
-                    NVBIO_CUDA_DEBUG_ASSERT(
-                        slot >= m_global_offset,
-                        slot <  m_global_offset + h_suffixes.size(),
-                        "[%u:%u] = (%u,%u) placed at %llu - %llu (%u)\n", i, j, loc.x, loc.y, slot, m_global_offset, bucket );
-
-                    h_suffixes[ slot - m_global_offset ] = loc;
-                }
-
-                // keep stats
-                n_collected += m_bucketers[i].n_collected;
-
-                timer.stop();
-                bin_time += timer.seconds();
             }
         }
 

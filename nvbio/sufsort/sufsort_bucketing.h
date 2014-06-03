@@ -663,9 +663,6 @@ struct HostCoreSetSuffixBucketer
         // extract the first word
         const local_set_suffix_word_functor<SYMBOL_SIZE,N_BITS,DOLLAR_BITS,string_set_type,bucket_type> word_functor( string_set, 0u );
 
-        // determine if a radix is in the given bucket range
-        const priv::in_range_functor in_range = priv::in_range_functor( bucket_begin, bucket_end );
-
         const uint32 n_strings = string_set.size();
 
         // keep track of the maximum suffix length
@@ -687,7 +684,7 @@ struct HostCoreSetSuffixBucketer
                 const bucket_type radix = word_functor( make_uint2( j, i ) );
 
                 // check whether the extracted radix is in the given bucket
-                if (in_range( radix ))
+                if (radix >= bucket_begin && radix < bucket_end)
                 {
                     if (n_collected + 1u > h_radices.size())
                     {

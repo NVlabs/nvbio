@@ -65,7 +65,7 @@ struct strided_iterator
     typedef typename std::iterator_traits<T>::pointer           pointer;
     typedef typename std::iterator_traits<T>::difference_type   difference_type;
     //typedef typename std::iterator_traits<T>::distance_type     distance_type;
-    typedef std::random_access_iterator_tag                     iterator_category;
+    typedef typename std::iterator_traits<T>::iterator_category iterator_category;
 
     /// constructor
     ///
@@ -111,6 +111,15 @@ struct strided_iterator
     T      m_vec;
     uint32 m_stride;
 };
+
+/// build a strided iterator
+///
+template <typename T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+strided_iterator<T> make_strided_iterator(T it, const uint32 stride)
+{
+    return strided_iterator<T>( it, stride );
+}
 
 /// operator ==
 ///
@@ -163,7 +172,7 @@ struct block_strided_iterator
     typedef typename std::iterator_traits<T>::pointer           pointer;
     typedef typename std::iterator_traits<T>::difference_type   difference_type;
     //typedef typename std::iterator_traits<T>::distance_type     distance_type;
-    typedef std::random_access_iterator_tag                     iterator_category;
+    typedef typename std::iterator_traits<T>::iterator_category iterator_category;
 
     /// constructor
     ///

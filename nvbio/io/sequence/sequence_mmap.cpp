@@ -25,8 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#pragma once
-
 #include <nvbio/io/sequence/sequence_mmap.h>
 #include <nvbio/io/sequence/sequence_pac.h>
 #include <nvbio/basic/console.h>

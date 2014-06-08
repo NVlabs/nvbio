@@ -460,6 +460,12 @@ bool load_pac(
         case DNA_N:
             return load_pac<DNA_N>( prefix, sequence_ptr, seq_length, seq_words );
             break;
+        case RNA:
+            return load_pac<RNA>( prefix, sequence_ptr, seq_length, seq_words );
+            break;
+        case RNA_N:
+            return load_pac<RNA_N>( prefix, sequence_ptr, seq_length, seq_words );
+            break;
         case PROTEIN:
             return load_pac<PROTEIN>( prefix, sequence_ptr, seq_length, seq_words );
             break;

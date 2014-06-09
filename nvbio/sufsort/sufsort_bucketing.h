@@ -480,7 +480,14 @@ struct DeviceSetSuffixBucketer
             // determine the end of this batch
             const uint32 chunk_end = nvbio::min( chunk_begin + chunk_size, n_strings );
 
+            Timer timer;
+            timer.start();
+
             const chunk_set_type chunk_set = chunk_loader.load( string_set, chunk_begin, chunk_end );
+
+            NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
+            timer.stop();
+            load_time += timer.seconds();
 
             Timer timer;
             timer.start();
@@ -561,15 +568,17 @@ struct DeviceSetSuffixBucketer
     ///
     void log_collect_stats()
     {
-        log_verbose(stderr,"    setup    : %.1fs\n", m_bucketer.d_setup_time);
-        log_verbose(stderr,"      scan   : %.1fs\n", m_bucketer.suffixes.d_scan_time);
-        log_verbose(stderr,"      search : %.1fs\n", m_bucketer.suffixes.d_search_time);
-        log_verbose(stderr,"    flatten  : %.1fs\n", m_bucketer.d_flatten_time);
-        log_verbose(stderr,"    filter   : %.1fs\n", m_bucketer.d_filter_time);
-        log_verbose(stderr,"    remap    : %.1fs\n", m_bucketer.d_remap_time);
-        log_verbose(stderr,"    max      : %.1fs\n", m_bucketer.d_max_time);
-        log_verbose(stderr,"    sort     : %.1fs\n", m_bucketer.d_collect_sort_time);
-        log_verbose(stderr,"    copy     : %.1fs\n", m_bucketer.d_copy_time);
+        log_verbose(stderr,"    load     : %.1fs\n", load_time);
+        log_verbose(stderr,"    collect  : %.1fs\n", collect_time);
+        log_verbose(stderr,"      setup    : %.1fs\n", m_bucketer.d_setup_time);
+        log_verbose(stderr,"        scan   : %.1fs\n", m_bucketer.suffixes.d_scan_time);
+        log_verbose(stderr,"        search : %.1fs\n", m_bucketer.suffixes.d_search_time);
+        log_verbose(stderr,"      flatten  : %.1fs\n", m_bucketer.d_flatten_time);
+        log_verbose(stderr,"      filter   : %.1fs\n", m_bucketer.d_filter_time);
+        log_verbose(stderr,"      remap    : %.1fs\n", m_bucketer.d_remap_time);
+        log_verbose(stderr,"      max      : %.1fs\n", m_bucketer.d_max_time);
+        log_verbose(stderr,"      sort     : %.1fs\n", m_bucketer.d_collect_sort_time);
+        log_verbose(stderr,"      copy     : %.1fs\n", m_bucketer.d_copy_time);
         log_verbose(stderr,"    bin      : %.1fs\n", bin_time);
     }
 

@@ -489,7 +489,6 @@ struct DeviceSetSuffixBucketer
             timer.stop();
             load_time += timer.seconds();
 
-            Timer timer;
             timer.start();
 
             m_bucketer.collect(

@@ -481,6 +481,7 @@ struct LargeBWTSkeleton
 
         LargeBWTStatus          status;
 
+        // allocate an MGPU context
         mgpu::ContextPtr        mgpu_ctxt = mgpu::CreateCudaDevice(0); 
 
         suffix_bucketer_type    bucketer( mgpu_ctxt );
@@ -505,8 +506,35 @@ struct LargeBWTSkeleton
         thrust::device_vector<uint8>     d_block_bwt;
         //thrust::device_vector<uint8>     d_temp_storage;
 
-        // allocate an MGPU context
-        mgpu::ContextPtr mgpu = mgpu::CreateCudaDevice(0);
+        //
+        // split the suffixes in buckets, and count them
+        //
+
+        const uint32 n_buckets = 1u << BUCKETING_BITS;
+
+        thrust::host_vector<uint32> h_buckets( n_buckets );
+        thrust::host_vector<uint32> h_subbuckets( n_buckets );
+
+        // count how many suffixes fall in each bucket
+        const uint64 total_suffixes = bucketer.count( string_set, h_buckets );
+
+        // find the maximum bucket size
+        const uint32 max_bucket_size = thrust::reduce(
+            h_buckets.begin(),
+            h_buckets.end(),
+            0u,
+            thrust::maximum<uint32>() );
+
+        // compute the largest non-elementary bucket
+        const uint32 largest_subbucket = max_subbucket_size( h_buckets, max_super_block_size, max_block_size, &status );
+        if (!status)
+        {
+            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    exceeded maximum bucket size\n") );
+            return status;
+        }
+
+        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    max bucket size: %u (%u)\n", largest_subbucket, max_bucket_size) );
+        NVBIO_CUDA_DEBUG_STATEMENT( bucketer.log_count_stats() );
 
         float bwt_time    = 0.0f;
         float output_time = 0.0f;
@@ -555,33 +583,6 @@ struct LargeBWTSkeleton
             timer.stop();
             output_time += timer.seconds();
         }
-
-        //
-        // split the suffixes in buckets, and count them
-        //
-
-        const uint32 n_buckets = 1u << BUCKETING_BITS;
-
-        thrust::host_vector<uint32> h_buckets( n_buckets );
-        thrust::host_vector<uint32> h_subbuckets( n_buckets );
-
-        // count how many suffixes fall in each bucket
-        const uint64 total_suffixes = bucketer.count( string_set, h_buckets );
-
-        // find the maximum bucket size
-        const uint32 max_bucket_size = thrust::reduce(
-            h_buckets.begin(),
-            h_buckets.end(),
-            0u,
-            thrust::maximum<uint32>() );
-
-        // compute the largest non-elementary bucket
-        const uint32 largest_subbucket = max_subbucket_size( h_buckets, max_super_block_size, max_block_size, &status );
-        if (!status)
-            return status;
-
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    max bucket size: %u (%u)\n", largest_subbucket, max_bucket_size) );
-        NVBIO_CUDA_DEBUG_STATEMENT( bucketer.log_count_stats() );
 
         bucketer.clear_timers();
 

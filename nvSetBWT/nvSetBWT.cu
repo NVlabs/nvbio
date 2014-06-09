@@ -31,20 +31,18 @@
 #define NVBIO_CUDA_DEBUG
 
 #include <cub/cub.cuh>
-#ifdef _OPENMP
-#include <omp.h>
-#endif
+#include <nvbio/basic/omp.h>
 
 #include <nvbio/sufsort/sufsort.h>
 #include <nvbio/sufsort/sufsort_utils.h>
 #include <nvbio/sufsort/file_bwt.h>
 #include <nvbio/basic/timer.h>
-#include <nvbio/strings/string_set.h>
 #include <nvbio/basic/shared_pointer.h>
-#include <nvbio/io/sequence/sequence.h>
+#include <nvbio/basic/exceptions.h>
 #include <nvbio/basic/dna.h>
-#include <thrust/host_vector.h>
-#include <thrust/device_vector.h>
+#include <nvbio/basic/vector.h>
+#include <nvbio/strings/string_set.h>
+#include <nvbio/io/sequence/sequence.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
@@ -64,13 +62,15 @@ struct Reads
 
     typedef PackedStream<word_type*,uint8,SYMBOL_SIZE,true,uint64>  packed_stream_type;
 
-    Reads() : n_reads(0), n_symbols(0), min_len(uint32(-1)), max_len(0) {}
+    Reads() : n_reads(0), n_symbols(0), min_len(uint32(-1)), max_len(0), reserved_words(0u), h_read_storage( NULL ) {}
+    ~Reads() { free( h_read_storage ); }
 
     uint32                      n_reads;            // number of reads
     uint64                      n_symbols;          // number of symbols
     uint32                      min_len;            // minimum read length
     uint32                      max_len;            // maximum read length
-    thrust::host_vector<uint32> h_read_storage;     // read storage
+    uint64                      reserved_words;     // allocated words
+    word_type*                  h_read_storage;     // read storage
     thrust::host_vector<uint64> h_read_index;       // read index
 };
 
@@ -118,7 +118,15 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
 
         const uint64 required_words = util::divide_ri( reads->n_symbols + h_read_data.bps(), SYMBOLS_PER_WORD );
 
-        reads->h_read_storage.resize( required_words );
+        // realloc the storage
+        if (reads->reserved_words <= required_words)
+        {
+            reads->reserved_words = nvbio::max( required_words, (reads->reserved_words * 3)/2 );
+
+            reads->h_read_storage = (word_type*)realloc( reads->h_read_storage, reads->reserved_words * sizeof(word_type) );
+            if (reads->h_read_storage == NULL)
+                throw bad_alloc( "unable to allocate %.1fGB of read storage", float(reads->reserved_words * sizeof(word_type))/float(1024*1024*1024) );
+        }
 
         // pack the first few symbols to fill the last word
         const uint32 word_offset = reads->n_symbols & (SYMBOLS_PER_WORD-1);
@@ -226,7 +234,8 @@ int main(int argc, char* argv[])
     }
 
     typedef Reads::word_type word_type;
-    NVBIO_VAR_UNUSED static const uint32 SYMBOL_SIZE = Reads::SYMBOL_SIZE;
+    NVBIO_VAR_UNUSED static const uint32 SYMBOL_SIZE      = Reads::SYMBOL_SIZE;
+    NVBIO_VAR_UNUSED static const uint32 SYMBOLS_PER_WORD = Reads::SYMBOLS_PER_WORD;
 
     const char* reads_name        = argv[argc-2];
     const char* output_name       = argv[argc-1];
@@ -247,8 +256,8 @@ int main(int argc, char* argv[])
             params.host_memory = atoi( argv[++i] ) * uint64(1024u*1024u);
         }
         else if ((strcmp( argv[i], "-gpu-mem" )       == 0) ||
-                 (strcmp( argv[i], "--gpu-mem" )       == 0) ||
-                 (strcmp( argv[i], "--gpu-memory" )    == 0))
+                 (strcmp( argv[i], "--gpu-mem" )      == 0) ||
+                 (strcmp( argv[i], "--gpu-memory" )   == 0))
         {
             params.device_memory = atoi( argv[++i] ) * uint64(1024u*1024u);
         }
@@ -297,14 +306,14 @@ int main(int argc, char* argv[])
         cudaMemGetInfo(&free_device, &total_device);
         log_stats(stderr, "  device has %ld of %ld MB free\n", free_device/1024/1024, total_device/1024/1024);
 
-#ifdef _OPENMP
+    #ifdef _OPENMP
         // now set the number of CPU threads
         omp_set_num_threads( threads > 0 ? threads : omp_get_num_procs() );
         #pragma omp parallel
         {
             log_verbose(stderr, "  running on multiple threads (%d)\n", omp_get_thread_num());
         }
-#endif
+    #endif
 
         Reads reads;
 
@@ -322,7 +331,8 @@ int main(int argc, char* argv[])
 
         log_info(stderr,"  reading input... done\n");
 
-        const uint64 input_size = reads.h_read_storage.size() * sizeof(word_type);
+        const uint64 input_words = util::divide_ri( reads.n_symbols, SYMBOLS_PER_WORD );
+        const uint64 input_size  = input_words * sizeof(word_type);
         log_stats(stderr,"    reads   : %u (min len: %u, max len: %u)\n", reads.n_reads, reads.min_len, reads.max_len);
         log_stats(stderr,"    symbols : %llu\n", reads.n_symbols);
         log_stats(stderr,"    size    : %llu MB\n", input_size / uint64(1024*1024));
@@ -340,8 +350,10 @@ int main(int argc, char* argv[])
         {
             log_verbose(stderr, "  using fast path\n");
 
-            thrust::device_vector<word_type> d_read_storage( reads.h_read_storage );
+            thrust::device_vector<word_type> d_read_storage( input_words );
             thrust::device_vector<uint64>    d_read_index( reads.h_read_index );
+
+            thrust::copy( reads.h_read_storage, reads.h_read_storage + input_words, d_read_storage.begin() );
 
             const packed_stream_type d_packed_string( (word_type*)nvbio::plain_view( d_read_storage ) );
 
@@ -359,7 +371,7 @@ int main(int argc, char* argv[])
         {
             log_verbose(stderr, "  using hybrid path\n");
 
-            const packed_stream_type h_packed_string( (word_type*)nvbio::plain_view( reads.h_read_storage ) );
+            const packed_stream_type h_packed_string( reads.h_read_storage );
 
             const string_set h_string_set(
                 reads.n_reads,

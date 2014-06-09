@@ -199,7 +199,11 @@ bool read(const char* reads_name, const io::QualityEncoding qencoding, const io:
         timer.stop();
         io_time += timer.seconds();
 
-        log_verbose(stderr,"\r    %u reads, %llu symbols read (%.1fs)    ", reads->n_reads, reads->n_symbols, io_time);
+        log_verbose(stderr,"\r    %u reads, %llu symbols read (%.1fs - %.1fGB)    ",
+            reads->n_reads,
+            reads->n_symbols,
+            io_time,
+            float(reads->reserved_words*sizeof(word_type))/float(1024*1024*1024));
     }
     log_verbose_cont(stderr,"\n");
     return true;

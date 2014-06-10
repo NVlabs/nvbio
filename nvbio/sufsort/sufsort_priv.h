@@ -41,6 +41,7 @@
 #include <thrust/adjacent_difference.h>
 #include <thrust/binary_search.h>
 #include <thrust/iterator/constant_iterator.h>
+#include <emmintrin.h>                              // SSE intrinsics
 
 namespace nvbio {
 namespace priv {
@@ -445,10 +446,22 @@ void extract_word_packed(
     index_type range_len  = string_len - suffix_off;              // partial suffix length
     index_type range_off  = string_off + suffix_off;              // partial suffix offset
 
-  #if 0
-    const_cached_iterator<storage_type> cached_words( base_words );
+    const uint32 cache_begin = uint32( range_off / STORAGE_SYMBOLS );
+
+  #if !defined(NVBIO_DEVICE_COMPILATION)
+    // use SSE to load all the words we need in a small cache
+    const uint32 SSE_WORDS = 16u / sizeof( word_type );
+    const uint32 cache_end = uint32( (range_off + (word_end - word_begin)*SYMBOLS_PER_WORD) / STORAGE_SYMBOLS );
+
+    __m128i sse_cache[8];
+    for (uint32 w = cache_begin; w < cache_end; w += SSE_WORDS)
+        sse_cache[ (w - cache_begin)/SSE_WORDS ] = _mm_loadu_si128( (const __m128i*)(base_words + w) );
+
+    const word_type* cached_words = (const word_type*)sse_cache;
+  #elif 0
+    const_cached_iterator<storage_type> cached_words( base_words + cache_begin );
   #else
-    const storage_type cached_words = base_words;
+    const storage_type cached_words = base_words + cache_begin;
   #endif
 
     for (uint32 w = word_begin; w < word_end; ++w)
@@ -497,7 +510,7 @@ void extract_word_packed(
         // |-------------------------------------------|  // the $ sign: these are bits that need to be
         // |           |    n1   |   n2  |     |       |  // cleared if the suffix is short
         //
-        const uint32 k1 = uint32( range_off/STORAGE_SYMBOLS );              // index of the first word
+        const uint32 k1 = uint32( range_off/STORAGE_SYMBOLS ) - cache_begin; // index of the first word
 
         const uint32 m1 = range_off & (STORAGE_SYMBOLS-1);                  // offset in the word
         const uint32 r1 = STORAGE_SYMBOLS - m1;                             // symbols left in the word
@@ -511,7 +524,7 @@ void extract_word_packed(
             word |= word2 >> (r1*SYMBOL_SIZE);                              // shift by n1 symbols to the right
         }
 
-        word >>= (STORAGE_BITS - WORD_BITS);                                 // align the top to WORD_BITS
+        word >>= (STORAGE_BITS - WORD_BITS);                                // align the top to WORD_BITS
 
         // clear every symbol we don't need among the word's LSD
         word &= clearmask<word_type>( WORD_BITS - n_symbols*SYMBOL_SIZE );
@@ -867,8 +880,8 @@ struct string_bwt_functor
         return suffix_idx ? string[suffix_idx-1] : 255u; // use 255u to mark the dollar sign
     }
 
-    const uint64    string_len;
-    string_type     string;
+    const uint64        string_len;
+    const string_type   string;
 };
 
 /// given a string set, return the symbol preceding each of its suffixes, or 255u to mark the
@@ -913,7 +926,7 @@ struct string_set_bwt_functor
         return string[ string.length()-1 ];
     }
 
-    string_set_type string_set;
+    const string_set_type string_set;
 };
 
 /// A binary functor implementing some custom logic to remove singletons from a set of segment-flags
@@ -994,7 +1007,6 @@ struct dispatch_set_suffix_radices<
         const SetSuffixFlattener<SYMBOL_SIZE>&  set_flattener,
         radix_iterator                          radices)
     {
-        set_suffix_radices_kernel<<<
         typedef typename std::iterator_traits<radix_iterator>::value_type word_type;
 
         thrust::transform(
@@ -1732,7 +1744,17 @@ struct HostStringSetRadices
     {
         return
             d_active_suffixes.size() * sizeof(uint2) +
-            d_symbols.size() * sizeof(uint8);
+            d_symbols.size()         * sizeof(uint8);
+    }
+
+    /// return the amount of used device memory
+    ///
+    uint64 allocated_host_memory() const
+    {
+        return
+            m_block.size()           * sizeof(uint2) +
+            h_active_suffixes.size() * sizeof(uint2) +
+            h_symbols.size()         * sizeof(uint8);
     }
 
     string_set_type                 m_string_set;
@@ -1892,8 +1914,14 @@ struct DeviceStringSetRadices
     ///
     uint64 allocated_device_memory() const
     {
-        return
-            d_symbols.size() * sizeof(uint8);
+        return d_symbols.size() * sizeof(uint8);
+    }
+
+    /// return the amount of used device memory
+    ///
+    uint64 allocated_host_memory() const
+    {
+        return 0u;
     }
 
     string_set_type                 m_string_set;

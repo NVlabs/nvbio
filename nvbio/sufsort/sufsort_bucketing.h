@@ -312,7 +312,17 @@ struct DeviceCoreSetSuffixBucketer
             d_indices.size() * sizeof(uint32) +
             d_radices.size() * sizeof(bucket_type) +
             d_buckets.size() * sizeof(uint32) +
-            d_output.size() * sizeof(uint32);
+            d_output.size()  * sizeof(uint32);
+    }
+
+    /// return the amount of used device memory
+    ///
+    uint64 allocated_host_memory() const
+    {
+        return
+            //suffixes.allocated_host_memory() +
+            h_radices.size()  * sizeof(bucket_type) +
+            h_suffixes.size() * sizeof(uint2);
     }
 
 public:
@@ -545,7 +555,11 @@ struct DeviceSetSuffixBucketer
 
     /// return the amount of used device memory
     ///
-    uint64 allocated_device_memory() const { return 0u; }
+    uint64 allocated_device_memory() const { return m_bucketer.allocated_device_memory(); }
+
+    /// return the amount of used device memory
+    ///
+    uint64 allocated_host_memory() const { return m_bucketer.allocated_host_memory(); }
 
     /// print some stats
     ///
@@ -718,6 +732,16 @@ struct HostCoreSetSuffixBucketer
     /// return the amount of used device memory
     ///
     uint64 allocated_device_memory() const { return 0u; }
+
+    /// return the amount of used device memory
+    ///
+    uint64 allocated_host_memory() const
+    {
+        return
+            h_buckets.size()  * sizeof(uint32)       +
+            h_radices.size()  * sizeof(bucket_type)  +
+            h_suffixes.size() * sizeof(uint2);
+    }
 
 public:
     thrust::host_vector<uint32>      h_buckets;
@@ -959,6 +983,16 @@ struct HostSetSuffixBucketer
     /// return the amount of used device memory
     ///
     uint64 allocated_device_memory() const { return 0u; }
+
+    /// return the amount of used device memory
+    ///
+    uint64 allocated_host_memory() const
+    {
+        uint64 r = 0u;
+        for (uint32 i = 0; i < m_bucketers.size(); ++i)
+            r += m_bucketers[i].allocated_host_memory();
+        return r;
+    }
 
     /// print some stats
     ///

@@ -611,11 +611,26 @@ struct LargeBWTSkeleton
             priv::alloc_storage( d_indices,         max_block_size );
             priv::alloc_storage( d_bucket_suffixes, max_block_size );
 
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  allocated device memory: %.1f MB\n",
-                float( bucketer.allocated_device_memory() + string_set_handler.allocated_device_memory() + string_sorter.allocated_device_memory() ) / float(1024*1024) ) );
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    bucketer : %.1f MB\n", float( bucketer.allocated_device_memory() ) / float(1024*1024) ) );
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    handler  : %.1f MB\n", float( string_set_handler.allocated_device_memory() ) / float(1024*1024) ) );
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    sorter   : %.1f MB\n", float( string_sorter.allocated_device_memory() ) / float(1024*1024) ) );
+            log_verbose(stderr,"  allocated device memory: %.1f MB\n",
+                float( bucketer.allocated_device_memory()           +
+                       string_set_handler.allocated_device_memory() +
+                       string_sorter.allocated_device_memory()      +
+                       d_block_bwt.size()       * sizeof(uint8)     +
+                       d_indices.size()         * sizeof(uint32)    +
+                       d_bucket_suffixes.size() * sizeof(uint2)
+                ) / float(1024*1024) );
+            log_verbose(stderr,"    bucketer : %.1f MB\n", float( bucketer.allocated_device_memory() ) / float(1024*1024) );
+            log_verbose(stderr,"    handler  : %.1f MB\n", float( string_set_handler.allocated_device_memory() ) / float(1024*1024) );
+            log_verbose(stderr,"    sorter   : %.1f MB\n", float( string_sorter.allocated_device_memory() ) / float(1024*1024) );
+
+            log_verbose(stderr,"  allocated host memory: %.1f MB\n",
+                float( bucketer.allocated_host_memory() +
+                       string_set_handler.allocated_host_memory() +
+                       h_block_bwt.size()       * sizeof(uint8)  +
+                       h_suffixes.size()        * sizeof(uint2)  +
+                       h_buckets.size()         * sizeof(uint32) +
+                       h_subbuckets.size()      * sizeof(uint32)
+                ) / float(1024*1024) );
         }
 
         // now build the sub-bucket lists

@@ -625,9 +625,6 @@ struct LargeBWTSkeleton
             max_super_block_size,
             max_block_size );
 
-        // build the subbucket pointers
-        thrust::device_vector<uint32> d_subbuckets( h_subbuckets );
-
         uint64 global_suffix_offset = 0;
 
         for (uint32 bucket_begin = 0, bucket_end = 0; bucket_begin < h_buckets.size(); bucket_begin = bucket_end)

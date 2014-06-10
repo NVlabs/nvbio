@@ -475,7 +475,7 @@ struct LargeBWTSkeleton
         NVBIO_VAR_UNUSED const uint32 BUCKETING_BITS = ConfigType::BUCKETING_BITS;
         NVBIO_VAR_UNUSED const uint32 DOLLAR_BITS    = ConfigType::DOLLAR_BITS;
         NVBIO_VAR_UNUSED const uint32 DOLLAR_MASK    = (1u << DOLLAR_BITS) - 1u;
-        NVBIO_VAR_UNUSED const uint32 SLICE_SIZE     = 4;
+        NVBIO_VAR_UNUSED const uint32 SLICE_SIZE     = params ? params->radix_slice : 4u;
 
         const uint32 N = string_set.size();
 

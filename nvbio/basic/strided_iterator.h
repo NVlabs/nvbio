@@ -158,12 +158,24 @@ template <typename T>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 bool operator>=(const strided_iterator<T> it1, const strided_iterator<T> it2) { return (it1.m_vec >= it2.m_vec); }
 
+enum block_strided_layout
+{
+    ROW_MAJOR_LAYOUT    = 0u,
+    COLUMN_MAJOR_LAYOUT = 1u
+};
+
 ///
 /// Wrapper class to create a block-strided iterator out of another base iterator, i.e:
 ///
 ///   it[  <b>j</b>  ] = base[ (<b>j</b>  /  BLOCKSIZE) * <i>stride</i> + (<b>j</b>  %%  BLOCKSIZE) ]
 ///
-template <uint32 BLOCKSIZE, typename T>
+/// or:
+///
+///   it[  <b>j</b>  ] = base[ (<b>j</b>  %%  BLOCKSIZE) * <i>stride</i> + (<b>j</b> / BLOCKSIZE) ]
+///
+/// depending on whether the alignment is ROW_MAJOR or COLUMN_MAJOR
+///
+template <uint32 BLOCKSIZE, typename T, block_strided_layout LAYOUT = ROW_MAJOR_LAYOUT>
 struct block_strided_iterator
 {
     typedef typename std::iterator_traits<T>::value_type        value_type;
@@ -192,12 +204,24 @@ struct block_strided_iterator
     /// const indexing operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    const_reference operator[](const uint32 i) const { return m_vec[((i+m_offset)/BLOCKSIZE)*m_stride + ((i+m_offset)%BLOCKSIZE)]; }
+    const_reference operator[](const uint32 i) const
+    {
+        if (LAYOUT == ROW_MAJOR_LAYOUT)
+            return m_vec[((i+m_offset) / BLOCKSIZE)*m_stride + ((i+m_offset) % BLOCKSIZE)];
+        else
+            return m_vec[((i+m_offset) % BLOCKSIZE)*m_stride + ((i+m_offset) / BLOCKSIZE)];
+    }
 
     /// indexing operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    reference operator[](const uint32 i) { return m_vec[((i+m_offset)/BLOCKSIZE)*m_stride + ((i+m_offset)%BLOCKSIZE)]; }
+    reference operator[](const uint32 i)
+    {
+        if (LAYOUT == ROW_MAJOR_LAYOUT)
+            return m_vec[((i+m_offset) / BLOCKSIZE)*m_stride + ((i+m_offset) % BLOCKSIZE)];
+        else
+            return m_vec[((i+m_offset) % BLOCKSIZE)*m_stride + ((i+m_offset) / BLOCKSIZE)];
+    }
 
     /// addition
     ///
@@ -222,17 +246,17 @@ struct block_strided_iterator
 
 /// operator ==
 ///
-template <uint32 BLOCKSIZE,typename T>
+template <uint32 BLOCKSIZE,typename T, block_strided_layout LAYOUT>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-bool operator==(const block_strided_iterator<BLOCKSIZE,T> it1, const block_strided_iterator<BLOCKSIZE,T> it2)
+bool operator==(const block_strided_iterator<BLOCKSIZE,T,LAYOUT> it1, const block_strided_iterator<BLOCKSIZE,T,LAYOUT> it2)
 {
     return (it1.m_vec == it2.m_vec) && (it1.m_offset == it2.m_offset) && (it1.m_stride == it2.m_stride);
 }
 /// operator !=
 ///
-template <uint32 BLOCKSIZE,typename T>
+template <uint32 BLOCKSIZE,typename T, block_strided_layout LAYOUT>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-bool operator!=(const block_strided_iterator<BLOCKSIZE,T> it1, const block_strided_iterator<BLOCKSIZE,T> it2)
+bool operator!=(const block_strided_iterator<BLOCKSIZE,T,LAYOUT> it1, const block_strided_iterator<BLOCKSIZE,T,LAYOUT> it2)
 {
     return (it1.m_vec != it2.m_vec) || (it1.m_offset != it2.m_offset) || (it1.m_stride != it2.m_stride);
 }

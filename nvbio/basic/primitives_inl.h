@@ -571,7 +571,7 @@ uint32 runlength_encode(
         in + n,
         thrust::make_constant_iterator<uint32>( 1u ),
         out,
-        counts ) - out );
+        counts ).first - out );
 };
 
 
@@ -600,14 +600,14 @@ uint32 reduce_by_key(
 {
     typedef typename std::iterator_traits<KeyIterator>::value_type key_type;
 
-    return thrust::reduce_by_key(
+    return uint32( thrust::reduce_by_key(
         keys_in,
         keys_in + n,
         values_in,
         keys_out,
         values_out,
         nvbio::equal_functor<key_type>(),
-        reduction_op );
+        reduction_op ).first - keys_out );
 }
 
 #if defined(__CUDACC__)

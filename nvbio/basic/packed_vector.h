@@ -133,9 +133,9 @@ struct PackedVector
     /// get the i-th symbol
     /// note: no device implementation for this as PackedVectors are never used on device
     /// (only their plain view, which is a PackedStream)
-    NVBIO_FORCEINLINE NVBIO_HOST typename stream_type::symbol_type operator[] (const index_type i) const
+    NVBIO_FORCEINLINE NVBIO_HOST const typename stream_type::symbol_type operator[] (const index_type i) const
     {
-        stream_type stream( &m_storage[0] );
+        const_stream_type stream( &m_storage[0] );
         return stream[i];
     }
 

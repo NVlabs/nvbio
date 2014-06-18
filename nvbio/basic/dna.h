@@ -42,6 +42,15 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE char dna_to_char(const uint8 c)
                     'N';
 }
 
+/// convert a 2-bit DNA symbol to a IUPAC16 symbol
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 dna_to_iupac16(const uint8 c)
+{
+    //     DNA: A, C, T, G -> { 0, 1, 2, 3 }
+    // IUPAC16: A, C, T, G -> { 1, 2, 4, 8 }
+    return 1 << c;
+}
+
 /// convert a 4-bit DNA symbol to its ASCII character
 ///
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE char iupac16_to_char(const uint8 c)

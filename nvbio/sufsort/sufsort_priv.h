@@ -48,11 +48,18 @@ namespace priv {
 
 template <uint32 BITS> struct word_selector     {};
 template <>            struct word_selector<4>  { typedef uint8 type; };
+template <>            struct word_selector<6>  { typedef uint8 type; };
 template <>            struct word_selector<8>  { typedef uint8 type; };
+template <>            struct word_selector<10> { typedef uint8 type; };
 template <>            struct word_selector<12> { typedef uint16 type; };
+template <>            struct word_selector<14> { typedef uint16 type; };
 template <>            struct word_selector<16> { typedef uint16 type; };
+template <>            struct word_selector<18> { typedef uint16 type; };
 template <>            struct word_selector<20> { typedef uint32 type; };
+template <>            struct word_selector<22> { typedef uint32 type; };
 template <>            struct word_selector<24> { typedef uint32 type; };
+template <>            struct word_selector<26> { typedef uint32 type; };
+template <>            struct word_selector<28> { typedef uint32 type; };
 template <>            struct word_selector<30> { typedef uint32 type; };
 template <>            struct word_selector<32> { typedef uint32 type; };
 template <>            struct word_selector<48> { typedef uint64 type; };

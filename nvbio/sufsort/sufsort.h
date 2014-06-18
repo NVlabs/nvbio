@@ -94,10 +94,12 @@ struct BWTParams
     BWTParams() :
         host_memory(8u*1024u*1024u*1024llu),
         device_memory(2u*1024u*1024u*1024llu),
+        bucketing_bits(16u),
         radix_slice(4u) {}
 
     uint64 host_memory;
     uint64 device_memory;
+    uint32 bucketing_bits;
     uint32 radix_slice;
 };
 

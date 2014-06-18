@@ -916,29 +916,48 @@ void large_bwt(
 {
     cuda::LargeBWTStatus status;
 
+    const uint32 bucketing_bits = params ? params->bucketing_bits : 16u;
+
     if (omp_get_num_procs()   >= 20 &&
         omp_get_max_threads() >= 20)     // use the CPU if lots of cores/threads are available
     {
         typedef cuda::HostBWTConfigCPUBucketer<16,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_16; // 16-bits bucketing
         typedef cuda::HostBWTConfigCPUBucketer<20,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_20; // 20-bits bucketing
         typedef cuda::HostBWTConfigCPUBucketer<24,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_24; // 24-bits bucketing
+        typedef cuda::HostBWTConfigCPUBucketer<26,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_26; // 26-bits bucketing
 
         // try 16-bit bucketing
-        if (status = cuda::LargeBWTSkeleton<config_type_16,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
-            string_set,
-            output,
-            params ))
-            return;
+        if (bucketing_bits <= 16u)
+        {
+            if (status = cuda::LargeBWTSkeleton<config_type_16,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
+                string_set,
+                output,
+                params ))
+                return;
+        }
 
         // try 20-bit bucketing
-        if (status = cuda::LargeBWTSkeleton<config_type_20,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
-            string_set,
-            output,
-            params ))
-            return;
+        if (bucketing_bits <= 20u)
+        {
+            if (status = cuda::LargeBWTSkeleton<config_type_20,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
+                string_set,
+                output,
+                params ))
+                return;
+        }
 
         // try 24-bit bucketing
-        if (status = cuda::LargeBWTSkeleton<config_type_24,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
+        if (bucketing_bits <= 24u)
+        {
+            if (status = cuda::LargeBWTSkeleton<config_type_24,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
+                string_set,
+                output,
+                params ))
+                return;
+        }
+
+        // try 26-bit bucketing
+        if (status = cuda::LargeBWTSkeleton<config_type_26,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
             string_set,
             output,
             params ))
@@ -949,23 +968,40 @@ void large_bwt(
         typedef cuda::HostBWTConfigGPUBucketer<16,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_16; // 16-bits bucketing
         typedef cuda::HostBWTConfigGPUBucketer<20,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_20; // 20-bits bucketing
         typedef cuda::HostBWTConfigGPUBucketer<24,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_24; // 24-bits bucketing
+        typedef cuda::HostBWTConfigGPUBucketer<26,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_26; // 26-bits bucketing
 
         // try 16-bit bucketing
-        if (status = cuda::LargeBWTSkeleton<config_type_16,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
-            string_set,
-            output,
-            params ))
-            return;
+        if (bucketing_bits <= 16u)
+        {
+            if (status = cuda::LargeBWTSkeleton<config_type_16,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
+                string_set,
+                output,
+                params ))
+                return;
+        }
 
         // try 20-bit bucketing
-        if (status = cuda::LargeBWTSkeleton<config_type_20,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
-            string_set,
-            output,
-            params ))
-            return;
+        if (bucketing_bits <= 20u)
+        {
+            if (status = cuda::LargeBWTSkeleton<config_type_20,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
+                string_set,
+                output,
+                params ))
+                return;
+        }
 
         // try 24-bit bucketing
-        if (status = cuda::LargeBWTSkeleton<config_type_24,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
+        if (bucketing_bits <= 24u)
+        {
+            if (status = cuda::LargeBWTSkeleton<config_type_24,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
+                string_set,
+                output,
+                params ))
+                return;
+        }
+
+        // try 26-bit bucketing
+        if (status = cuda::LargeBWTSkeleton<config_type_26,SYMBOL_SIZE,BIG_ENDIAN,storage_type>::enact(
             string_set,
             output,
             params ))

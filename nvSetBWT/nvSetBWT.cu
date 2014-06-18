@@ -222,6 +222,7 @@ int main(int argc, char* argv[])
         log_info(stderr, "   -gpu-mem | --gpu-memory    int (MB)  [2048]\n");
         log_info(stderr, "   -c       | --compression   string    [1R]   (e.g. \"1\", ..., \"9\", \"1R\")\n");
         log_info(stderr, "   -t       | --threads       int       [auto]\n");
+        log_info(stderr, "   -b       | --bucketing     int       [16]   (# of bits used for bucketing)\n");
         log_info(stderr, "   -F       | --skip-forward\n");
         log_info(stderr, "   -R       | --skip-reverse\n");
         log_info(stderr, "  output formats:\n");
@@ -295,6 +296,11 @@ int main(int argc, char* argv[])
                  (strcmp( argv[i], "--radix-slice" )  == 0))  // radix slice
         {
             params.radix_slice = atoi( argv[++i] );
+        }
+        else if ((strcmp( argv[i], "-b" )             == 0) ||
+                 (strcmp( argv[i], "--bucketing" )    == 0))  // bucketing bits
+        {
+            params.bucketing_bits = atoi( argv[++i] );
         }
     }
 

@@ -569,17 +569,17 @@ struct SequenceDataStorage : public SequenceData
         m_name_index_vec.reserve( n_seqs+1 );
     }
 
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator                  name_index()                { return m_name_index_vec.begin();  }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator                  sequence_index()            { return m_sequence_index_vec.begin();  }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_storage_iterator           name_stream()               { return m_name_vec.begin(); }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_storage_iterator       sequence_storage()          { return m_sequence_vec.begin(); }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE qual_storage_iterator           qual_stream()               { return m_qual_vec.begin(); }
+    NVBIO_FORCEINLINE index_iterator                  name_index()                { return m_name_index_vec.begin();  }
+    NVBIO_FORCEINLINE index_iterator                  sequence_index()            { return m_sequence_index_vec.begin();  }
+    NVBIO_FORCEINLINE name_storage_iterator           name_stream()               { return m_name_vec.begin(); }
+    NVBIO_FORCEINLINE sequence_storage_iterator       sequence_storage()          { return m_sequence_vec.begin(); }
+    NVBIO_FORCEINLINE qual_storage_iterator           qual_stream()               { return m_qual_vec.begin(); }
 
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator            name_index()          const { return m_name_index_vec.begin();  }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_index_iterator            sequence_index()      const { return m_sequence_index_vec.begin();  }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_name_storage_iterator     name_stream()         const { return m_name_vec.begin(); }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_sequence_storage_iterator sequence_storage()    const { return m_sequence_vec.begin(); }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const_qual_storage_iterator     qual_stream()         const { return m_qual_vec.begin(); }
+    NVBIO_FORCEINLINE const_index_iterator            name_index()          const { return m_name_index_vec.begin();  }
+    NVBIO_FORCEINLINE const_index_iterator            sequence_index()      const { return m_sequence_index_vec.begin();  }
+    NVBIO_FORCEINLINE const_name_storage_iterator     name_stream()         const { return m_name_vec.begin(); }
+    NVBIO_FORCEINLINE const_sequence_storage_iterator sequence_storage()    const { return m_sequence_vec.begin(); }
+    NVBIO_FORCEINLINE const_qual_storage_iterator     qual_stream()         const { return m_qual_vec.begin(); }
 
     nvbio::vector<system_tag,uint32> m_sequence_vec;
     nvbio::vector<system_tag,uint32> m_sequence_index_vec;

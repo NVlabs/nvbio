@@ -403,6 +403,14 @@ inline NVBIO_HOST_DEVICE uint8 min(const uint8 a, const uint8 b) { return a < b 
 ///
 inline NVBIO_HOST_DEVICE uint8 max(const uint8 a, const uint8 b) { return a > b ? a : b; }
 
+/// minimum of two uint16
+///
+inline NVBIO_HOST_DEVICE uint16 min(const uint16 a, const uint16 b) { return a < b ? a : b; }
+
+/// maximum of two uint16
+///
+inline NVBIO_HOST_DEVICE uint16 max(const uint16 a, const uint16 b) { return a > b ? a : b; }
+
 /// minimum of two int32
 ///
 inline NVBIO_HOST_DEVICE int32 min(const int32 a, const int32 b) { return a < b ? a : b; }

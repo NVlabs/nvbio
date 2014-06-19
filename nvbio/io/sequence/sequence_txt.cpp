@@ -57,8 +57,8 @@ int SequenceDataFile_TXT::nextChunk(SequenceDataEncoder* output, uint32 max_read
         ((m_flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
         ((m_flags & REVERSE_COMPLEMENT) ? 1u : 0u);
 
-    while (n_reads + read_mult                       <= max_reads &&
-           n_bps + read_mult*SequenceDataFile::LONG_READ <= max_bps)
+    while (n_reads + read_mult                             <= max_reads &&
+           n_bps   + read_mult*SequenceDataFile::LONG_READ <= max_bps)
     {
         // reset the read
         m_read_bp.erase( m_read_bp.begin(), m_read_bp.end() );
@@ -153,6 +153,11 @@ SequenceDataFile_TXT_gz::SequenceDataFile_TXT_gz(
     }
 
     gzbuffer(m_file, m_buffer_size);
+}
+
+SequenceDataFile_TXT_gz::~SequenceDataFile_TXT_gz()
+{
+    gzclose( m_file );
 }
 
 SequenceDataFile_TXT::FileState SequenceDataFile_TXT_gz::fillBuffer(void)

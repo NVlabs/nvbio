@@ -117,6 +117,8 @@ struct SequenceDataFile_FASTQ_gz : public SequenceDataFile_FASTQ_parser
         const uint32 max_read_len,
         const SequenceEncoding flags);
 
+    ~SequenceDataFile_FASTQ_gz();
+
     virtual FileState fillBuffer(void);
 
 private:

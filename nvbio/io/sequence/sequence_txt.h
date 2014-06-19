@@ -114,6 +114,8 @@ struct SequenceDataFile_TXT_gz : public SequenceDataFile_TXT
                           const SequenceEncoding flags,
                           const uint32 buffer_size = 64536u);
 
+    ~SequenceDataFile_TXT_gz();
+
     virtual FileState fillBuffer(void);
 
 private:

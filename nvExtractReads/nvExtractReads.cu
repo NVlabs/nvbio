@@ -94,25 +94,26 @@ bool to_ascii(const char* reads_name, void* output_file, void* output_index, con
                 log_error( stderr, "unable to write to output\n");
                 return false;
             }
-
-            if (output_index)
-            {
-                // collect the sequence offsets
-                for (uint32 i = 0; i < h_read_data.size(); ++i)
-                    index[i] = offset + h_read_data.sequence_index()[i+1];
-
-                // write the sequence offsets
-                gzwrite( output_file, &index[0], sizeof(uint64) * h_read_data.size() );
-
-                // update the global sequence offset
-                offset += h_read_data.bps();
-            }
         }
 
+        if (output_index)
+        {
+            // collect the sequence offsets
+            for (uint32 i = 0; i < h_read_data.size(); ++i)
+                index[i] = offset + h_read_data.sequence_index()[i+1];
+
+            // write the sequence offsets
+            gzwrite( output_file, &index[0], sizeof(uint64) * h_read_data.size() );
+        }
+
+        // update the global sequence offset
+        offset += h_read_data.bps();
+
+        // update the global number of output reads
         n_reads += h_read_data.size();
 
         const uint64 n_bytes = gzoffset( output_file );
-        log_verbose(stderr,"\r    %u reads (%.2fGB)    ", n_reads, float( n_bytes ) / float(1024*1024*1024));
+        log_verbose(stderr,"\r    %u reads (%.2fGB - %.2fB/read - %.2fB/bp)    ", n_reads, float( n_bytes ) / float(1024*1024*1024), float(n_bytes)/float(n_reads), float(n_bytes)/float(offset));
     }
     log_verbose_cont(stderr,"\n");
     return true;
@@ -188,15 +189,16 @@ bool to_packed(const char* reads_name, void* output_file, void* output_index, co
 
             // write the sequence offsets
             gzwrite( output_file, &index[0], sizeof(uint64) * h_read_data.size() );
-
-            // update the global sequence offset
-            offset += h_read_data.bps();
         }
 
+        // update the global sequence offset
+        offset += h_read_data.bps();
+
+        // update the global number of output reads
         n_reads += h_read_data.size();
 
         const uint64 n_bytes = gzoffset( output_file );
-        log_verbose(stderr,"\r    %u reads (%.2fGB)    ", n_reads, float( n_bytes ) / float(1024*1024*1024));
+        log_verbose(stderr,"\r    %u reads (%.2fGB - %.2fB/read - %.2fB/bp)    ", n_reads, float( n_bytes ) / float(1024*1024*1024), float(n_bytes)/float(n_reads), float(n_bytes)/float(offset));
     }
     log_verbose_cont(stderr,"\n");
     return true;

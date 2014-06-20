@@ -626,11 +626,8 @@ struct HostCoreSetSuffixBucketer
     /// count the number of suffixes falling in each bucket, where the buckets
     /// are defined by the first n_bits of the suffix
     ///
-    template <typename string_set_type>
-    uint64 count(const string_set_type& string_set)
+    void count_init()
     {
-        typedef typename string_set_type::string_type string_type;
-
         const uint32 n_buckets = 1u << N_BITS;
 
         // initialize the temporary and output vectors
@@ -640,12 +637,24 @@ struct HostCoreSetSuffixBucketer
         for (uint32 i = 0; i < n_buckets; ++i)
             h_buckets[i] = 0u;
 
+        // initialize the global suffix counter
+        n_suffixes = 0u;
+    }
+
+    /// count the number of suffixes falling in each bucket, where the buckets
+    /// are defined by the first n_bits of the suffix
+    ///
+    template <typename string_set_type>
+    uint64 count(const string_set_type& string_set)
+    {
+        typedef typename string_set_type::string_type string_type;
+
         // extract the first word
         const local_set_suffix_word_functor<SYMBOL_SIZE,N_BITS,DOLLAR_BITS,string_set_type,bucket_type> word_functor( string_set, 0u );
 
         const uint32 n_strings = string_set.size();
 
-        n_suffixes = 0u;
+        uint64 _n_suffixes = 0u;
 
         // loop through all the strings in the set
         for (uint32 i = 0; i < n_strings; ++i)
@@ -664,9 +673,13 @@ struct HostCoreSetSuffixBucketer
             }
 
             // increase total number of suffixes
-            n_suffixes += string_len;
+            _n_suffixes += string_len;
         }
-        return n_suffixes;
+
+        // update the global counter
+        n_suffixes += _n_suffixes;
+
+        return _n_suffixes;
     }
 
     /// collect the suffixes falling in a given set of buckets, where the buckets
@@ -792,8 +805,11 @@ struct HostSetSuffixBucketer
     {
         ScopedTimer<float> count_timer( &count_time );
 
+        const uint32 n_threads = omp_get_max_threads();
+
         const uint32 n_buckets  = 1u << N_BITS;
-        const uint32 batch_size = 1024*1024;
+        const uint32 chunk_size = 128*1024;
+        const uint32 batch_size = n_threads * chunk_size;
         const uint32 n_strings  = string_set.size();
 
         // initialize bucket counters
@@ -801,15 +817,15 @@ struct HostSetSuffixBucketer
         for (int b = 0; b < int(n_buckets); ++b)
             h_buckets[b] = 0u;
 
-        const uint32 n_threads = omp_get_max_threads();
-
-        const uint32 chunk_size = batch_size / n_threads;
-
         // declare a chunk loader
         chunk_loader_type chunk_loader;
 
         // keep track of the total number of suffixes
         uint64 n_suffixes = 0u;
+
+        // initialize bucket counters
+        for (uint32 i = 0; i < n_threads; ++i)
+            m_bucketers[i].count_init();
 
         // split the string-set in batches
         for (uint32 batch_begin = 0; batch_begin < n_strings; batch_begin += batch_size)
@@ -833,26 +849,20 @@ struct HostSetSuffixBucketer
                     m_bucketers[tid].count( chunk_set );
                 }
             }
+        }
 
-            // merge all buckets
+        // merge all buckets
+        {
+            ScopedTimer<float> timer( &merge_time );
+
+            for (uint32 i = 0; i < n_threads; ++i)
             {
-                ScopedTimer<float> timer( &merge_time );
+                // sum the number of suffixes
+                n_suffixes += m_bucketers[i].n_suffixes;
 
-                for (uint32 i = 0; i < n_threads; ++i)
-                {
-                    const uint32 chunk_begin = batch_begin + i * chunk_size;
-
-                    // make sure this thread is active
-                    if (chunk_begin < batch_end)
-                    {
-                        // sum the number of suffixes
-                        n_suffixes += m_bucketers[i].n_suffixes;
-
-                        #pragma omp parallel for
-                        for (int b = 0; b < int(n_buckets); ++b)
-                            h_buckets[b] += m_bucketers[i].h_buckets[b];
-                    }
-                }
+                #pragma omp parallel for
+                for (int b = 0; b < int(n_buckets); ++b)
+                    h_buckets[b] += m_bucketers[i].h_buckets[b];
             }
         }
 
@@ -889,7 +899,7 @@ struct HostSetSuffixBucketer
 
         const uint32 n_threads = omp_get_max_threads();
 
-        const uint32 chunk_size = batch_size / n_threads;
+        const uint32 chunk_size = util::divide_ri( batch_size, n_threads );
 
         // declare a chunk loader
         chunk_loader_type chunk_loader;

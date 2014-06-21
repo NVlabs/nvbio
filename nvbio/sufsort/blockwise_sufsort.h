@@ -114,14 +114,14 @@ void blockwise_suffix_sort(
 
     const uint32 DELAY_BUFFER = 1024*1024;
 
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  super-block-size: %.1f M\n", float(max_super_block_size)/float(1024*1024)) );
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"        block-size: %.1f M\n", float(max_block_size)/float(1024*1024)) );
+    log_verbose(stderr,"  super-block-size: %.1f M\n", float(max_super_block_size)/float(1024*1024));
+    log_verbose(stderr,"        block-size: %.1f M\n", float(max_block_size)/float(1024*1024));
     thrust::host_vector<uint32> h_super_suffixes( max_super_block_size, 0u );
     thrust::host_vector<uint32> h_block_suffixes( max_block_size );
     thrust::host_vector<uint32> h_block_radices( max_block_size );
 
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  device-alloc(%.1f GB)... started\n", float(needed_device_mem)/float(1024*1024*1024)) );
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    free: %.1f GB\n", float(free)/float(1024*1024*1024)) );
+    log_verbose(stderr,"  device-alloc(%.1f GB)... started\n", float(needed_device_mem)/float(1024*1024*1024));
+    log_verbose(stderr,"    free: %.1f GB\n", float(free)/float(1024*1024*1024));
 
     thrust::device_vector<uint32> d_subbucket_suffixes( max_block_size );
     thrust::device_vector<uint32> d_delayed_suffixes( max_block_size );
@@ -144,8 +144,8 @@ void blockwise_suffix_sort(
 
     priv::StringSuffixBucketer<SYMBOL_SIZE,BUCKETING_BITS,DOLLAR_BITS> bucketer;
 
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  device-alloc(%.1f GB)... done\n", float(needed_device_mem)/float(1024*1024*1024)) );
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  bucket counting\n") );
+    log_verbose(stderr,"  device-alloc(%.1f GB)... done\n", float(needed_device_mem)/float(1024*1024*1024));
+    log_verbose(stderr,"  bucket counting\n");
 
     // global bucket sizes
     thrust::device_vector<uint32> d_buckets( 1u << (BUCKETING_BITS), 0u );
@@ -178,8 +178,8 @@ void blockwise_suffix_sort(
         0u,
         thrust::maximum<uint32>() );
 
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    max bucket size: %u\n", max_bucket_size) );
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"      c-sort  : %.1fs\n", bucketer.d_count_sort_time) );
+    log_verbose(stderr,"    max bucket size: %u\n", max_bucket_size);
+    log_verbose(stderr,"      c-sort  : %.1fs\n", bucketer.d_count_sort_time);
 
     //
     // at this point, we have to do multiple passes through the input string set,
@@ -237,7 +237,7 @@ void blockwise_suffix_sort(
 
         uint32 suffix_count = 0;
 
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  collect buckets[%u:%u] (%u suffixes)\n", bucket_begin, bucket_end, bucket_size) );
+        log_verbose(stderr,"  collect buckets[%u:%u] (%u suffixes)\n", bucket_begin, bucket_end, bucket_size);
         Timer collect_timer;
         collect_timer.start();
 
@@ -286,12 +286,12 @@ void blockwise_suffix_sort(
         collect_timer.stop();
         collect_time += collect_timer.seconds();
 
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  collect : %.1fs, %.1f M suffixes/s\n", collect_time, 1.0e-6f*float(global_suffix_offset + suffix_count)/collect_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    setup   : %.1fs\n", bucketer.d_setup_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    flatten : %.1fs\n", bucketer.d_flatten_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    b-sort  : %.1fs\n", bucketer.d_collect_sort_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    search  : %.1fs\n", bucketer.d_remap_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    copy    : %.1fs\n", bucketer.d_copy_time) );
+        log_verbose(stderr,"  collect : %.1fs, %.1f M suffixes/s\n", collect_time, 1.0e-6f*float(global_suffix_offset + suffix_count)/collect_time);
+        log_verbose(stderr,"    setup   : %.1fs\n", bucketer.d_setup_time);
+        log_verbose(stderr,"    flatten : %.1fs\n", bucketer.d_flatten_time);
+        log_verbose(stderr,"    b-sort  : %.1fs\n", bucketer.d_collect_sort_time);
+        log_verbose(stderr,"    search  : %.1fs\n", bucketer.d_remap_time);
+        log_verbose(stderr,"    copy    : %.1fs\n", bucketer.d_copy_time);
 
         //
         // at this point we have a large collection of localized suffixes to sort in d_subbucket_suffixes;
@@ -309,7 +309,7 @@ void blockwise_suffix_sort(
             for (subbucket_size = 0; (subbucket_end < bucket_end) && (subbucket_size + h_buckets[subbucket_end] < max_block_size); ++subbucket_end)
                 subbucket_size += h_buckets[subbucket_end];
 
-            NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"\r  sufsort buckets[%u:%u] (%u suffixes, %.1f M suffixes/s)        ", subbucket_begin, subbucket_end, subbucket_size, 1.0e-6f*float(global_suffix_offset + suffix_count)/sufsort_time ) );
+            log_verbose(stderr,"\r  sufsort buckets[%u:%u] (%u suffixes, %.1f M suffixes/s)        ", subbucket_begin, subbucket_end, subbucket_size, 1.0e-6f*float(global_suffix_offset + suffix_count)/sufsort_time );
 
             // consume subbucket_size suffixes
             const uint32 n_suffixes = subbucket_size;
@@ -428,16 +428,16 @@ void blockwise_suffix_sort(
             suffix_count += subbucket_size;
         }
 
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"\r  sufsort : %.1fs (%.1f M suffixes/s)                     \n", sufsort_time, 1.0e-6f*float(global_suffix_offset + suffix_count)/sufsort_time) );
+        log_verbose(stderr,"\r  sufsort : %.1fs (%.1f M suffixes/s)                     \n", sufsort_time, 1.0e-6f*float(global_suffix_offset + suffix_count)/sufsort_time);
 
       #if defined(COMPRESSION_SORTING)
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    extract  : %.1fs\n", compression_sort.extract_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    r-sort   : %.1fs\n", compression_sort.radixsort_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    s-sort   : %.1fs\n", compression_sort.stablesort_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    compress : %.1fs\n", compression_sort.compress_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    compact  : %.1fs\n", compression_sort.compact_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    bwt-copy : %.1fs\n", bwt_copy_time) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"    bwt-scat : %.1fs\n", bwt_scatter_time) );
+        log_verbose(stderr,"    extract  : %.1fs\n", compression_sort.extract_time);
+        log_verbose(stderr,"    r-sort   : %.1fs\n", compression_sort.radixsort_time);
+        log_verbose(stderr,"    s-sort   : %.1fs\n", compression_sort.stablesort_time);
+        log_verbose(stderr,"    compress : %.1fs\n", compression_sort.compress_time);
+        log_verbose(stderr,"    compact  : %.1fs\n", compression_sort.compact_time);
+        log_verbose(stderr,"    bwt-copy : %.1fs\n", bwt_copy_time);
+        log_verbose(stderr,"    bwt-scat : %.1fs\n", bwt_scatter_time);
       #endif
 
         global_suffix_offset += suffix_count;
@@ -457,7 +457,7 @@ void blockwise_build(
 
     // build the list of DC sample suffixes
     const index_type estimated_sample_size = index_type( dcs.estimate_sample_size( string_len ) );
-    NVBIO_CUDA_DEBUG_STATEMENT( log_verbose(stderr,"  allocating DCS: %.1f MB\n", float(size_t( estimated_sample_size )*8u)/float(1024*1024)) );
+    log_verbose(stderr,"  allocating DCS: %.1f MB\n", float(size_t( estimated_sample_size )*8u)/float(1024*1024));
 
     thrust::device_vector<uint32> d_sample( estimated_sample_size );
     thrust::device_vector<uint8>  d_temp_storage;

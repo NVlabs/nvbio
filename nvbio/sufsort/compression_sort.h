@@ -522,6 +522,8 @@ void CompressionSort::sort(
 
     try
     {
+        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      initialize\n" ) );
+
         // reserve temporary storage
         reserve( n_strings );
 
@@ -561,6 +563,7 @@ void CompressionSort::sort(
         //
         for (uint32 word_block_begin = 0; word_block_begin < max_words; word_block_begin += slice_size)
         {
+            NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      slice %u/%u (%u active)\n", word_block_begin, max_words, n_active_strings ) );
             const uint32 word_block_end = nvbio::min( word_block_begin + slice_size, max_words );
 
             Timer timer;
@@ -603,6 +606,7 @@ void CompressionSort::sort(
                 timer.start();
 
                 // extract only active radices, already sorted
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      extract\n" ) );
                 set.extract(
                     n_active_strings,
                     raw_pointer( d_indices ),
@@ -618,6 +622,7 @@ void CompressionSort::sort(
                 timer.start();
 
                 // extract all radices, not sorted
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      extract\n" ) );
                 set.extract(
                     n_strings,
                     NULL,
@@ -633,6 +638,7 @@ void CompressionSort::sort(
                 timer.start();
 
                 // get the radices in proper order
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      gather\n" ) );
                 thrust::gather(
                     d_indices.begin(),
                     d_indices.begin() + n_active_strings,
@@ -643,10 +649,10 @@ void CompressionSort::sort(
                 timer.stop();
                 copy_time += timer.seconds();
             #endif
-
                 timer.start();
 
                 // build the compressed flags
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      pack-flags\n" ) );
                 uint32* d_comp_flags = (uint32*)nvbio::raw_pointer( d_temp_flags );
                 priv::pack_flags(
                     n_active_strings,
@@ -657,6 +663,7 @@ void CompressionSort::sort(
                 cuda::check_error("CompressionSort::sort() : pack_flags");
 
                 // sort within segments
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      seg-sort\n" ) );
                 mgpu::SegSortPairsFromFlags(
                     nvbio::raw_pointer( d_keys ),
                     nvbio::raw_pointer( d_indices ),
@@ -678,6 +685,7 @@ void CompressionSort::sort(
                 // of them in the sorted list with its predecessor.
                 // At that point, we can isolate all segments which contain more than 1 suffix and continue sorting
                 // those by themselves.
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      build-head-flags\n" ) );
                 priv::build_head_flags(
                     n_active_strings,
                     nvbio::raw_pointer( d_keys ),
@@ -713,6 +721,7 @@ void CompressionSort::sort(
                     if (n_active_strings == n_strings)
                     {
                         // copy the fully sorted indices to the output in their proper place
+                        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      copy-partials\n" ) );
                         thrust::copy(
                             d_indices.begin(),
                             d_indices.begin() + n_active_strings,
@@ -722,6 +731,7 @@ void CompressionSort::sort(
                     else
                     {
                         // scatter the partially sorted indices to the output in their proper place
+                        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      scatter-partials\n" ) );
                         thrust::scatter(
                             d_indices.begin(),
                             d_indices.begin() + n_active_strings,
@@ -758,7 +768,6 @@ void CompressionSort::sort(
                     d_copy_flags.begin(),
                     priv::remove_singletons() );
 
-
                 const uint32 n_partials = cuda::reduce(
                     n_active_strings,
                     thrust::make_transform_iterator( d_copy_flags.begin() + 1u, priv::cast_functor<uint8,uint32>() ),
@@ -769,7 +778,7 @@ void CompressionSort::sort(
                 //if (2u*n_segments >= n_active_strings)
                 if (2u*n_partials <= n_active_strings)
                 {
-                    //NVBIO_CUDA_DEBUG_STATEMENT( fprintf(stderr,"\n    segments: %.3f%%, at pass %u\n", 100.0f*float(n_segments)/float(n_strings), word_idx) );
+                    NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      filter-unique %u\n", n_partials ) );
 
                     timer.start();
 
@@ -827,8 +836,6 @@ void CompressionSort::sort(
                     NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
                     timer.stop();
                     compact_time += timer.seconds();
-
-                    //NVBIO_CUDA_DEBUG_STATEMENT( fprintf(stderr,"\n    active: %.3f%% in %.3f%% segments, at pass %u\n", 100.0f*float(n_active_strings)/float(n_strings), 100.0f*float(n_segments)/float(n_strings), word_idx) );
                 }
             }
         }

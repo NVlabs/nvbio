@@ -34,6 +34,7 @@
 #include <thrust/reduce.h>
 #include <thrust/scan.h>
 #include <thrust/copy.h>
+#include <thrust/binary_search.h>
 #include <thrust/iterator/constant_iterator.h>
 
 #if defined(__CUDACC__)
@@ -258,6 +259,38 @@ uint32 reduce_by_key(
     OutputValueIterator                 values_out,
     ReductionOp                         reduction_op,
     nvbio::vector<system_tag,uint8>&    temp_storage);
+
+/// system-wide lower_bound
+///
+/// \param n                    number of input items
+/// \param values               a system input iterator of values to be searched
+/// \param n_keys               number of sorted keys
+/// \param keys                 a system input iterator of sorted keys
+/// \param indices              a system output iterator
+///
+template <typename system_tag, typename KeyIterator, typename ValueIterator, typename OutputIterator>
+void lower_bound(
+    const uint32                        n,
+    ValueIterator                       values,
+    const uint32                        n_keys,
+    KeyIterator                         keys,
+    OutputIterator                      indices);
+
+/// system-wide upper_bound
+///
+/// \param n                    number of input items
+/// \param values               a system input iterator of values to be searched
+/// \param n_keys               number of sorted keys
+/// \param keys                 a system input iterator of sorted keys
+/// \param indices              a system output iterator
+///
+template <typename system_tag, typename KeyIterator, typename ValueIterator, typename OutputIterator>
+void upper_bound(
+    const uint32                        n,
+    ValueIterator                       values,
+    const uint32                        n_keys,
+    KeyIterator                         keys,
+    OutputIterator                      indices);
 
 ///@} // end of the Primitives group
 ///@} // end of the Basic group

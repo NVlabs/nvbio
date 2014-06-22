@@ -713,7 +713,7 @@ uint32 reduce_by_key(
 
 #endif
 
-// device-wide copy of flagged items
+// system-wide copy of flagged items
 //
 // \param n                    number of input items
 // \param in                 a device input iterator
@@ -734,7 +734,7 @@ uint32 copy_flagged(
     return copy_flagged( system_tag(), n, in, flags, out, temp_storage );
 };
 
-// device-wide copy of predicated items
+// system-wide copy of predicated items
 //
 // \param n                    number of input items
 // \param in                 a device input iterator
@@ -807,6 +807,140 @@ uint32 reduce_by_key(
         values_out,
         reduction_op,
         temp_storage );
+}
+
+// device-wide lower_bound
+//
+// \param n                    number of input items
+// \param values               a system input iterator of values to be searched
+// \param keys                 a system input iterator of sorted keys
+// \param indices              a system output iterator
+//
+template <typename KeyIterator, typename ValueIterator, typename OutputIterator>
+void lower_bound(
+    const device_tag                    tag,
+    const uint32                        n,
+    ValueIterator                       values,
+    const uint32                        n_keys,
+    KeyIterator                         keys,
+    OutputIterator                      indices)
+{
+    thrust::lower_bound(
+        keys, keys + n_keys,
+        values, values + n,
+        indices );
+}
+
+// host-wide lower_bound
+//
+// \param n                    number of input items
+// \param values               a system input iterator of values to be searched
+// \param keys                 a system input iterator of sorted keys
+// \param indices              a system output iterator
+//
+template <typename KeyIterator, typename ValueIterator, typename OutputIterator>
+void lower_bound(
+    const host_tag                      tag,
+    const uint32                        n,
+    ValueIterator                       values,
+    const uint32                        n_keys,
+    KeyIterator                         keys,
+    OutputIterator                      indices)
+{
+    #pragma omp parallel for
+    for (long i = 0; i < long(n); ++i)
+        indices[i] = uint32( lower_bound( values[i], keys, n_keys ) - keys );
+}
+
+// system-wide lower_bound
+//
+// \param n                    number of input items
+// \param values               a system input iterator of values to be searched
+// \param keys                 a system input iterator of sorted keys
+// \param indices              a system output iterator
+//
+template <typename system_tag, typename KeyIterator, typename ValueIterator, typename OutputIterator>
+void lower_bound(
+    const uint32                        n,
+    ValueIterator                       values,
+    const uint32                        n_keys,
+    KeyIterator                         keys,
+    OutputIterator                      indices)
+{
+    lower_bound(
+        system_tag(),
+        n,
+        values,
+        n_keys,
+        keys,
+        indices );
+}
+
+// device-wide upper_bound
+//
+// \param n                    number of input items
+// \param values               a system input iterator of values to be searched
+// \param keys                 a system input iterator of sorted keys
+// \param indices              a system output iterator
+//
+template <typename KeyIterator, typename ValueIterator, typename OutputIterator>
+void upper_bound(
+    const device_tag                    tag,
+    const uint32                        n,
+    ValueIterator                       values,
+    const uint32                        n_keys,
+    KeyIterator                         keys,
+    OutputIterator                      indices)
+{
+    thrust::upper_bound(
+        keys, keys + n_keys,
+        values, values + n,
+        indices );
+}
+
+// host-wide upper_bound
+//
+// \param n                    number of input items
+// \param values               a system input iterator of values to be searched
+// \param keys                 a system input iterator of sorted keys
+// \param indices              a system output iterator
+//
+template <typename KeyIterator, typename ValueIterator, typename OutputIterator>
+void upper_bound(
+    const host_tag                      tag,
+    const uint32                        n,
+    ValueIterator                       values,
+    const uint32                        n_keys,
+    KeyIterator                         keys,
+    OutputIterator                      indices)
+{
+    #pragma omp parallel for
+    for (long i = 0; i < long(n); ++i)
+        indices[i] = uint32( upper_bound( values[i], keys, n_keys ) - keys );
+}
+
+// system-wide upper_bound
+//
+// \param n                    number of input items
+// \param values               a system input iterator of values to be searched
+// \param keys                 a system input iterator of sorted keys
+// \param indices              a system output iterator
+//
+template <typename system_tag, typename KeyIterator, typename ValueIterator, typename OutputIterator>
+void upper_bound(
+    const uint32                        n,
+    ValueIterator                       values,
+    const uint32                        n_keys,
+    KeyIterator                         keys,
+    OutputIterator                      indices)
+{
+    upper_bound(
+        system_tag(),
+        n,
+        values,
+        n_keys,
+        keys,
+        indices );
 }
 
 } // namespace nvbio

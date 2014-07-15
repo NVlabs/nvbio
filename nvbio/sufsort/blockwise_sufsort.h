@@ -480,7 +480,11 @@ void blockwise_build(
             in_dcs,
             d_temp_storage );
 
-        assert( sample_size <= estimated_sample_size );
+        if (sample_size > estimated_sample_size)
+        {
+            log_error(stderr,"  buffer overflow (%llu / %llu)\n", uint64( sample_size ), uint64( estimated_sample_size ));
+            throw runtime_error( "DCS buffer overflow" );
+        }
     }
 
     // alloc enough space for the DC ranks

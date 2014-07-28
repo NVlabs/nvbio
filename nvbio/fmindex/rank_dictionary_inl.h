@@ -278,7 +278,7 @@ struct dispatch_rank<2,K,PackedStream<TextStorage,uint8,2u,true,index_type>,OccI
         const word_type i_mod = ~word_type(i) & (SYMS_PER_WORD-1);
 
         // fetch base occurrence counter
-        const word_type out = dict.occ[ k*4 + c ];
+        const index_type out = dict.occ[ k*4 + c ];
 
         const uint32 off = k*(K >> LOG_SYMS_PER_WORD);
 

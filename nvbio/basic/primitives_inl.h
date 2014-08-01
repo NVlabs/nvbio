@@ -131,8 +131,8 @@ struct is_sorted_iterator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     is_sorted_iterator& operator++ () { ++it1; ++it2; return *this; }
 
-    const Iterator1 it1;
-    const Iterator2 it2;
+    Iterator1 it1;
+    Iterator2 it2;
 };
 
 // operator+
@@ -192,9 +192,9 @@ struct is_segment_sorted_iterator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     is_segment_sorted_iterator& operator++ () { ++it1; ++it2; ++hd; return *this; }
 
-    const Iterator1 it1;
-    const Iterator2 it2;
-    const Headflags hd;
+    Iterator1 it1;
+    Iterator2 it2;
+    Headflags hd;
 };
 
 // operator+

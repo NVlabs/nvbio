@@ -108,35 +108,123 @@ bool all(
 template <typename Iterator1, typename Iterator2>
 struct is_sorted_iterator
 {
+    typedef bool                                                        value_type;
+    typedef value_type&                                                 reference;
+    typedef value_type                                                  const_reference;
+    typedef value_type*                                                 pointer;
+    typedef typename std::iterator_traits<Iterator1>::difference_type   difference_type;
+    typedef typename std::iterator_traits<Iterator1>::iterator_category iterator_category;
+
     // constructor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     is_sorted_iterator(const Iterator1 _it1, const Iterator2 _it2) : it1( _it1 ), it2( _it2 ) {}
 
     // dereference operator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    bool operator[] (const uint32 i) const { return it1[i] <= it2[i]; }
+    bool operator[] (const uint64 i) const { return it1[i] <= it2[i]; }
+
+    // dereference operator
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    bool operator* () const { return it1[0] <= it2[0]; }
+
+    // dereference operator
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    is_sorted_iterator& operator++ () const { ++it1; ++it2; return *this; }
 
     const Iterator1 it1;
     const Iterator2 it2;
 };
+
+// operator+
+template <typename T1, typename T2>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+is_sorted_iterator<T1,T2> operator+ (const is_sorted_iterator<T1,T2> it, const int64 i)
+{
+    return is_sorted_iterator<T1,T2>( it.it1 + i, it.it2 + i );
+}
+// operator-
+template <typename T1, typename T2>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+int64 operator- (const is_sorted_iterator<T1,T2> it1, const is_sorted_iterator<T1,T2> it2)
+{
+    return it1.it1 - it2.it1;
+}
+// operator!=
+template <typename T1, typename T2>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!= (const is_sorted_iterator<T1,T2> it1, const is_sorted_iterator<T1,T2> it2)
+{
+    return it1.it1 != it2.it1;
+}
+// operator==
+template <typename T1, typename T2>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator== (const is_sorted_iterator<T1,T2> it1, const is_sorted_iterator<T1,T2> it2)
+{
+    return it1.it1 == it2.it1;
+}
 
 // a pseudo-iterator to evaluate the predicate (hd[i] || (it1[i] <= it2[i])) for arbitrary iterator pairs
 //
 template <typename Iterator1, typename Iterator2, typename Headflags>
 struct is_segment_sorted_iterator
 {
+    typedef bool                                                        value_type;
+    typedef value_type&                                                 reference;
+    typedef value_type                                                  const_reference;
+    typedef value_type*                                                 pointer;
+    typedef typename std::iterator_traits<Iterator1>::difference_type   difference_type;
+    typedef typename std::iterator_traits<Iterator1>::iterator_category iterator_category;
+
     // constructor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     is_segment_sorted_iterator(const Iterator1 _it1, const Iterator2 _it2, const Headflags _hd) : it1( _it1 ), it2( _it2 ), hd(_hd) {}
 
     // dereference operator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    bool operator[] (const uint32 i) const { return hd[i] || (it1[i] <= it2[i]); }
+    bool operator[] (const uint64 i) const { return hd[i] || (it1[i] <= it2[i]); }
+
+    // dereference operator
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    bool operator* () const { return hd[0] || (it1[0] <= it2[0]); }
+
+    // dereference operator
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    is_segment_sorted_iterator& operator++ () const { ++it1; ++it2; ++hd; return *this; }
 
     const Iterator1 it1;
     const Iterator2 it2;
     const Headflags hd;
 };
+
+// operator+
+template <typename T1, typename T2, typename H>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+is_segment_sorted_iterator<T1,T2,H> operator+ (const is_segment_sorted_iterator<T1,T2,H> it, const int64 i)
+{
+    return is_segment_sorted_iterator<T1,T2,H>( it.it1 + i, it.it2 + i, it.hd + i );
+}
+// operator-
+template <typename T1, typename T2, typename H>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+int64 operator- (const is_segment_sorted_iterator<T1,T2,H> it1, const is_segment_sorted_iterator<T1,T2,H> it2)
+{
+    return it1.it1 - it2.it1;
+}
+// operator!=
+template <typename T1, typename T2, typename H>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!= (const is_segment_sorted_iterator<T1,T2,H> it1, const is_segment_sorted_iterator<T1,T2,H> it2)
+{
+    return it1.it1 != it2.it1;
+}
+// operator==
+template <typename T1, typename T2, typename H>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator== (const is_segment_sorted_iterator<T1,T2,H> it1, const is_segment_sorted_iterator<T1,T2,H> it2)
+{
+    return it1.it1 == it2.it1;
+}
 
 // return true if the items in the range [0,n) are sorted
 //

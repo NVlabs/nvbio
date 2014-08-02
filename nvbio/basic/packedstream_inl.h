@@ -787,7 +787,7 @@ void assign(
         for (uint32 i = 0; i < word_rem; ++i)
         {
             // fetch the bp
-            const uint8 bp = input_string[i];
+            const uint8 bp = input_string[i] & SYMBOL_MASK;
 
             const uint32       bit_idx = (word_offset + i) * SYMBOL_SIZE;
             const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
@@ -820,7 +820,7 @@ void assign(
             if (j < n_symbols)
             {
                 // fetch the bp
-                const uint8 bp = input_string[IndexType(i) + j];
+                const uint8 bp = input_string[IndexType(i) + j] & SYMBOL_MASK;
 
                 const uint32       bit_idx = j * SYMBOL_SIZE;
                 const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;

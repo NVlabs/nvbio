@@ -87,11 +87,11 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Iterator find_pivot(
 /// \param x        element to find
 /// \param begin    sequence start iterator
 /// \param n        sequence size
-template <typename Iterator, typename Value>
+template <typename Iterator, typename Value, typename index_type>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Iterator lower_bound(
-    const Value     x,
-    Iterator        begin,
-    const uint32    n)
+    const Value         x,
+    Iterator            begin,
+    const index_type    n)
 {
     // if the range has a size of zero, let's just return the intial element
     if (n == 0)
@@ -105,11 +105,11 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Iterator lower_bound(
         return begin + n;
 
     // perform a binary search over the given range
-    uint32 count = n;
+    index_type count = n;
 
     while (count > 0)
     {
-        const uint32 count2 = count / 2;
+        const index_type count2 = count / 2;
 
         Iterator mid = begin + count2;
 
@@ -126,17 +126,17 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Iterator lower_bound(
 /// \param x        element to find
 /// \param begin    sequence start iterator
 /// \param n        sequence size
-template <typename Iterator, typename Value>
+template <typename Iterator, typename Value, typename index_type>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Iterator upper_bound(
-    const Value     x,
-    Iterator        begin,
-    const uint32    n)
+    const Value         x,
+    Iterator            begin,
+    const index_type    n)
 {
-    uint32 count = n;
+    index_type count = n;
  
     while (count > 0)
     {
-        const uint32 step = count / 2;
+        const index_type step = count / 2;
 
         Iterator it = begin + step;
 
@@ -150,4 +150,33 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Iterator upper_bound(
     }
     return begin;
 }
+
+/// find the lower bound in a sequence
+///
+/// \param x        element to find
+/// \param begin    sequence start iterator
+/// \param n        sequence size
+template <typename Iterator, typename Value, typename index_type>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE index_type lower_bound_index(
+    const Value         x,
+    Iterator            begin,
+    const index_type    n)
+{
+    return uint32( lower_bound( x, begin, n ) - begin );
+}
+
+/// find the upper bound in a sequence
+///
+/// \param x        element to find
+/// \param begin    sequence start iterator
+/// \param n        sequence size
+template <typename Iterator, typename Value, typename index_type>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE index_type upper_bound_index(
+    const Value         x,
+    Iterator            begin,
+    const index_type    n)
+{
+    return index_type( upper_bound( x, begin, n ) - begin );
+}
+
 } // namespace nvbio

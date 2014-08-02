@@ -40,6 +40,7 @@ bool any(
     return thrust::reduce(
         pred,
         pred + n,
+        false,
         thrust::logical_or<bool>() );
 }
 
@@ -54,6 +55,7 @@ bool all(
     return thrust::reduce(
         pred,
         pred + n,
+        true,
         thrust::logical_and<bool>() );
 }
 

@@ -82,6 +82,11 @@ struct strided_iterator
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     const_reference operator*() const { return *m_vec; }
 
+    /// dereferencing operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    reference operator*() { return *m_vec; }
+
     /// const indexing operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
@@ -106,6 +111,15 @@ struct strided_iterator
     difference_type operator-(const strided_iterator<T> it) const
     {
         return m_vec - it.m_vec;
+    }
+
+    /// pre-increment
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    strided_iterator<T>& operator++()
+    {
+        m_vec += m_stride;
+        return *this;
     }
 
     T      m_vec;
@@ -237,6 +251,15 @@ struct block_strided_iterator
     difference_type operator-(const block_strided_iterator<BLOCKSIZE,T> it) const
     {
         return (m_vec + m_offset) - (it.m_vec + it.m_offset);
+    }
+
+    /// pre-increment
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    block_strided_iterator<BLOCKSIZE,T>& operator++()
+    {
+        ++m_offset;
+        return *this;
     }
 
     T      m_vec;

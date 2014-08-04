@@ -93,7 +93,7 @@ struct PrefixCore<StringType,CoordType,1u>
     /// prefix size
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 size() const { return nvbio::length( m_string ) - m_coords; }
+    uint32 size() const { return m_coords; }
 
     /// prefix length
     ///
@@ -103,12 +103,12 @@ struct PrefixCore<StringType,CoordType,1u>
     /// indexing operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    symbol_type operator[] (const uint32 i) const { return m_string[ m_coords + i ]; }
+    symbol_type operator[] (const uint32 i) const { return m_string[ i ]; }
 
     /// indexing operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    reference operator[] (const uint32 i) { return m_string[ m_coords + i ]; }
+    reference operator[] (const uint32 i) { return m_string[ i ]; }
 
     /// return the prefix coordinates
     ///
@@ -153,7 +153,7 @@ struct PrefixCore<StringType,CoordType,2u>
     /// prefix size
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint32 size() const { return nvbio::length( m_string ) - m_coords.y; }
+    uint32 size() const { return m_coords.y; }
 
     /// prefix length
     ///
@@ -163,12 +163,12 @@ struct PrefixCore<StringType,CoordType,2u>
     /// indexing operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    symbol_type operator[] (const uint32 i) const { return m_string[ m_coords.y + i ]; }
+    symbol_type operator[] (const uint32 i) const { return m_string[ i ]; }
 
     /// indexing operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    reference operator[] (const uint32 i) { return m_string[ m_coords.y + i ]; }
+    reference operator[] (const uint32 i) { return m_string[ i ]; }
 
     /// return the prefix coordinates
     ///
@@ -211,7 +211,7 @@ struct Prefix : PrefixCore< StringType, CoordType, vector_traits<CoordType>::DIM
     Prefix(
         const string_type   string,
         const coord_type    infix) : core_type( string, infix ) {}
-}
+};
 
 /// make a prefix, i.e. a substring of a given string
 ///

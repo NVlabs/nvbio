@@ -455,19 +455,45 @@ void blockwise_build(
 {
     typedef typename string_type::index_type index_type;
 
+    const index_type block_size = 16*1024*1024;
+
+    //
     // build the list of DC sample suffixes
-    const index_type estimated_sample_size = index_type( dcs.estimate_sample_size( string_len ) );
+    //
+
+    // compute the size of the DC sample
+    //const index_type estimated_sample_size = index_type( dcs.estimate_sample_size( string_len ) );
+
+    thrust::device_vector<uint8> d_temp_storage;
+
+    index_type estimated_sample_size = 0u;
+
+    for (index_type block_begin = 0; block_begin < string_len; block_begin += block_size)
+    {
+        const index_type block_end = nvbio::min(
+            block_begin + block_size,
+            string_len );
+
+        const priv::DCS_predicate in_dcs( dcs.Q, nvbio::plain_view( dcs.d_bitmask ) );
+
+        estimated_sample_size += cuda::reduce(
+            uint32( block_end - block_begin ),
+            thrust::make_transform_iterator(
+                thrust::make_transform_iterator(
+                    thrust::make_counting_iterator<uint32>(0u) + block_begin, in_dcs ),
+                    priv::cast_functor<bool,uint32>() ),
+            thrust::plus<uint32>(),
+            d_temp_storage );
+    }
     log_verbose(stderr,"  allocating DCS: %.1f MB\n", float(size_t( estimated_sample_size )*8u)/float(1024*1024));
 
     thrust::device_vector<uint32> d_sample( estimated_sample_size );
-    thrust::device_vector<uint8>  d_temp_storage;
 
     index_type sample_size = 0;
 
-    const index_type block_size = 16*1024*1024;
     for (index_type block_begin = 0; block_begin < string_len; block_begin += block_size)
     {
-        const index_type block_end = (uint32)nvbio::min(
+        const index_type block_end = nvbio::min(
             block_begin + block_size,
             string_len );
 
@@ -482,7 +508,7 @@ void blockwise_build(
 
         if (sample_size > estimated_sample_size)
         {
-            log_error(stderr,"  buffer overflow (%llu / %llu)\n", uint64( sample_size ), uint64( estimated_sample_size ));
+            log_error(stderr,"  DCS buffer overflow (%llu / %llu)\n", uint64( sample_size ), uint64( estimated_sample_size ));
             throw runtime_error( "DCS buffer overflow" );
         }
     }

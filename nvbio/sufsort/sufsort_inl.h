@@ -482,7 +482,9 @@ struct LargeBWTSkeleton
         LargeBWTStatus          status;
 
         // allocate an MGPU context
-        mgpu::ContextPtr        mgpu_ctxt = mgpu::CreateCudaDevice(0); 
+        int current_device;
+        cudaGetDevice( &current_device );
+        mgpu::ContextPtr        mgpu_ctxt = mgpu::CreateCudaDevice( current_device ); 
 
         suffix_bucketer_type    bucketer( mgpu_ctxt );
         string_set_handler_type string_set_handler( string_set );

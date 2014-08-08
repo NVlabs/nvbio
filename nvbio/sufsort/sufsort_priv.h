@@ -1051,6 +1051,21 @@ struct SetSuffixFlattener
         d_search_time = 0.0f;
     }
 
+    /// reserve storage
+    ///
+    void reserve(const uint32 n_strings, const uint32 n_suffixes)
+    {
+        alloc_storage( cum_lengths, n_strings );
+        alloc_storage( string_ids,  n_suffixes );
+    }
+
+    /// return the amount of device memory needed
+    ///
+    uint64 needed_device_memory(const uint32 n_strings, const uint32 n_suffixes)
+    {
+        return (n_strings + n_suffixes) * sizeof(uint32);
+    }
+
     /// initialize this flattener, building the auxiliary data-structures needed
     /// to extract the radices
     ///
@@ -1780,6 +1795,7 @@ struct HostStringSetRadices
 template <typename string_set_type, uint32 SYMBOL_SIZE, uint32 DOLLAR_BITS, uint32 WORD_BITS>
 struct DeviceStringSetRadices
 {
+    DeviceStringSetRadices() {}
     DeviceStringSetRadices(const string_set_type string_set) : m_string_set( string_set ) {}
 
     /// return the number of words needed to represent a given string length
@@ -1797,6 +1813,10 @@ struct DeviceStringSetRadices
     {
         d_symbols.resize( n_suffixes );
     }
+
+    /// set string set
+    ///
+    void set(const string_set_type string_set) { m_string_set = string_set; }
 
     /// initialize the suffixes to extract
     ///

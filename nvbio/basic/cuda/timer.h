@@ -61,6 +61,19 @@ struct Timer
     cudaEvent_t m_start, m_stop;
 };
 
+///
+/// A helper timer which measures the time from its instantiation
+/// to the moment it goes out of scope
+///
+template <typename T>
+struct ScopedTimer
+{
+	 ScopedTimer(T* time) : m_time( time ), m_timer() { m_timer.start(); }
+	~ScopedTimer() { m_timer.stop(); *m_time += m_timer.seconds(); }
+
+	T*		m_time;
+	Timer	m_timer;
+};
 
 // constructor
 //

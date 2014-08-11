@@ -85,6 +85,13 @@ template <> struct AlphabetTraits<DNA>
 {
     static const uint32 SYMBOL_SIZE  = 2;
     static const uint32 SYMBOL_COUNT = 4;
+
+    enum {
+        A = 0,
+        C = 1,
+        G = 2,
+        T = 3,
+    };
 };
 /// A traits class for DNA_N Alphabet
 ///
@@ -92,6 +99,14 @@ template <> struct AlphabetTraits<DNA_N>
 {
     static const uint32 SYMBOL_SIZE  = 4;
     static const uint32 SYMBOL_COUNT = 5;
+
+    enum {
+        A = 0,
+        C = 1,
+        G = 2,
+        T = 3,
+        N = 4,
+    };
 };
 /// A traits class for DNA_IUPAC Alphabet
 ///
@@ -99,6 +114,25 @@ template <> struct AlphabetTraits<DNA_IUPAC>
 {
     static const uint32 SYMBOL_SIZE  = 4;
     static const uint32 SYMBOL_COUNT = 16;
+
+    enum {
+        EQUAL = 0,
+        A     = 1,
+        C     = 2,
+        M     = 3,
+        G     = 4,
+        R     = 5,
+        S     = 6,
+        V     = 7,
+        T     = 8,
+        W     = 9,
+        Y     = 10,
+        H     = 11,
+        K     = 12,
+        D     = 13,
+        B     = 14,
+        N     = 15,
+    };
 };
 /// A traits class for Protein Alphabet
 ///
@@ -106,6 +140,33 @@ template <> struct AlphabetTraits<PROTEIN>
 {
     static const uint32 SYMBOL_SIZE  = 8;
     static const uint32 SYMBOL_COUNT = 24;
+
+    enum {
+        A = 0,
+        C = 1,
+        D = 2,
+        E = 3,
+        F = 4,
+        G = 5,
+        H = 6,
+        I = 7,
+        K = 8,
+        L = 9,
+        M = 10,
+        N = 11,
+        O = 12,
+        P = 13,
+        Q = 14,
+        R = 15,
+        S = 16,
+        T = 17,
+        V = 18,
+        W = 19,
+        Y = 20,
+        B = 21,
+        Z = 22,
+        X = 23,
+    };
 };
 /// A traits class for DNA Alphabet
 ///
@@ -113,6 +174,13 @@ template <> struct AlphabetTraits<RNA>
 {
     static const uint32 SYMBOL_SIZE  = 2;
     static const uint32 SYMBOL_COUNT = 4;
+
+    enum {
+        A = 0,
+        C = 1,
+        G = 2,
+        U = 3,
+    };
 };
 /// A traits class for DNA_N Alphabet
 ///
@@ -120,6 +188,14 @@ template <> struct AlphabetTraits<RNA_N>
 {
     static const uint32 SYMBOL_SIZE  = 4;
     static const uint32 SYMBOL_COUNT = 5;
+
+    enum {
+         A = 0,
+         C = 1,
+         G = 2,
+         U = 3,
+         N = 4,
+    };
 };
 
 /// return the number of bits per symbol for a given alphabet

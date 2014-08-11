@@ -46,8 +46,8 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE char dna_to_char(const uint8 c)
 ///
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 dna_to_iupac16(const uint8 c)
 {
-    //     DNA: A, C, T, G -> { 0, 1, 2, 3 }
-    // IUPAC16: A, C, T, G -> { 1, 2, 4, 8 }
+    //     DNA: A, C, G, T -> { 0, 1, 2, 3 }
+    // IUPAC16: A, C, G, T -> { 1, 2, 4, 8 }
     return 1 << c;
 }
 

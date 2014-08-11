@@ -15,6 +15,8 @@ option(WERROR
   "Treat compiler warnings as errors"
   OFF)
 
+set(GPU_ARCHITECTURE "sm_35" CACHE STRING "Target GPU architecture")
+
 set(NVBIO_SOURCE_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
 # import our own nvbio_* macros
@@ -65,7 +67,7 @@ if (APPLE AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++")
 endif()
 
-set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} ${CUDA_NVCC_DEBUG_FLAGS} --gpu-architecture=sm_35 -use_fast_math)
+set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} ${CUDA_NVCC_DEBUG_FLAGS} --gpu-architecture=${GPU_ARCHITECTURE} -use_fast_math)
 
 set(cudpp_INCLUDE_DIRS ${NVBIO_SOURCE_ROOT})
 set(INCLUDE_DIRS ${NVBIO_SOURCE_ROOT} ${NVBIO_SOURCE_ROOT}/contrib ${CMAKE_BINARY_DIR}/contrib/zlib-1.2.7 ${NVBIO_SOURCE_ROOT}/contrib/crc ${NVBIO_SOURCE_ROOT}/contrib/bamtools ${NVBIO_SOURCE_ROOT}/contrib/moderngpu/include)

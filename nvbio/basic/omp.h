@@ -33,6 +33,7 @@
 
 #else
 
+inline void omp_set_nested(const int n) {}
 inline void omp_set_num_threads(const int n) {}
 inline int  omp_get_max_threads() { return 1; }
 inline int  omp_get_num_threads() { return 1; }

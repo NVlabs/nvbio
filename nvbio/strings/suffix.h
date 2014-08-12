@@ -420,6 +420,51 @@ struct SuffixSet : public SuffixSetCore<
     iterator end() { return iterator(*this,base_type::size()); }
 };
 
+/// compare string-set suffixes
+///
+template <typename string_set_type>
+int32 compare_suffixes(
+    const string_set_type string_set,
+    const uint2           suffix1,
+    const uint2           suffix2)
+{
+    typedef typename string_set_type::string_type   string_type;
+    typedef Suffix<string_type,uint32>              suffix_type;
+
+    const suffix_type string1 = make_suffix( string_set[suffix1.y], suffix1.x );
+    const suffix_type string2 = make_suffix( string_set[suffix2.y], suffix2.x );
+
+    const uint32 min_len = nvbio::min( nvbio::length( string1 ), nvbio::length( string2 ) );
+
+    // make sure s_i <= s_n
+    int32 cmp = 0;
+    for (uint32 j = 0; j < min_len; ++j)
+    {
+        const uint8 c_i = string1[j];
+        const uint8 c_n = string2[j];
+        if (c_i < c_n)
+        {
+            cmp = -1;
+            break;
+        }
+        if (c_i > c_n)
+        {
+            cmp = 1;
+            break;
+        }
+    }
+    if (cmp == 0)
+    {
+        if (nvbio::length( string1 ) < nvbio::length( string2 )) // $ is smaller than any other character
+            cmp = -1; 
+        else if (nvbio::length( string2 ) < nvbio::length( string1 )) // $ is smaller than any other character
+            cmp =  1;
+        else
+            cmp = suffix1.y < suffix2.y ? -1 : 1;
+    }
+    return cmp;
+}
+
 ///@} StringSetsModule
 ///@} Strings
 

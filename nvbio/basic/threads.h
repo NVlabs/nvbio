@@ -244,6 +244,8 @@ inline uint32 balance_batch_size(uint32 batch_size, uint32 total_count, uint32 t
     return util::divide_ri(total_count, bal_batches);
 }
 
+void yield();
+
 ///@} Threads
 ///@} Basic
 

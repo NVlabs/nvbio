@@ -166,6 +166,8 @@ Mutex::~Mutex()
 void Mutex::lock()   {}
 void Mutex::unlock() {}
 
+void yield() {}
+
 #elif defined(WIN32)
 
 namespace {
@@ -254,6 +256,8 @@ Mutex::~Mutex()
 void Mutex::lock()   { EnterCriticalSection( &m_impl->m_mutex ); }
 void Mutex::unlock() { LeaveCriticalSection( &m_impl->m_mutex ); }
 
+void yield() {}
+
 #else
 
 struct ThreadBase::Impl
@@ -300,6 +304,8 @@ Mutex::~Mutex()
 
 void Mutex::lock()   { pthread_mutex_lock( &m_impl->m_mutex ); }
 void Mutex::unlock() { pthread_mutex_unlock( &m_impl->m_mutex ); }
+
+void yield() { pthread_yield(); }
 
 #endif
 

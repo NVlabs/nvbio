@@ -628,15 +628,18 @@ struct local_set_suffix_word_functor
 
 /// A functor fetching the w'th word worth of 2-bit symbols from the given (string,suffix) in a set
 ///
-template <uint32 SYMBOL_SIZE, uint32 WORD_BITS, uint32 DOLLAR_BITS, typename storage_type, typename word_type, typename index_type>
+template <uint32 SYMBOL_SIZE, uint32 WORD_BITS, uint32 DOLLAR_BITS, typename storage_type, typename word_type, typename offsets_iterator>
 struct local_set_suffix_word_functor<
     SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS,
-    ConcatenatedStringSet<PackedStream<storage_type,uint8,SYMBOL_SIZE,true,index_type>,index_type*>,
+    ConcatenatedStringSet<
+        PackedStream<storage_type,uint8,SYMBOL_SIZE,true,typename std::iterator_traits<offsets_iterator>::value_type>,
+        offsets_iterator>,
     word_type>
 {
+    typedef typename std::iterator_traits<offsets_iterator>::value_type index_type;
     typedef ConcatenatedStringSet<
         PackedStream<storage_type,uint8,SYMBOL_SIZE,true,index_type>,
-        index_type*>        string_set_type;
+        offsets_iterator>        string_set_type;
 
     typedef uint2               argument_type;
     typedef word_type           result_type;

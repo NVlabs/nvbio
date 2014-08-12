@@ -113,6 +113,24 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit_all(
     const CountTable count_table,
     const uint32     i);
 
+// generate table for counting 11,10,01,00(pattern) for 8 bits number
+// table [no# ] = representation ( # of count-pattern, . , . , . )
+// ---------------------------------------------------------------------------
+// e.g cnt_table[11111111] = 0x04000000 ( 4-11, 0-10, 0-01, 0-00 )
+// cnt_table[00100001] = 0x00010102 ( 0-11, 1-10, 1-01, 2-00 )
+// cnt_table[00000001] = 0x00000103 ( 0-11, 0-10, 1-01, 3-00 )
+inline void gen_2bit_count_table(uint32* count_table)
+{
+    for (int i = 0; i != 256; ++i)
+    {
+        uint32 x = 0;
+        for (int j = 0; j != 4; ++j)
+            x |= (((i&3) == j) + ((i>>2&3) == j) + ((i>>4&3) == j) + (i>>6 == j)) << (j<<3);
+
+        count_table[i] = x;
+    }
+}
+
 ///@} BasicUtils
 ///@} Basic
 

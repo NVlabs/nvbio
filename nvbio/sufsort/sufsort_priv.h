@@ -1197,16 +1197,17 @@ struct SetSuffixFlattener
 
 /// A helper class to load a chunk of a string_set from the host onto the device
 ///
-template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type, typename input_tag, typename output_tag>
+template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type, typename offsets_iterator, typename input_tag, typename output_tag>
 struct ChunkLoader {};
 
 /// A helper class to load a chunk of a string_set from the host onto the device
 ///
-template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type>
-struct ChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type,host_tag,device_tag>
+template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type, typename offsets_iterator>
+struct ChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator,host_tag,device_tag>
 {
     // infer the word type
-    typedef typename std::iterator_traits<storage_type>::value_type word_type;
+    typedef typename std::iterator_traits<storage_type>::value_type     word_type;
+    typedef typename std::iterator_traits<offsets_iterator>::value_type index_type;
 
     typedef cuda::load_pointer<word_type,cuda::LOAD_LDG> word_pointer;
 
@@ -1220,8 +1221,8 @@ struct ChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type,host_tag,device_tag>
 
     chunk_set_type load(
         const ConcatenatedStringSet<
-            typename PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64>::iterator,
-            uint64*>                string_set,
+            typename PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type>::iterator,
+            offsets_iterator>       string_set,
         const uint32                chunk_begin,
         const uint32                chunk_end)
     {
@@ -1273,12 +1274,14 @@ struct ChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type,host_tag,device_tag>
 
 /// A helper class to load a chunk of a string_set from the host onto the device
 ///
-template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type, typename system_tag>
-struct ChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type,system_tag,system_tag>
+template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type, typename offsets_iterator, typename system_tag>
+struct ChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator,system_tag,system_tag>
 {
+    typedef typename std::iterator_traits<offsets_iterator>::value_type index_type;
+
     typedef const ConcatenatedStringSet<
-        typename PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64>::iterator,
-        uint64*>                    string_set_type;
+        typename PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type>::iterator,
+        offsets_iterator>           string_set_type;
 
     typedef string_set_type         chunk_set_type;
 

@@ -360,8 +360,8 @@ template <
     typename system_tag>
 struct DeviceSetSuffixBucketer
 {
-    typedef priv::ChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type,system_tag,device_tag> chunk_loader_type;
-    typedef typename chunk_loader_type::chunk_set_type                                   chunk_set_type;
+    typedef priv::ChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type,uint64*,system_tag,device_tag> chunk_loader_type;
+    typedef typename chunk_loader_type::chunk_set_type                                           chunk_set_type;
 
     /// constructor
     ///
@@ -776,8 +776,8 @@ template <
     typename bucket_type>
 struct HostSetSuffixBucketer
 {
-    typedef priv::ChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type,host_tag,host_tag> chunk_loader_type;
-    typedef typename chunk_loader_type::chunk_set_type                               chunk_set_type;
+    typedef priv::ChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type,uint64*,host_tag,host_tag> chunk_loader_type;
+    typedef typename chunk_loader_type::chunk_set_type                                       chunk_set_type;
 
     /// constructor
     ///

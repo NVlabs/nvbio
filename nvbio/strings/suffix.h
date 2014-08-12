@@ -444,7 +444,7 @@ int32 compare_suffixes(
 
     const uint32 min_len = nvbio::min( len1, len2 );
 
-    // make sure s_i <= s_n
+    // compare character by character
     int32 cmp = 0;
     for (uint32 j = 0; j < min_len; ++j)
     {

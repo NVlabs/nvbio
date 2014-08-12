@@ -431,10 +431,18 @@ int32 compare_suffixes(
     typedef typename string_set_type::string_type   string_type;
     typedef Suffix<string_type,uint32>              suffix_type;
 
+    // check whether both inputs represent the same suffix
+    if (suffix1.y == suffix2.y &&
+        suffix1.x == suffix2.x)
+        return 0;
+
     const suffix_type string1 = make_suffix( string_set[suffix1.y], suffix1.x );
     const suffix_type string2 = make_suffix( string_set[suffix2.y], suffix2.x );
 
-    const uint32 min_len = nvbio::min( nvbio::length( string1 ), nvbio::length( string2 ) );
+    const uint32 len1 = nvbio::length( string1 );
+    const uint32 len2 = nvbio::length( string2 );
+
+    const uint32 min_len = nvbio::min( len1, len2 );
 
     // make sure s_i <= s_n
     int32 cmp = 0;
@@ -453,13 +461,15 @@ int32 compare_suffixes(
             break;
         }
     }
+
+    // break ties...
     if (cmp == 0)
     {
-        if (nvbio::length( string1 ) < nvbio::length( string2 )) // $ is smaller than any other character
+        if (len1 < len2)      // $ is smaller than any other character => s1 < s2
             cmp = -1; 
-        else if (nvbio::length( string2 ) < nvbio::length( string1 )) // $ is smaller than any other character
+        else if (len2 < len1) // $ is smaller than any other character => s2 < s1
             cmp =  1;
-        else
+        else                  // $_1 < $_2 ? -1 : 1
             cmp = suffix1.y < suffix2.y ? -1 : 1;
     }
     return cmp;

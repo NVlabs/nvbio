@@ -257,7 +257,7 @@ struct DeviceCoreSetSuffixBucketer
         timer.start();
 
         // sort the radices so as to make binning easy
-        cuda::SortBuffers<bucket_type*,uint64*>   sort_buffers;
+        cuda::SortBuffers<bucket_type*,uint64*> sort_buffers;
         cuda::SortEnactor                       sort_enactor;
 
         sort_buffers.selector  = 0;

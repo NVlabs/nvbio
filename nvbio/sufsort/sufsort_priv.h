@@ -140,20 +140,6 @@ storage_type clearmask(const uint32 n) { return ~((storage_type(1u) << n)-1u); }
 
 /// A functor to cast from one type into another
 ///
-template <typename T,typename R>
-struct cast_functor
-{
-    typedef T argument_type;
-    typedef R result_type;
-
-    /// return R(i)
-    ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    R operator() (const T i) const { return R(i); }
-};
-
-/// A functor to cast from one type into another
-///
 struct in_range_functor
 {
     typedef uint32 argument_type;

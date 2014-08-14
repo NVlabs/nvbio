@@ -450,8 +450,8 @@ struct DeviceSetSuffixBucketer
         // scan the bucket offsets so as to have global positions
         alloc_storage( h_bucket_offsets, n_buckets );
         thrust::exclusive_scan(
-            thrust::make_transform_iterator( h_buckets.begin(), priv::cast_functor<uint32,uint64>() ),
-            thrust::make_transform_iterator( h_buckets.end(),   priv::cast_functor<uint32,uint64>() ),
+            thrust::make_transform_iterator( h_buckets.begin(), cast_functor<uint32,uint64>() ),
+            thrust::make_transform_iterator( h_buckets.end(),   cast_functor<uint32,uint64>() ),
             h_bucket_offsets.begin() );
 
         count_timer.stop();
@@ -875,8 +875,8 @@ struct HostSetSuffixBucketer
         // scan the bucket offsets so as to have global positions
         alloc_storage( h_bucket_offsets, n_buckets );
         thrust::exclusive_scan(
-            thrust::make_transform_iterator( h_buckets.begin(), priv::cast_functor<uint32,uint64>() ),
-            thrust::make_transform_iterator( h_buckets.end(),   priv::cast_functor<uint32,uint64>() ),
+            thrust::make_transform_iterator( h_buckets.begin(), cast_functor<uint32,uint64>() ),
+            thrust::make_transform_iterator( h_buckets.end(),   cast_functor<uint32,uint64>() ),
             h_bucket_offsets.begin() );
 
         return n_suffixes;

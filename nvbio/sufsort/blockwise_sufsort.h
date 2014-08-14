@@ -481,7 +481,7 @@ void blockwise_build(
             thrust::make_transform_iterator(
                 thrust::make_transform_iterator(
                     thrust::make_counting_iterator<uint32>(0u) + block_begin, in_dcs ),
-                    priv::cast_functor<bool,uint32>() ),
+                    cast_functor<bool,uint32>() ),
             thrust::plus<uint32>(),
             d_temp_storage );
     }

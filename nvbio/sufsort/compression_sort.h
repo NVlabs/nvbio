@@ -378,7 +378,7 @@ void CompressionSort::sort(
         // this operation will produce a 1-based vector of contiguous values of the kind (1, 1, 2, 3, 3, 3, ... )
         cuda::inclusive_scan(
             n_active_suffixes,
-            thrust::make_transform_iterator( d_segment_flags.begin(), priv::cast_functor<uint8,uint32>() ),
+            thrust::make_transform_iterator( d_segment_flags.begin(), cast_functor<uint8,uint32>() ),
             d_keys.begin(),
             thrust::plus<uint32>(),
             d_temp_storage );
@@ -429,7 +429,7 @@ void CompressionSort::sort(
 
         const uint32 n_partials = cuda::reduce(
             n_active_suffixes,
-            thrust::make_transform_iterator( d_copy_flags.begin() + 1u, priv::cast_functor<uint8,uint32>() ),
+            thrust::make_transform_iterator( d_copy_flags.begin() + 1u, cast_functor<uint8,uint32>() ),
             thrust::plus<uint32>(),
             d_temp_storage );
 
@@ -701,7 +701,7 @@ void CompressionSort::sort(
                 // this operation will produce a 1-based vector of contiguous values of the kind (1, 1, 2, 3, 3, 3, ... )
                 cuda::inclusive_scan(
                     n_active_strings,
-                    thrust::make_transform_iterator( d_segment_flags.begin(), priv::cast_functor<uint8,uint32>() ),
+                    thrust::make_transform_iterator( d_segment_flags.begin(), cast_functor<uint8,uint32>() ),
                     d_keys.begin(),
                     thrust::plus<uint32>(),
                     d_temp_storage );
@@ -770,7 +770,7 @@ void CompressionSort::sort(
 
                 const uint32 n_partials = cuda::reduce(
                     n_active_strings,
-                    thrust::make_transform_iterator( d_copy_flags.begin() + 1u, priv::cast_functor<uint8,uint32>() ),
+                    thrust::make_transform_iterator( d_copy_flags.begin() + 1u, cast_functor<uint8,uint32>() ),
                     thrust::plus<uint32>(),
                     d_temp_storage );
 

@@ -202,7 +202,7 @@ struct DollarRankMap
 
             if (d_indices != NULL)
             {
-                // copy them back the indices to the host
+                // copy the indices back to the host
                 thrust::copy(
                     thrust::device_ptr<const uint32>( d_indices ),
                     thrust::device_ptr<const uint32>( d_indices ) + n_suffixes,

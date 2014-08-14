@@ -1266,6 +1266,20 @@ struct complement_functor
     uint8 operator() (const uint8 c) const { return c >= ALPHABET_SIZE ? c : uint8(ALPHABET_SIZE-1) - c; }
 };
 
+/// A functor to cast from one type into another
+///
+template <typename T,typename R>
+struct cast_functor
+{
+    typedef T argument_type;
+    typedef R result_type;
+
+    /// return R(i)
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    R operator() (const T i) const { return R(i); }
+};
+
 ///@} BasicFunctors
 ///@} BasicUtils
 ///@} Basic

@@ -378,7 +378,7 @@ template <typename T1, typename T2, typename Transform>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 bool operator==(const binary_transform_iterator<T1,T2,Transform> it1, const binary_transform_iterator<T1,T2,Transform> it2)
 {
-    return (it1.m_base1 == it2.m_base1) && (it1.m_base2 == it2.m_base2) && (it1.m_f == it2.m_f);
+    return (it1.m_base1 == it2.m_base1) && (it1.m_base2 == it2.m_base2)/* && (it1.m_f == it2.m_f)*/;
 }
 /// operator !=
 ///
@@ -386,7 +386,7 @@ template <typename T1, typename T2, typename Transform>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 bool operator!=(const binary_transform_iterator<T1,T2,Transform> it1, const binary_transform_iterator<T1,T2,Transform> it2)
 {
-    return (it1.m_base1 != it2.m_base1) || (it1.m_base2 != it2.m_base2) || (it1.m_f != it2.m_f);
+    return (it1.m_base1 != it2.m_base1) || (it1.m_base2 != it2.m_base2)/* || (it1.m_f != it2.m_f)*/;
 }
 /// operator <
 ///

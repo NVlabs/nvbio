@@ -1033,4 +1033,148 @@ void upper_bound(
         indices );
 }
 
+template <
+    typename key_iterator1,
+    typename key_iterator2,
+    typename value_iterator1,
+    typename value_iterator2,
+    typename key_output,
+    typename value_output>
+void merge_by_key(
+    const host_tag          tag,
+    const uint32            A_len,
+    const uint32            B_len,
+    const key_iterator1     A_keys,
+    const key_iterator2     B_keys,
+    const value_iterator1   A_values,
+    const value_iterator2   B_values,
+          key_output        C_keys,
+          value_output      C_values)
+{
+    if (A_len == 0)
+    {
+        #pragma omp parallel for
+        for (int32 i = 0; i < int32( B_len ); ++i)
+        {
+            C_keys[i]   = A_keys[i];
+            C_values[i] = A_values[i];
+        }
+    }
+    else if (B_len == 0)
+    {
+        #pragma omp parallel for
+        for (int32 i = 0; i < int32( A_len ); ++i)
+        {
+            C_keys[i]   = A_keys[i];
+            C_values[i] = A_values[i];
+        }
+    }
+
+    const uint32 n_threads = (uint32)omp_get_num_procs();
+
+    nvbio::vector<host_tag,uint32> A_diag( n_threads+1 );
+    nvbio::vector<host_tag,uint32> B_diag( n_threads+1 );
+
+    const uint32 C_len = A_len + B_len;
+
+    A_diag[ n_threads ] = 0;
+    B_diag[ n_threads ] = 0;
+    A_diag[ n_threads ] = A_len;
+    B_diag[ n_threads ] = B_len;
+
+    const uint32 n_partition = util::divide_ri( C_len, n_threads );
+
+    #pragma omp parallel for num_threads(n_threads)
+    for (int32 i = 1; i < int32( n_threads ); ++i)
+    {
+        const int32 index = i * n_partition;
+
+        const uint2 jk = corank( index, A_keys, A_len, B_keys, B_len );
+
+        A_diag[i] = jk.x;
+        B_diag[i] = jk.y;
+    }
+
+    #pragma omp parallel for num_threads(n_threads)
+    for (int32 i = 0; i < int32( n_threads ); ++i)
+    {
+        nvbio::merge_by_key(
+            A_keys   + A_diag[i],
+            A_keys   + A_diag[i+1],
+            B_keys   + B_diag[i],
+            B_keys   + B_diag[i+1],
+            A_values + A_diag[i],
+            B_values + B_diag[i],
+            C_keys   + i * n_partition,
+            C_values + i * n_partition );
+    }
+/*  for (uint32 i = 1; i < C_len; ++i)
+    {
+        if (C_keys[i-1] > C_keys[i])
+        {
+            fprintf(stderr, "merging error at %u: %llu, %llu\n", i, C_keys[i-1], C_keys[i] );
+            exit(1);
+        }
+    }*/
+}
+
+template <
+    typename key_iterator1,
+    typename key_iterator2,
+    typename value_iterator1,
+    typename value_iterator2,
+    typename key_output,
+    typename value_output>
+void merge_by_key(
+    const device_tag        tag,
+    const uint32            A_len,
+    const uint32            B_len,
+    const key_iterator1     A_keys,
+    const key_iterator2     B_keys,
+    const value_iterator1   A_values,
+    const value_iterator2   B_values,
+          key_output        C_keys,
+          value_output      C_values)
+{
+    thrust::merge_by_key(
+        A_keys,
+        A_keys + A_len,
+        B_keys,
+        B_keys + A_len,
+        A_values,
+        B_values,
+        C_keys,
+        C_values );
+}
+
+template <
+    typename system_tag,
+    typename key_iterator1,
+    typename key_iterator2,
+    typename value_iterator1,
+    typename value_iterator2,
+    typename key_output,
+    typename value_output>
+void merge_by_key(
+    const uint32            A_len,
+    const uint32            B_len,
+    const key_iterator1     A_keys,
+    const key_iterator2     B_keys,
+    const value_iterator1   A_values,
+    const value_iterator2   B_values,
+          key_output        C_keys,
+          value_output      C_values)
+{
+    merge_by_key(
+        system_tag(),
+        A_len,
+        B_len,
+        A_keys,
+        B_keys,
+        A_values,
+        B_values,
+        C_keys,
+        C_values );
+}
+
 } // namespace nvbio

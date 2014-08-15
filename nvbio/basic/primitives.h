@@ -35,6 +35,7 @@
 #include <thrust/scan.h>
 #include <thrust/copy.h>
 #include <thrust/binary_search.h>
+#include <thrust/merge.h>
 #include <thrust/iterator/constant_iterator.h>
 
 #if defined(__CUDACC__)
@@ -291,6 +292,24 @@ void upper_bound(
     const uint32                        n_keys,
     KeyIterator                         keys,
     OutputIterator                      indices);
+
+template <
+    typename system_tag,
+    typename key_iterator1,
+    typename key_iterator2,
+    typename value_iterator1,
+    typename value_iterator2,
+    typename key_output,
+    typename value_output>
+void merge_by_key(
+    const uint32            A_len,
+    const uint32            B_len,
+    const key_iterator1     A_keys,
+    const key_iterator2     B_keys,
+    const value_iterator1   A_values,
+    const value_iterator2   B_values,
+          key_output        C_keys,
+          value_output      C_values);
 
 ///@} // end of the Primitives group
 ///@} // end of the Basic group

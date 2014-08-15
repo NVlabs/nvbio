@@ -310,6 +310,7 @@ void blockwise_suffix_sort(
                 subbucket_size += h_buckets[subbucket_end];
 
             log_verbose(stderr,"\r  sufsort buckets[%u:%u] (%u suffixes, %.1f M suffixes/s)        ", subbucket_begin, subbucket_end, subbucket_size, 1.0e-6f*float(global_suffix_offset + suffix_count)/sufsort_time );
+            log_debug(stderr, "    compression-sort\n");
 
             // consume subbucket_size suffixes
             const uint32 n_suffixes = subbucket_size;
@@ -373,6 +374,7 @@ void blockwise_suffix_sort(
                 (delay_list.count >= DELAY_BUFFER ||
                  subbucket_end == bucket_end))
             {
+                log_debug(stderr, "    sort delayed-suffixes (%u)\n", delay_list.count);
                 timer.start();
 
                 // and sort the corresponding suffixes

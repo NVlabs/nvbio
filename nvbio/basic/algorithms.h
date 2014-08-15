@@ -132,6 +132,17 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Iterator upper_bound(
     Iterator            begin,
     const index_type    n)
 {
+    // if the range has a size of zero, let's just return the intial element
+    //if (n == 0)
+    //    return begin;
+
+    // check whether this segment is all left or right of x
+    //if (x < begin[0])
+    //    return begin;
+
+    //if (begin[n-1] <= x)
+    //    return begin + n;
+    
     index_type count = n;
  
     while (count > 0)
@@ -177,6 +188,135 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE index_type upper_bound_index(
     const index_type    n)
 {
     return index_type( upper_bound( x, begin, n ) - begin );
+}
+
+/// merge two ranges
+///
+/// \param first1   beginning of the first range
+/// \param end1     end of the first range
+/// \param first2   beginning of the second range
+/// \param end2     end of the second range
+/// \param output   beginning of the output range
+///
+template <
+    typename input_iterator1,
+    typename input_iterator2,
+    typename output_iterator>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+void merge(
+    input_iterator1    first1,
+    input_iterator1    end1,
+    input_iterator2    first2,
+    input_iterator2    end2,
+    output_iterator    output)
+{
+    while (first1 != end1 &&
+           first2 != end2)
+    {
+        if (*first2 < *first1)
+        {
+            *output = *first2;
+
+            ++first2;
+        }
+        else
+        {
+            *output = *first1;
+
+            ++first1;
+        }
+
+        ++output;
+    }
+
+    while (first1 != end1)
+    {
+        *output = *first1;
+
+        ++first1;
+        ++output;
+    }
+
+    while (first2 != end2)
+    {
+        *output = *first2;
+
+        ++first2;
+        ++output;
+    }
+}
+
+/// merge two ranges
+///
+/// \param first1   beginning of the first range
+/// \param end1     end of the first range
+/// \param first2   beginning of the second range
+/// \param end2     end of the second range
+/// \param output   beginning of the output range
+///
+template <
+    typename key_iterator1,
+    typename key_iterator2,
+    typename value_iterator1,
+    typename value_iterator2,
+    typename key_iterator,
+    typename value_iterator>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+void merge_by_key(
+    key_iterator1      first1,
+    key_iterator1      end1,
+    key_iterator2      first2,
+    key_iterator2      end2,
+    value_iterator1    values1,
+    value_iterator2    values2,
+    key_iterator       output_keys,
+    value_iterator     output_values)
+{
+    while (first1 != end1 &&
+           first2 != end2)
+    {
+        if (*first2 < *first1)
+        {
+            *output_keys   = *first2;
+            *output_values = *values2;
+
+            ++first2;
+            ++values2;
+        }
+        else
+        {
+            *output_keys   = *first1;
+            *output_values = *values1;
+
+            ++first1;
+            ++values1;
+        }
+
+        ++output_keys;
+        ++output_values;
+    }
+
+    while (first1 != end1)
+    {
+        *output_keys   = *first1;
+        *output_values = *values1;
+
+        ++first1;
+        ++values1;
+        ++output_keys;
+        ++output_values;
+    }
+
+    while (first2 != end2)
+    {
+        *output_keys   = *first2;
+        *output_values = *values2;
+
+        ++first2;
+        ++values2;
+        ++output_keys;
+        ++output_values;
+    }
 }
 
 } // namespace nvbio

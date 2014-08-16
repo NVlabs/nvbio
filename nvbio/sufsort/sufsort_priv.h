@@ -41,7 +41,10 @@
 #include <thrust/adjacent_difference.h>
 #include <thrust/binary_search.h>
 #include <thrust/iterator/constant_iterator.h>
+
+#if defined(PLATFORM_X86)
 #include <emmintrin.h>                              // SSE intrinsics
+#endif
 
 namespace nvbio {
 namespace priv {
@@ -441,7 +444,7 @@ void extract_word_packed(
 
     const uint32 cache_begin = uint32( range_off / STORAGE_SYMBOLS );
 
-  #if !defined(NVBIO_DEVICE_COMPILATION)
+  #if defined(PLATFORM_X86) && !defined(NVBIO_DEVICE_COMPILATION)
     // use SSE to load all the words we need in a small cache
     const uint32 SSE_WORDS = 16u / sizeof( word_type );
     const uint32 cache_end = uint32( (range_off + (word_end - word_begin)*SYMBOLS_PER_WORD) / STORAGE_SYMBOLS );

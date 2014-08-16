@@ -106,6 +106,9 @@ inline unsigned char convert_to_phred_quality(const uint8 q)
 
     case Solexa:
         return s_solexa_to_phred[q];
+
+    default:
+        break;
     }
 
     // gcc is dumb
@@ -201,6 +204,9 @@ void encode(
         break;
     case Solexa:
         encode<ALPHABET,Solexa>( sequence, stream, qual_stream );
+        break;
+
+    default:
         break;
     }
 }
@@ -403,6 +409,9 @@ SequenceDataEncoder* create_encoder(const Alphabet alphabet, SequenceDataHost* d
     case PROTEIN:
         return new SequenceDataEncoderImpl<PROTEIN>( data );
         break;
+
+    default:
+        break;
     }
     return NULL;
 }
@@ -431,6 +440,9 @@ int next(const Alphabet alphabet, SequenceDataHost* data, SequenceDataStream* st
             return stream->next( &encoder, batch_size, batch_bps );
         }
         break;
+
+    default:
+        break;
     }
     return 0;
 }
@@ -458,6 +470,9 @@ int append(const Alphabet alphabet, SequenceDataHost* data, SequenceDataStream* 
             SequenceDataEncoderImpl<PROTEIN> encoder( data, true );
             return stream->next( &encoder, batch_size, batch_bps );
         }
+        break;
+
+    default:
         break;
     }
     return 0;

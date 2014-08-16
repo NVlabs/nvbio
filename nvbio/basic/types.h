@@ -140,7 +140,7 @@ typedef unsigned char       uint8;
 typedef long long           int64;
 typedef int                 int32;
 typedef short               int16;
-typedef char                int8;
+typedef signed char         int8;
 
 ///@defgroup SystemTags System Tags
 ///\par

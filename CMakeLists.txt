@@ -39,6 +39,10 @@ else()
   set(CUDA_NVCC_DEBUG_FLAGS "")
 endif()
 
+if (CMAKE_SYSTEM_PROCESSOR MATCHES "Intel" OR CMAKE_SYSTEM_PROCESSOR MATCHES "x86")
+add_definitions(-DPLATFORM_X86)
+endif()
+
 find_package(CUDA)
 find_package(Doxygen)
 

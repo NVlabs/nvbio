@@ -179,6 +179,8 @@ typedef AtomicInt<int64>   AtomicInt64;
 
 #else
 
+#define ASM_ATOMICS
+
 /// an atomic integer class
 struct AtomicInt32
 {
@@ -188,8 +190,7 @@ struct AtomicInt32
     /// destructor
     AtomicInt32(const int value) : m_value(value) {}
 
-#define USE_ASM 1
-#if USE_ASM
+#if defined(PLATFORM_X86) && defined(ASM_ATOMICS)
     // look here
     // http://www.memoryhole.net/kyle/2007/05/atomic_incrementing.html
     // and also figure if this could use xaddq for the 64bit version
@@ -315,8 +316,7 @@ struct AtomicInt64
     /// destructor
     AtomicInt64(const long value) : m_value(value) {}
 
-#define USE_ASM 1
-#if USE_ASM
+#if defined(PLATFORM_X86) && defined(ASM_ATOMICS)
     // look here
     // http://www.memoryhole.net/kyle/2007/05/atomic_incrementing.html
     // and also figure if this could use xaddq for the 64bit version
@@ -388,7 +388,23 @@ struct AtomicInt64
 #elif defined(__INTEL_COMPILER)
 #error TODO!
 #else
-#error TODO!
+    /// postincrement by one
+    long operator++(int) { return __sync_fetch_and_add(&m_value, 1); }
+
+    /// postdecrement by one
+    long operator--(int) { return __sync_fetch_and_add(&m_value, -1); }
+
+    /// preincrement by one
+    long operator++() { return __sync_add_and_fetch(&m_value, 1); }
+
+    /// predecrement by one
+    long operator--() { return __sync_add_and_fetch(&m_value, -1); }
+
+    /// preincrement
+    long operator+=(long value) { return __sync_add_and_fetch(&m_value, value); }
+
+    /// predecrement
+    long operator-=(long value) { return __sync_sub_and_fetch(&m_value, value); }
 #endif
 
     /// comparisons
@@ -402,7 +418,6 @@ struct AtomicInt64
     volatile long m_value;
 };
 
-#undef USE_ASM
 #endif
 
 /// comparisons

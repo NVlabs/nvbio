@@ -302,14 +302,15 @@ template <
     typename key_output,
     typename value_output>
 void merge_by_key(
-    const uint32            A_len,
-    const uint32            B_len,
-    const key_iterator1     A_keys,
-    const key_iterator2     B_keys,
-    const value_iterator1   A_values,
-    const value_iterator2   B_values,
-          key_output        C_keys,
-          value_output      C_values);
+    const uint32                        A_len,
+    const uint32                        B_len,
+    const key_iterator1                 A_keys,
+    const key_iterator2                 B_keys,
+    const value_iterator1               A_values,
+    const value_iterator2               B_values,
+          key_output                    C_keys,
+          value_output                  C_values,
+    nvbio::vector<system_tag,uint8>&    temp_storage);
 
 ///@} // end of the Primitives group
 ///@} // end of the Basic group

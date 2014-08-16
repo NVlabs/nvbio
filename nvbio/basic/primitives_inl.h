@@ -1033,6 +1033,49 @@ void upper_bound(
         indices );
 }
 
+
+template <
+    typename key_iterator1,
+    typename key_iterator2>
+uint2 corank(
+    const int32         i,
+    const key_iterator1 A,
+    const int32         m,
+    const key_iterator2 B,
+    const int32         n)
+{
+    int32 j = min( i, m );
+    int32 k = i - j;
+
+    int32 j_lo = i >= n ? i - n : 0;
+    int32 k_lo = 0;
+
+    while (1)
+    {
+        if ((j > 0 || k < n) && A[j-1] > B[k])
+        {
+            // decrease j
+            const int32 delta = util::divide_ri( j - j_lo, 2 );
+            k_lo = k;
+            j -= delta;
+            k += delta;
+            assert( j + k == i );
+        }
+        else if ((k > 0 || j < m) && B[k-1] >= A[j])
+        {
+            // decrease k
+            const int32 delta = util::divide_ri( k - k_lo, 2 );
+            j_lo = j;
+            j += delta;
+            k -= delta;
+            assert( j + k == i );
+        }
+        else
+            break;
+    }
+    return make_uint2( uint32(j), uint32(k) );
+}
+
 template <
     typename key_iterator1,
     typename key_iterator2,
@@ -1156,14 +1199,15 @@ template <
     typename key_output,
     typename value_output>
 void merge_by_key(
-    const uint32            A_len,
-    const uint32            B_len,
-    const key_iterator1     A_keys,
-    const key_iterator2     B_keys,
-    const value_iterator1   A_values,
-    const value_iterator2   B_values,
-          key_output        C_keys,
-          value_output      C_values)
+    const uint32                        A_len,
+    const uint32                        B_len,
+    const key_iterator1                 A_keys,
+    const key_iterator2                 B_keys,
+    const value_iterator1               A_values,
+    const value_iterator2               B_values,
+          key_output                    C_keys,
+          value_output                  C_values,
+    nvbio::vector<system_tag,uint8>&    temp_storage)
 {
     merge_by_key(
         system_tag(),

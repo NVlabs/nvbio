@@ -38,6 +38,15 @@
 
 namespace mgpu {
 
+// NVBIO_VAR_UNUSED can be prepended to a variable to turn off unused variable warnings
+// this should only be used when the variable actually is used and the warning is wrong
+// (e.g., variables which are used only as template parameters for kernel launches)
+#if defined(__GNUC__)
+#define MGPU_VAR_UNUSED __attribute__((unused))
+#else
+#define MGPU_VAR_UNUSED
+#endif
+
 // Get the difference between two pointers in bytes.
 MGPU_HOST_DEVICE ptrdiff_t PtrDiff(const void* a, const void* b) {
 	return (const byte*)b - (const byte*)a;

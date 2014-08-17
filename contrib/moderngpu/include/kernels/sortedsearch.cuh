@@ -169,13 +169,13 @@ MGPU_HOST void SortedSearch(InputIt1 a_global, int aCount, InputIt2 b_global,
 	int bCount, OutputIt1 aIndices_global, OutputIt2 bIndices_global,
 	Comp comp, CudaContext& context, int* aMatchCount, int* bMatchCount) {
 
-	const bool IndexA = MgpuSearchTypeIndex == TypeA || 
+	MGPU_VAR_UNUSED const bool IndexA = MgpuSearchTypeIndex == TypeA || 
 		MgpuSearchTypeIndexMatch == TypeA;
-	const bool MatchA = MgpuSearchTypeMatch == TypeA ||
+	MGPU_VAR_UNUSED const bool MatchA = MgpuSearchTypeMatch == TypeA ||
 		MgpuSearchTypeIndexMatch == TypeA;
-	const bool IndexB = MgpuSearchTypeIndex == TypeB ||
+	MGPU_VAR_UNUSED const bool IndexB = MgpuSearchTypeIndex == TypeB ||
 		MgpuSearchTypeIndexMatch == TypeB;
-	const bool MatchB = MgpuSearchTypeMatch == TypeB ||
+	MGPU_VAR_UNUSED const bool MatchB = MgpuSearchTypeMatch == TypeB ||
 		MgpuSearchTypeIndexMatch == TypeB;
 
 	typedef typename std::iterator_traits<InputIt1>::value_type T;

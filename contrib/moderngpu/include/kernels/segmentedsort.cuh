@@ -564,8 +564,9 @@ MGPU_HOST void SegSortKeysFromFlags(T* data_global, int count,
 	const uint* flags_global, CudaContext& context, Comp comp,
 	bool verbose) {
 
-	const bool Stable = true;
-	typedef LaunchBoxVT<
+	MGPU_VAR_UNUSED const bool Stable = true;
+
+    typedef LaunchBoxVT<
 		128, 11, 0,
 		128, 11, 0,
 		128, (sizeof(T) > 4) ? 7 : 11, 0
@@ -608,8 +609,9 @@ MGPU_HOST void SegSortPairsFromFlags(KeyType* keys_global,
 	ValType* values_global, int count, const uint* flags_global,
 	CudaContext& context, Comp comp, bool verbose) {
 
-	const bool Stable = true;
-	typedef LaunchBoxVT<
+	MGPU_VAR_UNUSED const bool Stable = true;
+
+    typedef LaunchBoxVT<
 		128, 11, 0,
 		128, 7, 0,
 		128, 7, 0
@@ -666,8 +668,9 @@ MGPU_HOST void SegSortKeysFromIndices(T* data_global, int count,
 	const int* indices_global, int indicesCount, CudaContext& context,
 	Comp comp, bool verbose) {
 
-	const bool Stable = true;
-	typedef LaunchBoxVT<
+	MGPU_VAR_UNUSED const bool Stable = true;
+
+    typedef LaunchBoxVT<
 		128, 11, 0,
 		128, 11, 0,
 		128, (sizeof(T) > 4) ? 7 : 11, 0
@@ -714,8 +717,9 @@ MGPU_HOST void SegSortPairsFromIndices(KeyType* keys_global,
 	ValType* values_global, int count, const int* indices_global, 
 	int indicesCount, CudaContext& context, Comp comp, bool verbose) {
 
-	const bool Stable = true;
-	typedef LaunchBoxVT<
+	MGPU_VAR_UNUSED const bool Stable = true;
+
+    typedef LaunchBoxVT<
 		128, 11, 0,
 		128, 7, 0,
 		128, 7, 0

@@ -338,6 +338,8 @@ bool load_pac(
     case PROTEIN:
         return load_pac<PROTEIN>( prefix, &sequence_data->m_sequence_vec[0], seq_length, seq_words );
         break;
+
+    default: break;
     }
     return false;
 }
@@ -469,6 +471,8 @@ bool load_pac(
         case PROTEIN:
             return load_pac<PROTEIN>( prefix, sequence_ptr, seq_length, seq_words );
             break;
+
+        default: break;
         }
     }
     catch (ServerMappedFile::mapping_error e)

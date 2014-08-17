@@ -188,7 +188,7 @@ template <typename T, typename Transform>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 bool operator==(const transform_iterator<T,Transform> it1, const transform_iterator<T,Transform> it2)
 {
-    return (it1.m_base == it2.m_base) && (it1.m_f == it2.m_f);
+    return (it1.m_base == it2.m_base)/* && (it1.m_f == it2.m_f)*/;
 }
 /// operator !=
 ///
@@ -196,7 +196,7 @@ template <typename T, typename Transform>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 bool operator!=(const transform_iterator<T,Transform> it1, const transform_iterator<T,Transform> it2)
 {
-    return (it1.m_base != it2.m_base) || (it1.m_f != it2.m_f);
+    return (it1.m_base != it2.m_base)/* || (it1.m_f != it2.m_f)*/;
 }
 /// operator <
 ///

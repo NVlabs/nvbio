@@ -241,6 +241,17 @@ ReadHitsReference<ScoringQueuesType>::operator[] (const uint32 i) const
     return m_queues.hits[ hit_index ];
 }
 
+// return the slot where the i-th element is stored
+//
+#pragma hd_warning_disable 
+template <typename ScoringQueuesType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32
+ReadHitsReference<ScoringQueuesType>::slot(const uint32 i) const
+{
+    return m_queues.hits_index( m_read_index, i );
+}
+
 // bind this read to its new output location
 //
 // \param read_index         output index of this read

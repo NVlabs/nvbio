@@ -199,7 +199,7 @@ void score_reduce_paired_kernel(
     for (uint32 i = 0; i < count; ++i)
     {
         hit_type hit = read_hits[i];
-        NVBIO_CUDA_DEBUG_ASSERT( hit.read_id == read_id, "reduce hit[%u][%u]: expected id %u, got: %u (slot: %u)\n", thread_id, i, read_id, hit.read_id, scoring_queues.hits_index( thread_id, i ));
+        NVBIO_CUDA_DEBUG_ASSERT( hit.read_id == read_id, "reduce hit[%u][%u]: expected id %u, got: %u (slot: %u)\n", thread_id, i, read_id, hit.read_id, read_hits.slot(i) );
 
         const packed_seed seed_info = hit.seed;
         const uint32 read_rc        = seed_info.rc;

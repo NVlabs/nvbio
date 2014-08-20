@@ -309,7 +309,7 @@ void select_multi_kernel(
     // create a hit binder for this read
     read_hits_binder dst_read_hits( scoring_queues );
 
-    uint32 parent          = uint32(-1);
+    uint32 output_lane     = uint32(-1);
     uint32 n_selected_hits = 0u;
 
 #if 0
@@ -336,14 +336,14 @@ void select_multi_kernel(
             }
         }
 
-        if (parent == uint32(-1))
+        if (output_lane == uint32(-1))
         {
-            // grab a slot in the output read queue - we'll call this the 'parent' read
-            parent = atomicAdd( scoring_queues.active_reads.out_size, 1u );
-            NVBIO_CUDA_ASSERT( parent <  scoring_queues.active_reads.in_size );
+            // grab a slot in the output read queue - we'll call this the 'output_lane'
+            output_lane = atomicAdd( scoring_queues.active_reads.out_size, 1u );
+            NVBIO_CUDA_ASSERT( output_lane <  scoring_queues.active_reads.in_size );
 
             // bind the read to its new location in the output queue
-            dst_read_hits.bind( parent );
+            dst_read_hits.bind( output_lane );
         }
 
         // fetch next SA row from the selected hit
@@ -351,7 +351,7 @@ void select_multi_kernel(
         const uint32 r_type = hit->get_readtype() ? 1u : 0u;
 
         // grab an output slot for writing our hit
-        const uint32 slot  = atomicAdd( scoring_queues.hits_pool, 1u );
+        const uint32 slot = atomicAdd( scoring_queues.hits_pool, 1u );
 
         // bind the hit
         dst_read_hits.bind_hit( n_selected_hits, slot );
@@ -362,7 +362,7 @@ void select_multi_kernel(
         out_hit.seed    = packed_seed( hit->get_posinread(), hit->get_indexdir(), r_type, top_flag );
 
         ++n_selected_hits;
-        NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_select( read_id ), "select() : selected SA[%u:%u:%u] in slot [%u], parent[%u:%u])\n", sa_pos, hit->get_indexdir(), hit->get_posinread(), slot, parent, i);
+        NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_select( read_id ), "select() : selected SA[%u:%u:%u] in slot [%u], output-lane[%u:%u])\n", sa_pos, hit->get_indexdir(), hit->get_posinread(), slot, output_lane, i);
     }
 #else
     // NOTE: the following loop relies on fragile, unsupported
@@ -416,15 +416,15 @@ void select_multi_kernel(
         // is this thread still active?
         if (active)
         {
-            if (parent == uint32(-1))
+            if (output_lane == uint32(-1))
             {
-                // grab a slot in the output read queue - we'll call this the 'parent' read
-                parent = alloc( scoring_queues.active_reads.out_size, &warp_broadcast1 );
+                // grab a slot in the output read queue - we'll call this the 'output_lane'
+                output_lane = alloc( scoring_queues.active_reads.out_size, &warp_broadcast1 );
 
                 // bind the read to its new location in the output queue
-                dst_read_hits.bind( parent );
+                dst_read_hits.bind( output_lane );
 
-                NVBIO_CUDA_ASSERT( parent < scoring_queues.active_reads.in_size );
+                NVBIO_CUDA_ASSERT( output_lane < scoring_queues.active_reads.in_size );
             }
 
             // fetch next SA row from the selected hit
@@ -432,7 +432,7 @@ void select_multi_kernel(
             const uint32 r_type = hit->get_readtype() ? 1u : 0u;
 
             // grab an output slot for writing our hit
-            const uint32 slot  = alloc( scoring_queues.hits_pool, &warp_broadcast2 );
+            const uint32 slot = alloc( scoring_queues.hits_pool, &warp_broadcast2 );
 
             // bind the hit
             dst_read_hits.bind_hit( n_selected_hits, slot );
@@ -443,16 +443,16 @@ void select_multi_kernel(
             out_hit.seed    = packed_seed( hit->get_posinread(), hit->get_indexdir(), r_type, top_flag );
 
             ++n_selected_hits;
-            NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_select( read_id ), "select() : selected SA[%u:%u:%u] in slot [%u], parent[%u:%u])\n", sa_pos, hit->get_indexdir(), hit->get_posinread(), slot, parent, i);
+            NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_select( read_id ), "select() : selected SA[%u:%u:%u] in slot [%u], output-lane[%u:%u])\n", sa_pos, hit->get_indexdir(), hit->get_posinread(), slot, output_lane, i);
         }
     }
 #endif
 
-    // write the output parent read info.
+    // write the output read info.
     // NOTE: this must be done at the very end, because only now we know the final state of the top_flag.
-    if (parent != uint32(-1))
+    if (output_lane != uint32(-1))
     {
-        // copy from parent
+        // setup the output-lane's read-info
         dst_read_hits.set_read_info( packed_read( read_id, top_flag ) );
 
         // set the number of hits

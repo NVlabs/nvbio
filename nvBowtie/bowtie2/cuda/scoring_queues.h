@@ -473,6 +473,11 @@ struct ReadHitsReference
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     packed_read read_info() const;
 
+    /// return the slot where the i-th element is stored
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 slot(const uint32 i) const;
+
 private:
     ScoringQueuesType& m_queues;       ///< view of the hits container
     uint32             m_read_index;   ///< read index

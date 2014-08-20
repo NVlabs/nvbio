@@ -459,7 +459,7 @@ void Aligner::best_approx_score(
     // prepeare the selection context
     SelectBestApproxContext select_context( trys_dptr );
 
-    for (uint32 extension_pass = 0; active_read_queues.in_size; ++extension_pass)
+    for (uint32 extension_pass = 0; active_read_queues.in_size && n_ext < params.max_ext; ++extension_pass)
     {
         NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    pass:\n      batch:          %u\n      seeding pass:   %d\n      extension pass: %u\n", batch_number, seeding_pass, extension_pass) );
 

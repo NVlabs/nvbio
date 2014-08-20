@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
     int    cuda_device  = -1;
     bool   from_file    = false;
     bool   paired_end   = false;
-    io::PairedEndPolicy pe_policy = io::PE_POLICY_FF;
+    io::PairedEndPolicy pe_policy = io::PE_POLICY_FR;
     io::QualityEncoding qencoding = io::Phred33;
 
     std::map<std::string,std::string> string_options;

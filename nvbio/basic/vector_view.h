@@ -134,22 +134,22 @@ struct vector_view
     /// dereference operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    const_reference operator*() const                   { NVBIO_CUDA_DEBUG_ASSERT( 0 < m_size, "vector_view: access out of bounds, %u >= %u\n", 0, m_size ); return *m_vec; }
+    const_reference operator*() const                   { NVBIO_CUDA_DEBUG_ASSERT( 0 < m_size, "vector_view: access out of bounds, dereferenced zero sized vector\n" ); return *m_vec; }
 
     /// dereference operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    reference operator*()                               { NVBIO_CUDA_DEBUG_ASSERT( 0 < m_size, "vector_view: access out of bounds, %u >= %u\n", 0, m_size ); return *m_vec; }
+    reference operator*()                               { NVBIO_CUDA_DEBUG_ASSERT( 0 < m_size, "vector_view: access out of bounds, dereferenced zero sized vector\n" ); return *m_vec; }
 
     /// const indexing operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    const_reference operator[](const IndexType i) const { NVBIO_CUDA_DEBUG_ASSERT( i < m_size, "vector_view: access out of bounds, %u >= %u\n", i, m_size ); return m_vec[i]; }
+    const_reference operator[](const IndexType i) const { NVBIO_CUDA_DEBUG_ASSERT( i < m_size, "vector_view: access out of bounds, %llu >= %llu\n", uint64(i), uint64(m_size) ); return m_vec[i]; }
 
     /// indexing operator
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    reference operator[](const IndexType i)             { NVBIO_CUDA_DEBUG_ASSERT( i < m_size, "vector_view: access out of bounds, %u >= %u\n", i, m_size ); return m_vec[i]; }
+    reference operator[](const IndexType i)             { NVBIO_CUDA_DEBUG_ASSERT( i < m_size, "vector_view: access out of bounds, %llu >= %llu\n", uint64(i), uint64(m_size) ); return m_vec[i]; }
 
     /// return reference to front
     ///

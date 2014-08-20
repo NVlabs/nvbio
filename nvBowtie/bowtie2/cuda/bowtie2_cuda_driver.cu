@@ -94,8 +94,8 @@ std::map<std::string,std::string> load_options(const char* name)
 
 void parse_options(Params& params, const std::map<std::string,std::string>& options, bool init)
 {
-    params.mode             = mapping_mode( string_option(options, "mode", init ? "best"  : mapping_mode( params.mode )).c_str() ); // mapping mode
-    params.scoring_mode     = scoring_mode( string_option(options, "scoring", init ? "ed"  : scoring_mode( params.scoring_mode )).c_str() ); // scoring mode
+    params.mode             = mapping_mode( string_option(options, "mode",    init ? "best" : mapping_mode( params.mode )).c_str() ); // mapping mode
+    params.scoring_mode     = scoring_mode( string_option(options, "scoring", init ? "sw"   : scoring_mode( params.scoring_mode )).c_str() ); // scoring mode
     params.alignment_type   = uint_option(options, "local",            init ? 0u      : params.alignment_type == LocalAlignment ) ? LocalAlignment : EndToEndAlignment;           // local alignment
     params.keep_stats       = (bool)uint_option(options, "stats",      init ? 1u      : params.keep_stats);           // keep stats
     params.max_hits         = uint_option(options, "max-hits",         init ? 100u    : params.max_hits);             // too big = memory exhaustion 

@@ -362,6 +362,8 @@ void CompressionSort::sort(
                 *m_mgpu );
 
             NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
+            cuda::check_error("CompressionSort::sort() : seg_sort");
+
             timer.stop();
             radixsort_time += timer.seconds();
 
@@ -378,6 +380,9 @@ void CompressionSort::sort(
                 n_active_suffixes,
                 nvbio::raw_pointer( d_keys ),
                 nvbio::raw_pointer( d_segment_flags ) );
+
+            NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
+            cuda::check_error("CompressionSort::sort() : build_head_flags");
 
             d_segment_flags[0]                 = 1u; // make sure the first flag is a 1
             d_segment_flags[n_active_suffixes] = 1u; // and add a sentinel

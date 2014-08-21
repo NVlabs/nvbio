@@ -128,6 +128,9 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.min_frag_len  = uint_option(options, "minins",           init ? 0u      : params.min_frag_len);          // paired-end minimum fragment length
     params.max_frag_len  = uint_option(options, "maxins",           init ? 500u    : params.max_frag_len);          // paired-end maximum fragment length
 
+    // the maximum batch of reads processed in parallel
+    params.max_batch_size = uint_option(options, "max-batch-size",  init ? 64u*1024u : params.max_batch_size );   // maximum batch size
+
     // internal controls
     params.scoring_window   =       uint_option(options, "scoring-window",   init ? 32u        : params.scoring_window);       // scoring window size
     params.debug.read_id    = (uint32)int_option(options, "debug-read",      init ? -1         : (int32)params.debug.read_id); // debug read id
@@ -241,7 +244,7 @@ int driver(
     cudaMemGetInfo(&free, &total);
     log_stats(stderr, "  device has %ld of %ld MB free\n", free/1024/1024, total/1024/1024);
 
-    uint32 BATCH_SIZE = 64*1024*1024;
+    uint32 BATCH_SIZE = params.max_batch_size*1024;
 
     for (BATCH_SIZE = 1024*1024; BATCH_SIZE >= 16*1024; BATCH_SIZE /= 2)
     {
@@ -559,7 +562,7 @@ int driver(
     size_t free, total;
     cudaMemGetInfo(&free, &total);
     log_stats(stderr, "  device has %ld of %ld MB free\n", free/1024/1024, total/1024/1024);
-    uint32 BATCH_SIZE = 64*1024*1024;
+    uint32 BATCH_SIZE = params.max_batch_size*1024;
 
     for (BATCH_SIZE = 1024*1024; BATCH_SIZE >= 16*1024; BATCH_SIZE /= 2)
     {

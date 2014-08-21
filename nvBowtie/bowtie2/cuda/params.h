@@ -151,6 +151,7 @@ struct ParamsPOD
     uint32        subseed_len;
     uint32        mapq_filter;
     uint32        min_read_len;
+    uint32        max_batch_size;
 
     // paired-end options
     uint32        pe_policy;

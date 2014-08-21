@@ -275,20 +275,7 @@ void for_each(
     const Iterator          in,
           Functor           functor)
 {
-    uint32 major, minor;
-    cuda::device_arch( major, minor );
-    if (major <= 2)
-    {
-        // loop in small grids
-        const uint32 batch_size = 32*1024;
-        for (uint32 batch_begin = 0; batch_begin < n; batch_begin += batch_size)
-        {
-            const uint32 batch_end = nvbio::min( batch_begin + batch_size, n );
-            thrust::for_each( in + batch_begin, in + batch_end, functor );
-        }
-    }
-    else
-        thrust::for_each( in, in + n, functor );
+    thrust::for_each( in, in + n, functor );
 }
 
 // invoke a functor for each element of the given sequence

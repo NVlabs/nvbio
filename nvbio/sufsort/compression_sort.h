@@ -352,6 +352,9 @@ void CompressionSort::sort(
                 nvbio::raw_pointer( d_segment_flags ),
                 d_comp_flags );
 
+            NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
+            cuda::check_error("CompressionSort::sort() : pack_flags");
+
             // sort within segments
             NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      seg-sort\n" ) );
             mgpu::SegSortPairsFromFlags(

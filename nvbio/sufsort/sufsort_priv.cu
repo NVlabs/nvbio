@@ -84,8 +84,8 @@ void pack_flags(
           uint32*           comp_flags)
 {
     const uint32 blockdim = 128;
-    const uint32 n_words  = (n + 31) / 32;
-    const uint32 n_blocks = (n_words + blockdim-1) / blockdim;
+    const uint32 n_words  = util::divide_ri( n, 32u );
+    const uint32 n_blocks = util::divide_ri( n_words, blockdim );
 
     pack_flags_kernel<<<n_blocks,blockdim>>>(
         n,
@@ -128,7 +128,8 @@ void build_head_flags(
           uint8*            flags)
 {
     const uint32 blockdim = 128;
-    const uint32 n_blocks = ((n+3)/4 + blockdim-1) / blockdim;
+    const uint32 n_quads  = util::divide_ri( n, 4u );
+    const uint32 n_blocks = util::divide_ri( n_quads, blockdim );
 
     build_head_flags_kernel<<<n_blocks,blockdim>>>(
         n,
@@ -167,7 +168,7 @@ void build_head_flags(
           uint8*            flags)
 {
     const uint32 blockdim = 128;
-    const uint32 n_blocks = (n + blockdim-1) / blockdim;
+    const uint32 n_blocks = util::divide_ri( n, blockdim );
 
     build_head_flags_kernel<<<n_blocks,blockdim>>>(
         n,

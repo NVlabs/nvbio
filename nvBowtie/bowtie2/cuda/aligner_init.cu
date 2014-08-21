@@ -138,17 +138,17 @@ std::pair<uint64,uint64> Aligner::init_alloc(const uint32 BATCH_SIZE, const Para
     cigar_coords_dptr = resize( do_alloc, cigar_coords_dvec, BATCH_SIZE, d_allocated_bytes );
     nvbio::cuda::check_error("allocating CIGARs");
 
+    if (type == kPairedEnds)
+    {
+        // allocate the device queue
+        opposite_queue_dptr = resize( do_alloc, opposite_queue_dvec, BATCH_SIZE, d_allocated_bytes );
+    }
+
     // allocate DP storage
     uint32 dp_storage = 0;
 
     if (do_alloc)
     {
-        if (type == kPairedEnds)
-        {
-            // allocate the device queue
-            opposite_queue_dptr = resize( do_alloc, opposite_queue_dvec, BATCH_SIZE, d_allocated_bytes );
-        }
-
         //
         // allocate two thirds of available device memory for scoring / traceback
         //

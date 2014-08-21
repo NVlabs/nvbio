@@ -50,6 +50,9 @@ struct Arch
 // granularity of shared memory allocation
 inline void device_arch(uint32& major, uint32& minor);
 
+// granularity of the maximum grid size
+inline uint32 max_grid_size();
+
 // granularity of shared memory allocation
 inline size_t smem_allocation_unit(const cudaDeviceProp& properties);
 

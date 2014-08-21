@@ -40,6 +40,14 @@ inline void device_arch(uint32& major, uint32& minor)
     minor = properties.minor;
 }
 
+// granularity of the maximum grid size
+inline uint32 max_grid_size()
+{
+    uint32 major, minor;
+    device_arch( major, minor );
+    return major <= 2 ? 32*1024 : uint32(-1);
+}
+
 // granularity of shared memory allocation
 inline size_t smem_allocation_unit(const cudaDeviceProp& properties)
 {

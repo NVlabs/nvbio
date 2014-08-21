@@ -2014,9 +2014,15 @@ struct device_copy_dispatch
         const output_iterator       output,
         const index_type            offset)
     {
-        const uint32 blockdim = 128;
-        const uint32 n_blocks = (n + blockdim-1) / blockdim;
-        simple_device_copy_kernel<<<n_blocks,blockdim>>>( n, input, output, offset );
+        const uint32 batch_size = cuda::max_grid_size();
+        for (uint32 batch_begin = 0; batch_begin < n; batch_begin += batch_size)
+        {
+            const uint32 batch_end = nvbio::min( batch_begin + batch_size, n );
+
+            const uint32 blockdim = 128;
+            const uint32 n_blocks = util::divide_ri( batch_end - batch_begin, blockdim );
+            simple_device_copy_kernel<<<n_blocks,blockdim>>>( n, input, output, offset );
+        }
     }
 };
 
@@ -2041,10 +2047,17 @@ struct device_copy_dispatch<
         typedef typename PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type>::storage_type word_type;
         const uint32 SYMBOLS_PER_WORD = (8u*sizeof(word_type))/SYMBOL_SIZE;
 
-        const uint32 blockdim = 128;
-        const uint32 n_words  = util::divide_ri( n, SYMBOLS_PER_WORD ) + 1u;
-        const uint32 n_blocks = (n_words + blockdim-1) / blockdim;
-        packed_device_copy_kernel<<<n_blocks,blockdim>>>( n, input, output, offset );
+        const uint32 batch_size = cuda::max_grid_size();
+        for (uint32 batch_begin = 0; batch_begin < n; batch_begin += batch_size)
+        {
+            const uint32 batch_end = nvbio::min( batch_begin + batch_size, n );
+
+            const uint32 blockdim = 128;
+            const uint32 n_words  = util::divide_ri( batch_end - batch_begin, SYMBOLS_PER_WORD ) + 1u;
+            const uint32 n_blocks = util::divide_ri( n_words, blockdim );
+
+            packed_device_copy_kernel<<<n_blocks,blockdim>>>( batch_end - batch_begin, input, output, offset + batch_begin );
+        }
     }
 };
 
@@ -2066,23 +2079,25 @@ void device_copy(
 ///
 template <typename input_iterator, typename slot_iterator, typename range_iterator, typename storage_type, uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename index_type>
 __global__ void device_scatter_kernel(
-    const uint32                                                                                        n_ranges,
+    const uint32                                                                                        begin,
+    const uint32                                                                                        end,
     const range_iterator                                                                                ranges,
     const input_iterator                                                                                input,
     const slot_iterator                                                                                 slots,
           PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type>                            output)
 {
     const uint32 thread_id = threadIdx.x + blockIdx.x*blockDim.x;
+    const uint32 idx = thread_id + begin;
 
-    if (thread_id >= n_ranges)
+    if (idx >= end)
         return;
 
     //
     // care must be used to avoid write-conflicts, hence we assign all symbols belonging
     // to the same output word to a single thread
     //
-    const uint32 elem_begin = thread_id ? ranges[ thread_id-1 ] : 0u;
-    const uint32 elem_end   =             ranges[ thread_id   ];
+    const uint32 elem_begin = idx ? ranges[ idx-1 ] : 0u;
+    const uint32 elem_end   =       ranges[ idx   ];
 
     for (uint32 i = elem_begin; i < elem_end; ++i)
     {
@@ -2145,15 +2160,23 @@ struct device_scatter_dispatch<
             thrust::equal_to<uint32>(),
             thrust::maximum<uint32>() ).first - d_keys.begin() );
 
-        // at this point we can scatter the identified ranges
-        const uint32 blockdim = 128;
-        const uint32 n_blocks = (n_ranges + blockdim-1) / blockdim;
-        device_scatter_kernel<<<n_blocks,blockdim>>>(
-            n_ranges,
-            d_ranges.begin(),
-            input,
-            slots,
-            output );
+        const uint32 batch_size = cuda::max_grid_size();
+        for (uint32 batch_begin = 0; batch_begin < n_ranges; batch_begin += batch_size)
+        {
+            const uint32 batch_end = nvbio::min( batch_begin + batch_size, n_ranges );
+
+            // at this point we can scatter the identified ranges
+            const uint32 blockdim = 128;
+            const uint32 n_blocks = util::divide_ri( batch_end - batch_begin, blockdim );
+
+            device_scatter_kernel<<<n_blocks,blockdim>>>(
+                batch_begin,
+                batch_end,
+                d_ranges.begin(),
+                input,
+                slots,
+                output );
+        }
     }
 };
 

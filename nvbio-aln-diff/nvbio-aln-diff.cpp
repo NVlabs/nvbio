@@ -287,7 +287,7 @@ int main(int argc, char* argv[])
                     }
                     if (alnR1->is_mapped() && alnR1->mate == alnR2->mate)
                     {
-                        log_error(stderr, "alignments %u and %u in \"%s\" refer to the same mate, must come coming from different reads\n", i, i+1, aln_file_nameR);
+                        log_error(stderr, "alignments %u and %u in \"%s\" refer to the same mate, must come from different reads\n", i, i+1, aln_file_nameR);
                         return 1;
                     }
 

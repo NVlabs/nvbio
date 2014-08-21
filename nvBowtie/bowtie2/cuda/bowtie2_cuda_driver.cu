@@ -129,7 +129,7 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.max_frag_len  = uint_option(options, "maxins",           init ? 500u    : params.max_frag_len);          // paired-end maximum fragment length
 
     // the maximum batch of reads processed in parallel
-    params.max_batch_size = uint_option(options, "max-batch",  init ? 64u*1024u : params.max_batch_size );   // maximum batch size
+    params.max_batch_size = uint_option(options, "batch-size",  init ? 64u*1024u : params.max_batch_size );   // maximum batch size
 
     // internal controls
     params.scoring_window   =       uint_option(options, "scoring-window",   init ? 32u        : params.scoring_window);       // scoring window size

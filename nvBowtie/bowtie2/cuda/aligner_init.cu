@@ -26,6 +26,7 @@
  */
 
 #include <nvBowtie/bowtie2/cuda/aligner.h>
+#include <nvbio/basic/primitives.h>
 
 namespace nvbio {
 namespace bowtie2 {
@@ -332,19 +333,35 @@ void hits_stats(
 }
 
 // copy the contents of a section of a ring buffer into a plain array
-__global__ 
-void ring_buffer_to_plain_array_kernel(
-    const uint32* buffer,
-    const uint32  buffer_size,
-    const uint32  begin,
-    const uint32  end,
-          uint32* output)
+struct ring_buffer_to_plain_array_functor
 {
-    const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;
+    // constructor
+    ring_buffer_to_plain_array_functor(
+        const uint32* _buffer,
+        const uint32  _buffer_size,
+        const uint32  _begin,
+        const uint32  _end,
+              uint32* _output)
+    : buffer( _buffer ),
+      buffer_size( _buffer_size ),
+      begin( _begin ),
+      end( _end ),
+      output( _output ) {}
 
-    if (begin + thread_id < end)
-        output[ thread_id ] = buffer[ (begin + thread_id) % buffer_size ];
-}
+    // functor operator
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    void operator() (const uint32 i) const
+    {
+        if (begin + i < end)
+            output[i] = buffer[ (begin + i) % buffer_size ];
+    }
+
+    const uint32* buffer;
+    const uint32  buffer_size;
+    const uint32  begin;
+    const uint32  end;
+          uint32* output;
+};
 
 void ring_buffer_to_plain_array(
     const uint32* buffer,
@@ -353,14 +370,15 @@ void ring_buffer_to_plain_array(
     const uint32  end,
           uint32* output)
 {
-    const uint32 blocks = (end - begin + BLOCKDIM-1) / BLOCKDIM;
-
-    ring_buffer_to_plain_array_kernel<<<blocks, BLOCKDIM>>>(
-        buffer,
-        buffer_size,
-        begin,
-        end,
-        output );
+    nvbio::for_each<device_tag>(
+        end - begin,
+        thrust::make_counting_iterator<uint32>(0),
+        ring_buffer_to_plain_array_functor(
+            buffer,
+            buffer_size,
+            begin,
+            end,
+            output ) );
 }
 
 } // namespace cuda

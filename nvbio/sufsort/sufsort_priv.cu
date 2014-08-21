@@ -26,6 +26,7 @@
  */
 
 #include <nvbio/sufsort/sufsort_priv.h>
+#include <nvbio/basic/primitives.h>
 #ifdef _OPENMP
 #include <omp.h>
 #endif
@@ -33,48 +34,133 @@
 namespace nvbio {
 namespace priv {
 
-// pack a set of head flags into a bit-packed array
-//
-__global__ void pack_flags_kernel(
-    const uint32            n,
-    const uint8*            flags,
-          uint32*           comp_flags)
+struct pack_flags_functor
 {
-    const uint32 thread_id = (threadIdx.x + blockIdx.x * blockDim.x);
-    const uint32 idx = 32 * thread_id;
-    if (idx >= n)
-        return;
+    // constructor
+    pack_flags_functor(
+        const uint32    _n,
+        const uint8*    _flags,
+              uint32*   _comp_flags)
+    :   n( _n ), flags( _flags ), comp_flags( _comp_flags ) {}
 
-    // initialize the output word
-    uint32 f = 0u;
-
-    #pragma unroll
-    for (uint32 i = 0; i < 2; ++i)
+    // functor operator
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    void operator() (const uint32 thread_id) const
     {
-        // fetch and process 16-bytes in one go
-        const uint4 flag = ((const uint4*)flags)[idx/16u + i];
+        const uint32 idx = 32 * thread_id;
+        if (idx >= n)
+            return;
 
-        if (flag.x & (255u <<  0)) f |= 1u << (i*16 + 0);
-        if (flag.x & (255u <<  8)) f |= 1u << (i*16 + 1);
-        if (flag.x & (255u << 16)) f |= 1u << (i*16 + 2);
-        if (flag.x & (255u << 24)) f |= 1u << (i*16 + 3);
-        if (flag.y & (255u <<  0)) f |= 1u << (i*16 + 4);
-        if (flag.y & (255u <<  8)) f |= 1u << (i*16 + 5);
-        if (flag.y & (255u << 16)) f |= 1u << (i*16 + 6);
-        if (flag.y & (255u << 24)) f |= 1u << (i*16 + 7);
-        if (flag.z & (255u <<  0)) f |= 1u << (i*16 + 8);
-        if (flag.z & (255u <<  8)) f |= 1u << (i*16 + 9);
-        if (flag.z & (255u << 16)) f |= 1u << (i*16 + 10);
-        if (flag.z & (255u << 24)) f |= 1u << (i*16 + 11);
-        if (flag.w & (255u <<  0)) f |= 1u << (i*16 + 12);
-        if (flag.w & (255u <<  8)) f |= 1u << (i*16 + 13);
-        if (flag.w & (255u << 16)) f |= 1u << (i*16 + 14);
-        if (flag.w & (255u << 24)) f |= 1u << (i*16 + 15);
+        // initialize the output word
+        uint32 f = 0u;
+
+        #pragma unroll
+        for (uint32 i = 0; i < 2; ++i)
+        {
+            // fetch and process 16-bytes in one go
+            const uint4 flag = ((const uint4*)flags)[idx/16u + i];
+
+            if (flag.x & (255u <<  0)) f |= 1u << (i*16 + 0);
+            if (flag.x & (255u <<  8)) f |= 1u << (i*16 + 1);
+            if (flag.x & (255u << 16)) f |= 1u << (i*16 + 2);
+            if (flag.x & (255u << 24)) f |= 1u << (i*16 + 3);
+            if (flag.y & (255u <<  0)) f |= 1u << (i*16 + 4);
+            if (flag.y & (255u <<  8)) f |= 1u << (i*16 + 5);
+            if (flag.y & (255u << 16)) f |= 1u << (i*16 + 6);
+            if (flag.y & (255u << 24)) f |= 1u << (i*16 + 7);
+            if (flag.z & (255u <<  0)) f |= 1u << (i*16 + 8);
+            if (flag.z & (255u <<  8)) f |= 1u << (i*16 + 9);
+            if (flag.z & (255u << 16)) f |= 1u << (i*16 + 10);
+            if (flag.z & (255u << 24)) f |= 1u << (i*16 + 11);
+            if (flag.w & (255u <<  0)) f |= 1u << (i*16 + 12);
+            if (flag.w & (255u <<  8)) f |= 1u << (i*16 + 13);
+            if (flag.w & (255u << 16)) f |= 1u << (i*16 + 14);
+            if (flag.w & (255u << 24)) f |= 1u << (i*16 + 15);
+        }
+
+        // write the output word
+        comp_flags[thread_id] = f;
     }
 
-    // write the output word
-    comp_flags[thread_id] = f;
-}
+    const uint32    n;
+    const uint8*    flags;
+          uint32*   comp_flags;
+};
+
+template <typename T>
+struct build_head_flags_functor;
+
+template <>
+struct build_head_flags_functor<uint32>
+{
+    // constructor
+    build_head_flags_functor(
+        const uint32    _n,
+        const uint32*   _keys,
+              uint8*    _flags)
+    :   n( _n ), keys( _keys ), flags( _flags ) {}
+
+    // functor operator
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    void operator() (const uint32 thread_id) const
+    {
+        const uint32 idx = 4 * thread_id;
+        if (idx >= n)
+            return;
+
+        // load the previous key
+        const uint32 key_p = idx ? keys[idx-1] : 0xFFFFFFFF;
+
+        // load the next 4 keys
+        const uint4  key  = ((const uint4*)keys)[thread_id];
+        const uchar4 flag = ((const uchar4*)flags)[thread_id];
+
+        // and write the corresponding 4 flags
+        ((uchar4*)flags)[thread_id] = make_uchar4(
+            (key.x != key_p) ? 1u : flag.x,
+            (key.y != key.x) ? 1u : flag.y,
+            (key.z != key.y) ? 1u : flag.z,
+            (key.w != key.z) ? 1u : flag.w );
+    }
+
+    const uint32    n;
+    const uint32*   keys;
+          uint8*    flags;
+};
+
+template <>
+struct build_head_flags_functor<uint64>
+{
+    // constructor
+    build_head_flags_functor(
+        const uint32    _n,
+        const uint64*   _keys,
+              uint8*    _flags)
+    :   n( _n ), keys( _keys ), flags( _flags ) {}
+
+    // functor operator
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    void operator() (const uint32 thread_id) const
+    {
+        const uint32 idx = thread_id;
+        if (idx >= n)
+            return;
+
+        // load the previous key
+        const uint64 key_p = idx ? keys[idx-1] : 0xFFFFFFFF;
+
+        // load the next key
+        const uint64 key = keys[thread_id];
+        const uint8 flag = flags[thread_id];
+
+        // and write the corresponding flag out
+        flags[thread_id] = (key != key_p) ? 1u : flag;
+    }
+
+    const uint32    n;
+    const uint64*   keys;
+          uint8*    flags;
+};
 
 // pack a set of head flags into a bit-packed array
 //
@@ -83,41 +169,13 @@ void pack_flags(
     const uint8*            flags,
           uint32*           comp_flags)
 {
-    const uint32 blockdim = 128;
-    const uint32 n_words  = util::divide_ri( n, 32u );
-    const uint32 n_blocks = util::divide_ri( n_words, blockdim );
+    const uint32 n_words = util::divide_ri( n, 32u );
 
-    pack_flags_kernel<<<n_blocks,blockdim>>>(
-        n,
-        flags,
-        comp_flags );
-}
-
-// build a set of head flags looking at adjacent keys
-//
-__global__ void build_head_flags_kernel(
-    const uint32            n,
-    const uint32*           keys,
-          uint8*            flags)
-{
-    const uint32 thread_id = (threadIdx.x + blockIdx.x * blockDim.x);
-    const uint32 idx = 4 * thread_id;
-    if (idx >= n)
-        return;
-
-    // load the previous key
-    const uint32 key_p = idx ? keys[idx-1] : 0xFFFFFFFF;
-
-    // load the next 4 keys
-    const uint4  key  = ((const uint4*)keys)[thread_id];
-    const uchar4 flag = ((const uchar4*)flags)[thread_id];
-
-    // and write the corresponding 4 flags
-    ((uchar4*)flags)[thread_id] = make_uchar4(
-        (key.x != key_p) ? 1u : flag.x,
-        (key.y != key.x) ? 1u : flag.y,
-        (key.z != key.y) ? 1u : flag.z,
-        (key.w != key.z) ? 1u : flag.w );
+    // use a for_each to automate support for older compute capabilities with limited grid sizes
+    nvbio::for_each<device_tag>(
+        n_words,
+        thrust::make_counting_iterator<uint32>(0u),
+        pack_flags_functor( n, flags, comp_flags ) );
 }
 
 // build a set of head flags looking at adjacent keys
@@ -127,37 +185,13 @@ void build_head_flags(
     const uint32*           keys,
           uint8*            flags)
 {
-    const uint32 blockdim = 128;
-    const uint32 n_quads  = util::divide_ri( n, 4u );
-    const uint32 n_blocks = util::divide_ri( n_quads, blockdim );
+    const uint32 n_quads = util::divide_ri( n, 4u );
 
-    build_head_flags_kernel<<<n_blocks,blockdim>>>(
-        n,
-        keys,
-        flags );
-}
-
-// build a set of head flags looking at adjacent keys
-//
-__global__ void build_head_flags_kernel(
-    const uint32            n,
-    const uint64*           keys,
-          uint8*            flags)
-{
-    const uint32 thread_id = (threadIdx.x + blockIdx.x * blockDim.x);
-    const uint32 idx = thread_id;
-    if (idx >= n)
-        return;
-
-    // load the previous key
-    const uint64 key_p = idx ? keys[idx-1] : 0xFFFFFFFF;
-
-    // load the next key
-    const uint64 key = keys[thread_id];
-    const uint8 flag = flags[thread_id];
-
-    // and write the corresponding flag out
-    flags[thread_id] = (key != key_p) ? 1u : flag;
+    // use a for_each to automate support for older compute capabilities with limited grid sizes
+    nvbio::for_each<device_tag>(
+        n_quads,
+        thrust::make_counting_iterator<uint32>(0u),
+        build_head_flags_functor<uint32>( n, keys, flags ) );
 }
 
 // build a set of head flags looking at adjacent keys
@@ -167,13 +201,11 @@ void build_head_flags(
     const uint64*           keys,
           uint8*            flags)
 {
-    const uint32 blockdim = 128;
-    const uint32 n_blocks = util::divide_ri( n, blockdim );
-
-    build_head_flags_kernel<<<n_blocks,blockdim>>>(
+    // use a for_each to automate support older compute capabilities with limited grid sizes
+    nvbio::for_each<device_tag>(
         n,
-        keys,
-        flags );
+        thrust::make_counting_iterator<uint32>(0u),
+        build_head_flags_functor<uint64>( n, keys, flags ) );
 }
 
 uint32 extract_radix_16(

@@ -64,6 +64,7 @@ int main(int argc, char* argv[])
     uint32 filter_stats = Filter::ALL;
     int32  filter_delta = 5;
     bool   paired = false;
+    bool   id_check = true;
 
     int arg = 1;
     while (arg < argc)
@@ -81,6 +82,11 @@ int main(int argc, char* argv[])
         else if (strcmp( argv[arg], "-report" ) == 0)
         {
             report_name = argv[++arg];
+            ++arg;
+        }
+        else if (strcmp( argv[arg], "-no-ids" ) == 0)
+        {
+            id_check = false;
             ++arg;
         }
         else if (strcmp( argv[arg], "-filter" ) == 0)
@@ -199,12 +205,13 @@ int main(int argc, char* argv[])
     {
         log_info(stderr, "nvbio-aln-diff [OPTIONS] <file1> <file2>\n");
         log_info(stderr, "OPTIONS:\n");
-        log_info(stderr, "  -paired\n" );
+        log_info(stderr, "  -paired                   # paired-end input\n" );
+        log_info(stderr, "  -no-ids                   # do not perform id checks\n" );
+        log_info(stderr, "  -report <file-name>       # HTML report\n" );
         log_info(stderr, "  -filter <file-name>\n" );
         log_info(stderr, "          <flags={distant|discordant|diff-ref}>\n" );
         log_info(stderr, "          <stats={ed|mapQ|mms|ins|dels}>\n" );
         log_info(stderr, "          int:delta\n" );
-        log_info(stderr, "  -report <file-name>\n" );
         return 0;
     }
 
@@ -257,7 +264,7 @@ int main(int argc, char* argv[])
             std::vector<Alignment> batchR( BATCH_SIZE );
 
             Filter filter( filter_name, filter_flags, filter_stats, filter_delta );
-            SharedPointer<PEAnalyzer> analyzer = SharedPointer<PEAnalyzer>( new PEAnalyzer( filter ) );
+            SharedPointer<PEAnalyzer> analyzer = SharedPointer<PEAnalyzer>( new PEAnalyzer( filter, id_check ) );
 
             uint32 n_batch = 0;
             while (1)
@@ -408,7 +415,7 @@ int main(int argc, char* argv[])
         std::vector<Alignment> batchR2( BATCH_SIZE );
 
         Filter filter( filter_name, filter_flags, filter_stats, filter_delta );
-        SharedPointer<PEAnalyzer> analyzer = SharedPointer<PEAnalyzer>( new PEAnalyzer( filter ) );
+        SharedPointer<PEAnalyzer> analyzer = SharedPointer<PEAnalyzer>( new PEAnalyzer( filter, id_check ) );
 
         uint32 n_batch = 0;
         while (1)

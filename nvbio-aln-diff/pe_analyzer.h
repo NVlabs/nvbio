@@ -36,7 +36,7 @@ namespace alndiff {
 
 struct PEAnalyzer
 {
-    PEAnalyzer(Filter& filter);
+    PEAnalyzer(Filter& filter, const bool id_check);
 
     void push(
         const AlignmentPair& alnL,
@@ -56,6 +56,7 @@ struct PEAnalyzer
     uint32 filtered() const { return m_filter.filtered(); }
 
     Filter& m_filter;
+    bool    m_id_check;
 
     BooleanStats mapped;
     BooleanStats paired;

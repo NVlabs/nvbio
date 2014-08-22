@@ -32,8 +32,9 @@
 namespace nvbio {
 namespace alndiff {
 
-PEAnalyzer::PEAnalyzer(Filter& filter) :
-    m_filter( filter )
+PEAnalyzer::PEAnalyzer(Filter& filter, const bool id_check) :
+    m_filter( filter ),
+    m_id_check( id_check )
 {
     n = 0;
     n_mismatched = 0;
@@ -43,9 +44,9 @@ void PEAnalyzer::push(
     const AlignmentPair& alnL,
     const AlignmentPair& alnR)
 {
-    if (alnL[0].read_id  != alnR[0].read_id  ||
+    if ((m_id_check && alnL[0].read_id  != alnR[0].read_id)  ||
+        (m_id_check && alnL[1].read_id  != alnR[1].read_id)  ||
         alnL[0].read_len != alnR[0].read_len ||
-        alnL[1].read_id  != alnR[1].read_id  ||
         alnL[1].read_len != alnR[1].read_len)
     {
         n_mismatched++;

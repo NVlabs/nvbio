@@ -48,68 +48,108 @@ namespace nvbio {
 
 int32 host_atomic_add(int32* value, const int32 op)
 {
+#if defined(__GNUC__)
+    return __atomic_fetch_add( value, op, __ATOMIC_RELAXED );
+#else
     Mutex mutex;
     ScopedLock lock( &mutex );
 
+    const int32 old = *value;
     *value += op;
-    return *value;
+    return old;
+#endif
 }
 uint32 host_atomic_add(uint32* value, const uint32 op)
 {
+#if defined(__GNUC__)
+    return __atomic_fetch_add( value, op, __ATOMIC_RELAXED );
+#else
     Mutex mutex;
     ScopedLock lock( &mutex );
 
+    const uint32 old = *value;
     *value += op;
-    return *value;
+    return old;
+#endif
 }
 int64 host_atomic_add(int64* value, const int64 op)
 {
+#if defined(__GNUC__)
+    return __atomic_fetch_add( value, op, __ATOMIC_RELAXED );
+#else
     Mutex mutex;
     ScopedLock lock( &mutex );
 
+    const int64 old = *value;
     *value += op;
-    return *value;
+    return old;
+#endif
 }
 uint64 host_atomic_add(uint64* value, const uint64 op)
 {
+#if defined(__GNUC__)
+    return __atomic_fetch_add( value, op, __ATOMIC_RELAXED );
+#else
     Mutex mutex;
     ScopedLock lock( &mutex );
 
+    const uint64 old = *value;
     *value += op;
-    return *value;
+    return old;
+#endif
 }
 int32 host_atomic_sub(int32* value, const int32 op)
 {
+#if defined(__GNUC__)
+    return __atomic_fetch_sub( value, op, __ATOMIC_RELAXED );
+#else
     Mutex mutex;
     ScopedLock lock( &mutex );
 
+    const int32 old = *value;
     *value -= op;
-    return *value;
+    return old;
+#endif
 }
 uint32 host_atomic_sub(uint32* value, const uint32 op)
 {
+#if defined(__GNUC__)
+    return __atomic_fetch_sub( value, op, __ATOMIC_RELAXED );
+#else
     Mutex mutex;
     ScopedLock lock( &mutex );
 
+    const uint32 old = *value;
     *value -= op;
-    return *value;
+    return old;
+#endif
 }
 
 int64 host_atomic_sub(int64* value, const int64 op)
 {
+#if defined(__GNUC__)
+    return __atomic_fetch_sub( value, op, __ATOMIC_RELAXED );
+#else
     Mutex mutex;
     ScopedLock lock( &mutex );
 
+    const int64 old = *value;
     *value -= op;
-    return *value;
+    return old;
+#endif
 }
 uint64 host_atomic_sub(uint64* value, const uint64 op)
 {
+#if defined(__GNUC__)
+    return __atomic_fetch_sub( value, op, __ATOMIC_RELAXED );
+#else
     Mutex mutex;
     ScopedLock lock( &mutex );
 
+    const uint64 old = *value;
     *value -= op;
-    return *value;
+    return old;
+#endif
 }
 
 } // namespace nvbio

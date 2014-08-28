@@ -46,6 +46,22 @@ int64 atomic_decrement(int64 volatile *value) { return InterlockedDecrement64(va
 
 namespace nvbio {
 
+void host_release_fence()
+{
+    #if defined(__GNUC__)
+    // make sure the other threads see the reference count before the output is set
+    __atomic_thread_fence( __ATOMIC_RELEASE );
+    #endif
+}
+
+void host_acquire_fence()
+{
+    #if defined(__GNUC__)
+    // make sure the other threads see the reference count before the output is set
+    __atomic_thread_fence( __ATOMIC_ACQUIRE );
+    #endif
+}
+
 int32 host_atomic_add(int32* value, const int32 op)
 {
 #if defined(__GNUC__)

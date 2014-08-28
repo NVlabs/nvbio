@@ -55,6 +55,9 @@ namespace nvbio {
 /// This module implements basic host/device atomic counters.
 ///@{
 
+void host_release_fence();
+void host_acquire_fence();
+
 int32  host_atomic_add( int32* value, const  int32 op);
 uint32 host_atomic_add(uint32* value, const uint32 op);
 int64  host_atomic_add( int64* value, const  int64 op);

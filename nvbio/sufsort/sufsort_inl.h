@@ -928,8 +928,7 @@ void large_bwt(
 
     const uint32 bucketing_bits = params ? params->bucketing_bits : 16u;
 
-    if (omp_get_num_procs()   >= 20 &&
-        omp_get_max_threads() >= 20)     // use the CPU if lots of cores/threads are available
+    if (params && params->cpu_bucketing)
     {
         typedef cuda::HostBWTConfigCPUBucketer<16,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_16; // 16-bits bucketing
         typedef cuda::HostBWTConfigCPUBucketer<20,SYMBOL_SIZE,BIG_ENDIAN,storage_type> config_type_20; // 20-bits bucketing

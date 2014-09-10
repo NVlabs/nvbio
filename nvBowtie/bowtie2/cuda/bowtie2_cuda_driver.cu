@@ -111,7 +111,7 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.mapq_filter      = uint_option(options, "mapQ-filter",      init ? 0u      : params.mapq_filter);          // filter anything below this
     params.report           = string_option(options, "report",         init ? ""      : params.report.c_str());       // generate a report file
     params.scoring_file     = string_option(options, "scoring-scheme", init ? ""      : params.scoring_file.c_str());
-    params.randomized       = uint_option(options, "rand",             init ? 0u      : params.randomized);           // use randomized selection
+    params.randomized       = uint_option(options, "rand",             init ? 1u      : params.randomized);           // use randomized selection
     params.top_seed         = uint_option(options, "top",              init ? 0u      : params.top_seed);             // explore top seed entirely
     params.min_read_len     = uint_option(options, "min-read-len",     init ? 12u     : params.min_read_len);         // minimum read length
 

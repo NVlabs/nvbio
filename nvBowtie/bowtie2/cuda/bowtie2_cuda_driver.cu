@@ -297,6 +297,8 @@ int driver(
     uint32 input_set  = 0;
     uint32 n_reads    = 0;
 
+    io::SequenceDataHost local_read_data_host;
+
     // loop through the batches of reads
     for (uint32 read_begin = 0; true; read_begin += BATCH_SIZE)
     {
@@ -325,7 +327,7 @@ int driver(
         }
 
         // make a local copy of the host batch
-        io::SequenceDataHost local_read_data_host = *read_data_host;
+        local_read_data_host = *read_data_host;
 
         // mark this set as ready to be reused
         input_thread.read_data[ input_set ] = NULL;
@@ -630,6 +632,9 @@ int driver(
     uint32 input_set  = 0;
     uint32 n_reads    = 0;
 
+    io::SequenceDataHost local_read_data_host1;
+    io::SequenceDataHost local_read_data_host2;
+
     // loop through the batches of reads
     for (uint32 read_begin = 0; true; read_begin += BATCH_SIZE)
     {
@@ -662,8 +667,8 @@ int driver(
         }
 
         // make a local copy of the host batch
-        io::SequenceDataHost local_read_data_host1 = *read_data_host1;
-        io::SequenceDataHost local_read_data_host2 = *read_data_host2;
+        local_read_data_host1 = *read_data_host1;
+        local_read_data_host2 = *read_data_host2;
 
         // mark this set as ready to be reused
         input_thread.read_data1[ input_set ] = NULL;

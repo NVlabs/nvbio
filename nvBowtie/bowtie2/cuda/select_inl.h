@@ -104,7 +104,7 @@ void select_kernel(
     SeedHit* hit = const_cast<SeedHit*>( &hit_deque.top() );
 
     // check whether this hit's range became empty
-    if (hit->get_range().x >= hit->get_range().y)
+    if (hit->empty())
     {
         // pop the top of the hit queue
         hit_deque.pop_top();
@@ -138,6 +138,26 @@ void select_kernel(
     NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_select( read_id ), "select() : selected SA[%u:%u:%u] in slot [%u])\n", sa_pos, hit->get_indexdir(), hit->get_posinread(), slot);
 }
 
+template <typename ProbTree>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 randomized_select(ProbTree& prob_tree, SeedHit* hits_data, uint32* rseeds, const uint32 read_id)
+{
+    // pick a new random value
+    const uint32 ri = 1664525u * rseeds[ read_id ] + 1013904223u;
+
+    // store the new state
+    rseeds[ read_id ] = ri;
+
+    // convert to a float
+    const float rf = float(ri) / float(0xFFFFFFFFu);
+
+    // select the next hit
+    const uint32 hit_id = sample( prob_tree, rf );
+    NVBIO_CUDA_ASSERT( hit_id < hits.get_size( read_id ) );
+
+    return hit_id;
+}
+
 ///
 /// Prepare for a round of seed extension by selecting the next SA row
 ///
@@ -161,7 +181,7 @@ void rand_select_kernel(
     // Fetch the next item from the work queue
     const packed_read read_info = scoring_queues.active_read( thread_id );
     const uint32 read_id   = read_info.read_id;
-          uint32 top_flag  = read_info.top_flag;;
+          uint32 top_flag  = read_info.top_flag;
 
     NVBIO_CUDA_ASSERT( read_id < read_batch.size() );
 
@@ -177,61 +197,40 @@ void rand_select_kernel(
         return;
 
     ProbTree prob_tree( hit_deque.size(), hit_deque.get_probs() );
-
     SeedHit* hits_data( hit_deque.get_data() );
 
+    // check that the tree still contains some unexplored entries
+    if (prob_tree.sum() <= 0.0f)
+    {
+        // stop traversal
+        hits.erase( read_id );
+        return;
+    }
+
     // check if the top hit became empty
-    if (top_flag)
-    {
-        if (hits_data[0].get_range().x >= hits_data[0].get_range().y)
-            top_flag = 0;
-    }
+    if (top_flag && hits_data[0].empty())
+        top_flag = 0;
 
-    uint32 hit_id;
+    const uint32 hit_id = top_flag ? 0 : randomized_select( prob_tree, hits_data, rseeds, read_id );
 
-    // check whether we're still visiting the top hit or we switched to random selection
-    if (top_flag)
-        hit_id = 0;
-    else
-    {
-        // check that the tree still contains some unexplored entries
-        if (prob_tree.sum() <= 0.0f)
-        {
-            // stop traversal
-            hits.erase( read_id );
-            return;
-        }
-
-        // pick a new random value
-        const uint32 ri = 1664525u * rseeds[ read_id ] + 1013904223u;
-
-        // store the new state
-        rseeds[ read_id ] = ri;
-
-        // convert to a float
-        const float rf = float(ri) / float(0xFFFFFFFFu);
-
-        // select the next hit
-        hit_id = sample( prob_tree, rf );
-        NVBIO_CUDA_ASSERT( hit_id < hits.get_size( read_id ) );
-
-        // this should never happen if we had infinite precision, but in practice because of rounding errors prob_tree.sum() might
-        // be non-zero even though its leaf values are: let's just check for this and call it a day.
-        const SeedHit* hit = &hits_data[ hit_id ];
-        if (hit->get_range().x >= hit->get_range().y)
-            return;
-    }
-
-    // fetch the next hit
+    // fetch the selected hit
     SeedHit* hit = &hits_data[ hit_id ];
-    NVBIO_CUDA_DEBUG_ASSERT( hit->get_range().x < hit->get_range().y, "read_id[%u], hit_id[%u] : [%u,%u], top: %u\n", read_id, hit_id, hit->get_range().x < hit->get_range().y, uint32(top_flag) );
+
+    // this should never happen if we had infinite precision, but in practice because of rounding errors prob_tree.sum() might
+    // be non-zero even though its leaf values are: let's just check for this and call it a day.
+    if (hit->empty())
+    {
+        // stop traversal
+        hits.erase( read_id );
+        return;
+    }
 
     // fetch next SA row from the selected hit
     const uint32 sa_pos = hit->pop_front();
     const uint32 r_type = hit->get_readtype() ? 1u : 0u;
 
     // if the range for the selected seed hit became empty, zero out its probability
-    if (hit->get_range().x >= hit->get_range().y)
+    if (hit->empty())
         prob_tree.set( hit_id, 0.0f );
 
     const uint32 slot = alloc( scoring_queues.active_reads.out_size, &warp_broadcast );
@@ -319,7 +318,7 @@ void select_multi_kernel(
         SeedHit* hit = const_cast<SeedHit*>( &hit_deque.top() );
 
         // check whether this hit's range became empty
-        if (hit->get_range().x >= hit->get_range().y)
+        if (hit->empty())
         {
             // pop the top of the hit queue
             hit_deque.pop_top();
@@ -390,7 +389,7 @@ void select_multi_kernel(
             hit = const_cast<SeedHit*>( &hit_deque.top() );
 
             // check whether this hit's range became empty
-            if (hit->get_range().x >= hit->get_range().y)
+            if (hit->empty())
             {
                 // pop the top of the hit queue
                 hit_deque.pop_top();
@@ -447,6 +446,135 @@ void select_multi_kernel(
         }
     }
 #endif
+
+    // write the output read info.
+    // NOTE: this must be done at the very end, because only now we know the final state of the top_flag.
+    if (output_lane != uint32(-1))
+    {
+        // setup the output-lane's read-info
+        dst_read_hits.set_read_info( packed_read( read_id, top_flag ) );
+
+        // set the number of hits
+        dst_read_hits.resize( n_selected_hits );
+    }
+}
+
+///
+/// Prepare for a round of seed extension by selecting a set of up
+/// to 'n_multi' next SA rows.
+/// For each read in the input queue, this kernel generates:
+///     1. one or zero output reads, in the main output read queue,
+///     2. zero to 'n_multi' SA rows. These are made of three entries,
+///        one in 'loc_queue', identifying the corresponding SA index,
+///        one in 'seed_queue', storing information about the seed hit,
+///        and one in 'parent_queue', storing the index of the "parent"
+///        read in the output queue (i.e. the slot where the read is
+///        is being stored)
+///
+template <typename BatchType, typename ContextType> __global__ 
+void rand_select_multi_kernel(
+    const BatchType                         read_batch,
+    SeedHitDequeArrayDeviceView             hits,
+    uint32*                                 rseeds,
+    const ContextType                       context,
+          ScoringQueuesDeviceView           scoring_queues,
+    const uint32                            n_multi,
+    const ParamsPOD                         params)
+{
+    typedef SumTree< float* > ProbTree;
+
+    const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;
+    if (thread_id >= scoring_queues.active_read_count()) return;
+
+    const packed_read read_info = scoring_queues.active_read( thread_id );
+    const uint32 read_id   = read_info.read_id;
+          uint32 top_flag  = read_info.top_flag;
+
+    NVBIO_CUDA_ASSERT( read_id < read_batch.size() );
+
+    // check whether we finished our loop
+    if (context.stop( read_id ))
+        return;
+
+    typedef SeedHitDequeArrayDeviceView::reference hit_deque_reference;
+
+    // check whether there's any hits left
+    hit_deque_reference hit_deque = hits[ read_id ];
+    if (hit_deque.size() == 0)
+        return;
+
+    ProbTree prob_tree( hit_deque.size(), hit_deque.get_probs() );
+    SeedHit* hits_data( hit_deque.get_data() );
+
+    typedef ReadHitsBinder<ScoringQueuesDeviceView>    read_hits_binder;
+    typedef typename read_hits_binder::reference       hit_reference;
+
+    // create a hit binder for this read
+    read_hits_binder dst_read_hits( scoring_queues );
+
+    uint32 output_lane     = uint32(-1);
+    uint32 n_selected_hits = 0u;
+
+    for (uint32 i = 0; i < n_multi; ++i)
+    {
+        // check that the tree still contains some unexplored entries
+        if (prob_tree.sum() <= 0.0f)
+        {
+            // stop traversal
+            hits.erase( read_id );
+            break;
+        }
+
+        // check if the top hit became empty
+        if (top_flag && hits_data[0].empty())
+            top_flag = 0;
+
+        const uint32 hit_id = top_flag ? 0 : randomized_select( prob_tree, hits_data, rseeds, read_id );
+
+        // fetch the selected hit
+        SeedHit* hit = &hits_data[ hit_id ];
+
+        // this should never happen if we had infinite precision, but in practice because of rounding errors prob_tree.sum() might
+        // be non-zero even though its leaf values are: let's just check for this and call it a day.
+        if (hit->empty())
+        {
+            // stop traversal
+            hits.erase( read_id );
+            break;
+        }
+
+        // fetch next SA row from the selected hit
+        const uint32 sa_pos = hit->pop_front();
+        const uint32 r_type = hit->get_readtype() ? 1u : 0u;
+
+        // if the range for the selected seed hit became empty, zero out its probability
+        if (hit->empty())
+            prob_tree.set( hit_id, 0.0f );
+
+        if (output_lane == uint32(-1))
+        {
+            // grab a slot in the output read queue - we'll call this the 'output_lane'
+            output_lane = atomicAdd( scoring_queues.active_reads.out_size, 1u );
+            NVBIO_CUDA_ASSERT( output_lane <  scoring_queues.active_reads.in_size );
+
+            // bind the read to its new location in the output queue
+            dst_read_hits.bind( output_lane );
+        }
+
+        // grab an output slot for writing our hit
+        const uint32 slot = atomicAdd( scoring_queues.hits_pool, 1u );
+
+        // bind the hit
+        dst_read_hits.bind_hit( n_selected_hits, slot );
+
+        hit_reference out_hit = dst_read_hits[ n_selected_hits ];
+        out_hit.read_id = read_id;
+        out_hit.loc     = sa_pos;
+        out_hit.seed    = packed_seed( hit->get_posinread(), hit->get_indexdir(), r_type, top_flag );
+
+        ++n_selected_hits;
+        NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_select( read_id ), "select() : selected SA[%u:%u:%u] in slot [%u], output-lane[%u:%u])\n", sa_pos, hit->get_indexdir(), hit->get_posinread(), slot, output_lane, i);
+    }
 
     // write the output read info.
     // NOTE: this must be done at the very end, because only now we know the final state of the top_flag.
@@ -541,6 +669,39 @@ void select_multi(
 }
 
 //
+// Prepare for a round of seed extension by selecting a set of up
+// to 'n_multi' next SA rows.
+// For each read in the input queue, this kernel generates:
+//     1. one or zero output reads, in the main output read queue,
+//     2. zero to 'n_multi' SA rows. These are made of three entries,
+//        one in 'loc_queue', identifying the corresponding SA index,
+//        one in 'seed_queue', storing information about the seed hit,
+//        and one in 'parent_queue', storing the index of the "parent"
+//        read in the output queue (i.e. the slot where the read is
+//        is being stored)
+//
+template <typename BatchType, typename ContextType>
+void rand_select_multi(
+    const BatchType                         read_batch,
+    SeedHitDequeArrayDeviceView             hits,
+    uint32*                                 rseeds,
+    const ContextType                       context,
+          ScoringQueuesDeviceView           scoring_queues,
+    const uint32                            n_multi,
+    const ParamsPOD                         params)
+{
+    const int blocks = (scoring_queues.active_reads.in_size + BLOCKDIM-1) / BLOCKDIM;
+
+    rand_select_multi_kernel<<<blocks, BLOCKDIM>>>(
+        read_batch,
+        hits, rseeds,
+        context,
+        scoring_queues,
+        n_multi,
+        params );
+}
+
+//
 // Prepare for a round of seed extension by selecting the next SA rows for each read
 //
 template <typename BatchType, typename ContextType>
@@ -557,36 +718,53 @@ void select(
     // Dispatch the call to the proper version based on whether we are performing
     // single-hit or batched-hit selection, and whether we use randomization or not.
     //
-    if (n_multi > 1)
+    if (params.randomized)
     {
-        // batched-hit selection
-        select_multi(
-            read_batch,
-            hits,
-            context,
-            scoring_queues,
-            n_multi,
-            params );
-    }
-    else if (params.randomized)
-    {
-        // randomized single-hit selection
-        rand_select(
-            read_batch,
-            hits, rseeds,
-            context,
-            scoring_queues,
-            params );
+        if (n_multi > 1)
+        {
+            // batched-hit selection
+            rand_select_multi(
+                read_batch,
+                hits, rseeds,
+                context,
+                scoring_queues,
+                n_multi,
+                params );
+        }
+        else
+        {
+            // randomized single-hit selection
+            rand_select(
+                read_batch,
+                hits, rseeds,
+                context,
+                scoring_queues,
+                params );
+        }
     }
     else
     {
-        // non-randomized single-hit selection
-        select(
-            read_batch,
-            hits,
-            context,
-            scoring_queues,
-            params );
+        if (n_multi > 1)
+        {
+            // batched-hit selection
+            select_multi(
+                read_batch,
+                hits,
+                context,
+                scoring_queues,
+                n_multi,
+                params );
+        }
+        else
+        {
+            // non-randomized single-hit selection
+            select(
+                read_batch,
+                hits,
+                context,
+                scoring_queues,
+                params );
+        }
     }
 }
 

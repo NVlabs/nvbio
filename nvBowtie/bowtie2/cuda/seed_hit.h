@@ -130,6 +130,12 @@ struct SeedHit
     uint2 get_range() const
     { return make_uint2( m_range_begin, m_range_begin + m_range_delta ); }
 
+    /// is empty
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    bool empty() const
+    { return m_range_delta == 0; }
+
     /// get the size of the SA range
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE

@@ -324,16 +324,8 @@ int driver(
             break;
         }
 
-        Timer timer;
-        timer.start();
-
-        aligner.output_file->start_batch(read_data_host);
-
-        io::SequenceDataDevice read_data( *read_data_host );
-        cudaThreadSynchronize();
-
-        timer.stop();
-        stats.read_HtoD.add( read_data.size(), timer.seconds() );
+        // make a local copy of the host batch
+        io::SequenceDataHost local_read_data_host = *read_data_host;
 
         // mark this set as ready to be reused
         input_thread.read_data[ input_set ] = NULL;
@@ -343,6 +335,17 @@ int driver(
 
         // advance input set pointer
         input_set = (input_set + 1) % InputThread::BUFFERS;
+
+        Timer timer;
+        timer.start();
+
+        aligner.output_file->start_batch( &local_read_data_host );
+
+        io::SequenceDataDevice read_data( local_read_data_host );
+        cudaThreadSynchronize();
+
+        timer.stop();
+        stats.read_HtoD.add( read_data.size(), timer.seconds() );
 
         const uint32 count = read_data.size();
         log_info(stderr, "aligning reads [%u, %u]\n", read_begin, read_begin + count - 1u);
@@ -658,16 +661,9 @@ int driver(
             break;
         }
 
-        Timer timer;
-        timer.start();
-
-        aligner.output_file->start_batch(read_data_host1, read_data_host2);
-
-        io::SequenceDataDevice read_data1( *read_data_host1/*, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS*/ );
-        io::SequenceDataDevice read_data2( *read_data_host2/*, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS*/ );
-
-        timer.stop();
-        stats.read_HtoD.add( read_data1.size(), timer.seconds() );
+        // make a local copy of the host batch
+        io::SequenceDataHost local_read_data_host1 = *read_data_host1;
+        io::SequenceDataHost local_read_data_host2 = *read_data_host2;
 
         // mark this set as ready to be reused
         input_thread.read_data1[ input_set ] = NULL;
@@ -678,6 +674,17 @@ int driver(
 
         // advance input set pointer
         input_set = (input_set + 1) % InputThread::BUFFERS;
+
+        Timer timer;
+        timer.start();
+
+        aligner.output_file->start_batch( &local_read_data_host1, &local_read_data_host2 );
+
+        io::SequenceDataDevice read_data1( local_read_data_host1/*, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS*/ );
+        io::SequenceDataDevice read_data2( local_read_data_host2/*, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS*/ );
+
+        timer.stop();
+        stats.read_HtoD.add( read_data1.size(), timer.seconds() );
 
         const uint32 count = read_data1.size();
         log_info(stderr, "aligning reads [%u, %u]\n", read_begin, read_begin + count - 1u);

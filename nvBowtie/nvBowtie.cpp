@@ -97,10 +97,10 @@ int main(int argc, char* argv[])
         log_info(stderr,"    --rr                             paired mates are reverse-reverse\n");
         log_info(stderr,"    --verbosity                      verbosity level\n");
         log_info(stderr,"  Seeding:\n");
-        log_info(stderr,"    --seed-len         int [22]      seed lengths\n");
-        log_info(stderr,"    --seed-freq        int [15]      interval between seeds\n");
-        log_info(stderr,"    --max-hits         int [100]     maximum amount of seed hits\n");
-        log_info(stderr,"    --max-reseed       int [2]       number of reseeding rounds\n");
+        log_info(stderr,"    --seed-len         int   [22]    seed lengths\n");
+        log_info(stderr,"    --seed-freq        float [1.15]  seed spacing, specified as 1 + X*sqrt(read-len)\n");
+        log_info(stderr,"    --max-hits         int   [100]   maximum amount of seed hits\n");
+        log_info(stderr,"    --max-reseed       int   [2]     number of reseeding rounds\n");
         log_info(stderr,"  Extension:\n");
         log_info(stderr,"    --rand                           randomized seed selection\n");
         log_info(stderr,"    --max-dist         int [15]      maximum edit distance\n");

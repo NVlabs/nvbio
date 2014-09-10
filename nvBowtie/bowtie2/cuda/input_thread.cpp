@@ -34,6 +34,7 @@
 #include <nvbio/basic/threads.h>
 #include <nvbio/basic/atomics.h>
 #include <nvbio/basic/timer.h>
+#include <nvbio/basic/exceptions.h>
 
 namespace nvbio {
 namespace bowtie2 {
@@ -43,40 +44,88 @@ void InputThread::run()
 {
     log_verbose( stderr, "starting background input thread\n" );
 
-    while (1u)
+    try
     {
-        // poll until the set is done reading & ready to be reused
-        while (read_data[m_set] != NULL) { yield(); }
-
-        //// lock the set to flush
-        //ScopedLock lock( &m_lock[m_set] );
-
-        Timer timer;
-        timer.start();
-
-        const int ret = io::next( DNA_N, &read_data_storage[ m_set ], m_read_data_stream, m_batch_size );
-
-        timer.stop();
-
-        if (ret)
+        while (1u)
         {
-            m_stats.read_io.add( read_data_storage[ m_set ].size(), timer.seconds() );
+            // poll until the set is done reading & ready to be reused
+            while (read_data[m_set] != NULL) { yield(); }
 
-            // mark the set as done
-            read_data[ m_set ] = &read_data_storage[ m_set ];
+            log_debug( stderr, "  reading input set %u\n", m_set );
+            //// lock the set to flush
+            //ScopedLock lock( &m_lock[m_set] );
+
+            Timer timer;
+            timer.start();
+
+            const int ret = io::next( DNA_N, &read_data_storage[ m_set ], m_read_data_stream, m_batch_size );
+
+            timer.stop();
+
+            if (ret)
+            {
+                m_stats.read_io.add( read_data_storage[ m_set ].size(), timer.seconds() );
+
+                // mark the set as done
+                read_data[ m_set ] = &read_data_storage[ m_set ];
+
+                // make sure the other threads see the writes
+                host_release_fence();
+            }
+            else
+            {
+                // mark this as an invalid entry
+                read_data[ m_set ] = (io::SequenceDataHost*)INVALID;
+
+                // make sure the other threads see the writes
+                host_release_fence();
+                break;
+            }
+
+            // switch to the next set
+            m_set = (m_set + 1) % BUFFERS;
         }
-        else
-        {
-            // mark this as an invalid entry
-            read_data[ m_set ] = (io::SequenceDataHost*)INVALID;
-            break;
-        }
-
-        // make sure the other threads see the writes
-        host_release_fence();
-
-        // switch to the next set
-        m_set = (m_set + 1) % BUFFERS;
+    }
+    catch (nvbio::bad_alloc e)
+    {
+        log_error(stderr, "caught a nvbio::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        exit(1);
+    }
+    catch (nvbio::logic_error e)
+    {
+        log_error(stderr, "caught a nvbio::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        exit(1);
+    }
+    catch (nvbio::runtime_error e)
+    {
+        log_error(stderr, "caught a nvbio::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        exit(1);
+    }
+    catch (std::bad_alloc e)
+    {
+        log_error(stderr, "caught a std::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        exit(1);
+    }
+    catch (std::logic_error e)
+    {
+        log_error(stderr, "caught a std::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        exit(1);
+    }
+    catch (std::runtime_error e)
+    {
+        log_error(stderr, "caught a std::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        exit(1);
+    }
+    catch (...)
+    {
+        log_error(stderr, "caught an unknown exception!\n");
+        exit(1);
     }
 }
 
@@ -84,43 +133,92 @@ void InputThreadPaired::run()
 {
     log_verbose( stderr, "starting background paired-end input thread\n" );
 
-    while (1u)
+    try
     {
-        // poll until the set is done reading & ready to be reused
-        while (read_data1[m_set] != NULL || read_data2[m_set] != NULL) { yield(); }
-
-        //// lock the set to flush
-        //ScopedLock lock( &m_lock[m_set] );
-
-        Timer timer;
-        timer.start();
-
-        const int ret1 = io::next( DNA_N, &read_data_storage1[ m_set ], m_read_data_stream1, m_batch_size );
-        const int ret2 = io::next( DNA_N, &read_data_storage2[ m_set ], m_read_data_stream2, m_batch_size );
-
-        timer.stop();
-
-        if (ret1 && ret2)
+        while (1u)
         {
-            m_stats.read_io.add( read_data_storage1[ m_set ].size(), timer.seconds() );
+            // poll until the set is done reading & ready to be reused
+            while (read_data1[m_set] != NULL || read_data2[m_set] != NULL) { yield(); }
 
-            // mark the set as done
-            read_data1[ m_set ] = &read_data_storage1[ m_set ];
-            read_data2[ m_set ] = &read_data_storage2[ m_set ];
+            log_debug( stderr, "  reading input set %u\n", m_set );
+
+            //// lock the set to flush
+            //ScopedLock lock( &m_lock[m_set] );
+
+            Timer timer;
+            timer.start();
+
+            const int ret1 = io::next( DNA_N, &read_data_storage1[ m_set ], m_read_data_stream1, m_batch_size );
+            const int ret2 = io::next( DNA_N, &read_data_storage2[ m_set ], m_read_data_stream2, m_batch_size );
+
+            timer.stop();
+
+            if (ret1 && ret2)
+            {
+                m_stats.read_io.add( read_data_storage1[ m_set ].size(), timer.seconds() );
+
+                // mark the set as done
+                read_data1[ m_set ] = &read_data_storage1[ m_set ];
+                read_data2[ m_set ] = &read_data_storage2[ m_set ];
+
+                // make sure the other threads see the writes
+                host_release_fence();
+            }
+            else
+            {
+                // mark this as an invalid entry
+                read_data1[ m_set ] = (io::SequenceDataHost*)INVALID;
+                read_data2[ m_set ] = (io::SequenceDataHost*)INVALID;
+
+                // make sure the other threads see the writes
+                host_release_fence();
+                break;
+            }
+
+            // switch to the next set
+            m_set = (m_set + 1) % BUFFERS;
         }
-        else
-        {
-            // mark this as an invalid entry
-            read_data1[ m_set ] = (io::SequenceDataHost*)INVALID;
-            read_data2[ m_set ] = (io::SequenceDataHost*)INVALID;
-            break;
-        }
-
-        // make sure the other threads see the writes
-        host_release_fence();
-
-        // switch to the next set
-        m_set = (m_set + 1) % BUFFERS;
+    }
+    catch (nvbio::bad_alloc e)
+    {
+        log_error(stderr, "caught a nvbio::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        exit(1);
+    }
+    catch (nvbio::logic_error e)
+    {
+        log_error(stderr, "caught a nvbio::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        exit(1);
+    }
+    catch (nvbio::runtime_error e)
+    {
+        log_error(stderr, "caught a nvbio::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        exit(1);
+    }
+    catch (std::bad_alloc e)
+    {
+        log_error(stderr, "caught a std::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        exit(1);
+    }
+    catch (std::logic_error e)
+    {
+        log_error(stderr, "caught a std::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        exit(1);
+    }
+    catch (std::runtime_error e)
+    {
+        log_error(stderr, "caught a std::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        exit(1);
+    }
+    catch (...)
+    {
+        log_error(stderr, "caught an unknown exception!\n");
+        exit(1);
     }
 }
 

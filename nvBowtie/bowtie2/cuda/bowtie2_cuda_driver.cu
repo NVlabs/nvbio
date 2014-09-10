@@ -346,7 +346,7 @@ int driver(
 
         const uint32 count = read_data_host->size();
         log_info(stderr, "aligning reads [%u, %u]\n", read_begin, read_begin + count - 1u);
-        log_verbose(stderr, "  %u reads\n", read_data_host->size());
+        log_verbose(stderr, "  %u reads\n", count);
         log_verbose(stderr, "  %.3f M bps (%.1f MB)\n", float(read_data_host->bps())/1.0e6f, float(read_data_host->words()*sizeof(uint32)+read_data_host->bps()*sizeof(char))/float(1024*1024));
         log_verbose(stderr, "  %.1f bps/read (min: %u, max: %u)\n", float(read_data_host->bps())/float(read_data_host->size()), read_data_host->min_sequence_len(), read_data_host->max_sequence_len());
 
@@ -681,7 +681,7 @@ int driver(
 
         const uint32 count = read_data_host1->size();
         log_info(stderr, "aligning reads [%u, %u]\n", read_begin, read_begin + count - 1u);
-        log_verbose(stderr, "  %u reads\n", read_data_host1->size());
+        log_verbose(stderr, "  %u reads\n", count);
         log_verbose(stderr, "  %.3f M bps (%.1f MB)\n",
             float(read_data_host1->bps() + read_data_host2->bps())/1.0e6f,
             float(read_data_host1->words()*sizeof(uint32)+read_data_host1->bps()*sizeof(char))/float(1024*1024)+

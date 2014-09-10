@@ -32,6 +32,7 @@
 #include <nvBowtie/bowtie2/cuda/stats.h>
 #include <nvbio/io/output/output_utils.h>
 #include <nvbio/basic/threads.h>
+#include <nvbio/basic/atomics.h>
 #include <nvbio/basic/timer.h>
 
 namespace nvbio {
@@ -45,7 +46,7 @@ void InputThread::run()
     while (1u)
     {
         // poll until the set is done reading & ready to be reused
-        while (read_data[m_set] != NULL) {}
+        while (read_data[m_set] != NULL) { yield(); }
 
         //// lock the set to flush
         //ScopedLock lock( &m_lock[m_set] );
@@ -71,6 +72,9 @@ void InputThread::run()
             break;
         }
 
+        // make sure the other threads see the writes
+        host_release_fence();
+
         // switch to the next set
         m_set = (m_set + 1) % BUFFERS;
     }
@@ -83,7 +87,7 @@ void InputThreadPaired::run()
     while (1u)
     {
         // poll until the set is done reading & ready to be reused
-        while (read_data1[m_set] != NULL || read_data2[m_set] != NULL) {}
+        while (read_data1[m_set] != NULL || read_data2[m_set] != NULL) { yield(); }
 
         //// lock the set to flush
         //ScopedLock lock( &m_lock[m_set] );
@@ -111,6 +115,9 @@ void InputThreadPaired::run()
             read_data2[ m_set ] = (io::SequenceDataHost*)INVALID;
             break;
         }
+
+        // make sure the other threads see the writes
+        host_release_fence();
 
         // switch to the next set
         m_set = (m_set + 1) % BUFFERS;

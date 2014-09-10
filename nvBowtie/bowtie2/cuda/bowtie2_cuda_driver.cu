@@ -48,6 +48,7 @@
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/options.h>
 #include <nvbio/basic/threads.h>
+#include <nvbio/basic/atomics.h>
 #include <nvbio/basic/html.h>
 #include <nvbio/basic/dna.h>
 #include <nvbio/fmindex/bwt.h>
@@ -303,7 +304,10 @@ int driver(
         polling_timer.start();
 
         // poll until the current input set is loaded...
-        while (input_thread.read_data[ input_set ] == NULL) {}
+        while (input_thread.read_data[ input_set ] == NULL) { yield(); }
+
+        // make sure the other writes are seen
+        host_acquire_fence();
 
         polling_timer.stop();
         polling_time += polling_timer.seconds();
@@ -333,6 +337,9 @@ int driver(
 
         // mark this set as ready to be reused
         input_thread.read_data[ input_set ] = NULL;
+
+        // make sure the other threads see this change
+        host_release_fence();
 
         // advance input set pointer
         input_set = (input_set + 1) % InputThread::BUFFERS;
@@ -628,7 +635,10 @@ int driver(
 
         // poll until the current input set is loaded...
         while (input_thread.read_data1[ input_set ] == NULL ||
-               input_thread.read_data2[ input_set ] == NULL) {}
+               input_thread.read_data2[ input_set ] == NULL) { yield(); }
+
+        // make sure the other writes are seen
+        host_acquire_fence();
 
         polling_timer.stop();
         polling_time += polling_timer.seconds();
@@ -662,6 +672,9 @@ int driver(
         // mark this set as ready to be reused
         input_thread.read_data1[ input_set ] = NULL;
         input_thread.read_data2[ input_set ] = NULL;
+
+        // make sure the other threads see this change
+        host_release_fence();
 
         // advance input set pointer
         input_set = (input_set + 1) % InputThread::BUFFERS;

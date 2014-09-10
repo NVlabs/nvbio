@@ -1,0 +1,7 @@
+var searchData=
+[
+  ['g',['G',['../structnvbio_1_1_alphabet_traits_3_01_d_n_a_01_4.html#a6721a78a1aee76f97015d8326d1aff22abc5a81abfa2b9106b68d01e3473b9c63',1,'nvbio::AlphabetTraits&lt; DNA &gt;::G()'],['../structnvbio_1_1_alphabet_traits_3_01_d_n_a___n_01_4.html#ad4c282cd75318148d36759b7ca2835fdad10afa11edd57eac464526cfa1093cee',1,'nvbio::AlphabetTraits&lt; DNA_N &gt;::G()'],['../structnvbio_1_1_alphabet_traits_3_01_d_n_a___i_u_p_a_c_01_4.html#a15c877c5500ab6997e781097c1859dbcaafc1abf09ed0abf2b5cd60bae625290c',1,'nvbio::AlphabetTraits&lt; DNA_IUPAC &gt;::G()'],['../structnvbio_1_1_alphabet_traits_3_01_p_r_o_t_e_i_n_01_4.html#a87f9f74f48d09677016d783f71feb4f0a1318496147bc50861bb9ae27ae4eb1da',1,'nvbio::AlphabetTraits&lt; PROTEIN &gt;::G()'],['../structnvbio_1_1_alphabet_traits_3_01_r_n_a_01_4.html#a1fb957c229272a8cd9c8017d6b1023b7a79d024cda361031a350ed8fb9f7a2c8e',1,'nvbio::AlphabetTraits&lt; RNA &gt;::G()'],['../structnvbio_1_1_alphabet_traits_3_01_r_n_a___n_01_4.html#ac31a2edb9c50246833ebde6d5fd0b7d6a801d65856e7d2b37033f4a0b85f2e176',1,'nvbio::AlphabetTraits&lt; RNA_N &gt;::G()']]],
+  ['global',['GLOBAL',['../group___alignment_type_module.html#ggab731872890371bb772663612b5b9c717a86ac8a6732111a83d906fde8a8f06190',1,'nvbio::aln']]],
+  ['gotoh',['GOTOH',['../namespacenvbio_1_1aln.html#acfb46c7f9c1c9231522ab51aad29578aa48974295146f4c06b72d8999b369915c',1,'nvbio::aln']]],
+  ['gotoh_5fbanded',['GOTOH_BANDED',['../namespacenvbio_1_1aln.html#acfb46c7f9c1c9231522ab51aad29578aa85467f67f46faec6800af75f9046e90b',1,'nvbio::aln']]]
+];

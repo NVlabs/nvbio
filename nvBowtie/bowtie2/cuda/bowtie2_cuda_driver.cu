@@ -344,11 +344,11 @@ int driver(
         // advance input set pointer
         input_set = (input_set + 1) % InputThread::BUFFERS;
 
-        const uint32 count = read_data_host->size();
+        const uint32 count = read_data.size();
         log_info(stderr, "aligning reads [%u, %u]\n", read_begin, read_begin + count - 1u);
         log_verbose(stderr, "  %u reads\n", count);
-        log_verbose(stderr, "  %.3f M bps (%.1f MB)\n", float(read_data_host->bps())/1.0e6f, float(read_data_host->words()*sizeof(uint32)+read_data_host->bps()*sizeof(char))/float(1024*1024));
-        log_verbose(stderr, "  %.1f bps/read (min: %u, max: %u)\n", float(read_data_host->bps())/float(read_data_host->size()), read_data_host->min_sequence_len(), read_data_host->max_sequence_len());
+        log_verbose(stderr, "  %.3f M bps (%.1f MB)\n", float(read_data.bps())/1.0e6f, float(read_data.words()*sizeof(uint32)+read_data.bps()*sizeof(char))/float(1024*1024));
+        log_verbose(stderr, "  %.1f bps/read (min: %u, max: %u)\n", float(read_data.bps())/float(read_data.size()), read_data.min_sequence_len(), read_data.max_sequence_len());
 
         if (params.mode == AllMapping)
         {
@@ -679,17 +679,17 @@ int driver(
         // advance input set pointer
         input_set = (input_set + 1) % InputThread::BUFFERS;
 
-        const uint32 count = read_data_host1->size();
+        const uint32 count = read_data1.size();
         log_info(stderr, "aligning reads [%u, %u]\n", read_begin, read_begin + count - 1u);
         log_verbose(stderr, "  %u reads\n", count);
         log_verbose(stderr, "  %.3f M bps (%.1f MB)\n",
-            float(read_data_host1->bps() + read_data_host2->bps())/1.0e6f,
-            float(read_data_host1->words()*sizeof(uint32)+read_data_host1->bps()*sizeof(char))/float(1024*1024)+
-            float(read_data_host2->words()*sizeof(uint32)+read_data_host2->bps()*sizeof(char))/float(1024*1024));
+            float(read_data1.bps() + read_data2.bps())/1.0e6f,
+            float(read_data1.words()*sizeof(uint32)+read_data1.bps()*sizeof(char))/float(1024*1024)+
+            float(read_data2.words()*sizeof(uint32)+read_data2.bps()*sizeof(char))/float(1024*1024));
         log_verbose(stderr, "  %.1f bps/read (min: %u, max: %u)\n",
-            float(read_data_host1->bps()+read_data_host2->bps())/float(read_data_host1->size()+read_data_host2->size()),
-            nvbio::min( read_data_host1->min_sequence_len(), read_data_host2->min_sequence_len() ),
-            nvbio::max( read_data_host1->max_sequence_len(), read_data_host2->max_sequence_len() ));
+            float(read_data1.bps()+read_data2.bps())/float(read_data1.size()+read_data2.size()),
+            nvbio::min( read_data1.min_sequence_len(), read_data2.min_sequence_len() ),
+            nvbio::max( read_data1.max_sequence_len(), read_data2.max_sequence_len() ));
 
         if (params.mode == AllMapping)
         {

@@ -46,9 +46,10 @@ namespace aln {
 template <typename aligner_type> struct checkpoint_storage_type {
     typedef null_type type;    ///< the type of the checkpoint cells
 };
-template <AlignmentType TYPE, typename algorithm_tag>                        struct checkpoint_storage_type< EditDistanceAligner<TYPE,algorithm_tag> >                { typedef  int16 type; };
-template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct checkpoint_storage_type< SmithWatermanAligner<TYPE,scoring_type,algorithm_tag> >  { typedef  int16 type; };
-template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct checkpoint_storage_type< GotohAligner<TYPE,scoring_type,algorithm_tag> >          { typedef short2 type; };
+template <AlignmentType TYPE, typename algorithm_tag>                        struct checkpoint_storage_type< EditDistanceAligner<TYPE,algorithm_tag> >                  { typedef  int16 type; };
+template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct checkpoint_storage_type< HammingDistanceAligner<TYPE,scoring_type,algorithm_tag> >  { typedef int16 type; };
+template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct checkpoint_storage_type< SmithWatermanAligner<TYPE,scoring_type,algorithm_tag> >    { typedef  int16 type; };
+template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct checkpoint_storage_type< GotohAligner<TYPE,scoring_type,algorithm_tag> >            { typedef short2 type; };
 
 /// A meta-function returning the type of the column cells for a given \ref Aligner "Aligner"
 ///
@@ -57,9 +58,10 @@ template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> str
 template <typename aligner_type> struct column_storage_type {
     typedef null_type type;    ///< the type of the column cells
 };
-template <AlignmentType TYPE, typename algorithm_tag>                        struct column_storage_type< EditDistanceAligner<TYPE,algorithm_tag> >                { typedef  int16 type; };
-template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct column_storage_type< SmithWatermanAligner<TYPE,scoring_type,algorithm_tag> >  { typedef  int16 type; };
-template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct column_storage_type< GotohAligner<TYPE,scoring_type,algorithm_tag> >          { typedef short2 type; };
+template <AlignmentType TYPE, typename algorithm_tag>                        struct column_storage_type< EditDistanceAligner<TYPE,algorithm_tag> >                  { typedef  int16 type; };
+template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct column_storage_type< HammingDistanceAligner<TYPE,scoring_type,algorithm_tag> >  { typedef  int16 type; };
+template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct column_storage_type< SmithWatermanAligner<TYPE,scoring_type,algorithm_tag> >    { typedef  int16 type; };
+template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> struct column_storage_type< GotohAligner<TYPE,scoring_type,algorithm_tag> >            { typedef short2 type; };
 
 /// A meta-function returning the number of bits required to represent the direction vectors
 /// for a given \ref Aligner "Aligner"
@@ -129,6 +131,28 @@ struct SimpleGotohScheme
     int32 m_gap_open;
     int32 m_gap_ext;
 };
+
+///
+/// Calculate the maximum possible number of pattern gaps that could occur in a
+/// given score boundary
+///
+template <AlignmentType TYPE, typename scoring_scheme_type, typename algorithm_tag>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+uint32 max_pattern_gaps(
+    const HammingDistanceAligner<TYPE,scoring_scheme_type,algorithm_tag>&   aligner,
+	int32                                                                   min_score,
+    int32                                                                   pattern_len);
+
+///
+/// Calculate the maximum possible number of reference gaps that could occur in a
+/// given score boundary
+///
+template <AlignmentType TYPE, typename scoring_scheme_type, typename algorithm_tag>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+uint32 max_text_gaps(
+    const HammingDistanceAligner<TYPE,scoring_scheme_type, algorithm_tag>&  aligner,
+	int32                                                                   min_score,
+    int32                                                                   pattern_len);
 
 ///
 /// Calculate the maximum possible number of pattern gaps that could occur in a

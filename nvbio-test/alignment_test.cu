@@ -394,24 +394,55 @@ float enact_batch(
 
 // execute and time a batch of full DP alignments using BatchAlignmentScore
 //
+template <bool supported, typename scheduler_type, uint32 N, uint32 M, typename stream_type>
+struct batch_score_profile_dispatch
+{
+    static void run(
+        const stream_type               stream,
+        const uint32                    n_tests,
+        const uint32                    n_tasks)
+    {}
+};
+
+// execute and time a batch of full DP alignments using BatchAlignmentScore
+//
+template <typename scheduler_type, uint32 N, uint32 M, typename stream_type>
+struct batch_score_profile_dispatch<true,scheduler_type,N,M,stream_type>
+{
+    static void run(
+        const stream_type               stream,
+        const uint32                    n_tests,
+        const uint32                    n_tasks)
+    {
+        typedef aln::BatchedAlignmentScore<stream_type, scheduler_type> batch_type;  // our batch type
+
+        // setup a batch
+        batch_type batch;
+
+        const float time = enact_batch(
+            batch,
+            stream,
+            n_tests,
+            n_tasks );
+
+        fprintf(stderr,"  %5.1f", 1.0e-9f * float(n_tasks*uint64(N*M))/time );
+    }
+};
+
+// execute and time a batch of full DP alignments using BatchAlignmentScore
+//
 template <typename scheduler_type, uint32 N, uint32 M, typename stream_type>
 void batch_score_profile(
     const stream_type               stream,
     const uint32                    n_tests,
     const uint32                    n_tasks)
 {
-    typedef aln::BatchedAlignmentScore<stream_type, scheduler_type> batch_type;  // our batch type
+    const bool is_supported = aln::supports_scheduler<typename stream_type::aligner_type,scheduler_type>::pred;
 
-    // setup a batch
-    batch_type batch;
-
-    const float time = enact_batch(
-        batch,
+    batch_score_profile_dispatch<is_supported,scheduler_type,N,M,stream_type>::run(
         stream,
         n_tests,
         n_tasks );
-
-    fprintf(stderr,"  %5.1f", 1.0e-9f * float(n_tasks*uint64(N*M))/time );
 }
 
 // execute and time the batch_score<scheduler> algorithm for all possible schedulers
@@ -920,6 +951,34 @@ void test(int argc, char* argv[])
             {
                 batch_score_profile_all<N,M>(
                     make_edit_distance_aligner<aln::LOCAL>(),
+                    n_tests,
+                    N_TASKS,
+                    str_dvec,
+                    ref_dvec,
+                    score_dvec );
+            }
+        }
+        if (TEST_MASK & ED)
+        {
+            aln::SimpleSmithWatermanScheme scoring;
+            scoring.m_match     =  2;
+            scoring.m_mismatch  = -1;
+
+            fprintf(stderr,"  testing Hamming Distance scoring speed...\n");
+            fprintf(stderr,"    %15s : ", "semi-global");
+            {
+                batch_score_profile_all<N,M>(
+                    make_hamming_distance_aligner<aln::SEMI_GLOBAL>( scoring ),
+                    n_tests,
+                    N_TASKS,
+                    str_dvec,
+                    ref_dvec,
+                    score_dvec );
+            }
+            fprintf(stderr,"    %15s : ", "local");
+            {
+                batch_score_profile_all<N,M>(
+                    make_hamming_distance_aligner<aln::LOCAL>( scoring ),
                     n_tests,
                     N_TASKS,
                     str_dvec,

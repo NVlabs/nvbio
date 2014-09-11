@@ -33,6 +33,7 @@
 #include <nvbio/alignment/sw/sw_inl.h>
 #include <nvbio/alignment/ed/ed_inl.h>
 #include <nvbio/alignment/gotoh/gotoh_inl.h>
+#include <nvbio/alignment/hamming/hamming_inl.h>
 
 #if defined(__CUDACC__)
 #include <nvbio/alignment/sw/sw_warp_inl.h>

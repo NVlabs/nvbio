@@ -67,6 +67,27 @@ struct DeviceStagedThreadScheduler {};
 ///
 struct DeviceWarpScheduler {};
 
+template <typename T,typename Scheduler>
+struct supports_scheduler { static const bool pred = false; };
+
+template <AlignmentType TYPE, typename AlgorithmTag> struct supports_scheduler<EditDistanceAligner<TYPE,AlgorithmTag>, HostThreadScheduler>         { static const bool pred = true; };
+template <AlignmentType TYPE, typename AlgorithmTag> struct supports_scheduler<EditDistanceAligner<TYPE,AlgorithmTag>, DeviceThreadScheduler>       { static const bool pred = true; };
+template <AlignmentType TYPE, typename AlgorithmTag> struct supports_scheduler<EditDistanceAligner<TYPE,AlgorithmTag>, DeviceStagedThreadScheduler> { static const bool pred = true; };
+template <AlignmentType TYPE, typename AlgorithmTag> struct supports_scheduler<EditDistanceAligner<TYPE,AlgorithmTag>, DeviceWarpScheduler>         { static const bool pred = true; };
+
+template <AlignmentType TYPE, typename ScoringScheme, typename AlgorithmTag> struct supports_scheduler<SmithWatermanAligner<TYPE,ScoringScheme,AlgorithmTag>, HostThreadScheduler>         { static const bool pred = true; };
+template <AlignmentType TYPE, typename ScoringScheme, typename AlgorithmTag> struct supports_scheduler<SmithWatermanAligner<TYPE,ScoringScheme,AlgorithmTag>, DeviceThreadScheduler>       { static const bool pred = true; };
+template <AlignmentType TYPE, typename ScoringScheme, typename AlgorithmTag> struct supports_scheduler<SmithWatermanAligner<TYPE,ScoringScheme,AlgorithmTag>, DeviceStagedThreadScheduler> { static const bool pred = true; };
+template <AlignmentType TYPE, typename ScoringScheme, typename AlgorithmTag> struct supports_scheduler<SmithWatermanAligner<TYPE,ScoringScheme,AlgorithmTag>, DeviceWarpScheduler>         { static const bool pred = true; };
+
+template <AlignmentType TYPE, typename ScoringScheme, typename AlgorithmTag> struct supports_scheduler<GotohAligner<TYPE,ScoringScheme,AlgorithmTag>, HostThreadScheduler>         { static const bool pred = true; };
+template <AlignmentType TYPE, typename ScoringScheme, typename AlgorithmTag> struct supports_scheduler<GotohAligner<TYPE,ScoringScheme,AlgorithmTag>, DeviceThreadScheduler>       { static const bool pred = true; };
+template <AlignmentType TYPE, typename ScoringScheme, typename AlgorithmTag> struct supports_scheduler<GotohAligner<TYPE,ScoringScheme,AlgorithmTag>, DeviceStagedThreadScheduler> { static const bool pred = true; };
+template <AlignmentType TYPE, typename ScoringScheme, typename AlgorithmTag> struct supports_scheduler<GotohAligner<TYPE,ScoringScheme,AlgorithmTag>, DeviceWarpScheduler>         { static const bool pred = true; };
+
+template <AlignmentType TYPE, typename ScoringScheme, typename AlgorithmTag> struct supports_scheduler<HammingDistanceAligner<TYPE,ScoringScheme,AlgorithmTag>, HostThreadScheduler>   { static const bool pred = true; };
+template <AlignmentType TYPE, typename ScoringScheme, typename AlgorithmTag> struct supports_scheduler<HammingDistanceAligner<TYPE,ScoringScheme,AlgorithmTag>, DeviceThreadScheduler> { static const bool pred = true; };
+
 ///@} // end of BatchScheduler group
 
 ///

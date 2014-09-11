@@ -302,6 +302,7 @@ template <typename T> struct transpose_aligner {};
 struct SmithWatermanTag {}; ///< the Smith-Waterman aligner tag
 struct GotohTag {};         ///< the Gotoh aligner tag
 struct EditDistanceTag {};  ///< the Edit Distance aligner tag
+struct HammingDistanceTag {};  ///< the Hamming Distance aligner tag
 
 /// A meta-function specifying the aligner tag of an \ref Aligner "Aligner"
 ///
@@ -549,6 +550,45 @@ template <AlignmentType TYPE, typename scoring_scheme_type>
 SmithWatermanAligner<TYPE,scoring_scheme_type,PatternBlockingTag> transpose(const SmithWatermanAligner<TYPE,scoring_scheme_type,TextBlockingTag>& aligner)
 {
     return SmithWatermanAligner<TYPE,scoring_scheme_type,PatternBlockingTag>( aligner.scheme );
+}
+
+/// An edit distance alignment algorithm, see \ref Aligner
+/// \anchor HammingDistanceAligner
+///
+/// \tparam T_TYPE                    specifies whether the alignment is SEMI_GLOBAL/GLOBAL
+///
+template <AlignmentType T_TYPE, typename scoring_scheme_type, typename AlgorithmType = PatternBlockingTag>
+struct HammingDistanceAligner
+{
+    static const AlignmentType TYPE =   T_TYPE;         ///< the AlignmentType
+
+    typedef HammingDistanceTag            aligner_tag;  ///< the \ref AlignerTag "Aligner Tag"
+    typedef AlgorithmType               algorithm_tag;  ///< the \ref AlgorithmTag "Algorithm Tag"
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    HammingDistanceAligner(const scoring_scheme_type _scheme) : scheme(_scheme) {}
+
+    scoring_scheme_type scheme;
+};
+
+template <AlignmentType T_TYPE, typename scoring_scheme_type, typename AlgorithmTag>
+struct transpose_aligner< HammingDistanceAligner<T_TYPE,scoring_scheme_type,AlgorithmTag> >
+{
+    typedef HammingDistanceAligner<T_TYPE,scoring_scheme_type,typename transpose_tag<AlgorithmTag>::type> type;
+};
+
+template <AlignmentType TYPE, typename scoring_scheme_type>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+HammingDistanceAligner<TYPE,scoring_scheme_type> make_hamming_distance_aligner(const scoring_scheme_type& scheme)
+{
+    return HammingDistanceAligner<TYPE,scoring_scheme_type>( scheme );
+}
+
+template <AlignmentType TYPE, typename scoring_scheme_type, typename algorithm_tag>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+HammingDistanceAligner<TYPE,scoring_scheme_type,algorithm_tag> make_hamming_distance_aligner(const scoring_scheme_type& scheme)
+{
+    return HammingDistanceAligner<TYPE,scoring_scheme_type,algorithm_tag>( scheme );
 }
 
 ///@} // end of the Aligner group

@@ -151,6 +151,9 @@ struct EditDistanceScoringScheme
     typedef aln::EditDistanceAligner<aln::LOCAL>        local_aligner_type;
     typedef aln::EditDistanceAligner<aln::SEMI_GLOBAL>  end_to_end_aligner_type;
 
+    typedef aln::EditDistanceAligner<aln::LOCAL>        ungapped_local_aligner_type;
+    typedef aln::EditDistanceAligner<aln::SEMI_GLOBAL>  ungapped_end_to_end_aligner_type;
+
     static const int32 inf_score     =  0;
     static const int32 worst_score   = -(1 << 8);
 
@@ -161,6 +164,14 @@ struct EditDistanceScoringScheme
     /// return the end_to_end aligner
     ///
     end_to_end_aligner_type end_to_end_aligner() const { return end_to_end_aligner_type(); }
+
+    /// return the local aligner
+    ///
+    ungapped_local_aligner_type ungapped_local_aligner() const { return ungapped_local_aligner_type(); }
+
+    /// return the end_to_end aligner
+    ///
+    ungapped_end_to_end_aligner_type ungapped_end_to_end_aligner() const { return ungapped_end_to_end_aligner_type(); }
 
     // ---------- constructors -------------------------------------------------------------------- //
 
@@ -220,6 +231,9 @@ struct SmithWatermanScoringScheme
     typedef aln::GotohAligner<aln::LOCAL,scheme_type>        local_aligner_type;
     typedef aln::GotohAligner<aln::SEMI_GLOBAL,scheme_type>  end_to_end_aligner_type;
 
+    typedef aln::HammingDistanceAligner<aln::LOCAL,scheme_type>        ungapped_local_aligner_type;
+    typedef aln::HammingDistanceAligner<aln::SEMI_GLOBAL,scheme_type>  ungapped_end_to_end_aligner_type;
+
     typedef ConstantCost<int> MatchCost;
     typedef MMCost            MismatchCost;
 
@@ -239,6 +253,14 @@ struct SmithWatermanScoringScheme
     /// return the end_to_end aligner
     ///
     end_to_end_aligner_type end_to_end_aligner() const { return end_to_end_aligner_type(*this); }
+
+    /// return the local aligner
+    ///
+    ungapped_local_aligner_type ungapped_local_aligner() const { return ungapped_local_aligner_type(*this); }
+
+    /// return the end_to_end aligner
+    ///
+    ungapped_end_to_end_aligner_type ungapped_end_to_end_aligner() const { return ungapped_end_to_end_aligner_type(*this); }
 
     // ---------- constructors -------------------------------------------------------------------- //
 

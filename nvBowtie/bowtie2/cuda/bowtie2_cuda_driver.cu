@@ -115,6 +115,7 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.randomized       =!uint_option(options, "no-rand",                          !params.randomized);           // don't use randomized selection
     params.top_seed         = uint_option(options, "top",              init ? 0u      : params.top_seed);             // explore top seed entirely
     params.min_read_len     = uint_option(options, "min-read-len",     init ? 12u     : params.min_read_len);         // minimum read length
+    params.ungapped_mates   = uint_option(options, "ungapped-mates",   init ? 0u      : params.ungapped_mates);       // ungapped mate alignment
 
     const bool local = params.alignment_type == LocalAlignment;
 

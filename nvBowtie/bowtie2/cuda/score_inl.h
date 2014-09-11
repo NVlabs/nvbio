@@ -837,17 +837,37 @@ void opposite_score_best(
 {
     if (params.alignment_type == LocalAlignment)
     {
-        detail::opposite_score_best(
-            pipeline,
-            pipeline.scoring_scheme.local_aligner(),
-            params );
+        if (params.ungapped_mates)
+        {
+            detail::opposite_score_best(
+                pipeline,
+                pipeline.scoring_scheme.ungapped_local_aligner(),
+                params );
+        }
+        else
+        {
+            detail::opposite_score_best(
+                pipeline,
+                pipeline.scoring_scheme.local_aligner(),
+                params );
+        }
     }
     else
     {
-        detail::opposite_score_best(
-            pipeline,
-            pipeline.scoring_scheme.end_to_end_aligner(),
-            params );
+        if (params.ungapped_mates)
+        {
+            detail::opposite_score_best(
+                pipeline,
+                pipeline.scoring_scheme.ungapped_end_to_end_aligner(),
+                params );
+        }
+        else
+        {
+            detail::opposite_score_best(
+                pipeline,
+                pipeline.scoring_scheme.end_to_end_aligner(),
+                params );
+        }
     }
 }
 

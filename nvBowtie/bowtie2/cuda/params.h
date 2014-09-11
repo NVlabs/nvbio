@@ -152,6 +152,7 @@ struct ParamsPOD
     uint32        mapq_filter;
     uint32        min_read_len;
     uint32        max_batch_size;
+    bool          ungapped_mates;
 
     // paired-end options
     uint32        pe_policy;

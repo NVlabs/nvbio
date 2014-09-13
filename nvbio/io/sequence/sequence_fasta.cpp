@@ -126,7 +126,13 @@ SequenceDataFile_FASTA_gz::SequenceDataFile_FASTA_gz(
     const SequenceEncoding  flags) :
     SequenceDataFile( max_reads, max_read_len, flags ),
     m_fasta_reader( read_file_name )
-{}
+{
+	if (!m_fasta_reader.valid()) {
+		m_file_state = FILE_OPEN_FAILED;
+	} else {
+		m_file_state = FILE_OK;
+	}
+}
 
 // get a chunk of reads
 //

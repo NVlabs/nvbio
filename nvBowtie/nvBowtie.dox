@@ -262,8 +262,8 @@
 /// \subsection ScoringSchemeSection scoring schemes
 ///
 ///\par
-/// Finally, it's possible to provide a custom Smith-Waterman scoring scheme through a text file,
-/// where each line must contain a token value pair.
+/// The <i>--scoring-scheme filename</i> option allows to provide a custom Smith-Waterman scoring scheme
+/// through a text file, where each line must contain a token value pair.
 /// The tokens and default values are reported below:
 ///
 ///\verbatim

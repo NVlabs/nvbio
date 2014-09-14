@@ -214,7 +214,14 @@
 ///      --dovetail                       allow dovetailing mates
 ///      --no-mixed                       only report paired alignments
 ///      --ungapped-mates | -ug           perform ungapped mate alignment
+///    Scoring:
 ///      --scoring-scheme    filename     use a given scoring scheme
+///      --ma                int          match bonus
+///      --mp                int,int      max,min mismatch penalties
+///      --np                int          N penalty
+///      --rdg               int,int      read gap open / extension penalties
+///      --rfg               int,int      reference gap open / extension penalties
+///      --score-min         func         minimum score function
 ///    Reporting:
 ///      --mapQ-filter | -Q  int [0]      minimum mapQ threshold
 ///    Debug

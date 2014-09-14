@@ -104,6 +104,7 @@ int main(int argc, char* argv[])
         log_info(stderr,"    --max-reseed | -R   int   [2]    number of reseeding rounds\n");
         log_info(stderr,"  Extension:\n");
         log_info(stderr,"    --rand                           randomized seed selection\n");
+        log_info(stderr,"    --no-rand                        do not randomize seed hit selection\n");
         log_info(stderr,"    --max-dist          int [15]     maximum edit distance\n");
         log_info(stderr,"    --max-effort-init   int [15]     initial maximum number of consecutive extension failures\n");
         log_info(stderr,"    --max-effort | -D   int [15]     maximum number of consecutive extension failures\n");
@@ -114,7 +115,6 @@ int main(int argc, char* argv[])
         log_info(stderr,"    --overlap                        allow overlapping mates\n");
         log_info(stderr,"    --dovetail                       allow dovetailing mates\n");
         log_info(stderr,"    --no-mixed                       only report paired alignments\n");
-        log_info(stderr,"    --no-rand                        do not randomize seed hit selection\n");
         log_info(stderr,"    --ungapped-mates | -ug           perform ungapped mate alignment\n");
         log_info(stderr,"  Reporting:\n");
         log_info(stderr,"    --mapQ-filter | -Q  int [0]      minimum mapQ threshold\n");

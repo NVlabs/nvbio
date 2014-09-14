@@ -171,6 +171,9 @@ SimpleFunc func_option(const options_type& options, const char* name1, const cha
 
 void parse_options(Params& params, const std::map<std::string,std::string>& options, bool init)
 {
+    const bool        old_local        = params.alignment_type == LocalAlignment;
+    const ScoringMode old_scoring_mode = params.scoring_mode;
+
     params.mode             = mapping_mode( string_option(options, "mode",    init ? "best" : mapping_mode( params.mode )).c_str() ); // mapping mode
     params.scoring_mode     = scoring_mode( string_option(options, "scoring", init ? "sw"   : scoring_mode( params.scoring_mode )).c_str() ); // scoring mode
     params.alignment_type   = uint_option(options, "local",                 init ? 0u      : params.alignment_type == LocalAlignment ) ? LocalAlignment : EndToEndAlignment;           // local alignment
@@ -230,6 +233,49 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
 
     params.max_effort_init = nvbio::max( params.max_effort_init, params.max_effort );
     params.max_ext         = nvbio::max( params.max_ext,         params.max_effort );
+
+    UberScoringScheme& sc = params.scoring_scheme;
+
+    // set the default ED values, or reset them if the scoring mode has been changed
+    if (init || (params.scoring_mode != old_scoring_mode))
+        sc.ed.m_score_min = SimpleFunc( SimpleFunc::LinearFunc, -(float)params.max_dist, 0.0f );
+
+    // set the default SW values, or reset them if the alignment type has been changed
+    if (init || (local != old_local))
+    {
+        sc.sw = local ? 
+            SmithWatermanScoringScheme<>::local() :
+            SmithWatermanScoringScheme<>();
+    }
+
+    // load scoring scheme from file
+    if (params.scoring_file != "")
+        sc.sw = load_scoring_scheme( params.scoring_file.c_str(), AlignmentType( params.alignment_type ) );
+
+    // score-min
+    sc.ed.m_score_min = func_option( options, "score-min", sc.ed.m_score_min );
+    sc.sw.m_score_min = func_option( options, "score-min", sc.sw.m_score_min );
+
+    // match bonus
+    sc.sw.m_match.m_val = int_option( options, "ma", sc.sw.m_match.m_val );
+
+    // mismatch penalties
+    const int2 mp = int2_option( options, "mp", make_int2( sc.sw.m_mmp.m_max_val, sc.sw.m_mmp.m_min_val ) );
+    sc.sw.m_mmp.m_max_val = mp.x;
+    sc.sw.m_mmp.m_min_val = mp.y;
+
+    // np
+    sc.sw.m_np.m_val = int_option( options, "np", sc.sw.m_np.m_val );
+
+    // read gaps
+    const int2 rdg         = int2_option( options, "rdg", make_int2( sc.sw.m_read_gap_const, sc.sw.m_read_gap_coeff ) );
+    sc.sw.m_read_gap_const = rdg.x;
+    sc.sw.m_read_gap_coeff = rdg.y;
+
+    // reference gaps
+    const int2 rfg        = int2_option( options, "rfg", make_int2( sc.sw.m_ref_gap_const, sc.sw.m_ref_gap_coeff ) );
+    sc.sw.m_ref_gap_const = rfg.x;
+    sc.sw.m_ref_gap_coeff = rfg.y;
 }
 
 //
@@ -251,6 +297,7 @@ int driver(
         std::string config = string_option(options, "config", "" );
         if (config != "") { parse_options( params, load_options( config.c_str() ), init ); init = false; }
                             parse_options( params, options,                        init );
+
     }
     if (params.alignment_type == LocalAlignment &&
         params.scoring_mode == EditDistanceMode)
@@ -350,15 +397,7 @@ int driver(
     Timer global_timer;
     global_timer.start();
 
-    UberScoringScheme scoring_scheme;
-    scoring_scheme.ed = EditDistanceScoringScheme( params );
-    scoring_scheme.sw = SmithWatermanScoringScheme<>();
-    if (AlignmentType( params.alignment_type ) == LocalAlignment)
-        scoring_scheme.sw = SmithWatermanScoringScheme<>::local();
-
-    // load scoring scheme from file
-    if (params.scoring_file != "")
-        scoring_scheme.sw = load_scoring_scheme( params.scoring_file.c_str(), AlignmentType( params.alignment_type ) );
+    UberScoringScheme& scoring_scheme = params.scoring_scheme;
 
     Stats stats( params );
 
@@ -685,15 +724,7 @@ int driver(
     Timer global_timer;
     global_timer.start();
 
-    UberScoringScheme scoring_scheme;
-    scoring_scheme.ed = EditDistanceScoringScheme( params );
-    scoring_scheme.sw = SmithWatermanScoringScheme<>();
-    if (AlignmentType( params.alignment_type ) == LocalAlignment)
-        scoring_scheme.sw = SmithWatermanScoringScheme<>::local();
-
-    // load scoring scheme from file
-    if (params.scoring_file != "")
-        scoring_scheme.sw = load_scoring_scheme( params.scoring_file.c_str(), AlignmentType( params.alignment_type ) );
+    UberScoringScheme& scoring_scheme = params.scoring_scheme;
 
     Stats stats( params );
 

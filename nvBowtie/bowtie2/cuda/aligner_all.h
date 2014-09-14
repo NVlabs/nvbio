@@ -165,8 +165,8 @@ void Aligner::score_all(
     // prepare the scoring system
     //typedef typename scoring_scheme_type::threshold_score_type          threshold_score_type;
 
-    //threshold_score_type threshold_score = scoring_scheme.threshold_score( params );
-    const int32 score_limit = scoring_scheme.score_limit( params );
+    //threshold_score_type threshold_score = scoring_scheme.threshold_score();
+    const int32 score_limit = scoring_scheme.score_limit();
 
     Timer timer;
     Timer global_timer;

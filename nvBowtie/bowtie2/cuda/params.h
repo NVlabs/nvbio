@@ -28,6 +28,7 @@
 #pragma once
 
 #include <nvbio/basic/types.h>
+#include <nvBowtie/bowtie2/cuda/scoring.h>
 #include <string.h>
 #include <string>
 
@@ -47,11 +48,6 @@ enum MappingMode {
 enum ScoringMode {
     EditDistanceMode  = 0,
     SmithWatermanMode = 1,
-};
-
-enum AlignmentType {
-    EndToEndAlignment = 0,
-    LocalAlignment    = 1,
 };
 
 static const char* s_mapping_mode[] = {
@@ -93,39 +89,6 @@ inline uint32 scoring_mode(const char* str)
         return EditDistanceMode;
 }
 
-struct SimpleFunc
-{
-    enum Type { LinearFunc = 0, LogFunc = 1, SqrtFunc = 2 };
-
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    SimpleFunc(const Type _type = LinearFunc, const float _k = 0.0f, const float _m = 1.0f) : type(_type), k(_k), m(_m) {}
-
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    int32 operator() (const int32 x) const
-    {
-        return int32( k + m * (type == LogFunc  ?  logf(float(x)) :
-                               type == SqrtFunc ? sqrtf(float(x)) :
-                                                        float(x)) );
-    }
-
-    const char* type_string() const
-    {
-        return type == LogFunc  ? "log" :
-               type == SqrtFunc ? "sqrt" :
-                                  "linear";
-    }
-    const char* type_symbol() const
-    {
-        return type == LogFunc  ? "G" :
-               type == SqrtFunc ? "S" :
-                                  "L";
-    }
-
-    Type  type;
-    float k;
-    float m;
-};
-
 ///
 /// A POD structure holding all of nvBowtie's parameters
 ///
@@ -161,6 +124,9 @@ struct ParamsPOD
     bool          pe_unpaired;
     uint32        min_frag_len;
     uint32        max_frag_len;
+
+    // Scoring scheme
+    UberScoringScheme scoring_scheme;
 
     // Internal fields
     uint32        scoring_window;

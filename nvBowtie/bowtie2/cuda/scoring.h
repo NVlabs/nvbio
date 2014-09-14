@@ -35,7 +35,7 @@
 #include <nvbio/basic/options.h>
 #include <nvbio/alignment/alignment.h>
 #include <nvBowtie/bowtie2/quality_coeffs.h>
-#include <nvBowtie/bowtie2/cuda/params.h>
+#include <nvBowtie/bowtie2/cuda/func.h>
 #include <string>
 #include <map>
 
@@ -49,7 +49,10 @@ namespace cuda {
 ///@addtogroup Alignment
 ///@{
 
-enum ScoringFuncType { LinearFunc = 0, LogFunc = 1 };
+enum AlignmentType {
+    EndToEndAlignment = 0,
+    LocalAlignment    = 1,
+};
 
 enum CostType {
 	ROUNDED_QUAL_COST   = 1,
@@ -129,7 +132,7 @@ struct ConstantCost
 struct EditDistanceScoringScheme
 {
     typedef EditDistanceScoringScheme    scheme_type;
-    typedef Constant<int32>              threshold_score_type;
+    typedef SimpleFunc                   threshold_score_type;
     typedef aln::EditDistanceTag         aligner_tag;
 
     typedef aln::EditDistanceAligner<aln::LOCAL>        local_aligner_type;
@@ -162,11 +165,7 @@ struct EditDistanceScoringScheme
     /// default constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    EditDistanceScoringScheme() : m_min_score(-5) {}
-
-    /// constructor
-    ///
-    EditDistanceScoringScheme(const Params& params) : m_min_score(-(int32)params.max_dist) {}
+    EditDistanceScoringScheme() : m_score_min( SimpleFunc::LinearFunc, -5.0f, 0.0f ) {}
 
     // ---------- begin: limits ------------------------------------------------------------------- //
 
@@ -178,23 +177,23 @@ struct EditDistanceScoringScheme
     /// min score
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    int32 min_score(const uint32 len) const { return m_min_score-1; }
+    int32 min_score(const uint32 len) const { return m_score_min( len ); }
 
     /// score limit value
     ///
-    int32 score_limit(const Params& params)  const { return m_min_score; }
+    int32 score_limit()  const { return Field_traits<int32>::min(); }
 
     /// min score function
     ///
-    threshold_score_type threshold_score(const Params& params) const
+    threshold_score_type threshold_score() const
     {
-        return threshold_score_type( m_min_score );
+        return threshold_score_type( m_score_min );
     }
 
     // ---------- end: limits ---------------------------------------------------------------------- //
 
 public:
-    int32 m_min_score; ///< minimum score
+    SimpleFunc      m_score_min;            // minimum read score function
 };
 
 ///
@@ -277,11 +276,11 @@ struct SmithWatermanScoringScheme
 
     /// min score function
     ///
-    SimpleFunc threshold_score(const Params& params) const { return m_score_min; }
+    SimpleFunc threshold_score() const { return m_score_min; }
 
     /// score limit value
     ///
-    int32 score_limit(const Params& params) const { return Field_traits<int32>::min(); }
+    int32 score_limit() const { return Field_traits<int32>::min(); }
 
 	/// best achievable score for a read of given length
     ///

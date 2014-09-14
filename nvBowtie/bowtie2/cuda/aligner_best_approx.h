@@ -67,8 +67,8 @@ void Aligner::best_approx(
 
     scoring_scheme_type scoring_scheme = ScoringSchemeSelector<scoring_tag>::scheme( input_scoring_scheme );
 
-    threshold_score_type threshold_score = scoring_scheme.threshold_score( params );
-    //const int32          score_limit     = scoring_scheme.score_limit( params );
+    threshold_score_type threshold_score = scoring_scheme.threshold_score();
+    //const int32          score_limit     = scoring_scheme.score_limit();
 
     // start timing
     Timer timer;
@@ -385,8 +385,8 @@ void Aligner::best_approx_score(
     // prepare the scoring system
     typedef typename scoring_scheme_type::threshold_score_type          threshold_score_type;
 
-    //threshold_score_type threshold_score = scoring_scheme.threshold_score( params );
-    const int32 score_limit = scoring_scheme.score_limit( params );
+    //threshold_score_type threshold_score = scoring_scheme.threshold_score();
+    const int32 score_limit = scoring_scheme.score_limit();
 
     Timer timer;
     Timer global_timer;

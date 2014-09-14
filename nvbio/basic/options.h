@@ -127,4 +127,23 @@ std::string string_option(const options_type& options, const char* name1, const 
             std::string( val );
 }
 
+template <typename options_type>
+int2 int2_option(const options_type& options, const char* name, const int2 val)
+{
+    if (options.find( std::string(name) ) != options.end())
+    {
+        const std::string str = options.find(std::string(name))->second;
+        const size_t c = str.find(',');
+        if (c == std::string::npos)
+        {
+            log_warning( stderr, "int2_option() : parsing error, missing comma\n" );
+            return val;
+        }
+        const std::string num1 = str.substr( 0, c );
+        const std::string num2 = str.substr( c + 1, str.size() );
+        return make_int2( atoi( num1.c_str() ), atoi( num2.c_str() ) );
+    }
+    return val;
+}
+
 } // namespace nvbio

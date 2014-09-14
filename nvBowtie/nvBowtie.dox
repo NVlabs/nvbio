@@ -207,8 +207,8 @@
 ///      --max-effort | -D   int [15]     maximum number of consecutive extension failures
 ///      --min-ext           int [30]     minimum number of extensions per read
 ///      --max-ext           int [400]    maximum number of extensions per read
-///      --minins            int [0]      minimum insert length
-///      --minins            int [500]    maximum insert length
+///      --minins     | -I   int [0]      minimum insert length
+///      --minins     | -X   int [500]    maximum insert length
 ///      --overlap                        allow overlapping mates
 ///      --dovetail                       allow dovetailing mates
 ///      --no-mixed                       only report paired alignments

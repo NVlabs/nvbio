@@ -275,9 +275,9 @@
 /// The tokens and default values are reported below:
 ///
 ///\verbatim
-/// match				0        // local alignment: 2
-/// mm-penalty-min		2
-/// mm-penalty-max		6
+/// match               0        // local alignment: 2
+/// mm-penalty-min      2
+/// mm-penalty-max      6
 /// N-penalty-min       1
 /// N-penalty-max       1
 /// score-min-const     -0.6     // local alignment: 0

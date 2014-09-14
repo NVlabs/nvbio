@@ -816,7 +816,7 @@ FMIndexDataDevice::FMIndexDataDevice(const FMIndexData& host_data, const uint32 
 
         if (flags & SA)
         {
-            if (host_data.m_ssa.m_ssa == NULL)
+            if (host_data.m_rssa.m_ssa == NULL)
                 log_warning(stderr, "FMIndexDataDevice: requested reverse SSA is not available!\n");
 
             m_rssa_vec.resize( m_sa_words );

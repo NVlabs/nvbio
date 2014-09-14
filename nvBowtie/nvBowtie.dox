@@ -213,8 +213,11 @@
 ///      --dovetail                       allow dovetailing mates
 ///      --no-mixed                       only report paired alignments
 ///      --ungapped-mates | -ug           perform ungapped mate alignment
+///      --scoring-scheme    filename     use a given scoring scheme
 ///    Reporting:
-///      --mapQ-filter | -Q  int [0]       minimum mapQ threshold
+///      --mapQ-filter | -Q  int [0]      minimum mapQ threshold
+///    Debug
+///      --report            filename     generate an HTML report
 ///\endverbatim
 ///
 ///\par
@@ -254,5 +257,30 @@
 ///
 ///\verbatim
 /// ./nvBowtie hg19 my_reads.fastq my_reads.bam
+///\endverbatim
+///
+/// \subsection ScoringSchemeSection scoring schemes
+///
+///\par
+/// Finally, it's possible to provide a custom Smith-Waterman scoring scheme through a text file,
+/// where each line must contain a token value pair.
+/// The tokens and default values are reported below:
+///
+///\verbatim
+/// match				0        // local alignment: 2
+/// mm-penalty-min		2
+/// mm-penalty-max		6
+/// N-penalty-min       1
+/// N-penalty-max       1
+/// score-min-const     -0.6     // local alignment: 0
+/// score-min-coeff     -06      // local alignment: 10.0
+/// score-min-type      linear   // local alignment: log
+/// N-ceil-const        0
+/// N-ceil-coeff        0.15
+/// read-gap-const      5
+/// read-gap-coeff      3
+/// ref-gap-const       5
+/// ref-gap-coeff       3
+/// gap-free            5
 ///\endverbatim
 ///

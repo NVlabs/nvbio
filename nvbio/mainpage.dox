@@ -97,7 +97,7 @@
 /// </table>
 ///\par
 /// <table>
-/// <tr><td style="white-space: nowrap; vertical-align:text-top;">26/05/2014 \n NVBIO 0.9.9</td>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">26/05/2014 \n NVBIO 0.9.95</td>
 /// <td style="vertical-align:text-top;" width="90%">
 /// - <b>New Features:</b> \n
 ///   * Added a new \ref AlphabetsSection "Alphabets" module for managing different alphabets.

@@ -210,6 +210,7 @@
 ///      --minins     | -I   int [0]      minimum insert length
 ///      --minins     | -X   int [500]    maximum insert length
 ///      --overlap                        allow overlapping mates
+///      --no-overlap                     disable overlapping mates
 ///      --dovetail                       allow dovetailing mates
 ///      --no-mixed                       only report paired alignments
 ///      --ungapped-mates | -ug           perform ungapped mate alignment

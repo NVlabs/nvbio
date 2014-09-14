@@ -202,8 +202,9 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.subseed_len      = uint_option(options,  "subseed-len",          init ? 0u                       : params.subseed_len); // no greater than 32
 
     params.pe_overlap    = uint_option(options, "overlap",          init ? 1u      : params.pe_overlap);            // paired-end overlap
+    params.pe_overlap    =!uint_option(options, "no-overlap",                       !params.pe_overlap);            // paired-end overlap
     params.pe_dovetail   = uint_option(options, "dovetail",         init ? 0u      : params.pe_dovetail);           // paired-end dovetail
-    params.pe_unpaired   = !uint_option(options, "no-mixed",        init ? 0u      : !params.pe_unpaired);          // paired-end no-mixed
+    params.pe_unpaired   =!uint_option(options, "no-mixed",         init ? 0u      :!params.pe_unpaired);           // paired-end no-mixed
     params.min_frag_len  = uint_option(options, "minins", "-I",     init ? 0u      : params.min_frag_len);          // paired-end minimum fragment length
     params.max_frag_len  = uint_option(options, "maxins", "-X",     init ? 500u    : params.max_frag_len);          // paired-end maximum fragment length
 

@@ -205,8 +205,8 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.pe_overlap    =!uint_option(options, "no-overlap",                       !params.pe_overlap);            // paired-end overlap
     params.pe_dovetail   = uint_option(options, "dovetail",         init ? 0u      : params.pe_dovetail);           // paired-end dovetail
     params.pe_unpaired   =!uint_option(options, "no-mixed",         init ? 0u      :!params.pe_unpaired);           // paired-end no-mixed
-    params.min_frag_len  = uint_option(options, "minins", "-I",     init ? 0u      : params.min_frag_len);          // paired-end minimum fragment length
-    params.max_frag_len  = uint_option(options, "maxins", "-X",     init ? 500u    : params.max_frag_len);          // paired-end maximum fragment length
+    params.min_frag_len  = uint_option(options, "minins", "I",      init ? 0u      : params.min_frag_len);          // paired-end minimum fragment length
+    params.max_frag_len  = uint_option(options, "maxins", "X",      init ? 500u    : params.max_frag_len);          // paired-end maximum fragment length
 
     // the maximum batch of reads processed in parallel
     params.max_batch_size = uint_option(options, "batch-size",  init ? 1024u : params.max_batch_size );   // maximum batch size

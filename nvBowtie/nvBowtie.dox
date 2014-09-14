@@ -273,7 +273,7 @@
 /// N-penalty-min       1
 /// N-penalty-max       1
 /// score-min-const     -0.6     // local alignment: 0
-/// score-min-coeff     -06      // local alignment: 10.0
+/// score-min-coeff     -0.6     // local alignment: 10
 /// score-min-type      linear   // local alignment: log
 /// N-ceil-const        0
 /// N-ceil-coeff        0.15

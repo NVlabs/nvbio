@@ -181,7 +181,7 @@ void map(const Stream query,
         } else { base_range = make_uint2(1, 0); break; }
     }
 
-    if (find_exact && base_range.x<=base_range.y)
+    if (find_exact && base_range.x <= base_range.y)
     {
         if (hitheap.size() == max_hits)
             hitheap.pop_bottom();
@@ -336,22 +336,13 @@ struct seed_mapper<APPROX_MAPPING>
         // Standard seed=0, forward scan, forward index=0
         const fSeedReader f_reader(reader, forward_offset);
         flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-seed_len);
-        map<CHECK_EXACT> (f_reader,  (seed_len  )/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        map<CHECK_EXACT> (f_reader,  params.subseed_len, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
 
-        // Standard seed=0, reverse scan, reverse index=1
-        const rSeedReader r_reader(reader, reverse_offset);                        
-        flags = SeedHit::build_flags(STANDARD, REVERSE, read_range.y-pos-1);
-        map<IGNORE_EXACT>(r_reader,  (seed_len+1)/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
-
-        // Complement seed=1, forward scan, reverse index=1
-        const transform_iterator<fSeedReader, complement_functor<4> > cf_reader(f_reader, complement_functor<4>());
-        flags = SeedHit::build_flags(COMPLEMENT, REVERSE, pos-read_range.x+seed_len-1);
-        map<CHECK_EXACT> (cf_reader, (seed_len  )/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
-        
         // Complement seed=1, reverse scan, forward  index=0
+        const rSeedReader r_reader(reader, reverse_offset);                        
         const transform_iterator<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
         flags = SeedHit::build_flags(COMPLEMENT, FORWARD, pos-read_range.x);
-        map<IGNORE_EXACT>(cr_reader, (seed_len+1)/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        map<IGNORE_EXACT>(cr_reader, params.subseed_len, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
     }
 };
 
@@ -406,7 +397,7 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
         map<CHECK_EXACT> (f_reader,  (seed_len  )/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
 
         // Standard seed=0, reverse scan, reverse index=1
-        const rSeedReader r_reader(reader, reverse_offset);                        
+        const rSeedReader r_reader(reader, reverse_offset);
         flags = SeedHit::build_flags(STANDARD, REVERSE, read_range.y-pos-1);
         map<IGNORE_EXACT>(r_reader,  (seed_len+1)/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
 
@@ -414,7 +405,7 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
         const transform_iterator<fSeedReader, complement_functor<4> > cf_reader(f_reader, complement_functor<4>());
         flags = SeedHit::build_flags(COMPLEMENT, REVERSE, pos-read_range.x+seed_len-1);
         map<CHECK_EXACT> (cf_reader, (seed_len  )/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
-        
+
         // Complement seed=1, reverse scan, forward  index=0
         const transform_iterator<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
         flags = SeedHit::build_flags(COMPLEMENT, FORWARD, pos-read_range.x);

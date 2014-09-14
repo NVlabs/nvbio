@@ -56,16 +56,17 @@ namespace cuda {
 using namespace nvbio;
 
 // bogus implementation of a function to check if a string is a number
-bool is_number(const char* str)
+bool is_number(const char* str, uint32 len = uint32(-1))
 {
     if (str[0] == '-')
         ++str;
 
-    for (;*str != '\0'; ++str)
+    for (uint32 l = 0; *str != '\0' && l < len; ++l)
     {
-        if (*str < '0' ||
-            *str > '9')
-            return false;
+        const char c = *str; ++str;
+        if (c == '.')             continue;
+        if (c >= '0' && c <= '9') continue;
+        return false;
     }
     return true;
 }
@@ -83,8 +84,8 @@ int main(int argc, char* argv[])
         log_info(stderr,"nvBowtie [options] reference-genome read-file output\n");
         log_info(stderr,"options:\n");
         log_info(stderr,"  General:\n");
-        log_info(stderr,"    --max-reads        int [-1]      maximum number of reads to process\n");
-        log_info(stderr,"    --device           int [0]       select the given cuda device\n");
+        log_info(stderr,"    --max-reads         int [-1]     maximum number of reads to process\n");
+        log_info(stderr,"    --device            int [0]      select the given cuda device\n");
         log_info(stderr,"    --file-ref                       load reference from file\n");
         log_info(stderr,"    --server-ref                     load reference from server\n");
         log_info(stderr,"    --phred33                        qualities are ASCII characters equal to Phred quality + 33\n");
@@ -97,24 +98,26 @@ int main(int argc, char* argv[])
         log_info(stderr,"    --rr                             paired mates are reverse-reverse\n");
         log_info(stderr,"    --verbosity                      verbosity level\n");
         log_info(stderr,"  Seeding:\n");
-        log_info(stderr,"    --seed-len         int   [22]    seed lengths\n");
-        log_info(stderr,"    --seed-freq        float [1.15]  seed spacing, specified as 1 + X*sqrt(read-len)\n");
-        log_info(stderr,"    --max-hits         int   [100]   maximum amount of seed hits\n");
-        log_info(stderr,"    --max-reseed       int   [2]     number of reseeding rounds\n");
+        log_info(stderr,"    --seed-len   | -L   int   [22]       seed lengths\n");
+        log_info(stderr,"    --seed-freq  | -i   func  [L,1,1.15] seed interval, specified as 1 + X*sqrt(read-len)\n");
+        log_info(stderr,"    --max-hits          int   [100]  maximum amount of seed hits\n");
+        log_info(stderr,"    --max-reseed | -R   int   [2]    number of reseeding rounds\n");
         log_info(stderr,"  Extension:\n");
         log_info(stderr,"    --rand                           randomized seed selection\n");
-        log_info(stderr,"    --max-dist         int [15]      maximum edit distance\n");
-        log_info(stderr,"    --max-effort-init  int [15]      initial maximum number of consecutive extension failures\n");
-        log_info(stderr,"    --max-effort       int [15]      maximum number of consecutive extension failures\n");
-        log_info(stderr,"    --min-ext          int [30]      minimum number of extensions per read\n");
-        log_info(stderr,"    --max-ext          int [400]     maximum number of extensions per read\n");
-        log_info(stderr,"    --minins           int [0]       minimum insert length\n");
-        log_info(stderr,"    --minins           int [500]     maximum insert length\n");
+        log_info(stderr,"    --max-dist          int [15]     maximum edit distance\n");
+        log_info(stderr,"    --max-effort-init   int [15]     initial maximum number of consecutive extension failures\n");
+        log_info(stderr,"    --max-effort|-D     int [15]     maximum number of consecutive extension failures\n");
+        log_info(stderr,"    --min-ext           int [30]     minimum number of extensions per read\n");
+        log_info(stderr,"    --max-ext           int [400]    maximum number of extensions per read\n");
+        log_info(stderr,"    --minins            int [0]      minimum insert length\n");
+        log_info(stderr,"    --minins            int [500]    maximum insert length\n");
         log_info(stderr,"    --overlap                        allow overlapping mates\n");
         log_info(stderr,"    --dovetail                       allow dovetailing mates\n");
         log_info(stderr,"    --no-mixed                       only report paired alignments\n");
+        log_info(stderr,"    --no-rand                        do not randomize seed hit selection\n");
+        log_info(stderr,"    --ungapped-mates | -ug           perform ungapped mate alignment\n");
         log_info(stderr,"  Reporting:\n");
-        log_info(stderr,"    --mapQ-filter      int [0]       minimum mapQ threshold\n");
+        log_info(stderr,"    --mapQ-filter | -Q  int [0]      minimum mapQ threshold\n");
         exit(0);
     }
     else if (argc == 2 && strcmp( argv[1], "-test" ) == 0)

@@ -41,11 +41,33 @@ uint32 uint_option(const options_type& options, const char* name, const uint32 v
 }
 
 template <typename options_type>
+uint32 uint_option(const options_type& options, const char* name1, const char* name2, const uint32 val)
+{
+    return
+        (options.find( std::string(name1) ) != options.end()) ?
+            atoi( options.find(std::string(name1))->second.c_str() ) :
+        (options.find( std::string(name2) ) != options.end()) ?
+            atoi( options.find(std::string(name2))->second.c_str() ) :
+            val;
+}
+
+template <typename options_type>
 int32 int_option(const options_type& options, const char* name, const int32 val)
 {
     return (options.find( std::string(name) ) != options.end()) ?
         atoi( options.find(std::string(name))->second.c_str() ) :
         val;
+}
+
+template <typename options_type>
+int32 int_option(const options_type& options, const char* name1, const char* name2, const uint32 val)
+{
+    return
+        (options.find( std::string(name1) ) != options.end()) ?
+            atoi( options.find(std::string(name1))->second.c_str() ) :
+        (options.find( std::string(name2) ) != options.end()) ?
+            atoi( options.find(std::string(name2))->second.c_str() ) :
+            val;
 }
 
 template <typename options_type>
@@ -57,6 +79,17 @@ int64 int64_option(const options_type& options, const char* name, const int64 va
 }
 
 template <typename options_type>
+int64 int64_option(const options_type& options, const char* name1, const char* name2, const uint32 val)
+{
+    return
+        (options.find( std::string(name1) ) != options.end()) ?
+            atoi( options.find(std::string(name1))->second.c_str() ) :
+        (options.find( std::string(name2) ) != options.end()) ?
+            atoi( options.find(std::string(name2))->second.c_str() ) :
+            val;
+}
+
+template <typename options_type>
 float float_option(const options_type& options, const char* name, const float val)
 {
     return (options.find( std::string(name) ) != options.end()) ?
@@ -65,11 +98,33 @@ float float_option(const options_type& options, const char* name, const float va
 }
 
 template <typename options_type>
+float float_option(const options_type& options, const char* name1, const char* name2, const uint32 val)
+{
+    return
+        (options.find( std::string(name1) ) != options.end()) ?
+            atof( options.find(std::string(name1))->second.c_str() ) :
+        (options.find( std::string(name2) ) != options.end()) ?
+            atof( options.find(std::string(name2))->second.c_str() ) :
+            val;
+}
+
+template <typename options_type>
 std::string string_option(const options_type& options, const char* name, const char* val)
 {
     return (options.find( std::string(name) ) != options.end()) ?
         options.find(std::string(name))->second :
         std::string( val );
+}
+
+template <typename options_type>
+std::string string_option(const options_type& options, const char* name1, const char* name2, const char* val)
+{
+    return
+        (options.find( std::string(name1) ) != options.end()) ?
+            options.find(std::string(name1))->second :
+        (options.find( std::string(name2) ) != options.end()) ?
+            options.find(std::string(name2))->second :
+            std::string( val );
 }
 
 } // namespace nvbio

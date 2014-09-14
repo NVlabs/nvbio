@@ -93,37 +93,113 @@ std::map<std::string,std::string> load_options(const char* name)
     return options;
 }
 
+// bogus implementation of a function to check if a string is a number
+bool is_number(const char* str, uint32 len = uint32(-1))
+{
+    if (str[0] == '-')
+        ++str;
+
+    for (uint32 l = 0; *str != '\0' && l < len; ++l)
+    {
+        const char c = *str; ++str;
+        if (c == '.')             continue;
+        if (c >= '0' && c <= '9') continue;
+        return false;
+    }
+    return true;
+}
+
+// bogus implementation of a function to check if an option is a function
+SimpleFunc parse_function(const char* str, const SimpleFunc def)
+{
+    if (str[1] != ',')
+        return def;
+
+    if (!(str[0] == 'C' ||
+          str[0] == 'L' ||
+          str[0] == 'G' ||
+          str[0] == 'S'))
+          return def;
+
+    SimpleFunc ret;
+    ret.type = (str[0] == 'C') ? SimpleFunc::LinearFunc :
+               (str[0] == 'L') ? SimpleFunc::LinearFunc :
+               (str[0] == 'G') ? SimpleFunc::LogFunc    :
+                                 SimpleFunc::SqrtFunc;
+
+    std::string nums = std::string( str + 2 );
+    const size_t c = nums.find(',');
+    if (c == std::string::npos)
+        return def;
+
+    if (is_number( nums.c_str(), c )      == false) return def;
+    if (is_number( nums.c_str() + c + 1 ) == false) return def;
+
+    const std::string num1 = nums.substr( 0, c );
+    const std::string num2 = std::string( nums.c_str() + c + 1 );
+
+    ret.k = atof( num1.c_str() );
+    ret.m = atof( nums.c_str() + c + 1 );
+
+    // take care of transforming constant functions in linear ones
+    if (str[0] == 'C')
+    {
+        //ret.k += ret.m;
+        ret.m = 0.0f;
+    }
+    return ret;
+}
+
+template <typename options_type>
+SimpleFunc func_option(const options_type& options, const char* name, const SimpleFunc func)
+{
+    return (options.find( std::string(name) ) != options.end()) ?
+        parse_function( options.find(std::string(name))->second.c_str(), func ) :
+        func;
+}
+
+template <typename options_type>
+SimpleFunc func_option(const options_type& options, const char* name1, const char* name2, const SimpleFunc func)
+{
+    return
+        (options.find( std::string(name1) ) != options.end()) ?
+            parse_function( options.find(std::string(name1))->second.c_str(), func ) :
+        (options.find( std::string(name2) ) != options.end()) ?
+            parse_function( options.find(std::string(name2))->second.c_str(), func ) :
+            func;
+}
+
 void parse_options(Params& params, const std::map<std::string,std::string>& options, bool init)
 {
     params.mode             = mapping_mode( string_option(options, "mode",    init ? "best" : mapping_mode( params.mode )).c_str() ); // mapping mode
     params.scoring_mode     = scoring_mode( string_option(options, "scoring", init ? "sw"   : scoring_mode( params.scoring_mode )).c_str() ); // scoring mode
-    params.alignment_type   = uint_option(options, "local",            init ? 0u      : params.alignment_type == LocalAlignment ) ? LocalAlignment : EndToEndAlignment;           // local alignment
-    params.keep_stats       = (bool)uint_option(options, "stats",      init ? 1u      : params.keep_stats);           // keep stats
-    params.max_hits         = uint_option(options, "max-hits",         init ? 100u    : params.max_hits);             // too big = memory exhaustion 
-    params.max_dist         = uint_option(options, "max-dist",         init ? 15u     : params.max_dist);             // must be <= MAX_BAND_LEN/2
-    params.max_effort_init  = uint_option(options, "max-effort-init",  init ? 15u     : params.max_effort_init);      // initial scoring effort limit
-    params.max_effort       = uint_option(options, "max-effort",       init ? 15u     : params.max_effort);           // scoring effort limit
-    params.min_ext          = uint_option(options, "min-ext",          init ? 30u     : params.min_ext);              // min # of extensions
-    params.max_ext          = uint_option(options, "max-ext",          init ? 400u    : params.max_ext);              // max # of extensions
-    params.max_reseed       = uint_option(options, "max-reseed",       init ? 2u      : params.max_reseed);           // max # of reseeding rounds
-    params.rep_seeds        = uint_option(options, "rep-seeds",        init ? 1000u   : params.rep_seeds);            // reseeding threshold
-    params.allow_sub        = uint_option(options, "N",                init ? 0u      : params.allow_sub);            // allow substitution in seed
-    params.mapq_filter      = uint_option(options, "mapQ-filter",      init ? 0u      : params.mapq_filter);          // filter anything below this
-    params.report           = string_option(options, "report",         init ? ""      : params.report.c_str());       // generate a report file
-    params.scoring_file     = string_option(options, "scoring-scheme", init ? ""      : params.scoring_file.c_str());
-    params.randomized       = uint_option(options, "rand",             init ? 1u      : params.randomized);           // use randomized selection
-    params.randomized       =!uint_option(options, "no-rand",                          !params.randomized);           // don't use randomized selection
-    params.top_seed         = uint_option(options, "top",              init ? 0u      : params.top_seed);             // explore top seed entirely
-    params.min_read_len     = uint_option(options, "min-read-len",     init ? 12u     : params.min_read_len);         // minimum read length
-    params.ungapped_mates   = uint_option(options, "ungapped-mates",   init ? 0u      : params.ungapped_mates);       // ungapped mate alignment
+    params.alignment_type   = uint_option(options, "local",                 init ? 0u      : params.alignment_type == LocalAlignment ) ? LocalAlignment : EndToEndAlignment;           // local alignment
+    params.keep_stats       = (bool)uint_option(options, "stats",           init ? 1u      : params.keep_stats);           // keep stats
+    params.max_hits         = uint_option(options, "max-hits",              init ? 100u    : params.max_hits);             // too big = memory exhaustion 
+    params.max_dist         = uint_option(options, "max-dist",              init ? 15u     : params.max_dist);             // must be <= MAX_BAND_LEN/2
+    params.max_effort_init  = uint_option(options, "max-effort-init",       init ? 15u     : params.max_effort_init);      // initial scoring effort limit
+    params.max_effort       = uint_option(options, "max-effort",    "D",    init ? 15u     : params.max_effort);           // scoring effort limit
+    params.min_ext          = uint_option(options, "min-ext",               init ? 30u     : params.min_ext);              // min # of extensions
+    params.max_ext          = uint_option(options, "max-ext",               init ? 400u    : params.max_ext);              // max # of extensions
+    params.max_reseed       = uint_option(options, "max-reseed",    "R",    init ? 2u      : params.max_reseed);           // max # of reseeding rounds
+    params.rep_seeds        = uint_option(options, "rep-seeds",             init ? 1000u   : params.rep_seeds);            // reseeding threshold
+    params.allow_sub        = uint_option(options, "N",                     init ? 0u      : params.allow_sub);            // allow substitution in seed
+    params.mapq_filter      = uint_option(options, "mapQ-filter",   "Q",    init ? 0u      : params.mapq_filter);          // filter anything below this
+    params.report           = string_option(options, "report",              init ? ""      : params.report.c_str());       // generate a report file
+    params.scoring_file     = string_option(options, "scoring-scheme",      init ? ""      : params.scoring_file.c_str());
+    params.randomized       = uint_option(options, "rand",                  init ? 1u      : params.randomized);           // use randomized selection
+    params.randomized       =!uint_option(options, "no-rand",                               !params.randomized);           // don't use randomized selection
+    params.top_seed         = uint_option(options, "top",                   init ? 0u      : params.top_seed);             // explore top seed entirely
+    params.min_read_len     = uint_option(options, "min-read-len",          init ? 12u     : params.min_read_len);         // minimum read length
+    params.ungapped_mates   = uint_option(options, "ungapped-mates", "ug",  init ? 0u      : params.ungapped_mates);       // ungapped mate alignment
 
     const bool local = params.alignment_type == LocalAlignment;
 
-    params.seed_len         = uint_option(options, "seed-len",         init ? (local ? 20 : 22u)        : params.seed_len);    // no greater than 32
-    params.seed_freq.type   = SimpleFunc::SqrtFunc;
-    params.seed_freq.k      = 1.0f;
-    params.seed_freq.m      = float_option(options, "seed-freq",       init ? (local ? 0.75f : 1.15)    : params.seed_freq.m); // seed interval
-    params.subseed_len      = uint_option(options, "subseed-len",      init ? 0u      : params.subseed_len);          // no greater than 32
+    const SimpleFunc seed_freq( SimpleFunc::SqrtFunc, 1.0f, (local ? 0.75f : 1.15) );
+
+    params.seed_len         = uint_option(options,  "seed-len",      "L",   init ? (local ? 20 : 22u)       : params.seed_len);    // no greater than 32
+    params.seed_freq        = func_option( options, "seed-freq",     "i",   init ? seed_freq                : params.seed_freq );  // seed interval
+    params.subseed_len      = uint_option(options,  "subseed-len",          init ? 0u                       : params.subseed_len); // no greater than 32
 
     params.pe_overlap    = uint_option(options, "overlap",          init ? 1u      : params.pe_overlap);            // paired-end overlap
     params.pe_dovetail   = uint_option(options, "dovetail",         init ? 0u      : params.pe_dovetail);           // paired-end dovetail

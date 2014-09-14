@@ -195,24 +195,26 @@
 ///      --verbosity                      verbosity level
 ///      --local                          perform local alignment
 ///    Seeding:
-///      --seed-len         int   [22]                   seed lengths
-///      --seed-freq        float [local ? 0.75 : 1.15]  interval between seeds
-///      --max-hits         int   [100]                  maximum amount of seed hits
-///      --max-reseed       int   [2]                    number of reseeding rounds
+///      --seed-len   | -L   int  [22]                       seed lengths
+///      --seed-freq  | -i   func [S,1,local ? 0.75 : 1.15]  seed interval function
+///      --max-hits          int  [100]                      maximum amount of seed hits
+///      --max-reseed | -R   int  [2]                        number of reseeding rounds
 ///    Extension:
 ///      --rand                           randomized seed selection
-///      --max-dist         int [15]      maximum edit distance
-///      --max-effort-init  int [15]      initial maximum number of consecutive extension failures
-///      --max-effort       int [15]      maximum number of consecutive extension failures
-///      --min-ext          int [30]      minimum number of extensions per read
-///      --max-ext          int [400]     maximum number of extensions per read
-///      --minins           int [0]       minimum insert length
-///      --minins           int [500]     maximum insert length
+///      --no-rand                        disable randomized seed selection
+///      --max-dist          int [15]     maximum edit distance
+///      --max-effort-init   int [15]     initial maximum number of consecutive extension failures
+///      --max-effort | -D   int [15]     maximum number of consecutive extension failures
+///      --min-ext           int [30]     minimum number of extensions per read
+///      --max-ext           int [400]    maximum number of extensions per read
+///      --minins            int [0]      minimum insert length
+///      --minins            int [500]    maximum insert length
 ///      --overlap                        allow overlapping mates
 ///      --dovetail                       allow dovetailing mates
 ///      --no-mixed                       only report paired alignments
+///      --ungapped-mates | -ug           perform ungapped mate alignment
 ///    Reporting:
-///      --mapQ-filter      int [0]       minimum mapQ threshold
+///      --mapQ-filter | -Q  int [0]       minimum mapQ threshold
 ///\endverbatim
 ///
 ///\par

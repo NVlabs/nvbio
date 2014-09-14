@@ -121,22 +121,6 @@ struct ConstantCost
 };
 
 ///
-/// minimum score functor (function of a read's length)
-///
-struct MinScoreFunc
-{
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    MinScoreFunc(const ScoringFuncType type, const float k, const float m) : m_k(k), m_m(m), m_type( type ) {}
-
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    int32 operator() (const int32 x) const { return int32( m_k + m_m * (m_type == LogFunc ? logf(float(x)) : float(x)) ); }
-
-    float             m_k;
-    float             m_m;
-    ScoringFuncType   m_type;
-};
-
-///
 /// This class implements an edit-distance based scoring scheme for short read alignment.
 /// While the original bowtie2 code base always performs alignment using Gotoh's algorithm
 /// (i.e. Smith-Waterman with affine gap penalties), nvBowtie also supports edit-distance,
@@ -241,7 +225,7 @@ struct SmithWatermanScoringScheme
     typedef MismatchCost      mismatch_cost_function;
     typedef NCost             N_cost_function;
 
-    typedef MinScoreFunc      threshold_score_type;
+    typedef SimpleFunc        threshold_score_type;
 
     static const int32 inf_score     = -(1 << 16);
     static const int32 worst_score   =  inf_score;
@@ -293,7 +277,7 @@ struct SmithWatermanScoringScheme
 
     /// min score function
     ///
-    MinScoreFunc threshold_score(const Params& params) const { return m_score_min; }
+    SimpleFunc threshold_score(const Params& params) const { return m_score_min; }
 
     /// score limit value
     ///
@@ -356,7 +340,7 @@ struct SmithWatermanScoringScheme
     // -------- end: helper methods to perform final scoring --------------------------------------------------- //
 
 public:
-    MinScoreFunc    m_score_min;            // minimum read score function
+    SimpleFunc      m_score_min;            // minimum read score function
     float           m_n_ceil_const;         // constant for the function governing the ceiling on the number of N's, depending on the read-length
     float           m_n_ceil_coeff;         // coefficient for the function governing the ceiling on the number of N's, depending on the read-length
     int             m_read_gap_const;       // reap gap open penalty
@@ -371,8 +355,8 @@ public:
     bool            m_local;                // are we doing local alignment?
 
 private:
-    static ScoringFuncType func_type(const std::string& type);
-    static MinScoreFunc min_score_function(const std::map<std::string,std::string>& options);
+    static SimpleFunc::Type func_type(const std::string& type);
+    static SimpleFunc min_score_function(const std::map<std::string,std::string>& options);
     static MatchCost match_cost(const std::map<std::string,std::string>& options);
     static MMCost mm_cost(const std::map<std::string,std::string>& options);
     static NCost n_cost(const std::map<std::string,std::string>& options);

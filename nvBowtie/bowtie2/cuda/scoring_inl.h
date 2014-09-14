@@ -106,7 +106,7 @@ template <
     typename NCost>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 SmithWatermanScoringScheme<MMCost,NCost>::SmithWatermanScoringScheme() :
-    m_score_min( LinearFunc, -0.6f, -0.6f ),
+    m_score_min( SimpleFunc::LinearFunc, -0.6f, -0.6f ),
     m_n_ceil_const( 0.0f ),
     m_n_ceil_coeff( 0.15f ),
     m_read_gap_const( 5 ),
@@ -149,20 +149,22 @@ SmithWatermanScoringScheme<MMCost,NCost>::SmithWatermanScoringScheme(
 template <
     typename MMCost,
     typename NCost>
-ScoringFuncType SmithWatermanScoringScheme<MMCost,NCost>::func_type(const std::string& type)
+SimpleFunc::Type SmithWatermanScoringScheme<MMCost,NCost>::func_type(const std::string& type)
 {
     if (strcmp( type.c_str(), "log" ) == 0)
-        return LogFunc;
+        return SimpleFunc::LogFunc;
+    else if (strcmp( type.c_str(), "sqrt" ) == 0)
+        return SimpleFunc::SqrtFunc;
 
-    return LinearFunc;
+    return SimpleFunc::LinearFunc;
 }
 
 template <
     typename MMCost,
     typename NCost>
-MinScoreFunc SmithWatermanScoringScheme<MMCost,NCost>::min_score_function(const std::map<std::string,std::string>& options)
+SimpleFunc SmithWatermanScoringScheme<MMCost,NCost>::min_score_function(const std::map<std::string,std::string>& options)
 {
-    return MinScoreFunc(
+    return SimpleFunc(
         func_type( string_option( options, "score-min-type", "linear" ) ),
         float_option( options, "score-min-const", -0.6f ), // 37.0f
         float_option( options, "score-min-coeff", -0.6f ) ); // 0.3f

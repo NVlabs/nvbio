@@ -198,11 +198,16 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
 
     const bool local = params.alignment_type == LocalAlignment;
 
-    const SimpleFunc seed_freq( SimpleFunc::SqrtFunc, 1.0f, (local ? 0.75f : 1.15) );
+    // set the default seeding values, or reset them if the alignment type has been changed
+    if (init || (local != old_local))
+    {
+        params.seed_len = local ? 20 : 22u;
+        params.seed_freq = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, (local ? 0.75f : 1.15) );
+    }
 
-    params.seed_len         = uint_option(options,  "seed-len",      "L",   init ? (local ? 20 : 22u)       : params.seed_len);    // no greater than 32
-    params.seed_freq        = func_option( options, "seed-freq",     "i",   init ? seed_freq                : params.seed_freq );  // seed interval
-    params.subseed_len      = uint_option(options,  "subseed-len",          init ? 0u                       : params.subseed_len); // no greater than 32
+    params.seed_len         = uint_option(options,  "seed-len",      "L",                    params.seed_len);      // no greater than 32
+    params.seed_freq        = func_option( options, "seed-freq",     "i",                    params.seed_freq );    // seed interval
+    params.subseed_len      = uint_option(options,  "subseed-len",          init ? 0u      : params.subseed_len);   // no greater than 32
 
     params.pe_overlap    = uint_option(options, "overlap",          init ? 1u      : params.pe_overlap);            // paired-end overlap
     params.pe_overlap    =!uint_option(options, "no-overlap",                       !params.pe_overlap);            // paired-end overlap

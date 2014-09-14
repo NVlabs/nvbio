@@ -106,7 +106,7 @@ int main(int argc, char* argv[])
         log_info(stderr,"    --rand                           randomized seed selection\n");
         log_info(stderr,"    --max-dist          int [15]     maximum edit distance\n");
         log_info(stderr,"    --max-effort-init   int [15]     initial maximum number of consecutive extension failures\n");
-        log_info(stderr,"    --max-effort|-D     int [15]     maximum number of consecutive extension failures\n");
+        log_info(stderr,"    --max-effort | -D   int [15]     maximum number of consecutive extension failures\n");
         log_info(stderr,"    --min-ext           int [30]     minimum number of extensions per read\n");
         log_info(stderr,"    --max-ext           int [400]    maximum number of extensions per read\n");
         log_info(stderr,"    --minins            int [0]      minimum insert length\n");

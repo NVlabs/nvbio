@@ -180,7 +180,7 @@
 /// nvBowtie --pe [options] reference-genome read-file1 read-file2 output
 ///  options:
 ///    General:
-///      --max-reads        int [-1]      maximum number of reads to process
+///      --upto | -u        int [-1]      maximum number of reads to process
 ///      --device           int [0]       select the given cuda device
 ///      --file-ref                       load reference from file
 ///      --server-ref                     load reference from server

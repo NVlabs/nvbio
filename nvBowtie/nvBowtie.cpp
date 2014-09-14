@@ -154,19 +154,21 @@ int main(int argc, char* argv[])
             pe_policy = io::PE_POLICY_RF;
         else if (strcmp( argv[i], "--rr" ) == 0)
             pe_policy = io::PE_POLICY_RR;
-        else if (strcmp( argv[i], "-max-reads" ) == 0 ||
-                 strcmp( argv[i], "--max-reads" ) == 0)
+        else if (strcmp( argv[i], "-max-reads" )  == 0 ||
+                 strcmp( argv[i], "--max-reads" ) == 0 ||
+                 strcmp( argv[i], "-u" )          == 0 ||
+                 strcmp( argv[i], "--upto" )      == 0)
             max_reads = atoi( argv[++i] );
-        else if (strcmp( argv[i], "-max-read-len" ) == 0 ||
+        else if (strcmp( argv[i], "-max-read-len" )  == 0 ||
                  strcmp( argv[i], "--max-read-len" ) == 0)
             max_read_len = atoi( argv[++i] );
-        else if (strcmp( argv[i], "-file-ref" ) == 0 ||
+        else if (strcmp( argv[i], "-file-ref" )  == 0 ||
                  strcmp( argv[i], "--file-ref" ) == 0)
             from_file = true;
-        else if (strcmp( argv[i], "-server-ref" ) == 0 ||
+        else if (strcmp( argv[i], "-server-ref" )  == 0 ||
                  strcmp( argv[i], "--server-ref" ) == 0)
             from_file = false;
-        else if (strcmp( argv[i], "-input" ) == 0 ||
+        else if (strcmp( argv[i], "-input" )  == 0 ||
                  strcmp( argv[i], "--input" ) == 0)
         {
             if (strcmp( argv[i+1], "file" ) == 0)

@@ -86,9 +86,21 @@
 /// \section RecentNew Recent News
 ///\par
 /// <table>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">15/09/2014 \n NVBIO 0.9.95</td>
+/// <td style="vertical-align:text-top;" width="90%">
+/// - <b>New Features:</b> \n
+///   * Added many Bowtie2-compatible command line options to nvBowtie
+///   * Added --ungapped-mates option to nvBowtie, which doubles speed at a minor cost in sensitivity (<0.2%)
+/// - <b>Bug Fixes:</b> \n
+///   * Fixed several memory-corruption bugs in nvBowtie's paired-end alignment
+/// </td></tr>
+/// </table>
+///\par
+/// <table>
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">26/05/2014 \n NVBIO 0.9.9</td>
 /// <td style="vertical-align:text-top;" width="90%">
 /// - <b>New Features:</b> \n
+///   * Added a new \ref AlphabetsSection "Alphabets" module for managing different alphabets.
 ///   * Added a new \ref sequence_io_page "Sequence IO" module for managing all kinds of sequence data;
 ///		unlike the old io::ReadData, the containers in this module support various types
 ///		of alphabet encodings, and can be used both for loading reads as well as for reading or mapping

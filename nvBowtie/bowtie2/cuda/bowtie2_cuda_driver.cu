@@ -171,8 +171,8 @@ SimpleFunc func_option(const options_type& options, const char* name1, const cha
 
 void parse_options(Params& params, const std::map<std::string,std::string>& options, bool init)
 {
-    const bool        old_local        = params.alignment_type == LocalAlignment;
-    const ScoringMode old_scoring_mode = params.scoring_mode;
+    const bool   old_local        = params.alignment_type == LocalAlignment;
+    const uint32 old_scoring_mode = params.scoring_mode;
 
     params.mode             = mapping_mode( string_option(options, "mode",    init ? "best" : mapping_mode( params.mode )).c_str() ); // mapping mode
     params.scoring_mode     = scoring_mode( string_option(options, "scoring", init ? "sw"   : scoring_mode( params.scoring_mode )).c_str() ); // scoring mode

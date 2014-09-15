@@ -83,11 +83,12 @@ template< typename FMType, typename StreamType > NVBIO_DEVICE NVBIO_FORCEINLINE
 uint2 match_range(uint2 range, const FMType index, StreamType query,
                   uint32 begin, uint32 end)
 {
-    for(uint32 i=begin; i<end && range.x<=range.y; ++i) {
-        uint8 c = query[i];
-        if(c>3)  return make_uint2(1, 0);
+    for (uint32 i = begin; i < end && range.x <= range.y; ++i)
+    {
+        const uint8 c = query[i];
+        if (c > 3)  return make_uint2(1, 0);
 
-        uint2 bwt_cnts = rank(index, make_uint2(range.x-1, range.y), c);
+        const uint2 bwt_cnts = rank(index, make_uint2(range.x-1, range.y), c);
         range.x = index.L2(c) + bwt_cnts.x + 1;
         range.y = index.L2(c) + bwt_cnts.y;
     }
@@ -125,7 +126,7 @@ template< bool find_exact,
           typename FMType,
           typename HitType> NVBIO_DEVICE NVBIO_FORCEINLINE
 void map(const Stream query, 
-         const uint32 len1,
+         /*const*/ uint32 len1,
          const uint32 len2,
          const FMType index,
          const SeedHit::Flags hit_flags,
@@ -141,9 +142,27 @@ void map(const Stream query,
     // call.
     //
 
+    // if there is an N, we can do exact matching till the N
+    uint32 N_pos = 0;
+    uint32 N_cnt = 0;
+    for (uint32 i = 0; i < len2; ++i)
+    {
+        const uint8 c = query[i];
+        if (c > 3)
+        {
+            // if the N is in our exact-matching region, or it is the second one, we cannot align this
+            if (i < len1 || N_cnt) return;
+
+            N_pos = i;
+            N_cnt++;
+        }
+    }
+    // do exact-matching till the N, if there is one
+    len1 = N_cnt ? N_pos : len1;
+
     // Exact Match first half of read
     uint2 base_range = make_uint2(0, index.length());
-    base_range = match_range(base_range, index, query, 0, len1);
+          base_range = match_range(base_range, index, query, 0, len1);
 
     // Allow an error in the next batch
     for(uint32 i = len1; i < len2 && base_range.x <= base_range.y; ++i)
@@ -155,11 +174,14 @@ void map(const Stream query,
         rank4(index, make_uint2(base_range.x-1, base_range.y), &occ_lo, &occ_hi);
 
         // Try each character
-        for(uint8 sub=0; sub<4; ++sub) {
-            if( sub != c && comp(occ_hi, sub) > comp(occ_lo, sub) ) {
+        for (uint8 sub = 0; sub < 4; ++sub)
+        {
+            if (sub != c && comp(occ_hi, sub) > comp(occ_lo, sub))
+            {
                 // Manually insert sub
                 uint2 range = make_uint2(index.L2(sub) + comp(occ_lo, sub) + 1,
                                          index.L2(sub) + comp(occ_hi, sub) );
+
                 // Extend match to end of read
                 range = match_range(range, index, query, i+1, len2);
 
@@ -174,8 +196,9 @@ void map(const Stream query,
                 }
             }
         }
+
         // Extend base_range
-        if( c < 4 ) {
+        if (c < 4) {
             base_range.x = index.L2(c) + comp(occ_lo, c) + 1;
             base_range.y = index.L2(c) + comp(occ_hi, c);
         } else { base_range = make_uint2(1, 0); break; }
@@ -226,7 +249,7 @@ struct seed_mapper<EXACT_MAPPING>
         // First we have to buffer the seed into shared memory.
         const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
         const uint32 seed_offs = pos & (SYMBOLS_PER_WORD-1); // pos % 8, there are 8 bases per uint32
-        const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD) / SYMBOLS_PER_WORD; //seed_len/8+1
+        const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD; //seed_len/8+1
         const uint32 fword     = pos / SYMBOLS_PER_WORD;
         for (uint32 i = 0; i < nwords; ++i)
             S[i] = read_batch.sequence_storage()[fword + i];
@@ -321,7 +344,7 @@ struct seed_mapper<APPROX_MAPPING>
         // First we have to buffer the seed into shared memory.
         const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
         const uint32 seed_offs = pos & (SYMBOLS_PER_WORD-1); // pos % 8, there are 8 bases per uint32
-        const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD) / SYMBOLS_PER_WORD; //seed_len/8+1
+        const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD; //seed_len/8+1
         const uint32 fword     = pos / SYMBOLS_PER_WORD;
         for (uint32 i = 0; i < nwords; ++i)
             S[i] = read_batch.sequence_storage()[fword + i];
@@ -335,6 +358,8 @@ struct seed_mapper<APPROX_MAPPING>
 
         // Standard seed=0, forward scan, forward index=0
         const fSeedReader f_reader(reader, forward_offset);
+        if (util::count_occurrences( f_reader, seed_len, 4u, 2u ))
+            return;
         flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-seed_len);
         map<CHECK_EXACT> (f_reader,  params.subseed_len, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
 
@@ -379,7 +404,7 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
         // First we have to buffer the seed into shared memory.
         const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
         const uint32 seed_offs = pos & (SYMBOLS_PER_WORD-1); // pos % 8, there are 8 bases per uint32
-        const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD) / SYMBOLS_PER_WORD; //seed_len/8+1
+        const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD; //seed_len/8+1
         const uint32 fword     = pos / SYMBOLS_PER_WORD;
         for (uint32 i = 0; i < nwords; ++i)
             S[i] = read_batch.sequence_storage()[fword + i];
@@ -496,7 +521,7 @@ void map_kernel(
     // Pad shared by 1 uint32 because seed may not start at beginning of uint.
     // For MAX_SEED=32, SHARED_DIM=5, so gcd(SHARED_DIM, SMEM_BANKS)=1, and
     // we don't have to worry about bank conflicts.
-    enum { SHARED_DIM = MAX_SEED/8+1 };
+    enum { SHARED_DIM = MAX_SEED/8+2 };
     __shared__ uint32 S[BLOCKDIM][SHARED_DIM];
 
     const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;
@@ -573,7 +598,7 @@ void map_kernel(
     // Pad shared by 1 uint32 because seed may not start at beginning of uint.
     // For MAX_SEED=32, SHARED_DIM=5, so gcd(SHARED_DIM, SMEM_BANKS)=1, and
     // we don't have to worry about bank conflicts.
-    enum { SHARED_DIM = MAX_SEED/8+1 };
+    enum { SHARED_DIM = MAX_SEED/8+2 };
     __shared__ uint32 S[BLOCKDIM][SHARED_DIM];
 
     const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;

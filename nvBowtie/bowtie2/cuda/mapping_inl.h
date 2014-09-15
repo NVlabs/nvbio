@@ -333,24 +333,34 @@ struct seed_mapper<APPROX_MAPPING>
         uint32&             range_count,
         const ParamsPOD&    params)
     {
-        //typedef const_cached_iterator<const uint32*> BaseStream;
+    #if 0
         typedef PackedStream<
             const uint32*,uint8,
             BatchType::SEQUENCE_BITS,
             BatchType::SEQUENCE_BIG_ENDIAN> Reader;
 
-        Reader reader(S);
-
         // First we have to buffer the seed into shared memory.
         const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
-        const uint32 seed_offs = pos & (SYMBOLS_PER_WORD-1); // pos % 8, there are 8 bases per uint32
-        const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD; //seed_len/8+1
-        const uint32 fword     = pos / SYMBOLS_PER_WORD;
-        for (uint32 i = 0; i < nwords; ++i)
-            S[i] = read_batch.sequence_storage()[fword + i];
+        const uint32 storage_offset   = pos;
+        const uint32 word_offset      = storage_offset & (SYMBOLS_PER_WORD-1);
+        const uint32 begin_word       = storage_offset / SYMBOLS_PER_WORD;
+        const uint32 end_word         = (storage_offset + seed_len + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
+        NVBIO_CUDA_DEBUG_ASSERT( end_word <= read_batch.words(), "map_kernel(): seed %u accessing word %u / %u", pos, end_word, read_batch.words() );
+        for (uint32 i = begin_word; i < end_word; ++i)
+            S[i - begin_word] = read_batch.sequence_storage()[i];
 
-        const OffsetXform <typename Reader::index_type> forward_offset(seed_offs);
-        const ReverseXform<typename Reader::index_type> reverse_offset(seed_offs+seed_len);
+        Reader reader(S);
+
+        const OffsetXform <typename Reader::index_type> forward_offset(word_offset);
+        const ReverseXform<typename Reader::index_type> reverse_offset(word_offset+seed_len);
+    #else
+        typedef typename BatchType::sequence_stream_type Reader;
+
+        Reader reader( read_batch.sequence_storage() );
+
+        const OffsetXform <typename Reader::index_type> forward_offset(pos);
+        const ReverseXform<typename Reader::index_type> reverse_offset(pos + seed_len);
+    #endif
         typedef index_transform_iterator< Reader, OffsetXform <typename Reader::index_type> > fSeedReader;
         typedef index_transform_iterator< Reader, ReverseXform<typename Reader::index_type> > rSeedReader;
 
@@ -393,24 +403,34 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
         uint32&             range_count,
         const ParamsPOD&    params)
     {
-        //typedef const_cached_iterator<const uint32*> BaseStream;
+    #if 0
         typedef PackedStream<
             const uint32*,uint8,
             BatchType::SEQUENCE_BITS,
             BatchType::SEQUENCE_BIG_ENDIAN> Reader;
 
-        Reader reader(S);
-
         // First we have to buffer the seed into shared memory.
         const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
-        const uint32 seed_offs = pos & (SYMBOLS_PER_WORD-1); // pos % 8, there are 8 bases per uint32
-        const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD; //seed_len/8+1
-        const uint32 fword     = pos / SYMBOLS_PER_WORD;
-        for (uint32 i = 0; i < nwords; ++i)
-            S[i] = read_batch.sequence_storage()[fword + i];
+        const uint32 storage_offset   = pos;
+        const uint32 word_offset      = storage_offset & (SYMBOLS_PER_WORD-1);
+        const uint32 begin_word       = storage_offset / SYMBOLS_PER_WORD;
+        const uint32 end_word         = (storage_offset + seed_len + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
+        NVBIO_CUDA_DEBUG_ASSERT( end_word <= read_batch.words(), "map_kernel(): seed %u accessing word %u / %u", pos, end_word, read_batch.words() );
+        for (uint32 i = begin_word; i < end_word; ++i)
+            S[i - begin_word] = read_batch.sequence_storage()[i];
 
-        const OffsetXform <typename Reader::index_type> forward_offset(seed_offs);
-        const ReverseXform<typename Reader::index_type> reverse_offset(seed_offs+seed_len);
+        Reader reader(S);
+
+        const OffsetXform <typename Reader::index_type> forward_offset(word_offset);
+        const ReverseXform<typename Reader::index_type> reverse_offset(word_offset+seed_len);
+    #else
+        typedef typename BatchType::sequence_stream_type Reader;
+
+        Reader reader( read_batch.sequence_storage() );
+
+        const OffsetXform <typename Reader::index_type> forward_offset(pos);
+        const ReverseXform<typename Reader::index_type> reverse_offset(pos + seed_len);
+    #endif
         typedef index_transform_iterator< Reader, OffsetXform <typename Reader::index_type> > fSeedReader;
         typedef index_transform_iterator< Reader, ReverseXform<typename Reader::index_type> > rSeedReader;
 
@@ -521,7 +541,7 @@ void map_kernel(
     // Pad shared by 1 uint32 because seed may not start at beginning of uint.
     // For MAX_SEED=32, SHARED_DIM=5, so gcd(SHARED_DIM, SMEM_BANKS)=1, and
     // we don't have to worry about bank conflicts.
-    enum { SHARED_DIM = MAX_SEED/8+2 };
+    enum { SHARED_DIM = MAX_SEED/8+1 };
     __shared__ uint32 S[BLOCKDIM][SHARED_DIM];
 
     const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;
@@ -598,7 +618,7 @@ void map_kernel(
     // Pad shared by 1 uint32 because seed may not start at beginning of uint.
     // For MAX_SEED=32, SHARED_DIM=5, so gcd(SHARED_DIM, SMEM_BANKS)=1, and
     // we don't have to worry about bank conflicts.
-    enum { SHARED_DIM = MAX_SEED/8+2 };
+    enum { SHARED_DIM = MAX_SEED/8+1 };
     __shared__ uint32 S[BLOCKDIM][SHARED_DIM];
 
     const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;

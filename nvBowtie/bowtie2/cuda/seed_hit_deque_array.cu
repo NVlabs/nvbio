@@ -25,68 +25,40 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <nvBowtie/bowtie2/cuda/seed_hit_deque_array.h>
+#include <nvbio/basic/sum_tree.h>
+
 namespace nvbio {
 namespace bowtie2 {
 namespace cuda {
 
-// return the device view
+// resize the arena
 //
-inline
-SeedHitDequeArrayDeviceView SeedHitDequeArray::device_view()
+// \return     # of allocated bytes
+uint64 SeedHitDequeArray::resize(const uint32 n_reads, const uint32 max_hits, const bool do_alloc)
 {
-    return SeedHitDequeArrayDeviceView(
-        nvbio::device_view( m_counts ),
-        nvbio::device_view( m_index ),
-        nvbio::device_view( m_hits ),
-        nvbio::device_view( m_probs ),
-        nvbio::device_view( m_pool ) );
+    uint64 bytes = 0u;
+    uint32 max_nodes = SumTree<float*>::node_count( max_hits );
+    if (do_alloc) m_counts.resize( n_reads );               bytes += n_reads * sizeof(uint32);
+    if (do_alloc) m_index.resize( n_reads );                bytes += n_reads * sizeof(uint32);
+    if (do_alloc) m_hits.resize( n_reads * max_hits );      bytes += n_reads * max_hits * sizeof(SeedHit);
+    if (do_alloc) m_probs.resize( n_reads * max_nodes );    bytes += n_reads * max_nodes * sizeof(float);
+    if (do_alloc) m_pool.resize( 1, 0u );                   bytes += sizeof(uint32);
+
+    if (do_alloc) thrust::fill( m_counts.begin(), m_counts.end(), uint32(0) );
+    if (do_alloc) thrust::fill( m_index.begin(),  m_index.end(),  uint32(0) );
+    return bytes;
 }
 
-// constructor
-//
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-SeedHitDequeArrayDeviceView::SeedHitDequeArrayDeviceView(
-    index_storage_type  counts,
-    index_storage_type  index,
-    hits_storage_type   hits,
-    prob_storage_type   probs,
-    index_storage_type  pool) :
-    m_counts( counts ),
-    m_hits( hits ),
-    m_probs( probs ),
-    m_index( index ),
-    m_pool( pool )
-{}
-
-// return a reference to the given deque
-//
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-SeedHitDequeArrayDeviceView::reference SeedHitDequeArrayDeviceView::operator[] (const uint32 read_id)
+/// clear all deques
+///
+void SeedHitDequeArray::clear_deques()
 {
-    return reference( *this, read_id );
-}
+    // reset deque size counters
+    thrust::fill( m_counts.begin(), m_counts.end(), uint32(0) );
+    thrust::fill( m_index.begin(),  m_index.end(),  uint32(0) );
 
-// allocate some storage for the deque bound to a given read
-//
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-SeedHit* SeedHitDequeArrayDeviceView::alloc_deque(const uint32 read_id, const uint32 size)
-{
-#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ > 0
-    m_counts[read_id] = 0u;
-    m_index[read_id]  = size ? atomicAdd( m_pool, size ) : 0u;
-    return m_hits + m_index[read_id];
-#else
-    return NULL;
-#endif
-}
-
-// return the deque bound to a given read
-//
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename SeedHitDequeArrayDeviceView::hit_deque_type SeedHitDequeArrayDeviceView::get_deque(const uint32 read_id, bool build_heap) const
-{
-    hit_vector_type hit_vector( m_counts[read_id], get_data( read_id ) );
-    return hit_deque_type( hit_vector, build_heap );
+    m_pool[0] = 0; // reset the arena
 }
 
 } // namespace cuda

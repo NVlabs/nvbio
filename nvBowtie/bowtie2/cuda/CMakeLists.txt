@@ -43,6 +43,7 @@ seed_hit.h
 select.cu
 select.h
 select_inl.h
+seed_hit_deque_array.cu
 seed_hit_deque_array.h
 seed_hit_deque_array_inl.h
 seed_hit_deque_array_test.cu

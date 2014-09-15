@@ -37,6 +37,7 @@
 #include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/thrust_view.h>
 #include <nvbio/basic/priority_deque.h>
+#include <nvbio/basic/sum_tree.h>
 #include <nvbio/basic/vector_view.h>
 #include <nvbio/basic/vector.h>
 #include <algorithm>
@@ -68,7 +69,9 @@ struct SeedHitDequeArrayDeviceStorage
     index_storage_type   m_counts;      ///< per-read seed hit counters
     prob_storage_type    m_probs;       ///< global arena of SA probabilities
     index_storage_type   m_index;       ///< per-read index marking the beginning of the read's hits vector in the global arena
+    index_storage_type   m_probs_index; ///< per-read index marking the beginning of the read's hits vector in the global arena
     index_storage_type   m_pool;        ///< pool counter for the global arena
+    index_storage_type   m_probs_pool;  ///< pool counter for the global arena
 };
 
 ///
@@ -88,11 +91,13 @@ struct SeedHitDequeArrayHostStorage
     ///
     SeedHitDequeArrayHostStorage& operator=(const SeedHitDequeArrayDeviceStorage& other)
     {
-        nvbio::cuda::thrust_copy_vector( m_hits,    other.m_hits );
-        nvbio::cuda::thrust_copy_vector( m_counts,  other.m_counts );
-        nvbio::cuda::thrust_copy_vector( m_probs,   other.m_probs );
-        nvbio::cuda::thrust_copy_vector( m_index,   other.m_index );
-        nvbio::cuda::thrust_copy_vector( m_pool,    other.m_pool );
+        nvbio::cuda::thrust_copy_vector( m_hits,        other.m_hits );
+        nvbio::cuda::thrust_copy_vector( m_counts,      other.m_counts );
+        nvbio::cuda::thrust_copy_vector( m_probs,       other.m_probs );
+        nvbio::cuda::thrust_copy_vector( m_index,       other.m_index );
+        nvbio::cuda::thrust_copy_vector( m_probs_index, other.m_probs_index );
+        nvbio::cuda::thrust_copy_vector( m_pool,        other.m_pool );
+        nvbio::cuda::thrust_copy_vector( m_probs_pool,  other.m_probs_pool );
         return *this;
     }
 
@@ -100,7 +105,9 @@ struct SeedHitDequeArrayHostStorage
     index_storage_type   m_counts;      ///< per-read seed hit counters
     prob_storage_type    m_probs;       ///< global arena of SA probabilities
     index_storage_type   m_index;       ///< per-read index marking the beginning of the read's hits vector in the global arena
+    index_storage_type   m_probs_index; ///< per-read index marking the beginning of the read's hits vector in the global arena
     index_storage_type   m_pool;        ///< pool counter for the global arena
+    index_storage_type   m_probs_pool;        ///< pool counter for the global arena
 };
 
 ///
@@ -158,11 +165,13 @@ struct SeedHitDequeArrayDeviceView
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     SeedHitDequeArrayDeviceView(
-        index_storage_type  counts = index_storage_type(),
-        index_storage_type  index  = index_storage_type(),
-        hits_storage_type   hits   = hits_storage_type(),
-        prob_storage_type   probs  = prob_storage_type(),
-        index_storage_type  pool   = index_storage_type());
+        index_storage_type  counts      = index_storage_type(),
+        index_storage_type  index       = index_storage_type(),
+        hits_storage_type   hits        = hits_storage_type(),
+        index_storage_type  probs_index = index_storage_type(),
+        prob_storage_type   probs       = prob_storage_type(),
+        index_storage_type  pool        = index_storage_type(),
+        index_storage_type  probs_pool  = index_storage_type());
 
     /// return a reference to the given deque
     ///
@@ -193,7 +202,7 @@ struct SeedHitDequeArrayDeviceView
     /// get the storage for the hit vector bound to a given read
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    float* get_probs(const uint32 read_id) const { return m_probs.base() + m_index[read_id]; }
+    float* get_probs(const uint32 read_id) const { return m_probs.base() + m_probs_index[read_id]; }
 
     /// erase the set of hits bound to a read.
     /// NOTE: this method doesn't release the previously allocated memory!
@@ -211,7 +220,9 @@ struct SeedHitDequeArrayDeviceView
     index_storage_type   m_counts;      ///< per-read seed hit counters
     prob_storage_type    m_probs;       ///< global arena of SA probabilities
     index_storage_type   m_index;       ///< per-read index marking the beginning of the read's hits vector in the global arena
+    index_storage_type   m_probs_index; ///< per-read index marking the beginning of the read's hits vector in the global arena
     index_storage_type   m_pool;        ///< pool counter for the global arena
+    index_storage_type   m_probs_pool;  ///< pool counter for the global arena
 };
 
 ///

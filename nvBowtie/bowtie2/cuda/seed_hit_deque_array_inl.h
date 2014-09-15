@@ -38,8 +38,10 @@ SeedHitDequeArrayDeviceView SeedHitDequeArray::device_view()
         nvbio::device_view( m_counts ),
         nvbio::device_view( m_index ),
         nvbio::device_view( m_hits ),
+        nvbio::device_view( m_probs_index ),
         nvbio::device_view( m_probs ),
-        nvbio::device_view( m_pool ) );
+        nvbio::device_view( m_pool ),
+        nvbio::device_view( m_probs_pool ) );
 }
 
 // constructor
@@ -49,13 +51,17 @@ SeedHitDequeArrayDeviceView::SeedHitDequeArrayDeviceView(
     index_storage_type  counts,
     index_storage_type  index,
     hits_storage_type   hits,
+    index_storage_type  probs_index,
     prob_storage_type   probs,
-    index_storage_type  pool) :
+    index_storage_type  pool,
+    index_storage_type  probs_pool) :
     m_counts( counts ),
     m_hits( hits ),
     m_probs( probs ),
     m_index( index ),
-    m_pool( pool )
+    m_probs_index( probs_index ),
+    m_pool( pool ),
+    m_probs_pool( probs_pool )
 {}
 
 // return a reference to the given deque
@@ -74,6 +80,7 @@ SeedHit* SeedHitDequeArrayDeviceView::alloc_deque(const uint32 read_id, const ui
 #if defined(__CUDA_ARCH__) && __CUDA_ARCH__ > 0
     m_counts[read_id] = 0u;
     m_index[read_id]  = size ? atomicAdd( m_pool, size ) : 0u;
+    m_probs_index[read_id]  = size ? atomicAdd( m_probs_pool, SumTree<float*>::node_count( size ) ) : 0u;
     return m_hits + m_index[read_id];
 #else
     return NULL;

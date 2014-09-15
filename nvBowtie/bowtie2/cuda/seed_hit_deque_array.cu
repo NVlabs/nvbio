@@ -43,10 +43,13 @@ uint64 SeedHitDequeArray::resize(const uint32 n_reads, const uint32 max_hits, co
     if (do_alloc) m_index.resize( n_reads );                bytes += n_reads * sizeof(uint32);
     if (do_alloc) m_hits.resize( n_reads * max_hits );      bytes += n_reads * max_hits * sizeof(SeedHit);
     if (do_alloc) m_probs.resize( n_reads * max_nodes );    bytes += n_reads * max_nodes * sizeof(float);
+    if (do_alloc) m_probs_index.resize( n_reads );          bytes += n_reads * sizeof(uint32);
     if (do_alloc) m_pool.resize( 1, 0u );                   bytes += sizeof(uint32);
+    if (do_alloc) m_probs_pool.resize( 1, 0u );             bytes += sizeof(uint32);
 
-    if (do_alloc) thrust::fill( m_counts.begin(), m_counts.end(), uint32(0) );
-    if (do_alloc) thrust::fill( m_index.begin(),  m_index.end(),  uint32(0) );
+    if (do_alloc) thrust::fill( m_counts.begin(),       m_counts.end(),       uint32(0) );
+    if (do_alloc) thrust::fill( m_index.begin(),        m_index.end(),        uint32(0) );
+    if (do_alloc) thrust::fill( m_probs_index.begin(),  m_probs_index.end(),  uint32(0) );
     return bytes;
 }
 
@@ -55,10 +58,12 @@ uint64 SeedHitDequeArray::resize(const uint32 n_reads, const uint32 max_hits, co
 void SeedHitDequeArray::clear_deques()
 {
     // reset deque size counters
-    thrust::fill( m_counts.begin(), m_counts.end(), uint32(0) );
-    thrust::fill( m_index.begin(),  m_index.end(),  uint32(0) );
+    thrust::fill( m_counts.begin(),       m_counts.end(),       uint32(0) );
+    thrust::fill( m_index.begin(),        m_index.end(),        uint32(0) );
+    thrust::fill( m_probs_index.begin(),  m_probs_index.end(),  uint32(0) );
 
     m_pool[0] = 0; // reset the arena
+    m_probs_pool[0] = 0; // reset the arena
 }
 
 } // namespace cuda

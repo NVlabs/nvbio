@@ -244,8 +244,6 @@ struct seed_mapper<EXACT_MAPPING>
             BatchType::SEQUENCE_BITS,
             BatchType::SEQUENCE_BIG_ENDIAN> Reader;
 
-        Reader reader(S);
-
         // First we have to buffer the seed into shared memory.
         const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
         const uint32 seed_offs = pos & (SYMBOLS_PER_WORD-1); // pos % 8, there are 8 bases per uint32
@@ -254,6 +252,7 @@ struct seed_mapper<EXACT_MAPPING>
         for (uint32 i = 0; i < nwords; ++i)
             S[i] = read_batch.sequence_storage()[fword + i];
 
+        const Reader reader(S);
         const OffsetXform <typename Reader::index_type> forward_offset(seed_offs);
         const ReverseXform<typename Reader::index_type> reverse_offset(seed_offs+seed_len);
         typedef index_transform_iterator< Reader, OffsetXform <typename Reader::index_type> > fSeedReader;
@@ -349,15 +348,13 @@ struct seed_mapper<APPROX_MAPPING>
         for (uint32 i = begin_word; i < end_word; ++i)
             S[i - begin_word] = read_batch.sequence_storage()[i];
 
-        Reader reader(S);
-
+        const Reader reader(S);
         const OffsetXform <typename Reader::index_type> forward_offset(word_offset);
         const ReverseXform<typename Reader::index_type> reverse_offset(word_offset+seed_len);
     #else
         typedef typename BatchType::sequence_stream_type Reader;
 
-        Reader reader( read_batch.sequence_storage() );
-
+        const Reader reader( read_batch.sequence_storage() );
         const OffsetXform <typename Reader::index_type> forward_offset(pos);
         const ReverseXform<typename Reader::index_type> reverse_offset(pos + seed_len);
     #endif
@@ -419,15 +416,13 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
         for (uint32 i = begin_word; i < end_word; ++i)
             S[i - begin_word] = read_batch.sequence_storage()[i];
 
-        Reader reader(S);
-
+        const Reader reader(S);
         const OffsetXform <typename Reader::index_type> forward_offset(word_offset);
         const ReverseXform<typename Reader::index_type> reverse_offset(word_offset+seed_len);
     #else
         typedef typename BatchType::sequence_stream_type Reader;
 
-        Reader reader( read_batch.sequence_storage() );
-
+        const Reader reader( read_batch.sequence_storage() );
         const OffsetXform <typename Reader::index_type> forward_offset(pos);
         const ReverseXform<typename Reader::index_type> reverse_offset(pos + seed_len);
     #endif

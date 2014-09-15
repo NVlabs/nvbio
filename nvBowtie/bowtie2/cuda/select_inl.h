@@ -47,7 +47,7 @@ namespace cuda {
 // Initialize the hit-selection pipeline
 //
 template <typename ScoringScheme>
-void select_init(BestApproxScoringPipelineState<ScoringScheme>& pipeline, const ParamsPOD& params)
+void select_init_t(BestApproxScoringPipelineState<ScoringScheme>& pipeline, const ParamsPOD& params)
 {
     select_init(
         pipeline.reads.size(),
@@ -142,20 +142,29 @@ template <typename ProbTree>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 uint32 randomized_select(ProbTree& prob_tree, SeedHit* hits_data, uint32* rseeds, const uint32 read_id)
 {
-    // pick a new random value
-    const uint32 ri = 1664525u * rseeds[ read_id ] + 1013904223u;
+    for (uint32 i = 0; i < 10; ++i)
+    {
+        // pick a new random value
+        const uint32 ri = 1664525u * rseeds[ read_id ] + 1013904223u;
 
-    // store the new state
-    rseeds[ read_id ] = ri;
+        // store the new state
+        rseeds[ read_id ] = ri;
 
-    // convert to a float
-    const float rf = float(ri) / float(0xFFFFFFFFu);
+        // convert to a float
+        const float rf = float(ri) / float(0xFFFFFFFFu);
 
-    // select the next hit
-    const uint32 hit_id = sample( prob_tree, rf );
-    NVBIO_CUDA_ASSERT( hit_id < hits.get_size( read_id ) );
+        // select the next hit
+        const uint32 hit_id = sample( prob_tree, rf );
+        NVBIO_CUDA_ASSERT( hit_id < hits.get_size( read_id ) );
 
-    return hit_id;
+        SeedHit* hit = &hits_data[ hit_id ];
+
+        // this should never happen if we had infinite precision, but in practice because of rounding errors prob_tree.sum() might
+        // be non-zero even though its leaf values are: let's just check for this and call it a day.
+        if (hit->empty() == false)
+            return hit_id;
+    }
+    return 0;
 }
 
 ///
@@ -540,7 +549,7 @@ void rand_select_multi_kernel(
         {
             // stop traversal
             hits.erase( read_id );
-            break;
+            continue;
         }
 
         // fetch next SA row from the selected hit
@@ -772,7 +781,7 @@ void select(
 // Prepare for a round of seed extension by selecting the next SA rows for each read
 //
 template <typename ScoringScheme, typename ContextType>
-void select(
+void select_t(
     const ContextType                                       context,
     const BestApproxScoringPipelineState<ScoringScheme>&    pipeline,
     const ParamsPOD                                         params)

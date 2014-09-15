@@ -63,20 +63,13 @@ template <typename Iterator>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 void SumTree<Iterator>::setup(const value_type zero)
 {
+    // zero out padding cells
+    for (uint32 i = m_size; i < m_padded_size; ++i)
+        m_cells[i] = zero;
+
     uint32 src = 0;
-    {
-        const uint32 dst = src + m_padded_size;
 
-        const uint32 m = m_padded_size >> 1;
-        for (uint32 i = 0; i < m; ++i)
-        {
-            m_cells[ dst + i ] = (i*2    < m_size ? m_cells[ i*2 ]    : zero) +
-                                 (i*2+1u < m_size ? m_cells[ i*2+1u ] : zero);
-        }
-
-        src += m_padded_size;
-    }
-    for (uint32 n = m_padded_size/2; n >= 2; n >>= 1)
+    for (uint32 n = m_padded_size; n >= 2; n >>= 1)
     {
         const uint32 dst = src + n;
 
@@ -117,14 +110,15 @@ void SumTree<Iterator>::set(const uint32 i, const value_type v)
     uint32 parent_base = m_padded_size;
     uint32 parent      = i >> 1;
 
-    for (uint32 m = m_padded_size >> 1; m >= 2; m >>= 1, parent >>= 1)
+    for (uint32 m = m_padded_size >> 1; parent_base + parent < nodes(); m >>= 1)
     {
         m_cells[ parent_base + parent ] =
             m_cells[ prev_base + parent*2   ] +
             m_cells[ prev_base + parent*2+1 ];
 
-        prev_base    = parent_base;
-        parent_base += m;
+        prev_base     = parent_base;
+        parent_base  += m;
+        parent      >>= 1;
     }
 }
 

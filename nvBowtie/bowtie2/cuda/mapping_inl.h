@@ -536,7 +536,8 @@ void map_kernel(
     // Pad shared by 1 uint32 because seed may not start at beginning of uint.
     // For MAX_SEED=32, SHARED_DIM=5, so gcd(SHARED_DIM, SMEM_BANKS)=1, and
     // we don't have to worry about bank conflicts.
-    enum { SHARED_DIM = MAX_SEED/8+1 };
+    const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
+    enum { SHARED_DIM = MAX_SEED/SYMBOLS_PER_WORD+1 };
     __shared__ uint32 S[BLOCKDIM][SHARED_DIM];
 
     const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;
@@ -613,7 +614,8 @@ void map_kernel(
     // Pad shared by 1 uint32 because seed may not start at beginning of uint.
     // For MAX_SEED=32, SHARED_DIM=5, so gcd(SHARED_DIM, SMEM_BANKS)=1, and
     // we don't have to worry about bank conflicts.
-    enum { SHARED_DIM = MAX_SEED/8+1 };
+    const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
+    enum { SHARED_DIM = MAX_SEED/SYMBOLS_PER_WORD+1 };
     __shared__ uint32 S[BLOCKDIM][SHARED_DIM];
 
     const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;

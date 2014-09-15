@@ -26,6 +26,7 @@
  */
 
 #include <nvBowtie/bowtie2/cuda/mapping.h>
+#include <nvBowtie/bowtie2/cuda/mapping_impl.h>
 
 namespace nvbio {
 namespace bowtie2 {

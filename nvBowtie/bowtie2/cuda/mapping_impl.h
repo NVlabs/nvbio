@@ -76,22 +76,11 @@ namespace cuda {
 ///@{
 
 ///
-/// For all the seed hit ranges, output the range size in out_ranges.
-///
-void gather_ranges(
-    const uint32                    count,
-    const uint32                    n_reads,
-    SeedHitDequeArrayDeviceView     hits,
-    const uint32*                   hit_counts_scan,
-          uint64*                   out_ranges);
-
-///
 /// perform exact read mapping
 ///
-void map_whole_read(
-    const ReadsDef::type&                           read_batch,
-    const FMIndexDef::type                          fmi,
-    const FMIndexDef::type                          rfmi,
+template <typename BatchType, typename FMType, typename rFMType>
+void map_whole_read_t(
+    const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params);
@@ -100,10 +89,9 @@ void map_whole_read(
 /// perform one run of exact seed mapping for all the reads in the input queue,
 /// writing reads that need another run in the output queue
 ///
-void map_exact(
-    const ReadsDef::type&                           read_batch,
-    const FMIndexDef::type                          fmi,
-    const FMIndexDef::type                          rfmi,
+template <typename BatchType, typename FMType, typename rFMType>
+void map_exact_t(
+    const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     SeedHitDequeArrayDeviceView                     hits,
@@ -112,22 +100,32 @@ void map_exact(
 ///
 /// perform multiple runs of exact seed mapping in one go and keep the best
 ///
-void map_exact(
-    const ReadsDef::type&                           read_batch,
-    const FMIndexDef::type                          fmi,
-    const FMIndexDef::type                          rfmi,
+template <typename BatchType, typename FMType, typename rFMType>
+void map_exact_t(
+    const BatchType&            read_batch, const FMType fmi, const rFMType rfmi,
+    SeedHitDequeArrayDeviceView hits,
+    const uint2                 seed_range,
+    const ParamsPOD             params);
+
+///
+/// perform one run of approximate seed mapping using case pruning for all the reads in
+/// the input queue, writing reads that need another run in the output queue
+///
+template <typename BatchType, typename FMType, typename rFMType>
+void map_case_pruning_t(
+    const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
+    const uint32                                    retry,
+    const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     SeedHitDequeArrayDeviceView                     hits,
-    const uint2                                     seed_range,
     const ParamsPOD                                 params);
 
 ///
 /// perform one run of approximate seed mapping for all the reads in the input queue,
 /// writing reads that need another run in the output queue
 ///
-void map_approx(
-    const ReadsDef::type&                           read_batch,
-    const FMIndexDef::type                          fmi,
-    const FMIndexDef::type                          rfmi,
+template <typename BatchType, typename FMType, typename rFMType>
+void map_approx_t(
+    const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     SeedHitDequeArrayDeviceView                     hits,
@@ -136,21 +134,19 @@ void map_approx(
 ///
 /// perform multiple runs of approximate seed mapping in one go and keep the best
 ///
-void map_approx(
-    const ReadsDef::type&                           read_batch,
-    const FMIndexDef::type                          fmi,
-    const FMIndexDef::type                          rfmi,
-    SeedHitDequeArrayDeviceView                     hits,
-    const uint2                                     seed_range,
-    const ParamsPOD                                 params);
+template <typename BatchType, typename FMType, typename rFMType>
+void map_approx_t(
+    const BatchType&            read_batch, const FMType fmi, const rFMType rfmi,
+    SeedHitDequeArrayDeviceView hits,
+    const uint2                 seed_range,
+    const ParamsPOD             params);
 
 ///
 /// perform one run of seed mapping
 ///
-void map(
-    const ReadsDef::type&                           read_batch,
-    const FMIndexDef::type                          fmi,
-    const FMIndexDef::type                          rfmi,
+template <typename BatchType, typename FMType, typename rFMType>
+void map_t(
+    const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     SeedHitDequeArrayDeviceView                     hits,
@@ -162,3 +158,5 @@ void map(
 } // namespace cuda
 } // namespace bowtie2
 } // namespace nvbio
+
+#include <nvBowtie/bowtie2/cuda/mapping_inl.h>

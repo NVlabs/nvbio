@@ -171,8 +171,7 @@ uint32 sample(const SumTree<Iterator>& tree, const float value)
         const float r = node_index + 1u < size ? float(tree.cell( node_index + 1u )) : 0.0f;
         const float sum = float( l + r );
 
-        if (sum > 0.0f && r > 0.0f && v * sum >= l)
-            node_index = node_index + 1u;
+        node_index = (v * sum < l || r == 0.0f) ? node_index : node_index + 1u;
     }
 
     // clamp the leaf index to the tree size

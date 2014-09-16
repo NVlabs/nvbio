@@ -29,8 +29,6 @@
 ///\file reduce.cu
 ///
 
-#pragma once
-
 #include <nvBowtie/bowtie2/cuda/reduce.h>
 #include <nvBowtie/bowtie2/cuda/reduce_impl.h>
 #include <nvBowtie/bowtie2/cuda/params.h>

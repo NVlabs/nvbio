@@ -25,8 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#pragma once
-
 #include <nvBowtie/bowtie2/cuda/score.h>
 #include <nvBowtie/bowtie2/cuda/score_impl.h>
 #include <nvBowtie/bowtie2/cuda/scoring.h>

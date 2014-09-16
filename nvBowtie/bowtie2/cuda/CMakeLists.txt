@@ -56,6 +56,9 @@ seed_hit_deque_array_inl.h
 seed_hit_deque_array_test.cu
 stats.cpp
 stats.h
+traceback.cu
 traceback.h
+traceback_impl.h
+traceback_inl.h
 utils.h
 )

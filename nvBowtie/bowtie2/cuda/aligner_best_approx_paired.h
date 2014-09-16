@@ -227,7 +227,8 @@ void Aligner::best_approx(
         device_timer.start();
 
         NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    backtracking\n") );
-        banded_traceback_best<0>(
+        banded_traceback_best(
+            0u,
             count,
             NULL,
             best_anchor_ptr,
@@ -246,7 +247,8 @@ void Aligner::best_approx(
         device_timer.start();
 
         NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    alignment\n") );
-        finish_alignment_best<0>(
+        finish_alignment_best(
+            0u,
             count,
             NULL,
             best_anchor_ptr,
@@ -309,7 +311,8 @@ void Aligner::best_approx(
             const uint32* paired_idx = thrust::raw_pointer_cast( paired_idx_begin.base() );
 
             NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    paired opposite backtracking\n") );
-            opposite_traceback_best<0>(
+            opposite_traceback_best(
+                0u,
                 n_paired,
                 paired_idx,
                 best_opposite_ptr,
@@ -337,7 +340,8 @@ void Aligner::best_approx(
             const uint32* unpaired_idx = thrust::raw_pointer_cast( unpaired_idx_begin.base() );
 
             NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    unpaired opposite backtracking\n") );
-            banded_traceback_best<0>(
+            banded_traceback_best(
+                0u,
                 n_unpaired,
                 unpaired_idx,
                 best_opposite_ptr,
@@ -371,7 +375,8 @@ void Aligner::best_approx(
             NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    opposite alignment: %u\n", n_aligned) );
             const uint32* aligned_idx = thrust::raw_pointer_cast( aligned_idx_begin.base() );
 
-            finish_opposite_alignment_best<0>(
+            finish_opposite_alignment_best(
+                0u,
                 n_aligned,
                 aligned_idx,
                 best_opposite_ptr,
@@ -429,7 +434,8 @@ void Aligner::best_approx(
         const uint32* second_idx = thrust::raw_pointer_cast( second_idx_begin.base() );
 
         NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best backtracking\n") );
-        banded_traceback_best<1>(
+        banded_traceback_best(
+            1u,
             n_second,
             second_idx,
             best_anchor_ptr,
@@ -448,7 +454,8 @@ void Aligner::best_approx(
         device_timer.start();
 
         NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best alignment\n") );
-        finish_alignment_best<1>(
+        finish_alignment_best(
+            1u,
             n_second,
             second_idx,
             best_anchor_ptr,
@@ -510,7 +517,8 @@ void Aligner::best_approx(
             NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best paired: %u\n", n_second_paired) );
 
             NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best paired opposite backtracking\n") );
-            opposite_traceback_best<1>(
+            opposite_traceback_best(
+                1u,
                 n_second_paired,
                 second_idx,
                 best_opposite_ptr,
@@ -534,7 +542,8 @@ void Aligner::best_approx(
             NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best unpaired: %u\n", n_second_unpaired) );
 
             NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best unpaired opposite backtracking\n") );
-            banded_traceback_best<1>(
+            banded_traceback_best(
+                1u,
                 n_second_unpaired,
                 second_idx,
                 best_opposite_ptr,
@@ -565,7 +574,8 @@ void Aligner::best_approx(
         {
             // compute alignment only on the opposite mates with a second-best
             NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best opposite alignment\n") );
-            finish_opposite_alignment_best<1>(
+            finish_opposite_alignment_best(
+                    1u,
                     n_second,
                     second_idx,
                     best_opposite_ptr,

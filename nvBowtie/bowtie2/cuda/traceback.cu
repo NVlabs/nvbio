@@ -25,32 +25,17 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#pragma once
-
-#include <nvBowtie/bowtie2/cuda/defs.h>
-#include <nvBowtie/bowtie2/cuda/string_utils.h>
-#include <nvBowtie/bowtie2/cuda/scoring.h>
-#include <nvbio/io/alignments.h>
-#include <nvbio/io/utils.h>
+#include <nvBowtie/bowtie2/cuda/traceback.h>
+#include <nvBowtie/bowtie2/cuda/traceback_impl.h>
+#include <nvBowtie/bowtie2/cuda/pipeline_states.h>
 
 namespace nvbio {
 namespace bowtie2 {
 namespace cuda {
 
-struct ParamsPOD;
-
-template <typename ScoringScheme> struct TracebackPipelineState;
-template <typename ScoringScheme> struct AllMappingPipelineState;
-
-///@addtogroup nvBowtie
-///@{
-
-///@addtogroup Traceback
-///@{
-
-///
-/// execute a batch of banded-alignment traceback calculations
-///
+//
+// execute a batch of banded-alignment traceback calculations
+//
 void banded_traceback_best(
     const uint32                                                aln_idx,
     const uint32                                                count,
@@ -58,11 +43,17 @@ void banded_traceback_best(
           io::BestAlignments*                                   best_data,
     const uint32                                                band_len,
     const TracebackPipelineState<EditDistanceScoringScheme>&    pipeline,
-    const ParamsPOD&                                            params);
+    const ParamsPOD&                                            params)
+{
+    if (aln_idx)
+        banded_traceback_best_t<1>( count, idx, best_data, band_len, pipeline, params );
+    else
+        banded_traceback_best_t<0>( count, idx, best_data, band_len, pipeline, params );
+}
 
-///
-/// execute a batch of banded-alignment traceback calculations
-///
+//
+// execute a batch of banded-alignment traceback calculations
+//
 void banded_traceback_best(
     const uint32                                                    aln_idx,
     const uint32                                                    count,
@@ -70,33 +61,52 @@ void banded_traceback_best(
           io::BestAlignments*                                       best_data,
     const uint32                                                    band_len,
     const TracebackPipelineState<SmithWatermanScoringScheme<> >&    pipeline,
-    const ParamsPOD&                                                params);
+    const ParamsPOD&                                                params)
+{
+    if (aln_idx)
+        banded_traceback_best_t<1>( count, idx, best_data, band_len, pipeline, params );
+    else
+        banded_traceback_best_t<0>( count, idx, best_data, band_len, pipeline, params );
+}
 
-///
-/// execute a batch of opposite alignment traceback calculations
-///
+//
+// execute a batch of opposite alignment traceback calculations
+//
 void opposite_traceback_best(
     const uint32                                                aln_idx,
     const uint32                                                count,
     const uint32*                                               idx,
           io::BestAlignments*                                   best_data,
     const TracebackPipelineState<EditDistanceScoringScheme>&    pipeline,
-    const ParamsPOD&                                            params);
+    const ParamsPOD&                                            params)
+{
+    if (aln_idx)
+        opposite_traceback_best_t<1>( count, idx, best_data, pipeline, params );
+    else
+        opposite_traceback_best_t<0>( count, idx, best_data, pipeline, params );
+}
 
-///
-/// execute a batch of opposite alignment traceback calculations
-///
+//
+// execute a batch of opposite alignment traceback calculations
+//
 void opposite_traceback_best(
     const uint32                                                    aln_idx,
     const uint32                                                    count,
     const uint32*                                                   idx,
           io::BestAlignments*                                       best_data,
     const TracebackPipelineState<SmithWatermanScoringScheme<> >&    pipeline,
-    const ParamsPOD&                                                params);
+    const ParamsPOD&                                                params)
+{
+    if (aln_idx)
+        opposite_traceback_best_t<1>( count, idx, best_data, pipeline, params );
+    else
+        opposite_traceback_best_t<0>( count, idx, best_data, pipeline, params );
+}
 
-///
-/// execute a batch of banded-alignment traceback calculations
-///
+
+//
+// execute a batch of banded-alignment traceback calculations
+//
 void banded_traceback_all(
     const uint32                                                count,
     const uint32*                                               idx,
@@ -105,11 +115,14 @@ void banded_traceback_all(
           io::Alignment*                                        alignments,
     const uint32                                                band_len,
     const AllMappingPipelineState<EditDistanceScoringScheme>&   pipeline,
-    const ParamsPOD&                                            params);
+    const ParamsPOD&                                            params)
+{
+    banded_traceback_all( count, idx, buffer_offset, buffer_size, alignments, band_len, pipeline, params );
+}
 
-///
-/// execute a batch of banded-alignment traceback calculations
-///
+//
+// execute a batch of banded-alignment traceback calculations
+//
 void banded_traceback_all(
     const uint32                                                    count,
     const uint32*                                                   idx,
@@ -118,11 +131,14 @@ void banded_traceback_all(
           io::Alignment*                                            alignments,
     const uint32                                                    band_len,
     const AllMappingPipelineState<SmithWatermanScoringScheme<> >&   pipeline,
-    const ParamsPOD&                                                params);
+    const ParamsPOD&                                                params)
+{
+    banded_traceback_all( count, idx, buffer_offset, buffer_size, alignments, band_len, pipeline, params );
+}
 
-///
-/// finish a batch of alignment calculations
-///
+//
+// finish a batch of alignment calculations
+//
 void finish_alignment_best(
     const uint32                                                aln_idx,
     const uint32                                                count,
@@ -131,11 +147,17 @@ void finish_alignment_best(
     const uint32                                                band_len,
     const TracebackPipelineState<EditDistanceScoringScheme>&    pipeline,
     const SmithWatermanScoringScheme<>                          scoring_scheme,
-    const ParamsPOD&                                            params);
+    const ParamsPOD&                                            params)
+{
+    if (aln_idx)
+        finish_alignment_best_t<1>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+    else
+        finish_alignment_best_t<0>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+}
 
-///
-/// finish a batch of alignment calculations
-///
+//
+// finish a batch of alignment calculations
+//
 void finish_alignment_best(
     const uint32                                                    aln_idx,
     const uint32                                                    count,
@@ -144,11 +166,17 @@ void finish_alignment_best(
     const uint32                                                    band_len,
     const TracebackPipelineState<SmithWatermanScoringScheme<> >&    pipeline,
     const SmithWatermanScoringScheme<>                              scoring_scheme,
-    const ParamsPOD&                                                params);
+    const ParamsPOD&                                                params)
+{
+    if (aln_idx)
+        finish_alignment_best_t<1>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+    else
+        finish_alignment_best_t<0>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+}
 
-///
-/// finish a batch of opposite alignment calculations
-///
+//
+// finish a batch of opposite alignment calculations
+//
 void finish_opposite_alignment_best(
     const uint32                                                aln_idx,
     const uint32                                                count,
@@ -157,11 +185,17 @@ void finish_opposite_alignment_best(
     const uint32                                                band_len,
     const TracebackPipelineState<EditDistanceScoringScheme>&    pipeline,
     const SmithWatermanScoringScheme<>                          scoring_scheme,
-    const ParamsPOD&                                            params);
+    const ParamsPOD&                                            params)
+{
+    if (aln_idx)
+        finish_opposite_alignment_best_t<1>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+    else
+        finish_opposite_alignment_best_t<0>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+}
 
-///
-/// finish a batch of opposite alignment calculations
-///
+//
+// finish a batch of opposite alignment calculations
+//
 void finish_opposite_alignment_best(
     const uint32                                                    aln_idx,
     const uint32                                                    count,
@@ -170,11 +204,17 @@ void finish_opposite_alignment_best(
     const uint32                                                    band_len,
     const TracebackPipelineState<SmithWatermanScoringScheme<> >&    pipeline,
     const SmithWatermanScoringScheme<>                              scoring_scheme,
-    const ParamsPOD&                                                params);
+    const ParamsPOD&                                                params)
+{
+    if (aln_idx)
+        finish_opposite_alignment_best_t<1>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+    else
+        finish_opposite_alignment_best_t<0>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+}
 
-///
-/// finish a batch of alignment calculations, all-mapping
-///
+//
+// finish a batch of alignment calculations, all-mapping
+//
 void finish_alignment_all(
     const uint32                                                count,
     const uint32*                                               idx,
@@ -184,11 +224,14 @@ void finish_alignment_all(
     const uint32                                                band_len,
     const AllMappingPipelineState<EditDistanceScoringScheme>&   pipeline,
     const SmithWatermanScoringScheme<>                          scoring_scheme,
-    const ParamsPOD&                                            params);
+    const ParamsPOD&                                            params)
+{
+    finish_alignment_all_t( count, idx, buffer_offset, buffer_size, alignments, band_len, pipeline, scoring_scheme, params );
+}
 
-///
-/// finish a batch of alignment calculations, all-mapping
-///
+//
+// finish a batch of alignment calculations, all-mapping
+//
 void finish_alignment_all(
     const uint32                                                    count,
     const uint32*                                                   idx,
@@ -198,11 +241,13 @@ void finish_alignment_all(
     const uint32                                                    band_len,
     const AllMappingPipelineState<SmithWatermanScoringScheme<> >&   pipeline,
     const SmithWatermanScoringScheme<>                              scoring_scheme,
-    const ParamsPOD&                                                params);
-
-///@}  // group Traceback
-///@}  // group nvBowtie
+    const ParamsPOD&                                                params)
+{
+    finish_alignment_all_t( count, idx, buffer_offset, buffer_size, alignments, band_len, pipeline, scoring_scheme, params );
+}
 
 } // namespace cuda
 } // namespace bowtie2
 } // namespace nvbio
+
+#include <nvBowtie/bowtie2/cuda/traceback_inl.h>

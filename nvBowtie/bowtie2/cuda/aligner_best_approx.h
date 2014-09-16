@@ -241,7 +241,8 @@ void Aligner::best_approx(
         device_timer.start();
 
         NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    backtrack\n") );
-        banded_traceback_best<0>(
+        banded_traceback_best(
+            0u,
             count,
             NULL,
             best_data_dptr,
@@ -260,7 +261,8 @@ void Aligner::best_approx(
         device_timer.start();
 
         NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    alignment\n") );
-        finish_alignment_best<0>(
+        finish_alignment_best(
+            0u,
             count,
             NULL,
             best_data_dptr,
@@ -316,7 +318,8 @@ void Aligner::best_approx(
         uint32* second_idx = thrust::raw_pointer_cast( &second_idx_dvec[0] );
 
         NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best backtrack (%u)\n", n_second) );
-        banded_traceback_best<1>(
+        banded_traceback_best(
+            1u,
             n_second,
             second_idx,
             best_data_dptr,
@@ -335,7 +338,8 @@ void Aligner::best_approx(
         device_timer.start();
 
         NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best alignment (%u)\n", n_second) );
-        finish_alignment_best<1>(
+        finish_alignment_best(
+            1u,
             n_second,
             second_idx,
             best_data_dptr,

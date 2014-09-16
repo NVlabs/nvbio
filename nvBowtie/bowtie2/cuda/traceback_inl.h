@@ -267,7 +267,7 @@ void traceback_best(
     const uint32                count,
     const uint32*               idx,
           io::BestAlignments*   best_data,
-    const pipeline_type&         pipeline,
+    const pipeline_type&        pipeline,
     const aligner_type          aligner,
     const ParamsPOD             params)
 {
@@ -821,7 +821,7 @@ void finish_alignment_all(
 // execute a batch of banded-alignment traceback calculations
 //
 template <uint32 ALN_IDX, typename pipeline_type>
-void banded_traceback_best(
+void banded_traceback_best_t(
     const uint32                count,
     const uint32*               idx,
           io::BestAlignments*   best_data,
@@ -859,7 +859,7 @@ void banded_traceback_best(
 // execute a batch of opposite alignment traceback calculations
 //
 template <uint32 ALN_IDX, typename pipeline_type>
-void opposite_traceback_best(
+void opposite_traceback_best_t(
     const uint32                count,
     const uint32*               idx,
           io::BestAlignments*   best_data,
@@ -894,7 +894,7 @@ void opposite_traceback_best(
 // execute a batch of banded-alignment traceback calculations
 //
 template <typename pipeline_type>
-void banded_traceback_all(
+void banded_traceback_all_t(
     const uint32                count,
     const uint32*               idx,
     const uint32                buffer_offset,
@@ -936,7 +936,7 @@ void banded_traceback_all(
 // finish a batch of alignment calculations
 //
 template <uint32 ALN_IDX, typename scoring_scheme_type, typename pipeline_type>
-void finish_alignment_best(
+void finish_alignment_best_t(
     const uint32                count,
     const uint32*               idx,
           io::BestAlignments*   best_data,
@@ -960,7 +960,7 @@ void finish_alignment_best(
 // finish a batch of opposite alignment calculations
 //
 template <uint32 ALN_IDX, typename scoring_scheme_type, typename pipeline_type>
-void finish_opposite_alignment_best(
+void finish_opposite_alignment_best_t(
     const uint32                count,
     const uint32*               idx,
           io::BestAlignments*   best_data,
@@ -984,7 +984,7 @@ void finish_opposite_alignment_best(
 // finish a batch of alignment calculations
 //
 template <typename scoring_scheme_type, typename pipeline_type>
-void finish_alignment_all(
+void finish_alignment_all_t(
     const uint32                count,
     const uint32*               idx,
     const uint32                buffer_offset,

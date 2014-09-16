@@ -27,7 +27,6 @@
 
 #pragma once
 
-#include <nvbio/basic/types.h>
 #include <nvBowtie/bowtie2/cuda/scoring.h>
 #include <string.h>
 #include <string>

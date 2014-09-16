@@ -777,7 +777,7 @@ void banded_score_all(
 // execute a batch of single-ended banded-alignment score calculations, best mapping
 //
 template <typename scheme_type>
-void score_best(
+void score_best_t(
     const uint32                                        band_len,
     const BestApproxScoringPipelineState<scheme_type>&  pipeline,
     const ParamsPOD                                     params)
@@ -804,7 +804,7 @@ void score_best(
 // execute a batch of banded-alignment score calculations for the anchor mates, best mapping
 //
 template <typename scheme_type>
-void anchor_score_best(
+void anchor_score_best_t(
     const uint32                                        band_len,
     const BestApproxScoringPipelineState<scheme_type>&  pipeline,
     const ParamsPOD                                     params)
@@ -831,7 +831,7 @@ void anchor_score_best(
 // execute a batch of full-DP alignment score calculations for the opposite mates, best mapping
 //
 template <typename scheme_type>
-void opposite_score_best(
+void opposite_score_best_t(
     const BestApproxScoringPipelineState<scheme_type>&  pipeline,
     const ParamsPOD                                     params)
 {
@@ -881,7 +881,7 @@ void opposite_score_best(
 // \param buffer_size          ring buffer size
 // \return                     number of valid alignments
 template <typename scheme_type>
-uint32 score_all(
+uint32 score_all_t(
     const uint32                                        band_len,
     const AllMappingPipelineState<scheme_type>&         pipeline,
     const ParamsPOD                                     params,

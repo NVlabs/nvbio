@@ -24,6 +24,8 @@ locate.h
 locate_inl.h
 mapping.cu
 mapping.h
+mapping_impl.h
+mapping_inl.h
 mapq.cpp
 mapq.h
 params.h
@@ -32,7 +34,9 @@ persist.h
 pipeline_states.h
 reduce.h
 reduce_inl.h
+score.cu
 score.h
+score_impl.h
 score_inl.h
 scoring.h
 scoring_inl.h
@@ -42,6 +46,7 @@ scoring_queues_test.cu
 seed_hit.h
 select.cu
 select.h
+select_impl.h
 select_inl.h
 seed_hit_deque_array.cu
 seed_hit_deque_array.h

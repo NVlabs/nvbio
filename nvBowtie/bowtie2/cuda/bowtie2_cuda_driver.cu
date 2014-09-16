@@ -201,7 +201,7 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     // set the default seeding values, or reset them if the alignment type has been changed
     if (init || (local != old_local))
     {
-        params.seed_len = local ? 20 : 22u;
+        params.seed_len  = local ? 20 : 22u;
         params.seed_freq = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, (local ? 0.75f : 1.15) );
     }
 

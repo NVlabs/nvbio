@@ -28,8 +28,10 @@
 #pragma once
 
 #include <nvBowtie/bowtie2/cuda/string_utils.h>
+#include <nvBowtie/bowtie2/cuda/params.h>
 #include <nvbio/alignment/alignment.h>
 #include <nvbio/alignment/batched.h>
+#include <nvbio/io/alignments.h>
 #include <nvbio/io/utils.h>
 #include <nvbio/basic/vector_view.h>
 

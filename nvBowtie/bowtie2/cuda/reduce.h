@@ -32,15 +32,14 @@
 #pragma once
 
 #include <nvBowtie/bowtie2/cuda/defs.h>
-#include <nvbio/io/alignments.h>
-#include <nvBowtie/bowtie2/cuda/seed_hit.h>
+#include <nvBowtie/bowtie2/cuda/scoring.h>
 #include <nvBowtie/bowtie2/cuda/params.h>
-#include <nvbio/io/utils.h>
-#include <nvbio/basic/exceptions.h>
 
 namespace nvbio {
 namespace bowtie2 {
 namespace cuda {
+
+struct ParamsPOD;
 
 template <typename ScoringScheme> struct BaseScoringPipelineState;
 template <typename ScoringScheme> struct BestApproxScoringPipelineState;
@@ -134,20 +133,34 @@ struct ReduceBestExactContext
 ///
 /// Reduce the scores associated to each read in the scoring queue to find the best 2 alignments.
 ///
-template <typename ScoringScheme, typename ReduceContext>
 void score_reduce(
-    const ReduceContext                                     context,
-    const BestApproxScoringPipelineState<ScoringScheme>&    pipeline,
-    const ParamsPOD                                         params);
+    const ReduceBestApproxContext                                       context,
+    const BestApproxScoringPipelineState<EditDistanceScoringScheme>&    pipeline,
+    const ParamsPOD&                                                    params);
+
+///
+/// Reduce the scores associated to each read in the scoring queue to find the best 2 alignments.
+///
+void score_reduce(
+    const ReduceBestApproxContext                                           context,
+    const BestApproxScoringPipelineState<SmithWatermanScoringScheme<> >&    pipeline,
+    const ParamsPOD&                                                        params);
 
 ///
 /// Reduce the scores associated to each paired-end read in the scoring queue to find the best 2 alignments.
 ///
-template <typename ScoringScheme, typename ReduceContext>
 void score_reduce_paired(
-    const ReduceContext                                     context,
-    const BestApproxScoringPipelineState<ScoringScheme>&    pipeline,
-    const ParamsPOD                                         params);
+    const ReduceBestApproxContext                                       context,
+    const BestApproxScoringPipelineState<EditDistanceScoringScheme>&    pipeline,
+    const ParamsPOD&                                                    params);
+
+///
+/// Reduce the scores associated to each paired-end read in the scoring queue to find the best 2 alignments.
+///
+void score_reduce_paired(
+    const ReduceBestApproxContext                                           context,
+    const BestApproxScoringPipelineState<SmithWatermanScoringScheme<> >&    pipeline,
+    const ParamsPOD&                                                        params);
 
 ///@}  // group Reduce
 ///@}  // group nvBowtie

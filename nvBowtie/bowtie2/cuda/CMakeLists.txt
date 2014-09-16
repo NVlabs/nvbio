@@ -32,7 +32,9 @@ params.h
 persist.cu
 persist.h
 pipeline_states.h
+reduce.cu
 reduce.h
+reduce_impl.h
 reduce_inl.h
 score.cu
 score.h

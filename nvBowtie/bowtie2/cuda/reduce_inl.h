@@ -309,7 +309,7 @@ void score_reduce_paired_kernel(
 // the best 2 alignments.
 //
 template <typename ScoringScheme, typename ReduceContext>
-void score_reduce(
+void score_reduce_t(
     const ReduceContext                                     context,
     const BestApproxScoringPipelineState<ScoringScheme>&    pipeline,
     const ParamsPOD                                         params)
@@ -328,7 +328,7 @@ void score_reduce(
 // call the scoring kernel
 //
 template <typename ScoringScheme, typename ReduceContext>
-void score_reduce_paired(
+void score_reduce_paired_t(
     const ReduceContext                                     context,
     const BestApproxScoringPipelineState<ScoringScheme>&    pipeline,
     const ParamsPOD                                         params)

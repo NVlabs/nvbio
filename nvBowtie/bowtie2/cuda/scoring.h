@@ -33,7 +33,7 @@
 
 #include <nvbio/basic/types.h>
 #include <nvbio/basic/options.h>
-#include <nvbio/alignment/alignment.h>
+#include <nvbio/alignment/alignment_base.h>
 #include <nvBowtie/bowtie2/quality_coeffs.h>
 #include <nvBowtie/bowtie2/cuda/defs.h>
 #include <nvBowtie/bowtie2/cuda/func.h>

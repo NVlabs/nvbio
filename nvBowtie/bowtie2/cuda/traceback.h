@@ -29,8 +29,13 @@
 
 #include <nvBowtie/bowtie2/cuda/defs.h>
 #include <nvBowtie/bowtie2/cuda/scoring.h>
-#include <nvbio/io/alignments.h>
-#include <nvbio/io/utils.h>
+
+namespace nvbio {
+namespace io {
+    struct Alignment;
+    struct BestAlignments;
+} // namespace io
+} // namespace nvbio
 
 namespace nvbio {
 namespace bowtie2 {

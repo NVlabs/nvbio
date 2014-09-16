@@ -28,9 +28,6 @@
 #pragma once
 
 #include <nvbio/basic/types.h>
-#include <nvBowtie/bowtie2/cuda/func.h>
-#include <string.h>
-#include <string>
 
 namespace nvbio {
 namespace bowtie2 {

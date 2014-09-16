@@ -299,8 +299,9 @@ void log_error_cont(FILE* stream, const char* format, ...)
 #else
 #include <stdarg.h>
 
-const char* TEXT_BRIGHT_BLUE = "\033[01;34m";
-const char* TEXT_BRIGHT_RED  = "\033[01;31m";
+const char* TEXT_BRIGHT_BLUE    = "\033[01;34m";
+const char* TEXT_BRIGHT_MAGENTA = "\033[01;35m";
+const char* TEXT_BRIGHT_RED     = "\033[01;31m";
 const char* TEXT_CYAN   = "\033[22;36m";
 const char* TEXT_BLUE   = "\033[22;34m";
 const char* TEXT_RED    = "\033[22;31m";
@@ -347,7 +348,7 @@ void log_stats(FILE* stream, const char* format, ...)
     {
         const std::string new_format = retokenize( format, "stats   : " );
         char col_format[2048];
-        sprintf( col_format, "%s%s", TEXT_BLUE, new_format.c_str() );
+        sprintf( col_format, "%s%s", TEXT_CYAN, new_format.c_str() );
         va_list args;
         va_start(args, format);
         vfprintf(stream, col_format, args);
@@ -386,7 +387,7 @@ void log_warning(FILE* stream, const char* format, ...)
     {
         const std::string new_format = retokenize( format, "warning : " );
         char col_format[2048];
-        sprintf( col_format, "%s%s", TEXT_CYAN, new_format.c_str() );
+        sprintf( col_format, "%s%s", TEXT_BRIGHT_MAGENTA, new_format.c_str() );
         va_list args;
         va_start(args, format);
         vfprintf(stream, col_format, args);
@@ -436,7 +437,7 @@ void log_stats_cont(FILE* stream, const char* format, ...)
     if (s_verbosity >= V_STATS)
     {
         char col_format[2048];
-        sprintf( col_format, "%s%s", TEXT_BLUE, format );
+        sprintf( col_format, "%s%s", TEXT_CYAN, format );
         va_list args;
         va_start(args, format);
         vfprintf(stream, col_format, args);
@@ -472,7 +473,7 @@ void log_warning_cont(FILE* stream, const char* format, ...)
     if (s_verbosity >= V_ERROR)
     {
         char col_format[2048];
-        sprintf( col_format, "%s%s", TEXT_CYAN, format );
+        sprintf( col_format, "%s%s", TEXT_BRIGHT_MAGENTA, format );
         va_list args;
         va_start(args, format);
         vfprintf(stream, col_format, args);

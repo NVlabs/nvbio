@@ -53,6 +53,7 @@ void select_init_t(BestApproxScoringPipelineState<ScoringScheme>& pipeline, cons
         pipeline.reads.size(),
         pipeline.hits,
         pipeline.trys,
+        pipeline.rseeds,
         params );
 }
 
@@ -144,6 +145,7 @@ uint32 randomized_select(ProbTree& prob_tree, SeedHit* hits_data, uint32* rseeds
 {
     for (uint32 i = 0; i < 10; ++i)
     {
+      #if 0
         // pick a new random value
         const uint32 ri = 1664525u * rseeds[ read_id ] + 1013904223u;
 
@@ -152,6 +154,10 @@ uint32 randomized_select(ProbTree& prob_tree, SeedHit* hits_data, uint32* rseeds
 
         // convert to a float
         const float rf = float(ri) / float(0xFFFFFFFFu);
+      #else
+        // advance the QMC sampler
+        const float rf = radical_inverse( rseeds[ read_id ]++ );
+      #endif
 
         // select the next hit
         const uint32 hit_id = sample( prob_tree, rf );

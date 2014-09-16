@@ -38,6 +38,7 @@ void select_init_kernel(
     const uint32                            count,
     SeedHitDequeArrayDeviceView             hits,
     uint32*                                 trys,
+    uint32*                                 rseeds,
     const ParamsPOD                         params)
 {
     const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;
@@ -50,6 +51,9 @@ void select_init_kernel(
     // initialize the probability trees
     if (params.randomized)
     {
+        // initialize the generator
+        rseeds[ thread_id ] = 0u;
+
         typedef SumTree<float*> ProbTree;
 
         // check whether we have a non-zero number of hits, otherwise we can go home
@@ -59,7 +63,7 @@ void select_init_kernel(
 
         // build the probability tree
         float*         hit_probs = hits.get_probs( thread_id );
-        const SeedHit* hit_data = hits.get_data( thread_id );
+        const SeedHit* hit_data  = hits.get_data( thread_id );
 
         for (uint32 i = 0; i < n_hits; ++i)
         {
@@ -84,6 +88,7 @@ void select_init(
     const uint32                    count,
     SeedHitDequeArrayDeviceView     hits,
     uint32*                         trys,
+    uint32*                         rseeds,
     const ParamsPOD                 params)
 {
     const int blocks = (count + BLOCKDIM-1) / BLOCKDIM;
@@ -92,6 +97,7 @@ void select_init(
         count,
         hits,
         trys,
+        rseeds,
         params );
 }
 

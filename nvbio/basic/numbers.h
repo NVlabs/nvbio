@@ -563,6 +563,31 @@ struct LCG_random
     uint32 m_s;
 };
 
+/// return the radical inverse of an integer n, useful for deterministic QMC sampling
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+float radical_inverse(unsigned int n)
+{
+	double  result = 0.0;
+	unsigned int  remainder;
+	unsigned int  m, bj = 1;
+
+    const unsigned int b = 2u;
+
+	do
+	{
+		bj *= b;
+		m   = n;
+		n  /= b;
+
+		remainder = m - n * b;
+
+		result += double( remainder ) / double( bj );
+	} while (n > 0);
+
+	return result;
+};
+
 #if defined(__CUDA_ARCH__)
 
 NVBIO_FORCEINLINE NVBIO_DEVICE 

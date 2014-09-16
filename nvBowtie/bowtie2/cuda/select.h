@@ -81,6 +81,7 @@ void select_init(
     const uint32                        count,
     const SeedHitDequeArrayDeviceView   hits,
     uint32*                             trys,
+    uint32*                             rseeds,
     const ParamsPOD                     params);
 
 ///

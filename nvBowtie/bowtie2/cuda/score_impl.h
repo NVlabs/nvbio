@@ -27,7 +27,6 @@
 
 #pragma once
 
-#include <nvBowtie/bowtie2/cuda/string_utils.h>
 #include <nvbio/alignment/alignment.h>
 #include <nvbio/alignment/batched.h>
 #include <nvbio/io/utils.h>

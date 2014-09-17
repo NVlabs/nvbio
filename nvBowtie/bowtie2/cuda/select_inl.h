@@ -51,6 +51,7 @@ void select_init_t(BestApproxScoringPipelineState<ScoringScheme>& pipeline, cons
 {
     select_init(
         pipeline.reads.size(),
+        pipeline.scoring_queues.active_reads.in_queue,
         pipeline.reads.name_stream(),
         pipeline.reads.name_index(),
         pipeline.hits,

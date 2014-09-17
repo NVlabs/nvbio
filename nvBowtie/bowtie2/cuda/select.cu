@@ -36,6 +36,7 @@ namespace cuda {
 __global__
 void select_init_kernel(
     const uint32                            count,
+    const packed_read*                      read_index,
     const char*                             read_names,
     const uint32*                           read_names_idx,
     SeedHitDequeArrayDeviceView             hits,
@@ -55,10 +56,11 @@ void select_init_kernel(
     {
         // initialize the generator
         //rseeds[ thread_id ] = 0u;
-        // compute a hash of the read name
         {
-            const uint32 off = read_names_idx[ thread_id ];
-            const uint32 len = read_names_idx[ thread_id + 1u ] - off;
+            // compute a hash of the read name
+            const uint32 read_id = read_index[ thread_id ].read_id;
+            const uint32 off = read_names_idx[ read_id ];
+            const uint32 len = read_names_idx[ read_id + 1u ] - off;
 
             const char* read_name = read_names + off;
 
@@ -102,6 +104,7 @@ void select_init_kernel(
 //
 void select_init(
     const uint32                    count,
+    const packed_read*              read_index,
     const char*                     read_names,
     const uint32*                   read_names_idx,
     SeedHitDequeArrayDeviceView     hits,
@@ -113,6 +116,7 @@ void select_init(
 
     select_init_kernel<<<blocks, BLOCKDIM>>>(
         count,
+        read_index,
         read_names,
         read_names_idx,
         hits,

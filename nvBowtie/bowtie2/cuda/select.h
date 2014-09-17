@@ -79,6 +79,7 @@ template <typename ScoringScheme> struct BestApproxScoringPipelineState;
 ///
 void select_init(
     const uint32                        count,
+    const packed_read*                  read_index,
     const char*                         read_names,
     const uint32*                       read_names_idx,
     const SeedHitDequeArrayDeviceView   hits,

@@ -240,7 +240,7 @@ int main(int argc, char* argv[])
     log_verbose(stderr, "  cuda devices : %d\n", device_count);
 
     // inspect and select cuda devices
-    if (device_count)
+    if (device_count > 0)
     {
         if (cuda_device == -1)
         {
@@ -274,6 +274,11 @@ int main(int argc, char* argv[])
             log_verbose(stderr, "    compute capability : %d.%d\n", device_prop.major, device_prop.minor);
         }
         cudaSetDevice( cuda_device );
+    }
+    else
+    {
+        log_error(stderr, "no available CUDA devices\n");
+        exit(1);
     }
 
     uint32 arg_offset = paired_end ? argc-4 : argc-3;

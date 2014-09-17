@@ -51,6 +51,8 @@ void select_init_t(BestApproxScoringPipelineState<ScoringScheme>& pipeline, cons
 {
     select_init(
         pipeline.reads.size(),
+        pipeline.reads.name_stream(),
+        pipeline.reads.name_index(),
         pipeline.hits,
         pipeline.trys,
         pipeline.rseeds,
@@ -145,7 +147,7 @@ uint32 randomized_select(ProbTree& prob_tree, SeedHit* hits_data, uint32* rseeds
 {
     for (uint32 i = 0; i < 10; ++i)
     {
-      #if 0
+      #if 1
         // pick a new random value
         const uint32 ri = 1664525u * rseeds[ read_id ] + 1013904223u;
 

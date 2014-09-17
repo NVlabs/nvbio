@@ -36,6 +36,8 @@ namespace cuda {
 __global__
 void select_init_kernel(
     const uint32                            count,
+    const char*                             read_names,
+    const uint32*                           read_names_idx,
     SeedHitDequeArrayDeviceView             hits,
     uint32*                                 trys,
     uint32*                                 rseeds,
@@ -52,7 +54,21 @@ void select_init_kernel(
     if (params.randomized)
     {
         // initialize the generator
-        rseeds[ thread_id ] = 0u;
+        //rseeds[ thread_id ] = 0u;
+        // compute a hash of the read name
+        {
+            const uint32 off = read_names_idx[ thread_id ];
+            const uint32 len = read_names_idx[ thread_id + 1u ] - off;
+
+            const char* read_name = read_names + off;
+
+            // djb2 hashing function
+            uint32 hash = 5381;
+            for (uint32 i = 0; i < len && read_name[i]; ++i)
+                hash = ((hash << 5) + hash) ^ read_name[i];
+
+            rseeds[ thread_id ] = hash;
+        }
 
         typedef SumTree<float*> ProbTree;
 
@@ -86,6 +102,8 @@ void select_init_kernel(
 //
 void select_init(
     const uint32                    count,
+    const char*                     read_names,
+    const uint32*                   read_names_idx,
     SeedHitDequeArrayDeviceView     hits,
     uint32*                         trys,
     uint32*                         rseeds,
@@ -95,6 +113,8 @@ void select_init(
 
     select_init_kernel<<<blocks, BLOCKDIM>>>(
         count,
+        read_names,
+        read_names_idx,
         hits,
         trys,
         rseeds,

@@ -828,50 +828,6 @@ void anchor_score_best_t(
 }
 
 //
-// execute a batch of full-DP alignment score calculations for the opposite mates, best mapping
-//
-template <typename scheme_type>
-void opposite_score_best_t(
-    const BestApproxScoringPipelineState<scheme_type>&  pipeline,
-    const ParamsPOD                                     params)
-{
-    if (params.alignment_type == LocalAlignment)
-    {
-        if (params.ungapped_mates)
-        {
-            detail::opposite_score_best(
-                pipeline,
-                pipeline.scoring_scheme.ungapped_local_aligner(),
-                params );
-        }
-        else
-        {
-            detail::opposite_score_best(
-                pipeline,
-                pipeline.scoring_scheme.local_aligner(),
-                params );
-        }
-    }
-    else
-    {
-        if (params.ungapped_mates)
-        {
-            detail::opposite_score_best(
-                pipeline,
-                pipeline.scoring_scheme.ungapped_end_to_end_aligner(),
-                params );
-        }
-        else
-        {
-            detail::opposite_score_best(
-                pipeline,
-                pipeline.scoring_scheme.end_to_end_aligner(),
-                params );
-        }
-    }
-}
-
-//
 // execute a batch of single-ended banded-alignment score calculations, best mapping
 //
 // \param band_len             alignment band length

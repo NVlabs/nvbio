@@ -36,7 +36,11 @@ reduce.cu
 reduce.h
 reduce_impl.h
 reduce_inl.h
-score.cu
+score_all.cu
+score_best.cu
+score_gapped.cu
+score_ungapped.cu
+score_paired.cu
 score.h
 score_impl.h
 score_inl.h

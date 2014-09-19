@@ -58,9 +58,8 @@ struct TransformStringSet
 
     /// constructor
     ///
-    /// \param size             set size
-    /// \param string           flat string iterator
-    /// \param offsets          string offsets in the flat string array, must contain size+1 entries
+    /// \param string_set       the base string set
+    /// \param transform        the string transfrom
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     TransformStringSet(
@@ -103,9 +102,12 @@ private:
     StringTransform m_transform;
 };
 
-///\relates ConcatenatedStringSet
+///\relates TransformStringSet
 ///
 /// A utility function to make a ConcatenatedStringSet
+///
+/// \param string_set       the base string set
+/// \param transform        the string transfrom
 ///
 template <typename StringSet, typename StringTransform>
 TransformStringSet<StringSet,StringTransform> make_transform_string_set(

@@ -35,12 +35,16 @@ namespace nvbio {
 ///
 /// A transformed string set
 ///
+/// \tparam StringSet           the base string set type
+/// \tparam StringTransform     the string transformation, a functor taking StringSet::string_type
+///                             as input and returning a StringTransform::result_type as output
+///
 template <typename StringSet, typename StringTransform>
 struct TransformStringSet
 {
     typedef StringSet                                                   string_set_type;
     typedef StringTransform                                             transform_type;
-    typedef typename transform_type::value_type                         string_type;
+    typedef typename transform_type::result_type                        string_type;
     typedef typename string_type::symbol_type                           symbol_type;
     typedef typename StringSet::system_tag                              system_tag;
 

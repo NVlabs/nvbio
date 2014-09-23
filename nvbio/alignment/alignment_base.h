@@ -394,6 +394,17 @@ HammingDistanceAligner<TYPE,scoring_scheme_type,algorithm_tag> make_hamming_dist
     return HammingDistanceAligner<TYPE,scoring_scheme_type,algorithm_tag>( scheme );
 }
 
+template <AlignmentType TYPE, typename scoring_scheme_type>
+HammingDistanceAligner<TYPE,scoring_scheme_type,TextBlockingTag> transpose(const HammingDistanceAligner<TYPE,scoring_scheme_type,PatternBlockingTag>& aligner)
+{
+    return HammingDistanceAligner<TYPE,scoring_scheme_type,TextBlockingTag>( aligner.scheme );
+}
+template <AlignmentType TYPE, typename scoring_scheme_type>
+HammingDistanceAligner<TYPE,scoring_scheme_type,PatternBlockingTag> transpose(const HammingDistanceAligner<TYPE,scoring_scheme_type,TextBlockingTag>& aligner)
+{
+    return HammingDistanceAligner<TYPE,scoring_scheme_type,PatternBlockingTag>( aligner.scheme );
+}
+
 ///@} // end of the Aligner group
 
 ///@} // end of the Alignment group

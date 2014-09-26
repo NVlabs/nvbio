@@ -40,7 +40,7 @@ using namespace std;
 
 namespace nvbio {
 
-#ifndef WIN32
+#if !defined(WIN32) && defined(PLATFORM_X86)
 void cpuID(unsigned i, unsigned regs[4])
 {
   asm volatile
@@ -78,7 +78,7 @@ uint32 num_physical_cores()
         ptr++;
     }
     return processorCoreCount;
-  #else
+  #elif defined(PLATFORM_X86)
     unsigned regs[4];
 
     // Get vendor
@@ -111,6 +111,8 @@ uint32 num_physical_cores()
         cores = ((unsigned)(regs[2] & 0xff)) + 1; // ECX[7:0] + 1
     }
     return cores;
+  #else
+    return 0;
   #endif
 }
 uint32 num_logical_cores()

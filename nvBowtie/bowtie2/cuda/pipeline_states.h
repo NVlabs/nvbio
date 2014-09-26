@@ -133,7 +133,7 @@ struct BestApproxScoringPipelineState : public BaseScoringPipelineState<ScoringS
     typedef Aligner::fmi_type                           fmi_type;
     typedef Aligner::rfmi_type                          rfmi_type;
     typedef Aligner::read_batch_type                    read_batch_type;
-    typedef Aligner::genome_iterator            genome_iterator;
+    typedef Aligner::genome_iterator                    genome_iterator;
     typedef ScoringScheme                               scheme_type;
 
     BestApproxScoringPipelineState(
@@ -141,7 +141,7 @@ struct BestApproxScoringPipelineState : public BaseScoringPipelineState<ScoringS
         const read_batch_type           _reads,
         const read_batch_type           _reads_o,
         const uint32                    _genome_len,
-        const genome_iterator   _genome,
+        const genome_iterator           _genome,
         const fmi_type                  _fmi,
         const rfmi_type                 _rfmi,
         const ScoringScheme             _scoring_scheme,

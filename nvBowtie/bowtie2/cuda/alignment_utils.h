@@ -29,8 +29,7 @@
 
 #include <nvBowtie/bowtie2/cuda/string_utils.h>
 #include <nvBowtie/bowtie2/cuda/params.h>
-#include <nvbio/alignment/alignment.h>
-#include <nvbio/alignment/batched.h>
+#include <nvbio/alignment/alignment_base.h>
 #include <nvbio/io/alignments.h>
 #include <nvbio/io/utils.h>
 #include <nvbio/basic/vector_view.h>
@@ -167,6 +166,63 @@ struct Backtracker
     uint32 capacity;
 };
 
+/// a container for the strings to be aligned
+///
+template <typename AlignerType, typename PipelineType>
+struct AlignmentStrings
+{
+    typedef typename PipelineType::genome_iterator                                  genome_iterator;
+    typedef typename PipelineType::read_batch_type                                  read_batch_type;
+    typedef typename PipelineType::scheme_type                                      scheme_type;
+    typedef AlignerType                                                             aligner_type;
+
+    static const uint32 CACHE_SIZE = 64;
+    typedef nvbio::lmem_cache_tag<CACHE_SIZE>                                       lmem_cache_type;
+
+    typedef          ReadLoader<read_batch_type,lmem_cache_type >                   pattern_loader_type;
+    typedef typename pattern_loader_type::string_type                               pattern_string;
+    typedef typename pattern_string::qual_string_type                               qual_string;
+
+    typedef PackedStringLoader<
+        typename genome_iterator::storage_iterator,
+        genome_iterator::SYMBOL_SIZE,
+        genome_iterator::BIG_ENDIAN,
+        lmem_cache_type>                                                            text_loader_type;
+    typedef typename text_loader_type::iterator                                     text_iterator;
+    typedef vector_view<text_iterator>                                              text_string;
+
+
+    template <typename context_type>
+    NVBIO_HOST_DEVICE
+    void load(const PipelineType& pipeline, const context_type* context)
+    {
+        // select the read batch based on context->mate
+        read_batch_type reads = context->mate ?
+            pipeline.reads_o :
+            pipeline.reads;
+
+        const uint2 read_subrange = make_uint2( 0u, context->read_range.y - context->read_range.x );
+
+        pattern = pattern_loader.load(
+            reads,
+            context->read_range,
+            context->read_rc ? FORWARD    : REVERSE,        // the reads are loaded in REVERSE fashion, so we invert this flag here
+            context->read_rc ? COMPLEMENT : STANDARD,
+            read_subrange );
+
+        quals   = pattern.qualities();
+        text    = text_string(
+            context->genome_end - context->genome_begin,
+            text_loader.load( pipeline.genome + context->genome_begin, context->genome_end - context->genome_begin ) );
+    }
+
+    pattern_loader_type     pattern_loader;
+    text_loader_type        text_loader;
+    pattern_string          pattern;
+    qual_string             quals;
+    text_string             text;
+};
+
 /// Base class for the alignment contexts
 ///
 template <AlignmentStreamType TYPE>
@@ -204,25 +260,9 @@ struct AlignmentStreamContext<TRACEBACK_STREAM>
 template <AlignmentStreamType TYPE, typename AlignerType, typename PipelineType>
 struct AlignmentStreamBase
 {
-    typedef typename PipelineType::genome_iterator                                  genome_iterator;
-    typedef typename PipelineType::read_batch_type                                  read_batch_type;
+    typedef AlignmentStrings<AlignerType,PipelineType>                              strings_type;
     typedef typename PipelineType::scheme_type                                      scheme_type;
     typedef AlignerType                                                             aligner_type;
-
-    static const uint32 CACHE_SIZE = 64;
-    typedef nvbio::lmem_cache_tag<CACHE_SIZE>                                       lmem_cache_type;
-
-    typedef          ReadLoader<read_batch_type,lmem_cache_type >                   pattern_loader_type;
-    typedef typename pattern_loader_type::string_type                               pattern_string;
-    typedef typename pattern_string::qual_string_type                               qual_string;
-
-    typedef PackedStringLoader<
-        typename genome_iterator::storage_iterator,
-        genome_iterator::SYMBOL_SIZE,
-        genome_iterator::BIG_ENDIAN,
-        lmem_cache_type>                                                            text_loader_type;
-    typedef typename text_loader_type::iterator                                     text_iterator;
-    typedef vector_view<text_iterator>                                              text_string;
 
     /// an alignment context
     ///
@@ -236,16 +276,6 @@ struct AlignmentStreamBase
         uint32                  genome_begin;
         uint32                  genome_end;
         int32                   min_score;
-    };
-    /// a container for the strings to be aligned
-    ///
-    struct strings_type
-    {
-        pattern_loader_type     pattern_loader;
-        text_loader_type        text_loader;
-        pattern_string          pattern;
-        qual_string             quals;
-        text_string             text;
     };
 
     /// constructor
@@ -292,24 +322,8 @@ struct AlignmentStreamBase
         const context_type* context,
               strings_type* strings) const
     {
-        // select the read batch based on context->mate
-        read_batch_type reads = context->mate ?
-            m_pipeline.reads_o :
-            m_pipeline.reads;
-
-        const uint2 read_subrange = make_uint2( window_begin, window_end );
-
-        strings->pattern = strings->pattern_loader.load(
-            reads,
-            context->read_range,
-            context->read_rc ? FORWARD    : REVERSE,        // the reads are loaded in REVERSE fashion, so we invert this flag here
-            context->read_rc ? COMPLEMENT : STANDARD,
-            read_subrange );
-
-        strings->quals   = strings->pattern.qualities();
-        strings->text    = text_string(
-            context->genome_end - context->genome_begin,
-            strings->text_loader.load( m_pipeline.genome + context->genome_begin, context->genome_end - context->genome_begin ) );
+        // load the strings
+        strings->load( m_pipeline, context );
     }
 
     PipelineType    m_pipeline;     ///< the pipeline object
@@ -322,6 +336,21 @@ struct AlignmentStreamBase
 ///@}  // group nvBowtie
 
 } // namespace detail
+
+/// an alignment scoring context
+///
+struct AlignmentScoringContext
+{
+    aln::BestSink<int32>    sink;           ///< output alignment sink
+    uint32                  idx;
+    uint32                  mate;
+    uint2                   read_range;
+    uint32                  read_id;
+    uint32                  read_rc;
+    uint32                  genome_begin;
+    uint32                  genome_end;
+    int32                   min_score;
+};
 
 } // namespace cuda
 } // namespace bowtie2

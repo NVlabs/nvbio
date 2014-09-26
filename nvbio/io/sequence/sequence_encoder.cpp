@@ -26,6 +26,7 @@
  */
 
 #include <nvbio/io/sequence/sequence_encoder.h>
+#include <stdio.h>
 
 namespace nvbio {
 namespace io {
@@ -329,7 +330,7 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
         {
             static const uint32 bps_per_word = 32u / SEQUENCE_BITS;
             const uint32 stream_len = m_data->m_sequence_stream_len + sequence_len;
-            const uint32 words      = (stream_len + bps_per_word - 1) / bps_per_word;
+            const uint32 words      = util::divide_ri( stream_len, bps_per_word );
 
             if (m_data->m_sequence_vec.size() < words)
                 m_data->m_sequence_vec.resize( words*2 );
@@ -355,7 +356,7 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
         m_data->m_sequence_stream_len += sequence_len;
         //m_data->m_sequence_index_vec.push_back( m_data->m_sequence_stream_len );
         if (m_data->m_sequence_index_vec.size() < m_data->m_n_seqs + 1u)
-            m_data->m_sequence_index_vec.resize(  (m_data->m_n_seqs + 1u)*2 );
+            m_data->m_sequence_index_vec.resize( (m_data->m_n_seqs + 1u)*2 );
         m_data->m_sequence_index_vec[ m_data->m_n_seqs ] = m_data->m_sequence_stream_len;
 
         m_data->m_min_sequence_len = nvbio::min( m_data->m_min_sequence_len, sequence_len );
@@ -371,6 +372,7 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
 
         m_data->m_name_stream_len += name_len + 1;
         //m_data->m_name_index_vec.push_back( m_data->m_name_stream_len );
+
         if (m_data->m_name_index_vec.size() < m_data->m_n_seqs + 1u)
             m_data->m_name_index_vec.resize( (m_data->m_n_seqs + 1u)*2 );
         m_data->m_name_index_vec[ m_data->m_n_seqs ] = m_data->m_name_stream_len;

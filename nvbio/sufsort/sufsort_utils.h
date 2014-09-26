@@ -80,6 +80,19 @@ struct DeviceBWTHandler : public SetBWTHandler
     ///
     void process(
         const uint32  n_suffixes,
+        const uint32  bits_per_symbol,
+        const uint32* bwt,
+        const uint32  n_dollars,
+        const uint64* dollar_pos,
+        const uint64* dollar_ids)
+    {
+        // NOTE: not supported!
+    }
+
+    /// process a batch of BWT symbols
+    ///
+    void process(
+        const uint32  n_suffixes,
         const uint8*  bwt,
         const uint32  n_dollars,
         const uint64* dollar_pos,
@@ -113,6 +126,37 @@ struct HostBWTHandler : public SetBWTHandler
 
     /// process a batch of BWT symbols
     ///
+    template <typename bwt_iterator>
+    void do_process(
+        const uint32        n_suffixes,
+        const bwt_iterator  bwt)
+    {
+        for (uint32 i = 0; i < n_suffixes; ++i)
+            output[i] = bwt[i];
+
+        output += n_suffixes;
+    }
+
+    /// process a batch of BWT symbols
+    ///
+    void process(
+        const uint32  n_suffixes,
+        const uint32  bits_per_symbol,
+        const uint32* bwt,
+        const uint32  n_dollars,
+        const uint64* dollar_pos,
+        const uint64* dollar_ids)
+    {
+        if (bits_per_symbol == 2)
+            do_process( n_suffixes, PackedStream<const uint32*,uint8,2,true>(bwt) );
+        else if (bits_per_symbol == 4)
+            do_process( n_suffixes, PackedStream<const uint32*,uint8,4,true>(bwt) );
+        else if (bits_per_symbol == 8)
+            do_process( n_suffixes, PackedStream<const uint32*,uint8,8,true>(bwt) );
+    }
+
+    /// process a batch of BWT symbols
+    ///
     void process(
         const uint32  n_suffixes,
         const uint8*  bwt,
@@ -120,10 +164,7 @@ struct HostBWTHandler : public SetBWTHandler
         const uint64* dollar_pos,
         const uint64* dollar_ids)
     {
-        for (uint32 i = 0; i < n_suffixes; ++i)
-            output[i] = bwt[i];
-
-        output += n_suffixes;
+        do_process( n_suffixes, bwt );
     }
 
     OutputIterator output;
@@ -146,12 +187,10 @@ struct HostBWTHandler< PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint
 
     /// process a batch of BWT symbols
     ///
-    void process(
-        const uint32  n_suffixes,
-        const uint8*  bwt,
-        const uint32  n_dollars,
-        const uint64* dollar_pos,
-        const uint64* dollar_ids)
+    template <typename bwt_iterator>
+    void do_process(
+        const uint32        n_suffixes,
+        const bwt_iterator  bwt)
     {
         const uint32 word_offset = offset & (SYMBOLS_PER_WORD-1);
               uint32 word_rem    = 0;
@@ -207,6 +246,36 @@ struct HostBWTHandler< PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint
 
         // advance the offset
         offset += n_suffixes;
+    }
+
+    /// process a batch of BWT symbols
+    ///
+    void process(
+        const uint32  n_suffixes,
+        const uint32  bits_per_symbol,
+        const uint32* bwt,
+        const uint32  n_dollars,
+        const uint64* dollar_pos,
+        const uint64* dollar_ids)
+    {
+        if (bits_per_symbol == 2)
+            do_process( n_suffixes, PackedStream<const uint32*,uint8,2,true>(bwt) );
+        else if (bits_per_symbol == 4)
+            do_process( n_suffixes, PackedStream<const uint32*,uint8,4,true>(bwt) );
+        else if (bits_per_symbol == 8)
+            do_process( n_suffixes, PackedStream<const uint32*,uint8,8,true>(bwt) );
+    }
+
+    /// process a batch of BWT symbols
+    ///
+    void process(
+        const uint32  n_suffixes,
+        const uint8*  bwt,
+        const uint32  n_dollars,
+        const uint64* dollar_pos,
+        const uint64* dollar_ids)
+    {
+        do_process( n_suffixes, bwt );
     }
 
     OutputIterator output;

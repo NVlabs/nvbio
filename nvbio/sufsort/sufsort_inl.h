@@ -490,6 +490,8 @@ struct LargeBWTSkeleton
         string_set_handler_type string_set_handler( string_set );
         cuda::CompressionSort   string_sorter( mgpu_ctxt );
 
+        priv::DollarExtractor   dollars;
+
         const uint64 max_super_block_size = params ?                    // requires max_super_block_size*8 host memory bytes
             (params->host_memory - uint64(128u*1024u*1024u)) / 8u :     // leave 128MB for the bucket counters
             512*1024*1024;
@@ -573,14 +575,22 @@ struct LargeBWTSkeleton
 
             timer.start();
 
-            // invoke the output handler
-            output.process(
+            // extract the dollars
+            const uint32 n_dollars = dollars.extract(
                 n_suffixes,
-                plain_view( h_block_bwt ),
-                plain_view( d_block_bwt ),
+                raw_pointer( h_block_bwt ),
+                raw_pointer( d_block_bwt ),
                 NULL,
                 NULL,
                 NULL );
+
+            // invoke the output handler
+            output.process(
+                n_suffixes,
+                raw_pointer( h_block_bwt ),
+                n_dollars,
+                raw_pointer( dollars.h_dollar_ranks ),
+                raw_pointer( dollars.h_dollars ) );
 
             timer.stop();
             output_time += timer.seconds();
@@ -739,14 +749,22 @@ struct LargeBWTSkeleton
 
                         timer.start();
 
+                        // extract the dollars
+                        const uint32 n_dollars = dollars.extract(
+                            n_suffixes,
+                            raw_pointer( h_block_bwt ),
+                            raw_pointer( d_block_bwt ),
+                            h_bucket_suffixes,
+                            raw_pointer( d_bucket_suffixes ),
+                            NULL );
+
                         // invoke the output handler
                         output.process(
                             n_suffixes,
-                            plain_view( h_block_bwt ),
-                            plain_view( d_block_bwt ),
-                            h_bucket_suffixes,
-                            plain_view( d_bucket_suffixes ),
-                            NULL );
+                            raw_pointer( h_block_bwt ),
+                            n_dollars,
+                            raw_pointer( dollars.h_dollar_ranks ),
+                            raw_pointer( dollars.h_dollars ) );
 
                         timer.stop();
                         output_time += timer.seconds();
@@ -838,13 +856,21 @@ struct LargeBWTSkeleton
                     timer.start();
 
                     // invoke the output handler
+                    const uint32 n_dollars = dollars.extract(
+                        n_suffixes,
+                        raw_pointer( h_block_bwt ),
+                        raw_pointer( d_block_bwt ),
+                        h_bucket_suffixes,
+                        raw_pointer( d_bucket_suffixes ),
+                        raw_pointer( d_indices ) );
+
+                    // invoke the output handler
                     output.process(
                         n_suffixes,
-                        plain_view( h_block_bwt ),
-                        plain_view( d_block_bwt ),
-                        h_bucket_suffixes,
-                        plain_view( d_bucket_suffixes ),
-                        plain_view( d_indices ) );
+                        raw_pointer( h_block_bwt ),
+                        n_dollars,
+                        raw_pointer( dollars.h_dollar_ranks ),
+                        raw_pointer( dollars.h_dollars ) );
 
                     timer.stop();
                     output_time += timer.seconds();

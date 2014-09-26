@@ -448,5 +448,90 @@ void extract_radices(
     }
 }
 
+/// process a batch of BWT symbols
+///
+uint32 DollarExtractor::extract(
+    const uint32  n_suffixes,
+    const uint8*  h_bwt,
+    const uint8*  d_bwt,
+    const uint2*  h_suffixes,
+    const uint2*  d_suffixes,
+    const uint32* d_indices)
+{
+    if (h_suffixes != NULL &&   // these are NULL for the empty suffixes
+        d_suffixes != NULL)
+    {
+        priv::alloc_storage( d_dollar_ranks,   n_suffixes );
+        priv::alloc_storage( d_dollars,        n_suffixes );
+        priv::alloc_storage( h_dollar_ranks,   n_suffixes );
+        priv::alloc_storage( h_dollars,        n_suffixes );
+
+        uint32 n_found_dollars = 0;
+
+        if (d_indices != NULL)
+        {
+            priv::alloc_storage( d_dollar_indices, n_suffixes );
+
+            // find the dollar signs
+            n_found_dollars = cuda::copy_flagged(
+                n_suffixes,
+                thrust::make_zip_iterator(
+                    thrust::make_tuple(
+                        thrust::make_counting_iterator<uint64>(0) + offset,
+                        thrust::device_ptr<const uint32>( d_indices ) ) ),
+                thrust::make_transform_iterator( thrust::device_ptr<const uint8>( d_bwt ), equal_to_functor<uint8>(255u) ),
+                thrust::make_zip_iterator(
+                    thrust::make_tuple(
+                        d_dollar_ranks.begin(),
+                        d_dollar_indices.begin() ) ),
+                d_temp_storage );
+
+            // gather their indices
+            thrust::gather(
+                d_dollar_indices.begin(),
+                d_dollar_indices.begin() + n_found_dollars,
+                thrust::make_transform_iterator( thrust::device_ptr<const uint2>( d_suffixes ), priv::suffix_component_functor<priv::STRING_ID>() ),
+                d_dollars.begin() );
+        }
+        else
+        {
+            // find the dollar signs
+            n_found_dollars = cuda::copy_flagged(
+                n_suffixes,
+                thrust::make_zip_iterator(
+                    thrust::make_tuple(
+                        thrust::make_counting_iterator<uint64>(0) + offset,
+                        thrust::make_transform_iterator( thrust::device_ptr<const uint2>( d_suffixes ), priv::suffix_component_functor<priv::STRING_ID>() ) ) ),
+                thrust::make_transform_iterator( thrust::device_ptr<const uint8>( d_bwt ), equal_to_functor<uint8>(255u) ),
+                thrust::make_zip_iterator(
+                    thrust::make_tuple(
+                        d_dollar_ranks.begin(),
+                        d_dollars.begin() ) ),
+                d_temp_storage );
+        }
+
+        // and copy them back to the host
+        thrust::copy(
+            d_dollar_ranks.begin(),
+            d_dollar_ranks.begin() + n_found_dollars,
+            h_dollar_ranks.begin() );
+
+        // and copy them back to the host
+        thrust::copy(
+            d_dollars.begin(),
+            d_dollars.begin() + n_found_dollars,
+            h_dollars.begin() );
+
+        offset    += n_suffixes;
+        n_dollars += n_found_dollars;
+        return n_found_dollars;
+    }
+    else
+    {
+        offset += n_suffixes;
+        return 0;
+    }
+}
+
 } // namespace priv
 } // namespace nvbio

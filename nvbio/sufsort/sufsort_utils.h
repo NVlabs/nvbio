@@ -40,27 +40,36 @@ namespace nvbio {
 
 /// base virtual interface used by all string-set BWT handlers
 ///
-struct BaseBWTHandler
+struct SetBWTHandler
 {
     /// virtual destructor
     ///
-    virtual ~BaseBWTHandler() {}
+    virtual ~SetBWTHandler() {}
 
     /// process a batch of BWT symbols
     ///
     virtual void process(
         const uint32  n_suffixes,
-        const uint8*  h_bwt,
-        const uint8*  d_bwt,
-        const uint2*  h_suffixes,
-        const uint2*  d_suffixes,
-        const uint32* d_indices) {}
+        const uint32  bits_per_symbol,
+        const uint32* bwt,
+        const uint32  n_dollars,
+        const uint64* dollar_pos,
+        const uint64* dollar_ids) {}
+
+    /// process a batch of BWT symbols
+    ///
+    virtual void process(
+        const uint32  n_suffixes,
+        const uint8*  bwt,
+        const uint32  n_dollars,
+        const uint64* dollar_pos,
+        const uint64* dollar_ids) {}
 };
 
 /// A class to output the BWT to a (potentially packed) device string
 ///
 template <typename OutputIterator>
-struct DeviceBWTHandler : public BaseBWTHandler
+struct DeviceBWTHandler : public SetBWTHandler
 {
     /// constructor
     ///
@@ -70,29 +79,34 @@ struct DeviceBWTHandler : public BaseBWTHandler
     ///
     void process(
         const uint32  n_suffixes,
-        const uint8*  h_bwt,
-        const uint8*  d_bwt,
-        const uint2*  h_suffixes,
-        const uint2*  d_suffixes,
-        const uint32* d_indices)
+        const uint8*  bwt,
+        const uint32  n_dollars,
+        const uint64* dollar_pos,
+        const uint64* dollar_ids)
     {
+        // TODO: this may be redundant as we often have a device copy of 'bwt already
+        priv::alloc_storage( d_bwt, n_suffixes );
+
+        thrust::copy( bwt, bwt + n_suffixes, d_bwt.begin() );
+
         priv::device_copy(
             n_suffixes,
-            d_bwt,
+            raw_pointer( d_bwt ),
             output,
             offset );
 
         offset += n_suffixes;
     }
 
-    OutputIterator               output;
-    uint64                       offset;
+    OutputIterator                  output;
+    uint64                          offset;
+    nvbio::vector<device_tag,uint8> d_bwt;
 };
 
 /// A class to output the BWT to a host string
 ///
 template <typename OutputIterator>
-struct HostBWTHandler : public BaseBWTHandler
+struct HostBWTHandler : public SetBWTHandler
 {
     HostBWTHandler(OutputIterator _output) : output(_output) {}
 
@@ -100,14 +114,13 @@ struct HostBWTHandler : public BaseBWTHandler
     ///
     void process(
         const uint32  n_suffixes,
-        const uint8*  h_bwt,
-        const uint8*  d_bwt,
-        const uint2*  h_suffixes,
-        const uint2*  d_suffixes,
-        const uint32* d_indices)
+        const uint8*  bwt,
+        const uint32  n_dollars,
+        const uint64* dollar_pos,
+        const uint64* dollar_ids)
     {
         for (uint32 i = 0; i < n_suffixes; ++i)
-            output[i] = h_bwt[i];
+            output[i] = bwt[i];
 
         output += n_suffixes;
     }
@@ -118,7 +131,7 @@ struct HostBWTHandler : public BaseBWTHandler
 /// A class to output the BWT to a packed host string
 ///
 template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename word_type>
-struct HostBWTHandler< PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> > : public BaseBWTHandler
+struct HostBWTHandler< PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> > : public SetBWTHandler
 {
     typedef PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> OutputIterator;
 
@@ -134,11 +147,10 @@ struct HostBWTHandler< PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint
     ///
     void process(
         const uint32  n_suffixes,
-        const uint8*  h_bwt,
-        const uint8*  d_bwt,
-        const uint2*  h_suffixes,
-        const uint2*  d_suffixes,
-        const uint32* d_indices)
+        const uint8*  bwt,
+        const uint32  n_dollars,
+        const uint64* dollar_pos,
+        const uint64* dollar_ids)
     {
         const uint32 word_offset = offset & (SYMBOLS_PER_WORD-1);
               uint32 word_rem    = 0;
@@ -158,7 +170,7 @@ struct HostBWTHandler< PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint
             {
                 const uint32       bit_idx = (word_offset + i) * SYMBOL_SIZE;
                 const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
-                const word_type     symbol = word_type(h_bwt[i]) << symbol_offset;
+                const word_type     symbol = word_type(bwt[i]) << symbol_offset;
 
                 // set bits
                 word |= symbol;
@@ -182,7 +194,7 @@ struct HostBWTHandler< PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint
             {
                 const uint32       bit_idx = j * SYMBOL_SIZE;
                 const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
-                const word_type     symbol = word_type(h_bwt[i + j]) << symbol_offset;
+                const word_type     symbol = word_type(bwt[i + j]) << symbol_offset;
 
                 // set bits
                 word |= symbol;
@@ -202,17 +214,8 @@ struct HostBWTHandler< PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint
 
 /// A class to output the BWT to a packed host string
 ///
-struct DiscardBWTHandler : public BaseBWTHandler
+struct DiscardBWTHandler : public SetBWTHandler
 {
-    /// process a batch of BWT symbols
-    ///
-    void process(
-        const uint32  n_suffixes,
-        const uint8*  h_bwt,
-        const uint8*  d_bwt,
-        const uint2*  h_suffixes,
-        const uint2*  d_suffixes,
-        const uint32* d_indices) {}
 };
 
 /// a utility StringSuffixHandler to compute the BWT of the sorted suffixes

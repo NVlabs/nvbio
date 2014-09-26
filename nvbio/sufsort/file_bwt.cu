@@ -92,176 +92,10 @@ template <typename T> uint32 itoa(char *buf, T in)
 
 } // anonymous namespace
 
-#define GPU_RANKING
-
-/// Map each dollar's rank to its sequence index
-///
-struct DollarRankMap
-{
-    typedef std::pair<uint64,uint32> entry_type;
-
-    /// constructor
-    ///
-    DollarRankMap() :
-        offset(0),
-        n_dollars(0) {}
-
-    /// process a batch of BWT symbols
-    ///
-    uint32 extract(
-        const uint32  n_suffixes,
-        const uint8*  h_bwt,
-        const uint8*  d_bwt,
-        const uint2*  h_suffixes,
-        const uint2*  d_suffixes,
-        const uint32* d_indices)
-    {
-        if (h_suffixes != NULL &&   // these are NULL for the empty suffixes
-            d_suffixes != NULL)
-        {
-        #if defined(GPU_RANKING)
-            priv::alloc_storage( found_dollars,    n_suffixes );
-            priv::alloc_storage( d_dollar_ranks,   n_suffixes );
-            priv::alloc_storage( d_dollars,        n_suffixes );
-            priv::alloc_storage( h_dollar_ranks,   n_suffixes );
-            priv::alloc_storage( h_dollars,        n_suffixes );
-
-            uint32 n_found_dollars = 0;
-
-            if (d_indices != NULL)
-            {
-                priv::alloc_storage( d_dollar_indices, n_suffixes );
-
-                // find the dollar signs
-                n_found_dollars = cuda::copy_flagged(
-                    n_suffixes,
-                    thrust::make_zip_iterator(
-                        thrust::make_tuple(
-                            thrust::make_counting_iterator<uint32>(0),
-                            thrust::device_ptr<const uint32>( d_indices ) ) ),
-                    thrust::make_transform_iterator( thrust::device_ptr<const uint8>( d_bwt ), equal_to_functor<uint8>(255u) ),
-                    thrust::make_zip_iterator(
-                        thrust::make_tuple(
-                            d_dollar_ranks.begin(),
-                            d_dollar_indices.begin() ) ),
-                    d_temp_storage );
-
-                // gather their indices
-                thrust::gather(
-                    d_dollar_indices.begin(),
-                    d_dollar_indices.begin() + n_found_dollars,
-                    thrust::make_transform_iterator( thrust::device_ptr<const uint2>( d_suffixes ), priv::suffix_component_functor<priv::STRING_ID>() ),
-                    d_dollars.begin() );
-            }
-            else
-            {
-                // find the dollar signs
-                n_found_dollars = cuda::copy_flagged(
-                    n_suffixes,
-                    thrust::make_zip_iterator(
-                        thrust::make_tuple(
-                            thrust::make_counting_iterator<uint32>(0),
-                            thrust::make_transform_iterator( thrust::device_ptr<const uint2>( d_suffixes ), priv::suffix_component_functor<priv::STRING_ID>() ) ) ),
-                    thrust::make_transform_iterator( thrust::device_ptr<const uint8>( d_bwt ), equal_to_functor<uint8>(255u) ),
-                    thrust::make_zip_iterator(
-                        thrust::make_tuple(
-                            d_dollar_ranks.begin(),
-                            d_dollars.begin() ) ),
-                    d_temp_storage );
-            }
-
-            // and copy them back to the host
-            thrust::copy(
-                d_dollar_ranks.begin(),
-                d_dollar_ranks.begin() + n_found_dollars,
-                h_dollar_ranks.begin() );
-
-            // and copy them back to the host
-            thrust::copy(
-                d_dollars.begin(),
-                d_dollars.begin() + n_found_dollars,
-                h_dollars.begin() );
-
-            #pragma omp parallel for
-            for (int i = 0; i < int( n_found_dollars ); ++i)
-            {
-                found_dollars[i] = std::make_pair(
-                    uint64( offset + h_dollar_ranks[i] ),
-                    h_dollars[i] );
-            }
-
-            n_dollars += n_found_dollars;
-            return n_found_dollars;
-        #else
-            priv::alloc_storage( found_dollars, n_suffixes );
-            priv::alloc_storage( h_indices,     n_suffixes );
-
-            const priv::suffix_component_functor<priv::STRING_ID> suffix_string;
-
-            uint32 n_found_dollars = 0;
-
-            if (d_indices != NULL)
-            {
-                // copy the indices back to the host
-                thrust::copy(
-                    thrust::device_ptr<const uint32>( d_indices ),
-                    thrust::device_ptr<const uint32>( d_indices ) + n_suffixes,
-                    h_indices.begin() );
-
-                // loop through every symbol and keep track of the dollars
-                for (uint32 i = 0; i < n_suffixes; ++i)
-                {
-                    if (h_bwt[i] == 255u)
-                    {
-                        h_dollars[ n_found_dollars++ ] = std::make_pair(
-                            uint64( offset + i ),
-                            suffix_string( h_suffixes[ h_indices[i] ] ) );
-                    }
-                }
-            }
-            else
-            {
-                // loop through every symbol and keep track of the dollars
-                for (uint32 i = 0; i < n_suffixes; ++i)
-                {
-                    if (h_bwt[i] == 255u)
-                    {
-                        found_dollars[ n_found_dollars++ ] = std::make_pair(
-                            uint64( offset + i ),
-                            suffix_string( h_suffixes[i] ) );
-                    }
-                }
-            }
-
-            n_dollars += n_found_dollars;
-            return n_found_dollars;
-        #endif
-        }
-
-        offset += n_suffixes;
-        return 0;
-    }
-
-    uint64                          offset;
-    uint32                          n_dollars;
-    std::vector<entry_type>         found_dollars;
-
-  #if defined(GPU_RANKING)
-    thrust::device_vector<uint32>   d_dollar_ranks;
-    thrust::device_vector<uint32>   d_dollar_indices;
-    thrust::device_vector<uint32>   d_dollars;
-    thrust::host_vector<uint32>     h_dollar_ranks;
-    thrust::host_vector<uint32>     h_dollars;
-    thrust::device_vector<uint8>    d_temp_storage;
-  #else
-    thrust::host_vector<uint32>     h_indices;
-  #endif
-};
-
 /// A class to output the BWT to a packed host string
 ///
 template <typename BWTWriter, uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename word_type>
-struct FileBWTHandler : public BaseBWTHandler, public BWTWriter
+struct FileBWTHandler : public SetBWTHandler, public BWTWriter
 {
     static const uint32 WORD_SIZE = uint32( 8u * sizeof(word_type) );
     static const uint32 SYMBOLS_PER_WORD = WORD_SIZE / SYMBOL_SIZE;
@@ -284,13 +118,134 @@ struct FileBWTHandler : public BaseBWTHandler, public BWTWriter
 
     /// process a batch of BWT symbols
     ///
+    template <uint32 IN_SYMBOL_SIZE>
+    void write_bwt(
+        const uint32  n_suffixes,
+        const uint32* bwt_storage)
+    {
+        typedef PackedStream<const uint32*,uint8,IN_SYMBOL_SIZE,true> input_stream_type;
+
+        input_stream_type bwt( bwt_storage );
+
+        const uint32 n_words = util::round_i( n_suffixes, SYMBOLS_PER_WORD );
+
+        // expand our cache if needed
+        if (cache.size() < n_words+2 ) // 2 more guardband words to avoid out-of-bounds accesses
+            cache.resize( n_words+2 );
+
+        const uint32 word_offset = offset & (SYMBOLS_PER_WORD-1);
+              uint32 word_rem    = 0;
+              uint32 cache_idx   = 0;
+
+        if (word_offset)
+        {
+            // compute how many symbols we still need to encode to fill the current word
+            word_rem = SYMBOLS_PER_WORD - word_offset;
+
+            // fetch the word in question
+            word_type word = cache_word;
+
+            for (uint32 i = 0; i < word_rem; ++i)
+            {
+                const uint32       bit_idx = (word_offset + i) * SYMBOL_SIZE;
+                const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
+                const word_type     symbol = word_type(bwt[i]) << symbol_offset;
+
+                // set bits
+                word |= symbol;
+            }
+
+            // write out the cached word
+            cache[0]  = word;
+            cache_idx = 1;
+        }
+
+        #pragma omp parallel for
+        for (int i = word_rem; i < int( n_suffixes ); i += SYMBOLS_PER_WORD)
+        {
+            // encode a word's worth of characters
+            word_type word = 0u;
+
+            const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, n_suffixes - i );
+
+            for (uint32 j = 0; j < n_symbols; ++j)
+            {
+                const uint32       bit_idx = j * SYMBOL_SIZE;
+                const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
+                const word_type     symbol = word_type(bwt[i + j]) << symbol_offset;
+
+                // set bits
+                word |= symbol;
+            }
+
+            // write out the word and advance word_idx
+            const uint32 word_idx = (i - word_rem) / SYMBOLS_PER_WORD;
+
+            cache[ cache_idx + word_idx ] = word;
+        }
+
+        // compute how many words we can actually write out
+        const uint32 n_full_words = cache_idx + (n_suffixes - word_rem) / SYMBOLS_PER_WORD;
+
+        // write out the cache buffer
+        {
+            const uint32 n_bytes   = uint32( sizeof(word_type) * n_full_words );
+            const uint32 n_written = BWTWriter::bwt_write( n_bytes, &cache[0] );
+            if (n_written != n_bytes)
+                throw nvbio::runtime_error("FileBWTHandler::process() : bwt write failed! (%u/%u bytes written)", n_written, n_bytes);
+        }
+
+        // save the last (possibly partial) word (hence the +2 guardband)
+        cache_word = cache[ n_full_words ];
+    }
+
+    /// process a batch of BWT symbols
+    ///
     void process(
         const uint32  n_suffixes,
-        const uint8*  h_bwt,
-        const uint8*  d_bwt,
-        const uint2*  h_suffixes,
-        const uint2*  d_suffixes,
-        const uint32* d_indices)
+        const uint32  bits_per_symbol,
+        const uint32* bwt,
+        const uint32  n_dollars,
+        const uint64* dollar_pos,
+        const uint64* dollar_ids)
+    {
+        if (bits_per_symbol == 2)
+            write_bwt<2>( n_suffixes, bwt );
+        else if (bits_per_symbol == 4)
+            write_bwt<4>( n_suffixes, bwt );
+        else if (bits_per_symbol == 8)
+            write_bwt<8>( n_suffixes, bwt );
+        else
+            throw nvbio::runtime_error("FileBWTHandler::process() : unsupported input format! (%u bits per symbol)", bits_per_symbol);
+
+        // and write the list to the output
+        if (n_dollars)
+        {
+            if (dollars.size() < n_dollars)
+                dollars.resize( n_dollars );
+
+            #pragma omp parallel for
+            for (int32 i = 0; i < int32( n_dollars ); ++i)
+                dollars[i] = std::make_pair( dollar_pos[i], dollar_ids[i] );
+
+            const uint32 n_bytes   = uint32( sizeof(uint64) * 2 * n_dollars );
+            const uint32 n_written = BWTWriter::index_write( n_bytes, &dollars[0] );
+            if (n_written != n_bytes)
+                throw nvbio::runtime_error("FileBWTHandler::process() : index write failed! (%u/%u bytes written)", n_written, n_bytes);
+        }
+
+        // advance the offset
+        offset += n_suffixes;
+    }
+
+    /// process a batch of BWT symbols
+    ///
+    void process(
+        const uint32  n_suffixes,
+        const uint8*  bwt,
+        const uint32  n_dollars,
+        const uint64* dollar_pos,
+        const uint64* dollar_ids)
     {
         const uint32 n_words = util::round_i( n_suffixes, SYMBOLS_PER_WORD );
 
@@ -314,7 +269,7 @@ struct FileBWTHandler : public BaseBWTHandler, public BWTWriter
             {
                 const uint32       bit_idx = (word_offset + i) * SYMBOL_SIZE;
                 const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
-                const word_type     symbol = word_type(h_bwt[i]) << symbol_offset;
+                const word_type     symbol = word_type(bwt[i]) << symbol_offset;
 
                 // set bits
                 word |= symbol;
@@ -337,7 +292,7 @@ struct FileBWTHandler : public BaseBWTHandler, public BWTWriter
             {
                 const uint32       bit_idx = j * SYMBOL_SIZE;
                 const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
-                const word_type     symbol = word_type(h_bwt[i + j]) << symbol_offset;
+                const word_type     symbol = word_type(bwt[i + j]) << symbol_offset;
 
                 // set bits
                 word |= symbol;
@@ -363,19 +318,18 @@ struct FileBWTHandler : public BaseBWTHandler, public BWTWriter
         // save the last (possibly partial) word (hence the +2 guardband)
         cache_word = cache[ n_full_words ];
 
-        const uint32 n_found_dollars = dollars.extract(
-            n_suffixes,
-            h_bwt,
-            d_bwt,
-            h_suffixes,
-            d_suffixes,
-            d_indices );
-
         // and write the list to the output
-        if (n_found_dollars)
+        if (n_dollars)
         {
-            const uint32 n_bytes   = uint32( sizeof(DollarRankMap::entry_type) * n_found_dollars );
-            const uint32 n_written = BWTWriter::index_write( n_bytes, &dollars.found_dollars[0] );
+            if (dollars.size() < n_dollars)
+                dollars.resize( n_dollars );
+
+            #pragma omp parallel for
+            for (int32 i = 0; i < int32( n_dollars ); ++i)
+                dollars[i] = std::make_pair( dollar_pos[i], dollar_ids[i] );
+
+            const uint32 n_bytes   = uint32( sizeof(uint64) * 2 * n_dollars );
+            const uint32 n_written = BWTWriter::index_write( n_bytes, &dollars[0] );
             if (n_written != n_bytes)
                 throw nvbio::runtime_error("FileBWTHandler::process() : index write failed! (%u/%u bytes written)", n_written, n_bytes);
         }
@@ -387,13 +341,13 @@ struct FileBWTHandler : public BaseBWTHandler, public BWTWriter
     uint64                  offset;
     std::vector<word_type>  cache;
     word_type               cache_word;
-    DollarRankMap           dollars;
+    std::vector< std::pair<uint64,uint64> > dollars;
 };
 
 /// A class to output the BWT to a ASCII file
 ///
 template <typename BWTWriter>
-struct ASCIIFileBWTHandler : public BaseBWTHandler, public BWTWriter
+struct ASCIIFileBWTHandler : public SetBWTHandler, public BWTWriter
 {
     /// constructor
     ///
@@ -411,55 +365,24 @@ struct ASCIIFileBWTHandler : public BaseBWTHandler, public BWTWriter
         BWTWriter::index_write( 5, magic );
     }
 
-    /// process a batch of BWT symbols
-    ///
-    void process(
-        const uint32  n_suffixes,
-        const uint8*  h_bwt,
-        const uint8*  d_bwt,
-        const uint2*  h_suffixes,
-        const uint2*  d_suffixes,
-        const uint32* d_indices)
+    void write_dollars(
+        const uint32        n_dollars,
+        const uint64*       dollar_pos,
+        const uint64*       dollar_ids)
     {
-        // write out the cache buffer
-        priv::alloc_storage( ascii, n_suffixes + 1 );
-
-        // convert to ASCII
-        dna6_to_string( h_bwt, n_suffixes, &ascii[0] );
+        if (n_dollars)
         {
-            const uint32 n_bytes   = uint32( n_suffixes );
-            const uint32 n_written = BWTWriter::bwt_write( n_bytes, &ascii[0] );
-            if (n_written != n_bytes)
-                throw nvbio::runtime_error("FileBWTHandler::process() : bwt write failed! (%u/%u bytes written)", n_written, n_bytes);
-        }
-
-        const uint32 n_found_dollars = dollars.extract(
-            n_suffixes,
-            h_bwt,
-            d_bwt,
-            h_suffixes,
-            d_suffixes,
-            d_indices );
-
-        // and write the list to the output
-        if (n_found_dollars)
-        {
-            //const uint32 n_bytes   = uint32( sizeof(DollarRankMap::entry_type) * n_found_dollars );
-            //const uint32 n_written = BWTWriter::index_write( n_bytes, &dollars.found_dollars[0] );
-            //if (n_written != n_bytes)
-            //    throw nvbio::runtime_error("FileBWTHandler::process() : index write failed! (%u/%u bytes written)", n_written, n_bytes);
-
             // reserve enough storage to encode 2 very large numbers in base 10 (up to 15 digits), plus a space and a newline
-            priv::alloc_storage( dollar_buffer, n_found_dollars * 32 );
+            priv::alloc_storage( dollar_buffer, n_dollars * 32 );
 
             uint32 output_size = 0;
 
-            for (uint32 i = 0; i < n_found_dollars; ++i)
+            for (uint32 i = 0; i < n_dollars; ++i)
             {
                 char* buf = &dollar_buffer[ output_size ];
 
-                const uint32 len1 = itoa( buf,            dollars.found_dollars[i].first );  buf[len1]            = ' ';
-                const uint32 len2 = itoa( buf + len1 + 1, dollars.found_dollars[i].second ); buf[len1 + len2 + 1] = '\n';
+                const uint32 len1 = itoa( buf,            dollar_pos[i] );  buf[len1]            = ' ';
+                const uint32 len2 = itoa( buf + len1 + 1, dollar_ids[i] ); buf[len1 + len2 + 1] = '\n';
                 const uint32 len  = len1 + len2 + 2;
 
                 output_size += len;
@@ -470,14 +393,72 @@ struct ASCIIFileBWTHandler : public BaseBWTHandler, public BWTWriter
             if (n_written != n_bytes)
                 throw nvbio::runtime_error("FileBWTHandler::process() : index write failed! (%u/%u bytes written)", n_written, n_bytes);
         }
+    }
+
+    /// process a batch of BWT symbols
+    ///
+    template <typename bwt_iterator>
+    void write(
+        const uint32        n_suffixes,
+        const bwt_iterator  bwt,
+        const uint32        n_dollars,
+        const uint64*       dollar_pos,
+        const uint64*       dollar_ids)
+    {
+        // write out the cache buffer
+        priv::alloc_storage( ascii, n_suffixes + 1 );
+
+        // convert to ASCII
+        dna6_to_string( bwt, n_suffixes, &ascii[0] );
+        {
+            const uint32 n_bytes   = uint32( n_suffixes );
+            const uint32 n_written = BWTWriter::bwt_write( n_bytes, &ascii[0] );
+            if (n_written != n_bytes)
+                throw nvbio::runtime_error("FileBWTHandler::process() : bwt write failed! (%u/%u bytes written)", n_written, n_bytes);
+        }
+
+        // and write the list to the output
+        write_dollars( n_dollars, dollar_pos, dollar_ids );
 
         // advance the offset
         offset += n_suffixes;
     }
 
+    /// process a batch of BWT symbols
+    ///
+    void process(
+        const uint32  n_suffixes,
+        const uint32  bits_per_symbol,
+        const uint8*  bwt,
+        const uint32  n_dollars,
+        const uint64* dollar_pos,
+        const uint64* dollar_ids)
+    {
+        // convert to ASCII
+        if (bits_per_symbol == 2)
+            write( n_suffixes, PackedStream<const uint32*,uint8,2,true>( bwt ), n_dollars, dollar_pos, dollar_ids );
+        else if (bits_per_symbol == 4)
+            write( n_suffixes, PackedStream<const uint32*,uint8,4,true>( bwt ), n_dollars, dollar_pos, dollar_ids );
+        else if (bits_per_symbol == 8)
+            write( n_suffixes, PackedStream<const uint32*,uint8,8,true>( bwt ), n_dollars, dollar_pos, dollar_ids );
+        else
+            throw nvbio::runtime_error("FileBWTHandler::process() : unsupported input format! (%u bits per symbol)", bits_per_symbol);
+    }
+        
+    /// process a batch of BWT symbols
+    ///
+    void process(
+        const uint32  n_suffixes,
+        const uint8*  bwt,
+        const uint32  n_dollars,
+        const uint64* dollar_pos,
+        const uint64* dollar_ids)
+    {
+        write( n_suffixes, bwt, n_dollars, dollar_pos, dollar_ids );
+    }
+
     uint64                  offset;
     std::vector<char>       ascii;
-    DollarRankMap           dollars;
     std::vector<char>       dollar_buffer;
 };
 
@@ -632,7 +613,7 @@ bool BWTGZWriter::is_ok() const { return output_file != NULL || index_file != NU
 
 // open a BWT file
 //
-BaseBWTHandler* open_bwt_file(const char* output_name, const char* params)
+SetBWTHandler* open_bwt_file(const char* output_name, const char* params)
 {
     enum OutputFormat
     {

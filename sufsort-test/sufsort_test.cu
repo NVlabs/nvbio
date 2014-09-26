@@ -39,6 +39,7 @@
 
 #include <nvbio/sufsort/sufsort.h>
 #include <nvbio/sufsort/sufsort_utils.h>
+#include <nvbio/sufsort/bwte.h>
 #include <nvbio/basic/exceptions.h>
 #include <nvbio/basic/timer.h>
 #include <nvbio/strings/string_set.h>
@@ -103,6 +104,7 @@ int sufsort_test(int argc, char* argv[])
         kGPU_BWT_SET        = 32u,
         kCPU_BWT_SET        = 64u,
         kGPU_SA_SET         = 128u,
+        kCPU_BWTE_SET       = 256u,
     };
     uint32 TEST_MASK = 0xFFFFFFFFu;
 
@@ -121,7 +123,13 @@ int sufsort_test(int argc, char* argv[])
 
     for (int i = 0; i < argc; ++i)
     {
-        if (strcmp( argv[i], "-cpu-mem" ) == 0)
+        if (strcmp( argv[i], "-v" )          == 0 ||
+            strcmp( argv[i], "-verbosity" )  == 0 ||
+            strcmp( argv[i], "--verbosity" ) == 0)
+        {
+            set_verbosity( Verbosity( atoi( argv[++i] ) ) );
+        }
+        else if (strcmp( argv[i], "-cpu-mem" ) == 0)
         {
             params.host_memory = atoi( argv[++i] ) * uint64(1024u*1024u);
         }
@@ -184,6 +192,8 @@ int sufsort_test(int argc, char* argv[])
                     TEST_MASK |= kGPU_BWT_SET;
                 else if (strcmp( temp, "cpu-set-bwt" ) == 0)
                     TEST_MASK |= kCPU_BWT_SET;
+                else if (strcmp( temp, "cpu-set-bwte" ) == 0)
+                    TEST_MASK |= kCPU_BWTE_SET;
 
                 if (*end == '\0')
                     break;
@@ -614,6 +624,60 @@ int sufsort_test(int argc, char* argv[])
             N_symbols,
             d_packed_string,
             d_packed_bwt,
+            &params );
+
+        timer.stop();
+
+        log_info(stderr, "  bwt... done: %.2fs\n", timer.seconds());
+    }
+    if (TEST_MASK & kCPU_BWTE_SET)
+    {
+        typedef uint32 word_type;
+
+        typedef PackedStream<word_type*,uint8,SYMBOL_SIZE,true,uint64>  packed_stream_type;
+        typedef ConcatenatedStringSet<packed_stream_type,uint64*>       string_set;
+
+        const uint32 N_strings   = cpu_bwt_size*1000*1000;
+        const uint64 N_words     = util::divide_ri( uint64(N_strings)*(N+0), SYMBOLS_PER_WORD );
+        const uint64 N_bwt_words = util::divide_ri( uint64(N_strings)*(N+1), SYMBOLS_PER_WORD );
+
+        log_info(stderr, "  cpu set-bwte test\n");
+        log_info(stderr, "    %5.1f M strings\n",  (1.0e-6f*float(N_strings)));
+        log_info(stderr, "    %5.1f G suffixes\n", (1.0e-9f*float(uint64(N_strings)*uint64(N+1))));
+        log_info(stderr, "    %5.2f GB\n",         (float(N_words)*sizeof(uint32))/float(1024*1024*1024));
+
+        thrust::host_vector<uint32>  h_string( N_words );
+        thrust::host_vector<uint64>  h_offsets( N_strings+1 );
+
+        sufsort::make_test_string_set<SYMBOL_SIZE>(
+            N_strings,
+            N,
+            h_string,
+            h_offsets );
+
+        // zero out a few suffixes to test for repetitive patterns...
+        //for (uint32 i = 0; i < N_words / 4u; ++i)
+        //    h_string[i] = 0u;
+
+        packed_stream_type h_packed_string( (word_type*)nvbio::plain_view( h_string ) );
+
+        string_set h_string_set(
+            N_strings,
+            h_packed_string,
+            nvbio::plain_view( h_offsets ) );
+
+        log_info(stderr, "  bwt... started\n");
+
+        PagedText<SYMBOL_SIZE,true> bwt;
+        SparseSymbolSet             dollars;
+
+        Timer timer;
+        timer.start();
+
+        bwte(
+            h_string_set,
+            bwt,
+            dollars,
             &params );
 
         timer.stop();

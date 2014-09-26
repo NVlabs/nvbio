@@ -73,7 +73,7 @@ namespace nvbio {
 /// \param params           additional compression parameters (e.g. "1R", "9", etc)
 /// \return     a handler that can be used by the string-set BWT construction functions
 ///
-BaseBWTHandler* open_bwt_file(const char* output_name, const char* params);
+SetBWTHandler* open_bwt_file(const char* output_name, const char* params);
 
 ///@}
 

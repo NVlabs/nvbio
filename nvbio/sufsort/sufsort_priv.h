@@ -1952,6 +1952,37 @@ struct DeviceStringSetRadices
 
 };
 
+/// Collect dollar symbols out of a BWT + SA block
+///
+struct DollarExtractor
+{
+    /// constructor
+    ///
+    DollarExtractor() :
+        offset(0),
+        n_dollars(0) {}
+
+    /// process a batch of BWT symbols
+    ///
+    uint32 extract(
+        const uint32  n_suffixes,
+        const uint8*  h_bwt,
+        const uint8*  d_bwt,
+        const uint2*  h_suffixes,
+        const uint2*  d_suffixes,
+        const uint32* d_indices);
+
+    uint64                          offset;
+    uint32                          n_dollars;
+
+    thrust::device_vector<uint64>   d_dollar_ranks;
+    thrust::device_vector<uint32>   d_dollar_indices;
+    thrust::device_vector<uint64>   d_dollars;
+    thrust::host_vector<uint64>     h_dollar_ranks;
+    thrust::host_vector<uint64>     h_dollars;
+    thrust::device_vector<uint8>    d_temp_storage;
+};
+
 // ------------------------------------------------------------------------------------------------------------- //
 // the following functions implement device_copy() and device_scatter() - special-purpose functions to copy
 // and scatter a set of symbols to a packed stream.

@@ -309,7 +309,7 @@ int main(int argc, char* argv[])
         log_visible(stderr,"nvSetBWT... started\n");
 
         // build an output file
-        SharedPointer<BaseBWTHandler> output_handler = SharedPointer<BaseBWTHandler>( open_bwt_file( output_name, comp_level ) );
+        SharedPointer<SetBWTHandler> output_handler = SharedPointer<SetBWTHandler>( open_bwt_file( output_name, comp_level ) );
         if (output_handler == NULL)
         {
             log_error(stderr, "  failed to create an output handler\n");

@@ -339,6 +339,8 @@ void CompressionSort::sort(
                 word_functor );
 
             NVBIO_CUDA_DEBUG_STATEMENT( cudaDeviceSynchronize() );
+            cuda::check_error("CompressionSort::sort() : extract");
+
             timer.stop();
             extract_time += timer.seconds();
 

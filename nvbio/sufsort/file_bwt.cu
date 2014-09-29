@@ -321,8 +321,7 @@ struct FileBWTHandler : public SetBWTHandler, public BWTWriter
         // and write the list to the output
         if (n_dollars)
         {
-            if (dollars.size() < n_dollars)
-                dollars.resize( n_dollars );
+            priv::alloc_storage( dollars, n_dollars );
 
             #pragma omp parallel for
             for (int32 i = 0; i < int32( n_dollars ); ++i)
@@ -429,7 +428,7 @@ struct ASCIIFileBWTHandler : public SetBWTHandler, public BWTWriter
     void process(
         const uint32  n_suffixes,
         const uint32  bits_per_symbol,
-        const uint8*  bwt,
+        const uint32* bwt,
         const uint32  n_dollars,
         const uint64* dollar_pos,
         const uint64* dollar_ids)

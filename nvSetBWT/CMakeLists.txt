@@ -1,6 +1,7 @@
 nvbio_module(nvSetBWT)
 
 addsources(
+input_thread.h
 nvSetBWT.cu
 )
 

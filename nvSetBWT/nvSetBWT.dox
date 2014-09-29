@@ -59,8 +59,6 @@
 ///   nvSetBWT [options] input_file output_file
 ///   options:
 ///    -v       | --verbosity     int (0-6) [5]
-///    -cpu-mem | --cpu-memory    int (MB)  [8192]
-///    -gpu-mem | --gpu-memory    int (MB)  [2048]
 ///    -c       | --compression   string    [1R]   (e.g. \"1\", ..., \"9\", \"1R\")
 ///    -F       | --skip-forward
 ///    -R       | --skip-reverse
@@ -102,27 +100,15 @@
 ///
 ///\section DetailsSection Details
 ///\par
-/// nvSetBWT implements a novel variant of the algorithms described in: \n
-/// <i>GPU-Accelerated BWT Construction for Large Collection of Short Reads</i> \n
-/// C.M. Liu, R.Luo, T-W. Lam \n
-/// http://arxiv.org/abs/1401.7457
+/// nvSetBWT implements a novel algorithm for the BWT construction of very large string sets,
+/// called <b>set-bwte</b>.
 ///\par
-/// In more detail, it implements a GPU-parallel version of the same Blockwise Suffix Sorting skeleton,
-/// replacing the core block sorter with a new high performance MSD radix sorter. As the new
-/// block sorter sifts unique keys incrementally, it is less sensitive to read length (as its
-/// performance is linear in the LCP length, rather than the total read length).
+/// The algorithm can be considered an adaptation of Ferragina's serial <b>bwte</b> algorithm
+/// to string sets and massive parallelism.
+/// Among its properties, it is well suited to process reads of arbitrary length, and allows incremental
+/// updates (though this option is not yet implemented).
 ///\par
-/// Moreover, nvSetBWT specializes the algorithms according to the string-set size: if it can fit
-/// entirely in GPU memory, it will move all data there and proceed without ever needing to go
-/// through host memory again.
-/// On a Tesla K40, this allows to process sets containing up to 50Gbps at a greater speed.
-///\par
-/// Larger sets can still be processed <i>out-of-core</i>. The size of the data-set and the processing
-/// speed are essentially limited by the amount of available host memory. In fact, the Blockwise Suffix
-/// Sorting skeleton partitions the suffixes in buckets, and performs many parallel scans through the entire
-/// data set to collect all suffixes belonging to each bucket: the size of the buckets, and the number
-/// of scans are directly determined by the amount of available host memory.\n
-/// The amount of memory reserved as working space can be determined with the <i>--cpu-memory [MB]</i> option.\n
-/// For example, in order to process 100Gbp data-sets we recommend a minimum of 48-64GB of memory: 25GB to
-/// hold the data set, and 20GB or 32GB of working space.
+/// While the algorithm takes advantage of the GPU to perform block-sorting, the size of the data-set is
+/// essentially limited by the amount of available host memory.
+/// More details about the algorithm will be soon released in a technical report.
 ///

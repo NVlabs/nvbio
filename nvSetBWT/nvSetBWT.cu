@@ -245,7 +245,7 @@ int main(int argc, char* argv[])
 
     try
     {
-        log_visible(stderr,"nvSetBWTE... started\n");
+        log_visible(stderr,"nvSetBWT... started\n");
 
         // build an output file
         SharedPointer<SetBWTHandler> output_handler = SharedPointer<SetBWTHandler>( open_bwt_file( output_name, comp_level ) );
@@ -370,7 +370,7 @@ int main(int argc, char* argv[])
 
         log_verbose(stderr,"  total time  : %.1fs\n", time);
         log_verbose(stderr,"  peak memory : %.1f GB\n", float( peak_resident_memory() ) / float(1024*1024*1024));
-        log_visible(stderr,"nvSetBWTE... done\n");
+        log_visible(stderr,"nvSetBWT... done\n");
     }
     catch (nvbio::cuda_error e)
     {

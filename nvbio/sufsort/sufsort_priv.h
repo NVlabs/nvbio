@@ -1211,12 +1211,20 @@ struct ChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator,host_tag
     // infer the word size
     static const uint32 SYMBOLS_PER_WORD = uint32(8u*sizeof(word_type))/SYMBOL_SIZE;
 
+    uint64 needed_device_memory(const uint32 max_strings, const uint32 max_symbols) const
+    {
+        const uint32 max_words = util::divide_ri( max_symbols, SYMBOLS_PER_WORD ) + 2;
+
+        return (max_strings+1) * sizeof(uint32) +
+                max_words      * sizeof(word_type);
+    }
+
     void reserve(const uint32 max_strings, const uint32 max_symbols)
     {
         const uint32 max_words = util::divide_ri( max_symbols, SYMBOLS_PER_WORD ) + 2;
 
-        alloc_storage( h_chunk_offsets, max_strings );
-        alloc_storage( d_chunk_offsets, max_strings );
+        alloc_storage( h_chunk_offsets, max_strings+1 );
+        alloc_storage( d_chunk_offsets, max_strings+1 );
         alloc_storage( d_chunk_string,  max_words );
     }
 

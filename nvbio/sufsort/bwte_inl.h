@@ -100,18 +100,14 @@ uint64 BWTEContext<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator>::needed
         string_sorter.needed_device_memory( _max_block_suffixes )
       + string_set_handler.needed_device_memory( max_block_suffixes )
       + suffixes.needed_device_memory( _max_block_strings, _max_block_suffixes )
+      + chunk_loader.needed_device_memory( _max_block_strings, _max_block_suffixes )
       + _max_block_suffixes * sizeof(uint2)          // d_suffixes
       + _max_block_suffixes * sizeof(uint8)          // d_temp_storage
       + _max_block_suffixes * sizeof(uint8)          // d_BWT_block
       + _max_block_strings  * sizeof(uint32)         // d_dollar_off
       + _max_block_strings  * sizeof(uint32);        // d_dollar_id
 
-    // approximate amount of memory consumed by the device chunk loader
-    const size_t d_chunk_size =
-        max_block_strings * sizeof(uint32) +
-        util::divide_ri( _max_block_suffixes * SYMBOL_SIZE, 8u ) * sizeof(uint8);
-
-    return d_bytes + d_chunk_size;
+    return d_bytes;
 }
 
 // reserve space for a maximum block size
@@ -126,6 +122,7 @@ void BWTEContext<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator>::reserve(
         string_sorter.needed_device_memory( max_block_suffixes )
       + string_set_handler.needed_device_memory( max_block_suffixes )
       + suffixes.needed_device_memory( max_block_strings, max_block_suffixes )
+      + chunk_loader.needed_device_memory( _max_block_strings, _max_block_suffixes )
       + max_block_suffixes * sizeof(uint2)          // d_suffixes
       + max_block_suffixes * sizeof(uint8)          // d_temp_storage
       + max_block_suffixes * sizeof(uint8)          // d_BWT_block

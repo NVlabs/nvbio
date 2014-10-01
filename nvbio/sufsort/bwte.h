@@ -94,6 +94,10 @@ struct BWTEContext
     ///
     BWTEContext(const int device);
 
+    /// needed device memory
+    ///
+    uint64 needed_device_memory(const uint32 _max_block_strings, const uint32 _max_block_suffixes) const;
+
     /// reserve space for a maximum block size
     ///
     void reserve(const uint32 _max_block_strings, const uint32 _max_block_suffixes);

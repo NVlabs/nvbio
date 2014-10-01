@@ -1053,7 +1053,7 @@ struct SetSuffixFlattener
 
     /// return the amount of device memory needed
     ///
-    uint64 needed_device_memory(const uint32 n_strings, const uint32 n_suffixes)
+    uint64 needed_device_memory(const uint32 n_strings, const uint32 n_suffixes) const
     {
         return (n_strings + n_suffixes) * sizeof(uint32);
     }
@@ -1211,6 +1211,15 @@ struct ChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator,host_tag
     // infer the word size
     static const uint32 SYMBOLS_PER_WORD = uint32(8u*sizeof(word_type))/SYMBOL_SIZE;
 
+    void reserve(const uint32 max_strings, const uint32 max_symbols)
+    {
+        const uint32 max_words = util::divide_ri( max_symbols, SYMBOLS_PER_WORD ) + 2;
+
+        alloc_storage( h_chunk_offsets, max_strings );
+        alloc_storage( d_chunk_offsets, max_strings );
+        alloc_storage( d_chunk_string,  max_words );
+    }
+
     chunk_set_type load(
         const ConcatenatedStringSet<
             typename PackedStream<storage_type,uint8,SYMBOL_SIZE,BIG_ENDIAN,index_type>::iterator,
@@ -1221,6 +1230,7 @@ struct ChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator,host_tag
         const uint32 chunk_size = chunk_end - chunk_begin;
 
         alloc_storage( h_chunk_offsets, chunk_size+1 );
+        alloc_storage( d_chunk_offsets, chunk_size+1 );
 
         // find the words overlapped by the chunk
         const uint64 begin_index = string_set.offsets()[ chunk_begin ];
@@ -1249,7 +1259,10 @@ struct ChunkLoader<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator,host_tag
         }
 
         // copy the offsets to the device
-        d_chunk_offsets = h_chunk_offsets;
+        thrust::copy(
+            h_chunk_offsets.begin(),
+            h_chunk_offsets.begin() + chunk_size+1,
+            d_chunk_offsets.begin() );
 
         // finally assemble the device chunk string-set
         packed_stream_type d_packed_stream( word_pointer( nvbio::plain_view( d_chunk_string ) ) );
@@ -1535,6 +1548,14 @@ struct HostStringSetRadices
         return (max_string_len + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
     }
 
+    /// needed amount of device storage
+    ///
+    uint64 needed_device_memory(const uint32 n_suffixes) const
+    {
+        return n_suffixes * sizeof(uint8) + // d_symbols
+               n_suffixes * sizeof(uint32); // d_active_suffixes
+    }
+
     /// reserve any temporary space for the given amount of suffixes
     ///
     void reserve(const uint32 n_suffixes, const uint32 block_size)
@@ -1802,6 +1823,13 @@ struct DeviceStringSetRadices
         return (max_string_len + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
     }
 
+    /// needed amount of device storage
+    ///
+    uint64 needed_device_memory(const uint32 n_suffixes) const
+    {
+        return n_suffixes; // d_symbols
+    }
+
     /// reserve any temporary space for the given amount of suffixes
     ///
     void reserve(const uint32 n_suffixes, const uint32 slice_size)
@@ -1949,7 +1977,6 @@ struct DeviceStringSetRadices
     string_set_type                 m_string_set;
     thrust::device_ptr<const uint2> d_suffixes;
     thrust::device_vector<uint8>    d_symbols;
-
 };
 
 /// Collect dollar symbols out of a BWT + SA block

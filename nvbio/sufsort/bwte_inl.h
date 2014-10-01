@@ -91,8 +91,31 @@ BWTEContext<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator>::BWTEContext(c
     n_processed_suffixes = 0u;
 }
 
-/// reserve space for a maximum block size
-///
+// needed device memory
+//
+template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type, typename offsets_iterator>
+uint64 BWTEContext<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator>::needed_device_memory(const uint32 _max_block_strings, const uint32 _max_block_suffixes) const
+{
+    const size_t d_bytes =
+        string_sorter.needed_device_memory( _max_block_suffixes )
+      + string_set_handler.needed_device_memory( max_block_suffixes )
+      + suffixes.needed_device_memory( _max_block_strings, _max_block_suffixes )
+      + _max_block_suffixes * sizeof(uint2)          // d_suffixes
+      + _max_block_suffixes * sizeof(uint8)          // d_temp_storage
+      + _max_block_suffixes * sizeof(uint8)          // d_BWT_block
+      + _max_block_strings  * sizeof(uint32)         // d_dollar_off
+      + _max_block_strings  * sizeof(uint32);        // d_dollar_id
+
+    // approximate amount of memory consumed by the device chunk loader
+    const size_t d_chunk_size =
+        max_block_strings * sizeof(uint32) +
+        util::divide_ri( _max_block_suffixes * SYMBOL_SIZE, 8u ) * sizeof(uint8);
+
+    return d_bytes + d_chunk_size;
+}
+
+// reserve space for a maximum block size
+//
 template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type, typename offsets_iterator>
 void BWTEContext<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator>::reserve(const uint32 _max_block_strings, const uint32 _max_block_suffixes)
 {
@@ -101,6 +124,7 @@ void BWTEContext<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator>::reserve(
 
     const size_t d_bytes =
         string_sorter.needed_device_memory( max_block_suffixes )
+      + string_set_handler.needed_device_memory( max_block_suffixes )
       + suffixes.needed_device_memory( max_block_strings, max_block_suffixes )
       + max_block_suffixes * sizeof(uint2)          // d_suffixes
       + max_block_suffixes * sizeof(uint8)          // d_temp_storage
@@ -118,6 +142,8 @@ void BWTEContext<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator>::reserve(
 
     priv::alloc_storage( d_dollar_off, max_block_strings );
     priv::alloc_storage( d_dollar_id,  max_block_strings );
+
+    chunk_loader.reserve( max_block_strings, max_block_suffixes );
 
     suffixes.reserve( max_block_strings, max_block_suffixes );
 
@@ -142,8 +168,8 @@ void BWTEContext<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator>::reserve(
     block.reserve( max_block_strings, max_block_suffixes );
 }
 
-/// append a new block of strings
-///
+// append a new block of strings
+//
 template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type, typename offsets_iterator>
 void BWTEContext<SYMBOL_SIZE,BIG_ENDIAN,storage_type,offsets_iterator>::append_block(
     const uint32                            block_begin,

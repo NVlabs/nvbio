@@ -291,9 +291,6 @@ int main(int argc, char* argv[])
             return false;
         }
 
-        const uint32 max_block_suffixes = 256*1024*1024;
-        const uint32 max_block_strings  =  16*1024*1024;
-
         // output vectors
         PagedText<SYMBOL_SIZE,BIG_ENDIAN> bwt;
         SparseSymbolSet                   dollars;
@@ -305,8 +302,20 @@ int main(int argc, char* argv[])
         // build a BWTEContext
         BWTE_context_type bwte_context( current_device );
 
+        // find out how big a block can we alloc
+        uint32 max_block_suffixes = 256*1024*1024;
+        uint32 max_block_strings  =  16*1024*1024;
+
+        while (bwte_context.needed_device_memory( max_block_strings, max_block_suffixes ) + 256u*1024u*1024u >= free_device)
+            max_block_suffixes /= 2;
+
+        log_verbose(stderr, "  block size: %u\n", max_block_suffixes);
+
         // reserve enough space for the block processing
         bwte_context.reserve( max_block_strings, max_block_suffixes );
+
+        cudaMemGetInfo(&free_device, &total_device);
+        log_stats(stderr, "  device has %ld of %ld MB free\n", free_device/1024/1024, total_device/1024/1024);
 
         // build the input stage
         InputStage input_stage( read_data_file.get(), max_block_strings, max_block_suffixes - max_block_strings );

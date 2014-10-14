@@ -91,7 +91,9 @@ void score_reduce_kernel(
     const uint32 read_id = read_hits.read_info().read_id;
 
     // fetch the best alignments
-    io::BestAlignments best = pipeline.best_alignments[ read_id ];
+    io::BestAlignments best(
+        pipeline.best_alignments[ read_id ],
+        pipeline.best_alignments[ read_id + pipeline.best_stride ] );
 
     // setup the read stream
     const uint2  read_range = pipeline.reads.get_range(read_id);
@@ -145,7 +147,8 @@ void score_reduce_kernel(
     }
 
     // report best alignments
-    pipeline.best_alignments[ read_id ] = best;
+    pipeline.best_alignments[ read_id ]                        = best.m_a1;
+    pipeline.best_alignments[ read_id + pipeline.best_stride ] = best.m_a2;
 }
 
 ///
@@ -186,8 +189,10 @@ void score_reduce_paired_kernel(
 
     // fetch current best alignments
     io::BestPairedAlignments best_pairs = io::BestPairedAlignments(
-        read( pipeline.best_alignments   + read_id ),
-        read( pipeline.best_alignments_o + read_id ) );
+        io::BestAlignments( pipeline.best_alignments[ read_id ],
+                            pipeline.best_alignments[ read_id + pipeline.best_stride ] ),
+        io::BestAlignments( pipeline.best_alignments_o[ read_id ],
+                            pipeline.best_alignments_o[ read_id + pipeline.best_stride ] ) );
 
     // setup the read stream
     const uint2  read_range = pipeline.reads.get_range(read_id);
@@ -242,8 +247,6 @@ void score_reduce_paired_kernel(
             best_pairs.m_o2 = best_pairs.m_o1;
             best_pairs.m_a1 = pair.m_a;
             best_pairs.m_o1 = pair.m_o;
-            write( pipeline.best_alignments   + read_id, best_pairs.best_anchor() );
-            write( pipeline.best_alignments_o + read_id, best_pairs.best_opposite() );
             NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_reduce( read_id ), "update best (anchor[%u]):  (parent[%u:%u])\n  1. score[%d], rc[%u], pos[%u]\n  2. score[%d], rc[%u], pos[%u,%u]\n", anchor, thread_id, i, score1, read_rc, g_pos.y, score2, o_read_rc, o_g_pos.x, o_g_pos.y );
         }
         else if ((score > best_pairs.second_score()) && distinct_alignments( best_pairs.pair<0>(), pair, read_len/2 ))
@@ -253,8 +256,6 @@ void score_reduce_paired_kernel(
             // set the second best score
             best_pairs.m_a2 = pair.m_a;
             best_pairs.m_o2 = pair.m_o;
-            write( pipeline.best_alignments   + read_id, best_pairs.best_anchor() );
-            write( pipeline.best_alignments_o + read_id, best_pairs.best_opposite() );
             NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_reduce( read_id ), "update second (anchor[%u]):  (parent[%u:%u])\n  1. score[%d], rc[%u], pos[%u]\n  2. score[%d], rc[%u], pos[%u,%u]\n", anchor, thread_id, i, score1, read_rc, g_pos.y, score2, o_read_rc, o_g_pos.x, o_g_pos.y );
         }
         else if ((params.pe_unpaired == true) && (best_pairs.is_paired() == false))
@@ -274,13 +275,25 @@ void score_reduce_paired_kernel(
             {
                 best.m_a2 = best.m_a1;
                 best.m_a1 = io::Alignment( g_pos.x, g_pos.y - g_pos.x, score1, read_rc, anchor, false );
-                write( (anchor ? pipeline.best_alignments_o : pipeline.best_alignments) + read_id, best );
+                if (anchor == 0)
+                {
+                    best_pairs.m_a1 = best.m_a1;
+                    best_pairs.m_a2 = best.m_a2;
+                }
+                else
+                {
+                    best_pairs.m_o1 = best.m_a1;
+                    best_pairs.m_o2 = best.m_a2;
+                }
+
                 NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_reduce( read_id ), "update best unpaired[%u]:  (parent[%u:%u])\n  1. score[%d], rc[%u], pos[%u]\n", anchor, thread_id, i, score1, read_rc, g_pos );
             }
             else if ((score1 > best.m_a2.score()) && io::distinct_alignments( best.m_a1.alignment(), best.m_a1.is_rc(), g_pos.x, read_rc, read_len/2 ))
             {
                 best.m_a2 = io::Alignment( g_pos.x, g_pos.y - g_pos.x, score1, read_rc, anchor, false );
-                write( (anchor ? pipeline.best_alignments_o : pipeline.best_alignments) + read_id, best );
+                if (anchor == 0) best_pairs.m_a2 = best.m_a2;
+                else             best_pairs.m_o2 = best.m_a2;
+
                 NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_reduce( read_id ), "update second unpaired[%u]:  (parent[%u:%u])\n  score[%d], rc[%u], pos[%u]\n", anchor, thread_id, i, score1, read_rc, g_pos );
             }
             else if (context.failure( i, read_id, top_flag, params ))
@@ -296,6 +309,12 @@ void score_reduce_paired_kernel(
             pipeline.hits.erase( read_id );
         }
     }
+
+    // report best alignments
+    pipeline.best_alignments[ read_id ]                          = best_pairs.m_a1;
+    pipeline.best_alignments[ read_id + pipeline.best_stride ]   = best_pairs.m_a2;
+    pipeline.best_alignments_o[ read_id  ]                       = best_pairs.m_o1;
+    pipeline.best_alignments_o[ read_id + pipeline.best_stride ] = best_pairs.m_o2;
 }
 
 ///@}  // group ReduceDetail

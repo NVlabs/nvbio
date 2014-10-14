@@ -50,7 +50,8 @@ struct BowtieMapq3
 
     /// compute mapping quality
     ///
-	int operator() (
+    NVBIO_HOST_DEVICE
+	uint32 operator() (
         const io::BestPairedAlignments& best_alignments,
         const uint32                    read_len,
         const uint32                    o_read_len) const
@@ -151,7 +152,8 @@ struct BowtieMapq2
 
     /// compute mapping quality
     ///
-	int operator() (
+    NVBIO_HOST_DEVICE
+	uint32 operator() (
         const io::BestPairedAlignments& best_alignments,
         const uint32                    read_len,
         const uint32                    o_read_len) const
@@ -326,45 +328,6 @@ struct BowtieMapq2
 
 private:
 	ScoringSchemeType m_sc;
-};
-
-// interface glue for io::MapQEvaluator
-// wraps BowtieMapq2/3
-// xxxnsubtil: this desperately needs cleaning up
-template <typename OldBowtieMapq>
-struct BowtieMapq : public io::MapQEvaluator
-{
-private:
-    OldBowtieMapq old_mapq;
-
-public:
-    BowtieMapq(const typename OldBowtieMapq::scoring_scheme_type sc)
-        : old_mapq(sc)
-    { }
-
-    // compute a single-end mapq
-    // this is used for both single-end and paired-ends --- for PE, mate is invalid
-    int compute_mapq(const io::AlignmentData& alignment,
-                     const io::AlignmentData& mate) const
-    {
-        io::BestAlignments best_a, best_o;
-
-        // stash the alignment into a BestPairedAlignments struct
-        NVBIO_CUDA_ASSERT(alignment.valid);
-        best_a = io::BestAlignments(*alignment.best, *alignment.second_best);
-
-        if (mate.valid)
-        {
-            best_o = io::BestAlignments(*mate.best, *mate.second_best);
-        } else {
-            best_o = io::BestAlignments(io::Alignment::invalid(), io::Alignment::invalid());
-        }
-
-        io::BestPairedAlignments best_paired(best_a, best_o);
-
-        // call into the old mapq code
-        return old_mapq(best_paired, alignment.read_len, alignment.read_len);
-    }
 };
 
 } // namespace cuda

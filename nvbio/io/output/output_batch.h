@@ -43,22 +43,20 @@ namespace nvbio {
 namespace io {
 
 // a batch of alignment results on the CPU
-struct CPUOutputBatch
+struct HostOutputBatchPE
 {
     uint32 count;
 
-    thrust::host_vector<io::AlignmentResult> best_alignments;
-
-    // we have two cigar and MDS arrays, one for each mate
+    // we have two alignments, cigar and MDS arrays, one for each mate
+    thrust::host_vector<io::Alignment>           alignments[2];
     HostCigarArray                               cigar[2];
     HostMdsArray                                 mds[2];
+    thrust::host_vector<uint8>                   mapq;
 
     // pointer to the host-side read data for each mate
     const io::SequenceDataHost*                  read_data[2];
 
-    CPUOutputBatch()
-        : count(0)
-    { }
+    HostOutputBatchPE() : count(0) {}
 
     // extract alignment data for a given mate
     AlignmentData get_mate(uint32 read_id, AlignmentMate mate, AlignmentMate cigar_mate);
@@ -69,37 +67,40 @@ struct CPUOutputBatch
 };
 
 // base class for representing a batch of alignment results on the device
-struct GPUOutputBatch
+struct DeviceOutputBatchSE
 {
 public:
     uint32                                     count;
 
-    thrust::device_vector<io::BestAlignments>& best_data_dvec;
+    thrust::device_vector<io::Alignment>&      alignments;
     DeviceCigarArray                           cigar;
     nvbio::DeviceVectorArray<uint8>&           mds;
+    thrust::device_vector<uint8>               mapq;
 
     const io::SequenceDataDevice&              read_data;
 
-    GPUOutputBatch(uint32                                         _count,
-                   thrust::device_vector<io::BestAlignments>&     _best_data_dvec,
+    DeviceOutputBatchSE(uint32                                    _count,
+                   thrust::device_vector<io::Alignment>&          _alignments,
                    DeviceCigarArray                               _cigar,
                    nvbio::DeviceVectorArray<uint8>&               _mds,
+                   thrust::device_vector<uint8>&                  _mapq,
                    const io::SequenceDataDevice&                  _read_data)
             : count(_count),
-              best_data_dvec(_best_data_dvec),
+              alignments(_alignments),
               cigar(_cigar),
               mds(_mds),
+              mapq(_mapq),
               read_data(_read_data)
     { }
 
     // copy best score data into host memory
-    void readback_scores(thrust::host_vector<io::AlignmentResult>& output,
-                         const AlignmentMate mate,
-                         const AlignmentScore score) const;
+    void readback_scores(thrust::host_vector<io::Alignment>& host_alignments) const;
     // copy cigars into host memory
     void readback_cigars(HostCigarArray& host_cigars) const;
     // copy md strings into host memory
     void readback_mds(nvbio::HostVectorArray<uint8>& host_mds) const;
+    // copy mapq into host memory
+    void readback_mapq(thrust::host_vector<uint8>& host_mapq) const;
 };
 
 } // namespace io

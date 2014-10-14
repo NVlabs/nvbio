@@ -585,7 +585,7 @@ float radical_inverse(unsigned int n)
 		result += double( remainder ) / double( bj );
 	} while (n > 0);
 
-	return result;
+	return float(result);
 };
 
 #if defined(__CUDA_ARCH__)

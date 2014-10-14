@@ -92,9 +92,8 @@ public:
     DebugOutput(const char *file_name, AlignmentType alignment_type, BNT bnt);
     ~DebugOutput();
 
-    void process(struct GPUOutputBatch& gpu_batch,
-                 const AlignmentMate mate,
-                 const AlignmentScore score);
+    void process(struct DeviceOutputBatchSE& gpu_batch,
+                 const AlignmentMate mate);
     void end_batch(void);
 
     void close(void);
@@ -113,7 +112,7 @@ private:
     gzFile fp_opposite_mate;
 
     // CPU copy of the current alignment batch
-    CPUOutputBatch cpu_batch;
+    HostOutputBatchPE cpu_batch;
 };
 
 } // namespace io

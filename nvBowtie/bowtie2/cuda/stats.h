@@ -33,11 +33,57 @@
 #include <vector>
 #include <deque>
 
+namespace nvbio { namespace io { struct BestAlignments; } }
+
 namespace nvbio {
 namespace bowtie2 {
 namespace cuda {
 
 typedef nvbio::TimeSeries KernelStats;
+
+
+struct AlignmentStats
+{
+    AlignmentStats()
+        : n_mapped(0),
+          n_ambiguous(0),
+          n_unambiguous(0),
+          n_unique(0),
+          n_multiple(0),
+          mapped_ed_histogram(4096, 0),
+          mapped_ed_histogram_fwd(4096, 0),
+          mapped_ed_histogram_rev(4096, 0)
+    {
+        for(uint32 c = 0; c < 64; c++)
+            mapq_bins[c] = 0;
+
+        for(uint32 c = 0; c < 64; c++)
+        {
+            for(uint32 d = 0; d < 64; d++)
+                mapped_ed_correlation[c][d] = 0;
+        }
+    }
+
+    // mapping quality stats
+    uint64 mapq_bins[64];
+
+    // mapping stats
+    uint32          n_mapped;       // number of mapped reads
+
+    uint32          n_ambiguous;    // number of reads mapped to more than one place with the same score
+    uint32          n_unambiguous;  // number of reads with a single best score (even if mapped to multiple locations)
+
+    uint32          n_unique;       // number of reads mapped to a single location
+    uint32          n_multiple;     // number of reads mapped to more than one location
+
+    // edit distance scoring histograms
+    std::vector<uint32> mapped_ed_histogram;        // aggregate histogram of edit-distance scores per read
+    std::vector<uint32> mapped_ed_histogram_fwd;    // histogram of edit-distance scores for reads mapped to the forward sequence
+    std::vector<uint32> mapped_ed_histogram_rev;    // histogram of edit-distance scores for reads mapped to the reverse-complemented sequence
+
+    // edit distance correlation (xxxnsubtil: what exactly does this measure?)
+    uint32  mapped_ed_correlation[64][64];
+};
 
 //
 // Global statistics
@@ -63,6 +109,11 @@ struct Stats
     KernelStats read_io;
     KernelStats io;
     KernelStats scoring_pipe;
+
+    // detailed mapping stats
+    AlignmentStats  paired;
+    AlignmentStats  mate1;
+    AlignmentStats  mate2;
 
     // mapping stats
     uint32              n_reads;
@@ -92,6 +143,16 @@ struct Stats
     uint32 hits_stats;
 
     Params params;
+
+    void track_alignment_statistics(
+        const io::BestAlignments&   alignment1,
+        const io::BestAlignments&   alignment2,
+        const uint8                 mapq);
+
+    void track_alignment_statistics(
+        AlignmentStats*             mate,
+        const io::BestAlignments&   alignment,
+        const uint8                 mapq);
 };
 
 void generate_report(Stats& stats, const char* report);

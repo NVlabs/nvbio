@@ -91,13 +91,15 @@ std::pair<uint64,uint64> Aligner::init_alloc(const uint32 BATCH_SIZE, const Para
 
     nvbio::cuda::check_error("allocating queues");
 
+    mapq_dptr = resize( do_alloc, mapq_dvec, BATCH_SIZE, d_allocated_bytes );
+
     if (params.mode != AllMapping)
     {
         trys_dptr      = resize( do_alloc, trys_dvec,       BATCH_SIZE,     d_allocated_bytes );
-        best_data_dptr = resize( do_alloc, best_data_dvec,  BATCH_SIZE,     d_allocated_bytes );
+        best_data_dptr = resize( do_alloc, best_data_dvec,  BATCH_SIZE*2,   d_allocated_bytes );
 
         if (type == kPairedEnds)
-            best_data_dptr_o = resize( do_alloc, best_data_dvec_o,  BATCH_SIZE, d_allocated_bytes );
+            best_data_dptr_o = resize( do_alloc, best_data_dvec_o,  BATCH_SIZE*2, d_allocated_bytes );
     }
     else
     {

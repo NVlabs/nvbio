@@ -154,6 +154,9 @@ struct BestAlignments
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 second_ed()            const { return m_a2.ed(); }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 second_alignment_pos() const { return m_a2.alignment(); }
 
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const Alignment& best()         const { return m_a1; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE const Alignment& second_best()  const { return m_a2; }
+
     template <uint32 I>
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
     const Alignment& alignment() const { return I == 0 ? m_a1 : m_a2; }
@@ -364,16 +367,25 @@ struct is_paired
 {
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE 
     bool operator() (const BestAlignments& op) { return op.alignment<0>().is_paired(); }
+
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE 
+    bool operator() (const Alignment& op) { return op.is_paired(); }
 };
 struct is_unpaired
 {
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE 
     bool operator() (const BestAlignments& op) { return op.alignment<0>().is_unpaired(); }
+
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE 
+    bool operator() (const Alignment& op) { return op.is_unpaired(); }
 };
 struct is_aligned
 {
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE 
     bool operator() (const BestAlignments& op) { return op.alignment<0>().is_aligned(); }
+
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE 
+    bool operator() (const Alignment& op) { return op.is_aligned(); }
 };
 
 // check whether two alignments are distinct

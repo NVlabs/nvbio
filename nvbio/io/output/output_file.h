@@ -52,7 +52,7 @@ namespace io {
 
    After each alignment pass in the pipeline, the aligner should call
    OutputFile::process. This call takes a handle to the alignment buffers in
-   GPU memory (a GPUOutputBatch structure). The implementation ensures that
+   GPU memory (a DeviceOutputBatchSE structure). The implementation ensures that
    any data required is copied out before the call returns, allowing the
    caller to invalidate the GPU memory immediately.
 
@@ -77,8 +77,7 @@ public:
     virtual ~OutputFile();
 
     /// Configure the MapQ evaluator. Must be called prior to any batch processing.
-    virtual void configure_mapq_evaluator(const io::MapQEvaluator *mapq,
-                                          int mapq_filter);
+    virtual void configure_mapq_evaluator(int mapq_filter);
 
     /// Begin a new batch of alignment results
     /// \param read_data_1 The (host-side) read data pointer for the first mate
@@ -90,9 +89,8 @@ public:
     /// \param gpu_batch Handle to the GPU buffers containing the alignment results
     /// \param alignment_mate Identifies the mate for this pass
     /// \param alignment_score Identifies the score type being calculated in this pass (currently either best or second-best)
-    virtual void process(struct GPUOutputBatch& gpu_batch,
-                         const AlignmentMate alignment_mate,
-                         const AlignmentScore alignment_score);
+    virtual void process(struct DeviceOutputBatchSE& gpu_batch,
+                         const AlignmentMate alignment_mate);
 
     /// Mark a batch of alignment results as complete
     virtual void end_batch(void);
@@ -105,14 +103,13 @@ public:
 
 protected:
     /// Read back batch data into the host
-    /// \param [out] cpu_batch The CPUOutputBatch struct which will receive the data
+    /// \param [out] cpu_batch The HostOutputBatchPE struct which will receive the data
     /// \param [in] gpu_batch The GPU memory handle to read from
     /// \param [in] alignment_mate Identifies the mate that the data in gpu_batch refers to
     /// \param [in] alignment_score The type of score data in gpu_batch
-    void readback(struct CPUOutputBatch& cpu_batch,
-                  const struct GPUOutputBatch& gpu_batch,
-                  const AlignmentMate alignment_mate,
-                  const AlignmentScore alignment_score);
+    void readback(struct HostOutputBatchPE& cpu_batch,
+                  const struct DeviceOutputBatchSE& gpu_batch,
+                  const AlignmentMate alignment_mate);
 
     /// Name of the file we're writing
     const char *file_name;
@@ -121,8 +118,6 @@ protected:
     /// Reference genome data handle
     BNT bnt;
 
-    /// The MapQ evaluator struct used to compute mapping qualities during output
-    const io::MapQEvaluator *mapq_evaluator;
     /// The current mapping quality filter: reads with a mapq below this value will be marked as not aligned
     int mapq_filter;
 

@@ -284,49 +284,6 @@ void select_all(
         hit_queues );
 }
 
-//
-// Prune the set of active reads based on whether we found the best alignments
-//
-__global__ 
-void prune_search_kernel(
-    const uint32                                    max_dist,
-    const nvbio::cuda::PingPongQueuesView<uint32>   queues,
-    const io::BestAlignments*                       best_data)
-{
-    __shared__ volatile uint32 sm_broadcast[BLOCKDIM >> 5];
-    volatile uint32& warp_broadcast = sm_broadcast[ warp_id() ];
-
-    const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;
-    if (thread_id >= queues.in_size) return;
-    const uint32 read_id = queues.in_queue[ thread_id ];
-
-    // check whether we can stop searching
-    const io::BestAlignments best = best_data[ read_id ];
-    if (best.has_second() && best.second_score() <= max_dist)
-        return;
-
-    // enqueue only if a valid seed
-    const uint32 slot = alloc( queues.out_size, &warp_broadcast );
-    NVBIO_CUDA_ASSERT( slot < queues.in_size );
-    queues.out_queue[ slot ] = read_id;
-}
-
-//
-// Prune the set of active reads based on whether we found the best alignments
-//
-void prune_search(
-    const uint32                                    max_dist,
-    const nvbio::cuda::PingPongQueuesView<uint32>   queues,
-    const io::BestAlignments*                       best_data)
-{
-    const int blocks = (queues.in_size + BLOCKDIM-1) / BLOCKDIM;
-
-    prune_search_kernel<<<blocks, BLOCKDIM>>>(
-        max_dist,
-        queues,
-        best_data );
-}
-
 } // namespace cuda
 } // namespace bowtie2
 } // namespace nvbio

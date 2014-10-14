@@ -161,14 +161,16 @@ struct BestApproxScoringPipelineState : public BaseScoringPipelineState<ScoringS
         trys                    ( _aligner.trys_dptr ),
         rseeds                  ( _aligner.rseeds_dptr ),
         best_alignments         ( _aligner.best_data_dptr ),
-        best_alignments_o       ( _aligner.best_data_dptr_o )
+        best_alignments_o       ( _aligner.best_data_dptr_o ),
+        best_stride             ( _aligner.BATCH_SIZE )
     {}
 
     uint32*                         trys;
     uint32*                         rseeds;
 
-    io::BestAlignments*             best_alignments;
-    io::BestAlignments*             best_alignments_o;
+    io::Alignment*                  best_alignments;
+    io::Alignment*                  best_alignments_o;
+    uint32                          best_stride;
 };
 
 ///

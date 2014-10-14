@@ -36,9 +36,7 @@
 //#define NVBIO_CUDA_DEBUG
 //#define NVBIO_CUDA_ASSERTS
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
+#include <nvbio/basic/omp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
@@ -800,11 +798,6 @@ void count_kernel(
 //
 void backtrack_test(const char* index_file, const char* reads_name, const uint32 n_reads)
 {
-  #ifdef _OPENMP
-    // Now set the number of threads
-    omp_set_num_threads( omp_get_num_procs() );
-  #endif
-
     io::FMIndexDataHost h_fmi;
     if (h_fmi.load( index_file, io::FMIndexData::FORWARD ))
     {
@@ -1015,9 +1008,10 @@ int fmindex_test(int argc, char* argv[])
     uint32 synth_len     = 10000000;
     uint32 synth_queries = 64*1024;
 
-    char*  index_name        = "./data/human.NCBI36/Homo_sapiens.NCBI36.53.dna.toplevel.fa";
+    char*  index_name        = "./data/human.NCBI36/Human.NCBI36";
     char*  reads_name        = "./data/SRR493095_1.fastq.gz";
     uint32 backtrack_queries = 64*1024;
+    uint32 threads           = omp_get_num_procs();
 
     for (int i = 0; i < argc; ++i)
     {
@@ -1031,7 +1025,11 @@ int fmindex_test(int argc, char* argv[])
             index_name = argv[++i];
         else if (strcmp( argv[i], "-reads" ) == 0)
             reads_name = argv[++i];
+        else if (strcmp( argv[i], "-threads" ) == 0)
+            threads = atoi( argv[++i] );
     }
+
+    omp_set_num_threads( threads );
 
     fprintf(stderr, "FM-index test... started\n");
 

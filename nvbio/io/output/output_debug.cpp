@@ -80,12 +80,11 @@ DebugOutput::~DebugOutput()
     fp_opposite_mate = NULL;
 }
 
-void DebugOutput::process(struct GPUOutputBatch& gpu_batch,
-                          const AlignmentMate mate,
-                          const AlignmentScore score)
+void DebugOutput::process(struct DeviceOutputBatchSE& gpu_batch,
+                          const AlignmentMate mate)
 {
     // read back the data into the CPU for later processing
-    readback(cpu_batch, gpu_batch, mate, score);
+    readback(cpu_batch, gpu_batch, mate);
 }
 
 void DebugOutput::end_batch(void)
@@ -143,19 +142,8 @@ void DebugOutput::process_one_alignment(const AlignmentData& mate_1, const Align
 {
     DbgAlignment al;
     DbgInfo info;
-    uint32 mapq;
 
-    const AlignmentData& anchor = (mate_1.best->mate() ? mate_2 : mate_1);
-    const AlignmentData& opposite_mate = (mate_1.best->mate() ? mate_1 : mate_2);
-
-    // compute the alignment's mapping quality
-    // we always compute the mapq using the anchor, so this is only done once per pair
-    if (mate_1.best->is_aligned())
-    {
-        mapq = mapq_evaluator->compute_mapq(anchor, opposite_mate);
-    } else {
-        mapq = 0;
-    }
+    const uint32 mapq = mate_1.mapq;
 
     // process the first mate
     process_one_mate(al, info, mate_1, mate_2, mapq);
@@ -166,14 +154,6 @@ void DebugOutput::process_one_alignment(const AlignmentData& mate_1, const Align
         // process the second mate
         process_one_mate(al, info, mate_2, mate_1, mapq);
         output_alignment(fp_opposite_mate, al, info);
-
-        // track per-alignment statistics
-        iostats.track_alignment_statistics(anchor, opposite_mate, mapq);
-    }
-    else
-    {
-        // track per-alignment statistics
-        iostats.track_alignment_statistics(anchor, mapq);
     }
 }
 
@@ -189,7 +169,7 @@ void DebugOutput::process_one_mate(DbgAlignment& al,
     al.read_id = crcCalc(alignment.read_name, strlen(alignment.read_name));
     al.read_len = alignment.read_len;
 
-    if (alignment.best->is_aligned())
+    if (alignment.aln->is_aligned())
     {
         // setup alignment information
         const uint32 seq_index = uint32(std::upper_bound(
@@ -198,15 +178,15 @@ void DebugOutput::process_one_mate(DbgAlignment& al,
             alignment.cigar_pos ) - bnt.sequence_index) - 1u;
 
         al.alignment_pos = alignment.cigar_pos - int32(bnt.sequence_index[ seq_index ]) + 1u;
-        info.flag = (alignment.best->mate() ? DbgInfo::READ_2 : DbgInfo::READ_1) |
-                    (alignment.best->is_rc() ? DbgInfo::REVERSE : 0u);
+        info.flag = (alignment.aln->mate() ? DbgInfo::READ_2 : DbgInfo::READ_1) |
+                    (alignment.aln->is_rc() ? DbgInfo::REVERSE : 0u);
 
         if (alignment_type == PAIRED_END)
         {
-            if (alignment.best->is_paired()) // FIXME: this should be other_mate.is_concordant()
+            if (alignment.aln->is_paired()) // FIXME: this should be other_mate.is_concordant()
                 info.flag |= DbgInfo::PROPER_PAIR;
 
-            if (mate.best->is_aligned() == false)
+            if (mate.aln->is_aligned() == false)
                 info.flag |= DbgInfo::MATE_UNMAPPED;
         }
 
@@ -224,17 +204,19 @@ void DebugOutput::process_one_mate(DbgAlignment& al,
         analyze_md_string(alignment.mds_vec, n_mm, n_gapo, n_gape);
 
         info.ref_id = seq_index;
-        info.mate   = alignment.best->mate();
-        info.score  = alignment.best->score();
+        info.mate   = alignment.aln->mate();
+        info.score  = alignment.aln->score();
         info.mapQ   = mapq;
-        info.ed     = alignment.best->ed();
+        info.ed     = alignment.aln->ed();
         info.subs   = count_symbols(Cigar::SUBSTITUTION, alignment.cigar, alignment.cigar_len);
         info.ins    = count_symbols(Cigar::INSERTION, alignment.cigar, alignment.cigar_len);
         info.dels   = count_symbols(Cigar::DELETION, alignment.cigar, alignment.cigar_len);
         info.mms    = n_mm;
         info.gapo   = n_gapo;
         info.gape   = n_gape;
-        info.sec_score = alignment.second_best->score();
+        info.sec_score = Field_traits<int16>::min(); // TODO!
+        info.has_second = 0;
+        /*
         if (info.sec_score == alignment.second_best->is_aligned())
         {
             info.sec_score = alignment.second_best->score();
@@ -243,6 +225,7 @@ void DebugOutput::process_one_mate(DbgAlignment& al,
             info.sec_score = Field_traits<int16>::min();
             info.has_second = 0;
         }
+        */
 
         info.pad = 0x69;
     } else {

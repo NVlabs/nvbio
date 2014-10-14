@@ -40,15 +40,16 @@ void banded_traceback_best(
     const uint32                                                aln_idx,
     const uint32                                                count,
     const uint32*                                               idx,
-          io::BestAlignments*                                   best_data,
+          io::Alignment*                                        best_data,
+    const uint32                                                best_stride,
     const uint32                                                band_len,
     const TracebackPipelineState<EditDistanceScoringScheme>&    pipeline,
     const ParamsPOD&                                            params)
 {
     if (aln_idx)
-        banded_traceback_best_t<1>( count, idx, best_data, band_len, pipeline, params );
+        banded_traceback_best_t<1>( count, idx, best_data, best_stride, band_len, pipeline, params );
     else
-        banded_traceback_best_t<0>( count, idx, best_data, band_len, pipeline, params );
+        banded_traceback_best_t<0>( count, idx, best_data, best_stride, band_len, pipeline, params );
 }
 
 //
@@ -58,15 +59,16 @@ void banded_traceback_best(
     const uint32                                                    aln_idx,
     const uint32                                                    count,
     const uint32*                                                   idx,
-          io::BestAlignments*                                       best_data,
+          io::Alignment*                                            best_data,
+    const uint32                                                    best_stride,
     const uint32                                                    band_len,
     const TracebackPipelineState<SmithWatermanScoringScheme<> >&    pipeline,
     const ParamsPOD&                                                params)
 {
     if (aln_idx)
-        banded_traceback_best_t<1>( count, idx, best_data, band_len, pipeline, params );
+        banded_traceback_best_t<1>( count, idx, best_data, best_stride, band_len, pipeline, params );
     else
-        banded_traceback_best_t<0>( count, idx, best_data, band_len, pipeline, params );
+        banded_traceback_best_t<0>( count, idx, best_data, best_stride, band_len, pipeline, params );
 }
 
 //
@@ -76,14 +78,15 @@ void opposite_traceback_best(
     const uint32                                                aln_idx,
     const uint32                                                count,
     const uint32*                                               idx,
-          io::BestAlignments*                                   best_data,
+          io::Alignment*                                        best_data,
+    const uint32                                                best_stride,
     const TracebackPipelineState<EditDistanceScoringScheme>&    pipeline,
     const ParamsPOD&                                            params)
 {
     if (aln_idx)
-        opposite_traceback_best_t<1>( count, idx, best_data, pipeline, params );
+        opposite_traceback_best_t<1>( count, idx, best_data, best_stride, pipeline, params );
     else
-        opposite_traceback_best_t<0>( count, idx, best_data, pipeline, params );
+        opposite_traceback_best_t<0>( count, idx, best_data, best_stride, pipeline, params );
 }
 
 //
@@ -93,14 +96,15 @@ void opposite_traceback_best(
     const uint32                                                    aln_idx,
     const uint32                                                    count,
     const uint32*                                                   idx,
-          io::BestAlignments*                                       best_data,
+          io::Alignment*                                            best_data,
+    const uint32                                                    best_stride,
     const TracebackPipelineState<SmithWatermanScoringScheme<> >&    pipeline,
     const ParamsPOD&                                                params)
 {
     if (aln_idx)
-        opposite_traceback_best_t<1>( count, idx, best_data, pipeline, params );
+        opposite_traceback_best_t<1>( count, idx, best_data, best_stride, pipeline, params );
     else
-        opposite_traceback_best_t<0>( count, idx, best_data, pipeline, params );
+        opposite_traceback_best_t<0>( count, idx, best_data, best_stride, pipeline, params );
 }
 
 
@@ -117,7 +121,7 @@ void banded_traceback_all(
     const AllMappingPipelineState<EditDistanceScoringScheme>&   pipeline,
     const ParamsPOD&                                            params)
 {
-    banded_traceback_all( count, idx, buffer_offset, buffer_size, alignments, band_len, pipeline, params );
+    banded_traceback_all_t( count, idx, buffer_offset, buffer_size, alignments, band_len, pipeline, params );
 }
 
 //
@@ -133,7 +137,7 @@ void banded_traceback_all(
     const AllMappingPipelineState<SmithWatermanScoringScheme<> >&   pipeline,
     const ParamsPOD&                                                params)
 {
-    banded_traceback_all( count, idx, buffer_offset, buffer_size, alignments, band_len, pipeline, params );
+    banded_traceback_all_t( count, idx, buffer_offset, buffer_size, alignments, band_len, pipeline, params );
 }
 
 //
@@ -143,16 +147,17 @@ void finish_alignment_best(
     const uint32                                                aln_idx,
     const uint32                                                count,
     const uint32*                                               idx,
-          io::BestAlignments*                                   best_data,
+          io::Alignment*                                        best_data,
+    const uint32                                                best_stride,
     const uint32                                                band_len,
     const TracebackPipelineState<EditDistanceScoringScheme>&    pipeline,
     const SmithWatermanScoringScheme<>                          scoring_scheme,
     const ParamsPOD&                                            params)
 {
     if (aln_idx)
-        finish_alignment_best_t<1>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+        finish_alignment_best_t<1>( count, idx, best_data, best_stride, band_len, pipeline, scoring_scheme, params );
     else
-        finish_alignment_best_t<0>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+        finish_alignment_best_t<0>( count, idx, best_data, best_stride, band_len, pipeline, scoring_scheme, params );
 }
 
 //
@@ -162,16 +167,17 @@ void finish_alignment_best(
     const uint32                                                    aln_idx,
     const uint32                                                    count,
     const uint32*                                                   idx,
-          io::BestAlignments*                                       best_data,
+          io::Alignment*                                            best_data,
+    const uint32                                                    best_stride,
     const uint32                                                    band_len,
     const TracebackPipelineState<SmithWatermanScoringScheme<> >&    pipeline,
     const SmithWatermanScoringScheme<>                              scoring_scheme,
     const ParamsPOD&                                                params)
 {
     if (aln_idx)
-        finish_alignment_best_t<1>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+        finish_alignment_best_t<1>( count, idx, best_data, best_stride, band_len, pipeline, scoring_scheme, params );
     else
-        finish_alignment_best_t<0>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+        finish_alignment_best_t<0>( count, idx, best_data, best_stride, band_len, pipeline, scoring_scheme, params );
 }
 
 //
@@ -181,16 +187,17 @@ void finish_opposite_alignment_best(
     const uint32                                                aln_idx,
     const uint32                                                count,
     const uint32*                                               idx,
-          io::BestAlignments*                                   best_data,
+          io::Alignment*                                        best_data,
+    const uint32                                                best_stride,
     const uint32                                                band_len,
     const TracebackPipelineState<EditDistanceScoringScheme>&    pipeline,
     const SmithWatermanScoringScheme<>                          scoring_scheme,
     const ParamsPOD&                                            params)
 {
     if (aln_idx)
-        finish_opposite_alignment_best_t<1>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+        finish_opposite_alignment_best_t<1>( count, idx, best_data, best_stride, band_len, pipeline, scoring_scheme, params );
     else
-        finish_opposite_alignment_best_t<0>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+        finish_opposite_alignment_best_t<0>( count, idx, best_data, best_stride, band_len, pipeline, scoring_scheme, params );
 }
 
 //
@@ -200,16 +207,17 @@ void finish_opposite_alignment_best(
     const uint32                                                    aln_idx,
     const uint32                                                    count,
     const uint32*                                                   idx,
-          io::BestAlignments*                                       best_data,
+          io::Alignment*                                            best_data,
+    const uint32                                                    best_stride,
     const uint32                                                    band_len,
     const TracebackPipelineState<SmithWatermanScoringScheme<> >&    pipeline,
     const SmithWatermanScoringScheme<>                              scoring_scheme,
     const ParamsPOD&                                                params)
 {
     if (aln_idx)
-        finish_opposite_alignment_best_t<1>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+        finish_opposite_alignment_best_t<1>( count, idx, best_data, best_stride, band_len, pipeline, scoring_scheme, params );
     else
-        finish_opposite_alignment_best_t<0>( count, idx, best_data, band_len, pipeline, scoring_scheme, params );
+        finish_opposite_alignment_best_t<0>( count, idx, best_data, best_stride, band_len, pipeline, scoring_scheme, params );
 }
 
 //

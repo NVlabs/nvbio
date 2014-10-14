@@ -67,9 +67,8 @@ public:
     BamOutput(const char *file_name, AlignmentType alignment_type, BNT bnt);
     ~BamOutput();
 
-    void process(struct GPUOutputBatch& gpu_batch,
-                 const AlignmentMate mate,
-                 const AlignmentScore score);
+    void process(struct DeviceOutputBatchSE& gpu_batch,
+                 const AlignmentMate mate);
     void end_batch(void);
 
     void close(void);
@@ -96,7 +95,7 @@ private:
     // our file pointer
     FILE *fp;
     // CPU copy of the current alignment batch
-    CPUOutputBatch cpu_output;
+    HostOutputBatchPE cpu_output;
     // text buffer that we're filling with data
     DataBuffer data_buffer;
     // our BGZF compressor

@@ -51,8 +51,7 @@ namespace io {
 
    - OutputFile
    - DeviceCigarArray
-   - MapQEvaluator
-   - GPUOutputBatch
+   - DeviceOutputBatchSE
 
 
    @addtogroup IO
@@ -105,20 +104,6 @@ typedef enum {
     SECOND_BEST_SCORE,
 } AlignmentScore;
 
-/// Encapsulates the best and second-best alignments.
-struct AlignmentResult
-{
-    /// Best alignment for both mates. Index 0 is the first mate, index 1 is the second mate
-    Alignment best[2];
-    /// Second-best alignment for both mates (same indexing)
-    Alignment second_best[2];
-
-    /// Set to true if this is a paired-end alignment
-    bool is_paired_end;
-
-    AlignmentResult();
-};
-
 /// Wrapper struct to keep CIGAR arrays and CIGAR coords in one place. This is the device version.
 struct DeviceCigarArray
 {
@@ -154,12 +139,9 @@ struct AlignmentData
     /// Set to true if this is a valid alignment
     bool valid;
 
-    /// The alignment itself
-    const Alignment *best;
-    /// The second-best alignment
-    const Alignment *second_best;
-    /// The read id of this alignment within the batch
-    uint32 read_id_p;
+    const Alignment *aln;               ///< The alignment itself
+    uint32 read_id_p;                   ///< The read id of this alignment within the batch
+    uint32 mapq;                        ///< the mapping quality score
 
     // Pointers to the read_data, cigar and mds arrays for this read.
     // These are not really meant to be used outside AlignmentData and
@@ -173,33 +155,22 @@ struct AlignmentData
     // cigar_array and mds_array in the ctor
     // they are commonly used when writing alignment data out to disk
 
-    /// the offset of the read from the start of read_data
-    uint32 read_offset;
-    /// length of the read
-    uint32 read_len;
-    /// read name
-    const char *read_name;
+    uint32 read_offset;                 ///< the offset of the read from the start of read_data
+    uint32 read_len;                    ///< length of the read
+    const char *read_name;              ///< read name
 
-    /// The iterator for the read data, acts as an array of uint8
-    read_type read_data;
-    /// quality data
-    const char *qual;
+    read_type read_data;                ///< The iterator for the read data, acts as an array of uint8
+    const char *qual;                   ///< quality data
 
-    /// CIGAR for this alignment
-    const Cigar *cigar;
-    /// The position of the cigar in the cigar array for this batch
-    /// (should really not be here, only used to get the BNT)
-    uint32 cigar_pos;
-    /// CIGAR length (in BPs? need to clarify)
-    uint32 cigar_len;
-
-    /// MDS vector
-    const uint8 *mds_vec;
+    const Cigar *cigar;                 ///< CIGAR for this alignment
+    uint32 cigar_pos;                   ///< The position of the cigar in the cigar array for this batch
+                                        ///< (should really not be here, only used to get the BNT)
+    uint32 cigar_len;                   ///< CIGAR length
+    const uint8 *mds_vec;               ///< MDS vector
 
     AlignmentData()
         : valid(false),
-          best(NULL),
-          second_best(NULL),
+          aln(NULL),
           read_id_p(0xffffffff),
           read_data_batch_p(NULL),
           cigar_array_p(NULL),
@@ -211,19 +182,18 @@ struct AlignmentData
           cigar(NULL),
           cigar_pos(0xffffffff),
           cigar_len(0xffffffff)
-    {
-    }
+    {}
 
-    AlignmentData(const Alignment *best,
-                  const Alignment *second_best,
-                  uint32 read_id,
+    AlignmentData(const Alignment* _aln,
+                  const uint32     _mapq,
+                  uint32           _read_id,
                   const io::SequenceDataHost *read_data_batch,
                   const HostCigarArray *cigar_array,
                   const HostMdsArray *mds_array)
         : valid(true),
-          best(best),
-          second_best(second_best),
-          read_id_p(read_id),
+          aln(_aln),
+          read_id_p(_read_id),
+          mapq(_mapq),
           read_data_batch_p(read_data_batch),
           cigar_array_p(cigar_array),
           mds_array_p(mds_array)
@@ -234,14 +204,14 @@ struct AlignmentData
 
         read_offset = read_data_access.sequence_index()[read_id_p];
         read_len    = read_data_access.sequence_index()[read_id_p + 1] - read_offset;
-        read_name   = read_data_access.name_stream() + read_data_access.name_index()[read_id];
+        read_name   = read_data_access.name_stream() + read_data_access.name_index()[read_id_p];
 
         read_data   = read_data_access.sequence_stream() + read_offset;
         qual        = read_data_access.qual_stream() + read_offset;
 
         cigar       = cigar_array_p->array[read_id_p];
         cigar_coord = cigar_array_p->coords[read_id_p];
-        cigar_pos   = compute_cigar_pos(cigar_coord.x, best->alignment());
+        cigar_pos   = compute_cigar_pos(cigar_coord.x, aln->alignment());
         cigar_len   = cigar_coord.y;
 
         mds_vec = (*mds_array)[read_id_p];
@@ -251,21 +221,6 @@ struct AlignmentData
     {
         return AlignmentData();
     }
-};
-
-/// MapQ evaluator interface
-struct MapQEvaluator
-{
-    virtual ~MapQEvaluator() { }
-
-    /// Callback to evaluate the mapping quality for a given alignment. Note that this could be called
-    /// concurrently from multiple threads.
-    /// \param [in] alignment The alignment to compute mapping quality for
-    /// \param [in] mate The mate of alignment (can be invalid for single end reads)
-    /// \return An int representing the mapping quality for this alignment
-    virtual int compute_mapq(const AlignmentData& alignment,
-                             const AlignmentData& mate) const = 0;
-
 };
 
 /**

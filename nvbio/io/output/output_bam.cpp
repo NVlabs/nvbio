@@ -63,12 +63,11 @@ BamOutput::~BamOutput()
     }
 }
 
-void BamOutput::process(struct GPUOutputBatch& gpu_batch,
-                        const AlignmentMate mate,
-                        const AlignmentScore score)
+void BamOutput::process(struct DeviceOutputBatchSE& gpu_batch,
+                        const AlignmentMate mate)
 {
     // read back the data into the CPU for later processing
-    readback(cpu_output, gpu_batch, mate, score);
+    readback(cpu_output, gpu_batch, mate);
 }
 
 uint32 BamOutput::generate_cigar(struct BAM_alignment& alnh,
@@ -266,7 +265,7 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
             uint8 out_bp;
             uint8 s;
 
-            if (alignment.best->m_rc)
+            if (alignment.aln->m_rc)
             {
                 nvbio::complement_functor<4> complement;
 
@@ -304,7 +303,7 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
     {
         char q;
 
-        if (alignment.best->m_rc)
+        if (alignment.aln->m_rc)
         {
             q = alignment.qual[i];
         } else {
@@ -315,28 +314,10 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
     }
 
     // compute mapping quality
-    // mapq is always computed based on the anchor mate, so we may have to swap the mates around here
-    if (alignment.best->mate())
-    {
-        // swap the mates around
-        // this requires computing read_len for the opposite mate
-        if (mate.best->is_aligned())
-        {
-            mapq = mapq_evaluator->compute_mapq(mate, alignment);
-        } else {
-            mapq = 0;
-        }
-    } else {
-        if (alignment.best->is_aligned())
-        {
-            mapq = mapq_evaluator->compute_mapq(alignment, mate);
-        } else {
-            mapq = 0;
-        }
-    }
+    mapq = alignment.mapq;
 
     // check if we're mapped
-    if (alignment.best->is_aligned() == false || mapq < mapq_filter)
+    if (alignment.aln->is_aligned() == false || mapq < mapq_filter)
     {
         alnh.refID = -1;
         alnh.pos = -1;
@@ -352,25 +333,25 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
     }
 
     // compute alignment flags
-    alnh.flag_nc = (alignment.best->mate() ? BAM_FLAGS_READ_2 : BAM_FLAGS_READ_1);
-    if (alignment.best->m_rc)
+    alnh.flag_nc = (alignment.aln->mate() ? BAM_FLAGS_READ_2 : BAM_FLAGS_READ_1);
+    if (alignment.aln->m_rc)
         alnh.flag_nc |= BAM_FLAGS_REVERSE;
 
     if (alignment_type == PAIRED_END)
     {
         alnh.flag_nc |= BAM_FLAGS_PAIRED;
 
-        if (mate.best->is_paired()) // FIXME: this should be other_mate.is_concordant()
+        if (mate.aln->is_paired()) // FIXME: this should be other_mate.is_concordant()
         {
             alnh.flag_nc |= BAM_FLAGS_PROPER_PAIR;
         }
 
-        if (!mate.best->is_aligned())
+        if (!mate.aln->is_aligned())
         {
             alnh.flag_nc |= BAM_FLAGS_MATE_UNMAPPED;
         }
 
-        if (mate.best->is_rc())
+        if (mate.aln->is_rc())
         {
             alnh.flag_nc |= BAM_FLAGS_MATE_REVERSE;
         }
@@ -415,7 +396,7 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
 
     if (alignment_type == PAIRED_END)
     {
-        if (mate.best->is_aligned())
+        if (mate.aln->is_aligned())
         {
             const uint32 o_ref_cigar_len = reference_cigar_length(mate.cigar, mate.cigar_len);
 
@@ -460,16 +441,10 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
     }
 
     // fill out tag data
-    alnd.ed = alignment.best->ed();
-    alnd.score = alignment.best->score();
+    alnd.ed = alignment.aln->ed();
+    alnd.score = alignment.aln->score();
 
-    if (alignment.second_best->is_aligned())
-    {
-        alnd.second_score = alignment.second_best->score();
-        alnd.second_score_valid = true;
-    } else {
-        alnd.second_score_valid = false;
-    }
+    alnd.second_score_valid = false; // TODO!
 
     generate_md_string(alnh, alnd, alignment);
 
@@ -559,7 +534,6 @@ void BamOutput::end_batch(void)
         // wrap the alignment into AlignmentData structures for both mates
         AlignmentData alignment;
         AlignmentData mate;
-        uint32 mapq = 0;
 
         switch(alignment_type)
         {
@@ -567,21 +541,15 @@ void BamOutput::end_batch(void)
                 alignment = cpu_output.get_mate(c, MATE_1, MATE_1);
                 mate = AlignmentData::invalid();
 
-                mapq = process_one_alignment(data_buffer, alignment, mate);
-
-                // track per-alignment statistics
-                iostats.track_alignment_statistics(alignment, mapq);
+                process_one_alignment(data_buffer, alignment, mate);
                 break;
 
             case PAIRED_END:
                 alignment = cpu_output.get_anchor(c);
                 mate = cpu_output.get_opposite_mate(c);
 
-                mapq = process_one_alignment(data_buffer, alignment, mate);
+                process_one_alignment(data_buffer, alignment, mate);
                 process_one_alignment(data_buffer, mate, alignment);
-
-                // track per-alignment statistics
-                iostats.track_alignment_statistics(alignment, mate, mapq);
                 break;
         }
     }

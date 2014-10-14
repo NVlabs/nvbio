@@ -35,65 +35,38 @@
 namespace nvbio {
 namespace io {
 
-AlignmentResult::AlignmentResult()
-{
-    best[MATE_1] = Alignment::invalid();
-    best[MATE_2] = Alignment::invalid();
-    second_best[MATE_1] = Alignment::invalid();
-    second_best[MATE_2] = Alignment::invalid();
-
-    is_paired_end = false;
-}
 // copy scoring data to host, converting to io::AlignmentResult
-void GPUOutputBatch::readback_scores(thrust::host_vector<io::AlignmentResult>& output,
-                                     const AlignmentMate mate,
-                                     const AlignmentScore score) const
+void DeviceOutputBatchSE::readback_scores(thrust::host_vector<io::Alignment>& host_alignments) const
 {
     // copy alignment data into a staging buffer
-    thrust::host_vector<io::BestAlignments> best_data_staging;
-    nvbio::cuda::thrust_copy_vector(best_data_staging, best_data_dvec, count);
-
-    // convert the contents of the staging buffer into io::AlignmentResult
-    output.resize(count);
-    for(uint32 c = 0; c < count; c++)
-    {
-        io::BestAlignments&      old_best_aln = best_data_staging[c];
-        io::Alignment&           old_aln = (score == BEST_SCORE ? old_best_aln.m_a1 : old_best_aln.m_a2);
-        io::AlignmentResult&    new_aln = output[c];
-
-        if (score == BEST_SCORE)
-        {
-            new_aln.best[mate] = old_aln;
-        } else {
-            new_aln.second_best[mate] = old_aln;
-        }
-
-        if (mate == MATE_2)
-        {
-            new_aln.is_paired_end = true;
-        }
-    }
+    host_alignments = alignments;
 }
 
 // copy CIGARs into host memory
-void GPUOutputBatch::readback_cigars(io::HostCigarArray& host_cigar) const
+void DeviceOutputBatchSE::readback_cigars(io::HostCigarArray& host_cigar) const
 {
     host_cigar.array = cigar.array;
     nvbio::cuda::thrust_copy_vector(host_cigar.coords, cigar.coords);
 }
 
 // copy MD strings back to the host
-void GPUOutputBatch::readback_mds(nvbio::HostVectorArray<uint8>& host_mds) const
+void DeviceOutputBatchSE::readback_mds(nvbio::HostVectorArray<uint8>& host_mds) const
 {
     host_mds = mds;
 }
 
+// copy mapq back to the host
+void DeviceOutputBatchSE::readback_mapq(thrust::host_vector<uint8>& host_mapq) const
+{
+    host_mapq = mapq;
+}
+
 // extract alignment data for a given mate
 // note that the mates can be different for the cigar, since mate 1 is always the anchor mate for cigars
-AlignmentData CPUOutputBatch::get_mate(uint32 read_id, AlignmentMate mate, AlignmentMate cigar_mate)
+AlignmentData HostOutputBatchPE::get_mate(uint32 read_id, AlignmentMate mate, AlignmentMate cigar_mate)
 {
-    return AlignmentData(&best_alignments[read_id].best[mate],
-                         &best_alignments[read_id].second_best[mate],
+    return AlignmentData(&alignments[mate][read_id],
+                         mapq[read_id],
                          read_id,
                          read_data[mate],
                          &cigar[cigar_mate],
@@ -101,9 +74,9 @@ AlignmentData CPUOutputBatch::get_mate(uint32 read_id, AlignmentMate mate, Align
 }
 
 // extract alignment data for the anchor mate
-AlignmentData CPUOutputBatch::get_anchor(uint32 read_id)
+AlignmentData HostOutputBatchPE::get_anchor(uint32 read_id)
 {
-    if (best_alignments[read_id].best[MATE_1].mate() == 0)
+    if (alignments[MATE_1][read_id].mate() == 0)
     {
         // mate 1 is the anchor
         return get_mate(read_id, MATE_1, MATE_1);
@@ -114,9 +87,9 @@ AlignmentData CPUOutputBatch::get_anchor(uint32 read_id)
 }
 
 // extract alignment data for the opposite mate
-AlignmentData CPUOutputBatch::get_opposite_mate(uint32 read_id)
+AlignmentData HostOutputBatchPE::get_opposite_mate(uint32 read_id)
 {
-    if (best_alignments[read_id].best[MATE_1].mate() == 0)
+    if (alignments[MATE_1][read_id].mate() == 0)
     {
         // mate 2 is the opposite mate
         return get_mate(read_id, MATE_2, MATE_2);

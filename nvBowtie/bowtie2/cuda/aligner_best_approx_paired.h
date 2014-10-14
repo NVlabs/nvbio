@@ -36,6 +36,7 @@
 #include <nvBowtie/bowtie2/cuda/traceback.h>
 #include <nvbio/basic/cuda/pingpong_queues.h>
 #include <nvbio/basic/cuda/ldg.h>
+#include <nvbio/basic/primitives.h>
 
 #include <nvbio/io/output/output_types.h>
 #include <nvbio/io/output/output_batch.h>
@@ -44,6 +45,49 @@
 namespace nvbio {
 namespace bowtie2 {
 namespace cuda {
+
+template <typename MapqCalculator, typename ReadData>
+struct MapqFunctorPE
+{
+    MapqFunctorPE(
+        MapqCalculator       _mapq_eval,
+        const io::Alignment* _best_data,
+        const io::Alignment* _best_data_o,
+        const uint32         _best_stride,
+        const ReadData       _read_data1,
+        const ReadData       _read_data2) :
+        mapq_eval( _mapq_eval ),
+        best_data( _best_data ),
+        best_data_o( _best_data_o ),
+        best_stride( _best_stride ),
+        read_data1( _read_data1 ),
+        read_data2( _read_data2 ) {}
+
+    NVBIO_HOST_DEVICE
+    uint8 operator() (const uint32 read_id)
+    {
+        io::BestAlignments best( best_data[ read_id ], best_data[ read_id + best_stride ] );
+        io::BestAlignments best_o( best_data_o[ read_id ], best_data_o[ read_id + best_stride ] );
+        io::BestPairedAlignments best_paired(
+            (best.m_a1.mate() == 0) ? best   : best_o,
+            (best.m_a1.mate() == 0) ? best_o : best );
+
+        const uint32 read_offset1 = read_data1.sequence_index()[ read_id ];
+        const uint32 read_len1    = read_data1.sequence_index()[ read_id + 1 ] - read_offset1;
+
+        const uint32 read_offset2 = read_data2.sequence_index()[ read_id ];
+        const uint32 read_len2    = read_data2.sequence_index()[ read_id + 1 ] - read_offset2;
+
+        return uint8( mapq_eval( best_paired, read_len1, read_len2 ) );
+    }
+
+    const MapqCalculator  mapq_eval;
+    const io::Alignment*  best_data;
+    const io::Alignment*  best_data_o;
+    const uint32          best_stride;
+    const ReadData        read_data1;
+    const ReadData        read_data2;
+};
 
 template <
     typename scoring_tag>
@@ -87,8 +131,8 @@ void Aligner::best_approx(
     const read_batch_type reads2( reads_view2 );
 
     // initialize best-alignments
-    init_alignments( reads1, threshold_score, best_data_dptr,   0u );
-    init_alignments( reads2, threshold_score, best_data_dptr_o, 1u );
+    init_alignments( reads1, threshold_score, best_data_dptr,   BATCH_SIZE, 0u );
+    init_alignments( reads2, threshold_score, best_data_dptr_o, BATCH_SIZE, 1u );
 
     for (uint32 anchor = 0; anchor < 2; ++anchor)
     {
@@ -201,11 +245,27 @@ void Aligner::best_approx(
     // and compute accessory CIGARs and MD strings.
     //
 
-    thrust::device_vector<io::BestAlignments>::iterator best_anchor_iterator   = best_data_dvec.begin();
-    thrust::device_vector<io::BestAlignments>::iterator best_opposite_iterator = best_data_dvec_o.begin();
+    thrust::device_vector<io::Alignment>::iterator best_anchor_iterator   = best_data_dvec.begin();
+    thrust::device_vector<io::Alignment>::iterator best_opposite_iterator = best_data_dvec_o.begin();
 
-    io::BestAlignments* best_anchor_ptr   = thrust::raw_pointer_cast( best_anchor_iterator.base() );
-    io::BestAlignments* best_opposite_ptr = thrust::raw_pointer_cast( best_opposite_iterator.base() );
+    io::Alignment* best_anchor_ptr   = thrust::raw_pointer_cast( best_anchor_iterator.base() );
+    io::Alignment* best_opposite_ptr = thrust::raw_pointer_cast( best_opposite_iterator.base() );
+
+    // compute mapq
+    {
+        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    compute mapq\n") );
+        typedef BowtieMapq2< SmithWatermanScoringScheme<> > mapq_evaluator_type;
+
+        mapq_evaluator_type mapq_eval( input_scoring_scheme.sw );
+
+        MapqFunctorPE<mapq_evaluator_type,read_view_type> mapq_functor( mapq_eval, best_anchor_ptr, best_opposite_ptr, BATCH_SIZE, reads_view1, reads_view2 );
+
+        nvbio::transform<device_tag>(
+            count,
+            thrust::make_counting_iterator<uint32>(0),
+            mapq_dvec.begin(),
+            mapq_functor );
+    }
 
     TracebackPipelineState<scoring_scheme_type> traceback_state(
         reads1,
@@ -232,6 +292,7 @@ void Aligner::best_approx(
             count,
             NULL,
             best_anchor_ptr,
+            BATCH_SIZE,
             band_len,
             traceback_state,
             params );
@@ -252,6 +313,7 @@ void Aligner::best_approx(
             count,
             NULL,
             best_anchor_ptr,
+            BATCH_SIZE,
             band_len,
             traceback_state,
             input_scoring_scheme.sw,    // always use Smith-Waterman for the final scoring of the found alignments
@@ -265,17 +327,17 @@ void Aligner::best_approx(
         stats.finalize.add( count, timer.seconds(), device_timer.seconds() );
     }
 
-    // wrap the results in a GPUOutputBatch and process it
+    // wrap the results in a DeviceOutputBatchSE and process it
     {
-        io::GPUOutputBatch gpu_batch(count,
-                                     best_data_dvec,
-                                     io::DeviceCigarArray(cigar, cigar_coords_dvec),
-                                     mds,
-                                     read_data1);
+        io::DeviceOutputBatchSE gpu_batch(
+            count,
+            best_data_dvec,
+            io::DeviceCigarArray(cigar, cigar_coords_dvec),
+            mds,
+            mapq_dvec,
+            read_data1);
 
-        output_file->process(gpu_batch,
-                             io::MATE_1,
-                             io::BEST_SCORE);
+        output_file->process( gpu_batch, io::MATE_1 );
     }
 
     //
@@ -316,6 +378,7 @@ void Aligner::best_approx(
                 n_paired,
                 paired_idx,
                 best_opposite_ptr,
+                BATCH_SIZE,
                 traceback_state,
                 params );
 
@@ -345,6 +408,7 @@ void Aligner::best_approx(
                 n_unpaired,
                 unpaired_idx,
                 best_opposite_ptr,
+                BATCH_SIZE,
                 band_len,
                 traceback_state,
                 params );
@@ -380,6 +444,7 @@ void Aligner::best_approx(
                 n_aligned,
                 aligned_idx,
                 best_opposite_ptr,
+                BATCH_SIZE,
                 band_len,
                 traceback_state,
                 input_scoring_scheme.sw,    // always use Smith-Waterman for the final scoring of the found alignments
@@ -393,216 +458,252 @@ void Aligner::best_approx(
         timer.stop();
         stats.finalize.add( count, timer.seconds(), device_timer.seconds() );
 
-        // wrap the results in a GPUOutputBatch and process it
+        // wrap the results in a DeviceOutputBatchSE and process it
         {
-            io::GPUOutputBatch gpu_batch(count,
-                                         best_data_dvec_o,
-                                         io::DeviceCigarArray(cigar, cigar_coords_dvec),
-                                         mds,
-                                         read_data1);
+            io::DeviceOutputBatchSE gpu_batch(
+                count,
+                best_data_dvec_o,
+                io::DeviceCigarArray(cigar, cigar_coords_dvec),
+                mds,
+                mapq_dvec,
+                read_data1);
 
-            output_file->process(gpu_batch,
-                                 io::MATE_2,
-                                 io::BEST_SCORE);
+            output_file->process( gpu_batch, io::MATE_2 );
         }
     }
 
-    // overlap the second-best indices with the loc queue
-    thrust::device_vector<uint32>::iterator second_idx_begin = scoring_queues.hits.loc.begin();
-
-    // compact the indices of the second-best alignments
-    const uint32 n_second = uint32( thrust::copy_if(
-        thrust::make_counting_iterator(0u),
-        thrust::make_counting_iterator(0u) + count,
-        best_anchor_iterator,
-        second_idx_begin,
-        io::has_second() ) - second_idx_begin );
-
-    //
-    // perform backtracking and compute cigars for the second-best alignments
-    //
-    if (n_second)
+    // TODO: decide whether to output second best alignments
+    #if 0
     {
-        // initialize cigars & MDS
-        cigar.clear();
-        mds.clear();
+        // clear mapq's
+        thrust::fill( mapq_dvec.begin(), mapq_dvec.begin() + count, int32(0) );
 
-        timer.start();
-        device_timer.start();
-
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best: %u\n", n_second) );
-        const uint32* second_idx = thrust::raw_pointer_cast( second_idx_begin.base() );
-
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best backtracking\n") );
-        banded_traceback_best(
-            1u,
-            n_second,
-            second_idx,
-            best_anchor_ptr,
-            band_len,
-            traceback_state,
-            params );
-
-        optional_device_synchronize();
-        nvbio::cuda::check_error("second-best backtracking kernel");
-
-        device_timer.stop();
-        timer.stop();
-        stats.backtrack.add( n_second, timer.seconds(), device_timer.seconds() );
-
-        timer.start();
-        device_timer.start();
-
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best alignment\n") );
-        finish_alignment_best(
-            1u,
-            n_second,
-            second_idx,
-            best_anchor_ptr,
-            band_len,
-            traceback_state,
-            input_scoring_scheme.sw,    // always use Smith-Waterman for the final scoring of the found alignments
-            params );
-
-        optional_device_synchronize();
-        nvbio::cuda::check_error("second-best alignment kernel");
-
-        device_timer.stop();
-        timer.stop();
-        stats.finalize.add( n_second, timer.seconds(), device_timer.seconds() );
-    }
-
-    // wrap the results in a GPUOutputBatch and process it
-    {
-        io::GPUOutputBatch gpu_batch(count,
-                                     best_data_dvec,
-                                     io::DeviceCigarArray(cigar, cigar_coords_dvec),
-                                     mds,
-                                     read_data1);
-
-        output_file->process(gpu_batch,
-                             io::MATE_1,
-                             io::SECOND_BEST_SCORE);
-    }
-
-    //
-    // perform backtracking and compute cigars for the opposite mates of the second-best paired alignments
-    //
-    {
-        // initialize cigars & MDS pools
-        cigar.clear();
-        mds.clear();
-
-        timer.start();
-        device_timer.start();
-
-        //
-        // these alignments are of two kinds: paired, or unpaired: this requires some attention,
-        // as true opposite paired alignments require full DP backtracking, while unpaired
-        // alignments require the banded version.
-        //
-
-        // compact the indices of the second-best paired alignments
-        const uint32 n_second_paired = uint32( thrust::copy_if(
-            thrust::make_counting_iterator(0u),
-            thrust::make_counting_iterator(0u) + count,
-            best_opposite_iterator,
-            second_idx_begin,
-            io::has_second_paired() ) - second_idx_begin );
-
-        const uint32* second_idx = thrust::raw_pointer_cast( second_idx_begin.base() );
-
-        if (n_second_paired)
-        {
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best paired: %u\n", n_second_paired) );
-
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best paired opposite backtracking\n") );
-            opposite_traceback_best(
-                1u,
-                n_second_paired,
-                second_idx,
-                best_opposite_ptr,
-                traceback_state,
-                params );
-
-            optional_device_synchronize();
-            nvbio::cuda::check_error("second-best paired opposite backtracking kernel");
-        }
-
-        // compact the indices of the second-best unpaired alignments
-        const uint32 n_second_unpaired = uint32( thrust::copy_if(
-            thrust::make_counting_iterator(0u),
-            thrust::make_counting_iterator(0u) + count,
-            best_opposite_iterator,
-            second_idx_begin,
-            io::has_second_unpaired() ) - second_idx_begin );
-
-        if (n_second_unpaired)
-        {
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best unpaired: %u\n", n_second_unpaired) );
-
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best unpaired opposite backtracking\n") );
-            banded_traceback_best(
-                1u,
-                n_second_unpaired,
-                second_idx,
-                best_opposite_ptr,
-                band_len,
-                traceback_state,
-                params );
-
-            optional_device_synchronize();
-            nvbio::cuda::check_error("second-best unpaired opposite backtracking kernel");
-        }
-
-        device_timer.stop();
-        timer.stop();
-        stats.backtrack_opposite.add( n_second_paired + n_second_unpaired, timer.seconds(), device_timer.seconds() );
-
-        timer.start();
-        device_timer.start();
+        // overlap the second-best indices with the loc queue
+        thrust::device_vector<uint32>::iterator second_idx_begin = scoring_queues.hits.loc.begin();
 
         // compact the indices of the second-best alignments
         const uint32 n_second = uint32( thrust::copy_if(
             thrust::make_counting_iterator(0u),
             thrust::make_counting_iterator(0u) + count,
-            best_opposite_iterator,
+            best_anchor_iterator,
             second_idx_begin,
             io::has_second() ) - second_idx_begin );
 
+        //
+        // perform backtracking and compute cigars for the second-best alignments
+        //
         if (n_second)
         {
-            // compute alignment only on the opposite mates with a second-best
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best opposite alignment\n") );
-            finish_opposite_alignment_best(
-                    1u,
-                    n_second,
-                    second_idx,
-                    best_opposite_ptr,
-                    band_len,
-                    traceback_state,
-                    input_scoring_scheme.sw,    // always use Smith-Waterman for the final scoring of the found alignments
-                    params );
+            // initialize cigars & MDS
+            cigar.clear();
+            mds.clear();
+
+            timer.start();
+            device_timer.start();
+
+            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best: %u\n", n_second) );
+            const uint32* second_idx = thrust::raw_pointer_cast( second_idx_begin.base() );
+
+            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best backtracking\n") );
+            banded_traceback_best(
+                1u,
+                n_second,
+                second_idx,
+                best_anchor_ptr,
+                BATCH_SIZE,
+                band_len,
+                traceback_state,
+                params );
 
             optional_device_synchronize();
-            nvbio::cuda::check_error("second-best opposite alignment kernel");
+            nvbio::cuda::check_error("second-best backtracking kernel");
+
+            device_timer.stop();
+            timer.stop();
+            stats.backtrack.add( n_second, timer.seconds(), device_timer.seconds() );
+
+            timer.start();
+            device_timer.start();
+
+            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best alignment\n") );
+            finish_alignment_best(
+                1u,
+                n_second,
+                second_idx,
+                best_anchor_ptr,
+                BATCH_SIZE,
+                band_len,
+                traceback_state,
+                input_scoring_scheme.sw,    // always use Smith-Waterman for the final scoring of the found alignments
+                params );
+
+            optional_device_synchronize();
+            nvbio::cuda::check_error("second-best alignment kernel");
+
+            device_timer.stop();
+            timer.stop();
+            stats.finalize.add( n_second, timer.seconds(), device_timer.seconds() );
         }
 
-        device_timer.stop();
-        timer.stop();
-        stats.finalize.add( n_second, timer.seconds(), device_timer.seconds() );
-
-        // wrap the results in a GPUOutputBatch and process it
+        // wrap the results in a DeviceOutputBatchSE and process it
         {
-            io::GPUOutputBatch gpu_batch(count,
-                                         best_data_dvec_o,
-                                         io::DeviceCigarArray(cigar, cigar_coords_dvec),
-                                         mds,
-                                         read_data1);
+            io::DeviceOutputBatchSE gpu_batch(
+                count,
+                best_data_dvec,
+                io::DeviceCigarArray(cigar, cigar_coords_dvec),
+                mds,
+                mapq_dvec,
+                read_data1);
 
-            output_file->process(gpu_batch,
-                                 io::MATE_2,
-                                 io::SECOND_BEST_SCORE);
+            output_file->process( gpu_batch, io::MATE_1 );
+        }
+
+        //
+        // perform backtracking and compute cigars for the opposite mates of the second-best paired alignments
+        //
+        {
+            // initialize cigars & MDS pools
+            cigar.clear();
+            mds.clear();
+
+            timer.start();
+            device_timer.start();
+
+            //
+            // these alignments are of two kinds: paired, or unpaired: this requires some attention,
+            // as true opposite paired alignments require full DP backtracking, while unpaired
+            // alignments require the banded version.
+            //
+
+            // compact the indices of the second-best paired alignments
+            const uint32 n_second_paired = uint32( thrust::copy_if(
+                thrust::make_counting_iterator(0u),
+                thrust::make_counting_iterator(0u) + count,
+                best_opposite_iterator,
+                second_idx_begin,
+                io::has_second_paired() ) - second_idx_begin );
+
+            const uint32* second_idx = thrust::raw_pointer_cast( second_idx_begin.base() );
+
+            if (n_second_paired)
+            {
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best paired: %u\n", n_second_paired) );
+
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best paired opposite backtracking\n") );
+                opposite_traceback_best(
+                    1u,
+                    n_second_paired,
+                    second_idx,
+                    best_opposite_ptr,
+                    BATCH_SIZE,
+                    traceback_state,
+                    params );
+
+                optional_device_synchronize();
+                nvbio::cuda::check_error("second-best paired opposite backtracking kernel");
+            }
+
+            // compact the indices of the second-best unpaired alignments
+            const uint32 n_second_unpaired = uint32( thrust::copy_if(
+                thrust::make_counting_iterator(0u),
+                thrust::make_counting_iterator(0u) + count,
+                best_opposite_iterator,
+                second_idx_begin,
+                io::has_second_unpaired() ) - second_idx_begin );
+
+            if (n_second_unpaired)
+            {
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best unpaired: %u\n", n_second_unpaired) );
+
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best unpaired opposite backtracking\n") );
+                banded_traceback_best(
+                    1u,
+                    n_second_unpaired,
+                    second_idx,
+                    best_opposite_ptr,
+                    BATCH_SIZE,
+                    band_len,
+                    traceback_state,
+                    params );
+
+                optional_device_synchronize();
+                nvbio::cuda::check_error("second-best unpaired opposite backtracking kernel");
+            }
+
+            device_timer.stop();
+            timer.stop();
+            stats.backtrack_opposite.add( n_second_paired + n_second_unpaired, timer.seconds(), device_timer.seconds() );
+
+            timer.start();
+            device_timer.start();
+
+            // compact the indices of the second-best alignments
+            const uint32 n_second = uint32( thrust::copy_if(
+                thrust::make_counting_iterator(0u),
+                thrust::make_counting_iterator(0u) + count,
+                best_opposite_iterator,
+                second_idx_begin,
+                io::has_second() ) - second_idx_begin );
+
+            if (n_second)
+            {
+                // compute alignment only on the opposite mates with a second-best
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best opposite alignment\n") );
+                finish_opposite_alignment_best(
+                        1u,
+                        n_second,
+                        second_idx,
+                        best_opposite_ptr,
+                        BATCH_SIZE,
+                        band_len,
+                        traceback_state,
+                        input_scoring_scheme.sw,    // always use Smith-Waterman for the final scoring of the found alignments
+                        params );
+
+                optional_device_synchronize();
+                nvbio::cuda::check_error("second-best opposite alignment kernel");
+            }
+
+            device_timer.stop();
+            timer.stop();
+            stats.finalize.add( n_second, timer.seconds(), device_timer.seconds() );
+
+            // wrap the results in a DeviceOutputBatchSE and process it
+            {
+                io::DeviceOutputBatchSE gpu_batch(
+                    count,
+                    best_data_dvec_o,
+                    io::DeviceCigarArray(cigar, cigar_coords_dvec),
+                    mds,
+                    mapq_dvec,
+                    read_data1);
+
+                output_file->process( gpu_batch, io::MATE_2 );
+            }
+        }
+    }
+    #endif
+
+    // keep alignment stats
+    {
+        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    track stats\n") );
+        thrust::host_vector<io::Alignment> h_best_data( BATCH_SIZE*2 );
+        thrust::host_vector<io::Alignment> h_best_data_o( BATCH_SIZE*2 );
+        thrust::host_vector<uint8>         h_mapq( BATCH_SIZE );
+
+        thrust::copy( best_data_dvec.begin(),                best_data_dvec.begin() + count,                h_best_data.begin() );
+        thrust::copy( best_data_dvec.begin() + BATCH_SIZE,   best_data_dvec.begin() + count + BATCH_SIZE,   h_best_data.begin() + BATCH_SIZE );
+        thrust::copy( best_data_dvec_o.begin(),              best_data_dvec_o.begin() + count,              h_best_data_o.begin() );
+        thrust::copy( best_data_dvec_o.begin() + BATCH_SIZE, best_data_dvec_o.begin() + count + BATCH_SIZE, h_best_data_o.begin() + BATCH_SIZE );
+        thrust::copy( mapq_dvec.begin(),                     mapq_dvec.begin()      + count,                h_mapq.begin() );
+
+        for (uint32 i = 0; i < count; ++i)
+        {
+            const io::BestAlignments best( h_best_data[i], h_best_data[i + BATCH_SIZE] );
+            const io::BestAlignments best_o( h_best_data_o[i], h_best_data_o[i + BATCH_SIZE] );
+            const uint8 mapq = h_mapq[i];
+
+            stats.track_alignment_statistics( best, best_o, mapq );
         }
     }
 
@@ -682,9 +783,6 @@ void Aligner::best_approx_score(
 
     // keep track of the number of extensions performed for each of the active reads
     uint32 n_ext = 0;
-
-    //thrust::device_vector<BestAlignments>::iterator best_anchor_iterator   = best_data_dvec.begin();
-    //thrust::device_vector<BestAlignments>::iterator best_opposite_iterator = best_data_dvec_o.begin();
 
     typedef BestApproxScoringPipelineState<scoring_scheme_type>     pipeline_type;
 

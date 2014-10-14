@@ -375,7 +375,7 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
     {
         uint8 s;
 
-        if (alignment.best->m_rc)
+        if (alignment.aln->m_rc)
         {
             nvbio::complement_functor<4> complement;
             s = complement(alignment.read_data[i]);
@@ -392,7 +392,7 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
     {
         char q;
 
-        if (alignment.best[MATE_1].m_rc)
+        if (alignment.aln[MATE_1].m_rc)
         {
             q = alignment.qual[i];
         } else {
@@ -404,28 +404,10 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
     sam_align.qual[alignment.read_len] = '\0';
 
     // compute mapping quality
-    // mapq is always computed based on the anchor mate, so we may have to swap the mates around here
-    if (alignment.best->mate())
-    {
-        // swap the mates around
-        // this requires computing read_len for the opposite mate
-        if (mate.best->is_aligned())
-        {
-            sam_align.mapq = mapq_evaluator->compute_mapq(mate, alignment);
-        } else {
-            sam_align.mapq = 0;
-        }
-    } else {
-        if (alignment.best->is_aligned())
-        {
-            sam_align.mapq = mapq_evaluator->compute_mapq(alignment, mate);
-        } else {
-            sam_align.mapq = 0;
-        }
-    }
+    sam_align.mapq = alignment.mapq;
 
     // if we didn't map, or mapped with low quality, output an unmapped alignment and return
-    if (!(alignment.best->is_aligned() || sam_align.mapq < mapq_filter))
+    if (!(alignment.aln->is_aligned() || sam_align.mapq < mapq_filter))
     {
         sam_align.flags = SAM_FLAGS_UNMAPPED;
         // mark the md string as empty
@@ -437,8 +419,8 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
     }
 
     // compute alignment flags
-    sam_align.flags  = (alignment.best->mate() ? SAM_FLAGS_READ_2 : SAM_FLAGS_READ_1);
-    if (alignment.best->m_rc)
+    sam_align.flags  = (alignment.aln->mate() ? SAM_FLAGS_READ_2 : SAM_FLAGS_READ_1);
+    if (alignment.aln->m_rc)
     {
         sam_align.flags |= SAM_FLAGS_REVERSE;
     }
@@ -449,17 +431,17 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
 
         sam_align.flags |= SAM_FLAGS_PAIRED;
 
-        if (mate.best->is_paired()) // FIXME: this should be other_mate.is_concordant()
+        if (mate.aln->is_paired()) // FIXME: this should be other_mate.is_concordant()
         {
             sam_align.flags |= SAM_FLAGS_PROPER_PAIR;
         }
 
-        if (!mate.best->is_aligned())
+        if (!mate.aln->is_aligned())
         {
             sam_align.flags |= SAM_FLAGS_MATE_UNMAPPED;
         }
 
-        if (mate.best->is_rc())
+        if (mate.aln->is_rc())
         {
             sam_align.flags |= SAM_FLAGS_MATE_REVERSE;
         }
@@ -490,7 +472,7 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
 
     if (alignment_type == PAIRED_END)
     {
-        if (mate.best->is_aligned())
+        if (mate.aln->is_aligned())
         {
             const uint32 o_ref_cigar_len = reference_cigar_length(mate.cigar, mate.cigar_len);
 
@@ -533,16 +515,10 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
     }
 
     // fill out tag data
-    sam_align.ed = alignment.best->ed();
-    sam_align.score = alignment.best->score();
+    sam_align.ed = alignment.aln->ed();
+    sam_align.score = alignment.aln->score();
 
-    if (alignment.second_best->is_aligned())
-    {
-        sam_align.second_score = alignment.second_best->score();
-        sam_align.second_score_valid = true;
-    } else {
-        sam_align.second_score_valid = false;
-    }
+    sam_align.second_score_valid = false; // TODO!
 
     generate_md_string(sam_align, alignment);
 
@@ -552,12 +528,11 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
     return sam_align.mapq;
 }
 
-void SamOutput::process(struct GPUOutputBatch& gpu_batch,
-                        const AlignmentMate mate,
-                        const AlignmentScore score)
+void SamOutput::process(struct DeviceOutputBatchSE& gpu_batch,
+                        const AlignmentMate mate)
 {
     // read back the data into the CPU for later processing
-    readback(cpu_batch, gpu_batch, mate, score);
+    readback(cpu_batch, gpu_batch, mate);
 }
 
 // called when output data for a given batch has been received, triggers processing of the accumulated data
@@ -567,7 +542,6 @@ void SamOutput::end_batch(void)
     {
         AlignmentData alignment;
         AlignmentData mate;
-        uint32 mapq;
 
         switch(alignment_type)
         {
@@ -575,21 +549,15 @@ void SamOutput::end_batch(void)
                 alignment = cpu_batch.get_mate(c, MATE_1, MATE_1);
                 mate = AlignmentData::invalid();
 
-                mapq = process_one_alignment(alignment, mate);
-
-                // track per-alignment statistics
-                iostats.track_alignment_statistics(alignment, mapq);
+                process_one_alignment(alignment, mate);
                 break;
 
             case PAIRED_END:
                 alignment = cpu_batch.get_anchor(c);
                 mate = cpu_batch.get_opposite_mate(c);
 
-                mapq = process_one_alignment(alignment, mate);
+                process_one_alignment(alignment, mate);
                 process_one_alignment(mate, alignment);
-
-                // track per-alignment statistics
-                iostats.track_alignment_statistics(alignment, mate, mapq);
                 break;
         }
     }

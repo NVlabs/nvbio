@@ -118,8 +118,8 @@ struct BestScoreStream : public AlignmentStreamBase<SCORE_STREAM,AlignerType,Pip
         context->sink = aln::BestSink<int32>();
 
         // setup the minimum score
-        const io::BestAlignments best = base_type::m_pipeline.best_alignments[ context->read_id ];
-        context->min_score = nvbio::max( best.m_a2.score() , base_type::m_pipeline.score_limit );
+        const io::Alignment second_best = base_type::m_pipeline.best_alignments[ context->read_id + base_type::m_pipeline.best_stride ];
+        context->min_score = nvbio::max( second_best.score() , base_type::m_pipeline.score_limit );
         return true;
     }
 
@@ -207,8 +207,8 @@ struct BestAnchorScoreStream : public AlignmentStreamBase<SCORE_STREAM,AlignerTy
         const uint32 read_id = hit.read_id;
 
         const io::BestPairedAlignments best = io::BestPairedAlignments(
-            read( base_type::m_pipeline.best_alignments   + read_id ),
-            read( base_type::m_pipeline.best_alignments_o + read_id ) );
+            io::BestAlignments( base_type::m_pipeline.best_alignments[ read_id ], base_type::m_pipeline.best_alignments[ read_id + base_type::m_pipeline.best_stride ] ),
+            io::BestAlignments( base_type::m_pipeline.best_alignments_o[ read_id ], base_type::m_pipeline.best_alignments_o[ read_id + base_type::m_pipeline.best_stride ] ) );
 
         // compute the optimal score of the opposite mate
         const uint2  o_read_range    = base_type::m_pipeline.reads_o.get_range( read_id );
@@ -359,8 +359,8 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<SCORE_STREAM,Aligner
         const int32 anchor_score = hit.score;
 
         const io::BestPairedAlignments best = io::BestPairedAlignments(
-            read( base_type::m_pipeline.best_alignments   + read_id ),
-            read( base_type::m_pipeline.best_alignments_o + read_id ) );
+            io::BestAlignments( base_type::m_pipeline.best_alignments[ read_id ], base_type::m_pipeline.best_alignments[ read_id + base_type::m_pipeline.best_stride ] ),
+            io::BestAlignments( base_type::m_pipeline.best_alignments_o[ read_id ], base_type::m_pipeline.best_alignments_o[ read_id + base_type::m_pipeline.best_stride ] ) );
 
         const int32 target_pair_score = compute_target_score( best, a_worst_score, o_worst_score );
 

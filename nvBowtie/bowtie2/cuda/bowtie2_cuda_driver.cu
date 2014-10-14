@@ -132,14 +132,14 @@ SimpleFunc parse_function(const char* str, const SimpleFunc def)
     if (c == std::string::npos)
         return def;
 
-    if (is_number( nums.c_str(), c )      == false) return def;
+    if (is_number( nums.c_str(), (uint32)c )      == false) return def;
     if (is_number( nums.c_str() + c + 1 ) == false) return def;
 
     const std::string num1 = nums.substr( 0, c );
     const std::string num2 = std::string( nums.c_str() + c + 1 );
 
-    ret.k = atof( num1.c_str() );
-    ret.m = atof( nums.c_str() + c + 1 );
+    ret.k = (float)atof( num1.c_str() );
+    ret.m = (float)atof( nums.c_str() + c + 1 );
 
     // take care of transforming constant functions in linear ones
     if (str[0] == 'C')
@@ -190,8 +190,8 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.mapq_filter      = uint_option(options, "mapQ-filter",   "Q",    init ? 0u      : params.mapq_filter);          // filter anything below this
     params.report           = string_option(options, "report",              init ? ""      : params.report.c_str());       // generate a report file
     params.scoring_file     = string_option(options, "scoring-scheme",      init ? ""      : params.scoring_file.c_str());
-    params.randomized       = uint_option(options, "rand",                  init ? 1u      : params.randomized);           // use randomized selection
-    params.randomized       =!uint_option(options, "no-rand",                               !params.randomized);           // don't use randomized selection
+    params.randomized       =(bool) uint_option(options, "rand",                  init ? 1u      : params.randomized);           // use randomized selection
+    params.randomized       =(bool)!uint_option(options, "no-rand",                               !params.randomized);           // don't use randomized selection
     params.top_seed         = uint_option(options, "top",                   init ? 0u      : params.top_seed);             // explore top seed entirely
     params.min_read_len     = uint_option(options, "min-read-len",          init ? 12u     : params.min_read_len);         // minimum read length
     params.ungapped_mates   = uint_option(options, "ungapped-mates", "ug",  init ? 0u      : params.ungapped_mates);       // ungapped mate alignment
@@ -209,10 +209,10 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.seed_freq        = func_option( options, "seed-freq",     "i",                    params.seed_freq );    // seed interval
     params.subseed_len      = uint_option(options,  "subseed-len",          init ? 0u      : params.subseed_len);   // no greater than 32
 
-    params.pe_overlap    = uint_option(options, "overlap",          init ? 1u      : params.pe_overlap);            // paired-end overlap
-    params.pe_overlap    =!uint_option(options, "no-overlap",                       !params.pe_overlap);            // paired-end overlap
-    params.pe_dovetail   = uint_option(options, "dovetail",         init ? 0u      : params.pe_dovetail);           // paired-end dovetail
-    params.pe_unpaired   =!uint_option(options, "no-mixed",         init ? 0u      :!params.pe_unpaired);           // paired-end no-mixed
+    params.pe_overlap    = (bool) uint_option(options, "overlap",          init ? 1u      : params.pe_overlap);            // paired-end overlap
+    params.pe_overlap    = (bool)!uint_option(options, "no-overlap",                       !params.pe_overlap);            // paired-end overlap
+    params.pe_dovetail   = (bool) uint_option(options, "dovetail",         init ? 0u      : params.pe_dovetail);           // paired-end dovetail
+    params.pe_unpaired   = (bool)!uint_option(options, "no-mixed",         init ? 0u      :!params.pe_unpaired);           // paired-end no-mixed
     params.min_frag_len  = uint_option(options, "minins", "I",      init ? 0u      : params.min_frag_len);          // paired-end minimum fragment length
     params.max_frag_len  = uint_option(options, "maxins", "X",      init ? 500u    : params.max_frag_len);          // paired-end maximum fragment length
 
@@ -410,8 +410,7 @@ int driver(
                                                io::SINGLE_END,
                                                io::BNT(reference_data_host));
 
-    nvbio::bowtie2::cuda::BowtieMapq< BowtieMapq2< SmithWatermanScoringScheme<> > > new_mapq_eval(scoring_scheme.sw);
-    aligner.output_file->configure_mapq_evaluator(&new_mapq_eval, params.mapq_filter);
+    aligner.output_file->configure_mapq_evaluator(params.mapq_filter);
 
     // setup the input thread
     InputThread input_thread( &read_data_stream, stats, BATCH_SIZE );
@@ -544,16 +543,17 @@ int driver(
 
     stats.alignments_DtoH.add(iostats.alignments_DtoH_count, iostats.alignments_DtoH_time);
     stats.io = iostats.output_process_timings;
-    stats.n_mapped          = iostats.mate1.n_mapped;
-    stats.n_ambiguous       = iostats.mate1.n_ambiguous;
-    stats.n_nonambiguous    = iostats.mate1.n_unambiguous;
-    stats.n_unique          = iostats.mate1.n_unique;
-    stats.n_multiple        = iostats.mate1.n_multiple;
-    stats.mapped            = iostats.mate1.mapped_ed_histogram;
-    stats.f_mapped          = iostats.mate1.mapped_ed_histogram_fwd;
-    stats.r_mapped          = iostats.mate1.mapped_ed_histogram_rev;
-    memcpy(stats.mapq_bins, iostats.mate1.mapq_bins,             sizeof(iostats.mate1.mapq_bins));
-    memcpy(stats.mapped2,   iostats.mate1.mapped_ed_correlation, sizeof(iostats.mate1.mapped_ed_correlation));
+    stats.n_reads           = n_reads;
+    stats.n_mapped          = stats.mate1.n_mapped;
+    stats.n_ambiguous       = stats.mate1.n_ambiguous;
+    stats.n_nonambiguous    = stats.mate1.n_unambiguous;
+    stats.n_unique          = stats.mate1.n_unique;
+    stats.n_multiple        = stats.mate1.n_multiple;
+    stats.mapped            = stats.mate1.mapped_ed_histogram;
+    stats.f_mapped          = stats.mate1.mapped_ed_histogram_fwd;
+    stats.r_mapped          = stats.mate1.mapped_ed_histogram_rev;
+    memcpy(stats.mapq_bins, stats.mate1.mapq_bins,             sizeof(stats.mate1.mapq_bins));
+    memcpy(stats.mapped2,   stats.mate1.mapped_ed_correlation, sizeof(stats.mate1.mapped_ed_correlation));
 
     delete aligner.output_file;
 
@@ -737,8 +737,7 @@ int driver(
                                                io::PAIRED_END,
                                                io::BNT(reference_data_host));
 
-    nvbio::bowtie2::cuda::BowtieMapq< BowtieMapq2< SmithWatermanScoringScheme<> > > new_mapq_eval(scoring_scheme.sw);
-    aligner.output_file->configure_mapq_evaluator(&new_mapq_eval, params.mapq_filter);
+    aligner.output_file->configure_mapq_evaluator(params.mapq_filter);
 
     // setup the input thread
     InputThreadPaired input_thread( &read_data_stream1, &read_data_stream2, stats, BATCH_SIZE );
@@ -886,17 +885,17 @@ int driver(
 
     stats.alignments_DtoH.add(iostats.alignments_DtoH_count, iostats.alignments_DtoH_time);
     stats.io                = iostats.output_process_timings;
-    stats.n_reads           = iostats.n_reads;
-    stats.n_mapped          = iostats.paired.n_mapped;
-    stats.n_ambiguous       = iostats.paired.n_ambiguous;
-    stats.n_nonambiguous    = iostats.paired.n_unambiguous;
-    stats.n_unique          = iostats.paired.n_unique;
-    stats.n_multiple        = iostats.paired.n_multiple;
-    stats.mapped            = iostats.paired.mapped_ed_histogram;
-    stats.f_mapped          = iostats.paired.mapped_ed_histogram_fwd;
-    stats.r_mapped          = iostats.paired.mapped_ed_histogram_rev;
-    memcpy(stats.mapq_bins, iostats.paired.mapq_bins,             sizeof(iostats.paired.mapq_bins));
-    memcpy(stats.mapped2,   iostats.paired.mapped_ed_correlation, sizeof(iostats.paired.mapped_ed_correlation));
+    stats.n_reads           = n_reads;
+    stats.n_mapped          = stats.paired.n_mapped;
+    stats.n_ambiguous       = stats.paired.n_ambiguous;
+    stats.n_nonambiguous    = stats.paired.n_unambiguous;
+    stats.n_unique          = stats.paired.n_unique;
+    stats.n_multiple        = stats.paired.n_multiple;
+    stats.mapped            = stats.paired.mapped_ed_histogram;
+    stats.f_mapped          = stats.paired.mapped_ed_histogram_fwd;
+    stats.r_mapped          = stats.paired.mapped_ed_histogram_rev;
+    memcpy(stats.mapq_bins, stats.paired.mapq_bins,             sizeof(stats.paired.mapq_bins));
+    memcpy(stats.mapped2,   stats.paired.mapped_ed_correlation, sizeof(stats.paired.mapped_ed_correlation));
 
     delete aligner.output_file;
 
@@ -941,22 +940,22 @@ int driver(
                 100.0f * float(mapped[i])/float(n_reads) );
         }
 
-        log_stats(stderr, "  mate1 : %.2f %% - of these:\n", 100.0f * float(iostats.mate1.n_mapped)/float(n_reads) );
-        if (iostats.mate1.n_mapped)
+        log_stats(stderr, "  mate1 : %.2f %% - of these:\n", 100.0f * float(stats.mate1.n_mapped)/float(n_reads) );
+        if (stats.mate1.n_mapped)
         {
-            log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate1.n_unique)/float(iostats.mate1.n_mapped), 100.0f * float(iostats.mate1.n_mapped - iostats.mate1.n_multiple)/float(n_reads) );
-            log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate1.n_unambiguous)/float(iostats.mate1.n_mapped), 100.0f * float(iostats.mate1.n_unambiguous)/float(n_reads) );
-            log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate1.n_ambiguous)/float(iostats.mate1.n_mapped), 100.0f * float(iostats.mate1.n_ambiguous)/float(n_reads) );
-            log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate1.n_multiple)/float(iostats.mate1.n_mapped), 100.0f * float(iostats.mate1.n_multiple)/float(n_reads) );
+            log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate1.n_unique)/float(stats.mate1.n_mapped), 100.0f * float(stats.mate1.n_mapped - stats.mate1.n_multiple)/float(n_reads) );
+            log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate1.n_unambiguous)/float(stats.mate1.n_mapped), 100.0f * float(stats.mate1.n_unambiguous)/float(n_reads) );
+            log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate1.n_ambiguous)/float(stats.mate1.n_mapped), 100.0f * float(stats.mate1.n_ambiguous)/float(n_reads) );
+            log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate1.n_multiple)/float(stats.mate1.n_mapped), 100.0f * float(stats.mate1.n_multiple)/float(n_reads) );
         }
 
-        log_stats(stderr, "  mate2 : %.2f %% - of these:\n", 100.0f * float(iostats.mate2.n_mapped)/float(n_reads) );
-        if (iostats.mate2.n_mapped)
+        log_stats(stderr, "  mate2 : %.2f %% - of these:\n", 100.0f * float(stats.mate2.n_mapped)/float(n_reads) );
+        if (stats.mate2.n_mapped)
         {
-            log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate2.n_unique)/float(iostats.mate2.n_mapped), 100.0f * float(iostats.mate2.n_mapped - iostats.mate2.n_multiple)/float(n_reads) );
-            log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate2.n_unambiguous)/float(iostats.mate2.n_mapped), 100.0f * float(iostats.mate2.n_unambiguous)/float(n_reads) );
-            log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate2.n_ambiguous)/float(iostats.mate2.n_mapped), 100.0f * float(iostats.mate2.n_ambiguous)/float(n_reads) );
-            log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(iostats.mate2.n_multiple)/float(iostats.mate2.n_mapped), 100.0f * float(iostats.mate2.n_multiple)/float(n_reads) );
+            log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate2.n_unique)/float(stats.mate2.n_mapped), 100.0f * float(stats.mate2.n_mapped - stats.mate2.n_multiple)/float(n_reads) );
+            log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate2.n_unambiguous)/float(stats.mate2.n_mapped), 100.0f * float(stats.mate2.n_unambiguous)/float(n_reads) );
+            log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate2.n_ambiguous)/float(stats.mate2.n_mapped), 100.0f * float(stats.mate2.n_ambiguous)/float(n_reads) );
+            log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate2.n_multiple)/float(stats.mate2.n_mapped), 100.0f * float(stats.mate2.n_multiple)/float(n_reads) );
         }
     }
 

@@ -70,12 +70,13 @@ struct BestTracebackStream : public AlignmentStreamBase<TRACEBACK_STREAM,Aligner
         const MateType              _mate_type,
         const uint32                _count,
         const uint32*               _idx,
-              io::BestAlignments*   _best_data,
+              io::Alignment*        _best_data,
+        const uint32                _best_stride,
         const uint32                _band_len,
         const PipelineType          _pipeline,
         const AlignerType           _aligner,
         const ParamsPOD             _params) :
-        base_type( _pipeline, _aligner, _params ), m_mate_type( _mate_type ), m_count(_count), m_idx(_idx), m_best_data(_best_data), m_band_len( _band_len ) {}
+        base_type( _pipeline, _aligner, _params ), m_mate_type( _mate_type ), m_count(_count), m_idx(_idx), m_best_data(_best_data), m_best_stride( _best_stride ), m_band_len( _band_len ) {}
 
     /// return the maximum pattern length
     ///
@@ -106,8 +107,7 @@ struct BestTracebackStream : public AlignmentStreamBase<TRACEBACK_STREAM,Aligner
     {
         context->idx = m_idx ? m_idx[ i ] : i;
 
-        const io::BestAlignments& best = m_best_data[ context->idx ];
-        const io::Alignment& alignment = best.alignment<ALN_IDX>();
+        const io::Alignment& alignment = m_best_data[ context->idx + ALN_IDX * m_best_stride ];
         if (alignment.is_aligned() == false)
             return false;
 
@@ -181,8 +181,7 @@ struct BestTracebackStream : public AlignmentStreamBase<TRACEBACK_STREAM,Aligner
         const  int32        score)
     {
         // rewrite the alignment
-        io::BestAlignments& best = m_best_data[ context->read_id ];
-        io::Alignment&      aln  = best.alignment<ALN_IDX>();
+        io::Alignment&      aln  = m_best_data[ context->read_id + ALN_IDX * m_best_stride ];
         aln.m_align     = context->genome_begin;
         aln.m_ed        = ed;
         aln.m_score_sgn = score < 0 ? 1 : 0;
@@ -194,7 +193,8 @@ struct BestTracebackStream : public AlignmentStreamBase<TRACEBACK_STREAM,Aligner
     const MateType              m_mate_type;
     const uint32                m_count;
     const uint32*               m_idx;
-          io::BestAlignments*   m_best_data;
+          io::Alignment*        m_best_data;
+    const uint32                m_best_stride;
     const uint32                m_band_len;
 };
 
@@ -206,7 +206,8 @@ void banded_traceback_best(
     const MateType              mate_type,
     const uint32                count,
     const uint32*               idx,
-          io::BestAlignments*   best_data,
+          io::Alignment*        best_data,
+    const uint32                best_stride,
     const uint32                band_len,
     const pipeline_type&        pipeline,
     const aligner_type          aligner,
@@ -225,6 +226,7 @@ void banded_traceback_best(
         count,
         idx,
         best_data,
+        best_stride,
         static_band_len,
         pipeline,
         aligner,
@@ -266,7 +268,8 @@ void traceback_best(
     const MateType              mate_type,
     const uint32                count,
     const uint32*               idx,
-          io::BestAlignments*   best_data,
+          io::Alignment*        best_data,
+    const uint32                best_stride,
     const pipeline_type&        pipeline,
     const aligner_type          aligner,
     const ParamsPOD             params)
@@ -278,6 +281,7 @@ void traceback_best(
         count,
         idx,
         best_data,
+        best_stride,
         0u,         // band-len
         pipeline,
         aligner,
@@ -723,7 +727,8 @@ void finish_alignment_best(
     const MateType              mate_type,
     const uint32                count,
     const uint32*               idx,
-          io::BestAlignments*   best_data,
+          io::Alignment*        best_data,
+    const uint32                best_stride,
     const uint32                band_len,
     const pipeline_type&        pipeline,
     const scheme_type           scoring_scheme,
@@ -744,6 +749,7 @@ void finish_alignment_best(
         count,
         idx,
         best_data,
+        best_stride,
         static_band_len,
         pipeline,
         pipeline.scoring_scheme.local_aligner(),
@@ -824,9 +830,10 @@ template <uint32 ALN_IDX, typename pipeline_type>
 void banded_traceback_best_t(
     const uint32                count,
     const uint32*               idx,
-          io::BestAlignments*   best_data,
+          io::Alignment*        best_data,
+    const uint32                best_stride,
     const uint32                band_len,
-    const pipeline_type&         pipeline,
+    const pipeline_type&        pipeline,
     const ParamsPOD             params)
 {
     if (params.alignment_type == LocalAlignment)
@@ -836,6 +843,7 @@ void banded_traceback_best_t(
             count,
             idx,
             best_data,
+            best_stride,
             band_len,
             pipeline,
             pipeline.scoring_scheme.local_aligner(),
@@ -848,6 +856,7 @@ void banded_traceback_best_t(
             count,
             idx,
             best_data,
+            best_stride,
             band_len,
             pipeline,
             pipeline.scoring_scheme.end_to_end_aligner(),
@@ -862,7 +871,8 @@ template <uint32 ALN_IDX, typename pipeline_type>
 void opposite_traceback_best_t(
     const uint32                count,
     const uint32*               idx,
-          io::BestAlignments*   best_data,
+          io::Alignment*        best_data,
+    const uint32                best_stride,
     const pipeline_type&        pipeline,
     const ParamsPOD             params)
 {
@@ -873,6 +883,7 @@ void opposite_traceback_best_t(
             count,
             idx,
             best_data,
+            best_stride,
             pipeline,
             pipeline.scoring_scheme.local_aligner(),
             params );
@@ -884,6 +895,7 @@ void opposite_traceback_best_t(
             count,
             idx,
             best_data,
+            best_stride,
             pipeline,
             pipeline.scoring_scheme.end_to_end_aligner(),
             params );
@@ -939,7 +951,8 @@ template <uint32 ALN_IDX, typename scoring_scheme_type, typename pipeline_type>
 void finish_alignment_best_t(
     const uint32                count,
     const uint32*               idx,
-          io::BestAlignments*   best_data,
+          io::Alignment*        best_data,
+    const uint32                best_stride,
     const uint32                band_len,
     const pipeline_type&        pipeline,
     const scoring_scheme_type   scoring_scheme,
@@ -950,6 +963,7 @@ void finish_alignment_best_t(
         count,
         idx,
         best_data,
+        best_stride,
         band_len,
         pipeline,
         scoring_scheme,
@@ -963,7 +977,8 @@ template <uint32 ALN_IDX, typename scoring_scheme_type, typename pipeline_type>
 void finish_opposite_alignment_best_t(
     const uint32                count,
     const uint32*               idx,
-          io::BestAlignments*   best_data,
+          io::Alignment*        best_data,
+    const uint32                best_stride,
     const uint32                band_len,
     const pipeline_type&        pipeline,
     const scoring_scheme_type   scoring_scheme,
@@ -974,6 +989,7 @@ void finish_opposite_alignment_best_t(
         count,
         idx,
         best_data,
+        best_stride,
         band_len,
         pipeline,
         scoring_scheme,

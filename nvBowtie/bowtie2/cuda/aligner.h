@@ -113,10 +113,12 @@ struct Aligner
     thrust::device_vector<uint32>       rseeds_dvec;
     uint32*                             rseeds_dptr;
 
-    thrust::device_vector<io::BestAlignments> best_data_dvec;
-    thrust::device_vector<io::BestAlignments> best_data_dvec_o;
-    io::BestAlignments*                       best_data_dptr;
-    io::BestAlignments*                       best_data_dptr_o;
+    thrust::device_vector<io::Alignment>    best_data_dvec;
+    thrust::device_vector<io::Alignment>    best_data_dvec_o;
+    io::Alignment*                          best_data_dptr;
+    io::Alignment*                          best_data_dptr_o;
+    thrust::device_vector<uint8>            mapq_dvec;
+    uint8*                                  mapq_dptr;
 
     // --- paired-end vectors --------------------------------- //
     thrust::device_vector<uint32>   opposite_queue_dvec;
@@ -284,14 +286,15 @@ void ring_buffer_to_plain_array(
 
 #if defined(__CUDACC__)
 
-// initialize a set of BestAlignments
+// initialize a set of alignments
 //
 template <typename ReadBatch, typename ScoreFunction>
 __global__
 void init_alignments_kernel(
     const ReadBatch         read_batch,
     const ScoreFunction     worst_score_fun,
-    io::BestAlignments*     best_data,
+    io::Alignment*          best_data,
+    const uint32            best_stride,
     const uint32            mate)
 {
     const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;
@@ -303,19 +306,20 @@ void init_alignments_kernel(
 
     const int32 worst_score = worst_score_fun( read_len );
 
-    io::BestAlignments best;
-    best.m_a1 = io::Alignment( uint32(-1), io::Alignment::max_ed(), worst_score, mate );
-    best.m_a2 = io::Alignment( uint32(-1), io::Alignment::max_ed(), worst_score, mate );
-    best_data[ thread_id ] = best;
+    io::Alignment a1 = io::Alignment( uint32(-1), io::Alignment::max_ed(), worst_score, mate );
+    io::Alignment a2 = io::Alignment( uint32(-1), io::Alignment::max_ed(), worst_score, mate );
+    best_data[ thread_id ]               = a1;
+    best_data[ thread_id + best_stride ] = a2;
 }
 
-// initialize a set of BestAlignments
+// initialize a set of alignments
 //
 template <typename ReadBatch, typename ScoreFunction>
 void init_alignments(
     const ReadBatch         read_batch,
     const ScoreFunction     worst_score_fun,
-    io::BestAlignments*     best_data,
+    io::Alignment*          best_data,
+    const uint32            best_stride,
     const uint32            mate = 0)
 {
     const int blocks = (read_batch.size() + BLOCKDIM-1) / BLOCKDIM;
@@ -324,6 +328,7 @@ void init_alignments(
         read_batch,
         worst_score_fun,
         best_data,
+        best_stride,
         mate );
 }
 

@@ -80,9 +80,10 @@ template <uint32 ALN_IDX, typename pipeline_type>
 void banded_traceback_best_t(
     const uint32                count,
     const uint32*               idx,
-          io::BestAlignments*   best_data,
+          io::Alignment*        best_data,
+    const uint32                best_stride,
     const uint32                band_len,
-    const pipeline_type&         pipeline,
+    const pipeline_type&        pipeline,
     const ParamsPOD             params);
 
 ///
@@ -92,7 +93,8 @@ template <uint32 ALN_IDX, typename pipeline_type>
 void opposite_traceback_best_t(
     const uint32                count,
     const uint32*               idx,
-          io::BestAlignments*   best_data,
+          io::Alignment*       best_data,
+    const uint32                best_stride,
     const pipeline_type&        pipeline,
     const ParamsPOD             params);
 
@@ -117,7 +119,8 @@ template <uint32 ALN_IDX, typename scoring_scheme_type, typename pipeline_type>
 void finish_alignment_best_t(
     const uint32                count,
     const uint32*               idx,
-          io::BestAlignments*   best_data,
+          io::Alignment*        best_data,
+    const uint32                best_stride,
     const uint32                band_len,
     const pipeline_type&        pipeline,
     const scoring_scheme_type   scoring_scheme,
@@ -130,7 +133,8 @@ template <uint32 ALN_IDX, typename scoring_scheme_type, typename pipeline_type>
 void finish_opposite_alignment_best_t(
     const uint32                count,
     const uint32*               idx,
-          io::BestAlignments*   best_data,
+          io::Alignment*        best_data,
+    const uint32                best_stride,
     const uint32                band_len,
     const pipeline_type&        pipeline,
     const scoring_scheme_type   scoring_scheme,

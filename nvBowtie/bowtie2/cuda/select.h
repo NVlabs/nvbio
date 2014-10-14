@@ -166,14 +166,6 @@ void select_all(
     const uint64*                       hit_range_scan,
           HitQueuesDeviceView           scoring_queues);
 
-///
-/// Prune the set of active reads based on whether we found the best alignments
-///
-void prune_search(
-    const uint32                                    max_dist,
-    const nvbio::cuda::PingPongQueuesView<uint32>   queues,
-    const io::BestAlignments*                       best_data);
-
 ///@}  // group Select
 ///@}  // group nvBowtie
 

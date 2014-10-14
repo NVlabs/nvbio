@@ -27,6 +27,7 @@
 
 #include <nvBowtie/bowtie2/cuda/stats.h>
 #include <nvbio/basic/html.h>
+#include <nvbio/io/alignments.h>
 #include <functional>
 #include <algorithm>
 #include <numeric>
@@ -93,6 +94,155 @@ Stats::Stats(const Params& params_) :
     opposite_score.user_names[1] = "queue::run utilization"; opposite_score.user_avg[1] = true;
     opposite_score.user_names[2] = "queue::run T_avg";       opposite_score.user_avg[2] = true;
     opposite_score.user_names[3] = "queue::run T_sigma";     opposite_score.user_avg[3] = false;
+}
+
+void Stats::track_alignment_statistics(
+    const io::BestAlignments& alignment1,
+    const io::BestAlignments& alignment2,
+    const uint8 mapq)
+{
+    n_reads++;
+
+    if (alignment1.best().is_paired())
+    {
+        // keep track of mapping quality histogram
+        paired.mapq_bins[mapq]++;
+
+        // count this read as mapped
+        paired.n_mapped++;
+
+        if (!alignment1.second_best().is_paired())
+        {
+            // we only have one score; count as a unique alignment
+            paired.n_unique++;
+        }
+        else
+        {
+            // we have two best scores, which implies two (or more) alignment positions
+            // count as multiple alignment
+            paired.n_multiple++;
+        }
+
+        // compute final alignment score
+        const int32 first  = alignment1.best().score()        + alignment2.best().score();
+        const int32 second = alignment1.second_best().is_paired() ?
+                             alignment1.second_best().score() + alignment2.second_best().score() :
+                             Field_traits<int32>::min();
+
+        // if the two best scores are equal, count as ambiguous
+        if (first == second)
+            paired.n_ambiguous++;
+        else {
+            // else, the first score must be higher...
+            NVBIO_CUDA_ASSERT(first > second);
+            /// ... which counts as a nonambiguous alignment
+            paired.n_unambiguous++;
+        }
+
+        // compute edit distance scores
+        const uint32 first_ed  = alignment1.best().ed()        + alignment2.best().ed();
+        const uint32 second_ed = alignment1.second_best().is_paired() ?
+                                 alignment1.second_best().ed() + alignment2.second_best().ed() : 255u;
+
+        // update best edit-distance histograms
+        if (first_ed < paired.mapped_ed_histogram.size())
+        {
+            paired.mapped_ed_histogram[first_ed]++;
+            if (alignment1.best().is_rc())
+                paired.mapped_ed_histogram_fwd[first_ed]++;
+            else
+                paired.mapped_ed_histogram_rev[first_ed]++;
+        }
+
+        // track edit-distance correlation
+        if (first_ed + 1 < 64)
+        {
+            if (second_ed + 1 < 64)
+                paired.mapped_ed_correlation[first_ed + 1][second_ed + 1]++;
+            else
+                paired.mapped_ed_correlation[first_ed + 1][0]++;
+        }
+    }
+    else
+    {
+        //
+        // track discordand alignments separately for each mate
+        //
+
+        const io::BestAlignments& aln1 = alignment1.best().mate() == 0 ? alignment1 : alignment2;
+        const io::BestAlignments& aln2 = alignment1.best().mate() == 0 ? alignment1 : alignment2;
+
+        track_alignment_statistics( &mate1, aln1, mapq );
+        track_alignment_statistics( &mate2, aln2, mapq );
+    }
+}
+
+void Stats::track_alignment_statistics(
+    AlignmentStats*             mate,
+    const io::BestAlignments&   alignment,
+    const uint8                 mapq)
+{
+    // check if the mate is aligned
+    if (!alignment.best().is_aligned())
+    {
+        mate->mapped_ed_correlation[0][0]++;
+        return;
+    }
+
+    // count this read as mapped
+    mate->n_mapped++;
+
+    // keep track of mapping quality histogram
+    mate->mapq_bins[mapq]++;
+
+    if (!alignment.second_best().is_aligned())
+    {
+        // we only have one score; count as a unique alignment
+        mate->n_unique++;
+    }
+    else
+    {
+        // we have two best scores, which implies two (or more) alignment positions
+        // count as multiple alignment
+        mate->n_multiple++;
+    }
+
+    // compute final alignment score
+    const int32 first  = alignment.best().score();
+    const int32 second = alignment.second_best().score();
+
+    // if the two best scores are equal, count as ambiguous
+    if (first == second)
+        mate->n_ambiguous++;
+    else {
+        // else, the first score must be higher...
+        NVBIO_CUDA_ASSERT(first > second);
+        /// ... which counts as a nonambiguous alignment
+        mate->n_unambiguous++;
+    }
+
+    // compute edit distance scores
+    const uint32 first_ed  = alignment.best().ed();
+    const uint32 second_ed = alignment.second_best().ed();
+
+    // update best edit-distance histograms
+    if (first_ed < mate->mapped_ed_histogram.size())
+    {
+        mate->mapped_ed_histogram[first_ed]++;
+        if (alignment.best().is_rc())
+            mate->mapped_ed_histogram_fwd[first_ed]++;
+        else
+            mate->mapped_ed_histogram_rev[first_ed]++;
+    }
+
+    // track edit-distance correlation
+    if (first_ed + 1 < 64)
+    {
+        if (second_ed + 1 < 64)
+            mate->mapped_ed_correlation[first_ed + 1][second_ed + 1]++;
+        else
+            mate->mapped_ed_correlation[first_ed + 1][0]++;
+    }
 }
 
 namespace { // anonymous

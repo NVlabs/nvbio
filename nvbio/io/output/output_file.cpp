@@ -37,7 +37,6 @@ OutputFile::OutputFile(const char *_file_name, AlignmentType _alignment_type, BN
     : file_name(_file_name),
       alignment_type(_alignment_type),
       bnt(_bnt),
-      mapq_evaluator(NULL),
       mapq_filter(-1),
       read_data_1(NULL),
       read_data_2(NULL)
@@ -48,9 +47,8 @@ OutputFile::~OutputFile()
 {
 }
 
-void OutputFile::configure_mapq_evaluator(const io::MapQEvaluator *mapq, int mapq_filter)
+void OutputFile::configure_mapq_evaluator(int mapq_filter)
 {
-    OutputFile::mapq_evaluator = mapq;
     OutputFile::mapq_filter = mapq_filter;
 }
 
@@ -62,9 +60,8 @@ void OutputFile::start_batch(const io::SequenceDataHost *read_data_1,
     OutputFile::read_data_2 = read_data_2;
 }
 
-void OutputFile::process(struct GPUOutputBatch& gpu_batch,
-                         const AlignmentMate alignment_mate,
-                         const AlignmentScore alignment_score)
+void OutputFile::process(struct DeviceOutputBatchSE& gpu_batch,
+                         const AlignmentMate alignment_mate)
 {
     // do nothing
 }
@@ -85,36 +82,31 @@ IOStats& OutputFile::get_aggregate_statistics(void)
     return iostats;
 }
 
-void OutputFile::readback(struct CPUOutputBatch& cpu_batch,
-                          const struct GPUOutputBatch& gpu_batch,
-                          const AlignmentMate mate,
-                          const AlignmentScore score)
+void OutputFile::readback(struct HostOutputBatchPE& cpu_batch,
+                          const struct DeviceOutputBatchSE& gpu_batch,
+                          const AlignmentMate mate)
 {
     Timer timer;
     timer.start();
 
-    // read back the scores
-    // readback_scores will do the "right thing" based on the pass and score that we're getting
-    // (i.e., it'll update either the first or second score for either the anchor or opposite mate)
-    gpu_batch.readback_scores(cpu_batch.best_alignments, mate, score);
+    // read back this mate
+    gpu_batch.readback_scores(cpu_batch.alignments[mate]);
+    gpu_batch.readback_cigars(cpu_batch.cigar[mate]);
+    gpu_batch.readback_mds(cpu_batch.mds[mate]);
 
-    if (score == BEST_SCORE)
+    if (mate == MATE_1)
     {
-        // if this is the best alignment, read back CIGARs and MD strings as well
-        gpu_batch.readback_cigars(cpu_batch.cigar[mate]);
-        gpu_batch.readback_mds(cpu_batch.mds[mate]);
+        // mapq comes from MATE_1
+        gpu_batch.readback_mapq(cpu_batch.mapq);
 
-        if (mate == MATE_1)
-        {
-            // mate 1 best score comes first; stash the count
-            cpu_batch.count = gpu_batch.count;
+        // stash the count for mate1, mate2 must match
+        cpu_batch.count = gpu_batch.count;
 
-            // set up the read data pointers
-            // this is not strictly related to which mate or scoring pass we're processing,
-            // but must be done once per batch, so we do it here
-            cpu_batch.read_data[MATE_1] = read_data_1;
-            cpu_batch.read_data[MATE_2] = read_data_2;
-        }
+        // set up the read data pointers
+        // this is not strictly related to which mate or scoring pass we're processing,
+        // but must be done once per batch, so we do it here
+        cpu_batch.read_data[MATE_1] = read_data_1;
+        cpu_batch.read_data[MATE_2] = read_data_2;
     }
 
     // sanity check to make sure the number of reads matches what we got previously

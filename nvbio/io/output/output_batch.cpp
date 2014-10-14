@@ -63,40 +63,50 @@ void DeviceOutputBatchSE::readback_mapq(thrust::host_vector<uint8>& host_mapq) c
 
 // extract alignment data for a given mate
 // note that the mates can be different for the cigar, since mate 1 is always the anchor mate for cigars
-AlignmentData HostOutputBatchPE::get_mate(uint32 read_id, AlignmentMate mate, AlignmentMate cigar_mate)
+AlignmentData HostOutputBatchPE::get_mate(uint32 read_id, AlignmentMate mate)
 {
-    return AlignmentData(&alignments[mate][read_id],
-                         mapq[read_id],
-                         read_id,
-                         read_data[mate],
-                         &cigar[cigar_mate],
-                         &mds[cigar_mate]);
+    if (alignments[0][read_id].mate() == mate)
+    {
+        return AlignmentData(&alignments[0][read_id],
+                             mapq[read_id],
+                             read_id,
+                             read_data[ mate ],
+                             &cigar[0],
+                             &mds[0]);
+    }
+    else
+    {
+        return AlignmentData(&alignments[1][read_id],
+                             mapq[read_id],
+                             read_id,
+                             read_data[ mate ],
+                             &cigar[1],
+                             &mds[1]);
+    }
 }
 
 // extract alignment data for the anchor mate
-AlignmentData HostOutputBatchPE::get_anchor(uint32 read_id)
+AlignmentData HostOutputBatchPE::get_anchor_mate(uint32 read_id)
 {
-    if (alignments[MATE_1][read_id].mate() == 0)
-    {
-        // mate 1 is the anchor
-        return get_mate(read_id, MATE_1, MATE_1);
-    } else {
-        // mate 2 is the anchor
-        return get_mate(read_id, MATE_2, MATE_1);
-    }
+    const uint32 mate = alignments[0][read_id].mate();
+    return AlignmentData(&alignments[0][read_id],
+                         mapq[read_id],
+                         read_id,
+                         read_data[ mate ],
+                         &cigar[0],
+                         &mds[0]);
 }
 
 // extract alignment data for the opposite mate
 AlignmentData HostOutputBatchPE::get_opposite_mate(uint32 read_id)
 {
-    if (alignments[MATE_1][read_id].mate() == 0)
-    {
-        // mate 2 is the opposite mate
-        return get_mate(read_id, MATE_2, MATE_2);
-    } else {
-        // mate 1 is the opposite mate
-        return get_mate(read_id, MATE_1, MATE_2);
-    }
+    const uint32 mate = alignments[1][read_id].mate();
+    return AlignmentData(&alignments[1][read_id],
+                         mapq[read_id],
+                         read_id,
+                         read_data[ mate ],
+                         &cigar[1],
+                         &mds[1]);
 }
 
 } // namespace io

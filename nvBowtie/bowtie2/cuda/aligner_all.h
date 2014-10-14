@@ -221,6 +221,8 @@ void Aligner::score_all(
 
     // gather all the range sizes, sorted by read, in a compacted array
     const uint32 n_hit_ranges = hits_count_scan_dvec[ count-1 ];
+    if (n_hit_ranges == 0)
+        return;
 
     log_verbose(stderr, "    ranges     : %u\n", n_hit_ranges);
 
@@ -247,12 +249,14 @@ void Aligner::score_all(
         uint64 total_hits = 0;
         thrust::host_vector<uint32>  h_counts = hit_deques.counts();
         thrust::host_vector<SeedHit> h_hits   = hit_deques.hits();
+        thrust::host_vector<uint32>  h_index  = hit_deques.index();
         for (uint32 i = 0; i < n_reads; ++i)
         {
-            uint32 cnt = h_counts[i];
+            uint32 cnt   = h_counts[i];
+            uint32 index = h_index[i];
             for (uint32 j = 0; j < cnt; ++j)
             {
-                const SeedHit hit = h_hits[ i + n_reads * j ];
+                const SeedHit hit = h_hits[ index + j ];
                 total_hits += hit.get_range().y - hit.get_range().x;
             }
         }

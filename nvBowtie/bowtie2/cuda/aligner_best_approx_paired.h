@@ -334,8 +334,7 @@ void Aligner::best_approx(
             best_data_dvec,
             io::DeviceCigarArray(cigar, cigar_coords_dvec),
             mds,
-            mapq_dvec,
-            read_data1);
+            mapq_dvec);
 
         output_file->process( gpu_batch, io::MATE_1 );
     }
@@ -465,8 +464,7 @@ void Aligner::best_approx(
                 best_data_dvec_o,
                 io::DeviceCigarArray(cigar, cigar_coords_dvec),
                 mds,
-                mapq_dvec,
-                read_data1);
+                mapq_dvec);
 
             output_file->process( gpu_batch, io::MATE_2 );
         }
@@ -476,7 +474,7 @@ void Aligner::best_approx(
     #if 0
     {
         // clear mapq's
-        thrust::fill( mapq_dvec.begin(), mapq_dvec.begin() + count, int32(0) );
+        thrust::fill( mapq_dvec.begin(), mapq_dvec.begin() + count, uint8(255) );
 
         // overlap the second-best indices with the loc queue
         thrust::device_vector<uint32>::iterator second_idx_begin = scoring_queues.hits.loc.begin();
@@ -552,8 +550,7 @@ void Aligner::best_approx(
                 best_data_dvec,
                 io::DeviceCigarArray(cigar, cigar_coords_dvec),
                 mds,
-                mapq_dvec,
-                read_data1);
+                mapq_dvec);
 
             output_file->process( gpu_batch, io::MATE_1 );
         }
@@ -675,8 +672,7 @@ void Aligner::best_approx(
                     best_data_dvec_o,
                     io::DeviceCigarArray(cigar, cigar_coords_dvec),
                     mds,
-                    mapq_dvec,
-                    read_data1);
+                    mapq_dvec);
 
                 output_file->process( gpu_batch, io::MATE_2 );
             }

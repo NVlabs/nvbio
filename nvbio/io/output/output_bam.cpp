@@ -538,14 +538,14 @@ void BamOutput::end_batch(void)
         switch(alignment_type)
         {
             case SINGLE_END:
-                alignment = cpu_output.get_mate(c, MATE_1, MATE_1);
+                alignment = cpu_output.get_mate(c, MATE_1);
                 mate = AlignmentData::invalid();
 
                 process_one_alignment(data_buffer, alignment, mate);
                 break;
 
             case PAIRED_END:
-                alignment = cpu_output.get_anchor(c);
+                alignment = cpu_output.get_anchor_mate(c);
                 mate = cpu_output.get_opposite_mate(c);
 
                 process_one_alignment(data_buffer, alignment, mate);

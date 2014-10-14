@@ -49,7 +49,7 @@ void gather_ranges_kernel(
 
     // do a binary search, looking for thread_id in hit_counts_scan,
     // to find the corresponding read id.
-    const uint32 read_id = uint32( upper_bound( thread_id, hit_counts_scan, n_reads ) - hit_counts_scan );
+    const uint32 read_id = upper_bound_index( thread_id, hit_counts_scan, n_reads );
 
     // at this point we can figure out which seed hit / SA range this thread is
     // responsible of

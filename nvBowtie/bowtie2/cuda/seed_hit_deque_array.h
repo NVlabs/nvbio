@@ -142,6 +142,10 @@ struct SeedHitDequeArray : public SeedHitDequeArrayDeviceStorage
     ///
     index_storage_type& counts() { return m_counts; }
 
+    /// return the index vector
+    ///
+    index_storage_type& index() { return m_index; }
+
     /// return the probs vector
     ///
     prob_storage_type& probs() { return m_probs; }

@@ -97,13 +97,13 @@ void DebugOutput::end_batch(void)
         switch(alignment_type)
         {
             case SINGLE_END:
-                mate_1 = cpu_batch.get_mate(c, MATE_1, MATE_1);
+                mate_1 = cpu_batch.get_mate(c, MATE_1);
                 mate_2 = AlignmentData::invalid();
                 break;
 
             case PAIRED_END:
-                mate_1 = cpu_batch.get_mate(c, MATE_1, MATE_1);
-                mate_2 = cpu_batch.get_mate(c, MATE_2, MATE_2);
+                mate_1 = cpu_batch.get_mate(c, MATE_1);
+                mate_2 = cpu_batch.get_mate(c, MATE_2);
                 break;
         }
 

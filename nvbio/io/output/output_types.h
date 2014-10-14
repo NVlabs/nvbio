@@ -86,25 +86,28 @@ struct BNT
 };
 
 /// Helper enum to identify the type of alignment we're doing
+///
 typedef enum {
     SINGLE_END,
     PAIRED_END
 } AlignmentType;
 
 /// Helper enum to identify a mate in an alignment.
-/// Note that these are used as indices within BestAlignments.
+///
 typedef enum {
     MATE_1 = 0,
     MATE_2 = 1,
 } AlignmentMate;
 
 /// Helper enum to identify a scoring pass.
+///
 typedef enum {
     BEST_SCORE,
     SECOND_BEST_SCORE,
 } AlignmentScore;
 
 /// Wrapper struct to keep CIGAR arrays and CIGAR coords in one place. This is the device version.
+///
 struct DeviceCigarArray
 {
     nvbio::DeviceVectorArray<io::Cigar>&       array;
@@ -114,17 +117,19 @@ struct DeviceCigarArray
                      thrust::device_vector<uint2>&        coords)
         : array(array),
           coords(coords)
-    { }
+    {}
 };
 
 /// Wrapper struct to keep CIGAR arrays and CIGAR coords in one place (host version).
+///
 struct HostCigarArray
 {
-    nvbio::HostVectorArray<io::Cigar> array;
-    thrust::host_vector<uint2>              coords;
+    nvbio::HostVectorArray<io::Cigar>   array;
+    thrust::host_vector<uint2>          coords;
 };
 
 /// The type for the MDS array in the host
+///
 typedef nvbio::HostVectorArray<uint8> HostMdsArray;
 
 /// Utility struct to gather all data related to a given alignment.
@@ -136,12 +141,10 @@ struct AlignmentData
     typedef io::SequenceDataAccess<DNA_N>                   read_access_type;
     typedef read_access_type::sequence_stream_type          read_type;
 
-    /// Set to true if this is a valid alignment
-    bool valid;
-
-    const Alignment *aln;               ///< The alignment itself
-    uint32 read_id_p;                   ///< The read id of this alignment within the batch
-    uint32 mapq;                        ///< the mapping quality score
+    bool             valid;             ///< Set to true if this is a valid alignment
+    const Alignment* aln;               ///< The alignment itself
+    uint32           read_id_p;         ///< The read id of this alignment within the batch
+    uint32           mapq;              ///< the mapping quality score
 
     // Pointers to the read_data, cigar and mds arrays for this read.
     // These are not really meant to be used outside AlignmentData and

@@ -59,9 +59,9 @@ struct HostOutputBatchPE
     HostOutputBatchPE() : count(0) {}
 
     // extract alignment data for a given mate
-    AlignmentData get_mate(uint32 read_id, AlignmentMate mate, AlignmentMate cigar_mate);
+    AlignmentData get_mate(uint32 read_id, AlignmentMate mate);
     // extract alignment data for the anchor mate
-    AlignmentData get_anchor(uint32 read_id);
+    AlignmentData get_anchor_mate(uint32 read_id);
     // extract alignment data for the opposite mate
     AlignmentData get_opposite_mate(uint32 read_id);
 };
@@ -75,23 +75,19 @@ public:
     thrust::device_vector<io::Alignment>&      alignments;
     DeviceCigarArray                           cigar;
     nvbio::DeviceVectorArray<uint8>&           mds;
-    thrust::device_vector<uint8>               mapq;
-
-    const io::SequenceDataDevice&              read_data;
+    thrust::device_vector<uint8>&              mapq;
 
     DeviceOutputBatchSE(uint32                                    _count,
                    thrust::device_vector<io::Alignment>&          _alignments,
                    DeviceCigarArray                               _cigar,
                    nvbio::DeviceVectorArray<uint8>&               _mds,
-                   thrust::device_vector<uint8>&                  _mapq,
-                   const io::SequenceDataDevice&                  _read_data)
+                   thrust::device_vector<uint8>&                  _mapq)
             : count(_count),
               alignments(_alignments),
               cigar(_cigar),
               mds(_mds),
-              mapq(_mapq),
-              read_data(_read_data)
-    { }
+              mapq(_mapq)
+    {}
 
     // copy best score data into host memory
     void readback_scores(thrust::host_vector<io::Alignment>& host_alignments) const;

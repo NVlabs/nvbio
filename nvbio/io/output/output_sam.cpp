@@ -546,14 +546,14 @@ void SamOutput::end_batch(void)
         switch(alignment_type)
         {
             case SINGLE_END:
-                alignment = cpu_batch.get_mate(c, MATE_1, MATE_1);
+                alignment = cpu_batch.get_mate(c, MATE_1);
                 mate = AlignmentData::invalid();
 
                 process_one_alignment(alignment, mate);
                 break;
 
             case PAIRED_END:
-                alignment = cpu_batch.get_anchor(c);
+                alignment = cpu_batch.get_anchor_mate(c);
                 mate = cpu_batch.get_opposite_mate(c);
 
                 process_one_alignment(alignment, mate);

@@ -180,10 +180,6 @@ struct EditDistanceScoringScheme
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     int32 min_score(const uint32 len) const { return m_score_min( len ); }
 
-    /// score limit value
-    ///
-    int32 score_limit()  const { return Field_traits<int32>::min(); }
-
     /// min score function
     ///
     threshold_score_type threshold_score() const
@@ -278,10 +274,6 @@ struct SmithWatermanScoringScheme
     /// min score function
     ///
     SimpleFunc threshold_score() const { return m_score_min; }
-
-    /// score limit value
-    ///
-    int32 score_limit() const { return Field_traits<int32>::min(); }
 
 	/// best achievable score for a read of given length
     ///

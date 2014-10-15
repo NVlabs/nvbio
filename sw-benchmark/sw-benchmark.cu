@@ -461,6 +461,7 @@ int main(int argc, char* argv[])
 
     const char* reads_name  = argv[argc-2];
     const char* ref_name    = argv[argc-1];
+    uint32      threads     = omp_get_num_procs();
     io::QualityEncoding qencoding = io::Phred33;
 
     for (int i = 0; i < argc-2; ++i)
@@ -500,6 +501,8 @@ int main(int argc, char* argv[])
                 ++end; begin = end;
             }
         }
+        else if (strcmp( argv[i], "-threads" ) == 0)
+            threads = atoi( argv[++i] );
     }
 
     fprintf(stderr,"sw-benchmark... started\n");
@@ -562,7 +565,7 @@ int main(int argc, char* argv[])
     }
 
     // Now set the number of threads
-    omp_set_num_threads( omp_get_num_procs() );
+    omp_set_num_threads( threads );
 
     #pragma omp parallel
     {

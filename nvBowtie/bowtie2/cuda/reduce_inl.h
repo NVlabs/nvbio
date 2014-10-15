@@ -238,26 +238,32 @@ void score_reduce_paired_kernel(
             distinct_alignments( best_pairs.pair<1>(), pair ) == false)
             continue;
 
-        if (score > best_pairs.best_score())
+        // check if this is a paired alignment
+        if (score2 > pipeline.score_limit)
         {
-            context.best_score( read_id, params );
+            // check if the best alignment was unpaired or had a worse score
+            if (best_pairs.is_paired() == false || score > best_pairs.best_score())
+            {
+                context.best_score( read_id, params );
 
-            // set the first best score
-            best_pairs.m_a2 = best_pairs.m_a1;
-            best_pairs.m_o2 = best_pairs.m_o1;
-            best_pairs.m_a1 = pair.m_a;
-            best_pairs.m_o1 = pair.m_o;
-            NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_reduce( read_id ), "update best (anchor[%u]):  (parent[%u:%u])\n  1. score[%d], rc[%u], pos[%u]\n  2. score[%d], rc[%u], pos[%u,%u]\n", anchor, thread_id, i, score1, read_rc, g_pos.y, score2, o_read_rc, o_g_pos.x, o_g_pos.y );
-        }
-        else if ((score > best_pairs.second_score()) && distinct_alignments( best_pairs.pair<0>(), pair, read_len/2 ))
-        {
-            context.second_score( read_id, params );
+                // set the first best score
+                best_pairs.m_a2 = best_pairs.m_a1;
+                best_pairs.m_o2 = best_pairs.m_o1;
+                best_pairs.m_a1 = pair.m_a;
+                best_pairs.m_o1 = pair.m_o;
+                NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_reduce( read_id ), "update best (anchor[%u]):  (parent[%u:%u])\n  1. score[%d], rc[%u], pos[%u]\n  2. score[%d], rc[%u], pos[%u,%u]\n", anchor, thread_id, i, score1, read_rc, g_pos.y, score2, o_read_rc, o_g_pos.x, o_g_pos.y );
+            } // check if the second-best alignment was unpaired or had a worse score
+            else if (best_pairs.has_second_paired() == false || (score > best_pairs.second_score() && distinct_alignments( best_pairs.pair<0>(), pair, read_len/2 )))
+            {
+                context.second_score( read_id, params );
 
-            // set the second best score
-            best_pairs.m_a2 = pair.m_a;
-            best_pairs.m_o2 = pair.m_o;
-            NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_reduce( read_id ), "update second (anchor[%u]):  (parent[%u:%u])\n  1. score[%d], rc[%u], pos[%u]\n  2. score[%d], rc[%u], pos[%u,%u]\n", anchor, thread_id, i, score1, read_rc, g_pos.y, score2, o_read_rc, o_g_pos.x, o_g_pos.y );
-        }
+                // set the second best score
+                best_pairs.m_a2 = pair.m_a;
+                best_pairs.m_o2 = pair.m_o;
+                NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_reduce( read_id ), "update second (anchor[%u]):  (parent[%u:%u])\n  1. score[%d], rc[%u], pos[%u]\n  2. score[%d], rc[%u], pos[%u,%u]\n", anchor, thread_id, i, score1, read_rc, g_pos.y, score2, o_read_rc, o_g_pos.x, o_g_pos.y );
+            }
+        } // the alignment is unpaired, check if the best alignment so far was also unpaired
+        // check if the best alignment was unpaired or had a worse score
         else if ((params.pe_unpaired == true) && (best_pairs.is_paired() == false))
         {
             //

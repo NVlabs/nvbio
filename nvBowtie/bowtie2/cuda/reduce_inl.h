@@ -263,7 +263,6 @@ void score_reduce_paired_kernel(
                 NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_reduce( read_id ), "update second (anchor[%u]):  (parent[%u:%u])\n  1. score[%d], rc[%u], pos[%u]\n  2. score[%d], rc[%u], pos[%u,%u]\n", anchor, thread_id, i, score1, read_rc, g_pos.y, score2, o_read_rc, o_g_pos.x, o_g_pos.y );
             }
         } // the alignment is unpaired, check if the best alignment so far was also unpaired
-        // check if the best alignment was unpaired or had a worse score
         else if ((params.pe_unpaired == true) && (best_pairs.is_paired() == false))
         {
             //

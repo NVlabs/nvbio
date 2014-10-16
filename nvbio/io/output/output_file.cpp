@@ -96,8 +96,9 @@ void OutputFile::readback(struct HostOutputBatchPE& cpu_batch,
 
     if (mate == MATE_1)
     {
-        // mapq comes from MATE_1
+        // mapq and read-ids come from MATE_1
         gpu_batch.readback_mapq(cpu_batch.mapq);
+        gpu_batch.readback_ids(cpu_batch.read_ids);
 
         // stash the count for mate1, mate2 must match
         cpu_batch.count = gpu_batch.count;

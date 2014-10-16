@@ -33,6 +33,10 @@
 #include <nvBowtie/bowtie2/cuda/reduce.h>
 #include <nvBowtie/bowtie2/cuda/traceback.h>
 
+#include <nvbio/io/output/output_types.h>
+#include <nvbio/io/output/output_batch.h>
+#include <nvbio/io/output/output_file.h>
+
 namespace nvbio {
 namespace bowtie2 {
 namespace cuda {
@@ -70,6 +74,9 @@ void Aligner::all(
         thrust::make_counting_iterator(0u) + count,
         seed_queues.in_queue.begin() );
 
+    // clear mapq's
+    thrust::fill( mapq_dvec.begin(), mapq_dvec.end(), uint8(255) );
+
     //
     // Unlike Bowtie2, in the context of all-mapping we perform a single seed & extension pass.
     // However, during seed mapping, if we find too many hits for a given seeding pattern,
@@ -86,6 +93,8 @@ void Aligner::all(
     {
         // initialize the seed hit counts
         hit_deques.clear_deques();
+
+        log_debug(stderr, "  map seed %u\n", seed);
 
         //
         // perform mapping
@@ -131,6 +140,7 @@ void Aligner::all(
         if (params.keep_stats)
             keep_stats( reads.size(), stats );
 
+        log_debug(stderr, "  score\n");
         score_all(
             params,
             fmi,
@@ -308,6 +318,7 @@ void Aligner::score_all(
 
         SeedHitDequeArrayDeviceView hits = hit_deques.device_view();
 
+        log_debug(stderr, "    select\n");
         select_all(
             hit_offset,
             hit_count,
@@ -330,6 +341,7 @@ void Aligner::score_all(
         pipeline.hits_queue_size = hit_count;
         pipeline.scoring_queues  = scoring_queues.device_view();
 
+        log_debug(stderr, "    locate\n");
         timer.start();
 
         pipeline.idx_queue = sort_hi_bits(
@@ -391,6 +403,7 @@ void Aligner::score_all(
         //
         timer.start();
 
+        log_debug(stderr, "    score\n");
         const uint32 n_alignments = nvbio::bowtie2::cuda::score_all(
             band_len,
             pipeline,
@@ -458,6 +471,7 @@ void Aligner::score_all(
             cigar.clear();
             mds.clear();
 
+            log_debug(stderr, "\n    traceback (%u alignments)\n", n_backtracks);
             banded_traceback_all(
                 n_backtracks,
                 idx_queue_dptr,         // input indices
@@ -471,6 +485,10 @@ void Aligner::score_all(
             optional_device_synchronize();
             nvbio::cuda::check_error("backtracking kernel");
 
+            if (cigar.has_overflown())
+                throw nvbio::runtime_error("CIGAR vector overflow\n");
+
+            log_debug(stderr, "    finish\n");
             finish_alignment_all(
                 n_backtracks,
                 idx_queue_dptr,             // input indices
@@ -485,10 +503,25 @@ void Aligner::score_all(
             optional_device_synchronize();
             nvbio::cuda::check_error("alignment kernel");
 
+            if (mds.has_overflown())
+                throw nvbio::runtime_error("MDS vector overflow\n");
+
             timer.stop();
             stats.backtrack.add( n_backtracks, timer.seconds() );
 
-            // TODO: insert a hook to output the alignments here
+            // wrap the results in a DeviceOutputBatchSE and process it
+            log_debug(stderr, "    output\n");
+            {
+                io::DeviceOutputBatchSE gpu_batch(
+                    n_backtracks,
+                    output_alignments_dvec,
+                    io::DeviceCigarArray(cigar, cigar_coords_dvec),
+                    mds,
+                    mapq_dvec,
+                    &output_read_info_dvec );
+
+                output_file->process( gpu_batch, io::MATE_1 );
+            }
 
             buffer_count  -= n_backtracks;
             buffer_offset  = (buffer_offset + n_backtracks) % (BATCH_SIZE*2);

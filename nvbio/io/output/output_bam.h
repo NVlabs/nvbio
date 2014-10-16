@@ -32,6 +32,7 @@
 
 #include <nvbio/io/output/output_file.h>
 #include <nvbio/io/output/output_batch.h>
+#include <nvbio/io/output/output_priv.h>
 #include <nvbio/io/output/output_databuffer.h>
 #include <nvbio/io/output/output_gzip.h>
 
@@ -69,7 +70,8 @@ public:
 
     void process(struct DeviceOutputBatchSE& gpu_batch,
                  const AlignmentMate mate);
-    void end_batch(void);
+
+    void flush();
 
     void close(void);
 

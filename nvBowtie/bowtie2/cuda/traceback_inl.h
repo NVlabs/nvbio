@@ -395,7 +395,7 @@ struct AllTracebackStream : public AlignmentStreamBase<TRACEBACK_STREAM,AlignerT
 
         // alloc the output cigar
         io::Cigar* cigar = base_type::m_pipeline.cigar.alloc( context->idx, cigar_len );
-        NVBIO_CUDA_ASSERT_IF( base_type::m_params.debug.asserts, cigar != NULL, "%s backtrack(): unable to allocate CIGAR!\n  read[%u], mate[%u], cigar: %u!\n", mate_string( m_mate_type ), context->read_id, context->mate, cigar_len );
+        NVBIO_CUDA_ASSERT_IF( base_type::m_params.debug.asserts, cigar != NULL, "%s backtrack(): unable to allocate CIGAR!\n  aln[%u], read[%u], mate[%u], cigar: %u!\n", mate_string( m_mate_type ), context->idx, context->read_id, context->mate, cigar_len );
         if (cigar)
         {
             // copy the local cigar to the output one
@@ -701,13 +701,13 @@ void finish_alignment_kernel(
   #endif
 
     // store the MDS length in the first two bytes
-    NVBIO_CUDA_ASSERT_IF( params.debug.asserts, mds_len < 65536, "finish_alignment(%s): exceeded representable MDS length!\n  read[%u], mate[%u], mds: %u!\n", stream.mate_type() == OppositeMate ? "opposite" : "anchor", context.read_id, context.mate, mds_len );
+    NVBIO_CUDA_ASSERT_IF( params.debug.asserts, mds_len < 65536, "finish_alignment(%s): exceeded representable MDS length!\n  aln[%u], read[%u], mate[%u], mds: %u!\n", stream.mate_type() == OppositeMate ? "opposite" : "anchor", context.idx, context.read_id, context.mate, mds_len );
     mds_local[0] = uint8( mds_len & 0xFF );
     mds_local[1] = uint8( mds_len >> 8 );
 
     // alloc the output mds
-    uint8* mds_vector = pipeline.mds.alloc( context.read_id, mds_len );
-    NVBIO_CUDA_ASSERT_IF( params.debug.asserts, mds_vector != NULL, "finish_alignment(%s): unable to allocate MDS!\n  read[%u], mate[%u], mds: %u!\n", stream.mate_type() == OppositeMate ? "opposite" : "anchor", context.read_id, context.mate, mds_len );
+    uint8* mds_vector = pipeline.mds.alloc( context.idx, mds_len );
+    NVBIO_CUDA_ASSERT_IF( params.debug.asserts, mds_vector != NULL, "finish_alignment(%s): unable to allocate MDS!\n  aln[%u], read[%u], mate[%u], mds: %u!\n", stream.mate_type() == OppositeMate ? "opposite" : "anchor", context.idx, context.read_id, context.mate, mds_len );
     if (mds_vector)
     {
         // copy the local mds to the output one

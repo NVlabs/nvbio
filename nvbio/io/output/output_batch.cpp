@@ -61,52 +61,13 @@ void DeviceOutputBatchSE::readback_mapq(thrust::host_vector<uint8>& host_mapq) c
     host_mapq = mapq;
 }
 
-// extract alignment data for a given mate
-// note that the mates can be different for the cigar, since mate 1 is always the anchor mate for cigars
-AlignmentData HostOutputBatchPE::get_mate(uint32 read_id, AlignmentMate mate)
+// copy mapq back to the host
+void DeviceOutputBatchSE::readback_ids(thrust::host_vector<uint32>& host_ids) const
 {
-    if (alignments[0][read_id].mate() == mate)
-    {
-        return AlignmentData(&alignments[0][read_id],
-                             mapq[read_id],
-                             read_id,
-                             read_data[ mate ],
-                             &cigar[0],
-                             &mds[0]);
-    }
+    if (read_ids)
+        host_ids = *read_ids;
     else
-    {
-        return AlignmentData(&alignments[1][read_id],
-                             mapq[read_id],
-                             read_id,
-                             read_data[ mate ],
-                             &cigar[1],
-                             &mds[1]);
-    }
-}
-
-// extract alignment data for the anchor mate
-AlignmentData HostOutputBatchPE::get_anchor_mate(uint32 read_id)
-{
-    const uint32 mate = alignments[0][read_id].mate();
-    return AlignmentData(&alignments[0][read_id],
-                         mapq[read_id],
-                         read_id,
-                         read_data[ mate ],
-                         &cigar[0],
-                         &mds[0]);
-}
-
-// extract alignment data for the opposite mate
-AlignmentData HostOutputBatchPE::get_opposite_mate(uint32 read_id)
-{
-    const uint32 mate = alignments[1][read_id].mate();
-    return AlignmentData(&alignments[1][read_id],
-                         mapq[read_id],
-                         read_id,
-                         read_data[ mate ],
-                         &cigar[1],
-                         &mds[1]);
+        host_ids.resize(0);
 }
 
 } // namespace io

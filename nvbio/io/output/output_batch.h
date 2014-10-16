@@ -42,30 +42,6 @@
 namespace nvbio {
 namespace io {
 
-// a batch of alignment results on the CPU
-struct HostOutputBatchPE
-{
-    uint32 count;
-
-    // we have two alignments, cigar and MDS arrays, one for each mate
-    thrust::host_vector<io::Alignment>           alignments[2];
-    HostCigarArray                               cigar[2];
-    HostMdsArray                                 mds[2];
-    thrust::host_vector<uint8>                   mapq;
-
-    // pointer to the host-side read data for each mate
-    const io::SequenceDataHost*                  read_data[2];
-
-    HostOutputBatchPE() : count(0) {}
-
-    // extract alignment data for a given mate
-    AlignmentData get_mate(uint32 read_id, AlignmentMate mate);
-    // extract alignment data for the anchor mate
-    AlignmentData get_anchor_mate(uint32 read_id);
-    // extract alignment data for the opposite mate
-    AlignmentData get_opposite_mate(uint32 read_id);
-};
-
 // base class for representing a batch of alignment results on the device
 struct DeviceOutputBatchSE
 {
@@ -76,17 +52,20 @@ public:
     DeviceCigarArray                           cigar;
     nvbio::DeviceVectorArray<uint8>&           mds;
     thrust::device_vector<uint8>&              mapq;
+    thrust::device_vector<uint32>*             read_ids;
 
     DeviceOutputBatchSE(uint32                                    _count,
                    thrust::device_vector<io::Alignment>&          _alignments,
                    DeviceCigarArray                               _cigar,
                    nvbio::DeviceVectorArray<uint8>&               _mds,
-                   thrust::device_vector<uint8>&                  _mapq)
-            : count(_count),
-              alignments(_alignments),
-              cigar(_cigar),
-              mds(_mds),
-              mapq(_mapq)
+                   thrust::device_vector<uint8>&                  _mapq,
+                   thrust::device_vector<uint32>*                 _read_ids = NULL)
+        : count(_count),
+          alignments(_alignments),
+          cigar(_cigar),
+          mds(_mds),
+          mapq(_mapq),
+          read_ids(_read_ids)
     {}
 
     // copy best score data into host memory
@@ -97,6 +76,8 @@ public:
     void readback_mds(nvbio::HostVectorArray<uint8>& host_mds) const;
     // copy mapq into host memory
     void readback_mapq(thrust::host_vector<uint8>& host_mapq) const;
+    // copy ids into host memory
+    void readback_ids(thrust::host_vector<uint32>& host_ids) const;
 };
 
 } // namespace io

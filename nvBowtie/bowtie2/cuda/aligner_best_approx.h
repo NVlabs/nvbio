@@ -306,6 +306,8 @@ void Aligner::best_approx(
 
         optional_device_synchronize();
         nvbio::cuda::check_error("backtracking kernel");
+        if (cigar.has_overflown())
+            throw nvbio::runtime_error("CIGAR vector overflow\n");
 
         device_timer.stop();
         timer.stop();
@@ -328,6 +330,8 @@ void Aligner::best_approx(
 
         optional_device_synchronize();
         nvbio::cuda::check_error("alignment kernel");
+        if (mds.has_overflown())
+            throw nvbio::runtime_error("MDS vector overflow\n");
 
         device_timer.stop();
         timer.stop();
@@ -392,6 +396,8 @@ void Aligner::best_approx(
 
             optional_device_synchronize();
             nvbio::cuda::check_error("second-best backtracking kernel");
+            if (cigar.has_overflown())
+                throw nvbio::runtime_error("CIGAR vector overflow\n");
 
             device_timer.stop();
             timer.stop();
@@ -414,6 +420,8 @@ void Aligner::best_approx(
 
             optional_device_synchronize();
             nvbio::cuda::check_error("second-best alignment kernel");
+            if (mds.has_overflown())
+                throw nvbio::runtime_error("MDS vector overflow\n");
 
             device_timer.stop();
             timer.stop();

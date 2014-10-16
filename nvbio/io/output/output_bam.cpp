@@ -68,6 +68,12 @@ void BamOutput::process(struct DeviceOutputBatchSE& gpu_batch,
 {
     // read back the data into the CPU for later processing
     readback(cpu_output, gpu_batch, mate);
+
+    if (alignment_type == SINGLE_END || mate == MATE_2)
+    {
+        // flush the output
+        flush();
+    }
 }
 
 uint32 BamOutput::generate_cigar(struct BAM_alignment& alnh,
@@ -147,6 +153,12 @@ template <typename T> int itoa(char *buf, T in)
 // generate the MD string
 uint32 BamOutput::generate_md_string(BAM_alignment& alnh, BAM_alignment_data_block& alnd, const AlignmentData& alignment)
 {
+    if (alignment.mds_vec == NULL)
+    {
+        log_warning(stderr, "  BAM: alignment %u from read %u has an empty MD string\n", alignment.aln_id, alignment.read_id);
+        alnd.md_string[0] = '\0';
+        return 0;
+    }
     const uint32 mds_len = uint32(alignment.mds_vec[0]) | (uint32(alignment.mds_vec[1]) << 8);
     char *buffer = alnd.md_string;
     uint32 buffer_len = 0;
@@ -389,7 +401,7 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
     if (computed_cigar_len != alignment.read_len)
     {
         log_error(stderr, "BAM output : cigar length doesn't match read %u (%u != %u)\n",
-                  alignment.read_id_p /* xxxnsubtil: global_read_id */,
+                  alignment.read_id /* xxxnsubtil: global_read_id */,
                   computed_cigar_len, alignment.read_len);
         return mapq;
     }
@@ -527,7 +539,7 @@ void BamOutput::output_alignment(DataBuffer& out, BAM_alignment& alnh, BAM_align
     }
 }
 
-void BamOutput::end_batch(void)
+void BamOutput::flush(void)
 {
     for(uint32 c = 0; c < cpu_output.count; c++)
     {
@@ -558,8 +570,6 @@ void BamOutput::end_batch(void)
     {
         write_block(data_buffer);
     }
-
-    OutputFile::end_batch();
 }
 
 void BamOutput::write_block(DataBuffer& block)

@@ -8,6 +8,8 @@ output_file.cpp
 output_file.h
 output_batch.h
 output_batch.cpp
+output_priv.h
+output_priv.cpp
 output_stats.h
 output_stats.cpp
 output_sam.h

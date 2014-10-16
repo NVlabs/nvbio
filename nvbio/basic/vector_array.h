@@ -208,6 +208,10 @@ struct DeviceVectorArray
         return bytes;
     }
 
+    /// check for overlows
+    ///
+    bool has_overflown() { return (m_pool[0] > m_arena.size()); }
+
     /// clear the pool
     ///
     void clear() { m_pool[0] = 0; }
@@ -321,6 +325,10 @@ struct HostVectorArray
         }
         return bytes;
     }
+
+    /// check for overlows
+    ///
+    bool has_overflown() { return (m_pool[0] > m_arena.size()); }
 
     /// clear the pool
     ///

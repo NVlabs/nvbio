@@ -85,9 +85,13 @@ void DebugOutput::process(struct DeviceOutputBatchSE& gpu_batch,
 {
     // read back the data into the CPU for later processing
     readback(cpu_batch, gpu_batch, mate);
+
+    // flush the output
+    if (alignment_type == SINGLE_END || mate == MATE_2)
+        flush();
 }
 
-void DebugOutput::end_batch(void)
+void DebugOutput::flush(void)
 {
     for(uint32 c = 0; c < cpu_batch.count; c++)
     {
@@ -109,8 +113,6 @@ void DebugOutput::end_batch(void)
 
         process_one_alignment(mate_1, mate_2);
     }
-
-    OutputFile::end_batch();
 }
 
 void DebugOutput::close(void)

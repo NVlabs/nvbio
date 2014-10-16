@@ -31,6 +31,7 @@
 #include <nvbio/io/output/output_utils.h>
 #include <nvbio/io/output/output_file.h>
 #include <nvbio/io/output/output_batch.h>
+#include <nvbio/io/output/output_priv.h>
 #include <nvbio/io/sequence/sequence.h>
 
 #include <stdio.h>
@@ -71,8 +72,8 @@ private:
         const char *        rnext;              // reference name of the mate/next read
         uint32              pnext;              // position of the mate/next read
         int32               tlen;               // observed template length
-        char                seq[1024];          // segment sequence (xxxnsubtil: size this according to max read len)
-        char                qual[1024];         // ASCII of phred-scaled base quality+33 (xxxnsubtil: same as above)
+        char                seq[4096];          // segment sequence (xxxnsubtil: size this according to max read len)
+        char                qual[4096];         // ASCII of phred-scaled base quality+33 (xxxnsubtil: same as above)
 
         // our own additional data, output as tags (only if read is mapped)
         int32               ed;                 // NM:i
@@ -93,7 +94,7 @@ public:
 
     void process(struct DeviceOutputBatchSE& gpu_batch,
                  const AlignmentMate mate);
-    void end_batch(void);
+    void flush(void);
 
     void close(void);
 

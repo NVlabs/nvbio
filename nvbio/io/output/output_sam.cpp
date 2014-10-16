@@ -224,7 +224,14 @@ uint32 SamOutput::generate_cigar_string(struct SamAlignment& sam_align,
 // generate the MD string
 uint32 SamOutput::generate_md_string(SamAlignment& sam_align, const AlignmentData& alignment)
 {
+    if (alignment.mds_vec == NULL)
+    {
+        log_warning(stderr, "  SAM: alignment %u from read %u has an empty MD string\n", alignment.aln_id, alignment.read_id);
+        sam_align.md_string[0] = '\0';
+        return 0;
+    }
     const uint32 mds_len = uint32(alignment.mds_vec[0]) | (uint32(alignment.mds_vec[1]) << 8);
+
     char *buffer = sam_align.md_string;
     uint32 buffer_len = 0;
 
@@ -277,6 +284,7 @@ uint32 SamOutput::generate_md_string(SamAlignment& sam_align, const AlignmentDat
         case MDS_DELETION:
             {
                 const uint8 l = alignment.mds_vec[i++];
+
                 buffer[buffer_len++] = '^';
                 for(uint8 n = 0; n < l; n++)
                 {
@@ -379,9 +387,9 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
         {
             nvbio::complement_functor<4> complement;
             s = complement(alignment.read_data[i]);
-        } else {
-            s = alignment.read_data[alignment.read_len - i - 1];
         }
+        else
+            s = alignment.read_data[alignment.read_len - i - 1];
 
         sam_align.seq[i] = dna_to_char(s);
     }
@@ -393,11 +401,9 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
         char q;
 
         if (alignment.aln[MATE_1].m_rc)
-        {
             q = alignment.qual[i];
-        } else {
+        else
             q = alignment.qual[alignment.read_len - i - 1];
-        }
 
         sam_align.qual[i] = q + 33;
     }
@@ -421,9 +427,7 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
     // compute alignment flags
     sam_align.flags  = (alignment.aln->mate() ? SAM_FLAGS_READ_2 : SAM_FLAGS_READ_1);
     if (alignment.aln->m_rc)
-    {
         sam_align.flags |= SAM_FLAGS_REVERSE;
-    }
 
     if (alignment_type == PAIRED_END)
     {
@@ -432,19 +436,13 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
         sam_align.flags |= SAM_FLAGS_PAIRED;
 
         if (mate.aln->is_paired()) // FIXME: this should be other_mate.is_concordant()
-        {
             sam_align.flags |= SAM_FLAGS_PROPER_PAIR;
-        }
 
         if (!mate.aln->is_aligned())
-        {
             sam_align.flags |= SAM_FLAGS_MATE_UNMAPPED;
-        }
 
         if (mate.aln->is_rc())
-        {
             sam_align.flags |= SAM_FLAGS_MATE_REVERSE;
-        }
     }
 
     if (alignment.cigar_pos + ref_cigar_len > bnt.sequence_index[ seq_index+1 ])
@@ -465,7 +463,7 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
     if (computed_cigar_len != alignment.read_len)
     {
         log_error(stderr, "SAM output : cigar length doesn't match read %u (%u != %u)\n",
-                  alignment.read_id_p /* xxxnsubtil: global_read_id */,
+                  alignment.read_id /* xxxnsubtil: global_read_id */,
                   computed_cigar_len, alignment.read_len);
         return sam_align.mapq;
     }
@@ -497,9 +495,7 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
                                  nvbio::min(mate.cigar_pos, alignment.cigar_pos);
 
                 if (mate.cigar_pos < alignment.cigar_pos)
-                {
                     sam_align.tlen = -sam_align.tlen;
-                }
             }
         } else {
             // other mate is unmapped
@@ -533,10 +529,14 @@ void SamOutput::process(struct DeviceOutputBatchSE& gpu_batch,
 {
     // read back the data into the CPU for later processing
     readback(cpu_batch, gpu_batch, mate);
+
+    // flush the output
+    if (alignment_type == SINGLE_END || mate == MATE_2)
+        flush();
 }
 
 // called when output data for a given batch has been received, triggers processing of the accumulated data
-void SamOutput::end_batch(void)
+void SamOutput::flush(void)
 {
     for(uint32 c = 0; c < cpu_batch.count; c++)
     {
@@ -561,8 +561,6 @@ void SamOutput::end_batch(void)
                 break;
         }
     }
-
-    OutputFile::end_batch();
 }
 
 void SamOutput::close(void)

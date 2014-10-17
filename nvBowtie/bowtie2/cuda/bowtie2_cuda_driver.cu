@@ -196,8 +196,8 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.min_read_len     = uint_option(options, "min-read-len",          init ? 12u     : params.min_read_len);         // minimum read length
     params.ungapped_mates   = uint_option(options, "ungapped-mates", "ug",  init ? 0u      : params.ungapped_mates);       // ungapped mate alignment
 
-    // force the all-mapping mode with the '-a' option
-    if (uint_option(options, "a", params.mode == AllMapping))
+    // force the all-mapping mode with the '--all|-a' option
+    if (uint_option(options, "all", "a", params.mode == AllMapping))
         params.mode = AllMapping;
 
     // force Edit-Distance scoring with the '--ed' option

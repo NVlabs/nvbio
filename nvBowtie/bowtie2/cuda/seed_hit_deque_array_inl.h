@@ -79,9 +79,21 @@ SeedHit* SeedHitDequeArrayDeviceView::alloc_deque(const uint32 read_id, const ui
 {
 #if defined(__CUDA_ARCH__) && __CUDA_ARCH__ > 0
     m_counts[read_id] = 0u;
-    m_index[read_id]  = size ? atomicAdd( m_pool, size ) : 0u;
-    m_probs_index[read_id]  = size ? atomicAdd( m_probs_pool, SumTree<float*>::node_count( size ) ) : 0u;
-    return m_hits + m_index[read_id];
+    const uint32 index       = size ? atomicAdd( m_pool, size ) : 0u;
+    const uint32 probs_index = size ? atomicAdd( m_probs_pool, SumTree<float*>::node_count( size ) ) : 0u;
+    if (index < m_hits.size())
+    {
+        m_index[read_id]       = index;
+        m_probs_index[read_id] = probs_index;
+        return m_hits + m_index[read_id];
+    }
+    else
+    {
+        // allocation failed
+        m_index[read_id]       = 0;
+        m_probs_index[read_id] = 0;
+        return NULL;
+    }
 #else
     return NULL;
 #endif

@@ -330,13 +330,16 @@ int driver(
 
     // compute band length
     const uint32 band_len = Aligner::band_length( params.max_dist );
+    const SimpleFunc& score_min = EditDistanceMode ? params.scoring_scheme.ed.m_score_min : params.scoring_scheme.sw.m_score_min;
     
     // print command line options
     log_visible(stderr, "  mode           = %s\n", mapping_mode( params.mode ));
     log_visible(stderr, "  scoring        = %s\n", scoring_mode( params.scoring_mode ));
+    log_visible(stderr, "  score-min      = %s:%.2f:%.2f\n", score_min.type_string(), score_min.k, score_min.m);
     log_visible(stderr, "  alignment type = %s\n", params.alignment_type == LocalAlignment ? "local" : "end-to-end");
     log_visible(stderr, "  seed length    = %u\n", params.seed_len);
     log_visible(stderr, "  seed interval  = (%s, %.3f, %.3f)\n", params.seed_freq.type_symbol(), params.seed_freq.k, params.seed_freq.m);
+    log_visible(stderr, "  seed rounds    = %u\n", params.max_reseed);
     log_visible(stderr, "  max hits       = %u\n", params.max_hits);
     log_visible(stderr, "  max edit dist  = %u (band len %u)\n", params.max_dist, band_len);
     log_visible(stderr, "  max effort     = %u\n", params.max_effort);
@@ -653,10 +656,12 @@ int driver(
 
     // compute band length
     const uint32 band_len = Aligner::band_length( params.max_dist );
+    const SimpleFunc& score_min = EditDistanceMode ? params.scoring_scheme.ed.m_score_min : params.scoring_scheme.sw.m_score_min;
 
     // print command line options
     log_visible(stderr, "  mode           = %s\n", mapping_mode( params.mode ));
     log_visible(stderr, "  scoring        = %s\n", scoring_mode( params.scoring_mode ));
+    log_visible(stderr, "  score-min      = %s:%.2f:%.2f\n", score_min.type_string(), score_min.k, score_min.m);
     log_visible(stderr, "  alignment type = %s\n", params.alignment_type == LocalAlignment ? "local" : "end-to-end");
     log_visible(stderr, "  pe-policy      = %s\n",
                                                    pe_policy == io::PE_POLICY_FF ? "ff" :
@@ -665,6 +670,7 @@ int driver(
                                                                                    "rr" );
     log_visible(stderr, "  seed length    = %u\n", params.seed_len);
     log_visible(stderr, "  seed interval  = (%s, %.3f, %.3f)\n", params.seed_freq.type_symbol(), params.seed_freq.k, params.seed_freq.m);
+    log_visible(stderr, "  seed rounds    = %u\n", params.max_reseed);
     log_visible(stderr, "  max hits       = %u\n", params.max_hits);
     log_visible(stderr, "  max edit dist  = %u (band len %u)\n", params.max_dist, band_len);
     log_visible(stderr, "  max effort     = %u\n", params.max_effort);

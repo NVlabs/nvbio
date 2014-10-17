@@ -112,6 +112,9 @@ struct Aligner
     uint32*                             trys_dptr;
     thrust::device_vector<uint32>       rseeds_dvec;
     uint32*                             rseeds_dptr;
+    thrust::device_vector<uint8>        flags_dvec;
+    uint8*                              flags_dptr;
+    nvbio::vector<device_tag,uint8>     temp_dvec;
 
     thrust::device_vector<io::Alignment>    best_data_dvec;
     thrust::device_vector<io::Alignment>    best_data_dvec_o;
@@ -254,6 +257,28 @@ struct Aligner
         const uint32*                           seed_queue,
         Stats&                                  stats,
         uint64&                                 total_alignments);
+
+  #if defined(__CUDACC__)
+    // return a pointer to an "index" into the given sorted keys
+    //
+    template <typename iterator_type>
+    std::pair<uint32*,uint64*> sort_64_bits(
+        const uint32        count,
+        const iterator_type keys)
+    {
+        thrust::copy(
+            keys,
+            keys + count,
+            thrust::device_ptr<uint64>( (uint64*)raw_pointer( sorting_queue_dvec ) ) );
+
+        return sort_64_bits( count );
+    }
+  #endif
+
+    // return a pointer to an "index" into the given sorted keys
+    //
+    std::pair<uint32*,uint64*> sort_64_bits(
+        const uint32 count);
 
     // return a pointer to an "index" into the given keys sorted by their hi bits
     //

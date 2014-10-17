@@ -86,8 +86,11 @@ std::pair<uint64,uint64> Aligner::init_alloc(const uint32 BATCH_SIZE, const Para
     // alloc the scoring queues
     d_allocated_bytes += scoring_queues.resize( BATCH_SIZE, BATCH_SIZE, do_alloc ); // TODO: pass read-end 'type' field
 
-                     resize( do_alloc, sorting_queue_dvec,    BATCH_SIZE*2, d_allocated_bytes );
-    idx_queue_dptr = resize( do_alloc, idx_queue_dvec,        BATCH_SIZE*2, d_allocated_bytes );
+    idx_queue_dptr = resize( do_alloc, idx_queue_dvec,      BATCH_SIZE*2,   d_allocated_bytes ); // 2x for ping-pong buffers
+    if (params.mode != AllMapping)
+                     resize( do_alloc, sorting_queue_dvec,  BATCH_SIZE*2,   d_allocated_bytes ); // 2x for ping-pong buffers
+    else
+                     resize( do_alloc, sorting_queue_dvec,  BATCH_SIZE*2*4, d_allocated_bytes ); // 4x for 64-bit sorting
 
     nvbio::cuda::check_error("allocating queues");
 
@@ -109,6 +112,8 @@ std::pair<uint64,uint64> Aligner::init_alloc(const uint32 BATCH_SIZE, const Para
 
         output_alignments_dptr = resize( do_alloc, output_alignments_dvec,  BATCH_SIZE,     d_allocated_bytes );
         output_read_info_dptr  = resize( do_alloc, output_read_info_dvec,   BATCH_SIZE,     d_allocated_bytes );
+
+        flags_dptr = resize( do_alloc, flags_dvec, BATCH_SIZE, d_allocated_bytes );
     }
     nvbio::cuda::check_error("allocating output buffers");
 

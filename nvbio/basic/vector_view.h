@@ -116,6 +116,11 @@ struct vector_view
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     void resize(const uint32 sz) { m_size = sz; }
 
+    /// clear
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    void clear() { m_size = 0; }
+
     /// return vector size
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE

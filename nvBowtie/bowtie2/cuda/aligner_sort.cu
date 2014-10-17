@@ -61,6 +61,30 @@ uint32* Aligner::sort_hi_bits(
     return double_buffer.values[double_buffer.selector];
 }
 
+// return a pointer to an "index" into the given sorted keys
+//
+std::pair<uint32*,uint64*> Aligner::sort_64_bits(
+    const uint32 count)
+{
+    thrust::copy(
+        thrust::make_counting_iterator(0u),
+        thrust::make_counting_iterator(0u) + count,
+        idx_queue_dvec.begin() );
+
+    // Create ping-pong storage wrapper
+    nvbio::cuda::SortBuffers<uint64*,uint32*> double_buffer;
+    double_buffer.keys[0]   = reinterpret_cast<uint64*>( raw_pointer( sorting_queue_dvec ) );
+    double_buffer.keys[1]   = reinterpret_cast<uint64*>( raw_pointer( sorting_queue_dvec ) ) + BATCH_SIZE;
+    double_buffer.values[0] = idx_queue_dptr;
+    double_buffer.values[1] = idx_queue_dptr + BATCH_SIZE;
+
+    sort_enactor.sort( count, double_buffer );
+
+    return std::make_pair(
+        double_buffer.values[double_buffer.selector],
+        double_buffer.keys[double_buffer.selector] );
+}
+
 // sort a set of keys in place
 //
 void Aligner::sort_inplace(

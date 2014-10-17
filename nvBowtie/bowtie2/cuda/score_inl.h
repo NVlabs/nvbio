@@ -671,7 +671,7 @@ struct AllScoreStream : public AlignmentStreamBase<SCORE_STREAM,AlignerType,Pipe
         context->genome_end   = nvbio::min( context->genome_begin + m_band_len + read_len, base_type::m_pipeline.genome_length );
 
         // setup the minimum score
-        context->min_score = base_type::m_pipeline.score_limit;
+        context->min_score = base_type::m_pipeline.scoring_scheme.min_score( read_len );
         return true;
     }
 

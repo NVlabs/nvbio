@@ -105,9 +105,12 @@ void store_deque(
     const SeedHit*              hitstorage)
 {
     SeedHit* hit_data = hit_deques.alloc_deque( read_id, n_hits );
-    hit_deques.resize_deque( read_id, n_hits );
-    for (uint32 i = 0; i < n_hits; ++i)
-        hit_data[i] = hitstorage[i];
+    if (hit_data != NULL)
+    {
+        hit_deques.resize_deque( read_id, n_hits );
+        for (uint32 i = 0; i < n_hits; ++i)
+            hit_data[i] = hitstorage[i];
+    }
 }
 
 enum { CHECK_EXACT=1u, IGNORE_EXACT=0u };
@@ -638,41 +641,48 @@ void map_kernel(
     SeedHit local_hits[512];
     typedef SeedHitDequeArrayDeviceView::hit_vector_type hit_storage_type;
     typedef SeedHitDequeArrayDeviceView::hit_deque_type  hit_deque_type;
+    hit_deque_type hitheap( hit_storage_type( 0, local_hits ), true );
 
-    for (uint32 retry = 0; retry <= params.max_reseed; ++retry)
+    bool active = true;
+
+    //for (uint32 retry = 0; retry <= params.max_reseed; ++retry) // TODO: this makes the kernel crash even when
+                                                                  // max_reseed is 0, for apparently no good reason...
+    for (uint32 retry = 0; retry <= 0; ++retry)
     {
-        // restore the result heap
-        hit_deque_type hitheap( hit_storage_type( 0, local_hits ), true );
-
-        uint32 range_sum   = 0;
-        uint32 range_count = 0;
-
-        for (uint32 i = seed_range.x; i < seed_range.y; ++i)
+        if (active)
         {
-            const uint32 pos = read_range.x + retry * retry_stride + i * seed_freq;
-            if (pos + seed_len > read_range.y)
-                break;
+            // restore the result heap
+            hitheap.clear();
 
-            seed_mapper<ALGO>::enact(
-                read_batch, fmi, rfmi,
-                read_range,
-                pos,
-                seed_len,
-                &S[threadIdx.x][0],
-                hitheap,
-                range_sum,
-                range_count,
-                params );
-        }
+            uint32 range_sum   = 0;
+            uint32 range_count = 0;
 
-        // check whether we could stop here or if we need re-seeding
-        if (retry == params.max_reseed || range_count == 0 && range_sum < params.rep_seeds * range_count)
-        {
-            // save the hits
-            store_deque( hits, read_id, hitheap.size(), local_hits );
-            break;
+            for (uint32 i = seed_range.x; i < seed_range.y; ++i)
+            {
+                const uint32 pos = read_range.x + retry * retry_stride + i * seed_freq;
+                if (pos + seed_len <= read_range.y)
+                {
+                    seed_mapper<ALGO>::enact(
+                        read_batch, fmi, rfmi,
+                        read_range,
+                        pos,
+                        seed_len,
+                        &S[threadIdx.x][0],
+                        hitheap,
+                        range_sum,
+                        range_count,
+                        params );
+                }
+            }
+
+            // check whether we could stop here or if we need re-seeding
+            if (retry == params.max_reseed || range_count == 0 && range_sum < params.rep_seeds * range_count)
+                active = false;
         }
     }
+
+    // save the hits
+    store_deque( hits, read_id, hitheap.size(), local_hits );
 }
 
 ///@}  // group MappingDetail

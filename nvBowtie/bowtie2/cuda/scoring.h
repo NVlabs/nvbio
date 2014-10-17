@@ -182,9 +182,9 @@ struct EditDistanceScoringScheme
 
     /// min score function
     ///
-    threshold_score_type threshold_score() const
+    SimpleFunc threshold_score() const
     {
-        return threshold_score_type( m_score_min );
+        return m_score_min;
     }
 
     // ---------- end: limits ---------------------------------------------------------------------- //

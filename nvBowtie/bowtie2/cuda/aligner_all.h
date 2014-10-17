@@ -26,6 +26,7 @@
  */
 
 #include <nvbio/basic/cuda/ldg.h>
+#include <nvbio/basic/primitives.h>
 #include <nvBowtie/bowtie2/cuda/pipeline_states.h>
 #include <nvBowtie/bowtie2/cuda/select.h>
 #include <nvBowtie/bowtie2/cuda/locate.h>
@@ -36,6 +37,9 @@
 #include <nvbio/io/output/output_types.h>
 #include <nvbio/io/output/output_batch.h>
 #include <nvbio/io/output/output_file.h>
+
+#include <thrust/iterator/transform_iterator.h>
+#include <thrust/adjacent_difference.h>
 
 namespace nvbio {
 namespace bowtie2 {
@@ -89,6 +93,7 @@ void Aligner::all(
     for (uint32 s = read_data.min_sequence_len(); s <= read_data.max_sequence_len(); ++s)
         max_seeds = nvbio::max( max_seeds, uint32( s / params.seed_freq(s) ) );
 
+#if 0
     for (uint32 seed = 0; seed < max_seeds; ++seed)
     {
         // initialize the seed hit counts
@@ -99,13 +104,13 @@ void Aligner::all(
         //
         // perform mapping
         //
+        SeedHitDequeArrayDeviceView hits = hit_deques.device_view();
+
         if (params.allow_sub == 0)
         {
             timer.start();
 
-            SeedHitDequeArrayDeviceView hits = hit_deques.device_view();
-
-            map_exact( // TODO: allow inexact mapping as well?
+            map_exact(
                 reads, fmi, rfmi,
                 hits,
                 make_uint2( seed, seed+1 ),
@@ -121,9 +126,7 @@ void Aligner::all(
         {
             timer.start();
 
-            SeedHitDequeArrayDeviceView hits = hit_deques.device_view();
-
-            map_approx( // TODO: allow inexact mapping as well?
+            map_approx(
                 reads, fmi, rfmi,
                 hits,
                 make_uint2( seed, seed+1 ),
@@ -155,7 +158,111 @@ void Aligner::all(
             stats,
             n_alignments );
     }
+#else
+    // initialize the seed hit counts
+    hit_deques.clear_deques();
+
+    //
+    // perform mapping
+    //
+    log_debug(stderr, "  map (%u seeds)\n", max_seeds);
+    {
+        SeedHitDequeArrayDeviceView hits = hit_deques.device_view();
+
+        if (params.allow_sub == 0)
+        {
+            timer.start();
+
+            map_exact(
+                reads, fmi, rfmi,
+                hits,
+                make_uint2( 0u, max_seeds ),
+                params );
+
+            optional_device_synchronize();
+            nvbio::cuda::check_error("mapping kernel");
+
+            timer.stop();
+            stats.map.add( count, timer.seconds() );
+        }
+        else
+        {
+            timer.start();
+
+            map_approx(
+                reads, fmi, rfmi,
+                hits,
+                make_uint2( 0u, max_seeds ),
+                params );
+
+            optional_device_synchronize();
+            nvbio::cuda::check_error("mapping kernel");
+
+            timer.stop();
+            stats.map.add( count, timer.seconds() );
+        }
+
+        // take some stats on the hits we got
+        if (params.keep_stats)
+            keep_stats( reads.size(), stats );
+    }
+
+    log_debug(stderr, "  score\n");
+    score_all(
+        params,
+        fmi,
+        rfmi,
+        input_scoring_scheme,
+        scoring_scheme,
+        reference_data,
+        driver_data,
+        read_data,
+        count,
+        seed_queues.raw_input_queue(),
+        stats,
+        n_alignments );
+#endif
 }
+
+// a simple functor to merge the read-id, RC flag and location into a single 64-bit sorting key
+//
+struct SortingKeys
+{
+    typedef uint32 argument_type;
+    typedef uint64 result_type;
+
+    SortingKeys(const HitQueuesDeviceView _hits) : hits( _hits ) {}
+
+    NVBIO_HOST_DEVICE
+    uint64 operator() (const uint32 i) const
+    {
+        const uint64 loc     = hits.loc[i];
+        const uint64 read_id = hits.read_id[i];
+        const uint64 rc      = hits.seed[i].rc;
+
+        return loc + (read_id << 33) + (rc << 32);
+    }
+
+    const HitQueuesDeviceView hits;
+};
+
+// a pseudo-iterator to evaluate the predicate (it[i] <= it[i-1]) for arbitrary iterators
+//
+template <typename Iterator>
+struct difference_transform
+{
+    typedef uint32  argument_type;
+    typedef bool    result_type;
+
+    // constructor
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    difference_transform(const Iterator _it) : it( _it ) {}
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    bool operator() (const uint32 i) const { return it[i] != it[i-1]; }
+
+    Iterator it;
+};
 
 template <typename scoring_scheme_type>
 void Aligner::score_all(
@@ -377,23 +484,46 @@ void Aligner::score_all(
 
         timer.start();
 
-      #if 1
         // sort the selected hits by their linear genome coordinate
-        // TODO: sub-sort by read_id/RC flag so as to (1) get better coherence,
-        // (2) allow removing duplicate extensions
-        // sort the selected hits by their SA coordinate
-        pipeline.idx_queue = sort_hi_bits(
-            hit_count,
-            nvbio::device_view( hit_queues.loc ) );
-      #else
-        // access the selected hits by read id
-        thrust::copy(
-            thrust::make_counting_iterator(0u),
-            thrust::make_counting_iterator(0u) + hit_count,
-            idx_queue_dvec.begin() );
+        const SortingKeys make_keys( nvbio::device_view( hit_queues ) );
 
-        pipeline.idx_queue = thrust::raw_pointer_cast( &idx_queue_dvec.front() );
-      #endif
+        std::pair<uint32*,uint64*> sorting_idx = sort_64_bits(
+            hit_count,
+            thrust::make_transform_iterator( thrust::make_counting_iterator<uint32>(0), make_keys ) );
+
+        if (1)
+        {
+            pipeline.idx_queue = (sorting_idx.first == idx_queue_dptr) ?
+                idx_queue_dptr + BATCH_SIZE :
+                idx_queue_dptr;
+
+            log_debug(stderr, "    dedup");
+            nvbio::transform<device_tag>(
+                hit_count-1u,
+                thrust::make_counting_iterator<uint32>(0) + 1u,
+                flags_dvec.begin() + 1u,
+                difference_transform<uint64*>( sorting_idx.second ) );
+
+            optional_device_synchronize();
+            nvbio::cuda::check_error("dedup kernel");
+
+            flags_dvec[0] = 1u;
+
+            // reset the hits queue size
+            pipeline.hits_queue_size = nvbio::copy_flagged(
+                hit_count,
+                sorting_idx.first,
+                flags_dptr,
+                pipeline.idx_queue,
+                temp_dvec );
+
+            optional_device_synchronize();
+            nvbio::cuda::check_error("copy-flagged kernel");
+
+            log_debug_cont(stderr, " (%u/%u - %.2f)\n", pipeline.hits_queue_size, hit_count, float(pipeline.hits_queue_size)/float(hit_count));
+        }
+        else
+            pipeline.idx_queue = sorting_idx.first;
 
         timer.stop();
         stats.sort.add( hit_count, timer.seconds() );
@@ -528,6 +658,8 @@ void Aligner::score_all(
         }
     }
     log_verbose_nl(stderr);
+
+    log_debug(stderr, "  alignments: %llu\n", total_alignments);
 }
 
 } // namespace cuda

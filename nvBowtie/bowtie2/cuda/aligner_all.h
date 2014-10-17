@@ -549,6 +549,7 @@ void Aligner::score_all(
 
         total_alignments += n_alignments;
         log_verbose(stderr, "\r    alignments : %u (%.1fM)    %.1f%%                ", n_alignments, float(total_alignments)*1.0e-6f, 100.0f * float(hit_offset + hit_count)/float(n_hits));
+        log_debug_cont(stderr,"\n");
 
         buffer_count += n_alignments;
 
@@ -601,7 +602,7 @@ void Aligner::score_all(
             cigar.clear();
             mds.clear();
 
-            log_debug(stderr, "\n    traceback (%u alignments)\n", n_backtracks);
+            log_debug(stderr, "    traceback (%u alignments)\n", n_backtracks);
             banded_traceback_all(
                 n_backtracks,
                 idx_queue_dptr,         // input indices

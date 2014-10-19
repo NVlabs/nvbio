@@ -132,6 +132,19 @@ void locate_lookup(
     const BaseScoringPipelineState<ScoringScheme>&  pipeline,
     const ParamsPOD                                 params);
 
+///
+/// mark seeds straddling the reference boundaries.
+///
+template <typename index_iterator, typename flags_iterator>
+void mark_straddling(
+    const uint32                in_count,
+    const uint32*               idx_queue,
+    const uint32                reference_count,
+    const index_iterator        reference_index,
+          HitQueuesDeviceView   hits,
+          flags_iterator        flags,
+    const ParamsPOD             params);
+
 ///@}  // group Locate
 ///@}  // group nvBowtie
 

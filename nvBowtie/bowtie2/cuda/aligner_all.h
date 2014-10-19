@@ -493,10 +493,6 @@ void Aligner::score_all(
 
         if (1)
         {
-            pipeline.idx_queue = (sorting_idx.first == idx_queue_dptr) ?
-                idx_queue_dptr + BATCH_SIZE :
-                idx_queue_dptr;
-
             log_debug(stderr, "    dedup");
             nvbio::transform<device_tag>(
                 hit_count-1u,
@@ -508,6 +504,23 @@ void Aligner::score_all(
             nvbio::cuda::check_error("dedup kernel");
 
             flags_dvec[0] = 1u;
+
+            // mark straddling seeds
+            mark_straddling(
+                hit_count,
+                pipeline.idx_queue,
+                genome_view.size(),
+                genome_view.sequence_index(),
+                pipeline.scoring_queues.hits,
+                flags_dptr,
+                params );
+
+            optional_device_synchronize();
+            nvbio::cuda::check_error("mark-straddling kernel");
+
+            pipeline.idx_queue = (sorting_idx.first == idx_queue_dptr) ?
+                idx_queue_dptr + BATCH_SIZE :
+                idx_queue_dptr;
 
             // reset the hits queue size
             pipeline.hits_queue_size = nvbio::copy_flagged(

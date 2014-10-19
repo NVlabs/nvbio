@@ -207,6 +207,43 @@ void locate_lookup_kernel(
     hit.loc = g_pos;
 }
 
+///
+/// mark seeds straddling the reference boundaries.
+///
+template <typename index_iterator, typename flags_iterator> __global__ 
+void mark_straddling_kernel(
+    const uint32                in_count,
+    const uint32*               idx_queue,
+    const uint32                reference_count,
+    const index_iterator        reference_index,
+          HitQueuesDeviceView   hits,
+          flags_iterator        flags,
+    const ParamsPOD             params)
+{
+    const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;
+    if (thread_id >= in_count) return;
+
+    const uint32 sa_idx = idx_queue[ thread_id ]; // fetch the sorting queue index
+
+    HitReference<HitQueuesDeviceView> hit( hits, sa_idx );
+    const uint32 g_pos = hit.loc;                 // fetch the global reference coordinate
+
+    // find the sequence
+    const uint32 seq_begin = upper_bound_index(
+        g_pos,
+        reference_index,
+        reference_count+1u ) - 1u;
+
+    // find the sequence
+    const uint32 seq_end = upper_bound_index(
+        g_pos + params.seed_len,
+        reference_index,
+        reference_count+1u ) - 1u;
+
+    if (seq_begin != seq_end)
+        flags[ thread_id ] = 0;
+}
+
 ///@}  // group LocateDetail
 ///@}  // group Locate
 ///@}  // group nvBowtie
@@ -321,6 +358,31 @@ void locate_lookup(
         pipeline.hits_queue_size,
         pipeline.idx_queue,
         pipeline.scoring_queues.hits,
+        params );
+}
+
+//
+// mark seeds straddling the reference boundaries.
+//
+template <typename index_iterator, typename flags_iterator>
+void mark_straddling(
+    const uint32                in_count,
+    const uint32*               idx_queue,
+    const uint32                reference_count,
+    const index_iterator        reference_index,
+          HitQueuesDeviceView   hits,
+          flags_iterator        flags,
+    const ParamsPOD             params)
+{
+    const int blocks = (in_count + BLOCKDIM-1) / BLOCKDIM;
+
+    detail::mark_straddling_kernel<<<blocks, BLOCKDIM>>>(
+        in_count,
+        idx_queue,
+        reference_count,
+        reference_index,
+        hits,
+        flags,
         params );
 }
 

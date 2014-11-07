@@ -32,6 +32,7 @@
 #include <nvbio/io/sequence/sequence.h>
 
 #include <stdio.h>
+#include <string>
 
 namespace nvbio {
 namespace io {
@@ -75,6 +76,26 @@ protected:
 
 public:
     virtual ~OutputFile();
+
+    void set_program(
+        const char* _pg_id,
+        const char* _pg_name,
+        const char* _pg_version,
+        const char* _pg_args)
+    {
+        pg_id      = _pg_id      ? _pg_id      : "";
+        pg_name    = _pg_name    ? _pg_name    : "";
+        pg_version = _pg_version ? _pg_version : "";
+        pg_args    = _pg_args    ? _pg_args    : "";
+    }
+
+    void set_rg(
+        const char* _rg_id,
+        const char* _rg_string)
+    {
+        rg_id      = _rg_id      ? _rg_id      : "";
+        rg_string  = _rg_string  ? _rg_string  : "";
+    }
 
     /// Configure the MapQ evaluator. Must be called prior to any batch processing.
     virtual void configure_mapq_evaluator(int mapq_filter);
@@ -128,6 +149,14 @@ protected:
 
     /// I/O statistics
     IOStats iostats;
+
+    std::string pg_id;
+    std::string pg_name;
+    std::string pg_version;
+    std::string pg_args;
+
+    std::string rg_id;
+    std::string rg_string;
 
 public:
     /// Factory method to create OutputFile objects

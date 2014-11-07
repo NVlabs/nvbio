@@ -148,6 +148,16 @@ int main(int argc, char* argv[])
 
     std::map<std::string,std::string> string_options;
 
+    std::string argstr;
+    for (int32 i = 1; i < argc; ++i)
+    {
+        argstr += " ";
+        argstr += argv[i];
+    }
+
+    std::string rg_id;
+    std::string rg_string;
+
     for (int32 i = 1; i < argc; ++i)
     {
         if (strcmp( argv[i], "--pe" ) == 0 ||
@@ -197,9 +207,6 @@ int main(int argc, char* argv[])
         else if (strcmp( argv[i], "-solexa-quals" ) == 0 ||
                  strcmp( argv[i], "--solexa-quals" ) == 0)
             qencoding = io::Solexa;
-        // xxxnsubtil: debug seems to be set but never used
-//        else if (strcmp( argv[i], "-debug" ) == 0)
-//            debug = true;
         else if (strcmp( argv[i], "-device" ) == 0 ||
                  strcmp( argv[i], "--device" ) == 0)
             cuda_device = atoi( argv[++i] );
@@ -219,6 +226,15 @@ int main(int argc, char* argv[])
             }
             else
                 string_options.insert( std::make_pair( key, "1" ) );
+        }
+        else if (strcmp( argv[i], "-rg-id" )  == 0 ||
+                 strcmp( argv[i], "--rg-id" ) == 0)
+            rg_id = argv[++i];
+        else if (strcmp( argv[i], "-rg" )  == 0 ||
+                 strcmp( argv[i], "--rg" ) == 0)
+        {
+            rg_string += "\t";
+            rg_string += argv[++i];
         }
     }
 
@@ -370,7 +386,7 @@ int main(int argc, char* argv[])
                 return 1;
             }
 
-            nvbio::bowtie2::cuda::driver( argv[argc-1], *reference_data, *driver_data, pe_policy, *read_data_file1, *read_data_file2, string_options );
+            nvbio::bowtie2::cuda::driver( argv[argc-1], *reference_data, *driver_data, pe_policy, *read_data_file1, *read_data_file2, string_options, argstr, rg_id, rg_string );
         }
         else
         {
@@ -389,7 +405,7 @@ int main(int argc, char* argv[])
                 return 1;
             }
 
-            nvbio::bowtie2::cuda::driver( argv[argc-1], *reference_data, *driver_data, *read_data_file, string_options );
+            nvbio::bowtie2::cuda::driver( argv[argc-1], *reference_data, *driver_data, *read_data_file, string_options, argstr, rg_id, rg_string );
         }
 
         log_info( stderr, "nvBowtie... done\n" );

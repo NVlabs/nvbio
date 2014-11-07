@@ -40,7 +40,10 @@ int driver(const char*                              output_name,
            const io::SequenceData&                  reference_data,
            const io::FMIndexData&                   driver_data,
                  io::SequenceDataStream&            read_data_stream,
-           const std::map<std::string,std::string>& options);
+           const std::map<std::string,std::string>& options,
+           const std::string&                       cmdline,
+           const std::string&                       rg_id,
+           const std::string&                       rg_string);
 
 int driver(const char*                              output_name,
            const io::SequenceData&                  reference_data,
@@ -48,7 +51,10 @@ int driver(const char*                              output_name,
            const io::PairedEndPolicy                pe_policy,
                  io::SequenceDataStream&            read_data_stream1,
                  io::SequenceDataStream&            read_data_stream2,
-           const std::map<std::string,std::string>& options);
+           const std::map<std::string,std::string>& options,
+           const std::string&                       cmdline,
+           const std::string&                       rg_id,
+           const std::string&                       rg_string);
 
 } // namespace cuda
 } // namespace bowtie2

@@ -51,6 +51,7 @@
 #include <nvbio/basic/atomics.h>
 #include <nvbio/basic/html.h>
 #include <nvbio/basic/dna.h>
+#include <nvbio/basic/version.h>
 #include <nvbio/fmindex/bwt.h>
 #include <nvbio/fmindex/ssa.h>
 #include <nvbio/fmindex/fmindex.h>
@@ -303,7 +304,10 @@ int driver(
     const io::SequenceData&                  reference_data_host,
     const io::FMIndexData&                   driver_data_host,
           io::SequenceDataStream&            read_data_stream,
-    const std::map<std::string,std::string>& options)
+    const std::map<std::string,std::string>& options,
+    const std::string&                       cmdline,
+    const std::string&                       rg_id,
+    const std::string&                       rg_string)
 {
     log_visible(stderr, "Bowtie2 cuda driver... started\n");
 
@@ -424,6 +428,13 @@ int driver(
     aligner.output_file = io::OutputFile::open(output_name,
                                                io::SINGLE_END,
                                                io::BNT(reference_data_host));
+
+    aligner.output_file->set_rg( rg_id.c_str(), rg_string.c_str() );
+    aligner.output_file->set_program(
+        "nvBowtie",
+        "nvBowtie",
+        NVBIO_VERSION_STRING,
+        cmdline.c_str() );
 
     aligner.output_file->configure_mapq_evaluator(params.mapq_filter);
 
@@ -625,7 +636,10 @@ int driver(
     const io::PairedEndPolicy                pe_policy,
           io::SequenceDataStream&            read_data_stream1,
           io::SequenceDataStream&            read_data_stream2,
-    const std::map<std::string,std::string>& options)
+    const std::map<std::string,std::string>& options,
+    const std::string&                       cmdline,
+    const std::string&                       rg_id,
+    const std::string&                       rg_string)
 {
     log_visible(stderr, "Bowtie2 cuda driver... started\n");
 
@@ -754,6 +768,13 @@ int driver(
     aligner.output_file = io::OutputFile::open(output_name,
                                                io::PAIRED_END,
                                                io::BNT(reference_data_host));
+
+    aligner.output_file->set_rg( rg_id.c_str(), rg_string.c_str() );
+    aligner.output_file->set_program(
+        "nvBowtie",
+        "nvBowtie",
+        NVBIO_VERSION_STRING,
+        cmdline.c_str() );
 
     aligner.output_file->configure_mapq_evaluator(params.mapq_filter);
 

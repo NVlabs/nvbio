@@ -167,12 +167,24 @@ void SamOutput::output_header(void)
     write_string("VN:1.3");
     linebreak();
 
+    if (!rg_id.empty())
+    {
+        // write the RG:ID
+        write_string("@RG", false);
+        write_formatted_string("ID:%s",rg_id.c_str());
+
+        // write the other RG tags
+        if (!rg_string.empty())
+            write_string( rg_string.c_str(), false );
+
+        linebreak();
+    }
+
     write_string("@PG", false);
-    // xxxnsubtil: this will have to be specified somewhere else later (maybe in Params?)
-    write_string("ID:nvBowtie");
-    write_string("PN:nvBowtie");
-    // VN was bumped to 0.5.1 to distinguish between the new and old output code
-    write_string("VN:0.5.1");
+    write_formatted_string("ID:%s",pg_id.c_str());
+    write_formatted_string("PN:%s",pg_name.c_str());
+    write_formatted_string("VN:%s",pg_version.c_str());
+    write_formatted_string("CL:\"%s\"",pg_args.c_str());
     linebreak();
 
     // output the sequence info

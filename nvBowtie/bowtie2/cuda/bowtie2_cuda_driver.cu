@@ -505,16 +505,32 @@ int driver(
 
         if (params.mode == AllMapping)
         {
-            all_ed(
-                aligner,
-                params,
-                fmi,
-                rfmi,
-                scoring_scheme,
-                reference_data,
-                driver_data,
-                read_data,
-                stats );
+            if (params.scoring_mode == EditDistanceMode)
+            {
+                all_ed(
+                    aligner,
+                    params,
+                    fmi,
+                    rfmi,
+                    scoring_scheme,
+                    reference_data,
+                    driver_data,
+                    read_data,
+                    stats );
+            }
+            else
+            {
+                all_sw(
+                    aligner,
+                    params,
+                    fmi,
+                    rfmi,
+                    scoring_scheme,
+                    reference_data,
+                    driver_data,
+                    read_data,
+                    stats );
+            }
         }
         else
         {
@@ -858,16 +874,8 @@ int driver(
 
         if (params.mode == AllMapping)
         {
-/*            aligner.all(
-                params,
-                fmi,
-                rfmi,
-                scoring_scheme,
-                reference_data,
-                driver_data,
-                read_data,
-                stats );
-                */
+            log_error(stderr, "paired-end all-mapping is not yet supported!\n");
+            exit(1);
         }
         else
         {

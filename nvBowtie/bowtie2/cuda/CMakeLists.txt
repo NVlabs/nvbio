@@ -1,5 +1,6 @@
 addsources(
 aligner_all_ed.cu
+aligner_all_sw.cu
 aligner_all.h
 aligner_best_approx_ed.cu
 aligner_best_approx.h

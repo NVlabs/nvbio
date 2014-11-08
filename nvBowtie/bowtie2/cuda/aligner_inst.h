@@ -44,6 +44,17 @@ void all_ed(
     io::SequenceDataDevice&                 read_data,
     Stats&                                  stats);
 
+void all_sw(
+          Aligner&                          aligner,
+    const Params&                           params,
+    const FMIndexDef::type                  fmi,
+    const FMIndexDef::type                  rfmi,
+    const UberScoringScheme&                scoring_scheme,
+    const io::SequenceDataDevice&           reference_data,
+    const io::FMIndexDataDevice&            driver_data,
+    io::SequenceDataDevice&                 read_data,
+    Stats&                                  stats);
+
 void best_approx_ed(
           Aligner&                          aligner,
     const Params&                           params,

@@ -86,7 +86,11 @@ void batched_alignment_score(stream_type& stream, column_type column, const uint
 }
 
 template <uint32 BLOCKDIM, uint32 COLUMN_SIZE, typename stream_type, typename cell_type>
-__global__ void lmem_batched_alignment_score_kernel(stream_type stream, cell_type* columns, const uint32 stride)
+__global__ void
+#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ == 350
+__launch_bounds__(BLOCKDIM,(BLOCKDIM*9)/128) // target 9 blocks @ 128 threads/block
+#endif
+lmem_batched_alignment_score_kernel(stream_type stream, cell_type* columns, const uint32 stride)
 {
     const uint32 tid = blockIdx.x * BLOCKDIM + threadIdx.x;
 
@@ -100,7 +104,11 @@ __global__ void lmem_batched_alignment_score_kernel(stream_type stream, cell_typ
 }
 
 template <uint32 BLOCKDIM, typename stream_type, typename cell_type>
-__global__ void batched_alignment_score_kernel(stream_type stream, cell_type* columns, const uint32 stride)
+__global__ void
+#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ == 350
+__launch_bounds__(BLOCKDIM,(BLOCKDIM*9)/128) // target 9 blocks @ 128 threads/block
+#endif
+batched_alignment_score_kernel(stream_type stream, cell_type* columns, const uint32 stride)
 {
     const uint32 tid = blockIdx.x * BLOCKDIM + threadIdx.x;
 
@@ -115,7 +123,11 @@ __global__ void batched_alignment_score_kernel(stream_type stream, cell_type* co
 }
 
 template <uint32 BLOCKDIM, typename stream_type, typename cell_type>
-__global__ void persistent_batched_alignment_score_kernel(stream_type stream, cell_type* columns, const uint32 stride)
+__global__ void
+#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ == 350
+__launch_bounds__(BLOCKDIM,(BLOCKDIM*9)/128) // target 9 blocks @ 128 threads/block
+#endif
+persistent_batched_alignment_score_kernel(stream_type stream, cell_type* columns, const uint32 stride)
 {
     const uint32 grid_threads = gridDim.x * BLOCKDIM;
     const uint32 thread_id    = threadIdx.x + blockIdx.x*BLOCKDIM;
@@ -660,7 +672,11 @@ void batched_alignment_traceback(stream_type& stream, cell_type* checkpoints, ui
 }
 
 template <uint32 BLOCKDIM, uint32 CHECKPOINTS, typename stream_type, typename cell_type>
-__global__ void batched_alignment_traceback_kernel(stream_type stream, cell_type* checkpoints, uint32* submatrices, cell_type* columns, const uint32 stride)
+__global__ void
+#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ == 350
+__launch_bounds__(BLOCKDIM,(BLOCKDIM*8)/128) // target 9 blocks @ 128 threads/block
+#endif
+batched_alignment_traceback_kernel(stream_type stream, cell_type* checkpoints, uint32* submatrices, cell_type* columns, const uint32 stride)
 {
     const uint32 tid = blockIdx.x * BLOCKDIM + threadIdx.x;
 
@@ -671,7 +687,11 @@ __global__ void batched_alignment_traceback_kernel(stream_type stream, cell_type
 }
 
 template <uint32 BLOCKDIM, uint32 CHECKPOINTS, typename stream_type, typename cell_type>
-__global__ void persistent_batched_alignment_traceback_kernel(stream_type stream, cell_type* checkpoints, uint32* submatrices, cell_type* columns, const uint32 stride)
+__global__ void
+#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ == 350
+__launch_bounds__(BLOCKDIM,(BLOCKDIM*8)/128) // target 9 blocks @ 128 threads/block
+#endif
+persistent_batched_alignment_traceback_kernel(stream_type stream, cell_type* checkpoints, uint32* submatrices, cell_type* columns, const uint32 stride)
 {
     const uint32 grid_threads = gridDim.x * BLOCKDIM;
     const uint32 thread_id    = threadIdx.x + blockIdx.x*BLOCKDIM;

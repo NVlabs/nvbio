@@ -602,12 +602,28 @@ void BamOutput::output_header(void)
     // fill out SAM header (text)
     data_buffer.append_string("@HD\t");
     data_buffer.append_string("VN:1.3\n");
-    data_buffer.append_string("@PG\t");
-    // xxxnsubtil: this will have to be specified somewhere else later (maybe in Params?)
-    data_buffer.append_string("ID:nvBowtie\t");
-    data_buffer.append_string("PN:nvBowtie\t");
+    if (!rg_id.empty())
+    {
+        // write the RG:ID
+        data_buffer.append_string("@RG");
+        data_buffer.append_string("\tID:");
+        data_buffer.append_string(rg_id.c_str());
+
+        // write the other RG tags
+        if (!rg_string.empty())
+            data_buffer.append_string( rg_string.c_str() );
+
+        data_buffer.append_string("\n");
+    }
+    data_buffer.append_string("@PG");
+    data_buffer.append_string("\tID:");
+    data_buffer.append_string(pg_id.c_str());
+    data_buffer.append_string("\tPN:");
+    data_buffer.append_string(pg_name.c_str());
     // VN was bumped to 0.5.1 to distinguish between the new and old output code
-    data_buffer.append_string("VN:0.5.1\n");
+    data_buffer.append_string("\tVN:");
+    data_buffer.append_string(pg_version.c_str());
+    data_buffer.append_string("\n");
     // samtools does not cope with a null terminator here, so don't write one out
 //    data_buffer.append_int8(0);
 

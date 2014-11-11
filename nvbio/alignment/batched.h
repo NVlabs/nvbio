@@ -48,16 +48,20 @@ namespace aln {
 
 /// Identify a thread-parallel batch execution algorithm
 ///
-template <typename system_tag>
-struct ThreadScheduler {};
-
-/// Identify a thread-parallel batch execution algorithm
-///
-typedef ThreadScheduler<host_tag> HostThreadScheduler;
+struct HostThreadScheduler {};
 
 /// Identify a staged thread-parallel batch execution algorithm
 ///
-typedef ThreadScheduler<device_tag> DeviceThreadScheduler;
+template <uint32 BLOCKDIM_T, uint32 MINBLOCKS_T>
+struct DeviceThreadBlockScheduler
+{
+    static const uint32 BLOCKDIM  = BLOCKDIM_T;
+    static const uint32 MINBLOCKS = MINBLOCKS_T;
+};
+
+/// Identify a staged thread-parallel batch execution algorithm
+///
+typedef DeviceThreadBlockScheduler<128,1> DeviceThreadScheduler;
 
 /// Identify a staged thread-parallel batch execution algorithm
 ///

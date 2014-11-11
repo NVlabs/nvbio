@@ -586,7 +586,7 @@ void opposite_score_best(
         aligner,
         params );
 
-    aln::BatchedAlignmentScore<stream_type, aln::DeviceThreadScheduler> batch;
+    aln::BatchedAlignmentScore<stream_type, aln::DeviceThreadBlockScheduler<128,9> > batch;
     //aln::BatchedAlignmentScore<stream_type, aln::DeviceStagedThreadScheduler> batch;
 
     batch.enact( stream, pipeline.dp_buffer_size, pipeline.dp_buffer );

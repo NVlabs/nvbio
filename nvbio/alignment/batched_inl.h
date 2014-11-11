@@ -85,11 +85,9 @@ void batched_alignment_score(stream_type& stream, column_type column, const uint
     stream.output( work_id, &context );
 }
 
-template <uint32 BLOCKDIM, uint32 COLUMN_SIZE, typename stream_type, typename cell_type>
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 COLUMN_SIZE, typename stream_type, typename cell_type>
 __global__ void
-#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ == 350
-__launch_bounds__(BLOCKDIM,(BLOCKDIM*9)/128) // target 9 blocks @ 128 threads/block
-#endif
+__launch_bounds__(BLOCKDIM,MINBLOCKS)
 lmem_batched_alignment_score_kernel(stream_type stream, cell_type* columns, const uint32 stride)
 {
     const uint32 tid = blockIdx.x * BLOCKDIM + threadIdx.x;
@@ -103,11 +101,9 @@ lmem_batched_alignment_score_kernel(stream_type stream, cell_type* columns, cons
     batched_alignment_score( stream, column, tid, tid );
 }
 
-template <uint32 BLOCKDIM, typename stream_type, typename cell_type>
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, typename stream_type, typename cell_type>
 __global__ void
-#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ == 350
-__launch_bounds__(BLOCKDIM,(BLOCKDIM*9)/128) // target 9 blocks @ 128 threads/block
-#endif
+__launch_bounds__(BLOCKDIM,MINBLOCKS)
 batched_alignment_score_kernel(stream_type stream, cell_type* columns, const uint32 stride)
 {
     const uint32 tid = blockIdx.x * BLOCKDIM + threadIdx.x;
@@ -122,11 +118,9 @@ batched_alignment_score_kernel(stream_type stream, cell_type* columns, const uin
     batched_alignment_score( stream, column, tid, tid );
 }
 
-template <uint32 BLOCKDIM, typename stream_type, typename cell_type>
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, typename stream_type, typename cell_type>
 __global__ void
-#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ == 350
-__launch_bounds__(BLOCKDIM,(BLOCKDIM*9)/128) // target 9 blocks @ 128 threads/block
-#endif
+__launch_bounds__(BLOCKDIM,MINBLOCKS)
 persistent_batched_alignment_score_kernel(stream_type stream, cell_type* columns, const uint32 stride)
 {
     const uint32 grid_threads = gridDim.x * BLOCKDIM;
@@ -332,11 +326,9 @@ void BatchedAlignmentScore<stream_type,HostThreadScheduler>::enact(stream_type s
 ///
 /// \tparam stream_type     the stream of alignment jobs
 ///
-template <typename stream_type>
-struct BatchedAlignmentScore<stream_type,DeviceThreadScheduler>
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, typename stream_type>
+struct BatchedAlignmentScore<stream_type,DeviceThreadBlockScheduler<BLOCKDIM,MINBLOCKS> >
 {
-    static const uint32 BLOCKDIM = 128;
-
     typedef typename stream_type::aligner_type                  aligner_type;
     typedef typename column_storage_type<aligner_type>::type    cell_type;
 
@@ -366,24 +358,24 @@ struct BatchedAlignmentScore<stream_type,DeviceThreadScheduler>
 
 // return the minimum number of bytes required by the algorithm
 //
-template <typename stream_type>
-uint64 BatchedAlignmentScore<stream_type,DeviceThreadScheduler>::min_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, typename stream_type>
+uint64 BatchedAlignmentScore<stream_type,DeviceThreadBlockScheduler<BLOCKDIM,MINBLOCKS> >::min_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
 {
     return column_storage( max_pattern_len, max_text_len ) * 1024;
 }
 
 // return the maximum number of bytes required by the algorithm
 //
-template <typename stream_type>
-uint64 BatchedAlignmentScore<stream_type,DeviceThreadScheduler>::max_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, typename stream_type>
+uint64 BatchedAlignmentScore<stream_type,DeviceThreadBlockScheduler<BLOCKDIM,MINBLOCKS> >::max_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
 {
     return align<32>( column_storage( max_pattern_len, max_text_len ) * stream_size );
 }
 
 // enact the batch execution
 //
-template <typename stream_type>
-void BatchedAlignmentScore<stream_type,DeviceThreadScheduler>::enact(stream_type stream, uint64 temp_size, uint8* temp)
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, typename stream_type>
+void BatchedAlignmentScore<stream_type,DeviceThreadBlockScheduler<BLOCKDIM,MINBLOCKS> >::enact(stream_type stream, uint64 temp_size, uint8* temp)
 {
     const uint32 column_size = equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
         uint32( stream.max_pattern_length() ) :
@@ -394,7 +386,7 @@ void BatchedAlignmentScore<stream_type,DeviceThreadScheduler>::enact(stream_type
     {
         const uint32 n_blocks = (stream.size() + BLOCKDIM-1) / BLOCKDIM;
 
-        lmem_batched_alignment_score_kernel<BLOCKDIM,1024> <<<n_blocks, BLOCKDIM>>>(
+        lmem_batched_alignment_score_kernel<BLOCKDIM,MINBLOCKS,1024> <<<n_blocks, BLOCKDIM>>>(
             stream,
             (cell_type*)temp,
             stream.size() );
@@ -422,7 +414,7 @@ void BatchedAlignmentScore<stream_type,DeviceThreadScheduler>::enact(stream_type
         {
             const uint32 n_blocks = (stream.size() + BLOCKDIM-1) / BLOCKDIM;
 
-            batched_alignment_score_kernel<BLOCKDIM> <<<n_blocks, BLOCKDIM>>>(
+            batched_alignment_score_kernel<BLOCKDIM,MINBLOCKS> <<<n_blocks, BLOCKDIM>>>(
                 stream,
                 (cell_type*)temp,
                 stream.size() );
@@ -431,10 +423,10 @@ void BatchedAlignmentScore<stream_type,DeviceThreadScheduler>::enact(stream_type
         {
             // compute the number of blocks we are going to launch
             const uint32 n_blocks = nvbio::max( nvbio::min(
-                (uint32)cuda::max_active_blocks( persistent_batched_alignment_score_kernel<BLOCKDIM,stream_type,cell_type>, BLOCKDIM, 0u ),
+                (uint32)cuda::max_active_blocks( persistent_batched_alignment_score_kernel<BLOCKDIM,MINBLOCKS,stream_type,cell_type>, BLOCKDIM, 0u ),
                 queue_capacity / BLOCKDIM ), 1u );
 
-            persistent_batched_alignment_score_kernel<BLOCKDIM> <<<n_blocks, BLOCKDIM>>>(
+            persistent_batched_alignment_score_kernel<BLOCKDIM,MINBLOCKS> <<<n_blocks, BLOCKDIM>>>(
                 stream,
                 (cell_type*)temp,
                 queue_capacity );
@@ -443,7 +435,7 @@ void BatchedAlignmentScore<stream_type,DeviceThreadScheduler>::enact(stream_type
 }
 
 ///
-/// DeviceThreadScheduler specialization of BatchedAlignmentScore.
+/// DeviceWarpScheduler specialization of BatchedAlignmentScore.
 ///
 /// \tparam stream_type     the stream of alignment jobs
 ///
@@ -671,11 +663,9 @@ void batched_alignment_traceback(stream_type& stream, cell_type* checkpoints, ui
     stream.output( work_id, &context );
 }
 
-template <uint32 BLOCKDIM, uint32 CHECKPOINTS, typename stream_type, typename cell_type>
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 CHECKPOINTS, typename stream_type, typename cell_type>
 __global__ void
-#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ == 350
-__launch_bounds__(BLOCKDIM,(BLOCKDIM*8)/128) // target 9 blocks @ 128 threads/block
-#endif
+__launch_bounds__(BLOCKDIM,MINBLOCKS)
 batched_alignment_traceback_kernel(stream_type stream, cell_type* checkpoints, uint32* submatrices, cell_type* columns, const uint32 stride)
 {
     const uint32 tid = blockIdx.x * BLOCKDIM + threadIdx.x;
@@ -686,11 +676,9 @@ batched_alignment_traceback_kernel(stream_type stream, cell_type* checkpoints, u
     batched_alignment_traceback<CHECKPOINTS>( stream, checkpoints, submatrices, columns, stride, tid, tid );
 }
 
-template <uint32 BLOCKDIM, uint32 CHECKPOINTS, typename stream_type, typename cell_type>
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 CHECKPOINTS, typename stream_type, typename cell_type>
 __global__ void
-#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ == 350
-__launch_bounds__(BLOCKDIM,(BLOCKDIM*8)/128) // target 9 blocks @ 128 threads/block
-#endif
+__launch_bounds__(BLOCKDIM,MINBLOCKS)
 persistent_batched_alignment_traceback_kernel(stream_type stream, cell_type* checkpoints, uint32* submatrices, cell_type* columns, const uint32 stride)
 {
     const uint32 grid_threads = gridDim.x * BLOCKDIM;
@@ -715,8 +703,8 @@ persistent_batched_alignment_traceback_kernel(stream_type stream, cell_type* che
 ///
 /// \tparam stream_type     the stream of alignment jobs
 ///
-template <uint32 CHECKPOINTS, typename stream_type>
-struct BatchedAlignmentTraceback<CHECKPOINTS, stream_type,DeviceThreadScheduler>
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 CHECKPOINTS, typename stream_type>
+struct BatchedAlignmentTraceback<CHECKPOINTS, stream_type,DeviceThreadBlockScheduler<BLOCKDIM,MINBLOCKS> >
 {
     static const uint32 BLOCKDIM = 128;
 
@@ -788,24 +776,24 @@ struct BatchedAlignmentTraceback<CHECKPOINTS, stream_type,DeviceThreadScheduler>
 
 // return the minimum number of bytes required by the algorithm
 //
-template <uint32 CHECKPOINTS, typename stream_type>
-uint64 BatchedAlignmentTraceback<CHECKPOINTS, stream_type,DeviceThreadScheduler>::min_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 CHECKPOINTS, typename stream_type>
+uint64 BatchedAlignmentTraceback<CHECKPOINTS, stream_type,DeviceThreadBlockScheduler<BLOCKDIM,MINBLOCKS> >::min_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
 {
     return element_storage( max_pattern_len, max_text_len ) * 1024;
 }
 
 // return the maximum number of bytes required by the algorithm
 //
-template <uint32 CHECKPOINTS, typename stream_type>
-uint64 BatchedAlignmentTraceback<CHECKPOINTS,stream_type,DeviceThreadScheduler>::max_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 CHECKPOINTS, typename stream_type>
+uint64 BatchedAlignmentTraceback<CHECKPOINTS,stream_type,DeviceThreadBlockScheduler<BLOCKDIM,MINBLOCKS> >::max_temp_storage(const uint32 max_pattern_len, const uint32 max_text_len, const uint32 stream_size)
 {
     return element_storage( max_pattern_len, max_text_len ) * stream_size;
 }
 
 // enact the batch execution
 //
-template <uint32 CHECKPOINTS, typename stream_type>
-void BatchedAlignmentTraceback<CHECKPOINTS,stream_type,DeviceThreadScheduler>::enact(stream_type stream, uint64 temp_size, uint8* temp)
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 CHECKPOINTS, typename stream_type>
+void BatchedAlignmentTraceback<CHECKPOINTS,stream_type,DeviceThreadBlockScheduler<BLOCKDIM,MINBLOCKS> >::enact(stream_type stream, uint64 temp_size, uint8* temp)
 {
     const uint64 min_temp_size = min_temp_storage(
         stream.max_pattern_length(),
@@ -836,7 +824,7 @@ void BatchedAlignmentTraceback<CHECKPOINTS,stream_type,DeviceThreadScheduler>::e
         cell_type* columns     = (cell_type*)(temp + (checkpoints_size)               * stream.size());
         uint32*    submatrices = (uint32*)   (temp + (checkpoints_size + column_size) * stream.size());
 
-        batched_alignment_traceback_kernel<BLOCKDIM,CHECKPOINTS> <<<n_blocks, BLOCKDIM>>>(
+        batched_alignment_traceback_kernel<BLOCKDIM,MINBLOCKS,CHECKPOINTS> <<<n_blocks, BLOCKDIM>>>(
             stream,
             checkpoints,
             submatrices,
@@ -847,14 +835,14 @@ void BatchedAlignmentTraceback<CHECKPOINTS,stream_type,DeviceThreadScheduler>::e
     {
         // compute the number of blocks we are going to launch
         const uint32 n_blocks = nvbio::max( nvbio::min(
-            (uint32)cuda::max_active_blocks( persistent_batched_alignment_traceback_kernel<BLOCKDIM,CHECKPOINTS,stream_type,cell_type>, BLOCKDIM, 0u ),
+            (uint32)cuda::max_active_blocks( persistent_batched_alignment_traceback_kernel<BLOCKDIM,MINBLOCKS,CHECKPOINTS,stream_type,cell_type>, BLOCKDIM, 0u ),
             queue_capacity / BLOCKDIM ), 1u );
 
         cell_type* checkpoints = (cell_type*)(temp);
         cell_type* columns     = (cell_type*)(temp + (checkpoints_size)               * queue_capacity);
         uint32*    submatrices = (uint32*)   (temp + (checkpoints_size + column_size) * queue_capacity);
 
-        persistent_batched_alignment_traceback_kernel<BLOCKDIM,CHECKPOINTS> <<<n_blocks, BLOCKDIM>>>(
+        persistent_batched_alignment_traceback_kernel<BLOCKDIM,MINBLOCKS,CHECKPOINTS> <<<n_blocks, BLOCKDIM>>>(
             stream,
             checkpoints,
             submatrices,

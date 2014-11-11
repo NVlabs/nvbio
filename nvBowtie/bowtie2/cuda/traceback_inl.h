@@ -287,7 +287,9 @@ void traceback_best(
         aligner,
         params );
 
-    aln::BatchedAlignmentTraceback<FULL_DP_CHECKPOINTS,stream_type> batch;
+    typedef aln::DeviceThreadBlockScheduler<128,9> scheduler_type;
+
+    aln::BatchedAlignmentTraceback<FULL_DP_CHECKPOINTS,stream_type,scheduler_type> batch;
 
     batch.enact( stream, pipeline.dp_buffer_size, pipeline.dp_buffer );
 }

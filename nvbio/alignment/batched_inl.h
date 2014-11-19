@@ -706,8 +706,6 @@ persistent_batched_alignment_traceback_kernel(stream_type stream, cell_type* che
 template <uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 CHECKPOINTS, typename stream_type>
 struct BatchedAlignmentTraceback<CHECKPOINTS, stream_type,DeviceThreadBlockScheduler<BLOCKDIM,MINBLOCKS> >
 {
-    static const uint32 BLOCKDIM = 128;
-
     typedef typename stream_type::aligner_type                  aligner_type;
     typedef typename column_storage_type<aligner_type>::type    cell_type;
 

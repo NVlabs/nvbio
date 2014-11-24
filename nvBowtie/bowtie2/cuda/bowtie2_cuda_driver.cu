@@ -438,6 +438,8 @@ int driver(
 
     aligner.output_file->configure_mapq_evaluator(params.mapq_filter);
 
+    aligner.output_file->header();
+
     // setup the input thread
     InputThread input_thread( &read_data_stream, stats, BATCH_SIZE );
     input_thread.create();
@@ -793,6 +795,8 @@ int driver(
         cmdline.c_str() );
 
     aligner.output_file->configure_mapq_evaluator(params.mapq_filter);
+
+    aligner.output_file->header();
 
     // setup the input thread
     InputThreadPaired input_thread( &read_data_stream1, &read_data_stream2, stats, BATCH_SIZE );

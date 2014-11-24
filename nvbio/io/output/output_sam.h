@@ -92,6 +92,7 @@ public:
     SamOutput(const char *file_name, AlignmentType alignment_type, BNT bnt);
     ~SamOutput();
 
+    void header() { output_header(); }
     void process(struct DeviceOutputBatchSE& gpu_batch,
                  const AlignmentMate mate);
     void flush(void);

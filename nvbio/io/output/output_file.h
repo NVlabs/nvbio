@@ -97,12 +97,18 @@ public:
         rg_string  = _rg_string  ? _rg_string  : "";
     }
 
+    /// write the header out
+    ///
+    virtual void header() {}
+
     /// Configure the MapQ evaluator. Must be called prior to any batch processing.
+    ///
     virtual void configure_mapq_evaluator(int mapq_filter);
 
     /// Begin a new batch of alignment results
     /// \param read_data_1 The (host-side) read data pointer for the first mate
     /// \param read_data_2 The (host-side) read data pointer for the second mate, if any (can be NULL for single-end alignment)
+    ///
     virtual void start_batch(const io::SequenceDataHost *read_data_1,
                              const io::SequenceDataHost *read_data_2 = NULL);
 
@@ -110,6 +116,7 @@ public:
     /// \param gpu_batch Handle to the GPU buffers containing the alignment results
     /// \param alignment_mate Identifies the mate for this pass
     /// \param alignment_score Identifies the score type being calculated in this pass (currently either best or second-best)
+    ///
     virtual void process(struct DeviceOutputBatchSE& gpu_batch,
                          const AlignmentMate alignment_mate);
 

@@ -49,9 +49,6 @@ BamOutput::BamOutput(const char *file_name, AlignmentType alignment_type, BNT bn
     // this makes sure small fwrites do not land on disk straight away
     // (256kb was chosen based on the default stripe size for Linux mdraid RAID-5 volumes)
     setvbuf(fp, NULL, _IOFBF, 256 * 1024);
-
-    // output the BAM header
-    output_header();
 }
 
 BamOutput::~BamOutput()

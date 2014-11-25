@@ -213,6 +213,15 @@ int main(int argc, char* argv[])
         else if (strcmp( argv[i], "-verbosity" ) == 0 ||
                  strcmp( argv[i], "--verbosity" ) == 0)
             set_verbosity( Verbosity( atoi( argv[++i] ) ) );
+        else if (strcmp( argv[i], "-rg-id" )  == 0 ||
+                 strcmp( argv[i], "--rg-id" ) == 0)
+            rg_id = argv[++i];
+        else if (strcmp( argv[i], "-rg" )  == 0 ||
+                 strcmp( argv[i], "--rg" ) == 0)
+        {
+            rg_string += "\t";
+            rg_string += argv[++i];
+        }
         else if (argv[i][0] == '-')
         {
             // add unknown option to the string options
@@ -226,15 +235,6 @@ int main(int argc, char* argv[])
             }
             else
                 string_options.insert( std::make_pair( key, "1" ) );
-        }
-        else if (strcmp( argv[i], "-rg-id" )  == 0 ||
-                 strcmp( argv[i], "--rg-id" ) == 0)
-            rg_id = argv[++i];
-        else if (strcmp( argv[i], "-rg" )  == 0 ||
-                 strcmp( argv[i], "--rg" ) == 0)
-        {
-            rg_string += "\t";
-            rg_string += argv[++i];
         }
     }
 

@@ -164,7 +164,7 @@ std::pair<uint64,uint64> Aligner::init_alloc(const uint32 BATCH_SIZE, const Para
         size_t free, total;
         cudaMemGetInfo(&free, &total);
         const uint32 free_words    = uint32( free / 4u );
-        const uint32 min_free_words = NVBIO_CUDA_DEBUG_SELECT( (500*1024*1024)/4, (400*1024*1024)/4 ); // we want to leave 320MB (500MB) free,
+        const uint32 min_free_words = NVBIO_CUDA_DEBUG_SELECT( (600*1024*1024)/4, (512*1024*1024)/4 ); // we want to leave 512MB free,
                                                                                                        // neeeded for kernels using lmem
         uint32 target_words  = (free_words * 2u) / 3u;
                target_words  = nvbio::min( target_words, free_words - min_free_words );

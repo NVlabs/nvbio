@@ -233,7 +233,7 @@ SequenceDataFile_FASTQ_gz::~SequenceDataFile_FASTQ_gz()
     gzclose( m_file );
 }
 
-static float time = 0.0f;
+//static float time = 0.0f;
 
 SequenceDataFile_FASTQ_parser::FileState SequenceDataFile_FASTQ_gz::fillBuffer(void)
 {

@@ -46,7 +46,7 @@ int SequenceDataFile::next(SequenceDataEncoder* encoder, const uint32 batch_size
     const uint32 reads_to_load = std::min(m_max_reads - m_loaded, batch_size);
 
     if (!is_ok() || reads_to_load == 0)
-        return NULL;
+        return 0;
 
     // a default average read length used to reserve enough space
     const uint32 AVG_READ_LENGTH = 100;

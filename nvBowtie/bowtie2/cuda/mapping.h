@@ -93,6 +93,7 @@ void map_whole_read(
     const FMIndexDef::type                          fmi,
     const FMIndexDef::type                          rfmi,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params);
 
@@ -106,6 +107,7 @@ void map_exact(
     const FMIndexDef::type                          rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params);
 
@@ -130,6 +132,7 @@ void map_approx(
     const FMIndexDef::type                          rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params);
 
@@ -153,6 +156,7 @@ void map(
     const FMIndexDef::type                          rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params);
 

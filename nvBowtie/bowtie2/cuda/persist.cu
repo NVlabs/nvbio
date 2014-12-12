@@ -218,7 +218,7 @@ void persist_selection(
                 {
                     const packed_seed seed = seed_vec[ link_vec[j] ];
                     const uint32      loc  = loc_vec[ link_vec[j] ];
-                    fprintf( file, " seed[pos:%u,dir:%u,rc:%u,top:%u,loc:%u]", (uint32)seed.pos_in_read, (uint32)seed.index_dir, (uint32)seed.rc, (uint32)seed.top_flag, loc );
+                    fprintf( file, "  seed[pos:%u,dir:%u,rc:%u,top:%u,loc:%u]\n", (uint32)seed.pos_in_read, (uint32)seed.index_dir, (uint32)seed.rc, (uint32)seed.top_flag, loc );
                 }
             }
             fprintf( file, "}\n" );
@@ -256,7 +256,7 @@ void persist_selection(
 
             const packed_seed seed = seed_vec[ idx ];
             const uint32      loc  = loc_vec[ idx ];
-            fprintf( file, " seed[pos:%u,dir:%u,rc:%u,top:%u,loc:%u]", (uint32)seed.pos_in_read, (uint32)seed.index_dir, (uint32)seed.rc, (uint32)seed.top_flag, loc );
+            fprintf( file, "  seed[pos:%u,dir:%u,rc:%u,top:%u,loc:%u]\n", (uint32)seed.pos_in_read, (uint32)seed.index_dir, (uint32)seed.rc, (uint32)seed.top_flag, loc );
 
             fprintf( file, "}\n" );
         }

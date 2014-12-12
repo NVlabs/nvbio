@@ -181,6 +181,10 @@ struct PingPongQueues
     ///
     const T* raw_output_queue() const { return nvbio::device_view( out_queue ); }
 
+    /// raw output queue
+    ///
+    T* raw_output_queue() { return nvbio::device_view( out_queue ); }
+
     /// return the output size
     ///
     uint32 output_size() const { return out_size[0]; }

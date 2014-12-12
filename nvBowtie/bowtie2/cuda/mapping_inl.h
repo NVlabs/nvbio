@@ -463,6 +463,7 @@ template<typename BatchType, typename FMType, typename rFMType> __global__
 void map_whole_read_kernel(
     const BatchType                                 read_batch, const FMType fmi, const rFMType rfmi,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params)
 {
@@ -509,15 +510,8 @@ void map_whole_read_kernel(
     store_deque( hits, read_id, hitheap.size(), local_hits );
 
     // enqueue for re-seeding if there are no hits
-    if (queues.out_queue)
-    {
-        if (range_count == 0)
-        {
-            const uint32 slot = alloc( queues.out_size, &warp_broadcast );
-            NVBIO_CUDA_ASSERT( slot < queues.in_size );
-            queues.out_queue[ slot ] = read_id;
-        }
-    }
+    if (reseed)
+        reseed[ thread_id ] = (range_count == 0);
 }
 
 ///
@@ -530,6 +524,7 @@ void map_kernel(
     const BatchType                                 read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params)
 {
@@ -588,15 +583,10 @@ void map_kernel(
     store_deque( hits, read_id, hitheap.size(), local_hits );
 
     // enqueue for re-seeding if there are too many hits
-    if (queues.out_queue)
-    {
-        if (range_count == 0 || range_sum >= params.rep_seeds * range_count)
-        {
-            const uint32 slot = alloc( queues.out_size, &warp_broadcast );
-            NVBIO_CUDA_ASSERT( slot < queues.in_size );
-            queues.out_queue[ slot ] = read_id;
-        }
-    }
+    if (reseed)
+        reseed[ thread_id ] = (range_count == 0 || range_sum >= params.rep_seeds * range_count);
+
+    NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.read_id == read_id, "map:  ranges[%u], rows[%u]\n", read_id, range_count, range_sum );
 }
 
 ///
@@ -699,6 +689,7 @@ void map_case_pruning_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params)
 {
@@ -707,22 +698,22 @@ void map_case_pruning_t(
     if (params.seed_len <= 16)
     {
         detail::map_kernel<detail::CASE_PRUNING_MAPPING,16> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
     }
     else if (params.seed_len <= 24)
     {
         detail::map_kernel<detail::CASE_PRUNING_MAPPING,24> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
     }
     else if (params.seed_len <= 32)
     {
         detail::map_kernel<detail::CASE_PRUNING_MAPPING,32> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
     }
     else if (params.seed_len <= 40)
     {
         detail::map_kernel<detail::CASE_PRUNING_MAPPING,40> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
     }
 }
 
@@ -734,6 +725,7 @@ void map_approx_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params)
 {
@@ -742,22 +734,22 @@ void map_approx_t(
     if (params.seed_len <= 16)
     {
         detail::map_kernel<detail::APPROX_MAPPING,16> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
     }
     else if (params.seed_len <= 24)
     {
         detail::map_kernel<detail::APPROX_MAPPING,24> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
     }
     else if (params.seed_len <= 32)
     {
         detail::map_kernel<detail::APPROX_MAPPING,32> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
     }
     else if (params.seed_len <= 40)
     {
         detail::map_kernel<detail::APPROX_MAPPING,40> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
     }
 }
 
@@ -802,13 +794,14 @@ template <typename BatchType, typename FMType, typename rFMType>
 void map_whole_read_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params)
 {
     const int blocks = (queues.in_size + BLOCKDIM-1) / BLOCKDIM;
 
     detail::map_whole_read_kernel<<<blocks, BLOCKDIM>>> (
-        read_batch, fmi, rfmi, queues, hits, params );
+        read_batch, fmi, rfmi, queues, reseed, hits, params );
 }
 
 //
@@ -819,6 +812,7 @@ void map_exact_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params)
 {
@@ -827,22 +821,22 @@ void map_exact_t(
     if (params.seed_len <= 16)
     {
         detail::map_kernel<detail::EXACT_MAPPING,16> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
     }
     else if (params.seed_len <= 24)
     {
         detail::map_kernel<detail::EXACT_MAPPING,24> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
     }
     else if (params.seed_len <= 32)
     {
         detail::map_kernel<detail::EXACT_MAPPING,32> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
     }
     else if (params.seed_len <= 40)
     {
         detail::map_kernel<detail::EXACT_MAPPING,40> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
     }
 }
 
@@ -888,6 +882,7 @@ void map_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params)
 {
@@ -899,20 +894,20 @@ void map_t(
         {
             // call the hybrid fuzzy mapping kernel
             map_case_pruning_t(
-                read_batch, fmi, rfmi, retry, queues, hits, params );
+                read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
         }
         else
         {
             // call the hybrid exact-fuzzy mapping kernel
             map_approx_t(
-                read_batch, fmi, rfmi, retry, queues, hits, params );
+                read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
         }
     }
     else
     {
         // call the hybrid exact mapping kernel
         map_exact_t(
-            read_batch, fmi, rfmi, retry, queues, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
     }
 }
 

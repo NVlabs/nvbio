@@ -50,30 +50,26 @@ void batched_banded_alignment_score(const stream_type& stream, const uint32 work
 
     // load the alignment context
     context_type context;
-    if (stream.init_context( work_id, &context ) == false)
+    if (stream.init_context( work_id, &context ) == true)
     {
-        // handle the output
-        stream.output( work_id, &context );
-        return;
+        // compute the end of the current DP matrix window
+        const uint32 len = equal<typename aligner_type::algorithm_tag,TextBlockingTag>() ?
+            stream.text_length( work_id, &context ) :
+            stream.pattern_length( work_id, &context );
+
+        // load the strings to be aligned
+        strings_type strings;
+        stream.load_strings( work_id, 0, len, &context, &strings );
+
+        // score the current DP matrix window
+        banded_alignment_score<BAND_LEN>(
+            stream.aligner(),
+            strings.pattern,
+            strings.quals,
+            strings.text,
+            context.min_score,
+            context.sink );
     }
-
-    // compute the end of the current DP matrix window
-    const uint32 len = equal<typename aligner_type::algorithm_tag,TextBlockingTag>() ?
-        stream.text_length( work_id, &context ) :
-        stream.pattern_length( work_id, &context );
-
-    // load the strings to be aligned
-    strings_type strings;
-    stream.load_strings( work_id, 0, len, &context, &strings );
-
-    // score the current DP matrix window
-    banded_alignment_score<BAND_LEN>(
-        stream.aligner(),
-        strings.pattern,
-        strings.quals,
-        strings.text,
-        context.min_score,
-        context.sink );
 
     // handle the output
     stream.output( work_id, &context );

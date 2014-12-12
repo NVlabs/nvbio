@@ -119,7 +119,9 @@ struct BestScoreStream : public AlignmentStreamBase<SCORE_STREAM,AlignerType,Pip
 
         // setup the minimum score
         const io::Alignment second_best = base_type::m_pipeline.best_alignments[ context->read_id + base_type::m_pipeline.best_stride ];
-        context->min_score = nvbio::max( second_best.score() , base_type::m_pipeline.score_limit );
+        context->min_score = nvbio::max( second_best.score(), base_type::m_pipeline.score_limit );
+
+        NVBIO_CUDA_DEBUG_PRINT_IF( base_type::m_params.debug.show_score_info( context->read_id ), "score-min: %d (rc[%u], pos[%u], [qid %u])]\n", context->min_score, context->read_rc, context->genome_begin, i );
         return true;
     }
 
@@ -136,6 +138,7 @@ struct BestScoreStream : public AlignmentStreamBase<SCORE_STREAM,AlignerType,Pip
         const aln::BestSink<int32> sink = context->sink;
         hit.score = nvbio::max( sink.score, scheme_type::worst_score );
         hit.sink  = context->genome_begin + sink.sink.x;
+
         // TODO: rewrite hit.loc
         // hit.loc = context->genome_begin;
         NVBIO_CUDA_DEBUG_PRINT_IF( base_type::m_params.debug.show_score( context->read_id, (sink.score >= context->min_score) ), "score: %d (rc[%u], pos[%u], [qid %u])]\n", sink.score, context->read_rc, context->genome_begin, i );

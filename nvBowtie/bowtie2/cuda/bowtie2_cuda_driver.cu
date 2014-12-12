@@ -249,6 +249,8 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.persist_extension =  int_option(options, "persist-extension",     init ? -1         : params.persist_extension);     // persist pass
     params.persist_file      =  string_option(options, "persist-file",       init ? ""         : params.persist_file.c_str() ); // persist file
 
+    params.no_multi_hits     =  int_option(options, "no-multi-hits",      init ? 0          : params.no_multi_hits ); // disable multi-hit selection
+
     params.max_effort_init = nvbio::max( params.max_effort_init, params.max_effort );
     params.max_ext         = nvbio::max( params.max_ext,         params.max_effort );
 
@@ -346,7 +348,7 @@ int driver(
 
     // compute band length
     const uint32 band_len = Aligner::band_length( params.max_dist );
-    const SimpleFunc& score_min = EditDistanceMode ? params.scoring_scheme.ed.m_score_min : params.scoring_scheme.sw.m_score_min;
+    const SimpleFunc& score_min = params.scoring_mode == EditDistanceMode ? params.scoring_scheme.ed.m_score_min : params.scoring_scheme.sw.m_score_min;
     
     // print command line options
     log_visible(stderr, "  mode           = %s\n", mapping_mode( params.mode ));
@@ -466,7 +468,10 @@ int driver(
 
         io::SequenceDataHost* read_data_host = input_thread.read_data[ input_set ];
         if (read_data_host == (io::SequenceDataHost*)InputThread::INVALID)
+        {
+            log_verbose(stderr, "end of input reached\n");
             break;
+        }
 
         if (read_data_host->max_sequence_len() > Aligner::MAX_READ_LEN)
         {
@@ -828,7 +833,10 @@ int driver(
         io::SequenceDataHost* read_data_host2 = input_thread.read_data2[ input_set ];
         if (read_data_host1 == (io::SequenceDataHost*)InputThread::INVALID ||
             read_data_host2 == (io::SequenceDataHost*)InputThread::INVALID)
+        {
+            log_verbose(stderr, "end of input reached\n");
             break;
+        }
 
         if ((read_data_host1->max_sequence_len() > Aligner::MAX_READ_LEN) ||
             (read_data_host2->max_sequence_len() > Aligner::MAX_READ_LEN))

@@ -188,6 +188,7 @@ void Aligner::best_approx(
                 map(
                     anchor ? reads2 : reads1, fmi, rfmi,
                     seeding_pass, seed_queues.device_view(),
+                    reseed_dptr,
                     hits,
                     params );
 
@@ -233,6 +234,14 @@ void Aligner::best_approx(
                 seed_queues.in_size,
                 seed_queues.raw_input_queue(),
                 stats );
+
+            // copy the reads that need reseeding
+            seed_queues.out_size[0] = nvbio::copy_flagged(
+                seed_queues.in_size,
+                (uint32*)seed_queues.raw_input_queue(),
+                reseed_dptr,
+                (uint32*)seed_queues.raw_output_queue(),
+                temp_dvec );
 
             // swap input & output queues
             seed_queues.swap();
@@ -853,7 +862,8 @@ void Aligner::best_approx_score(
         // keep track of how many hits per read we are generating
         pipeline.n_hits_per_read = 1;
 
-        if (active_read_queues.in_size <= BATCH_SIZE/2)
+        if ((active_read_queues.in_size <= BATCH_SIZE/2) &&
+            (params.no_multi_hits == false))
         {
             //
             // The queue of actively processed reads is very small: at this point

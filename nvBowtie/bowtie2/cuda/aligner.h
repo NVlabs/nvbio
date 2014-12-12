@@ -108,6 +108,8 @@ struct Aligner
     uint32*                             idx_queue_dptr;
     thrust::device_vector<uint16>       sorting_queue_dvec;
 
+    thrust::device_vector<uint8>        reseed_dvec;
+    uint8*                              reseed_dptr;
     thrust::device_vector<uint32>       trys_dvec;
     uint32*                             trys_dptr;
     thrust::device_vector<uint32>       rseeds_dvec;
@@ -358,6 +360,14 @@ void init_alignments(
 }
 
 #endif // defined(__CUDACC__)
+
+// mark unaligned reads that need reseeding
+//
+void mark_unaligned(
+    const uint32            n_active_reads,
+    const uint32*           active_reads,
+    const io::Alignment*    best_data,
+    uint8*                  reseed);
 
 } // namespace cuda
 } // namespace bowtie2

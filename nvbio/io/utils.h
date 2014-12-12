@@ -182,8 +182,8 @@ struct ReadStream
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
     qual_string_type qualities() const { return qual_string_type(*this); }
 
-    bool        rev;                ///< reverse flag
-    bool        comp;               ///< complement flag
+    uint32      rev;                ///< reverse flag
+    uint32      comp;               ///< complement flag
     uint32      first, last;        ///< offset of first and last elements
     StreamType  stream;             ///< read stream
     QualType    qual;               ///< quality stream

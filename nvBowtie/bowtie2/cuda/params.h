@@ -144,6 +144,8 @@ struct Params : public ParamsPOD
     int32         persist_seeding;
     int32         persist_extension;
     std::string   persist_file;
+
+    int32         no_multi_hits;
 };
 
 ///@}  // group nvBowtie

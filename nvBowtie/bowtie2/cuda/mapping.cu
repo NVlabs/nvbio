@@ -89,10 +89,11 @@ void map_whole_read(
     const FMIndexDef::type                          fmi,
     const FMIndexDef::type                          rfmi,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params)
 {
-    map_whole_read_t( read_batch, fmi, rfmi, queues, hits, params );
+    map_whole_read_t( read_batch, fmi, rfmi, queues, reseed, hits, params );
 }
 
 //
@@ -105,10 +106,11 @@ void map_exact(
     const FMIndexDef::type                          rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params)
 {
-    map_exact_t( read_batch, fmi, rfmi, retry, queues, hits, params );
+    map_exact_t( read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
 }
 
 //
@@ -135,10 +137,11 @@ void map_approx(
     const FMIndexDef::type                          rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params)
 {
-    map_approx_t( read_batch, fmi, rfmi, retry, queues, hits, params );
+    map_approx_t( read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
 }
 
 //
@@ -164,10 +167,11 @@ void map(
     const FMIndexDef::type                          rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params)
 {
-    map_t( read_batch, fmi, rfmi, retry, queues, hits, params );
+    map_t( read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
 }
 
 } // namespace cuda

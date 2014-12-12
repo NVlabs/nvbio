@@ -201,14 +201,14 @@ struct AlignmentStrings
             pipeline.reads_o :
             pipeline.reads;
 
-        const uint2 read_subrange = make_uint2( 0u, context->read_range.y - context->read_range.x );
+        const DirType  read_dir  = context->read_rc ? FORWARD    : REVERSE;
+        const ReadType read_type = context->read_rc ? COMPLEMENT : STANDARD;
 
         pattern = pattern_loader.load(
             reads,
             context->read_range,
-            context->read_rc ? FORWARD    : REVERSE,        // the reads are loaded in REVERSE fashion, so we invert this flag here
-            context->read_rc ? COMPLEMENT : STANDARD,
-            read_subrange );
+            read_dir,        // the reads are loaded in REVERSE fashion, so we invert this flag here
+            read_type );
 
         quals   = pattern.qualities();
         text    = text_string(

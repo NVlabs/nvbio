@@ -27,6 +27,7 @@
 
 #pragma once
 
+#include <nvBowtie/bowtie2/cuda/defs.h>
 #include <nvBowtie/bowtie2/cuda/string_utils.h>
 #include <nvBowtie/bowtie2/cuda/scoring.h>
 #include <nvbio/io/utils.h>

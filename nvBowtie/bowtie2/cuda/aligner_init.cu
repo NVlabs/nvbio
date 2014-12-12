@@ -98,6 +98,7 @@ std::pair<uint64,uint64> Aligner::init_alloc(const uint32 BATCH_SIZE, const Para
 
     if (params.mode != AllMapping)
     {
+        reseed_dptr    = resize( do_alloc, reseed_dvec,     BATCH_SIZE,     d_allocated_bytes );
         trys_dptr      = resize( do_alloc, trys_dvec,       BATCH_SIZE,     d_allocated_bytes );
         best_data_dptr = resize( do_alloc, best_data_dvec,  BATCH_SIZE*2,   d_allocated_bytes );
 
@@ -386,6 +387,43 @@ void ring_buffer_to_plain_array(
             begin,
             end,
             output ) );
+}
+
+// initialize a set of alignments
+//
+__global__
+void mark_unaligned_kernel(
+    const uint32            n_active_reads,
+    const uint32*           active_reads,
+    const io::Alignment*    best_data,
+    uint8*                  reseed)
+{
+    const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;
+    if (thread_id >= n_active_reads) return;
+
+    // fetch the read
+    const uint32 read_id = active_reads[ thread_id ];
+
+    // mark if unaligned
+    if (!best_data[ read_id ].is_aligned())
+        reseed[ thread_id ] = 1u;
+}
+
+// mark unaligned reads that need reseeding
+//
+void mark_unaligned(
+    const uint32            n_active_reads,
+    const uint32*           active_reads,
+    const io::Alignment*    best_data,
+    uint8*                  reseed)
+{
+    const int blocks = (n_active_reads + BLOCKDIM-1) / BLOCKDIM;
+
+    mark_unaligned_kernel<<<blocks, BLOCKDIM>>>(
+        n_active_reads,
+        active_reads,
+        best_data,
+        reseed );
 }
 
 } // namespace cuda

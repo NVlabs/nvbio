@@ -82,6 +82,7 @@ template <typename BatchType, typename FMType, typename rFMType>
 void map_whole_read_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params);
 
@@ -94,6 +95,7 @@ void map_exact_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params);
 
@@ -116,6 +118,7 @@ void map_case_pruning_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params);
 
@@ -128,6 +131,7 @@ void map_approx_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params);
 
@@ -149,6 +153,7 @@ void map_t(
     const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
+    uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
     const ParamsPOD                                 params);
 

@@ -68,8 +68,11 @@ T* resize(bool do_alloc, std::vector<T>& vec, const uint32 size, uint64& bytes)
     return NULL;
 }
 
-std::pair<uint64,uint64> Aligner::init_alloc(const uint32 BATCH_SIZE, const Params& params, const EndType type, bool do_alloc)
+bool Aligner::init_alloc(const uint32 BATCH_SIZE, const Params& params, const EndType type, bool do_alloc, std::pair<uint64,uint64>* mem_stats)
 {
+    size_t free, total;
+    cudaMemGetInfo(&free, &total);
+
     //const uint32 band_len = (type == kPairedEnds) ? MAXIMUM_BAND_LENGTH : band_length( params.max_dist );
 
     uint64 d_allocated_bytes = 0;
@@ -156,23 +159,31 @@ std::pair<uint64,uint64> Aligner::init_alloc(const uint32 BATCH_SIZE, const Para
     // allocate DP storage
     uint32 dp_storage = 0;
 
-    if (do_alloc)
     {
         //
         // allocate two thirds of available device memory for scoring / traceback
         //
+        const uint32 guard_band = 512*1024*1024; // we want to leave 512MB free,
+                                                 // needed for kernels using lmem
 
-        size_t free, total;
-        cudaMemGetInfo(&free, &total);
+        const uint32 min_dp_storage = 64*1024*1024; // minimum amount of DP storage
+
+        if (do_alloc)
+            cudaMemGetInfo(&free, &total);
+        else if (free >= d_allocated_bytes + guard_band + min_dp_storage)
+            free -= d_allocated_bytes;
+        else
+            return false;
+
         const uint32 free_words    = uint32( free / 4u );
-        const uint32 min_free_words = NVBIO_CUDA_DEBUG_SELECT( (600*1024*1024)/4, (512*1024*1024)/4 ); // we want to leave 512MB free,
-                                                                                                       // neeeded for kernels using lmem
+        const uint32 min_free_words = guard_band / 4u;
+
         uint32 target_words  = (free_words * 2u) / 3u;
                target_words  = nvbio::min( target_words, free_words - min_free_words );
 
         const uint32 buffer_words = target_words;
-        log_verbose(stderr, "    allocating %u MB of DP storage\n",
-            (buffer_words*4)/(1024*1024) );
+        if (do_alloc)
+            log_verbose(stderr, "    allocating %u MB of DP storage\n", (buffer_words*4)/(1024*1024) );
 
         dp_storage = buffer_words * sizeof(uint32);
     }
@@ -182,7 +193,12 @@ std::pair<uint64,uint64> Aligner::init_alloc(const uint32 BATCH_SIZE, const Para
 
     nvbio::cuda::check_error("allocating alignment buffers");
 
-    return std::make_pair( h_allocated_bytes, d_allocated_bytes );
+    if (mem_stats)
+    {
+        mem_stats->first  = h_allocated_bytes;
+        mem_stats->second = d_allocated_bytes;
+    }
+    return true;
 }
 
 bool Aligner::init(const uint32 batch_size, const Params& params, const EndType type)
@@ -195,13 +211,15 @@ bool Aligner::init(const uint32 batch_size, const Params& params, const EndType 
     batch_number = 0;
 
     try {
-        std::pair<uint64,uint64> mem_stats = init_alloc( batch_size, params, type, false );
+        std::pair<uint64,uint64> mem_stats;
+
+        init_alloc( batch_size, params, type, false, &mem_stats );
 
         log_stats(stderr, "  allocating alignment buffers... started\n    estimated: HOST %lu MB, DEVICE %lu MB)\n",
             mem_stats.first / (1024*1024),
             mem_stats.second / (1024*1024) );
 
-        mem_stats = init_alloc( batch_size, params, type, true );
+        init_alloc( batch_size, params, type, true, &mem_stats );
 
         log_stats(stderr, "  allocating alignment buffers... done\n    allocated: HOST %lu MB, DEVICE %lu MB)\n",
             mem_stats.first / (1024*1024),

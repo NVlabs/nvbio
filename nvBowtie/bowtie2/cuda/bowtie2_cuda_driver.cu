@@ -401,12 +401,8 @@ int driver(
 
     for (BATCH_SIZE = params.max_batch_size*1024; BATCH_SIZE >= 16*1024; BATCH_SIZE /= 2)
     {
-        // leave some guard band of free memory
-        const uint32 guard_band = 600*1024*1024;
-
         // gauge how much memory we'd need
-        const std::pair<uint64,uint64> mem_stats = aligner.init_alloc( BATCH_SIZE, params, kSingleEnd, false );
-        if (mem_stats.second < free - guard_band)
+        if (aligner.init_alloc( BATCH_SIZE, params, kSingleEnd, false ) == true)
             break;
     }
     log_stats(stderr, "  processing reads in batches of %uK\n", BATCH_SIZE/1024);
@@ -751,12 +747,8 @@ int driver(
 
     for (BATCH_SIZE = params.max_batch_size*1024; BATCH_SIZE >= 16*1024; BATCH_SIZE /= 2)
     {
-        // leave some guard band of free memory
-        const uint32 guard_band = 600*1024*1024;
-
         // gauge how much memory we'd need
-        const std::pair<uint64,uint64> mem_stats = aligner.init_alloc( BATCH_SIZE, params, kPairedEnds, false );
-        if (mem_stats.second < free - guard_band)
+        if (aligner.init_alloc( BATCH_SIZE, params, kPairedEnds, false ) == true)
             break;
     }
     log_stats(stderr, "  processing reads in batches of %uK\n", BATCH_SIZE/1024);

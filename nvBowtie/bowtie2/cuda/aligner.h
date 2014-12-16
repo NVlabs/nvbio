@@ -299,7 +299,7 @@ struct Aligner
         const uint32    count,
         uint32*         keys);
 
-    std::pair<uint64,uint64> init_alloc(const uint32 BATCH_SIZE, const Params& params, const EndType type, bool do_alloc);
+    bool init_alloc(const uint32 BATCH_SIZE, const Params& params, const EndType type, bool do_alloc, std::pair<uint64,uint64>* mem_stats = NULL);
 };
 
 // Compute the total number of matches found

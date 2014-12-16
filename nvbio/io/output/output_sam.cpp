@@ -532,42 +532,26 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
     return sam_align.mapq;
 }
 
-void SamOutput::process(struct DeviceOutputBatchSE& gpu_batch,
-                        const AlignmentMate mate)
+void SamOutput::process(struct HostOutputBatchSE& batch)
 {
-    // read back the data into the CPU for later processing
-    readback(cpu_batch, gpu_batch, mate);
+    for(uint32 c = 0; c < batch.count; c++)
+    {
+        AlignmentData alignment = get(batch, c);
+        AlignmentData mate = AlignmentData::invalid();
 
-    // flush the output
-    if (alignment_type == SINGLE_END || mate == MATE_2)
-        flush();
+        process_one_alignment(alignment, mate);
+    }
 }
 
-// called when output data for a given batch has been received, triggers processing of the accumulated data
-void SamOutput::flush(void)
+void SamOutput::process(struct HostOutputBatchPE& batch)
 {
-    for(uint32 c = 0; c < cpu_batch.count; c++)
+    for(uint32 c = 0; c < batch.count; c++)
     {
-        AlignmentData alignment;
-        AlignmentData mate;
+        AlignmentData alignment = get_anchor_mate(batch,c);
+        AlignmentData mate      = get_opposite_mate(batch,c);
 
-        switch(alignment_type)
-        {
-            case SINGLE_END:
-                alignment = cpu_batch.get_mate(c, MATE_1);
-                mate = AlignmentData::invalid();
-
-                process_one_alignment(alignment, mate);
-                break;
-
-            case PAIRED_END:
-                alignment = cpu_batch.get_anchor_mate(c);
-                mate = cpu_batch.get_opposite_mate(c);
-
-                process_one_alignment(alignment, mate);
-                process_one_alignment(mate, alignment);
-                break;
-        }
+        process_one_alignment(alignment, mate);
+        process_one_alignment(mate, alignment);
     }
 }
 

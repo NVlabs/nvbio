@@ -42,7 +42,8 @@
 namespace nvbio {
 namespace io {
 
-// base class for representing a batch of alignment results on the device
+/// base class for representing a batch of alignment results on the device
+///
 struct DeviceOutputBatchSE
 {
 public:
@@ -78,6 +79,56 @@ public:
     void readback_mapq(thrust::host_vector<uint8>& host_mapq) const;
     // copy ids into host memory
     void readback_ids(thrust::host_vector<uint32>& host_ids) const;
+};
+
+/// a batch of alignment results on the CPU
+///
+struct HostOutputBatchSE
+{
+public:
+    uint32 count;
+
+    // we have two alignments, cigar and MDS arrays, one for each mate
+    thrust::host_vector<io::Alignment>           alignments;
+    HostCigarArray                               cigar;
+    HostMdsArray                                 mds;
+    thrust::host_vector<uint8>                   mapq;
+    thrust::host_vector<uint32>                  read_ids;
+
+    // pointer to the host-side read data for each mate
+    const io::SequenceDataHost*                  read_data;
+
+    void readback(const DeviceOutputBatchSE);
+
+public:
+    /// constructor
+    ///
+    HostOutputBatchSE() : count(0) {}
+};
+
+/// a batch of alignment results on the CPU
+///
+struct HostOutputBatchPE
+{
+public:
+    uint32 count;
+
+    // we have two alignments, cigar and MDS arrays, one for each mate
+    thrust::host_vector<io::Alignment>           alignments[2];
+    HostCigarArray                               cigar[2];
+    HostMdsArray                                 mds[2];
+    thrust::host_vector<uint8>                   mapq;
+    thrust::host_vector<uint32>                  read_ids;
+
+    // pointer to the host-side read data for each mate
+    const io::SequenceDataHost*                  read_data[2];
+
+    void readback(const DeviceOutputBatchSE, const AlignmentMate mate);
+
+public:
+    /// constructor
+    ///
+    HostOutputBatchPE() : count(0) {}
 };
 
 } // namespace io

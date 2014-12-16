@@ -60,19 +60,6 @@ BamOutput::~BamOutput()
     }
 }
 
-void BamOutput::process(struct DeviceOutputBatchSE& gpu_batch,
-                        const AlignmentMate mate)
-{
-    // read back the data into the CPU for later processing
-    readback(cpu_output, gpu_batch, mate);
-
-    if (alignment_type == SINGLE_END || mate == MATE_2)
-    {
-        // flush the output
-        flush();
-    }
-}
-
 uint32 BamOutput::generate_cigar(struct BAM_alignment& alnh,
                                  struct BAM_alignment_data_block& alnd,
                                  const AlignmentData& alignment)
@@ -536,37 +523,33 @@ void BamOutput::output_alignment(DataBuffer& out, BAM_alignment& alnh, BAM_align
     }
 }
 
-void BamOutput::flush(void)
+void BamOutput::process(struct HostOutputBatchSE& batch)
 {
-    for(uint32 c = 0; c < cpu_output.count; c++)
+    for(uint32 c = 0; c < batch.count; c++)
     {
-        // wrap the alignment into AlignmentData structures for both mates
-        AlignmentData alignment;
-        AlignmentData mate;
+        AlignmentData alignment = get(batch, c);
+        AlignmentData mate = AlignmentData::invalid();
 
-        switch(alignment_type)
-        {
-            case SINGLE_END:
-                alignment = cpu_output.get_mate(c, MATE_1);
-                mate = AlignmentData::invalid();
-
-                process_one_alignment(data_buffer, alignment, mate);
-                break;
-
-            case PAIRED_END:
-                alignment = cpu_output.get_anchor_mate(c);
-                mate = cpu_output.get_opposite_mate(c);
-
-                process_one_alignment(data_buffer, alignment, mate);
-                process_one_alignment(data_buffer, mate, alignment);
-                break;
-        }
+        process_one_alignment(data_buffer, alignment, mate);
     }
 
     if (data_buffer.get_pos())
-    {
         write_block(data_buffer);
+}
+
+void BamOutput::process(struct HostOutputBatchPE& batch)
+{
+    for(uint32 c = 0; c < batch.count; c++)
+    {
+        AlignmentData alignment = get_anchor_mate(batch,c);
+        AlignmentData mate      = get_opposite_mate(batch,c);
+
+        process_one_alignment(data_buffer, alignment, mate);
+        process_one_alignment(data_buffer, mate, alignment);
     }
+
+    if (data_buffer.get_pos())
+        write_block(data_buffer);
 }
 
 void BamOutput::write_block(DataBuffer& block)

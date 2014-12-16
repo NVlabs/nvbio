@@ -42,6 +42,7 @@ void best_approx_sw(
     const io::FMIndexDataDevice&    driver_data,
     io::SequenceDataDevice&         read_data1,
     io::SequenceDataDevice&         read_data2,
+    io::HostOutputBatchPE&          cpu_batch,
     Stats&                          stats)
 {
     aligner.best_approx<smith_waterman_scoring_tag>(
@@ -53,6 +54,7 @@ void best_approx_sw(
         driver_data,
         read_data1,
         read_data2,
+        cpu_batch,
         stats );
 }
 

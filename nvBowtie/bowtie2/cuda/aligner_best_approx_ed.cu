@@ -41,6 +41,7 @@ void best_approx_ed(
     const io::SequenceDataDevice&   reference_data,
     const io::FMIndexDataDevice&    driver_data,
     io::SequenceDataDevice&         read_data,
+    io::HostOutputBatchSE&          cpu_batch,
     Stats&                          stats)
 {
     aligner.best_approx<edit_distance_scoring_tag>(
@@ -51,6 +52,7 @@ void best_approx_ed(
         reference_data,
         driver_data,
         read_data,
+        cpu_batch,
         stats );
 }
 

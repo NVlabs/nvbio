@@ -39,6 +39,7 @@
 #include <nvBowtie/bowtie2/cuda/mapping.h>
 #include <nvbio/io/alignments.h>
 #include <nvbio/io/output/output_file.h>
+#include <nvbio/io/output/output_batch.h>
 #include <nvbio/io/sequence/sequence.h>
 #include <nvBowtie/bowtie2/cuda/scoring.h>
 #include <nvBowtie/bowtie2/cuda/mapq.h>
@@ -186,6 +187,7 @@ struct Aligner
         const io::SequenceDataDevice&           reference_data,
         const io::FMIndexDataDevice&            driver_data,
         const io::SequenceDataDevice&           read_data,
+        io::HostOutputBatchSE&                  cpu_batch,
         Stats&                                  stats);
 
     template <
@@ -214,6 +216,7 @@ struct Aligner
         const io::FMIndexDataDevice&            driver_data,
         const io::SequenceDataDevice&           read_data1,
         const io::SequenceDataDevice&           read_data2,
+        io::HostOutputBatchPE&                  cpu_batch,
         Stats&                                  stats);
 
     template <
@@ -243,6 +246,7 @@ struct Aligner
         const io::SequenceDataDevice&           reference_data,
         const io::FMIndexDataDevice&            driver_data,
         const io::SequenceDataDevice&           read_data,
+        io::HostOutputBatchSE&                  cpu_batch,
         Stats&                                  stats);
 
     template <typename scoring_scheme_type>
@@ -255,6 +259,7 @@ struct Aligner
         const io::SequenceDataDevice&           reference_data,
         const io::FMIndexDataDevice&            driver_data,
         const io::SequenceDataDevice&           read_data,
+        io::HostOutputBatchSE&                  cpu_batch,
         const uint32                            seed_queue_size,
         const uint32*                           seed_queue,
         Stats&                                  stats,

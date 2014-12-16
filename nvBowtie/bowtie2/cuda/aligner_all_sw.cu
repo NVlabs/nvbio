@@ -41,6 +41,7 @@ void all_sw(
     const io::SequenceDataDevice&   reference_data,
     const io::FMIndexDataDevice&    driver_data,
     io::SequenceDataDevice&         read_data,
+    io::HostOutputBatchSE&          cpu_batch,
     Stats&                          stats)
 {
     aligner.all<smith_waterman_scoring_tag>(
@@ -51,6 +52,7 @@ void all_sw(
         reference_data,
         driver_data,
         read_data,
+        cpu_batch,
         stats );
 }
 

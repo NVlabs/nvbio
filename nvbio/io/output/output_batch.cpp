@@ -35,6 +35,30 @@
 namespace nvbio {
 namespace io {
 
+void HostOutputBatchSE::readback(const DeviceOutputBatchSE batch)
+{
+    count = batch.count;
+    batch.readback_scores( alignments );
+    batch.readback_cigars( cigar );
+    batch.readback_mds( mds );
+    batch.readback_mapq( mapq );
+    batch.readback_ids( read_ids );
+}
+
+void HostOutputBatchPE::readback(const DeviceOutputBatchSE batch, const AlignmentMate mate)
+{
+    count = batch.count;
+    batch.readback_scores( alignments[mate] );
+    batch.readback_cigars( cigar[mate] );
+    batch.readback_mds( mds[mate] );
+
+    if (mate == MATE_1)
+    {
+        batch.readback_mapq( mapq );
+        batch.readback_ids( read_ids );
+    }
+}
+
 // copy scoring data to host, converting to io::AlignmentResult
 void DeviceOutputBatchSE::readback_scores(thrust::host_vector<io::Alignment>& host_alignments) const
 {

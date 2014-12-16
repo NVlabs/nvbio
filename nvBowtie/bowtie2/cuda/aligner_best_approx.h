@@ -90,6 +90,7 @@ void Aligner::best_approx(
     const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     const io::SequenceDataDevice&           read_data,
+    io::HostOutputBatchSE&                  cpu_batch,
     Stats&                                  stats)
 {
     // cast the genome to use proper iterators
@@ -372,7 +373,9 @@ void Aligner::best_approx(
             mds,
             mapq_dvec);
 
-        output_file->process( gpu_batch, io::MATE_1 );
+        cpu_batch.readback( gpu_batch );
+
+        output_file->process( cpu_batch );
     }
 
     // TODO: decide whether to output second best alignments
@@ -462,7 +465,9 @@ void Aligner::best_approx(
                 mds,
                 mapq_dvec);
 
-            output_file->process( gpu_batch, io::MATE_1 );
+            cpu_batch.readback( gpu_batch );
+
+            output_file->process( cpu_batch );
         }
     }
     #endif

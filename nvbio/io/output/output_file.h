@@ -105,23 +105,17 @@ public:
     ///
     virtual void configure_mapq_evaluator(int mapq_filter);
 
-    /// Begin a new batch of alignment results
-    /// \param read_data_1 The (host-side) read data pointer for the first mate
-    /// \param read_data_2 The (host-side) read data pointer for the second mate, if any (can be NULL for single-end alignment)
+    /// Process a set of alignment results for the current batch.
     ///
-    virtual void start_batch(const io::SequenceDataHost *read_data_1,
-                             const io::SequenceDataHost *read_data_2 = NULL);
+    /// \param batch    Handle to the buffers containing the alignment results
+    ///
+    virtual void process(struct HostOutputBatchSE& batch) {}
 
     /// Process a set of alignment results for the current batch.
-    /// \param gpu_batch Handle to the GPU buffers containing the alignment results
-    /// \param alignment_mate Identifies the mate for this pass
-    /// \param alignment_score Identifies the score type being calculated in this pass (currently either best or second-best)
     ///
-    virtual void process(struct DeviceOutputBatchSE& gpu_batch,
-                         const AlignmentMate alignment_mate);
-
-    /// Mark a batch of alignment results as complete
-    virtual void end_batch(void);
+    /// \param batch    Handle to the buffers containing the alignment results
+    ///
+    virtual void process(struct HostOutputBatchPE& batch) {}
 
     /// Flush and close the output file
     virtual void close(void);
@@ -130,15 +124,6 @@ public:
     virtual IOStats& get_aggregate_statistics(void);
 
 protected:
-    /// Read back batch data into the host
-    /// \param [out] cpu_batch The HostOutputBatchPE struct which will receive the data
-    /// \param [in] gpu_batch The GPU memory handle to read from
-    /// \param [in] alignment_mate Identifies the mate that the data in gpu_batch refers to
-    /// \param [in] alignment_score The type of score data in gpu_batch
-    void readback(struct HostOutputBatchPE& cpu_batch,
-                  const struct DeviceOutputBatchSE& gpu_batch,
-                  const AlignmentMate alignment_mate);
-
     /// Name of the file we're writing
     const char *file_name;
     /// The type of alignment we're running (single or paired-end)
@@ -148,11 +133,6 @@ protected:
 
     /// The current mapping quality filter: reads with a mapq below this value will be marked as not aligned
     int mapq_filter;
-
-    /// Host-side copies of the read data for the current batch.
-    /// These are set by start_batch and invalidated by end_batch.
-    const io::SequenceDataHost *read_data_1;
-    const io::SequenceDataHost *read_data_2;
 
     /// I/O statistics
     IOStats iostats;

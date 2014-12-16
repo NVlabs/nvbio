@@ -93,9 +93,18 @@ public:
     ~SamOutput();
 
     void header() { output_header(); }
-    void process(struct DeviceOutputBatchSE& gpu_batch,
-                 const AlignmentMate mate);
-    void flush(void);
+
+    /// Process a set of alignment results for the current batch.
+    ///
+    /// \param batch    Handle to the buffers containing the alignment results
+    ///
+    void process(struct HostOutputBatchSE& batch);
+
+    /// Process a set of alignment results for the current batch.
+    ///
+    /// \param batch    Handle to the buffers containing the alignment results
+    ///
+    void process(struct HostOutputBatchPE& batch);
 
     void close(void);
 
@@ -131,8 +140,6 @@ private:
 
     // our file pointer
     FILE *fp;
-    // CPU copy of the current alignment batch
-    HostOutputBatchPE cpu_batch;
 };
 
 } // namespace io

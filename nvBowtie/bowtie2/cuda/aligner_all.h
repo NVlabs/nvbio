@@ -54,6 +54,7 @@ void Aligner::all(
     const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     const io::SequenceDataDevice&           read_data,
+    io::HostOutputBatchSE&                  cpu_batch,
     Stats&                                  stats)
 {
     // prepare the scoring system
@@ -217,6 +218,7 @@ void Aligner::all(
         reference_data,
         driver_data,
         read_data,
+        cpu_batch,
         count,
         seed_queues.raw_input_queue(),
         stats,
@@ -274,6 +276,7 @@ void Aligner::score_all(
     const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     const io::SequenceDataDevice&           read_data,
+    io::HostOutputBatchSE&                  cpu_batch,
     const uint32                            seed_queue_size,
     const uint32*                           seed_queue,
     Stats&                                  stats,
@@ -664,7 +667,9 @@ void Aligner::score_all(
                     mapq_dvec,
                     &output_read_info_dvec );
 
-                output_file->process( gpu_batch, io::MATE_1 );
+                cpu_batch.readback( gpu_batch );
+
+                output_file->process( cpu_batch );
             }
 
             buffer_count  -= n_backtracks;

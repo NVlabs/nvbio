@@ -42,6 +42,7 @@ void all_ed(
     const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     io::SequenceDataDevice&                 read_data,
+    io::HostOutputBatchSE&                  cpu_batch,
     Stats&                                  stats);
 
 void all_sw(
@@ -53,6 +54,7 @@ void all_sw(
     const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     io::SequenceDataDevice&                 read_data,
+    io::HostOutputBatchSE&                  cpu_batch,
     Stats&                                  stats);
 
 void best_approx_ed(
@@ -64,6 +66,7 @@ void best_approx_ed(
     const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     io::SequenceDataDevice&                 read_data,
+    io::HostOutputBatchSE&                  cpu_batch,
     Stats&                                  stats);
 
 void best_approx_sw(
@@ -75,6 +78,7 @@ void best_approx_sw(
     const io::SequenceDataDevice&           reference_data,
     const io::FMIndexDataDevice&            driver_data,
     io::SequenceDataDevice&                 read_data,
+    io::HostOutputBatchSE&                  cpu_batch,
     Stats&                                  stats);
 
 void best_approx_ed(
@@ -87,6 +91,7 @@ void best_approx_ed(
     const io::FMIndexDataDevice&            driver_data,
     io::SequenceDataDevice&                 read_data1,
     io::SequenceDataDevice&                 read_data2,
+    io::HostOutputBatchPE&                  cpu_batch,
     Stats&                                  stats);
 
 void best_approx_sw(
@@ -99,6 +104,7 @@ void best_approx_sw(
     const io::FMIndexDataDevice&            driver_data,
     io::SequenceDataDevice&                 read_data1,
     io::SequenceDataDevice&                 read_data2,
+    io::HostOutputBatchPE&                  cpu_batch,
     Stats&                                  stats);
 
 } // namespace cuda

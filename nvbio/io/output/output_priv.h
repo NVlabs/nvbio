@@ -30,6 +30,7 @@
 #include <nvbio/io/output/output_types.h>
 #include <nvbio/io/output/output_stats.h>
 #include <nvbio/io/output/output_file.h>
+#include <nvbio/io/output/output_batch.h>
 
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
@@ -137,30 +138,16 @@ struct AlignmentData
     static AlignmentData invalid(void) { return AlignmentData(); }
 };
 
-// a batch of alignment results on the CPU
-struct HostOutputBatchPE
-{
-    uint32 count;
+// extract alignment data for a given mate
+// note that the mates can be different for the cigar, since mate 1 is always the anchor mate for cigars
+AlignmentData get(HostOutputBatchSE& batch, const uint32 aln_id);
 
-    // we have two alignments, cigar and MDS arrays, one for each mate
-    thrust::host_vector<io::Alignment>           alignments[2];
-    HostCigarArray                               cigar[2];
-    HostMdsArray                                 mds[2];
-    thrust::host_vector<uint8>                   mapq;
-    thrust::host_vector<uint32>                  read_ids;
-
-    // pointer to the host-side read data for each mate
-    const io::SequenceDataHost*                  read_data[2];
-
-    HostOutputBatchPE() : count(0) {}
-
-    // extract alignment data for a given mate
-    AlignmentData get_mate(uint32 aln_id, AlignmentMate mate);
-    // extract alignment data for the anchor mate
-    AlignmentData get_anchor_mate(uint32 aln_id);
-    // extract alignment data for the opposite mate
-    AlignmentData get_opposite_mate(uint32 aln_id);
-};
+// extract alignment data for a given mate
+AlignmentData get_mate(HostOutputBatchPE& batch, const uint32 aln_id, const AlignmentMate mate);
+// extract alignment data for the anchor mate
+AlignmentData get_anchor_mate(HostOutputBatchPE& batch, const uint32 aln_id);
+// extract alignment data for the opposite mate
+AlignmentData get_opposite_mate(HostOutputBatchPE& batch, const uint32 aln_id);
 
 } // namespace io
 } // namespace nvbio

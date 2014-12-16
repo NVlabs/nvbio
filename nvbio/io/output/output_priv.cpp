@@ -38,60 +38,79 @@ namespace io {
 
 // extract alignment data for a given mate
 // note that the mates can be different for the cigar, since mate 1 is always the anchor mate for cigars
-AlignmentData HostOutputBatchPE::get_mate(uint32 aln_id, AlignmentMate mate)
+AlignmentData get(HostOutputBatchSE& batch, const uint32 aln_id)
 {
-    const uint32 read_id = read_ids.size() ? read_ids[ aln_id ] : aln_id;
+    const uint32 read_id = batch.read_ids.size() ?
+                           batch.read_ids[ aln_id ] : aln_id;
 
-    if (alignments[0][aln_id].mate() == mate)
+    return AlignmentData(&batch.alignments[aln_id],
+                         batch.mapq[aln_id],
+                         aln_id,
+                         read_id,
+                         batch.read_data,
+                         &batch.cigar,
+                         &batch.mds);
+}
+
+// extract alignment data for a given mate
+// note that the mates can be different for the cigar, since mate 1 is always the anchor mate for cigars
+AlignmentData get_mate(HostOutputBatchPE& batch, const uint32 aln_id, const AlignmentMate mate)
+{
+    const uint32 read_id = batch.read_ids.size() ?
+                           batch.read_ids[ aln_id ] : aln_id;
+
+    if (batch.alignments[0][aln_id].mate() == mate)
     {
-        return AlignmentData(&alignments[0][aln_id],
-                             mapq[aln_id],
+        return AlignmentData(&batch.alignments[0][aln_id],
+                             batch.mapq[aln_id],
                              aln_id,
                              read_id,
-                             read_data[ mate ],
-                             &cigar[0],
-                             &mds[0]);
+                             batch.read_data[ mate ],
+                             &batch.cigar[0],
+                             &batch.mds[0]);
     }
     else
     {
-        return AlignmentData(&alignments[1][aln_id],
-                             mapq[aln_id],
+        return AlignmentData(&batch.alignments[1][aln_id],
+                             batch.mapq[aln_id],
                              aln_id,
                              read_id,
-                             read_data[ mate ],
-                             &cigar[1],
-                             &mds[1]);
+                             batch.read_data[ mate ],
+                             &batch.cigar[1],
+                             &batch.mds[1]);
     }
 }
 
 // extract alignment data for the anchor mate
-AlignmentData HostOutputBatchPE::get_anchor_mate(uint32 aln_id)
+AlignmentData get_anchor_mate(HostOutputBatchPE& batch, const uint32 aln_id)
 {
-    const uint32 read_id = read_ids.size() ? read_ids[ aln_id ] : aln_id;
-    const uint32 mate    = alignments[0][aln_id].mate();
+    const uint32 read_id = batch.read_ids.size() ?
+                           batch.read_ids[ aln_id ] : aln_id;
+    const uint32 mate    = batch.alignments[0][aln_id].mate();
 
-    return AlignmentData(&alignments[0][aln_id],
-                         mapq[aln_id],
+    return AlignmentData(&batch.alignments[0][aln_id],
+                         batch.mapq[aln_id],
                          aln_id,
                          read_id,
-                         read_data[ mate ],
-                         &cigar[0],
-                         &mds[0]);
+                         batch.read_data[ mate ],
+                         &batch.cigar[0],
+                         &batch.mds[0]);
 }
 
 // extract alignment data for the opposite mate
-AlignmentData HostOutputBatchPE::get_opposite_mate(uint32 aln_id)
+AlignmentData get_opposite_mate(HostOutputBatchPE& batch, const uint32 aln_id)
 {
-    const uint32 read_id = read_ids.size() ? read_ids[ aln_id ] : aln_id;
-    const uint32 mate    = alignments[1][aln_id].mate();
+    const uint32 read_id = batch.read_ids.size() ?
+                           batch.read_ids[ aln_id ] : aln_id;
+    const uint32 mate    = batch.alignments[1][aln_id].mate();
 
-    return AlignmentData(&alignments[1][aln_id],
-                         mapq[aln_id],
+    return AlignmentData(&batch.alignments[1][aln_id],
+                         batch.mapq[aln_id],
                          aln_id,
                          read_id,
-                         read_data[ mate ],
-                         &cigar[1],
-                         &mds[1]);
+                         batch.read_data[ mate ],
+                         &batch.cigar[1],
+                         &batch.mds[1]);
 }
 
 } // namespace io

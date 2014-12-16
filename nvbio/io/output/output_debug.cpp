@@ -80,36 +80,24 @@ DebugOutput::~DebugOutput()
     fp_opposite_mate = NULL;
 }
 
-void DebugOutput::process(struct DeviceOutputBatchSE& gpu_batch,
-                          const AlignmentMate mate)
-{
-    // read back the data into the CPU for later processing
-    readback(cpu_batch, gpu_batch, mate);
 
-    // flush the output
-    if (alignment_type == SINGLE_END || mate == MATE_2)
-        flush();
+void DebugOutput::process(struct HostOutputBatchSE& batch)
+{
+    for(uint32 c = 0; c < batch.count; c++)
+    {
+        AlignmentData mate_1 = get(batch, c);
+        AlignmentData mate_2 = AlignmentData::invalid();
+
+        process_one_alignment(mate_1, mate_2);
+    }
 }
 
-void DebugOutput::flush(void)
+void DebugOutput::process(struct HostOutputBatchPE& batch)
 {
-    for(uint32 c = 0; c < cpu_batch.count; c++)
+    for(uint32 c = 0; c < batch.count; c++)
     {
-        AlignmentData mate_1;
-        AlignmentData mate_2;
-
-        switch(alignment_type)
-        {
-            case SINGLE_END:
-                mate_1 = cpu_batch.get_mate(c, MATE_1);
-                mate_2 = AlignmentData::invalid();
-                break;
-
-            case PAIRED_END:
-                mate_1 = cpu_batch.get_mate(c, MATE_1);
-                mate_2 = cpu_batch.get_mate(c, MATE_2);
-                break;
-        }
+        AlignmentData mate_1 = get_mate(batch, c, MATE_1);
+        AlignmentData mate_2 = get_mate(batch, c, MATE_2);
 
         process_one_alignment(mate_1, mate_2);
     }

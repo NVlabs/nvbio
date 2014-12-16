@@ -449,7 +449,8 @@ int driver(
     uint32 input_set  = 0;
     uint32 n_reads    = 0;
 
-    io::SequenceDataHost local_read_data_host;
+    io::SequenceDataHost   local_read_data_host;
+    io::HostOutputBatchSE  local_output_batch_host;
 
     // loop through the batches of reads
     for (uint32 read_begin = 0; true; read_begin += BATCH_SIZE)
@@ -496,7 +497,8 @@ int driver(
         Timer timer;
         timer.start();
 
-        aligner.output_file->start_batch( &local_read_data_host );
+        //aligner.output_file->start_batch( &local_read_data_host );
+        local_output_batch_host.read_data = &local_read_data_host;
 
         io::SequenceDataDevice read_data( local_read_data_host );
         cudaThreadSynchronize();
@@ -523,6 +525,7 @@ int driver(
                     reference_data,
                     driver_data,
                     read_data,
+                    local_output_batch_host,
                     stats );
             }
             else
@@ -536,6 +539,7 @@ int driver(
                     reference_data,
                     driver_data,
                     read_data,
+                    local_output_batch_host,
                     stats );
             }
         }
@@ -552,6 +556,7 @@ int driver(
                     reference_data,
                     driver_data,
                     read_data,
+                    local_output_batch_host,
                     stats );
             }
             else
@@ -565,6 +570,7 @@ int driver(
                     reference_data,
                     driver_data,
                     read_data,
+                    local_output_batch_host,
                     stats );
             }
         }
@@ -573,7 +579,7 @@ int driver(
         stats.global_time += global_timer.seconds();
         global_timer.start();
 
-        aligner.output_file->end_batch();
+        //aligner.output_file->end_batch();
 
         // increase the total reads counter
         n_reads += count;
@@ -810,8 +816,9 @@ int driver(
     uint32 input_set  = 0;
     uint32 n_reads    = 0;
 
-    io::SequenceDataHost local_read_data_host1;
-    io::SequenceDataHost local_read_data_host2;
+    io::SequenceDataHost    local_read_data_host1;
+    io::SequenceDataHost    local_read_data_host2;
+    io::HostOutputBatchPE   local_output_batch_host;
 
     // loop through the batches of reads
     for (uint32 read_begin = 0; true; read_begin += BATCH_SIZE)
@@ -864,7 +871,9 @@ int driver(
         Timer timer;
         timer.start();
 
-        aligner.output_file->start_batch( &local_read_data_host1, &local_read_data_host2 );
+        //aligner.output_file->start_batch( &local_read_data_host1, &local_read_data_host2 );
+        local_output_batch_host.read_data[0] = &local_read_data_host1;
+        local_output_batch_host.read_data[1] = &local_read_data_host2;
 
         io::SequenceDataDevice read_data1( local_read_data_host1/*, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS*/ );
         io::SequenceDataDevice read_data2( local_read_data_host2/*, io::ReadDataDevice::READS | io::ReadDataDevice::QUALS*/ );
@@ -903,6 +912,7 @@ int driver(
                     driver_data,
                     read_data1,
                     read_data2,
+                    local_output_batch_host,
                     stats );
             }
             else
@@ -917,6 +927,7 @@ int driver(
                     driver_data,
                     read_data1,
                     read_data2,
+                    local_output_batch_host,
                     stats );
             }
         }
@@ -925,7 +936,7 @@ int driver(
         stats.global_time += global_timer.seconds();
         global_timer.start();
 
-        aligner.output_file->end_batch();
+        //aligner.output_file->end_batch();
 
         // increase the total reads counter
         n_reads += count;

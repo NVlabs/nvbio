@@ -70,10 +70,17 @@ public:
 
     void header() { output_header(); }
 
-    void process(struct DeviceOutputBatchSE& gpu_batch,
-                 const AlignmentMate mate);
+    /// Process a set of alignment results for the current batch.
+    ///
+    /// \param batch    Handle to the buffers containing the alignment results
+    ///
+    void process(struct HostOutputBatchSE& batch);
 
-    void flush();
+    /// Process a set of alignment results for the current batch.
+    ///
+    /// \param batch    Handle to the buffers containing the alignment results
+    ///
+    void process(struct HostOutputBatchPE& batch);
 
     void close(void);
 

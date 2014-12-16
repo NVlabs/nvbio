@@ -100,6 +100,7 @@ void Aligner::best_approx(
     const io::FMIndexDataDevice&            driver_data,
     const io::SequenceDataDevice&           read_data1,
     const io::SequenceDataDevice&           read_data2,
+    io::HostOutputBatchPE&                  cpu_batch,
     Stats&                                  stats)
 {
     // prepare the scoring system
@@ -349,7 +350,7 @@ void Aligner::best_approx(
             mds,
             mapq_dvec);
 
-        output_file->process( gpu_batch, io::MATE_1 );
+        cpu_batch.readback( gpu_batch, io::MATE_1 );
     }
 
     //
@@ -485,7 +486,9 @@ void Aligner::best_approx(
                 mds,
                 mapq_dvec);
 
-            output_file->process( gpu_batch, io::MATE_2 );
+            cpu_batch.readback( gpu_batch, io::MATE_2 );
+
+            output_file->process( cpu_batch );
         }
     }
 
@@ -575,7 +578,7 @@ void Aligner::best_approx(
                 mds,
                 mapq_dvec);
 
-            output_file->process( gpu_batch, io::MATE_1 );
+            cpu_batch.readback( gpu_batch, io::MATE_1 );
         }
 
         //
@@ -703,7 +706,9 @@ void Aligner::best_approx(
                     mds,
                     mapq_dvec);
 
-                output_file->process( gpu_batch, io::MATE_2 );
+                cpu_batch.readback( gpu_batch, io::MATE_2 );
+
+                output_file->process( cpu_batch );
             }
         }
     }

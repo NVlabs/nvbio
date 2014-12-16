@@ -46,44 +46,57 @@ void InputThread::run()
 
     try
     {
+        // fill up the free pool
+        {
+            ScopedLock lock( &m_free_pool_lock );
+            for (uint32 i = 0; i < BUFFERS; ++i)
+                m_free_pool.push( &m_read_data_storage[i] );
+        }
+
         while (1u)
         {
-            // poll until the set is done reading & ready to be reused
-            while (read_data[m_set] != NULL) { yield(); }
+            io::SequenceDataHost* read_data = NULL;
 
-            log_debug( stderr, "  reading input set %u\n", m_set );
-            //// lock the set to flush
-            //ScopedLock lock( &m_lock[m_set] );
+            // loop until the free pool gets filled
+            while (read_data == NULL)
+            {
+                ScopedLock lock( &m_free_pool_lock );
+
+                if (m_free_pool.empty() == false)
+                {
+                    read_data = m_free_pool.top();
+                    m_free_pool.pop();
+                }
+
+                yield();
+            }
+
+            log_debug( stderr, "  reading input batch %u\n", m_set );
 
             Timer timer;
             timer.start();
 
-            const int ret = io::next( DNA_N, &read_data_storage[ m_set ], m_read_data_stream, m_batch_size );
+            const int ret = io::next( DNA_N, read_data, m_read_data_stream, m_batch_size );
 
             timer.stop();
 
+            m_stats.read_io.add( read_data->size(), timer.seconds() );
+
             if (ret)
             {
-                m_stats.read_io.add( read_data_storage[ m_set ].size(), timer.seconds() );
-
-                // mark the set as done
-                read_data[ m_set ] = &read_data_storage[ m_set ];
-
-                // make sure the other threads see the writes
-                host_release_fence();
+                ScopedLock lock( &m_ready_pool_lock );
+                m_ready_pool.push( read_data );
             }
             else
             {
-                // mark this as an invalid entry
-                read_data[ m_set ] = (io::SequenceDataHost*)INVALID;
-
-                // make sure the other threads see the writes
-                host_release_fence();
+                ScopedLock lock( &m_ready_pool_lock );
+                m_ready_pool.push( NULL );
+                // stop the thread
                 break;
             }
 
             // switch to the next set
-            m_set = (m_set + 1) % BUFFERS;
+            ++m_set;
         }
     }
     catch (nvbio::bad_alloc e)
@@ -129,18 +142,73 @@ void InputThread::run()
     }
 }
 
+// get a batch
+//
+io::SequenceDataHost* InputThread::next()
+{
+    // loop until the ready pool gets filled
+    while (1)
+    {
+        ScopedLock lock( &m_ready_pool_lock );
+
+        if (m_ready_pool.empty() == false)
+        {
+            // pop from the ready pool
+            io::SequenceDataHost* read_data = m_ready_pool.top();
+            m_ready_pool.pop();
+            return read_data;
+        }
+
+        yield();
+    }
+}
+
+// release a batch
+//
+void InputThread::release(io::SequenceDataHost* read_data)
+{
+    // push back to the free pool
+    ScopedLock lock( &m_free_pool_lock );
+    m_free_pool.push( read_data );
+}
+
 void InputThreadPaired::run()
 {
     log_verbose( stderr, "starting background paired-end input thread\n" );
 
     try
     {
+        // fill up the free pool
+        {
+            ScopedLock lock( &m_free_pool_lock );
+            for (uint32 i = 0; i < BUFFERS; ++i)
+            {
+                m_free_pool1.push( &m_read_data_storage1[i] );
+                m_free_pool2.push( &m_read_data_storage2[i] );
+            }
+        }
+
         while (1u)
         {
-            // poll until the set is done reading & ready to be reused
-            while (read_data1[m_set] != NULL || read_data2[m_set] != NULL) { yield(); }
+            io::SequenceDataHost* read_data1 = NULL;
+            io::SequenceDataHost* read_data2 = NULL;
 
-            log_debug( stderr, "  reading input set %u\n", m_set );
+            // loop until the free pool gets filled
+            while (read_data1 == NULL || read_data2 == NULL)
+            {
+                ScopedLock lock( &m_free_pool_lock );
+
+                if (m_free_pool1.empty() == false &&
+                    m_free_pool2.empty() == false)
+                {
+                    read_data1 = m_free_pool1.top(); m_free_pool1.pop();
+                    read_data2 = m_free_pool2.top(); m_free_pool2.pop();
+                }
+
+                yield();
+            }
+
+            log_debug( stderr, "  reading input batch %u\n", m_set );
 
             //// lock the set to flush
             //ScopedLock lock( &m_lock[m_set] );
@@ -148,35 +216,28 @@ void InputThreadPaired::run()
             Timer timer;
             timer.start();
 
-            const int ret1 = io::next( DNA_N, &read_data_storage1[ m_set ], m_read_data_stream1, m_batch_size );
-            const int ret2 = io::next( DNA_N, &read_data_storage2[ m_set ], m_read_data_stream2, m_batch_size );
+            const int ret1 = io::next( DNA_N, read_data1, m_read_data_stream1, m_batch_size );
+            const int ret2 = io::next( DNA_N, read_data2, m_read_data_stream2, m_batch_size );
 
             timer.stop();
 
             if (ret1 && ret2)
             {
-                m_stats.read_io.add( read_data_storage1[ m_set ].size(), timer.seconds() );
-
-                // mark the set as done
-                read_data1[ m_set ] = &read_data_storage1[ m_set ];
-                read_data2[ m_set ] = &read_data_storage2[ m_set ];
-
-                // make sure the other threads see the writes
-                host_release_fence();
+                ScopedLock lock( &m_ready_pool_lock );
+                m_ready_pool1.push( read_data1 );
+                m_ready_pool2.push( read_data2 );
             }
             else
             {
-                // mark this as an invalid entry
-                read_data1[ m_set ] = (io::SequenceDataHost*)INVALID;
-                read_data2[ m_set ] = (io::SequenceDataHost*)INVALID;
-
-                // make sure the other threads see the writes
-                host_release_fence();
+                ScopedLock lock( &m_ready_pool_lock );
+                m_ready_pool1.push( NULL );
+                m_ready_pool2.push( NULL );
+                // stop the thread
                 break;
             }
 
             // switch to the next set
-            m_set = (m_set + 1) % BUFFERS;
+            ++m_set;
         }
     }
     catch (nvbio::bad_alloc e)
@@ -220,6 +281,39 @@ void InputThreadPaired::run()
         log_error(stderr, "caught an unknown exception!\n");
         exit(1);
     }
+}
+
+// get a batch
+//
+std::pair<io::SequenceDataHost*,io::SequenceDataHost*> InputThreadPaired::next()
+{
+    // loop until the ready pool gets filled
+    while (1)
+    {
+        ScopedLock lock( &m_ready_pool_lock );
+
+        if (m_ready_pool1.empty() == false &&
+            m_ready_pool2.empty() == false)
+        {
+            // pop from the ready pool
+            std::pair<io::SequenceDataHost*,io::SequenceDataHost*> read_data;
+            read_data.first  = m_ready_pool1.top(); m_ready_pool1.pop();
+            read_data.second = m_ready_pool2.top(); m_ready_pool2.pop();
+            return read_data;
+        }
+
+        yield();
+    }
+}
+
+// release a batch
+//
+void InputThreadPaired::release(std::pair<io::SequenceDataHost*,io::SequenceDataHost*> read_data)
+{
+    // push back to the free pool
+    ScopedLock lock( &m_free_pool_lock );
+    m_free_pool1.push( read_data.first );
+    m_free_pool2.push( read_data.second );
 }
 
 } // namespace cuda

@@ -33,6 +33,7 @@
 #include <nvbio/basic/threads.h>
 #include <nvbio/basic/timer.h>
 #include <nvbio/io/sequence/sequence.h>
+#include <stack>
 
 namespace nvbio {
 namespace bowtie2 {
@@ -47,24 +48,34 @@ namespace cuda {
 struct InputThread : public Thread<InputThread>
 {
     static const uint32 BUFFERS = 4;
-    static const uint32 INVALID = 1u;
 
     InputThread(io::SequenceDataStream* read_data_stream, Stats& _stats, const uint32 batch_size) :
         m_read_data_stream( read_data_stream ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0)
-    {
-        for (uint32 i = 0; i < BUFFERS; ++i)
-            read_data[i] = NULL;
-    }
+    {}
 
     void run();
 
-    io::SequenceDataStream* m_read_data_stream;
-    Stats&              m_stats;
-    uint32              m_batch_size;
-    volatile uint32     m_set;
+    // get a batch
+    //
+    io::SequenceDataHost* next();
 
-    io::SequenceDataHost           read_data_storage[BUFFERS];
-    io::SequenceDataHost* volatile read_data[BUFFERS];
+    // release a batch
+    //
+    void release(io::SequenceDataHost* read_data);
+
+private:
+    io::SequenceDataStream* m_read_data_stream;
+    Stats&                  m_stats;
+    uint32                  m_batch_size;
+    uint32                  m_set;
+
+    io::SequenceDataHost                 m_read_data_storage[BUFFERS];
+
+    Mutex                                m_free_pool_lock;
+    std::stack<io::SequenceDataHost*>    m_free_pool;
+
+    Mutex                                m_ready_pool_lock;
+    std::stack<io::SequenceDataHost*>    m_ready_pool;
 };
 
 //
@@ -76,28 +87,38 @@ struct InputThread : public Thread<InputThread>
 struct InputThreadPaired : public Thread<InputThreadPaired>
 {
     static const uint32 BUFFERS = 4;
-    static const uint32 INVALID = 1u;
 
     InputThreadPaired(io::SequenceDataStream* read_data_stream1, io::SequenceDataStream* read_data_stream2, Stats& _stats, const uint32 batch_size) :
         m_read_data_stream1( read_data_stream1 ), m_read_data_stream2( read_data_stream2 ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0)
-    {
-        for (uint32 i = 0; i < BUFFERS; ++i)
-            read_data1[i] = read_data2[i] = NULL;
-    }
+    {}
 
     void run();
 
+    // get a batch
+    //
+    std::pair<io::SequenceDataHost*,io::SequenceDataHost*> next();
+
+    // release a batch
+    //
+    void release(std::pair<io::SequenceDataHost*,io::SequenceDataHost*> read_data);
+
+private:
     io::SequenceDataStream* m_read_data_stream1;
     io::SequenceDataStream* m_read_data_stream2;
     Stats&                  m_stats;
     uint32                  m_batch_size;
-    volatile uint32         m_set;
+    uint32                  m_set;
 
-    io::SequenceDataHost read_data_storage1[BUFFERS];
-    io::SequenceDataHost read_data_storage2[BUFFERS];
+    io::SequenceDataHost    m_read_data_storage1[BUFFERS];
+    io::SequenceDataHost    m_read_data_storage2[BUFFERS];
 
-    io::SequenceDataHost* volatile read_data1[BUFFERS];
-    io::SequenceDataHost* volatile read_data2[BUFFERS];
+    Mutex                                m_free_pool_lock;
+    std::stack<io::SequenceDataHost*>    m_free_pool1;
+    std::stack<io::SequenceDataHost*>    m_free_pool2;
+
+    Mutex                                m_ready_pool_lock;
+    std::stack<io::SequenceDataHost*>    m_ready_pool1;
+    std::stack<io::SequenceDataHost*>    m_ready_pool2;
 };
 
 } // namespace cuda

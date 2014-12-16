@@ -446,8 +446,7 @@ int driver(
     InputThread input_thread( &read_data_stream, stats, BATCH_SIZE );
     input_thread.create();
 
-    uint32 input_set  = 0;
-    uint32 n_reads    = 0;
+    uint32 n_reads = 0;
 
     io::SequenceDataHost   local_read_data_host;
     io::HostOutputBatchSE  local_output_batch_host;
@@ -458,17 +457,12 @@ int driver(
         Timer polling_timer;
         polling_timer.start();
 
-        // poll until the current input set is loaded...
-        while (input_thread.read_data[ input_set ] == NULL) { yield(); }
-
-        // make sure the other writes are seen
-        host_acquire_fence();
+        io::SequenceDataHost* read_data_host = input_thread.next();
 
         polling_timer.stop();
         polling_time += polling_timer.seconds();
 
-        io::SequenceDataHost* read_data_host = input_thread.read_data[ input_set ];
-        if (read_data_host == (io::SequenceDataHost*)InputThread::INVALID)
+        if (read_data_host == NULL)
         {
             log_verbose(stderr, "end of input reached\n");
             break;
@@ -486,13 +480,7 @@ int driver(
         local_read_data_host = *read_data_host;
 
         // mark this set as ready to be reused
-        input_thread.read_data[ input_set ] = NULL;
-
-        // make sure the other threads see this change
-        host_release_fence();
-
-        // advance input set pointer
-        input_set = (input_set + 1) % InputThread::BUFFERS;
+        input_thread.release( read_data_host );
 
         Timer timer;
         timer.start();
@@ -813,8 +801,7 @@ int driver(
     InputThreadPaired input_thread( &read_data_stream1, &read_data_stream2, stats, BATCH_SIZE );
     input_thread.create();
 
-    uint32 input_set  = 0;
-    uint32 n_reads    = 0;
+    uint32 n_reads = 0;
 
     io::SequenceDataHost    local_read_data_host1;
     io::SequenceDataHost    local_read_data_host2;
@@ -826,20 +813,15 @@ int driver(
         Timer polling_timer;
         polling_timer.start();
 
-        // poll until the current input set is loaded...
-        while (input_thread.read_data1[ input_set ] == NULL ||
-               input_thread.read_data2[ input_set ] == NULL) { yield(); }
-
-        // make sure the other writes are seen
-        host_acquire_fence();
+        std::pair<io::SequenceDataHost*,io::SequenceDataHost*> read_data_host_pair = input_thread.next();
 
         polling_timer.stop();
         polling_time += polling_timer.seconds();
 
-        io::SequenceDataHost* read_data_host1 = input_thread.read_data1[ input_set ];
-        io::SequenceDataHost* read_data_host2 = input_thread.read_data2[ input_set ];
-        if (read_data_host1 == (io::SequenceDataHost*)InputThread::INVALID ||
-            read_data_host2 == (io::SequenceDataHost*)InputThread::INVALID)
+        io::SequenceDataHost* read_data_host1 = read_data_host_pair.first;
+        io::SequenceDataHost* read_data_host2 = read_data_host_pair.second;
+        if (read_data_host1 == NULL ||
+            read_data_host2 == NULL)
         {
             log_verbose(stderr, "end of input reached\n");
             break;
@@ -859,14 +841,7 @@ int driver(
         local_read_data_host2 = *read_data_host2;
 
         // mark this set as ready to be reused
-        input_thread.read_data1[ input_set ] = NULL;
-        input_thread.read_data2[ input_set ] = NULL;
-
-        // make sure the other threads see this change
-        host_release_fence();
-
-        // advance input set pointer
-        input_set = (input_set + 1) % InputThread::BUFFERS;
+        input_thread.release( read_data_host_pair );
 
         Timer timer;
         timer.start();

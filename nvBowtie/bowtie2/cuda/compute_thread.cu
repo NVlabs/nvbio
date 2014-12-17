@@ -197,12 +197,14 @@ void ComputeThreadSE::run()
     io::HostOutputBatchSE  local_output_batch_host;
 
     // loop through the batches of reads
-    for (uint32 read_begin = 0; true; read_begin += BATCH_SIZE)
+    while (1)
     {
+        uint32 read_begin;
+
         Timer polling_timer;
         polling_timer.start();
 
-        io::SequenceDataHost* read_data_host = input_thread->next();
+        io::SequenceDataHost* read_data_host = input_thread->next( &read_begin );
 
         polling_timer.stop();
         polling_time += polling_timer.seconds();
@@ -473,12 +475,14 @@ void ComputeThreadPE::run()
     io::HostOutputBatchPE   local_output_batch_host;
 
     // loop through the batches of reads
-    for (uint32 read_begin = 0; true; read_begin += BATCH_SIZE)
+    while (1)
     {
+        uint32 read_begin;
+
         Timer polling_timer;
         polling_timer.start();
 
-        std::pair<io::SequenceDataHost*,io::SequenceDataHost*> read_data_host_pair = input_thread->next();
+        std::pair<io::SequenceDataHost*,io::SequenceDataHost*> read_data_host_pair = input_thread->next( &read_begin );
 
         polling_timer.stop();
         polling_time += polling_timer.seconds();

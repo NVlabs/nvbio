@@ -83,6 +83,9 @@ void InputThreadSE::run()
             {
                 ScopedLock lock( &m_ready_pool_lock );
                 m_ready_pool.push_front( read_data );
+                m_ready_poolN.push_front( m_reads );
+
+                m_reads += read_data->size();
 
                 m_stats.read_io.add( read_data->size(), timer.seconds() );
             }
@@ -90,6 +93,7 @@ void InputThreadSE::run()
             {
                 ScopedLock lock( &m_ready_pool_lock );
                 m_ready_pool.push_front( NULL );
+                m_ready_poolN.push_front( m_reads );
                 m_done = true;
                 // stop the thread
                 break;
@@ -144,7 +148,7 @@ void InputThreadSE::run()
 
 // get a batch
 //
-io::SequenceDataHost* InputThreadSE::next()
+io::SequenceDataHost* InputThreadSE::next(uint32* offset)
 {
     // loop until the ready pool gets filled
     while (1)
@@ -152,13 +156,18 @@ io::SequenceDataHost* InputThreadSE::next()
         ScopedLock lock( &m_ready_pool_lock );
 
         if (m_done)
+        {
+            if (offset) *offset = m_reads;
             return NULL;
+        }
 
         if (m_ready_pool.empty() == false)
         {
             // pop from the ready pool
             io::SequenceDataHost* read_data = m_ready_pool.back();
             m_ready_pool.pop_back();
+            if (offset) *offset = m_ready_poolN.back();
+                                  m_ready_poolN.pop_back();
             return read_data;
         }
 
@@ -226,6 +235,9 @@ void InputThreadPE::run()
                 ScopedLock lock( &m_ready_pool_lock );
                 m_ready_pool1.push_front( read_data1 );
                 m_ready_pool2.push_front( read_data2 );
+                m_ready_poolN.push_front( m_reads );
+
+                m_reads += read_data1->size();
 
                 m_stats.read_io.add( read_data1->size(), timer.seconds() );
             }
@@ -234,6 +246,7 @@ void InputThreadPE::run()
                 ScopedLock lock( &m_ready_pool_lock );
                 m_ready_pool1.push_front( NULL );
                 m_ready_pool2.push_front( NULL );
+                m_ready_poolN.push_front( m_reads );
                 m_done = true;
                 // stop the thread
                 break;
@@ -288,7 +301,7 @@ void InputThreadPE::run()
 
 // get a batch
 //
-std::pair<io::SequenceDataHost*,io::SequenceDataHost*> InputThreadPE::next()
+std::pair<io::SequenceDataHost*,io::SequenceDataHost*> InputThreadPE::next(uint32* offset)
 {
     // loop until the ready pool gets filled
     while (1)
@@ -296,7 +309,10 @@ std::pair<io::SequenceDataHost*,io::SequenceDataHost*> InputThreadPE::next()
         ScopedLock lock( &m_ready_pool_lock );
 
         if (m_done)
+        {
+            if (offset) *offset = m_reads;
             return std::pair<io::SequenceDataHost*,io::SequenceDataHost*>( NULL, NULL );
+        }
 
         if (m_ready_pool1.empty() == false &&
             m_ready_pool2.empty() == false)
@@ -305,6 +321,8 @@ std::pair<io::SequenceDataHost*,io::SequenceDataHost*> InputThreadPE::next()
             std::pair<io::SequenceDataHost*,io::SequenceDataHost*> read_data;
             read_data.first  = m_ready_pool1.back(); m_ready_pool1.pop_back();
             read_data.second = m_ready_pool2.back(); m_ready_pool2.pop_back();
+            if (offset) *offset = m_ready_poolN.back();
+                                  m_ready_poolN.pop_back();
             return read_data;
         }
 

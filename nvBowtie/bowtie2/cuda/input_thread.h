@@ -50,14 +50,14 @@ struct InputThreadSE : public Thread<InputThreadSE>
     static const uint32 BUFFERS = 4;
 
     InputThreadSE(io::SequenceDataStream* read_data_stream, Stats& _stats, const uint32 batch_size) :
-        m_read_data_stream( read_data_stream ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0), m_done(false)
+        m_read_data_stream( read_data_stream ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0), m_reads(0), m_done(false)
     {}
 
     void run();
 
     // get a batch
     //
-    io::SequenceDataHost* next();
+    io::SequenceDataHost* next(uint32* offset = NULL);
 
     // release a batch
     //
@@ -72,6 +72,7 @@ private:
     Stats&                  m_stats;
     uint32                  m_batch_size;
     uint32                  m_set;
+    uint32                  m_reads;
 
     io::SequenceDataHost                 m_read_data_storage[BUFFERS];
 
@@ -80,6 +81,7 @@ private:
 
     Mutex                                m_ready_pool_lock;
     std::deque<io::SequenceDataHost*>    m_ready_pool;
+    std::deque<uint32>                   m_ready_poolN;
 
     volatile bool m_done;
 };
@@ -95,14 +97,14 @@ struct InputThreadPE : public Thread<InputThreadPE>
     static const uint32 BUFFERS = 4;
 
     InputThreadPE(io::SequenceDataStream* read_data_stream1, io::SequenceDataStream* read_data_stream2, Stats& _stats, const uint32 batch_size) :
-        m_read_data_stream1( read_data_stream1 ), m_read_data_stream2( read_data_stream2 ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0), m_done(false)
+        m_read_data_stream1( read_data_stream1 ), m_read_data_stream2( read_data_stream2 ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0), m_reads(0), m_done(false)
     {}
 
     void run();
 
     // get a batch
     //
-    std::pair<io::SequenceDataHost*,io::SequenceDataHost*> next();
+    std::pair<io::SequenceDataHost*,io::SequenceDataHost*> next(uint32* offset = NULL);
 
     // release a batch
     //
@@ -118,6 +120,7 @@ private:
     Stats&                  m_stats;
     uint32                  m_batch_size;
     uint32                  m_set;
+    uint32                  m_reads;
 
     io::SequenceDataHost    m_read_data_storage1[BUFFERS];
     io::SequenceDataHost    m_read_data_storage2[BUFFERS];
@@ -129,6 +132,7 @@ private:
     Mutex                                m_ready_pool_lock;
     std::deque<io::SequenceDataHost*>    m_ready_pool1;
     std::deque<io::SequenceDataHost*>    m_ready_pool2;
+    std::deque<uint32>                   m_ready_poolN;
 
     volatile bool m_done;
 };

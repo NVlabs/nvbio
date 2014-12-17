@@ -58,10 +58,8 @@ struct AlignmentStats
             mapq_bins[c] = 0;
 
         for(uint32 c = 0; c < 64; c++)
-        {
             for(uint32 d = 0; d < 64; d++)
                 mapped_ed_correlation[c][d] = 0;
-        }
     }
 
     // mapping quality stats
@@ -83,6 +81,29 @@ struct AlignmentStats
 
     // edit distance correlation (xxxnsubtil: what exactly does this measure?)
     uint32  mapped_ed_correlation[64][64];
+
+    // merge stats
+    void merge(const AlignmentStats& stats)
+    {
+        n_mapped    += stats.n_mapped;
+        n_ambiguous += stats.n_unambiguous;
+        n_unique    += stats.n_unique;
+        n_multiple  += stats.n_multiple;
+
+        for (uint32 i = 0; i < mapped_ed_histogram.size(); ++i)
+        {
+            mapped_ed_histogram[i]     += mapped_ed_histogram[i];
+            mapped_ed_histogram_fwd[i] += mapped_ed_histogram_fwd[i];
+            mapped_ed_histogram_rev[i] += mapped_ed_histogram_rev[i];
+        }
+
+        for(uint32 c = 0; c < 64; c++)
+            mapq_bins[c] += stats.mapq_bins[c];
+
+        for(uint32 c = 0; c < 64; c++)
+            for(uint32 d = 0; d < 64; d++)
+                mapped_ed_correlation[c][d] += stats.mapped_ed_correlation[c][d];
+    }
 };
 
 //
@@ -91,7 +112,7 @@ struct AlignmentStats
 struct Stats
 {
     // constructor
-    Stats(const Params& params_);
+    Stats(const Params _params = Params());
 
     // timing stats
     float       global_time;
@@ -116,22 +137,9 @@ struct Stats
     AlignmentStats  mate2;
 
     // mapping stats
-    uint32              n_reads;
-    uint32              n_mapped;
-    uint32              n_unique;
-    uint32              n_multiple;
-    uint32              n_ambiguous;
-    uint32              n_nonambiguous;
-    std::vector<uint32> mapped;
-    std::vector<uint32> f_mapped;
-    std::vector<uint32> r_mapped;
-    uint32              mapped2[64][64];
-
-    // mapping quality stats
-    uint64 mapq_bins[64];
+    uint32 n_reads;
 
     // extensive (seeding) stats
-    volatile bool stats_ready;
     uint64 hits_total;
     uint64 hits_ranges;
     uint32 hits_max;
@@ -155,7 +163,7 @@ struct Stats
         const uint8                 mapq);
 };
 
-void generate_report(Stats& stats, const char* report);
+void generate_report(Stats& stats, AlignmentStats& aln_stats, const char* report);
 
 } // namespace cuda
 } // namespace bowtie2

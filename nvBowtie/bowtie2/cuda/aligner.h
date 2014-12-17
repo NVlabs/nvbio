@@ -33,7 +33,6 @@
 #include <nvBowtie/bowtie2/cuda/seed_hit.h>
 #include <nvBowtie/bowtie2/cuda/seed_hit_deque_array.h>
 #include <nvBowtie/bowtie2/cuda/scoring_queues.h>
-#include <nvBowtie/bowtie2/cuda/bowtie2_cuda_driver.h>
 #include <nvBowtie/bowtie2/cuda/params.h>
 #include <nvBowtie/bowtie2/cuda/stats.h>
 #include <nvBowtie/bowtie2/cuda/mapping.h>
@@ -95,6 +94,7 @@ struct Aligner
     typedef genome_access_type::sequence_stream_type                                                                         genome_iterator;
 
 
+    uint32                              ID;
     uint32                              BATCH_SIZE;
 
     thrust::device_vector<uint8>        dp_buffer_dvec;
@@ -174,7 +174,9 @@ struct Aligner
         return band_len;
     }
 
-    bool init(const uint32 BATCH_SIZE, const Params& params, const EndType type);
+    Aligner() : output_file(NULL) {}
+
+    bool init(const uint32 id, const uint32 batch_size, const Params& params, const EndType type);
 
     void keep_stats(const uint32 count, Stats& stats);
 

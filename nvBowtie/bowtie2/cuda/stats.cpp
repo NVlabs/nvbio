@@ -43,18 +43,9 @@ namespace cuda {
 
 void generate_kernel_table(const char* report, const KernelStats& stats);
 
-Stats::Stats(const Params& params_) :
+Stats::Stats(const Params _params) :
     n_reads(0),
-    n_mapped(0),
-    n_unique(0),
-    n_multiple(0),
-    n_ambiguous(0),
-    n_nonambiguous(0),
-    mapped( 4096, 0 ),
-    f_mapped( 4096, 0 ),
-    r_mapped( 4096, 0 ),
-    stats_ready( false ),
-    params( params_ )
+    params( _params )
 {
     global_time = 0.0f;
 
@@ -68,13 +59,6 @@ Stats::Stats(const Params& params_) :
 
     for (uint32 i = 0; i < 28; ++i)
         hits_bins[i] = hits_top_bins[i] = 0;
-
-    for (uint32 i = 0; i < 64; ++i)
-        mapq_bins[i] = 0;
-
-    for (uint32 i = 0; i < 64; ++i)
-        for (uint32 j = 0; j < 64; ++j)
-            mapped2[i][j] = 0;
 
     map.name                = "map";                map.units                   = "reads";
     select.name             = "select";             select.units                = "seeds";
@@ -300,7 +284,7 @@ void stats_string(char* buffer, const uint32 px, const char* units, const float 
 
 } // anonymous namespace
 
-void generate_report(Stats& stats, const char* report)
+void generate_report(Stats& stats, AlignmentStats& aln_stats, const char* report)
 {
     if (report == NULL)
         return;
@@ -333,8 +317,8 @@ void generate_report(Stats& stats, const char* report)
     }
 
     {
-        const uint32 n_mapped = stats.n_mapped;
         const uint32 n_reads  = stats.n_reads;
+        const uint32 n_mapped = aln_stats.n_mapped;
 
         html::html_object html( html_output );
         {
@@ -447,8 +431,8 @@ void generate_report(Stats& stats, const char* report)
                         html::tr_object tr( html_output, "class", "alt", NULL );
                         html::th_object( html_output, html::FORMATTED, NULL, "reads" );
                         html::td_object( html_output, html::FORMATTED, NULL, "%.1f %%", 100.0f * float(n_mapped)/float(n_reads) );
-                        html::td_object( html_output, html::FORMATTED, NULL, "%.1f %%", 100.0f * float(stats.n_ambiguous)/float(n_reads) );
-                        html::td_object( html_output, html::FORMATTED, NULL, "%.1f %%", 100.0f * float(stats.n_multiple)/float(n_reads) );
+                        html::td_object( html_output, html::FORMATTED, NULL, "%.1f %%", 100.0f * float(aln_stats.n_ambiguous)/float(n_reads) );
+                        html::td_object( html_output, html::FORMATTED, NULL, "%.1f %%", 100.0f * float(aln_stats.n_multiple)/float(n_reads) );
                     }
                     {
                         html::tr_object tr( html_output, NULL );
@@ -459,32 +443,38 @@ void generate_report(Stats& stats, const char* report)
                     }
                     uint32 best_bin[2]     = {0};
                     uint32 best_bin_val[2] = {0};
-                    for (uint32 i = 0; i < stats.mapped.size(); ++i)
+                    for (uint32 i = 0; i < aln_stats.mapped_ed_histogram.size(); ++i)
                     {
-                        if (best_bin_val[0] < stats.mapped[i])
+                        const uint32 v = aln_stats.mapped_ed_histogram[i];
+
+                        if (best_bin_val[0] < v)
                         {
                             best_bin_val[1] = best_bin_val[0];
                             best_bin[1]     = best_bin[0];
-                            best_bin_val[0] = stats.mapped[i];
+                            best_bin_val[0] = v;
                             best_bin[0]     = i;
                         }
-                        else if (best_bin_val[1] < stats.mapped[i])
+                        else if (best_bin_val[1] < v)
                         {
-                            best_bin_val[1] = stats.mapped[i];
+                            best_bin_val[1] = v;
                             best_bin[1]     = i;
                         }
                     }
-                    for (uint32 i = 0; i < stats.mapped.size(); ++i)
+                    for (uint32 i = 0; i < aln_stats.mapped_ed_histogram.size(); ++i)
                     {
-                        if (float(stats.mapped[i])/float(n_reads) < 1.0e-3f)
+                        const uint32 v = aln_stats.mapped_ed_histogram[i];
+                        const uint32 vf = aln_stats.mapped_ed_histogram_fwd[i];
+                        const uint32 vr = aln_stats.mapped_ed_histogram_rev[i];
+
+                        if (float(v)/float(n_reads) < 1.0e-3f)
                             continue;
 
                         html::tr_object tr( html_output, "class", i % 2 ? "none" : "alt", NULL );
                         html::th_object( html_output, html::FORMATTED, NULL, "%u", i );
                         const char* cls = i == best_bin[0] ? "yellow" : i == best_bin[1] ? "orange" : "none";
-                        html::td_object( html_output, html::FORMATTED, "class", cls, NULL, "%.1f %%", 100.0f * float(stats.mapped[i])/float(n_reads) );
-                        html::td_object( html_output, html::FORMATTED, NULL, "%.1f %%", 100.0f * float(stats.f_mapped[i])/float(n_reads) );
-                        html::td_object( html_output, html::FORMATTED, NULL, "%.1f %%", 100.0f * float(stats.r_mapped[i])/float(n_reads) );
+                        html::td_object( html_output, html::FORMATTED, "class", cls, NULL, "%.1f %%", 100.0f * float(v)/float(n_reads) );
+                        html::td_object( html_output, html::FORMATTED, NULL, "%.1f %%", 100.0f * float(vf)/float(n_reads) );
+                        html::td_object( html_output, html::FORMATTED, NULL, "%.1f %%", 100.0f * float(vr)/float(n_reads) );
                     }
                 }
                 //
@@ -503,7 +493,7 @@ void generate_report(Stats& stats, const char* report)
                     for (uint32 i = 0; i < 64; ++i)
                     {
                         const uint32 log_mapq = i ? nvbio::log2(i) + 1 : 0;
-                        bins[log_mapq] += stats.mapq_bins[i];
+                        bins[log_mapq] += aln_stats.mapq_bins[i];
                     }
 
                     // compute best bins
@@ -554,16 +544,16 @@ void generate_report(Stats& stats, const char* report)
                     {
                         for (uint32 j = 1; j <= 16; ++j)
                         {
-                            if (best_bin2_val[0] < stats.mapped2[i][j])
+                            if (best_bin2_val[0] < aln_stats.mapped_ed_correlation[i][j])
                             {
                                 best_bin2_val[1] = best_bin2_val[0];
                                 best_bin2[1]     = best_bin2[0];
-                                best_bin2_val[0] = stats.mapped2[i][j];
+                                best_bin2_val[0] = aln_stats.mapped_ed_correlation[i][j];
                                 best_bin2[0]     = make_uint2(i,j);
                             }
-                            else if (best_bin2_val[1] < stats.mapped2[i][j])
+                            else if (best_bin2_val[1] < aln_stats.mapped_ed_correlation[i][j])
                             {
-                                best_bin2_val[1] = stats.mapped2[i][j];
+                                best_bin2_val[1] = aln_stats.mapped_ed_correlation[i][j];
                                 best_bin2[1]     = make_uint2(i,j);
                             }
                         }
@@ -575,16 +565,16 @@ void generate_report(Stats& stats, const char* report)
 
                     for (uint32 i = 0; i <= 16; ++i)
                     {
-                        if (best_bin1_val[0] < stats.mapped2[i][0])
+                        if (best_bin1_val[0] < aln_stats.mapped_ed_correlation[i][0])
                         {
                             best_bin1_val[1] = best_bin1_val[0];
                             best_bin1[1]     = best_bin1[0];
-                            best_bin1_val[0] = stats.mapped2[i][0];
+                            best_bin1_val[0] = aln_stats.mapped_ed_correlation[i][0];
                             best_bin1[0]     = make_uint2(i,0);
                         }
-                        else if (best_bin1_val[1] < stats.mapped2[i][0])
+                        else if (best_bin1_val[1] < aln_stats.mapped_ed_correlation[i][0])
                         {
-                            best_bin1_val[1] = stats.mapped2[i][0];
+                            best_bin1_val[1] = aln_stats.mapped_ed_correlation[i][0];
                             best_bin1[1]     = make_uint2(i,0);
                         }
                     }
@@ -603,7 +593,9 @@ void generate_report(Stats& stats, const char* report)
 
                         for (uint32 j = 0; j <= 16; ++j)
                         {
-                            if (100.0f * float(stats.mapped2[i][j])/float(n_reads) >= 0.1f)
+                            const uint32 v = aln_stats.mapped_ed_correlation[i][j];
+
+                            if (100.0f * float(v)/float(n_reads) >= 0.1f)
                             {
                                 const char* cls = ((i == best_bin1[0].x && j == best_bin1[0].y) ||
                                                    (i == best_bin2[0].x && j == best_bin2[0].y)) ? "yellow" :
@@ -611,10 +603,10 @@ void generate_report(Stats& stats, const char* report)
                                                    (i == best_bin2[1].x && j == best_bin2[1].y)) ? "orange" :
                                                   (i   == j) ? "pink" :
                                                   (i+1 == j) ? "azure" : "none";
-                                html::td_object( html_output, html::FORMATTED, "class", cls, NULL, "%.1f %%", 100.0f * float(stats.mapped2[i][j])/float(n_reads) );
+                                html::td_object( html_output, html::FORMATTED, "class", cls, NULL, "%.1f %%", 100.0f * float(v)/float(n_reads) );
                             }
-                            else if (100.0f * float(stats.mapped2[i][j])/float(n_reads) >= 0.01f)
-                                html::td_object( html_output, html::FORMATTED, "class", "small", NULL, "%.2f %%", 100.0f * float(stats.mapped2[i][j])/float(n_reads) );
+                            else if (100.0f * float(v)/float(n_reads) >= 0.01f)
+                                html::td_object( html_output, html::FORMATTED, "class", "small", NULL, "%.2f %%", 100.0f * float(v)/float(n_reads) );
                             else
                             {
                                 const char* cls = (i > stats.params.max_dist+1 || j > stats.params.max_dist+1) ? "gray" : "none";
@@ -628,9 +620,6 @@ void generate_report(Stats& stats, const char* report)
                 //
                 if (stats.params.keep_stats)
                 {
-                    // poll until stats are being updated
-                    //while (stats.stats_ready == false) {}
-
                     // copy stats locally
                     uint64 hits_total     = stats.hits_total;
                     uint64 hits_ranges    = stats.hits_ranges;
@@ -647,9 +636,6 @@ void generate_report(Stats& stats, const char* report)
                          hits_bins_sum     += hits_bins[i]     = stats.hits_bins[i];
                          hits_top_bins_sum += hits_top_bins[i] = stats.hits_top_bins[i];
                     }
-
-                    // mark stats as consumed
-                    stats.stats_ready = false;
 
                     html::table_object table( html_output, "seeding-stats", "stats", "seeding stats" );
                     char buffer[1024];

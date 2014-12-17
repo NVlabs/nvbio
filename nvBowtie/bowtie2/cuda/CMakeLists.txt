@@ -13,8 +13,8 @@ aligner.h
 aligner_init.cu
 aligner_inst.h
 aligner_sort.cu
-bowtie2_cuda_driver.cu
-bowtie2_cuda_driver.h
+compute_thread.cu
+compute_thread.h
 checksums.cu
 checksums.h
 defs.h
@@ -30,6 +30,7 @@ mapping_inl.h
 mapq.cpp
 mapq.h
 params.h
+params.cpp
 persist.cu
 persist.h
 pipeline_states.h

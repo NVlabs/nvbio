@@ -163,7 +163,7 @@ uint32 randomized_select(ProbTree& prob_tree, SeedHit* hits_data, uint32* rseeds
 
         // select the next hit
         const uint32 hit_id = sample( prob_tree, rf );
-        NVBIO_CUDA_ASSERT( hit_id < hits.get_size( read_id ) );
+        //NVBIO_CUDA_ASSERT( hit_id < hits.get_size( read_id ) );
 
         SeedHit* hit = &hits_data[ hit_id ];
 
@@ -216,7 +216,7 @@ void rand_select_kernel(
     ProbTree prob_tree( hit_deque.size(), hit_deque.get_probs() );
     SeedHit* hits_data( hit_deque.get_data() );
 
-    // check that the tree still contains some unexplored entries
+    // check if the tree still contains some unexplored entries
     if (prob_tree.sum() <= 0.0f)
     {
         // stop traversal
@@ -534,7 +534,7 @@ void rand_select_multi_kernel(
 
     for (uint32 i = 0; i < n_multi; ++i)
     {
-        // check that the tree still contains some unexplored entries
+        // check if the tree still contains some unexplored entries
         if (prob_tree.sum() <= 0.0f)
         {
             // stop traversal
@@ -572,7 +572,7 @@ void rand_select_multi_kernel(
         {
             // grab a slot in the output read queue - we'll call this the 'output_lane'
             output_lane = atomicAdd( scoring_queues.active_reads.out_size, 1u );
-            NVBIO_CUDA_ASSERT( output_lane <  scoring_queues.active_reads.in_size );
+            NVBIO_CUDA_ASSERT( output_lane < scoring_queues.active_reads.in_size );
 
             // bind the read to its new location in the output queue
             dst_read_hits.bind( output_lane );
@@ -580,6 +580,7 @@ void rand_select_multi_kernel(
 
         // grab an output slot for writing our hit
         const uint32 slot = atomicAdd( scoring_queues.hits_pool, 1u );
+        NVBIO_CUDA_ASSERT( slot < scoring_queues.hits.read_id.size() );
 
         // bind the hit
         dst_read_hits.bind_hit( n_selected_hits, slot );

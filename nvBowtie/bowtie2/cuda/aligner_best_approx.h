@@ -158,7 +158,7 @@ void Aligner::best_approx(
 
             SeedHitDequeArrayDeviceView hits = hit_deques.device_view();
 
-            log_debug(stderr, "    map\n");
+            log_debug(stderr, "[%u]     map\n", ID);
             map_whole_read(
                 reads, fmi, rfmi,
                 seed_queues.device_view(),
@@ -187,7 +187,7 @@ void Aligner::best_approx(
             seed_queues.raw_input_queue(),
             stats );
 
-        log_verbose( stderr, "    %.1f %% reads map exactly\n", 100.0f * float(count - seed_queues.output_size())/float(count) );
+        log_verbose( stderr, "[%u]     %.1f %% reads map exactly\n", ID, 100.0f * float(count - seed_queues.output_size())/float(count) );
 
         // copy the reads that need reseeding
         seed_queues.out_size[0] = nvbio::copy_flagged(
@@ -221,7 +221,7 @@ void Aligner::best_approx(
 
             SeedHitDequeArrayDeviceView hits = hit_deques.device_view();
 
-            log_debug(stderr, "    map\n");
+            log_debug(stderr, "[%u]     map\n", ID);
             map(
                 reads, fmi, rfmi,
                 seeding_pass, seed_queues.device_view(),
@@ -286,7 +286,7 @@ void Aligner::best_approx(
 
     // compute mapq
     {
-        log_debug(stderr, "    compute mapq\n");
+        log_debug(stderr, "[%u]     compute mapq\n", ID);
         typedef BowtieMapq2< SmithWatermanScoringScheme<> > mapq_evaluator_type;
 
         mapq_evaluator_type mapq_eval( input_scoring_scheme.sw );
@@ -319,7 +319,7 @@ void Aligner::best_approx(
         timer.start();
         device_timer.start();
 
-        log_debug(stderr, "    backtrack\n");
+        log_debug(stderr, "[%u]     backtrack\n", ID);
         banded_traceback_best(
             0u,
             count,
@@ -342,7 +342,7 @@ void Aligner::best_approx(
         timer.start();
         device_timer.start();
 
-        log_debug(stderr, "    alignment\n");
+        log_debug(stderr, "[%u]     alignment\n", ID);
         finish_alignment_best(
             0u,
             count,
@@ -365,6 +365,7 @@ void Aligner::best_approx(
     }
 
     // wrap the results in a DeviceOutputBatchSE and process
+    if (output_file)
     {
         io::DeviceOutputBatchSE gpu_batch(
             count,
@@ -375,6 +376,7 @@ void Aligner::best_approx(
 
         cpu_batch.readback( gpu_batch );
 
+        log_debug(stderr, "[%u]     output\n", ID);
         output_file->process( cpu_batch );
     }
 
@@ -411,7 +413,7 @@ void Aligner::best_approx(
 
             uint32* second_idx = thrust::raw_pointer_cast( &second_idx_dvec[0] );
 
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best backtrack (%u)\n", n_second) );
+            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "[%u]     second-best backtrack (%u)\n", ID, n_second) );
             banded_traceback_best(
                 1u,
                 n_second,
@@ -434,7 +436,7 @@ void Aligner::best_approx(
             timer.start();
             device_timer.start();
 
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best alignment (%u)\n", n_second) );
+            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "[%u]     second-best alignment (%u)\n", ID, n_second) );
             finish_alignment_best(
                 1u,
                 n_second,
@@ -457,6 +459,7 @@ void Aligner::best_approx(
         }
 
         // wrap the results in a DeviceOutputBatchSE and process them
+        if (output_file)
         {
             io::DeviceOutputBatchSE gpu_batch(
                 count,
@@ -474,7 +477,7 @@ void Aligner::best_approx(
 
     // keep alignment stats
     {
-        log_debug(stderr, "    track stats\n");
+        log_debug(stderr, "[%u]    track stats\n", ID);
         thrust::host_vector<io::Alignment> h_best_data( BATCH_SIZE*2 );
         thrust::host_vector<uint8>         h_mapq( BATCH_SIZE );
 
@@ -587,7 +590,7 @@ void Aligner::best_approx_score(
 
     for (uint32 extension_pass = 0; active_read_queues.in_size && n_ext < params.max_ext; ++extension_pass)
     {
-        log_debug(stderr, "    pass:\n      batch:          %u\n      seeding pass:   %d\n      extension pass: %u\n", batch_number, seeding_pass, extension_pass);
+        log_debug(stderr, "[%u]     pass:\n[%u]       batch:          %u\n[%u]       seeding pass:   %d\n[%u]       extension pass: %u\n", ID, ID, batch_number, ID, seeding_pass, ID, extension_pass);
 
         // check if we need to persist this seeding pass
         if (params.persist_batch     == -1 || batch_number == (uint32) params.persist_batch &&
@@ -604,7 +607,7 @@ void Aligner::best_approx_score(
             timer.start();
             device_timer.start();
 
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    read sort\n") );
+            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "[%u]     read sort\n", ID) );
             sort_inplace( active_read_queues.in_size, active_read_queues.raw_input_queue() );
 
             device_timer.stop();
@@ -652,7 +655,7 @@ void Aligner::best_approx_score(
         // update pipeline
         pipeline.scoring_queues = scoring_queues.device_view();
 
-        log_debug(stderr, "    select (%u active reads)\n", active_read_queues.in_size);
+        log_debug(stderr, "[%u]     select (%u active reads)\n", ID, active_read_queues.in_size);
         select(
             select_context,
             pipeline,
@@ -698,15 +701,15 @@ void Aligner::best_approx_score(
                 scoring_queues.hits_index,
                 scoring_queues.hits );
 
-        log_debug(stderr, "    selected %u hits\n", pipeline.hits_queue_size);
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      crc: %llu\n", device_checksum( hit_read_id_iterator, hit_read_id_iterator + pipeline.hits_queue_size ) ) );
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      crc: %llu\n", device_checksum( loc_queue_iterator, loc_queue_iterator + pipeline.hits_queue_size ) ) );
+        log_debug(stderr, "[%u]     selected %u hits\n", ID, pipeline.hits_queue_size);
+        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "[%u]       crc: %llu\n", ID, device_checksum( hit_read_id_iterator, hit_read_id_iterator + pipeline.hits_queue_size ) ) );
+        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "[%u]       crc: %llu\n", ID, device_checksum( loc_queue_iterator, loc_queue_iterator + pipeline.hits_queue_size ) ) );
 
         timer.start();
         device_timer.start();
 
         // sort the selected hits by their SA coordinate
-        log_debug(stderr, "    locate sort\n");
+        log_debug(stderr, "[%u]     locate sort\n", ID);
         pipeline.idx_queue = sort_hi_bits( pipeline.hits_queue_size, pipeline.scoring_queues.hits.loc );
 
         device_timer.stop();
@@ -720,12 +723,12 @@ void Aligner::best_approx_score(
         // It might pay off to do a compaction beforehand.
 
         // and locate their position in linear coordinates
-        log_debug(stderr, "    locate init\n");
+        log_debug(stderr, "[%u]     locate init\n", ID);
         locate_init( pipeline, params );
 
         optional_device_synchronize();
 
-        log_debug(stderr, "    locate lookup\n");
+        log_debug(stderr, "[%u]     locate lookup\n", ID);
         locate_lookup( pipeline, params );
 
         optional_device_synchronize();
@@ -735,7 +738,7 @@ void Aligner::best_approx_score(
         timer.stop();
         stats.locate.add( pipeline.hits_queue_size, timer.seconds(), device_timer.seconds() );
 
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      crc: %llu\n", device_checksum( loc_queue_iterator, loc_queue_iterator + pipeline.hits_queue_size ) ) );
+        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "[%u]       crc: %llu\n", ID, device_checksum( loc_queue_iterator, loc_queue_iterator + pipeline.hits_queue_size ) ) );
 
         //
         // Start the real scoring work...
@@ -747,7 +750,7 @@ void Aligner::best_approx_score(
         // sort the selected hits by their linear genome coordinate
         // TODO: sub-sort by read position/RC flag so as to (1) get better coherence,
         // (2) allow removing duplicate extensions
-        log_debug(stderr, "    score sort\n");
+        log_debug(stderr, "[%u]     score sort\n", ID);
         pipeline.idx_queue = sort_hi_bits( pipeline.hits_queue_size, pipeline.scoring_queues.hits.loc );
 
         device_timer.stop();
@@ -775,7 +778,7 @@ void Aligner::best_approx_score(
         score_time += timer.seconds();
         dev_score_time += device_timer.seconds();
 
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      crc: %llu\n", device_checksum( score_queue_iterator, score_queue_iterator + pipeline.hits_queue_size ) ) );
+        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "[%u]       crc: %llu\n", ID, device_checksum( score_queue_iterator, score_queue_iterator + pipeline.hits_queue_size ) ) );
 
         // check if we need to persist this seeding pass
         if (params.persist_batch     == -1 || batch_number   == (uint32) params.persist_batch &&
@@ -790,7 +793,7 @@ void Aligner::best_approx_score(
 
         // reduce the multiple scores to find the best two alignments
         // (one thread per active read).
-        log_debug(stderr, "    score reduce\n");
+        log_debug(stderr, "[%u]     score reduce\n", ID);
         score_reduce(
             reduce_context,
             pipeline,

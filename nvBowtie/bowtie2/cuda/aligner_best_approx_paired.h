@@ -137,7 +137,7 @@ void Aligner::best_approx(
 
     for (uint32 anchor = 0; anchor < 2; ++anchor)
     {
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "  anchor mate: %u\n", anchor) );
+        log_debug(stderr, "[%u]   anchor mate: %u\n", ID, anchor);
 
         // start with a full seed queue
         seed_queues.in_size = count;
@@ -177,7 +177,7 @@ void Aligner::best_approx(
             // perform mapping
             //
             {
-                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    mapping (%u active reads)\n", n_active_reads) );
+                log_debug(stderr, "[%u]    mapping (%u active reads)\n", ID, n_active_reads);
                 timer.start();
                 device_timer.start();
 
@@ -205,9 +205,9 @@ void Aligner::best_approx(
                     uint64 crc, sum;
                     hits_checksum( n_active_reads, hit_deques, crc, sum );
 
-                    NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      crc cnts: %llu\n", device_checksum( hit_deques.counts().begin(), hit_deques.counts().begin() + count ) ) );
-                    NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      crc hits: %llu\n", crc ) );
-                    NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      sum hits: %llu\n", sum ) );
+                    NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "[%u]      crc cnts: %llu\n", ID, device_checksum( hit_deques.counts().begin(), hit_deques.counts().begin() + count ) ) );
+                    NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "[%u]      crc hits: %llu\n", ID, crc ) );
+                    NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "[%u]      sum hits: %llu\n", ID, sum ) );
                 }
                 #endif
 */
@@ -263,7 +263,7 @@ void Aligner::best_approx(
 
     // compute mapq
     {
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    compute mapq\n") );
+        log_debug(stderr, "[%u]    compute mapq\n", ID);
         typedef BowtieMapq2< SmithWatermanScoringScheme<> > mapq_evaluator_type;
 
         mapq_evaluator_type mapq_eval( input_scoring_scheme.sw );
@@ -296,7 +296,7 @@ void Aligner::best_approx(
         timer.start();
         device_timer.start();
 
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    backtracking\n") );
+        log_debug(stderr, "[%u]    backtracking\n", ID);
         banded_traceback_best(
             0u,
             count,
@@ -319,7 +319,7 @@ void Aligner::best_approx(
         timer.start();
         device_timer.start();
 
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    alignment\n") );
+        log_debug(stderr, "[%u]    alignment\n", ID);
         finish_alignment_best(
             0u,
             count,
@@ -382,10 +382,10 @@ void Aligner::best_approx(
 
         if (n_paired)
         {
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    paired opposite: %u\n", n_paired) );
+            log_debug(stderr, "[%u]    paired opposite: %u\n", ID, n_paired);
             const uint32* paired_idx = thrust::raw_pointer_cast( paired_idx_begin.base() );
 
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    paired opposite backtracking\n") );
+            log_debug(stderr, "[%u]    paired opposite backtracking\n", ID);
             opposite_traceback_best(
                 0u,
                 n_paired,
@@ -414,10 +414,10 @@ void Aligner::best_approx(
 
         if (n_unpaired)
         {
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    unpaired opposite: %u\n", n_unpaired) );
+            log_debug(stderr, "[%u]    unpaired opposite: %u\n", ID, n_unpaired);
             const uint32* unpaired_idx = thrust::raw_pointer_cast( unpaired_idx_begin.base() );
 
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    unpaired opposite backtracking\n") );
+            log_debug(stderr, "[%u]    unpaired opposite backtracking\n", ID);
             banded_traceback_best(
                 0u,
                 n_unpaired,
@@ -453,7 +453,7 @@ void Aligner::best_approx(
 
         if (n_aligned)
         {
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    opposite alignment: %u\n", n_aligned) );
+            log_debug(stderr, "[%u]    opposite alignment: %u\n", ID, n_aligned);
             const uint32* aligned_idx = thrust::raw_pointer_cast( aligned_idx_begin.base() );
 
             finish_opposite_alignment_best(
@@ -478,6 +478,7 @@ void Aligner::best_approx(
         stats.finalize.add( count, timer.seconds(), device_timer.seconds() );
 
         // wrap the results in a DeviceOutputBatchSE and process it
+        if (output_file)
         {
             io::DeviceOutputBatchSE gpu_batch(
                 count,
@@ -521,10 +522,10 @@ void Aligner::best_approx(
             timer.start();
             device_timer.start();
 
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best: %u\n", n_second) );
+            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "[%u]    second-best: %u\n", ID, n_second) );
             const uint32* second_idx = thrust::raw_pointer_cast( second_idx_begin.base() );
 
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best backtracking\n") );
+            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "[%u]    second-best backtracking\n", ID) );
             banded_traceback_best(
                 1u,
                 n_second,
@@ -547,7 +548,7 @@ void Aligner::best_approx(
             timer.start();
             device_timer.start();
 
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best alignment\n") );
+            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "[%u]    second-best alignment\n", ID) );
             finish_alignment_best(
                 1u,
                 n_second,
@@ -610,9 +611,9 @@ void Aligner::best_approx(
 
             if (n_second_paired)
             {
-                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best paired: %u\n", n_second_paired) );
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "[%u]    second-best paired: %u\n", ID, n_second_paired) );
 
-                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best paired opposite backtracking\n") );
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "[%u]    second-best paired opposite backtracking\n", ID) );
                 opposite_traceback_best(
                     1u,
                     n_second_paired,
@@ -638,9 +639,9 @@ void Aligner::best_approx(
 
             if (n_second_unpaired)
             {
-                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best unpaired: %u\n", n_second_unpaired) );
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "[%u]    second-best unpaired: %u\n", ID, n_second_unpaired) );
 
-                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best unpaired opposite backtracking\n") );
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "[%u]    second-best unpaired opposite backtracking\n", ID) );
                 banded_traceback_best(
                     1u,
                     n_second_unpaired,
@@ -675,7 +676,7 @@ void Aligner::best_approx(
             if (n_second)
             {
                 // compute alignment only on the opposite mates with a second-best
-                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    second-best opposite alignment\n") );
+                NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "[%u]    second-best opposite alignment\n", ID) );
                 finish_opposite_alignment_best(
                         1u,
                         n_second,
@@ -698,6 +699,7 @@ void Aligner::best_approx(
             stats.finalize.add( n_second, timer.seconds(), device_timer.seconds() );
 
             // wrap the results in a DeviceOutputBatchSE and process it
+            if (output_file)
             {
                 io::DeviceOutputBatchSE gpu_batch(
                     count,
@@ -716,7 +718,7 @@ void Aligner::best_approx(
 
     // keep alignment stats
     {
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    track stats\n") );
+        log_debug(stderr, "[%u]    track stats\n", ID);
         thrust::host_vector<io::Alignment> h_best_data( BATCH_SIZE*2 );
         thrust::host_vector<io::Alignment> h_best_data_o( BATCH_SIZE*2 );
         thrust::host_vector<uint8>         h_mapq( BATCH_SIZE );
@@ -759,7 +761,7 @@ void Aligner::best_approx_score(
     const uint32*                           seed_queue,
     Stats&                                  stats)
 {
-    NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    score\n") );
+    log_debug(stderr, "[%u]    score\n", ID);
     // prepare the scoring system
     typedef typename scoring_scheme_type::threshold_score_type          threshold_score_type;
 
@@ -841,7 +843,7 @@ void Aligner::best_approx_score(
 
     for (uint32 extension_pass = 0; active_read_queues.in_size && n_ext < params.max_ext; ++extension_pass)
     {
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    pass:\n      batch:          %u\n      seeding pass:   %u\n      extension pass: %u\n", batch_number, seeding_pass, extension_pass) );
+        log_debug(stderr, "[%u]    pass:\n[%u]      batch:[%u]          %u\n[%u]      seeding pass:   %u\n[%u]      extension pass: %u\n", ID, ID, batch_number, ID, seeding_pass, ID, extension_pass);
 
         // initialize all the scoring output queues
         scoring_queues.clear_output();
@@ -852,7 +854,7 @@ void Aligner::best_approx_score(
             timer.start();
             device_timer.start();
 
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    read sort\n") );
+            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "[%u]    read sort\n", ID) );
             sort_inplace( active_read_queues.in_size, active_read_queues.raw_input_queue() );
 
             device_timer.stop();
@@ -900,7 +902,7 @@ void Aligner::best_approx_score(
         // update pipeline
         pipeline.scoring_queues = scoring_queues.device_view();
 
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    select\n") );
+        log_debug(stderr, "[%u]    select\n", ID);
         select(
             select_context,
             pipeline,
@@ -946,13 +948,13 @@ void Aligner::best_approx_score(
                 scoring_queues.hits_index,
                 scoring_queues.hits );
 
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    selected %u hits\n", pipeline.hits_queue_size) );
+        log_debug(stderr, "[%u]    selected %u hits\n", ID, pipeline.hits_queue_size);
 
         timer.start();
         device_timer.start();
 
         // sort the selected hits by their SA coordinate
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    locate sort\n") );
+        log_debug(stderr, "[%u]    locate sort\n", ID);
         pipeline.idx_queue = sort_hi_bits( pipeline.hits_queue_size, pipeline.scoring_queues.hits.loc );
 
         device_timer.stop();
@@ -966,12 +968,12 @@ void Aligner::best_approx_score(
         // It might pay off to do a compaction beforehand.
 
         // and locate their position in linear coordinates
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    locate init\n") );
+        log_debug(stderr, "[%u]    locate init\n", ID);
         locate_init( pipeline, params );
 
         optional_device_synchronize();
 
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    locate lookup\n") );
+        log_debug(stderr, "[%u]    locate lookup\n", ID);
         locate_lookup( pipeline, params );
 
         optional_device_synchronize();
@@ -981,7 +983,7 @@ void Aligner::best_approx_score(
         timer.stop();
         stats.locate.add( pipeline.hits_queue_size, timer.seconds(), device_timer.seconds() );
 
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      crc: %llu\n", device_checksum( loc_queue_iterator, loc_queue_iterator + pipeline.hits_queue_size ) ) );
+        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "[%u]      crc: %llu\n", ID, device_checksum( loc_queue_iterator, loc_queue_iterator + pipeline.hits_queue_size ) ) );
 
         //
         // Start the real scoring work...
@@ -993,7 +995,7 @@ void Aligner::best_approx_score(
         // sort the selected hits by their linear genome coordinate
         // TODO: sub-sort by read position/RC flag so as to (1) get better coherence,
         // (2) allow removing duplicate extensions
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    score sort\n") );
+        log_debug(stderr, "[%u]     score sort\n", ID);
         pipeline.idx_queue = sort_hi_bits( pipeline.hits_queue_size, pipeline.scoring_queues.hits.loc );
 
         device_timer.stop();
@@ -1021,7 +1023,7 @@ void Aligner::best_approx_score(
         score_time += timer.seconds();
         dev_score_time += device_timer.seconds();
 
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      crc: %llu\n", device_checksum( score_queue_iterator, score_queue_iterator + pipeline.hits_queue_size ) ) );
+        NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "[%u]       crc: %llu\n", ID, device_checksum( score_queue_iterator, score_queue_iterator + pipeline.hits_queue_size ) ) );
 
         //
         // compact the list of candidate hits (with an anchor mate score lower than the current second best paired score)
@@ -1035,7 +1037,7 @@ void Aligner::best_approx_score(
         //  Here we want the output opposite_queue to contain the list of indices *into* idx_queue, so as to keep the
         //  original sorting order by genome coordintes used for scoring the anchor.
         //  Down the pipeline the scoring kernel will address the problems by idx_queue[ opposite_score_queue[ thread_id ] ].
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    compact opposite\n") );
+        log_debug(stderr, "[%u]     compact opposite\n", ID);
         const  int32 worst_score = scoring_scheme_type::worst_score;
 
         pipeline.opposite_queue_size = uint32( thrust::copy_if(
@@ -1054,12 +1056,12 @@ void Aligner::best_approx_score(
         if (pipeline.opposite_queue_size)
         {
             // perform DP alignment on the opposite mates
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    score opposite (%u)\n", pipeline.opposite_queue_size ) );
+            log_debug(stderr, "[%u]     score opposite (%u)\n", ID, pipeline.opposite_queue_size );
             opposite_score_best(
                 pipeline,
                 params );
 
-            NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "      crc: %llu\n", device_checksum( opposite_score_queue_iterator, opposite_score_queue_iterator + pipeline.hits_queue_size ) ) );
+            NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "[%u]       crc: %llu\n", device_checksum( opposite_score_queue_iterator, opposite_score_queue_iterator + pipeline.hits_queue_size ) ) );
 
             // check if we need to persist this seeding pass
             if (batch_number   == (uint32) params.persist_batch &&
@@ -1091,7 +1093,7 @@ void Aligner::best_approx_score(
 
         // reduce the multiple scores to find the best two alignments
         // (one thread per active read).
-        NVBIO_CUDA_DEBUG_STATEMENT( log_debug(stderr, "    score reduce\n") );
+        log_debug(stderr, "[%u]     score reduce\n", ID);
         score_reduce_paired(
             reduce_context,
             pipeline,

@@ -27,7 +27,6 @@
 
 #include <nvBowtie/bowtie2/cuda/input_thread.h>
 #include <nvBowtie/bowtie2/cuda/defs.h>
-#include <nvbio/io/alignments.h>
 #include <nvBowtie/bowtie2/cuda/params.h>
 #include <nvBowtie/bowtie2/cuda/stats.h>
 #include <nvbio/io/output/output_utils.h>
@@ -40,7 +39,7 @@ namespace nvbio {
 namespace bowtie2 {
 namespace cuda {
 
-void InputThread::run()
+void InputThreadSE::run()
 {
     log_verbose( stderr, "starting background input thread\n" );
 
@@ -80,17 +79,17 @@ void InputThread::run()
 
             timer.stop();
 
-            m_stats.read_io.add( read_data->size(), timer.seconds() );
-
             if (ret)
             {
                 ScopedLock lock( &m_ready_pool_lock );
-                m_ready_pool.push( read_data );
+                m_ready_pool.push_front( read_data );
+
+                m_stats.read_io.add( read_data->size(), timer.seconds() );
             }
             else
             {
                 ScopedLock lock( &m_ready_pool_lock );
-                m_ready_pool.push( NULL );
+                m_ready_pool.push_front( NULL );
                 // stop the thread
                 break;
             }
@@ -144,7 +143,7 @@ void InputThread::run()
 
 // get a batch
 //
-io::SequenceDataHost* InputThread::next()
+io::SequenceDataHost* InputThreadSE::next()
 {
     // loop until the ready pool gets filled
     while (1)
@@ -154,8 +153,8 @@ io::SequenceDataHost* InputThread::next()
         if (m_ready_pool.empty() == false)
         {
             // pop from the ready pool
-            io::SequenceDataHost* read_data = m_ready_pool.top();
-            m_ready_pool.pop();
+            io::SequenceDataHost* read_data = m_ready_pool.back();
+            m_ready_pool.pop_back();
             return read_data;
         }
 
@@ -165,14 +164,14 @@ io::SequenceDataHost* InputThread::next()
 
 // release a batch
 //
-void InputThread::release(io::SequenceDataHost* read_data)
+void InputThreadSE::release(io::SequenceDataHost* read_data)
 {
     // push back to the free pool
     ScopedLock lock( &m_free_pool_lock );
     m_free_pool.push( read_data );
 }
 
-void InputThreadPaired::run()
+void InputThreadPE::run()
 {
     log_verbose( stderr, "starting background paired-end input thread\n" );
 
@@ -210,9 +209,6 @@ void InputThreadPaired::run()
 
             log_debug( stderr, "  reading input batch %u\n", m_set );
 
-            //// lock the set to flush
-            //ScopedLock lock( &m_lock[m_set] );
-
             Timer timer;
             timer.start();
 
@@ -224,14 +220,16 @@ void InputThreadPaired::run()
             if (ret1 && ret2)
             {
                 ScopedLock lock( &m_ready_pool_lock );
-                m_ready_pool1.push( read_data1 );
-                m_ready_pool2.push( read_data2 );
+                m_ready_pool1.push_front( read_data1 );
+                m_ready_pool2.push_front( read_data2 );
+
+                m_stats.read_io.add( read_data1->size(), timer.seconds() );
             }
             else
             {
                 ScopedLock lock( &m_ready_pool_lock );
-                m_ready_pool1.push( NULL );
-                m_ready_pool2.push( NULL );
+                m_ready_pool1.push_front( NULL );
+                m_ready_pool2.push_front( NULL );
                 // stop the thread
                 break;
             }
@@ -285,7 +283,7 @@ void InputThreadPaired::run()
 
 // get a batch
 //
-std::pair<io::SequenceDataHost*,io::SequenceDataHost*> InputThreadPaired::next()
+std::pair<io::SequenceDataHost*,io::SequenceDataHost*> InputThreadPE::next()
 {
     // loop until the ready pool gets filled
     while (1)
@@ -297,8 +295,8 @@ std::pair<io::SequenceDataHost*,io::SequenceDataHost*> InputThreadPaired::next()
         {
             // pop from the ready pool
             std::pair<io::SequenceDataHost*,io::SequenceDataHost*> read_data;
-            read_data.first  = m_ready_pool1.top(); m_ready_pool1.pop();
-            read_data.second = m_ready_pool2.top(); m_ready_pool2.pop();
+            read_data.first  = m_ready_pool1.back(); m_ready_pool1.pop_back();
+            read_data.second = m_ready_pool2.back(); m_ready_pool2.pop_back();
             return read_data;
         }
 
@@ -308,7 +306,7 @@ std::pair<io::SequenceDataHost*,io::SequenceDataHost*> InputThreadPaired::next()
 
 // release a batch
 //
-void InputThreadPaired::release(std::pair<io::SequenceDataHost*,io::SequenceDataHost*> read_data)
+void InputThreadPE::release(std::pair<io::SequenceDataHost*,io::SequenceDataHost*> read_data)
 {
     // push back to the free pool
     ScopedLock lock( &m_free_pool_lock );

@@ -136,10 +136,10 @@ bool Aligner::init_alloc(const uint32 BATCH_SIZE, const Params& params, const En
     const uint32 n_mds_entries   = (256 * BATCH_SIZE)/sizeof(uint8);        // 256MB
     if (do_alloc)
     {
-        log_verbose(stderr, "    allocating %u MB of string storage\n      CIGARs : %u MB\n      MDs    : %u MB\n",
-                    uint32(n_cigar_entries * sizeof(io::Cigar) + n_mds_entries)/(1024*1024),
-                    uint32(n_cigar_entries * sizeof(io::Cigar))/(1024*1024),
-                    n_mds_entries/(1024*1024) );
+        log_verbose(stderr, "[%u]     allocating %u MB of string storage\n[%u]       CIGARs : %u MB\n[%u]       MDs    : %u MB\n",
+            ID, uint32(n_cigar_entries * sizeof(io::Cigar) + n_mds_entries)/(1024*1024),
+            ID, uint32(n_cigar_entries * sizeof(io::Cigar))/(1024*1024),
+            ID, n_mds_entries/(1024*1024) );
     }
 
     // allocate CIGARs & MDs
@@ -183,7 +183,7 @@ bool Aligner::init_alloc(const uint32 BATCH_SIZE, const Params& params, const En
 
         const uint32 buffer_words = target_words;
         if (do_alloc)
-            log_verbose(stderr, "    allocating %u MB of DP storage\n", (buffer_words*4)/(1024*1024) );
+            log_verbose(stderr, "[%u]     allocating %u MB of DP storage\n", ID, (buffer_words*4)/(1024*1024) );
 
         dp_storage = buffer_words * sizeof(uint32);
     }
@@ -201,11 +201,10 @@ bool Aligner::init_alloc(const uint32 BATCH_SIZE, const Params& params, const En
     return true;
 }
 
-bool Aligner::init(const uint32 batch_size, const Params& params, const EndType type)
+bool Aligner::init(const uint32 id, const uint32 batch_size, const Params& params, const EndType type)
 {
+    ID         = id;
     BATCH_SIZE = batch_size;
-
-    output_file = NULL;
 
     // initialize the batch number
     batch_number = 0;
@@ -215,18 +214,22 @@ bool Aligner::init(const uint32 batch_size, const Params& params, const EndType 
 
         init_alloc( batch_size, params, type, false, &mem_stats );
 
-        log_stats(stderr, "  allocating alignment buffers... started\n    estimated: HOST %lu MB, DEVICE %lu MB)\n",
+        log_stats(stderr, "[%u]   allocating alignment buffers... started\n[%u]     estimated: HOST %lu MB, DEVICE %lu MB)\n",
+            ID,
+            ID,
             mem_stats.first / (1024*1024),
             mem_stats.second / (1024*1024) );
 
         init_alloc( batch_size, params, type, true, &mem_stats );
 
-        log_stats(stderr, "  allocating alignment buffers... done\n    allocated: HOST %lu MB, DEVICE %lu MB)\n",
+        log_stats(stderr, "[%u]   allocating alignment buffers... done\n[%u]     allocated: HOST %lu MB, DEVICE %lu MB)\n",
+            ID,
+            ID,
             mem_stats.first / (1024*1024),
             mem_stats.second / (1024*1024) );
     }
     catch (...) {
-        log_error(stderr, "  allocating alignment buffers failed!\n");
+        log_error(stderr, "[%u]   allocating alignment buffers failed!\n", ID);
         return false;
     }
     return true;

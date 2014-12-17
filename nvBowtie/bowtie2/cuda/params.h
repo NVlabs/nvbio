@@ -30,6 +30,7 @@
 #include <nvBowtie/bowtie2/cuda/scoring.h>
 #include <string.h>
 #include <string>
+#include <map>
 
 namespace nvbio {
 namespace bowtie2 {
@@ -147,6 +148,16 @@ struct Params : public ParamsPOD
 
     int32         no_multi_hits;
 };
+
+///
+/// load options from a file
+///
+std::map<std::string,std::string> load_options(const char* name);
+
+///
+/// parse options
+///
+void parse_options(Params& params, const std::map<std::string,std::string>& options, bool init);
 
 ///@}  // group nvBowtie
 

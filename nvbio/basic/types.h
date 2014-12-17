@@ -30,6 +30,7 @@
 #include <nvbio/basic/version.h>
 #include <assert.h>
 #include <vector_types.h>
+#include <vector_functions.h>
 #include <thrust/iterator/detail/host_system_tag.h>
 #include <thrust/iterator/detail/device_system_tag.h>
 #include <thrust/iterator/detail/any_system_tag.h>

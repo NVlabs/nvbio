@@ -28,6 +28,8 @@
 #pragma once
 
 #include <nvbio/basic/types.h>
+#include <nvbio/basic/console.h>
+#include <stdlib.h>
 #include <string>
 
 namespace nvbio {

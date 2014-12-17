@@ -28,12 +28,12 @@
 #pragma once
 
 #include <nvBowtie/bowtie2/cuda/defs.h>
-#include <nvBowtie/bowtie2/cuda/params.h>
 #include <nvBowtie/bowtie2/cuda/stats.h>
 #include <nvbio/basic/threads.h>
 #include <nvbio/basic/timer.h>
 #include <nvbio/io/sequence/sequence.h>
 #include <stack>
+#include <deque>
 
 namespace nvbio {
 namespace bowtie2 {
@@ -45,11 +45,11 @@ namespace cuda {
 // operations performed by the main thread.
 //
 
-struct InputThread : public Thread<InputThread>
+struct InputThreadSE : public Thread<InputThreadSE>
 {
     static const uint32 BUFFERS = 4;
 
-    InputThread(io::SequenceDataStream* read_data_stream, Stats& _stats, const uint32 batch_size) :
+    InputThreadSE(io::SequenceDataStream* read_data_stream, Stats& _stats, const uint32 batch_size) :
         m_read_data_stream( read_data_stream ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0)
     {}
 
@@ -63,6 +63,10 @@ struct InputThread : public Thread<InputThread>
     //
     void release(io::SequenceDataHost* read_data);
 
+    // return the batch size
+    //
+    uint32 batch_size() const { return m_batch_size; }
+
 private:
     io::SequenceDataStream* m_read_data_stream;
     Stats&                  m_stats;
@@ -75,7 +79,7 @@ private:
     std::stack<io::SequenceDataHost*>    m_free_pool;
 
     Mutex                                m_ready_pool_lock;
-    std::stack<io::SequenceDataHost*>    m_ready_pool;
+    std::deque<io::SequenceDataHost*>    m_ready_pool;
 };
 
 //
@@ -84,11 +88,11 @@ private:
 // operations performed by the main thread.
 //
 
-struct InputThreadPaired : public Thread<InputThreadPaired>
+struct InputThreadPE : public Thread<InputThreadPE>
 {
     static const uint32 BUFFERS = 4;
 
-    InputThreadPaired(io::SequenceDataStream* read_data_stream1, io::SequenceDataStream* read_data_stream2, Stats& _stats, const uint32 batch_size) :
+    InputThreadPE(io::SequenceDataStream* read_data_stream1, io::SequenceDataStream* read_data_stream2, Stats& _stats, const uint32 batch_size) :
         m_read_data_stream1( read_data_stream1 ), m_read_data_stream2( read_data_stream2 ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0)
     {}
 
@@ -101,6 +105,10 @@ struct InputThreadPaired : public Thread<InputThreadPaired>
     // release a batch
     //
     void release(std::pair<io::SequenceDataHost*,io::SequenceDataHost*> read_data);
+
+    // return the batch size
+    //
+    uint32 batch_size() const { return m_batch_size; }
 
 private:
     io::SequenceDataStream* m_read_data_stream1;
@@ -117,8 +125,8 @@ private:
     std::stack<io::SequenceDataHost*>    m_free_pool2;
 
     Mutex                                m_ready_pool_lock;
-    std::stack<io::SequenceDataHost*>    m_ready_pool1;
-    std::stack<io::SequenceDataHost*>    m_ready_pool2;
+    std::deque<io::SequenceDataHost*>    m_ready_pool1;
+    std::deque<io::SequenceDataHost*>    m_ready_pool2;
 };
 
 } // namespace cuda

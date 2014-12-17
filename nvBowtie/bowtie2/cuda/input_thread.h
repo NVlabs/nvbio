@@ -50,7 +50,7 @@ struct InputThreadSE : public Thread<InputThreadSE>
     static const uint32 BUFFERS = 4;
 
     InputThreadSE(io::SequenceDataStream* read_data_stream, Stats& _stats, const uint32 batch_size) :
-        m_read_data_stream( read_data_stream ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0)
+        m_read_data_stream( read_data_stream ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0), m_done(false)
     {}
 
     void run();
@@ -80,6 +80,8 @@ private:
 
     Mutex                                m_ready_pool_lock;
     std::deque<io::SequenceDataHost*>    m_ready_pool;
+
+    volatile bool m_done;
 };
 
 //
@@ -93,7 +95,7 @@ struct InputThreadPE : public Thread<InputThreadPE>
     static const uint32 BUFFERS = 4;
 
     InputThreadPE(io::SequenceDataStream* read_data_stream1, io::SequenceDataStream* read_data_stream2, Stats& _stats, const uint32 batch_size) :
-        m_read_data_stream1( read_data_stream1 ), m_read_data_stream2( read_data_stream2 ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0)
+        m_read_data_stream1( read_data_stream1 ), m_read_data_stream2( read_data_stream2 ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0), m_done(false)
     {}
 
     void run();
@@ -127,6 +129,8 @@ private:
     Mutex                                m_ready_pool_lock;
     std::deque<io::SequenceDataHost*>    m_ready_pool1;
     std::deque<io::SequenceDataHost*>    m_ready_pool2;
+
+    volatile bool m_done;
 };
 
 } // namespace cuda

@@ -35,11 +35,9 @@
 #include <nvbio/io/output/output_priv.h>
 #include <nvbio/io/output/output_databuffer.h>
 #include <nvbio/io/output/output_gzip.h>
-
 #include <nvbio/io/sequence/sequence.h>
-
 #include <nvbio/io/bam_format.h>
-
+#include <nvbio/basic/threads.h>
 #include <stdio.h>
 
 namespace nvbio {
@@ -111,6 +109,8 @@ private:
     DataBuffer data_buffer;
     // our BGZF compressor
     BGZFCompressor bgzf;
+
+    Mutex mutex;
 };
 
 } // namespace io

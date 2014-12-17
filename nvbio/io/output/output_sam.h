@@ -33,6 +33,7 @@
 #include <nvbio/io/output/output_batch.h>
 #include <nvbio/io/output/output_priv.h>
 #include <nvbio/io/sequence/sequence.h>
+#include <nvbio/basic/threads.h>
 
 #include <stdio.h>
 
@@ -140,6 +141,8 @@ private:
 
     // our file pointer
     FILE *fp;
+
+    Mutex mutex;
 };
 
 } // namespace io

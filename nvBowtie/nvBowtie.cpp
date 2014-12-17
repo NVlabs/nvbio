@@ -144,11 +144,11 @@ int main(int argc, char* argv[])
     uint32 max_reads    = uint32(-1);
     uint32 max_read_len = uint32(-1);
     //bool   debug        = false;
-    int    cuda_device  = -1;
     bool   from_file    = false;
     bool   paired_end   = false;
     io::PairedEndPolicy pe_policy = io::PE_POLICY_FR;
     io::QualityEncoding qencoding = io::Phred33;
+    std::vector<int> cuda_devices;
 
     std::map<std::string,std::string> string_options;
 
@@ -213,7 +213,7 @@ int main(int argc, char* argv[])
             qencoding = io::Solexa;
         else if (strcmp( argv[i], "-device" ) == 0 ||
                  strcmp( argv[i], "--device" ) == 0)
-            cuda_device = atoi( argv[++i] );
+            cuda_devices.push_back( atoi( argv[++i] ) );
         else if (strcmp( argv[i], "-verbosity" ) == 0 ||
                  strcmp( argv[i], "--verbosity" ) == 0)
             set_verbosity( Verbosity( atoi( argv[++i] ) ) );
@@ -270,7 +270,7 @@ int main(int argc, char* argv[])
     // inspect and select cuda devices
     if (device_count > 0)
     {
-        if (cuda_device == -1)
+        if (cuda_devices.empty())
         {
             int            best_device = 0;
             cudaDeviceProp best_device_prop;
@@ -292,16 +292,17 @@ int main(int argc, char* argv[])
                     best_device      = device;
                 }
             }
-            cuda_device = best_device;
+            cuda_devices.push_back( best_device );
         }
-        log_verbose(stderr, "  chosen device %d\n", cuda_device);
+
+        for (size_t i = 0; i < cuda_devices.size(); ++i)
         {
             cudaDeviceProp device_prop;
-            cudaGetDeviceProperties( &device_prop, cuda_device );
+            cudaGetDeviceProperties( &device_prop, cuda_devices[i] );
+            log_verbose(stderr, "  chosen device %d\n", cuda_devices[i]);
             log_verbose(stderr, "    device name        : %s\n", device_prop.name);
             log_verbose(stderr, "    compute capability : %d.%d\n", device_prop.major, device_prop.minor);
         }
-        //cudaSetDevice( cuda_device );
     }
     else
     {
@@ -469,35 +470,63 @@ int main(int argc, char* argv[])
                     log_visible(stderr, "  subseed length = %u\n", params.subseed_len);
             }
 
-            // setup a stats object
-            bowtie2::cuda::Stats stats( params );
-
             //
-            // Setup the compute thread
+            // Setup the compute threads
             //
-            bowtie2::cuda::ComputeThreadPE compute_thread(
-                0u,
-                cuda_device,
-                *reference_data,
-                *driver_data,
-                string_options,
-                params,
-                stats );
 
-            const uint32 batch_size = compute_thread.gauge_batch_size();
+            uint32 batch_size = uint32(-1);
+
+            std::vector< bowtie2::cuda::Stats > device_stats( cuda_devices.size() );
+            std::vector< SharedPointer<bowtie2::cuda::ComputeThreadPE> > compute_threads( cuda_devices.size() );
+
+            for (uint32 i = 0; i < cuda_devices.size(); ++i)
+            {
+                device_stats[i] = bowtie2::cuda::Stats( params );
+
+                compute_threads[i] = SharedPointer<bowtie2::cuda::ComputeThreadPE>(
+                    new bowtie2::cuda::ComputeThreadPE(
+                        i,
+                        cuda_devices[i],
+                        *reference_data,
+                        *driver_data,
+                        string_options,
+                        params,
+                        device_stats[i] ) );
+
+                batch_size = nvbio::min( batch_size, compute_threads[i]->gauge_batch_size() );
+            }
 
             //
             // Setup the input thread
             //
 
-            bowtie2::cuda::InputThreadPE input_thread( read_data_file1.get(),  read_data_file2.get(), stats, batch_size );
+            bowtie2::cuda::Stats input_stats( params );
+
+            bowtie2::cuda::InputThreadPE input_thread( read_data_file1.get(),  read_data_file2.get(), input_stats, batch_size );
             input_thread.create();
 
-            compute_thread.set_input( &input_thread );
-            compute_thread.set_output( output_file.get() );
-            compute_thread.create();
+            for (uint32 i = 0; i < cuda_devices.size(); ++i)
+            {
+                compute_threads[i]->set_input( &input_thread );
+                compute_threads[i]->set_output( output_file.get() );
+                compute_threads[i]->create();
+            }
 
-            compute_thread.join();
+            uint32                        n_reads = 0;
+            bowtie2::cuda::AlignmentStats paired;
+            bowtie2::cuda::AlignmentStats mate1;
+            bowtie2::cuda::AlignmentStats mate2;
+
+            for (uint32 i = 0; i < cuda_devices.size(); ++i)
+            {
+                compute_threads[i]->join();
+
+                n_reads += device_stats[i].n_reads;
+                paired.merge( device_stats[i].paired );
+                mate1.merge( device_stats[i].mate1 );
+                mate2.merge( device_stats[i].mate2 );
+            }
+
             input_thread.join();
 
             log_verbose( stderr, "  compute threads joined\n" );
@@ -505,40 +534,22 @@ int main(int argc, char* argv[])
             // close the output file
             output_file->close();
 
-            // transfer I/O statistics
-            io::IOStats iostats = output_file->get_aggregate_statistics();
-
-            stats.alignments_DtoH.add(iostats.alignments_DtoH_count, iostats.alignments_DtoH_time);
-            stats.io        = iostats.output_process_timings;
-            uint32& n_reads = stats.n_reads;
-
             //
             // Print statistics
             //
 
-            log_stats(stderr, "  total          : %.2f sec (avg: %.1fK reads/s).\n", stats.global_time, 1.0e-3f * float(n_reads)/stats.global_time);
-            log_stats(stderr, "  mapping        : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.map.time, 1.0e-6f * stats.map.avg_speed(), 1.0e-6f * stats.map.max_speed, stats.map.device_time);
-            log_stats(stderr, "  scoring        : %.2f sec (avg: %.1fM reads/s, max: %.3fM reads/s, %.2f device sec).).\n", stats.scoring_pipe.time, 1.0e-6f * stats.scoring_pipe.avg_speed(), 1.0e-6f * stats.scoring_pipe.max_speed, stats.scoring_pipe.device_time);
-            log_stats(stderr, "    selecting    : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.select.time, 1.0e-6f * stats.select.avg_speed(), 1.0e-6f * stats.select.max_speed, stats.select.device_time);
-            log_stats(stderr, "    sorting      : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.sort.time, 1.0e-6f * stats.sort.avg_speed(), 1.0e-6f * stats.sort.max_speed, stats.sort.device_time);
-            log_stats(stderr, "    scoring(a)   : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.score.time, 1.0e-6f * stats.score.avg_speed(), 1.0e-6f * stats.score.max_speed, stats.score.device_time);
-            log_stats(stderr, "    scoring(o)   : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.opposite_score.time, 1.0e-6f * stats.opposite_score.avg_speed(), 1.0e-6f * stats.opposite_score.max_speed, stats.opposite_score.device_time);
-            log_stats(stderr, "    locating     : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.locate.time, 1.0e-6f * stats.locate.avg_speed(), 1.0e-6f * stats.locate.max_speed, stats.locate.device_time);
-            log_stats(stderr, "  backtracing(a) : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.backtrack.time, 1.0e-6f * stats.backtrack.avg_speed(), 1.0e-6f * stats.backtrack.max_speed, stats.backtrack.device_time);
-            log_stats(stderr, "  backtracing(o) : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.backtrack_opposite.time, 1.0e-6f * stats.backtrack_opposite.avg_speed(), 1.0e-6f * stats.backtrack_opposite.max_speed, stats.backtrack_opposite.device_time);
-            log_stats(stderr, "  finalizing     : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.finalize.time, 1.0e-6f * stats.finalize.avg_speed(), 1.0e-6f * stats.finalize.max_speed, stats.finalize.device_time);
-            log_stats(stderr, "  results DtoH   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.alignments_DtoH.time, 1.0e-6f * stats.alignments_DtoH.avg_speed(), 1.0e-6f * stats.alignments_DtoH.max_speed);
-            log_stats(stderr, "  reads HtoD     : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.read_HtoD.time, 1.0e-6f * stats.read_HtoD.avg_speed(), 1.0e-6f * stats.read_HtoD.max_speed);
-            log_stats(stderr, "  reads I/O      : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.read_io.time, 1.0e-6f * stats.read_io.avg_speed(), 1.0e-6f * stats.read_io.max_speed);
-            //log_stats(stderr, "    exposed      : %.2f sec (avg: %.3fK reads/s).\n", polling_time, 1.0e-3f * float(n_reads)/polling_time);
-            log_stats(stderr, "  output I/O     : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.io.time, 1.0e-6f * stats.io.avg_speed(), 1.0e-6f * stats.io.max_speed);
+            // transfer I/O statistics
+            io::IOStats iostats = output_file->get_aggregate_statistics();
+            const bowtie2::cuda::KernelStats& io = iostats.output_process_timings;
 
-            std::vector<uint32>& mapped         = stats.paired.mapped_ed_histogram;
-            uint32&              n_mapped       = stats.paired.n_mapped;
-            uint32&              n_unique       = stats.paired.n_unique;
-            uint32&              n_ambiguous    = stats.paired.n_ambiguous;
-            uint32&              n_nonambiguous = stats.paired.n_unambiguous;
-            uint32&              n_multiple     = stats.paired.n_multiple;
+            log_stats(stderr, "  output I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", io.time, 1.0e-6f * io.avg_speed(), 1.0e-6f * io.max_speed);
+
+            std::vector<uint32>& mapped         = paired.mapped_ed_histogram;
+            uint32&              n_mapped       = paired.n_mapped;
+            uint32&              n_unique       = paired.n_unique;
+            uint32&              n_ambiguous    = paired.n_ambiguous;
+            uint32&              n_nonambiguous = paired.n_unambiguous;
+            uint32&              n_multiple     = paired.n_multiple;
             {
                 log_stats(stderr, "  concordant reads : %.2f %% - of these:\n", 100.0f * float(n_mapped)/float(n_reads) );
                 log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_unique)/float(n_mapped), 100.0f * float(n_mapped - n_multiple)/float(n_reads) );
@@ -552,22 +563,22 @@ int main(int argc, char* argv[])
                         100.0f * float(mapped[i])/float(n_reads) );
                 }
 
-                log_stats(stderr, "  mate1 : %.2f %% - of these:\n", 100.0f * float(stats.mate1.n_mapped)/float(n_reads) );
-                if (stats.mate1.n_mapped)
+                log_stats(stderr, "  mate1 : %.2f %% - of these:\n", 100.0f * float(mate1.n_mapped)/float(n_reads) );
+                if (mate1.n_mapped)
                 {
-                    log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate1.n_unique)/float(stats.mate1.n_mapped), 100.0f * float(stats.mate1.n_mapped - stats.mate1.n_multiple)/float(n_reads) );
-                    log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate1.n_unambiguous)/float(stats.mate1.n_mapped), 100.0f * float(stats.mate1.n_unambiguous)/float(n_reads) );
-                    log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate1.n_ambiguous)/float(stats.mate1.n_mapped), 100.0f * float(stats.mate1.n_ambiguous)/float(n_reads) );
-                    log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate1.n_multiple)/float(stats.mate1.n_mapped), 100.0f * float(stats.mate1.n_multiple)/float(n_reads) );
+                    log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(mate1.n_unique)/float(mate1.n_mapped), 100.0f * float(mate1.n_mapped - mate1.n_multiple)/float(n_reads) );
+                    log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(mate1.n_unambiguous)/float(mate1.n_mapped), 100.0f * float(mate1.n_unambiguous)/float(n_reads) );
+                    log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(mate1.n_ambiguous)/float(mate1.n_mapped), 100.0f * float(mate1.n_ambiguous)/float(n_reads) );
+                    log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(mate1.n_multiple)/float(mate1.n_mapped), 100.0f * float(mate1.n_multiple)/float(n_reads) );
                 }
 
-                log_stats(stderr, "  mate2 : %.2f %% - of these:\n", 100.0f * float(stats.mate2.n_mapped)/float(n_reads) );
-                if (stats.mate2.n_mapped)
+                log_stats(stderr, "  mate2 : %.2f %% - of these:\n", 100.0f * float(mate2.n_mapped)/float(n_reads) );
+                if (mate2.n_mapped)
                 {
-                    log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate2.n_unique)/float(stats.mate2.n_mapped), 100.0f * float(stats.mate2.n_mapped - stats.mate2.n_multiple)/float(n_reads) );
-                    log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate2.n_unambiguous)/float(stats.mate2.n_mapped), 100.0f * float(stats.mate2.n_unambiguous)/float(n_reads) );
-                    log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate2.n_ambiguous)/float(stats.mate2.n_mapped), 100.0f * float(stats.mate2.n_ambiguous)/float(n_reads) );
-                    log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(stats.mate2.n_multiple)/float(stats.mate2.n_mapped), 100.0f * float(stats.mate2.n_multiple)/float(n_reads) );
+                    log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(mate2.n_unique)/float(mate2.n_mapped), 100.0f * float(mate2.n_mapped - mate2.n_multiple)/float(n_reads) );
+                    log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(mate2.n_unambiguous)/float(mate2.n_mapped), 100.0f * float(mate2.n_unambiguous)/float(n_reads) );
+                    log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(mate2.n_ambiguous)/float(mate2.n_mapped), 100.0f * float(mate2.n_ambiguous)/float(n_reads) );
+                    log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(mate2.n_multiple)/float(mate2.n_mapped), 100.0f * float(mate2.n_multiple)/float(n_reads) );
                 }
             }
         }
@@ -615,36 +626,58 @@ int main(int argc, char* argv[])
                     log_visible(stderr, "  subseed length = %u\n", params.subseed_len);
             }
 
-            // setup a stats object
-            bowtie2::cuda::Stats stats( params );
-
             //
-            // Setup the compute thread
+            // Setup the compute threads
             //
-            bowtie2::cuda::ComputeThreadSE compute_thread(
-                0u,
-                cuda_device,
-                *reference_data,
-                *driver_data,
-                string_options,
-                params,
-                stats );
 
-            const uint32 batch_size = compute_thread.gauge_batch_size();
+            uint32 batch_size = uint32(-1);
+
+            std::vector< bowtie2::cuda::Stats > device_stats( cuda_devices.size() );
+            std::vector< SharedPointer<bowtie2::cuda::ComputeThreadSE> > compute_threads( cuda_devices.size() );
+
+            for (uint32 i = 0; i < cuda_devices.size(); ++i)
+            {
+                device_stats[i] = bowtie2::cuda::Stats( params );
+
+                compute_threads[i] = SharedPointer<bowtie2::cuda::ComputeThreadSE>(
+                    new bowtie2::cuda::ComputeThreadSE(
+                        i,
+                        cuda_devices[i],
+                        *reference_data,
+                        *driver_data,
+                        string_options,
+                        params,
+                        device_stats[i] ) );
+
+                batch_size = nvbio::min( batch_size, compute_threads[i]->gauge_batch_size() );
+            }
 
             //
             // Setup the input thread
             //
+            bowtie2::cuda::Stats input_stats( params );
 
-            bowtie2::cuda::InputThreadSE input_thread( read_data_file.get(), stats, batch_size );
+            bowtie2::cuda::InputThreadSE input_thread( read_data_file.get(), input_stats, batch_size );
             input_thread.create();
 
-            compute_thread.set_input( &input_thread );
-            compute_thread.set_output( output_file.get() );
-            //compute_thread.run();
-            compute_thread.create();
+            for (uint32 i = 0; i < cuda_devices.size(); ++i)
+            {
+                compute_threads[i]->set_input( &input_thread );
+                compute_threads[i]->set_output( output_file.get() );
+                compute_threads[i]->create();
+            }
 
-            compute_thread.join();
+            uint32                        n_reads = 0;
+            bowtie2::cuda::AlignmentStats mate1;
+
+            for (uint32 i = 0; i < cuda_devices.size(); ++i)
+            {
+                compute_threads[i]->join();
+
+                n_reads += device_stats[i].n_reads;
+                mate1.merge( device_stats[i].mate1 );
+            }
+
             input_thread.join();
 
             log_verbose( stderr, "  compute threads joined\n" );
@@ -652,37 +685,22 @@ int main(int argc, char* argv[])
             // close the output file
             output_file->close();
 
-            // transfer I/O statistics
-            io::IOStats iostats = output_file->get_aggregate_statistics();
-
-            stats.alignments_DtoH.add(iostats.alignments_DtoH_count, iostats.alignments_DtoH_time);
-            stats.io        = iostats.output_process_timings;
-            uint32& n_reads = stats.n_reads;
-
             //
             // Print statistics
             //
 
-            log_stats(stderr, "  total        : %.2f sec (avg: %.1fK reads/s).\n", stats.global_time, 1.0e-3f * float(n_reads)/stats.global_time);
-            log_stats(stderr, "  mapping      : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.map.time, 1.0e-6f * stats.map.avg_speed(), 1.0e-6f * stats.map.max_speed, stats.map.device_time);
-            log_stats(stderr, "  selecting    : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.select.time, 1.0e-6f * stats.select.avg_speed(), 1.0e-6f * stats.select.max_speed, stats.select.device_time);
-            log_stats(stderr, "  sorting      : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.sort.time, 1.0e-6f * stats.sort.avg_speed(), 1.0e-6f * stats.sort.max_speed, stats.sort.device_time);
-            log_stats(stderr, "  scoring      : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.score.time, 1.0e-6f * stats.score.avg_speed(), 1.0e-6f * stats.score.max_speed, stats.score.device_time);
-            log_stats(stderr, "  locating     : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", stats.locate.time, 1.0e-6f * stats.locate.avg_speed(), 1.0e-6f * stats.locate.max_speed, stats.locate.device_time);
-            log_stats(stderr, "  backtracking : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.backtrack.time, 1.0e-6f * stats.backtrack.avg_speed(), 1.0e-6f * stats.backtrack.max_speed, stats.backtrack.device_time);
-            log_stats(stderr, "  finalizing   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", stats.finalize.time, 1.0e-6f * stats.finalize.avg_speed(), 1.0e-6f * stats.finalize.max_speed, stats.finalize.device_time);
-            log_stats(stderr, "  results DtoH : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.alignments_DtoH.time, 1.0e-6f * stats.alignments_DtoH.avg_speed(), 1.0e-6f * stats.alignments_DtoH.max_speed);
-            log_stats(stderr, "  reads HtoD   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.read_HtoD.time, 1.0e-6f * stats.read_HtoD.avg_speed(), 1.0e-6f * stats.read_HtoD.max_speed);
-            log_stats(stderr, "  reads I/O    : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.read_io.time, 1.0e-6f * stats.read_io.avg_speed(), 1.0e-6f * stats.read_io.max_speed);
-            //log_stats(stderr, "    exposed    : %.2f sec (avg: %.3fK reads/s).\n", polling_time, 1.0e-3f * float(n_reads)/polling_time);
-            log_stats(stderr, "  output I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", stats.io.time, 1.0e-6f * stats.io.avg_speed(), 1.0e-6f * stats.io.max_speed);
+            // transfer I/O statistics
+            io::IOStats iostats = output_file->get_aggregate_statistics();
+            const bowtie2::cuda::KernelStats& io = iostats.output_process_timings;
 
-            std::vector<uint32>& mapped         = stats.mate1.mapped_ed_histogram;
-            uint32&              n_mapped       = stats.mate1.n_mapped;
-            uint32&              n_unique       = stats.mate1.n_unique;
-            uint32&              n_ambiguous    = stats.mate1.n_ambiguous;
-            uint32&              n_nonambiguous = stats.mate1.n_unambiguous;
-            uint32&              n_multiple     = stats.mate1.n_multiple;
+            log_stats(stderr, "  output I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", io.time, 1.0e-6f * io.avg_speed(), 1.0e-6f * io.max_speed);
+
+            std::vector<uint32>& mapped         = mate1.mapped_ed_histogram;
+            uint32&              n_mapped       = mate1.n_mapped;
+            uint32&              n_unique       = mate1.n_unique;
+            uint32&              n_ambiguous    = mate1.n_ambiguous;
+            uint32&              n_nonambiguous = mate1.n_unambiguous;
+            uint32&              n_multiple     = mate1.n_multiple;
             {
                 log_stats(stderr, "  mapped reads : %.2f %% - of these:\n", 100.0f * float(n_mapped)/float(n_reads) );
                 log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_unique)/float(n_mapped), 100.0f * float(n_mapped - n_multiple)/float(n_reads) );

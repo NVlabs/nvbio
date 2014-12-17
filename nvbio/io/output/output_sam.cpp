@@ -534,6 +534,8 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
 
 void SamOutput::process(struct HostOutputBatchSE& batch)
 {
+    ScopedLock lock( &mutex );
+
     for(uint32 c = 0; c < batch.count; c++)
     {
         AlignmentData alignment = get(batch, c);
@@ -545,6 +547,8 @@ void SamOutput::process(struct HostOutputBatchSE& batch)
 
 void SamOutput::process(struct HostOutputBatchPE& batch)
 {
+    ScopedLock lock( &mutex );
+
     for(uint32 c = 0; c < batch.count; c++)
     {
         AlignmentData alignment = get_anchor_mate(batch,c);

@@ -90,6 +90,7 @@ void InputThreadSE::run()
             {
                 ScopedLock lock( &m_ready_pool_lock );
                 m_ready_pool.push_front( NULL );
+                m_done = true;
                 // stop the thread
                 break;
             }
@@ -149,6 +150,9 @@ io::SequenceDataHost* InputThreadSE::next()
     while (1)
     {
         ScopedLock lock( &m_ready_pool_lock );
+
+        if (m_done)
+            return NULL;
 
         if (m_ready_pool.empty() == false)
         {
@@ -230,6 +234,7 @@ void InputThreadPE::run()
                 ScopedLock lock( &m_ready_pool_lock );
                 m_ready_pool1.push_front( NULL );
                 m_ready_pool2.push_front( NULL );
+                m_done = true;
                 // stop the thread
                 break;
             }
@@ -290,6 +295,9 @@ std::pair<io::SequenceDataHost*,io::SequenceDataHost*> InputThreadPE::next()
     {
         ScopedLock lock( &m_ready_pool_lock );
 
+        if (m_done)
+            return std::pair<io::SequenceDataHost*,io::SequenceDataHost*>( NULL, NULL );
+
         if (m_ready_pool1.empty() == false &&
             m_ready_pool2.empty() == false)
         {
@@ -301,6 +309,7 @@ std::pair<io::SequenceDataHost*,io::SequenceDataHost*> InputThreadPE::next()
         }
 
         yield();
+
     }
 }
 

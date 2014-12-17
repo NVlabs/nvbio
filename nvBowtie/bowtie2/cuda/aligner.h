@@ -42,7 +42,6 @@
 #include <nvbio/io/sequence/sequence.h>
 #include <nvBowtie/bowtie2/cuda/scoring.h>
 #include <nvBowtie/bowtie2/cuda/mapq.h>
-#include <nvBowtie/bowtie2/cuda/input_thread.h>
 #include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/cuda/sort.h>
 #include <nvbio/basic/cuda/host_device_buffer.h>

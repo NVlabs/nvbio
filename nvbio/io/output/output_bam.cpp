@@ -525,6 +525,8 @@ void BamOutput::output_alignment(DataBuffer& out, BAM_alignment& alnh, BAM_align
 
 void BamOutput::process(struct HostOutputBatchSE& batch)
 {
+    ScopedLock lock( &mutex );
+
     for(uint32 c = 0; c < batch.count; c++)
     {
         AlignmentData alignment = get(batch, c);
@@ -539,6 +541,8 @@ void BamOutput::process(struct HostOutputBatchSE& batch)
 
 void BamOutput::process(struct HostOutputBatchPE& batch)
 {
+    ScopedLock lock( &mutex );
+
     for(uint32 c = 0; c < batch.count; c++)
     {
         AlignmentData alignment = get_anchor_mate(batch,c);

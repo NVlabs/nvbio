@@ -327,6 +327,19 @@ void ComputeThreadSE::run()
     nvbio::bowtie2::cuda::generate_report(/*thread_id,*/ stats, stats.mate1, params.report.c_str());
 
     log_visible(stderr, "[%u] nvBowtie cuda driver... done\n", thread_id);
+
+    log_stats(stderr, "[%u]   total        : %.2f sec (avg: %.1fK reads/s).\n", thread_id, stats.global_time, 1.0e-3f * float(n_reads)/stats.global_time);
+    log_stats(stderr, "[%u]   mapping      : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", thread_id, stats.map.time, 1.0e-6f * stats.map.avg_speed(), 1.0e-6f * stats.map.max_speed, stats.map.device_time);
+    log_stats(stderr, "[%u]   selecting    : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", thread_id, stats.select.time, 1.0e-6f * stats.select.avg_speed(), 1.0e-6f * stats.select.max_speed, stats.select.device_time);
+    log_stats(stderr, "[%u]   sorting      : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", thread_id, stats.sort.time, 1.0e-6f * stats.sort.avg_speed(), 1.0e-6f * stats.sort.max_speed, stats.sort.device_time);
+    log_stats(stderr, "[%u]   scoring      : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", thread_id, stats.score.time, 1.0e-6f * stats.score.avg_speed(), 1.0e-6f * stats.score.max_speed, stats.score.device_time);
+    log_stats(stderr, "[%u]   locating     : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", thread_id, stats.locate.time, 1.0e-6f * stats.locate.avg_speed(), 1.0e-6f * stats.locate.max_speed, stats.locate.device_time);
+    log_stats(stderr, "[%u]   backtracking : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", thread_id, stats.backtrack.time, 1.0e-6f * stats.backtrack.avg_speed(), 1.0e-6f * stats.backtrack.max_speed, stats.backtrack.device_time);
+    log_stats(stderr, "[%u]   finalizing   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", thread_id, stats.finalize.time, 1.0e-6f * stats.finalize.avg_speed(), 1.0e-6f * stats.finalize.max_speed, stats.finalize.device_time);
+    log_stats(stderr, "[%u]   results DtoH : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.alignments_DtoH.time, 1.0e-6f * stats.alignments_DtoH.avg_speed(), 1.0e-6f * stats.alignments_DtoH.max_speed);
+    log_stats(stderr, "[%u]   reads HtoD   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.read_HtoD.time, 1.0e-6f * stats.read_HtoD.avg_speed(), 1.0e-6f * stats.read_HtoD.max_speed);
+    log_stats(stderr, "[%u]   reads I/O    : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.read_io.time, 1.0e-6f * stats.read_io.avg_speed(), 1.0e-6f * stats.read_io.max_speed);
+    log_stats(stderr, "[%u]     exposed    : %.2f sec (avg: %.3fK reads/s).\n", thread_id, polling_time, 1.0e-3f * float(n_reads)/polling_time);
 }
 
 ComputeThreadPE::ComputeThreadPE(
@@ -578,6 +591,22 @@ void ComputeThreadPE::run()
     nvbio::bowtie2::cuda::generate_report(/*thread_id,*/ stats, stats.paired, params.report.c_str());
 
     log_visible(stderr, "[%u] nvBowtie cuda driver... done\n", thread_id);
+
+    log_stats(stderr, "[%u]   total          : %.2f sec (avg: %.1fK reads/s).\n", thread_id, stats.global_time, 1.0e-3f * float(n_reads)/stats.global_time);
+    log_stats(stderr, "[%u]   mapping        : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", thread_id, stats.map.time, 1.0e-6f * stats.map.avg_speed(), 1.0e-6f * stats.map.max_speed, stats.map.device_time);
+    log_stats(stderr, "[%u]   scoring        : %.2f sec (avg: %.1fM reads/s, max: %.3fM reads/s, %.2f device sec).).\n", thread_id, stats.scoring_pipe.time, 1.0e-6f * stats.scoring_pipe.avg_speed(), 1.0e-6f * stats.scoring_pipe.max_speed, stats.scoring_pipe.device_time);
+    log_stats(stderr, "[%u]     selecting    : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", thread_id, stats.select.time, 1.0e-6f * stats.select.avg_speed(), 1.0e-6f * stats.select.max_speed, stats.select.device_time);
+    log_stats(stderr, "[%u]     sorting      : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", thread_id, stats.sort.time, 1.0e-6f * stats.sort.avg_speed(), 1.0e-6f * stats.sort.max_speed, stats.sort.device_time);
+    log_stats(stderr, "[%u]     scoring(a)   : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", thread_id, stats.score.time, 1.0e-6f * stats.score.avg_speed(), 1.0e-6f * stats.score.max_speed, stats.score.device_time);
+    log_stats(stderr, "[%u]     scoring(o)   : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", thread_id, stats.opposite_score.time, 1.0e-6f * stats.opposite_score.avg_speed(), 1.0e-6f * stats.opposite_score.max_speed, stats.opposite_score.device_time);
+    log_stats(stderr, "[%u]     locating     : %.2f sec (avg: %.3fM seeds/s, max: %.3fM seeds/s, %.2f device sec).\n", thread_id, stats.locate.time, 1.0e-6f * stats.locate.avg_speed(), 1.0e-6f * stats.locate.max_speed, stats.locate.device_time);
+    log_stats(stderr, "[%u]   backtracing(a) : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", thread_id, stats.backtrack.time, 1.0e-6f * stats.backtrack.avg_speed(), 1.0e-6f * stats.backtrack.max_speed, stats.backtrack.device_time);
+    log_stats(stderr, "[%u]   backtracing(o) : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", thread_id, stats.backtrack_opposite.time, 1.0e-6f * stats.backtrack_opposite.avg_speed(), 1.0e-6f * stats.backtrack_opposite.max_speed, stats.backtrack_opposite.device_time);
+    log_stats(stderr, "[%u]   finalizing     : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", thread_id, stats.finalize.time, 1.0e-6f * stats.finalize.avg_speed(), 1.0e-6f * stats.finalize.max_speed, stats.finalize.device_time);
+    log_stats(stderr, "[%u]   results DtoH   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.alignments_DtoH.time, 1.0e-6f * stats.alignments_DtoH.avg_speed(), 1.0e-6f * stats.alignments_DtoH.max_speed);
+    log_stats(stderr, "[%u]   reads HtoD     : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.read_HtoD.time, 1.0e-6f * stats.read_HtoD.avg_speed(), 1.0e-6f * stats.read_HtoD.max_speed);
+    log_stats(stderr, "[%u]   reads I/O      : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.read_io.time, 1.0e-6f * stats.read_io.avg_speed(), 1.0e-6f * stats.read_io.max_speed);
+    log_stats(stderr, "[%u]     exposed      : %.2f sec (avg: %.3fK reads/s).\n", thread_id, polling_time, 1.0e-3f * float(n_reads)/polling_time);
 }
 
 } // namespace cuda

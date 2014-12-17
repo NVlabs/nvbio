@@ -154,7 +154,7 @@ void Stats::track_alignment_statistics(
         //
 
         const io::BestAlignments& aln1 = alignment1.best().mate() == 0 ? alignment1 : alignment2;
-        const io::BestAlignments& aln2 = alignment1.best().mate() == 0 ? alignment1 : alignment2;
+        const io::BestAlignments& aln2 = alignment1.best().mate() == 0 ? alignment2 : alignment1;
 
         track_alignment_statistics( &mate1, aln1, mapq );
         track_alignment_statistics( &mate2, aln2, mapq );

@@ -163,7 +163,8 @@ struct Stats
         const uint8                 mapq);
 };
 
-void generate_report(Stats& stats, AlignmentStats& aln_stats, const char* report);
+void generate_report_header(const uint32 n_reads, const Params& params, AlignmentStats& aln_stats, const uint32 n_devices, const Stats* device_stats, const char* report);
+void generate_device_report(const uint32 id, Stats& stats, AlignmentStats& aln_stats, const char* report);
 
 } // namespace cuda
 } // namespace bowtie2

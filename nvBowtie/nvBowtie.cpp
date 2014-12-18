@@ -581,6 +581,9 @@ int main(int argc, char* argv[])
                     log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(mate2.n_multiple)/float(mate2.n_mapped), 100.0f * float(mate2.n_multiple)/float(n_reads) );
                 }
             }
+
+            // generate an html report
+            bowtie2::cuda::generate_report_header( n_reads, params, paired, (uint32)cuda_devices.size(), &device_stats[0], params.report.c_str() );
         }
         else
         {
@@ -714,6 +717,9 @@ int main(int argc, char* argv[])
                         100.0f * float(mapped[i])/float(n_reads) );
                 }
             }
+
+            // generate an html report
+            bowtie2::cuda::generate_report_header( n_reads, params, mate1, (uint32)cuda_devices.size(), &device_stats[0], params.report.c_str() );
         }
 
         log_info( stderr, "nvBowtie... done\n" );

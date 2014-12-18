@@ -41,7 +41,7 @@ namespace nvbio {
 namespace bowtie2 {
 namespace cuda {
 
-void generate_kernel_table(const char* report, const KernelStats& stats);
+void generate_kernel_table(const uint32 id, const char* report, const KernelStats& stats);
 
 Stats::Stats(const Params _params) :
     n_reads(0),
@@ -231,9 +231,22 @@ void Stats::track_alignment_statistics(
 
 namespace { // anonymous
 
-std::string generate_file_name(const char* report, const char* name)
+std::string generate_file_name(const char* report, const uint32 id, const char* name)
 {
     std::string file_name = report;
+    char id_name[2048]; sprintf( id_name, "%u.%s", id, name );
+    {
+        const size_t offset = file_name.find(".html");
+        file_name.replace( offset+1, file_name.length() - offset - 1, id_name );
+        file_name.append( ".html" );
+    }
+    return file_name;
+}
+
+std::string device_file_name(const char* report, const uint32 i)
+{
+    std::string file_name = report;
+    char name[32]; sprintf( name, "%u", i );
     {
         const size_t offset = file_name.find(".html");
         file_name.replace( offset+1, file_name.length() - offset - 1, name );
@@ -284,7 +297,302 @@ void stats_string(char* buffer, const uint32 px, const char* units, const float 
 
 } // anonymous namespace
 
-void generate_report(Stats& stats, AlignmentStats& aln_stats, const char* report)
+void generate_report_header(const uint32 n_reads, const Params& params, AlignmentStats& aln_stats, const uint32 n_devices, const Stats* device_stats, const char* report)
+{
+    if (report == NULL)
+        return;
+
+    FILE* html_output = fopen( report, "w" );
+    if (html_output == NULL)
+    {
+        log_warning( stderr, "unable to write HTML report \"%s\"\n", report );
+        return;
+    }
+
+    {
+        const uint32 n_mapped = aln_stats.n_mapped;
+
+        html::html_object html( html_output );
+        {
+            const char* meta_list = "<meta http-equiv=\"refresh\" content=\"2\" />";
+
+            html::header_object hd( html_output, "Bowtie2 Report", html::style(), meta_list );
+            {
+                html::body_object body( html_output );
+
+                //
+                // params
+                //
+                {
+                    html::table_object table( html_output, "params", "params", "parameters" );
+                    {
+                        html::tr_object tr( html_output, NULL );
+                        html::th_object( html_output, html::FORMATTED, NULL, "parameter name" );
+                        html::th_object( html_output, html::FORMATTED, NULL, "value" );
+                    }
+                    add_param( html_output, "randomized",  params.randomized ? "yes" : "no", true );
+                    add_param( html_output, "N",           params.allow_sub,                 false );
+                    add_param( html_output, "seed-len",    params.seed_len,                  true );
+                    add_param( html_output, "subseed-len", params.subseed_len,               false );
+                    add_param( html_output, "seed-freq",   params.seed_freq.type_symbol(),   true );
+                    add_param( html_output, "seed-freq",   params.seed_freq.k,               true );
+                    add_param( html_output, "seed-freq",   params.seed_freq.m,               true );
+                    add_param( html_output, "max-reseed",  params.max_reseed,                false );
+                    add_param( html_output, "rep-seeds",   params.rep_seeds,                 true );
+                    add_param( html_output, "max-hits",    params.max_hits,                  false );
+                    add_param( html_output, "max-dist",    params.max_dist,                  true );
+                    add_param( html_output, "max-effort",  params.max_effort,                false );
+                    add_param( html_output, "min-ext",     params.min_ext,                   true );
+                    add_param( html_output, "max-ext",     params.max_ext,                   false );
+                    add_param( html_output, "mapQ-filter", params.mapq_filter,               true );
+                    add_param( html_output, "scoring",     params.scoring_file.c_str(),      false );
+                    add_param( html_output, "report",      params.report.c_str(),            true );
+                }
+
+                //
+                // per-device stats
+                //
+                {
+                    char span_string[1024];
+
+                    html::table_object table( html_output, "device-stats", "stats", "device stats" );
+
+                    {
+                        html::tr_object tr( html_output, NULL );
+                        html::th_object( html_output, html::FORMATTED, NULL, "" );
+                        html::th_object( html_output, html::FORMATTED, NULL, "time" );
+                        html::th_object( html_output, html::FORMATTED, NULL, "avg speed" );
+                        html::th_object( html_output, html::FORMATTED, NULL, "reads" );
+                    }
+                    float global_time = 0.0f;
+                    for (uint32 i = 0; i < n_devices; ++i)
+                        global_time += device_stats[i].global_time;
+
+                    for (uint32 i = 0; i < n_devices; ++i)
+                    {
+                        char link_name[1024];
+                        char device_name[64];
+                        sprintf( device_name, "device %u", i );
+                        sprintf( link_name, "<a href=\"%s\">%s</a>", local_file( device_file_name( report, i ) ), device_name );
+                        const char* cls = "none";
+                        html::tr_object tr( html_output, NULL );
+                        html::th_object( html_output, html::FORMATTED, NULL, link_name );
+                        stats_string( span_string, 40, "s", device_stats[i].global_time, device_stats[i].global_time / global_time, 75.0f );
+                        html::td_object( html_output, html::FORMATTED, "class", cls, NULL, span_string );
+                        html::td_object( html_output, html::FORMATTED, NULL, "%.2f K reads/s", 1.0e-3f * float(device_stats[i].n_reads) / device_stats[i].global_time );
+                        html::td_object( html_output, html::FORMATTED, NULL, "%.2f M", float(device_stats[i].n_reads) * 1.0e-6f );
+                    }
+                }
+
+                //
+                // mapping stats
+                //
+                {
+                    html::table_object table( html_output, "mapping-stats", "stats", "mapping stats" );
+                    {
+                        html::tr_object tr( html_output, NULL );
+                        html::th_object( html_output, html::FORMATTED, NULL, "" );
+                        html::th_object( html_output, html::FORMATTED, NULL, "mapped" );
+                        html::th_object( html_output, html::FORMATTED, NULL, "ambiguous" );
+                        html::th_object( html_output, html::FORMATTED, NULL, "multiple" );
+                    }
+                    {
+                        html::tr_object tr( html_output, "class", "alt", NULL );
+                        html::th_object( html_output, html::FORMATTED, NULL, "reads" );
+                        html::td_object( html_output, html::FORMATTED, NULL, "%.1f %%", 100.0f * float(n_mapped)/float(n_reads) );
+                        html::td_object( html_output, html::FORMATTED, NULL, "%.1f %%", 100.0f * float(aln_stats.n_ambiguous)/float(n_reads) );
+                        html::td_object( html_output, html::FORMATTED, NULL, "%.1f %%", 100.0f * float(aln_stats.n_multiple)/float(n_reads) );
+                    }
+                    {
+                        html::tr_object tr( html_output, NULL );
+                        html::th_object( html_output, html::FORMATTED, NULL, "edit distance" );
+                        html::th_object( html_output, html::FORMATTED, NULL, "total" );
+                        html::th_object( html_output, html::FORMATTED, NULL, "forward" );
+                        html::th_object( html_output, html::FORMATTED, NULL, "reverse" );
+                    }
+                    uint32 best_bin[2]     = {0};
+                    uint32 best_bin_val[2] = {0};
+                    for (uint32 i = 0; i < aln_stats.mapped_ed_histogram.size(); ++i)
+                    {
+                        const uint32 v = aln_stats.mapped_ed_histogram[i];
+
+                        if (best_bin_val[0] < v)
+                        {
+                            best_bin_val[1] = best_bin_val[0];
+                            best_bin[1]     = best_bin[0];
+                            best_bin_val[0] = v;
+                            best_bin[0]     = i;
+                        }
+                        else if (best_bin_val[1] < v)
+                        {
+                            best_bin_val[1] = v;
+                            best_bin[1]     = i;
+                        }
+                    }
+                    for (uint32 i = 0; i < aln_stats.mapped_ed_histogram.size(); ++i)
+                    {
+                        const uint32 v = aln_stats.mapped_ed_histogram[i];
+                        const uint32 vf = aln_stats.mapped_ed_histogram_fwd[i];
+                        const uint32 vr = aln_stats.mapped_ed_histogram_rev[i];
+
+                        if (float(v)/float(n_reads) < 1.0e-3f)
+                            continue;
+
+                        html::tr_object tr( html_output, "class", i % 2 ? "none" : "alt", NULL );
+                        html::th_object( html_output, html::FORMATTED, NULL, "%u", i );
+                        const char* cls = i == best_bin[0] ? "yellow" : i == best_bin[1] ? "orange" : "none";
+                        html::td_object( html_output, html::FORMATTED, "class", cls, NULL, "%.1f %%", 100.0f * float(v)/float(n_reads) );
+                        html::td_object( html_output, html::FORMATTED, NULL, "%.1f %%", 100.0f * float(vf)/float(n_reads) );
+                        html::td_object( html_output, html::FORMATTED, NULL, "%.1f %%", 100.0f * float(vr)/float(n_reads) );
+                    }
+                }
+
+                //
+                // mapping quality stats
+                //
+                {
+                    html::table_object table( html_output, "mapping-quality-stats", "stats", "mapping quality stats" );
+                    {
+                        html::tr_object tr( html_output, NULL );
+                        html::th_object( html_output, html::FORMATTED, NULL, "mapQ" );
+                        html::th_object( html_output, html::FORMATTED, NULL, "percentage" );
+                    }
+
+                    // rebin to a logarithmic scale
+                    uint64 bins[7] = {0};
+                    for (uint32 i = 0; i < 64; ++i)
+                    {
+                        const uint32 log_mapq = i ? nvbio::log2(i) + 1 : 0;
+                        bins[log_mapq] += aln_stats.mapq_bins[i];
+                    }
+
+                    // compute best bins
+                    uint32 best_bin[2]     = {0};
+                    uint64 best_bin_val[2] = {0};
+                    for (uint32 i = 0; i < 7; ++i)
+                    {
+                        if (best_bin_val[0] < bins[i])
+                        {
+                            best_bin_val[1] = best_bin_val[0];
+                            best_bin[1]     = best_bin[0];
+                            best_bin_val[0] = bins[i];
+                            best_bin[0]     = i;
+                        }
+                        else if (best_bin_val[1] < bins[i])
+                        {
+                            best_bin_val[1] = bins[i];
+                            best_bin[1]     = i;
+                        }
+                    }
+
+                    // output html table
+                    for (uint32 i = 0; i < 7; ++i)
+                    {
+                        const uint32 bin_size = 1u << (i-1);
+
+                        char buffer[1024];
+                        if (i <= 1)
+                            sprintf( buffer, "%u", i );
+                        else if (bin_size < 1024)
+                            sprintf( buffer, "%u - %u", bin_size, bin_size*2-1 );
+
+                        html::tr_object tr( html_output, "class", i % 2 ? "none" : "alt", NULL );
+                        html::th_object( html_output, html::FORMATTED, NULL, buffer );
+                        const char* cls = i == best_bin[0] ? "yellow" : i == best_bin[1] ? "orange" : "none";
+                        html::td_object( html_output, html::FORMATTED, "class", cls, NULL, "%.1f %%", 100.0f * float(bins[i])/float(n_reads) );
+                    }
+                }
+                //
+                // best2-mapping stats
+                //
+                {
+                    // compute best 2 entries among double alignments
+                    uint2  best_bin2[2] = { make_uint2(0,0) };
+                    uint32 best_bin2_val[2] = { 0 };
+
+                    for (uint32 i = 1; i <= 16; ++i)
+                    {
+                        for (uint32 j = 1; j <= 16; ++j)
+                        {
+                            if (best_bin2_val[0] < aln_stats.mapped_ed_correlation[i][j])
+                            {
+                                best_bin2_val[1] = best_bin2_val[0];
+                                best_bin2[1]     = best_bin2[0];
+                                best_bin2_val[0] = aln_stats.mapped_ed_correlation[i][j];
+                                best_bin2[0]     = make_uint2(i,j);
+                            }
+                            else if (best_bin2_val[1] < aln_stats.mapped_ed_correlation[i][j])
+                            {
+                                best_bin2_val[1] = aln_stats.mapped_ed_correlation[i][j];
+                                best_bin2[1]     = make_uint2(i,j);
+                            }
+                        }
+                    }
+
+                    // compute best 2 entries among single alignments
+                    uint2  best_bin1[2] = { make_uint2(0,0) };
+                    uint32 best_bin1_val[2] = { 0 };
+
+                    for (uint32 i = 0; i <= 16; ++i)
+                    {
+                        if (best_bin1_val[0] < aln_stats.mapped_ed_correlation[i][0])
+                        {
+                            best_bin1_val[1] = best_bin1_val[0];
+                            best_bin1[1]     = best_bin1[0];
+                            best_bin1_val[0] = aln_stats.mapped_ed_correlation[i][0];
+                            best_bin1[0]     = make_uint2(i,0);
+                        }
+                        else if (best_bin1_val[1] < aln_stats.mapped_ed_correlation[i][0])
+                        {
+                            best_bin1_val[1] = aln_stats.mapped_ed_correlation[i][0];
+                            best_bin1[1]     = make_uint2(i,0);
+                        }
+                    }
+
+                    html::table_object table( html_output, "best2-mapping-stats", "stats", "best2 mapping stats" );
+                    {
+                        html::tr_object tr( html_output, NULL );
+                        html::th_object( html_output, html::FORMATTED, NULL, "" );
+                        for (uint32 i = 0; i <= 16; ++i)
+                            html::th_object( html_output, html::FORMATTED, NULL, (i == 0 ? "-" : "%u"), i-1 );
+                    }
+                    for (uint32 i = 0; i <= 16; ++i)
+                    {
+                        html::tr_object tr( html_output, "class", i % 2 ? "none" : "alt", NULL );
+                        html::th_object( html_output, html::FORMATTED, NULL, (i == 0 ? "-" : "%u"), i-1 );
+
+                        for (uint32 j = 0; j <= 16; ++j)
+                        {
+                            const uint32 v = aln_stats.mapped_ed_correlation[i][j];
+
+                            if (100.0f * float(v)/float(n_reads) >= 0.1f)
+                            {
+                                const char* cls = ((i == best_bin1[0].x && j == best_bin1[0].y) ||
+                                                   (i == best_bin2[0].x && j == best_bin2[0].y)) ? "yellow" :
+                                                  ((i == best_bin1[1].x && j == best_bin1[1].y) ||
+                                                   (i == best_bin2[1].x && j == best_bin2[1].y)) ? "orange" :
+                                                  (i   == j) ? "pink" :
+                                                  (i+1 == j) ? "azure" : "none";
+                                html::td_object( html_output, html::FORMATTED, "class", cls, NULL, "%.1f %%", 100.0f * float(v)/float(n_reads) );
+                            }
+                            else if (100.0f * float(v)/float(n_reads) >= 0.01f)
+                                html::td_object( html_output, html::FORMATTED, "class", "small", NULL, "%.2f %%", 100.0f * float(v)/float(n_reads) );
+                            else
+                            {
+                                const char* cls = (i > params.max_dist+1 || j > params.max_dist+1) ? "gray" : "none";
+                                html::td_object( html_output, html::FORMATTED, "class", cls, NULL, "-" );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fclose( html_output );
+}
+
+void generate_device_report(const uint32 id, Stats& stats, AlignmentStats& aln_stats, const char* report)
 {
     if (report == NULL)
         return;
@@ -306,13 +614,15 @@ void generate_report(Stats& stats, AlignmentStats& aln_stats, const char* report
     //if (stats.params.keep_stats)
     {
         for (uint32 i = 0; i < kernel_stats.size(); ++i)
-            generate_kernel_table( report, *kernel_stats[i] );
+            generate_kernel_table( id, report, *kernel_stats[i] );
     }
 
-    FILE* html_output = fopen( report, "w" );
+    const std::string device_report = device_file_name( report, id );
+
+    FILE* html_output = fopen( device_report.c_str(), "w" );
     if (html_output == NULL)
     {
-        log_warning( stderr, "unable to write HTML report \"%s\"\n", report );
+        log_warning( stderr, "unable to write HTML report \"%s\"\n", device_report.c_str() );
         return;
     }
 
@@ -328,34 +638,6 @@ void generate_report(Stats& stats, AlignmentStats& aln_stats, const char* report
             {
                 html::body_object body( html_output );
 
-                //
-                // params
-                //
-                {
-                    html::table_object table( html_output, "params", "params", "parameters" );
-                    {
-                        html::tr_object tr( html_output, NULL );
-                        html::th_object( html_output, html::FORMATTED, NULL, "parameter name" );
-                        html::th_object( html_output, html::FORMATTED, NULL, "value" );
-                    }
-                    add_param( html_output, "randomized",  stats.params.randomized ? "yes" : "no", true );
-                    add_param( html_output, "N",           stats.params.allow_sub,                 false );
-                    add_param( html_output, "seed-len",    stats.params.seed_len,                  true );
-                    add_param( html_output, "subseed-len", stats.params.subseed_len,               false );
-                    add_param( html_output, "seed-freq",   stats.params.seed_freq.type_symbol(),   true );
-                    add_param( html_output, "seed-freq",   stats.params.seed_freq.k,               true );
-                    add_param( html_output, "seed-freq",   stats.params.seed_freq.m,               true );
-                    add_param( html_output, "max-reseed",  stats.params.max_reseed,                false );
-                    add_param( html_output, "rep-seeds",   stats.params.rep_seeds,                 true );
-                    add_param( html_output, "max-hits",    stats.params.max_hits,                  false );
-                    add_param( html_output, "max-dist",    stats.params.max_dist,                  true );
-                    add_param( html_output, "max-effort",  stats.params.max_effort,                false );
-                    add_param( html_output, "min-ext",     stats.params.min_ext,                   true );
-                    add_param( html_output, "max-ext",     stats.params.max_ext,                   false );
-                    add_param( html_output, "mapQ-filter", stats.params.mapq_filter,               true );
-                    add_param( html_output, "scoring",     stats.params.scoring_file.c_str(),      false );
-                    add_param( html_output, "report",      stats.params.report.c_str(),            true );
-                }
                 //
                 // speed stats
                 //
@@ -402,7 +684,7 @@ void generate_report(Stats& stats, AlignmentStats& aln_stats, const char* report
                         const KernelStats&     kstats = *kernel_stats[i];
                         const char*            name = kstats.name.c_str();
                         const char*            units = kstats.units.c_str();
-                        const std::string file_name = generate_file_name( report, name );
+                        const std::string file_name = generate_file_name( report, id, name );
 
                         char link_name[1024];
                         sprintf( link_name, "<a href=\"%s\">%s</a>", local_file( file_name ), name );
@@ -759,11 +1041,11 @@ void find_gt2(const uint32 n, const T* table, uint32 best_bin[2])
     }
 }
 
-void generate_kernel_table(const char* report, const KernelStats& stats)
+void generate_kernel_table(const uint32 id, const char* report, const KernelStats& stats)
 {
     const char* name            = stats.name.c_str();
     const char* units           = stats.units.c_str();
-    const std::string file_name = generate_file_name( report, name );
+    const std::string file_name = generate_file_name( report, id, name );
 
     const std::deque< std::pair<uint32,float> >& table = stats.info;
 

@@ -525,35 +525,47 @@ void BamOutput::output_alignment(DataBuffer& out, BAM_alignment& alnh, BAM_align
 
 void BamOutput::process(struct HostOutputBatchSE& batch)
 {
-    ScopedLock lock( &mutex );
-
-    for(uint32 c = 0; c < batch.count; c++)
+    float time = 0.0f;
     {
-        AlignmentData alignment = get(batch, c);
-        AlignmentData mate = AlignmentData::invalid();
+        ScopedTimer<float> timer( &time );
+        ScopedLock lock( &mutex );
 
-        process_one_alignment(data_buffer, alignment, mate);
+        for(uint32 c = 0; c < batch.count; c++)
+        {
+            AlignmentData alignment = get(batch, c);
+            AlignmentData mate = AlignmentData::invalid();
+
+            process_one_alignment(data_buffer, alignment, mate);
+        }
+
+        if (data_buffer.get_pos())
+            write_block(data_buffer);
     }
-
-    if (data_buffer.get_pos())
-        write_block(data_buffer);
+    iostats.n_reads += batch.count;
+    iostats.output_process_timings.add( batch.count, time );
 }
 
 void BamOutput::process(struct HostOutputBatchPE& batch)
 {
-    ScopedLock lock( &mutex );
-
-    for(uint32 c = 0; c < batch.count; c++)
+    float time = 0.0f;
     {
-        AlignmentData alignment = get_anchor_mate(batch,c);
-        AlignmentData mate      = get_opposite_mate(batch,c);
+        ScopedTimer<float> timer( &time );
+        ScopedLock lock( &mutex );
 
-        process_one_alignment(data_buffer, alignment, mate);
-        process_one_alignment(data_buffer, mate, alignment);
+        for(uint32 c = 0; c < batch.count; c++)
+        {
+            AlignmentData alignment = get_anchor_mate(batch,c);
+            AlignmentData mate      = get_opposite_mate(batch,c);
+
+            process_one_alignment(data_buffer, alignment, mate);
+            process_one_alignment(data_buffer, mate, alignment);
+        }
+
+        if (data_buffer.get_pos())
+            write_block(data_buffer);
     }
-
-    if (data_buffer.get_pos())
-        write_block(data_buffer);
+    iostats.n_reads += batch.count;
+    iostats.output_process_timings.add( batch.count, time );
 }
 
 void BamOutput::write_block(DataBuffer& block)

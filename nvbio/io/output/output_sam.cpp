@@ -534,29 +534,41 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
 
 void SamOutput::process(struct HostOutputBatchSE& batch)
 {
-    ScopedLock lock( &mutex );
-
-    for(uint32 c = 0; c < batch.count; c++)
+    float time = 0.0f;
     {
-        AlignmentData alignment = get(batch, c);
-        AlignmentData mate = AlignmentData::invalid();
+        ScopedTimer<float> timer( &time );
+        ScopedLock lock( &mutex );
 
-        process_one_alignment(alignment, mate);
+        for(uint32 c = 0; c < batch.count; c++)
+        {
+            AlignmentData alignment = get(batch, c);
+            AlignmentData mate = AlignmentData::invalid();
+
+            process_one_alignment(alignment, mate);
+        }
     }
+    iostats.n_reads += batch.count;
+    iostats.output_process_timings.add( batch.count, time );
 }
 
 void SamOutput::process(struct HostOutputBatchPE& batch)
 {
-    ScopedLock lock( &mutex );
-
-    for(uint32 c = 0; c < batch.count; c++)
+    float time = 0.0f;
     {
-        AlignmentData alignment = get_anchor_mate(batch,c);
-        AlignmentData mate      = get_opposite_mate(batch,c);
+        ScopedTimer<float> timer( &time );
+        ScopedLock lock( &mutex );
 
-        process_one_alignment(alignment, mate);
-        process_one_alignment(mate, alignment);
+        for(uint32 c = 0; c < batch.count; c++)
+        {
+            AlignmentData alignment = get_anchor_mate(batch,c);
+            AlignmentData mate      = get_opposite_mate(batch,c);
+
+            process_one_alignment(alignment, mate);
+            process_one_alignment(mate, alignment);
+        }
     }
+    iostats.n_reads += batch.count;
+    iostats.output_process_timings.add( batch.count, time );
 }
 
 void SamOutput::close(void)

@@ -91,11 +91,9 @@ void InputThreadSE::run()
             }
             else
             {
-                ScopedLock lock( &m_ready_pool_lock );
-                m_ready_pool.push_front( NULL );
-                m_ready_poolN.push_front( m_reads );
-                m_done = true;
                 // stop the thread
+                m_done = true;
+                host_release_fence();
                 break;
             }
 
@@ -155,12 +153,6 @@ io::SequenceDataHost* InputThreadSE::next(uint32* offset)
     {
         ScopedLock lock( &m_ready_pool_lock );
 
-        if (m_done)
-        {
-            if (offset) *offset = m_reads;
-            return NULL;
-        }
-
         if (m_ready_pool.empty() == false)
         {
             // pop from the ready pool
@@ -169,6 +161,11 @@ io::SequenceDataHost* InputThreadSE::next(uint32* offset)
             if (offset) *offset = m_ready_poolN.back();
                                   m_ready_poolN.pop_back();
             return read_data;
+        }
+        else if (m_done)
+        {
+            if (offset) *offset = m_reads;
+            return NULL;
         }
 
         yield();
@@ -243,12 +240,9 @@ void InputThreadPE::run()
             }
             else
             {
-                ScopedLock lock( &m_ready_pool_lock );
-                m_ready_pool1.push_front( NULL );
-                m_ready_pool2.push_front( NULL );
-                m_ready_poolN.push_front( m_reads );
-                m_done = true;
                 // stop the thread
+                m_done = true;
+                host_release_fence();
                 break;
             }
 
@@ -308,12 +302,6 @@ std::pair<io::SequenceDataHost*,io::SequenceDataHost*> InputThreadPE::next(uint3
     {
         ScopedLock lock( &m_ready_pool_lock );
 
-        if (m_done)
-        {
-            if (offset) *offset = m_reads;
-            return std::pair<io::SequenceDataHost*,io::SequenceDataHost*>( NULL, NULL );
-        }
-
         if (m_ready_pool1.empty() == false &&
             m_ready_pool2.empty() == false)
         {
@@ -324,6 +312,11 @@ std::pair<io::SequenceDataHost*,io::SequenceDataHost*> InputThreadPE::next(uint3
             if (offset) *offset = m_ready_poolN.back();
                                   m_ready_poolN.pop_back();
             return read_data;
+        }
+        else if (m_done)
+        {
+            if (offset) *offset = m_reads;
+            return std::pair<io::SequenceDataHost*,io::SequenceDataHost*>( NULL, NULL );
         }
 
         yield();

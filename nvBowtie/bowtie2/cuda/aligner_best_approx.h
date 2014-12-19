@@ -367,6 +367,8 @@ void Aligner::best_approx(
     // wrap the results in a DeviceOutputBatchSE and process
     if (output_file)
     {
+        timer.start();
+
         io::DeviceOutputBatchSE gpu_batch(
             count,
             best_data_dvec,
@@ -376,8 +378,16 @@ void Aligner::best_approx(
 
         cpu_batch.readback( gpu_batch );
 
+        timer.stop();
+        stats.alignments_DtoH.add( count, timer.seconds() );
+
+        timer.start();
+
         log_debug(stderr, "[%u]     output\n", ID);
         output_file->process( cpu_batch );
+
+        timer.stop();
+        stats.io.add( count, timer.seconds() );
     }
 
     // TODO: decide whether to output second best alignments
@@ -461,6 +471,8 @@ void Aligner::best_approx(
         // wrap the results in a DeviceOutputBatchSE and process them
         if (output_file)
         {
+            timer.start();
+
             io::DeviceOutputBatchSE gpu_batch(
                 count,
                 best_data_dvec,
@@ -470,7 +482,15 @@ void Aligner::best_approx(
 
             cpu_batch.readback( gpu_batch );
 
+            timer.stop();
+            stats.alignments_DtoH.add( count, timer.seconds() );
+
+            timer.start();
+
             output_file->process( cpu_batch );
+
+            timer.stop();
+            stats.io.add( count, timer.seconds() );
         }
     }
     #endif

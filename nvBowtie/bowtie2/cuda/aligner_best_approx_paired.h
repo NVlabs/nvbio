@@ -343,6 +343,8 @@ void Aligner::best_approx(
 
     // wrap the results in a DeviceOutputBatchSE and process it
     {
+        timer.start();
+
         io::DeviceOutputBatchSE gpu_batch(
             count,
             best_data_dvec,
@@ -351,6 +353,9 @@ void Aligner::best_approx(
             mapq_dvec);
 
         cpu_batch.readback( gpu_batch, io::MATE_1 );
+
+        timer.stop();
+        stats.alignments_DtoH.add( count, timer.seconds() );
     }
 
     //
@@ -480,6 +485,8 @@ void Aligner::best_approx(
         // wrap the results in a DeviceOutputBatchSE and process it
         if (output_file)
         {
+            timer.start();
+
             io::DeviceOutputBatchSE gpu_batch(
                 count,
                 best_data_dvec_o,
@@ -489,7 +496,15 @@ void Aligner::best_approx(
 
             cpu_batch.readback( gpu_batch, io::MATE_2 );
 
+            timer.stop();
+            stats.alignments_DtoH.add( count, timer.seconds() );
+
+            timer.start();
+
             output_file->process( cpu_batch );
+
+            timer.stop();
+            stats.io.add( count, timer.seconds() );
         }
     }
 
@@ -572,6 +587,8 @@ void Aligner::best_approx(
 
         // wrap the results in a DeviceOutputBatchSE and process it
         {
+            timer.start();
+
             io::DeviceOutputBatchSE gpu_batch(
                 count,
                 best_data_dvec,
@@ -580,6 +597,9 @@ void Aligner::best_approx(
                 mapq_dvec);
 
             cpu_batch.readback( gpu_batch, io::MATE_1 );
+
+            timer.stop();
+            stats.alignments_DtoH.add( count, timer.seconds() );
         }
 
         //
@@ -701,6 +721,8 @@ void Aligner::best_approx(
             // wrap the results in a DeviceOutputBatchSE and process it
             if (output_file)
             {
+                timer.start();
+
                 io::DeviceOutputBatchSE gpu_batch(
                     count,
                     best_data_dvec_o,
@@ -710,7 +732,15 @@ void Aligner::best_approx(
 
                 cpu_batch.readback( gpu_batch, io::MATE_2 );
 
+                timer.stop();
+                stats.alignments_DtoH.add( count, timer.seconds() );
+
+                timer.start();
+
                 output_file->process( cpu_batch );
+
+                timer.stop();
+                stats.io.add( count, timer.seconds() );
             }
         }
     }

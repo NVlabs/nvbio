@@ -72,6 +72,8 @@ struct ComputeThreadSE : public Thread<ComputeThreadSE>
 
     void run();
 
+    void do_run();
+
     const uint32                             thread_id;
     const uint32                             device_id;
     const io::SequenceData&                  reference_data_host;
@@ -110,6 +112,8 @@ struct ComputeThreadPE : public Thread<ComputeThreadPE>
     void set_output(io::OutputFile* _output_file) { output_file = _output_file; }
 
     void run();
+
+    void do_run();
 
     const uint32                             thread_id;
     const uint32                             device_id;

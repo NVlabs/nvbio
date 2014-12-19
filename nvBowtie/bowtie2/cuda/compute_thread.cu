@@ -117,7 +117,7 @@ uint32 ComputeThreadSE::gauge_batch_size()
     return BATCH_SIZE;
 }
 
-void ComputeThreadSE::run()
+void ComputeThreadSE::do_run()
 {
     log_visible(stderr, "[%u] nvBowtie cuda driver... started\n", thread_id);
 
@@ -339,9 +339,57 @@ void ComputeThreadSE::run()
     log_stats(stderr, "[%u]   backtracking : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", thread_id, stats.backtrack.time, 1.0e-6f * stats.backtrack.avg_speed(), 1.0e-6f * stats.backtrack.max_speed, stats.backtrack.device_time);
     log_stats(stderr, "[%u]   finalizing   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", thread_id, stats.finalize.time, 1.0e-6f * stats.finalize.avg_speed(), 1.0e-6f * stats.finalize.max_speed, stats.finalize.device_time);
     log_stats(stderr, "[%u]   results DtoH : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.alignments_DtoH.time, 1.0e-6f * stats.alignments_DtoH.avg_speed(), 1.0e-6f * stats.alignments_DtoH.max_speed);
+    log_stats(stderr, "[%u]   results I/O  : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.io.time, 1.0e-6f * stats.io.avg_speed(), 1.0e-6f * stats.io.max_speed);
     log_stats(stderr, "[%u]   reads HtoD   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.read_HtoD.time, 1.0e-6f * stats.read_HtoD.avg_speed(), 1.0e-6f * stats.read_HtoD.max_speed);
     log_stats(stderr, "[%u]   reads I/O    : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.read_io.time, 1.0e-6f * stats.read_io.avg_speed(), 1.0e-6f * stats.read_io.max_speed);
     log_stats(stderr, "[%u]     exposed    : %.2f sec (avg: %.3fK reads/s).\n", thread_id, polling_time, 1.0e-3f * float(n_reads)/polling_time);
+}
+
+
+void ComputeThreadSE::run()
+{
+    try {
+        do_run();
+    }
+    catch (nvbio::cuda_error e)
+    {
+        log_error(stderr, "caught a nvbio::cuda_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::bad_alloc e)
+    {
+        log_error(stderr, "caught a nvbio::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::logic_error e)
+    {
+        log_error(stderr, "caught a nvbio::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::runtime_error e)
+    {
+        log_error(stderr, "caught a nvbio::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::bad_alloc e)
+    {
+        log_error(stderr, "caught a std::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::logic_error e)
+    {
+        log_error(stderr, "caught a std::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::runtime_error e)
+    {
+        log_error(stderr, "caught a std::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (...)
+    {
+        log_error(stderr, "caught an unknown exception!\n");
+    }
 }
 
 ComputeThreadPE::ComputeThreadPE(
@@ -390,7 +438,7 @@ uint32 ComputeThreadPE::gauge_batch_size()
     return BATCH_SIZE;
 }
 
-void ComputeThreadPE::run()
+void ComputeThreadPE::do_run()
 {
     log_visible(stderr, "[%u] nvBowtie cuda driver... started\n", thread_id);
 
@@ -608,9 +656,57 @@ void ComputeThreadPE::run()
     log_stats(stderr, "[%u]   backtracing(o) : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", thread_id, stats.backtrack_opposite.time, 1.0e-6f * stats.backtrack_opposite.avg_speed(), 1.0e-6f * stats.backtrack_opposite.max_speed, stats.backtrack_opposite.device_time);
     log_stats(stderr, "[%u]   finalizing     : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s, %.2f device sec).\n", thread_id, stats.finalize.time, 1.0e-6f * stats.finalize.avg_speed(), 1.0e-6f * stats.finalize.max_speed, stats.finalize.device_time);
     log_stats(stderr, "[%u]   results DtoH   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.alignments_DtoH.time, 1.0e-6f * stats.alignments_DtoH.avg_speed(), 1.0e-6f * stats.alignments_DtoH.max_speed);
+    log_stats(stderr, "[%u]   results I/O    : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.io.time, 1.0e-6f * stats.io.avg_speed(), 1.0e-6f * stats.io.max_speed);
     log_stats(stderr, "[%u]   reads HtoD     : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.read_HtoD.time, 1.0e-6f * stats.read_HtoD.avg_speed(), 1.0e-6f * stats.read_HtoD.max_speed);
     log_stats(stderr, "[%u]   reads I/O      : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.read_io.time, 1.0e-6f * stats.read_io.avg_speed(), 1.0e-6f * stats.read_io.max_speed);
     log_stats(stderr, "[%u]     exposed      : %.2f sec (avg: %.3fK reads/s).\n", thread_id, polling_time, 1.0e-3f * float(n_reads)/polling_time);
+
+}
+
+void ComputeThreadPE::run()
+{
+    try {
+        do_run();
+    }
+    catch (nvbio::cuda_error e)
+    {
+        log_error(stderr, "caught a nvbio::cuda_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::bad_alloc e)
+    {
+        log_error(stderr, "caught a nvbio::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::logic_error e)
+    {
+        log_error(stderr, "caught a nvbio::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (nvbio::runtime_error e)
+    {
+        log_error(stderr, "caught a nvbio::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::bad_alloc e)
+    {
+        log_error(stderr, "caught a std::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::logic_error e)
+    {
+        log_error(stderr, "caught a std::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (std::runtime_error e)
+    {
+        log_error(stderr, "caught a std::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+    }
+    catch (...)
+    {
+        log_error(stderr, "caught an unknown exception!\n");
+    }
 }
 
 } // namespace cuda

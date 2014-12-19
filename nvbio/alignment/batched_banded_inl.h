@@ -75,8 +75,10 @@ void batched_banded_alignment_score(const stream_type& stream, const uint32 work
     stream.output( work_id, &context );
 }
 
-template <const uint32 BAND_LEN, typename stream_type>
-__global__ void batched_banded_alignment_score_kernel(const stream_type stream)
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 BAND_LEN, typename stream_type>
+__global__ void
+__launch_bounds__(BLOCKDIM,MINBLOCKS)
+batched_banded_alignment_score_kernel(const stream_type stream)
 {
     const uint32 tid = blockIdx.x * blockDim.x + threadIdx.x;
     if (tid >= stream.size())
@@ -130,11 +132,9 @@ void BatchedBandedAlignmentScore<BAND_LEN,stream_type,HostThreadScheduler>::enac
 ///
 /// \tparam stream_type     the stream of alignment jobs
 ///
-template <uint32 BAND_LEN, typename stream_type>
-struct BatchedBandedAlignmentScore<BAND_LEN,stream_type,DeviceThreadScheduler>
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 BAND_LEN, typename stream_type>
+struct BatchedBandedAlignmentScore<BAND_LEN,stream_type,DeviceThreadBlockScheduler<BLOCKDIM,MINBLOCKS> >
 {
-    static const uint32 BLOCKDIM = 128;
-
     typedef typename stream_type::aligner_type                  aligner_type;
     typedef typename column_storage_type<aligner_type>::type    cell_type;
 
@@ -153,12 +153,12 @@ struct BatchedBandedAlignmentScore<BAND_LEN,stream_type,DeviceThreadScheduler>
 
 // enact the batch execution
 //
-template <uint32 BAND_LEN, typename stream_type>
-void BatchedBandedAlignmentScore<BAND_LEN,stream_type,DeviceThreadScheduler>::enact(stream_type stream, uint64 temp_size, uint8* temp)
+template <uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 BAND_LEN, typename stream_type>
+void BatchedBandedAlignmentScore<BAND_LEN,stream_type,DeviceThreadBlockScheduler<BLOCKDIM,MINBLOCKS> >::enact(stream_type stream, uint64 temp_size, uint8* temp)
 {
     const uint32 n_blocks = (stream.size() + BLOCKDIM-1) / BLOCKDIM;
 
-    batched_banded_alignment_score_kernel<BAND_LEN> <<<n_blocks, BLOCKDIM>>>( stream );
+    batched_banded_alignment_score_kernel<BLOCKDIM,MINBLOCKS,BAND_LEN> <<<n_blocks, BLOCKDIM>>>( stream );
 }
 
 

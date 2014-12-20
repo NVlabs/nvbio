@@ -185,7 +185,6 @@ void ComputeThreadSE::do_run()
     cudaMemGetInfo(&free, &total);
     log_stats(stderr, "[%u]   ready to start processing: device has %ld MB free\n", thread_id, free/1024/1024);
 
-    float polling_time = 0.0f;
     Timer global_timer;
     global_timer.start();
 
@@ -201,13 +200,13 @@ void ComputeThreadSE::do_run()
     {
         uint32 read_begin;
 
-        Timer polling_timer;
-        polling_timer.start();
+        Timer io_timer;
+        io_timer.start();
 
         io::SequenceDataHost* read_data_host = input_thread->next( &read_begin );
 
-        polling_timer.stop();
-        polling_time += polling_timer.seconds();
+        io_timer.stop();
+        stats.io.add( read_data_host ? read_data_host->size() : 0u, io_timer.seconds() );
 
         if (read_data_host == NULL)
         {
@@ -342,7 +341,6 @@ void ComputeThreadSE::do_run()
     log_stats(stderr, "[%u]   results I/O  : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.io.time, 1.0e-6f * stats.io.avg_speed(), 1.0e-6f * stats.io.max_speed);
     log_stats(stderr, "[%u]   reads HtoD   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.read_HtoD.time, 1.0e-6f * stats.read_HtoD.avg_speed(), 1.0e-6f * stats.read_HtoD.max_speed);
     log_stats(stderr, "[%u]   reads I/O    : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.read_io.time, 1.0e-6f * stats.read_io.avg_speed(), 1.0e-6f * stats.read_io.max_speed);
-    log_stats(stderr, "[%u]     exposed    : %.2f sec (avg: %.3fK reads/s).\n", thread_id, polling_time, 1.0e-3f * float(n_reads)/polling_time);
 }
 
 
@@ -510,7 +508,6 @@ void ComputeThreadPE::do_run()
     cudaDeviceGetLimit( &stack_size_limit, cudaLimitStackSize );
     log_debug(stderr, "[%u]   max cuda stack size: %u\n", thread_id, stack_size_limit);
 
-    float polling_time = 0.0f;
     Timer global_timer;
     global_timer.start();
 
@@ -527,16 +524,17 @@ void ComputeThreadPE::do_run()
     {
         uint32 read_begin;
 
-        Timer polling_timer;
-        polling_timer.start();
+        Timer io_timer;
+        io_timer.start();
 
         std::pair<io::SequenceDataHost*,io::SequenceDataHost*> read_data_host_pair = input_thread->next( &read_begin );
 
-        polling_timer.stop();
-        polling_time += polling_timer.seconds();
-
         io::SequenceDataHost* read_data_host1 = read_data_host_pair.first;
         io::SequenceDataHost* read_data_host2 = read_data_host_pair.second;
+
+        io_timer.stop();
+        stats.io.add( read_data_host1 ? read_data_host1->size() : 0u, io_timer.seconds() );
+
         if (read_data_host1 == NULL ||
             read_data_host2 == NULL)
         {
@@ -659,8 +657,6 @@ void ComputeThreadPE::do_run()
     log_stats(stderr, "[%u]   results I/O    : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.io.time, 1.0e-6f * stats.io.avg_speed(), 1.0e-6f * stats.io.max_speed);
     log_stats(stderr, "[%u]   reads HtoD     : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.read_HtoD.time, 1.0e-6f * stats.read_HtoD.avg_speed(), 1.0e-6f * stats.read_HtoD.max_speed);
     log_stats(stderr, "[%u]   reads I/O      : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", thread_id, stats.read_io.time, 1.0e-6f * stats.read_io.avg_speed(), 1.0e-6f * stats.read_io.max_speed);
-    log_stats(stderr, "[%u]     exposed      : %.2f sec (avg: %.3fK reads/s).\n", thread_id, polling_time, 1.0e-3f * float(n_reads)/polling_time);
-
 }
 
 void ComputeThreadPE::run()

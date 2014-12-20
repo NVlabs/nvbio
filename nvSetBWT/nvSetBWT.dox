@@ -101,14 +101,13 @@
 ///\section DetailsSection Details
 ///\par
 /// nvSetBWT implements a novel algorithm for the BWT construction of very large string sets,
-/// called <b>set-bwte</b>.
+/// called <b>set-bwte</b>:
+///
+///  http://arxiv.org/pdf/1410.0562.pdf
+///
 ///\par
 /// The algorithm can be considered an adaptation of Ferragina's serial <b>bwte</b> algorithm
 /// to string sets and massive parallelism.
-/// Among its properties, it is well suited to process reads of arbitrary length, and allows incremental
+/// Among its properties, it is well suited to process reads of arbitrary length, and it allows incremental
 /// updates (though this option is not yet implemented).
-///\par
-/// While the algorithm takes advantage of the GPU to perform block-sorting, the size of the data-set is
-/// essentially limited by the amount of available host memory.
-/// More details about the algorithm will be soon released in a technical report.
 ///

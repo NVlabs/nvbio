@@ -262,6 +262,12 @@ void score_reduce_paired_kernel(
                 best_pairs.m_o2 = pair.m_o;
                 NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_reduce( read_id ), "update second (anchor[%u]):  (parent[%u:%u])\n  1. score[%d], rc[%u], pos[%u]\n  2. score[%d], rc[%u], pos[%u,%u]\n", anchor, thread_id, i, score1, read_rc, g_pos.y, score2, o_read_rc, o_g_pos.x, o_g_pos.y );
             }
+            else if (context.failure( i, read_id, top_flag, params ))
+            {
+                //NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.show_reduce( read_id ), "discard:  (parent[%u:%u])\n  score[%d + %d], rc[%u], pos[%u]\n", anchor, thread_id, i, score1, score2, read_rc, g_pos );
+                // stop traversal
+                pipeline.hits.erase( read_id );
+            }
         } // the alignment is unpaired, check if the best alignment so far was also unpaired
         else if ((params.pe_unpaired == true) && (best_pairs.is_paired() == false))
         {

@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/contrib/moderngpu/include/mmio.h Source File</title>
+<title>NVBIO: E:/git/nvbio/contrib/moderngpu/include/mmio.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -219,11 +220,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="comment">/*  high level routines */</span></div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="keywordtype">int</span> <a class="code" href="mmio_8h.html#a68d9871d7292ea09a915e05a3588ad4c">mm_write_mtx_crd</a>(<span class="keywordtype">char</span> fname[], <span class="keywordtype">int</span> M, <span class="keywordtype">int</span> N, <span class="keywordtype">int</span> nz, <span class="keywordtype">int</span> I[], <span class="keywordtype">int</span> J[],</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="keywordtype">int</span> <a class="code" href="mmio_8h.html#a68d9871d7292ea09a915e05a3588ad4c">mm_write_mtx_crd</a>(<span class="keywordtype">char</span> fname[], <span class="keywordtype">int</span> M, <span class="keywordtype">int</span> N, <span class="keywordtype">int</span> nz, <span class="keywordtype">int</span> <a class="code" href="md5_8c.html#ac0eafdc9ee161b71e7af98af736952fd">I</a>[], <span class="keywordtype">int</span> J[],</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                 <span class="keywordtype">double</span> val[], <a class="code" href="mmio_8h.html#a27c4a0610b9f2ecb5edb6430e79ae9ee">MM_typecode</a> matcode);</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="keywordtype">int</span> <a class="code" href="mmio_8h.html#a865459b4a6c07939c06e3fe9365fc2a2">mm_read_mtx_crd_data</a>(FILE *f, <span class="keywordtype">int</span> M, <span class="keywordtype">int</span> N, <span class="keywordtype">int</span> nz, <span class="keywordtype">int</span> I[], <span class="keywordtype">int</span> J[],</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="keywordtype">int</span> <a class="code" href="mmio_8h.html#a865459b4a6c07939c06e3fe9365fc2a2">mm_read_mtx_crd_data</a>(FILE *f, <span class="keywordtype">int</span> M, <span class="keywordtype">int</span> N, <span class="keywordtype">int</span> nz, <span class="keywordtype">int</span> <a class="code" href="md5_8c.html#ac0eafdc9ee161b71e7af98af736952fd">I</a>[], <span class="keywordtype">int</span> J[],</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                <span class="keywordtype">double</span> val[], <a class="code" href="mmio_8h.html#a27c4a0610b9f2ecb5edb6430e79ae9ee">MM_typecode</a> matcode);</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="keywordtype">int</span> <a class="code" href="mmio_8h.html#acc95fad8ef63aa0cd6cf0d02a4188109">mm_read_mtx_crd_entry</a>(FILE *f, <span class="keywordtype">int</span> *I, <span class="keywordtype">int</span> *J, <span class="keywordtype">double</span> *real, <span class="keywordtype">double</span> *img,</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="keywordtype">int</span> <a class="code" href="mmio_8h.html#acc95fad8ef63aa0cd6cf0d02a4188109">mm_read_mtx_crd_entry</a>(FILE *f, <span class="keywordtype">int</span> *<a class="code" href="md5_8c.html#ac0eafdc9ee161b71e7af98af736952fd">I</a>, <span class="keywordtype">int</span> *J, <span class="keywordtype">double</span> *real, <span class="keywordtype">double</span> *img,</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                        <a class="code" href="mmio_8h.html#a27c4a0610b9f2ecb5edb6430e79ae9ee">MM_typecode</a> matcode);</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="keywordtype">int</span> <a class="code" href="mmio_8h.html#a7c7820e0d0a68f95befe5f43eb833da9">mm_read_unsymmetric_sparse</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *fname, <span class="keywordtype">int</span> *M_, <span class="keywordtype">int</span> *N_, <span class="keywordtype">int</span> *nz_,</div>
@@ -235,7 +236,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:41:56 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:21 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

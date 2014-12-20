@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -134,8 +135,6 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_constant_cost.html">nvbio::bowtie2::cuda::ConstantCost&lt; T &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_min_score_func.html">nvbio::bowtie2::cuda::MinScoreFunc</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html">nvbio::bowtie2::cuda::EditDistanceScoringScheme</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_smith_waterman_scoring_scheme.html">nvbio::bowtie2::cuda::SmithWatermanScoringScheme&lt; MMCost, NCost &gt;</a></td></tr>
@@ -183,10 +182,10 @@ Enumerations</h2></td></tr>
 <a class="el" href="group___alignment.html#ggaf75921f1fc0f4f15d79833bade9cee41af47bc7b119411d3540645e55062020c3">nvbio::aln::FSTATE</a> = 2
  }</td></tr>
 <tr class="separator:gaf75921f1fc0f4f15d79833bade9cee41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaafd3d8be887acc2c35ffdf3c7c7df494"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___alignment.html#gaafd3d8be887acc2c35ffdf3c7c7df494">nvbio::bowtie2::cuda::ScoringFuncType</a> { <a class="el" href="group___alignment.html#ggaafd3d8be887acc2c35ffdf3c7c7df494ac274f53c6b573a52da8a37ba77aaeb62">nvbio::bowtie2::cuda::LinearFunc</a> = 0, 
-<a class="el" href="group___alignment.html#ggaafd3d8be887acc2c35ffdf3c7c7df494a6982213f3ba969426d14ccb0c48e56b5">nvbio::bowtie2::cuda::LogFunc</a> = 1
+<tr class="memitem:ga774096281a1bc92f00e0e78548b22b6f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___alignment.html#ga774096281a1bc92f00e0e78548b22b6f">nvbio::bowtie2::cuda::AlignmentType</a> { <a class="el" href="group___alignment.html#gga774096281a1bc92f00e0e78548b22b6fa7c4fc11624e416407333980f2cd0d71b">nvbio::bowtie2::cuda::EndToEndAlignment</a> = 0, 
+<a class="el" href="group___alignment.html#gga774096281a1bc92f00e0e78548b22b6fa2fa00b5322dc2404e6308fbb4c325194">nvbio::bowtie2::cuda::LocalAlignment</a> = 1
  }</td></tr>
-<tr class="separator:gaafd3d8be887acc2c35ffdf3c7c7df494"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:ga774096281a1bc92f00e0e78548b22b6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gabebb986b34a66d03a44f5e74266961c2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___alignment.html#gabebb986b34a66d03a44f5e74266961c2">nvbio::bowtie2::cuda::CostType</a> { <a class="el" href="group___alignment.html#ggabebb986b34a66d03a44f5e74266961c2a41c1dc643bf31461cc62af6aa2e10c93">nvbio::bowtie2::cuda::ROUNDED_QUAL_COST</a> = 1, 
 <a class="el" href="group___alignment.html#ggabebb986b34a66d03a44f5e74266961c2ab1f7967f7111500a13b932d05e7126a3">nvbio::bowtie2::cuda::QUAL_COST</a> = 2, 
 <a class="el" href="group___alignment.html#ggabebb986b34a66d03a44f5e74266961c2aca263066619b599e54188f7197410c45">nvbio::bowtie2::cuda::CONSTANT_COST</a> = 3
@@ -242,6 +241,26 @@ scheme_type &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><
 <tr class="separator:ga3ff3e244d804bfec49cb21578e12c74f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a class="anchor" id="ga774096281a1bc92f00e0e78548b22b6f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="group___alignment.html#ga774096281a1bc92f00e0e78548b22b6f">nvbio::bowtie2::cuda::AlignmentType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="gga774096281a1bc92f00e0e78548b22b6fa7c4fc11624e416407333980f2cd0d71b"></a>EndToEndAlignment</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="gga774096281a1bc92f00e0e78548b22b6fa2fa00b5322dc2404e6308fbb4c325194"></a>LocalAlignment</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00053">53</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="gabebb986b34a66d03a44f5e74266961c2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -260,7 +279,7 @@ scheme_type &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="scoring_8h_source.html#l00045">45</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00058">58</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
 
 </div>
 </div>
@@ -295,27 +314,7 @@ scheme_type &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2alignment_8h_source.html#l00326">326</a> of file <a class="el" href="nvbio_2alignment_2alignment_8h_source.html">alignment.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="gaafd3d8be887acc2c35ffdf3c7c7df494"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="group___alignment.html#gaafd3d8be887acc2c35ffdf3c7c7df494">nvbio::bowtie2::cuda::ScoringFuncType</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ggaafd3d8be887acc2c35ffdf3c7c7df494ac274f53c6b573a52da8a37ba77aaeb62"></a>LinearFunc</em>&nbsp;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="ggaafd3d8be887acc2c35ffdf3c7c7df494a6982213f3ba969426d14ccb0c48e56b5"></a>LogFunc</em>&nbsp;</td><td class="fielddoc">
-</td></tr>
-</table>
-
-<p>Definition at line <a class="el" href="scoring_8h_source.html#l00043">43</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00139">139</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -338,7 +337,7 @@ scheme_type &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2alignment_8h_source.html#l00341">341</a> of file <a class="el" href="nvbio_2alignment_2alignment_8h_source.html">alignment.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00154">154</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -407,7 +406,7 @@ template&lt;typename aligner_type , typename pattern_string , typename qual_stri
 <div class="line"><span class="keyword">typedef</span> aln::GotohAligner&lt;aln::LOCAL,aln::SimpleGotohScheme&gt; aligner_type;</div>
 <div class="line"><span class="keyword">typedef</span> aln::column_storage_type&lt;aligner_type&gt;::type         cell_type;</div>
 <div class="line"></div>
-<div class="line">cell_type column[14]; <span class="comment">// a column as big as the text</span></div>
+<div class="line">cell_type <a class="code" href="group__private.html#ga42cf6551fd7dbc319c92c050d713cb91">column</a>[14]; <span class="comment">// a column as big as the text</span></div>
 <div class="line"></div>
 <div class="line"><span class="keyword">const</span> aln::SimpleGotohScheme scoring(                       <span class="comment">// build a Gotoh scoring scheme</span></div>
 <div class="line">     2,                                                     <span class="comment">// match bonus</span></div>
@@ -448,7 +447,7 @@ template&lt;typename aligner_type , typename pattern_string , typename qual_stri
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="alignment__inl_8h_source.html#l00055">55</a> of file <a class="el" href="alignment__inl_8h_source.html">alignment_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__inl_8h_source.html#l00065">65</a> of file <a class="el" href="alignment__inl_8h_source.html">alignment_inl.h</a>.</p>
 
 </div>
 </div>
@@ -539,7 +538,7 @@ template&lt;uint32 MAX_TEXT_LEN, typename aligner_type , typename pattern_string
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="alignment__inl_8h_source.html#l00093">93</a> of file <a class="el" href="alignment__inl_8h_source.html">alignment_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__inl_8h_source.html#l00103">103</a> of file <a class="el" href="alignment__inl_8h_source.html">alignment_inl.h</a>.</p>
 
 </div>
 </div>
@@ -627,7 +626,7 @@ template&lt;uint32 CHECKPOINTS, typename aligner_type , typename pattern_string 
 <div class="line">cell_type column[TEXT_LEN]; <span class="comment">// a column as big as the text</span></div>
 <div class="line"></div>
 <div class="line"><span class="comment">// checkpoints storage</span></div>
-<div class="line">cell_type checkpoints[TEXT_LEN*<a class="code" href="group___basic_utils.html#gabf731ec687bc1c5397b265d41d76da50">util::divide_ri</a>(PATTERN_LEN,CHECKPOINTS) ];</div>
+<div class="line">cell_type <a class="code" href="group__private.html#ga79bab77c39c290c168c83216050371c4">checkpoints</a>[TEXT_LEN*<a class="code" href="group___basic_utils.html#gabf731ec687bc1c5397b265d41d76da50">util::divide_ri</a>(PATTERN_LEN,CHECKPOINTS) ];</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// submatrix storage (packed using a few bits per cell)</span></div>
 <div class="line"><span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> SUBMATRIX_BITS = <a class="code" href="infback_8c.html#a5967693540f086cfa357f68978bf0be7">direction_vector_traits&lt;aligner_type&gt;::BITS</a>;</div>
@@ -682,7 +681,7 @@ template&lt;uint32 CHECKPOINTS, typename aligner_type , typename pattern_string 
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>reported alignment </dd></dl>
 
-<p>Definition at line <a class="el" href="alignment__inl_8h_source.html#l00355">355</a> of file <a class="el" href="alignment__inl_8h_source.html">alignment_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__inl_8h_source.html#l00365">365</a> of file <a class="el" href="alignment__inl_8h_source.html">alignment_inl.h</a>.</p>
 
 </div>
 </div>
@@ -763,7 +762,7 @@ template&lt;uint32 MAX_PATTERN_LEN, uint32 MAX_TEXT_LEN, uint32 CHECKPOINTS, typ
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>reported alignment </dd></dl>
 
-<p>Definition at line <a class="el" href="alignment__inl_8h_source.html#l00488">488</a> of file <a class="el" href="alignment__inl_8h_source.html">alignment_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__inl_8h_source.html#l00498">498</a> of file <a class="el" href="alignment__inl_8h_source.html">alignment_inl.h</a>.</p>
 
 </div>
 </div>
@@ -835,7 +834,7 @@ template&lt;uint32 BAND_LEN, typename aligner_type , typename pattern_string , t
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="banded__inl_8h_source.html#l00049">49</a> of file <a class="el" href="banded__inl_8h_source.html">banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="banded__inl_8h_source.html#l00058">58</a> of file <a class="el" href="banded__inl_8h_source.html">banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -900,7 +899,7 @@ template&lt;uint32 BAND_LEN, typename aligner_type , typename pattern_string , t
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="banded__inl_8h_source.html#l00083">83</a> of file <a class="el" href="banded__inl_8h_source.html">banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="banded__inl_8h_source.html#l00092">92</a> of file <a class="el" href="banded__inl_8h_source.html">banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -966,7 +965,7 @@ template&lt;uint32 BAND_LEN, typename aligner_type , typename pattern_string , t
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>best alignment score </dd></dl>
 
-<p>Definition at line <a class="el" href="banded__inl_8h_source.html#l00117">117</a> of file <a class="el" href="banded__inl_8h_source.html">banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="banded__inl_8h_source.html#l00126">126</a> of file <a class="el" href="banded__inl_8h_source.html">banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1025,7 +1024,7 @@ template&lt;uint32 BAND_LEN, typename aligner_type , typename pattern_string , t
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>best alignment score </dd></dl>
 
-<p>Definition at line <a class="el" href="banded__inl_8h_source.html#l00151">151</a> of file <a class="el" href="banded__inl_8h_source.html">banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="banded__inl_8h_source.html#l00160">160</a> of file <a class="el" href="banded__inl_8h_source.html">banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1120,7 +1119,7 @@ template&lt;uint32 BAND_LEN, uint32 CHECKPOINTS, typename aligner_type , typenam
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>reported alignment </dd></dl>
 
-<p>Definition at line <a class="el" href="banded__inl_8h_source.html#l00354">354</a> of file <a class="el" href="banded__inl_8h_source.html">banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="banded__inl_8h_source.html#l00363">363</a> of file <a class="el" href="banded__inl_8h_source.html">banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1157,7 +1156,7 @@ template&lt;uint32 BAND_LEN, uint32 CHECKPOINTS, typename aligner_type , typenam
 </div><div class="memdoc">
 <p>load a Smith-Waterman scoring scheme from disk </p>
 
-<p>Definition at line <a class="el" href="scoring__inl_8h_source.html#l00028">28</a> of file <a class="el" href="scoring__inl_8h_source.html">scoring_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="scoring__inl_8h_source.html#l00037">37</a> of file <a class="el" href="scoring__inl_8h_source.html">scoring_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1178,14 +1177,14 @@ template&lt;AlignmentType TYPE, typename scheme_type &gt; </div>
 </div><div class="memdoc">
 <p>a helper function to make an aligner given the AlignmentType (LocalAlignment|EndToEndAlignment) and the scheme (EditDistanceScoringScheme|SmithWatermanScoringScheme) </p>
 
-<p>Definition at line <a class="el" href="scoring_8h_source.html#l00366">366</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00373">373</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:17 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:46 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

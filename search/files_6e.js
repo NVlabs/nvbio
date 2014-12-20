@@ -11,7 +11,6 @@ var searchData=
   ['nvfm_2dserver_2ecpp',['nvFM-server.cpp',['../nv_f_m-server_8cpp.html',1,'']]],
   ['nvfm_2dserver_2edox',['nvFM-server.dox',['../nv_f_m-server_8dox.html',1,'']]],
   ['nvsetbwt_2edox',['nvSetBWT.dox',['../nv_set_b_w_t_8dox.html',1,'']]],
-  ['nvsetbwte_2edox',['nvSetBWTE.dox',['../nv_set_b_w_t_e_8dox.html',1,'']]],
   ['nvssa_2ecpp',['nvSSA.cpp',['../nv_s_s_a_8cpp.html',1,'']]],
   ['nvssa_2edox',['nvSSA.dox',['../nv_s_s_a_8dox.html',1,'']]]
 ];

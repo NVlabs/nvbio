@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -116,6 +117,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gafe2c0edc8a2ca31b7f3354a665120e6f"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
 <tr class="memitem:gafe2c0edc8a2ca31b7f3354a665120e6f"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___locate_detail.html#gafe2c0edc8a2ca31b7f3354a665120e6f">nvbio::bowtie2::cuda::detail::locate_lookup_kernel</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 in_count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *idx_queue, HitQueuesDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
 <tr class="separator:gafe2c0edc8a2ca31b7f3354a665120e6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga694397c7a6bea97e7de184b68c31d473"><td class="memTemplParams" colspan="2">template&lt;typename index_iterator , typename flags_iterator &gt; </td></tr>
+<tr class="memitem:ga694397c7a6bea97e7de184b68c31d473"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___locate_detail.html#ga694397c7a6bea97e7de184b68c31d473">nvbio::bowtie2::cuda::detail::mark_straddling_kernel</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 in_count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *idx_queue, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 reference_count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> index_iterator reference_index, HitQueuesDeviceView hits, flags_iterator flags, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
+<tr class="separator:ga694397c7a6bea97e7de184b68c31d473"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ga1e5288e0dd925abff9cf9f32387af4c9"></a>
@@ -157,7 +161,7 @@ template&lt;typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>transform an SA index to linear coordinates using either the forward or reverse FM-index </p>
 
-<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00046">46</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00055">55</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
 
 </div>
 </div>
@@ -200,7 +204,7 @@ template&lt;typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>first pass of a two pass method to transform an SA index to linear coordinates using either the forward or reverse FM-index </p>
 
-<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00069">69</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00078">78</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
 
 </div>
 </div>
@@ -261,7 +265,7 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>Locate the next SA row in the queue. Since the input loc_queue might have been sorted to gather locality, the corresponding entry in seed_queue is now specified by an index (idx_queue). </p>
 
-<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00145">145</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00154">154</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
 
 </div>
 </div>
@@ -322,7 +326,7 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>Locate the next SA row in the queue. Since the input loc_queue might have been sorted to gather locality, the corresponding entry in seed_queue is now specified by an index (idx_queue). </p>
 
-<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00114">114</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00123">123</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
 
 </div>
 </div>
@@ -365,7 +369,7 @@ template&lt;typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>second pass of a two pass method to transform an SA index to linear coordinates using either the forward or reverse FM-index </p>
 
-<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00090">90</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00099">99</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
 
 </div>
 </div>
@@ -426,14 +430,75 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>Locate the next SA row in the queue. Since the input loc_queue might have been sorted to gather locality, the corresponding entry in seed_queue is now specified by an index (idx_queue). </p>
 
-<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00175">175</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00184">184</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga694397c7a6bea97e7de184b68c31d473"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename index_iterator , typename flags_iterator &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">__global__ void nvbio::bowtie2::cuda::detail::mark_straddling_kernel </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>in_count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *&#160;</td>
+          <td class="paramname"><em>idx_queue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>reference_count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> index_iterator&#160;</td>
+          <td class="paramname"><em>reference_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">HitQueuesDeviceView&#160;</td>
+          <td class="paramname"><em>hits</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flags_iterator&#160;</td>
+          <td class="paramname"><em>flags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>mark seeds straddling the reference boundaries. </p>
+
+<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00214">214</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:19 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:48 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

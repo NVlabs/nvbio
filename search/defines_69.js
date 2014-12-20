@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['i',['I',['../md5_8c.html#ac0eafdc9ee161b71e7af98af736952fd',1,'md5.c']]],
   ['inflatebackinit',['inflateBackInit',['../contrib_2zlib_2zlib_8h.html#a9253571ea0fc77cc53c330c0411b8c19',1,'inflateBackInit():&#160;zlib.h'],['../contrib_2zlib-1_82_87_2zlib_8h.html#a9253571ea0fc77cc53c330c0411b8c19',1,'inflateBackInit():&#160;zlib.h'],['../vs_2zlib_2zlib_8h.html#a9253571ea0fc77cc53c330c0411b8c19',1,'inflateBackInit():&#160;zlib.h']]],
   ['inflateinit',['inflateInit',['../contrib_2zlib_2zlib_8h.html#ad7c6797b618699f70f61323c5184f26e',1,'inflateInit():&#160;zlib.h'],['../contrib_2zlib-1_82_87_2zlib_8h.html#ad7c6797b618699f70f61323c5184f26e',1,'inflateInit():&#160;zlib.h'],['../vs_2zlib_2zlib_8h.html#ad7c6797b618699f70f61323c5184f26e',1,'inflateInit():&#160;zlib.h']]],
   ['inflateinit2',['inflateInit2',['../contrib_2zlib_2zlib_8h.html#a611fc206e69f34e812ca8b590982fdd5',1,'inflateInit2():&#160;zlib.h'],['../contrib_2zlib-1_82_87_2zlib_8h.html#a611fc206e69f34e812ca8b590982fdd5',1,'inflateInit2():&#160;zlib.h'],['../vs_2zlib_2zlib_8h.html#a611fc206e69f34e812ca8b590982fdd5',1,'inflateInit2():&#160;zlib.h']]],
@@ -11,5 +12,27 @@ var searchData=
   ['inst_5ftexture_5fselector_5fwrapper_5fclass',['INST_TEXTURE_SELECTOR_WRAPPER_CLASS',['../tex_8h.html#aba852080b43b65cdfc17a925428ce967',1,'tex.h']]],
   ['inst_5ftexture_5fselector_5fwrapper_5fclass_5f2d',['INST_TEXTURE_SELECTOR_WRAPPER_CLASS_2D',['../tex_8h.html#a4166cc325fe8019856f227085a1b4654',1,'tex.h']]],
   ['inst_5ftexture_5fwrapper_5fclass',['INST_TEXTURE_WRAPPER_CLASS',['../tex_8h.html#a37a45ed816f9a0135264bc59b99221d9',1,'tex.h']]],
-  ['inst_5ftexture_5fwrapper_5fclass_5f2d',['INST_TEXTURE_WRAPPER_CLASS_2D',['../tex_8h.html#ae765e1a15c80747cdefccdd345ea5383',1,'tex.h']]]
+  ['inst_5ftexture_5fwrapper_5fclass_5f2d',['INST_TEXTURE_WRAPPER_CLASS_2D',['../tex_8h.html#ae765e1a15c80747cdefccdd345ea5383',1,'tex.h']]],
+  ['int16_5fmax',['INT16_MAX',['../kstdint_8h.html#ac58f2c111cc9989c86db2a7dc4fd84ca',1,'kstdint.h']]],
+  ['int16_5fmin',['INT16_MIN',['../kstdint_8h.html#ad4e9955955b27624963643eac448118a',1,'kstdint.h']]],
+  ['int32_5fmax',['INT32_MAX',['../kstdint_8h.html#a181807730d4a375f848ba139813ce04f',1,'kstdint.h']]],
+  ['int32_5fmin',['INT32_MIN',['../kstdint_8h.html#a688eb21a22db27c2b2bd5836943cdcbe',1,'kstdint.h']]],
+  ['int64_5fmax',['INT64_MAX',['../kstdint_8h.html#ad0d744f05898e32d01f73f8af3cd2071',1,'kstdint.h']]],
+  ['int64_5fmin',['INT64_MIN',['../kstdint_8h.html#ab21f12f372f67b8ff0aa3432336ede67',1,'kstdint.h']]],
+  ['int8_5fmax',['INT8_MAX',['../kstdint_8h.html#aaf7f29f45f1a513b4748a4e5014ddf6a',1,'kstdint.h']]],
+  ['int8_5fmin',['INT8_MIN',['../kstdint_8h.html#aadcf2a81af243df333b31efa6461ab8e',1,'kstdint.h']]],
+  ['is_5fbam',['IS_BAM',['../tabix_8c.html#a7aa73e7c6e0a633970d7101760d8e5f9',1,'tabix.c']]],
+  ['is_5fbcf',['IS_BCF',['../tabix_8c.html#a19ee2633541fffb0a2e37f7df89698b3',1,'tabix.c']]],
+  ['is_5fbed',['IS_BED',['../tabix_8c.html#aa5b7230f094c5402aba608fd2910b3a6',1,'tabix.c']]],
+  ['is_5fgff',['IS_GFF',['../tabix_8c.html#a439ea0990f173e5992f8852c94167977',1,'tabix.c']]],
+  ['is_5fsam',['IS_SAM',['../tabix_8c.html#aa70387371827f2f9d7429dae6c359770',1,'tabix.c']]],
+  ['is_5ftxt',['IS_TXT',['../tabix_8c.html#a441fc3b707811744683a4fb6580d067a',1,'tabix.c']]],
+  ['is_5fvcf',['IS_VCF',['../tabix_8c.html#a9c103d0a2602b9b786e72c5c58a49b15',1,'tabix.c']]],
+  ['iswap_5fint2',['iswap_int2',['../os_8h.html#a50970e68aa64b64f7cb96f7b1686dea0',1,'os.h']]],
+  ['iswap_5fint4',['iswap_int4',['../os_8h.html#af680a81fb2d307bccc6a5a4f19c44605',1,'os.h']]],
+  ['iswap_5fint8',['iswap_int8',['../os_8h.html#a9abea225b9e2cd67176f4d378c80c981',1,'os.h']]],
+  ['itf8_5fget',['itf8_get',['../cram__io_8h.html#a71abe6f696e9e88155c28fc9efaa6514',1,'cram_io.h']]],
+  ['itf8_5fmacros',['ITF8_MACROS',['../cram__io_8h.html#acfa5e22787f5a03efbd46dc818147f54',1,'cram_io.h']]],
+  ['itf8_5fput',['itf8_put',['../cram__io_8h.html#a3f4f4509af272b115282d55e32304641',1,'cram_io.h']]],
+  ['itf8_5fsize',['itf8_size',['../cram__io_8h.html#a99de47e6dedf0e177fb9a03f47ca5cb2',1,'cram_io.h']]]
 ];

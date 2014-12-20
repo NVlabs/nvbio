@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -180,7 +181,7 @@ struct nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, algor
 <li>allow the user to perform string caching in registers/local memory: in fact, schedulers will instantiate the strings_type class on the stack, thus guaranteeing that any user-defined private data will be placed either in registers or local memory. The stream_type::load_strings() method is then free to use such private data to implement a cache for any of the involved strings. With this design cached strings will then be allowed to just contain pointers to the caches, making sure that they can be passed by value without inadvertedly copying the caches themselves. </li>
 </ul>
 
-<p>Definition at line <a class="el" href="batched_8h_source.html#l00397">397</a> of file <a class="el" href="batched_8h_source.html">batched.h</a>.</p>
+<p>Definition at line <a class="el" href="batched_8h_source.html#l00432">432</a> of file <a class="el" href="batched_8h_source.html">batched.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="batched_8h_source.html">batched.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -319,12 +320,12 @@ template&lt;uint32 CHECKPOINTS, typename stream_type, typename algorithm_type = 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/alignment/<a class="el" href="batched_8h_source.html">batched.h</a></li>
+<li>E:/git/nvbio/nvbio/alignment/<a class="el" href="batched_8h_source.html">batched.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:50 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:29 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

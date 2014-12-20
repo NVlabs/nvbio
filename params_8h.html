@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/params.h File Reference</title>
+<title>NVBIO: E:/git/nvbio/nvBowtie/bowtie2/cuda/params.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -104,16 +105,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">params.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="types_8h_source.html">nvbio/basic/types.h</a>&gt;</code><br/>
+<div class="textblock"><code>#include &lt;<a class="el" href="scoring_8h_source.html">nvBowtie/bowtie2/cuda/scoring.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="string_8h_source.html">string.h</a>&gt;</code><br/>
 <code>#include &lt;string&gt;</code><br/>
+<code>#include &lt;map&gt;</code><br/>
 </div>
 <p><a href="params_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_simple_func.html">nvbio::bowtie2::cuda::SimpleFunc</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params_p_o_d.html">nvbio::bowtie2::cuda::ParamsPOD</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params.html">nvbio::bowtie2::cuda::Params</a></td></tr>
@@ -140,10 +140,6 @@ Enumerations</h2></td></tr>
 <a class="el" href="group__nv_bowtie.html#gga7df415df8dea3af51fa5b274f8102b4fad76a804715535f5d360b58ed681ee751">nvbio::bowtie2::cuda::SmithWatermanMode</a> = 1
  }</td></tr>
 <tr class="separator:ga7df415df8dea3af51fa5b274f8102b4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga774096281a1bc92f00e0e78548b22b6f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__nv_bowtie.html#ga774096281a1bc92f00e0e78548b22b6f">nvbio::bowtie2::cuda::AlignmentType</a> { <a class="el" href="group__nv_bowtie.html#gga774096281a1bc92f00e0e78548b22b6fa7c4fc11624e416407333980f2cd0d71b">nvbio::bowtie2::cuda::EndToEndAlignment</a> = 0, 
-<a class="el" href="group__nv_bowtie.html#gga774096281a1bc92f00e0e78548b22b6fa2fa00b5322dc2404e6308fbb4c325194">nvbio::bowtie2::cuda::LocalAlignment</a> = 1
- }</td></tr>
-<tr class="separator:ga774096281a1bc92f00e0e78548b22b6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -155,11 +151,16 @@ Functions</h2></td></tr>
 <tr class="separator:ga092110a1d4d60bc154e86dac4a9ebb42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga43f68c79d83bb33c4e4e5cd82c0de674"><td class="memItemLeft" align="right" valign="top">uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__nv_bowtie.html#ga43f68c79d83bb33c4e4e5cd82c0de674">nvbio::bowtie2::cuda::scoring_mode</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *str)</td></tr>
 <tr class="separator:ga43f68c79d83bb33c4e4e5cd82c0de674"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae07971f064493cdc50c2afe0992d545b"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <br class="typebreak"/>
+std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__nv_bowtie.html#gae07971f064493cdc50c2afe0992d545b">nvbio::bowtie2::cuda::load_options</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name)</td></tr>
+<tr class="separator:gae07971f064493cdc50c2afe0992d545b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0c9ce7e4b974d16eafcc01a20632f736"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__nv_bowtie.html#ga0c9ce7e4b974d16eafcc01a20632f736">nvbio::bowtie2::cuda::parse_options</a> (Params &amp;params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> std::map&lt; std::string, std::string &gt; &amp;options, bool init)</td></tr>
+<tr class="separator:ga0c9ce7e4b974d16eafcc01a20632f736"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:16 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:44 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -98,12 +99,19 @@ Functions</h2></td></tr>
 <tr class="memitem:gabdc70c671d8b900a156693634c422389"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename ContextType &gt; </td></tr>
 <tr class="memitem:gabdc70c671d8b900a156693634c422389"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___select_detail.html#gabdc70c671d8b900a156693634c422389">nvbio::bowtie2::cuda::select_kernel</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType read_batch, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ContextType context, ScoringQueuesDeviceView scoring_queues, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
 <tr class="separator:gabdc70c671d8b900a156693634c422389"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae886c46187ada17484d842b8059c5b8f"><td class="memTemplParams" colspan="2">template&lt;typename ProbTree &gt; </td></tr>
+<tr class="memitem:gae886c46187ada17484d842b8059c5b8f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> uint32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___select_detail.html#gae886c46187ada17484d842b8059c5b8f">nvbio::bowtie2::cuda::randomized_select</a> (ProbTree &amp;prob_tree, SeedHit *hits_data, uint32 *rseeds, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 read_id)</td></tr>
+<tr class="separator:gae886c46187ada17484d842b8059c5b8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7bd04ce69e9617342cebc8bc539ba0ea"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename ContextType &gt; </td></tr>
 <tr class="memitem:ga7bd04ce69e9617342cebc8bc539ba0ea"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___select_detail.html#ga7bd04ce69e9617342cebc8bc539ba0ea">nvbio::bowtie2::cuda::rand_select_kernel</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType read_batch, SeedHitDequeArrayDeviceView hits, uint32 *rseeds, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ContextType context, ScoringQueuesDeviceView scoring_queues, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
 <tr class="separator:ga7bd04ce69e9617342cebc8bc539ba0ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7b991b30360cb9582e094731af70b471"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename ContextType &gt; </td></tr>
 <tr class="memitem:ga7b991b30360cb9582e094731af70b471"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___select_detail.html#ga7b991b30360cb9582e094731af70b471">nvbio::bowtie2::cuda::select_multi_kernel</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType read_batch, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ContextType context, ScoringQueuesDeviceView scoring_queues, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 n_multi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
 <tr class="separator:ga7b991b30360cb9582e094731af70b471"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga68f8021fa75da0f22bfb6ab66441b964"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename ContextType &gt; </td></tr>
+<tr class="memitem:ga68f8021fa75da0f22bfb6ab66441b964"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___select_detail.html#ga68f8021fa75da0f22bfb6ab66441b964">nvbio::bowtie2::cuda::rand_select_multi_kernel</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType read_batch, SeedHitDequeArrayDeviceView hits, uint32 *rseeds, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ContextType context, ScoringQueuesDeviceView scoring_queues, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 n_multi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
+<tr class="separator:ga68f8021fa75da0f22bfb6ab66441b964"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ga7bd04ce69e9617342cebc8bc539ba0ea"></a>
@@ -157,7 +165,114 @@ template&lt;typename BatchType , typename ContextType &gt; </div>
 </div><div class="memdoc">
 <p>Prepare for a round of seed extension by selecting the next SA row </p>
 
-<p>Definition at line <a class="el" href="select__inl_8h_source.html#l00136">136</a> of file <a class="el" href="select__inl_8h_source.html">select_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="select__inl_8h_source.html#l00182">182</a> of file <a class="el" href="select__inl_8h_source.html">select_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga68f8021fa75da0f22bfb6ab66441b964"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BatchType , typename ContextType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">__global__ void nvbio::bowtie2::cuda::rand_select_multi_kernel </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType&#160;</td>
+          <td class="paramname"><em>read_batch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SeedHitDequeArrayDeviceView&#160;</td>
+          <td class="paramname"><em>hits</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32 *&#160;</td>
+          <td class="paramname"><em>rseeds</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ContextType&#160;</td>
+          <td class="paramname"><em>context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ScoringQueuesDeviceView&#160;</td>
+          <td class="paramname"><em>scoring_queues</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>n_multi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Prepare for a round of seed extension by selecting a set of up to 'n_multi' next SA rows. For each read in the input queue, this kernel generates:</p>
+<ol type="1">
+<li>one or zero output reads, in the main output read queue,</li>
+<li>zero to 'n_multi' SA rows. These are made of three entries, one in 'loc_queue', identifying the corresponding SA index, one in 'seed_queue', storing information about the seed hit, and one in 'parent_queue', storing the index of the "parent" read in the output queue (i.e. the slot where the read is is being stored) </li>
+</ol>
+
+<p>Definition at line <a class="el" href="select__inl_8h_source.html#l00492">492</a> of file <a class="el" href="select__inl_8h_source.html">select_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="gae886c46187ada17484d842b8059c5b8f"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ProbTree &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> uint32 nvbio::bowtie2::cuda::randomized_select </td>
+          <td>(</td>
+          <td class="paramtype">ProbTree &amp;&#160;</td>
+          <td class="paramname"><em>prob_tree</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SeedHit *&#160;</td>
+          <td class="paramname"><em>hits_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32 *&#160;</td>
+          <td class="paramname"><em>rseeds</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>read_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="select__inl_8h_source.html#l00146">146</a> of file <a class="el" href="select__inl_8h_source.html">select_inl.h</a>.</p>
 
 </div>
 </div>
@@ -206,7 +321,7 @@ template&lt;typename BatchType , typename ContextType &gt; </div>
 </div><div class="memdoc">
 <p>Prepare for a round of seed extension by selecting the next SA row </p>
 
-<p>Definition at line <a class="el" href="select__inl_8h_source.html#l00063">63</a> of file <a class="el" href="select__inl_8h_source.html">select_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="select__inl_8h_source.html#l00075">75</a> of file <a class="el" href="select__inl_8h_source.html">select_inl.h</a>.</p>
 
 </div>
 </div>
@@ -265,14 +380,14 @@ template&lt;typename BatchType , typename ContextType &gt; </div>
 <li>zero to 'n_multi' SA rows. These are made of three entries, one in 'loc_queue', identifying the corresponding SA index, one in 'seed_queue', storing information about the seed hit, and one in 'parent_queue', storing the index of the "parent" read in the output queue (i.e. the slot where the read is is being stored) </li>
 </ol>
 
-<p>Definition at line <a class="el" href="select__inl_8h_source.html#l00269">269</a> of file <a class="el" href="select__inl_8h_source.html">select_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="select__inl_8h_source.html#l00294">294</a> of file <a class="el" href="select__inl_8h_source.html">select_inl.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:19 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:48 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

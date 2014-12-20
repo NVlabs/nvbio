@@ -1,4 +1,4 @@
-<!-- HTML header for doxygen 1.8.4 -->
+<!-- HTML header for doxygen 1.8.4-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -113,7 +114,7 @@ Links</h1>
 
  <a href="https://github.com/NVlabs/nvbio"><img src="download-icon.png" style="position:relative; bottom:-10px; border:0px;"/></a>
  &nbsp;&nbsp;
- <a href="https://github.com/NVlabs/nvbio">Download NVBIO 0.9.9</a>
+ <a href="https://github.com/NVlabs/nvbio">Download NVBIO 0.9.98</a>
  </div>
 <h1><a class="anchor" id="Documentation"></a>
 Documentation</h1>
@@ -131,8 +132,41 @@ Documentation</h1>
 Recent News</h1>
 <dl class="section user"><dt></dt><dd><table class="doxtable">
 <tr>
+<td style="white-space: nowrap; vertical-align:text-top;">20/12/2014 <br/>
+ NVBIO 0.9.98 </td><td style="vertical-align:text-top;" width="90%"><ul>
+<li><b>New Features:</b> <br/>
+<ul>
+<li>Added multi-GPU support to nvBowtie, together with many accuracy and sensitivity improvements</li>
+<li>Released a new version of nvSetBWT based on our freshly developed massively parallel algorithm: <a href="http://arxiv.org/pdf/1410.0562.pdf">http://arxiv.org/pdf/1410.0562.pdf</a>  </li>
+</ul>
+</li>
+</ul>
+</td></tr>
+</table>
+</dd></dl>
+<dl class="section user"><dt></dt><dd><table class="doxtable">
+<tr>
+<td style="white-space: nowrap; vertical-align:text-top;">15/09/2014 <br/>
+ NVBIO 0.9.98 </td><td style="vertical-align:text-top;" width="90%"><ul>
+<li><b>New Features:</b> <br/>
+<ul>
+<li>Added many Bowtie2-compatible command line options to nvBowtie</li>
+<li>Added &ndash;ungapped-mates option to nvBowtie, which doubles speed at a minor cost in sensitivity (&lt;0.2%)</li>
+</ul>
+</li>
+<li><b>Bug Fixes:</b> <br/>
+<ul>
+<li>Fixed several memory-corruption bugs in nvBowtie's paired-end alignment  </li>
+</ul>
+</li>
+</ul>
+</td></tr>
+</table>
+</dd></dl>
+<dl class="section user"><dt></dt><dd><table class="doxtable">
+<tr>
 <td style="white-space: nowrap; vertical-align:text-top;">26/05/2014 <br/>
- NVBIO 0.9.9 </td><td style="vertical-align:text-top;" width="90%"><ul>
+ NVBIO 0.9.90 </td><td style="vertical-align:text-top;" width="90%"><ul>
 <li><b>New Features:</b> <br/>
 <ul>
 <li>Added a new <a class="el" href="strings_page.html#AlphabetsSection">Alphabets</a> module for managing different alphabets.</li>
@@ -218,7 +252,7 @@ Requirements</h1>
 <dl class="section user"><dt></dt><dd>NVBIO has been designed for GPUs supporting at least CUDA's <em>Compute Capability 3.5</em>. Due to the high memory requirements typical of bionformatics algorithms, Tesla K20, K20x or K40 are recommended.</dd></dl>
 <h1><a class="anchor" id="Licensing"></a>
 Licensing</h1>
-<dl class="section user"><dt></dt><dd>NVBIO has been developed by <a href="http://www.nvidia.com">NVIDIA Corporation</a> and is licensed under <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL v2</a>.</dd></dl>
+<dl class="section user"><dt></dt><dd>NVBIO has been developed by <a href="http://www.nvidia.com">NVIDIA Corporation</a> and is licensed under BSD.</dd></dl>
 <h1><a class="anchor" id="Contributors"></a>
 Contributors</h1>
 <dl class="section user"><dt></dt><dd>The main contributors of NVBIO are <a href="#" onclick="location.href='mai'+'lto:'+'jpa'+'nt'+'ale'+'on'+'i@n'+'vi'+'dia'+'.c'+'om'; return false;">Jacopo Pantaleoni</a> and <a href="#" onclick="location.href='mai'+'lto:'+'nsu'+'bt'+'il@'+'nv'+'idi'+'a.'+'com'; return false;">Nuno Subtil</a>.</dd></dl>
@@ -228,7 +262,7 @@ Contributors</h1>
  </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:43:26 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:29:10 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

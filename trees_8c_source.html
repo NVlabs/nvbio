@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/contrib/zlib-1.2.7/trees.c Source File</title>
+<title>NVBIO: E:/git/nvbio/contrib/zlib-1.2.7/trees.c Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -432,43 +433,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="keywordtype">int</span> i;</div>
 <div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;</div>
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    <a class="code" href="zutil_8h.html#a5c8d8d889189d1461d10df831f3cd40e">Assert</a> (header != NULL, <span class="stringliteral">&quot;Can&#39;t open trees.h&quot;</span>);</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(header,</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    fprintf(header,</div>
 <div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            <span class="stringliteral">&quot;/* header created automatically with -DGEN_TREES_H */\n\n&quot;</span>);</div>
 <div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(header, <span class="stringliteral">&quot;local const ct_data static_ltree[L_CODES+2] = {\n&quot;</span>);</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    fprintf(header, <span class="stringliteral">&quot;local const ct_data static_ltree[L_CODES+2] = {\n&quot;</span>);</div>
 <div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code" href="deflate_8h.html#a2b0cc00cc6a7d521fba8d208a1cae477">L_CODES</a>+2; i++) {</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(header, <span class="stringliteral">&quot;{{%3u},{%3u}}%s&quot;</span>, <a class="code" href="trees_8c.html#a4cd63132278f666b275275d6ba45cca3">static_ltree</a>[i].<a class="code" href="deflate_8h.html#a068e76e6034d06450385bc98b69ea53e">Code</a>,</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        fprintf(header, <span class="stringliteral">&quot;{{%3u},{%3u}}%s&quot;</span>, <a class="code" href="trees_8c.html#a4cd63132278f666b275275d6ba45cca3">static_ltree</a>[i].<a class="code" href="deflate_8h.html#a068e76e6034d06450385bc98b69ea53e">Code</a>,</div>
 <div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                <a class="code" href="trees_8c.html#a4cd63132278f666b275275d6ba45cca3">static_ltree</a>[i].<a class="code" href="deflate_8h.html#a4490e644c06783cc69ad87c121e39e94">Len</a>, SEPARATOR(i, L_CODES+1, 5));</div>
 <div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    }</div>
 <div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(header, <span class="stringliteral">&quot;local const ct_data static_dtree[D_CODES] = {\n&quot;</span>);</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    fprintf(header, <span class="stringliteral">&quot;local const ct_data static_dtree[D_CODES] = {\n&quot;</span>);</div>
 <div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code" href="deflate_8h.html#a8798a9a526623abbd88fedb0727e21aa">D_CODES</a>; i++) {</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(header, <span class="stringliteral">&quot;{{%2u},{%2u}}%s&quot;</span>, <a class="code" href="trees_8c.html#a0ddc0ba781501da71ec8d54256819740">static_dtree</a>[i].<a class="code" href="deflate_8h.html#a068e76e6034d06450385bc98b69ea53e">Code</a>,</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        fprintf(header, <span class="stringliteral">&quot;{{%2u},{%2u}}%s&quot;</span>, <a class="code" href="trees_8c.html#a0ddc0ba781501da71ec8d54256819740">static_dtree</a>[i].<a class="code" href="deflate_8h.html#a068e76e6034d06450385bc98b69ea53e">Code</a>,</div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;                <a class="code" href="trees_8c.html#a0ddc0ba781501da71ec8d54256819740">static_dtree</a>[i].<a class="code" href="deflate_8h.html#a4490e644c06783cc69ad87c121e39e94">Len</a>, SEPARATOR(i, D_CODES-1, 5));</div>
 <div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    }</div>
 <div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(header, <span class="stringliteral">&quot;const uch ZLIB_INTERNAL _dist_code[DIST_CODE_LEN] = {\n&quot;</span>);</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    fprintf(header, <span class="stringliteral">&quot;const uch ZLIB_INTERNAL _dist_code[DIST_CODE_LEN] = {\n&quot;</span>);</div>
 <div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code" href="trees_8c.html#a368ebabef641e688c8f848e76b704500">DIST_CODE_LEN</a>; i++) {</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;        <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(header, <span class="stringliteral">&quot;%2u%s&quot;</span>, <a class="code" href="deflate_8h.html#af6c8544687b8a2a44e9638c796dce61e">_dist_code</a>[i],</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;        fprintf(header, <span class="stringliteral">&quot;%2u%s&quot;</span>, <a class="code" href="deflate_8h.html#af6c8544687b8a2a44e9638c796dce61e">_dist_code</a>[i],</div>
 <div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;                SEPARATOR(i, DIST_CODE_LEN-1, 20));</div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    }</div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(header,</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    fprintf(header,</div>
 <div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="stringliteral">&quot;const uch ZLIB_INTERNAL _length_code[MAX_MATCH-MIN_MATCH+1]= {\n&quot;</span>);</div>
 <div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code" href="zutil_8h.html#ab7a9188dce25dac8d3a970c01b89b0c6">MAX_MATCH</a>-<a class="code" href="zutil_8h.html#a7984ceb1ff48ac91172976b91ed43f60">MIN_MATCH</a>+1; i++) {</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(header, <span class="stringliteral">&quot;%2u%s&quot;</span>, <a class="code" href="deflate_8h.html#ac88cdfc823257dd30e51939e7f2e18d5">_length_code</a>[i],</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        fprintf(header, <span class="stringliteral">&quot;%2u%s&quot;</span>, <a class="code" href="deflate_8h.html#ac88cdfc823257dd30e51939e7f2e18d5">_length_code</a>[i],</div>
 <div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;                SEPARATOR(i, <a class="code" href="zutil_8h.html#ab7a9188dce25dac8d3a970c01b89b0c6">MAX_MATCH</a>-MIN_MATCH, 20));</div>
 <div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    }</div>
 <div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(header, <span class="stringliteral">&quot;local const int base_length[LENGTH_CODES] = {\n&quot;</span>);</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    fprintf(header, <span class="stringliteral">&quot;local const int base_length[LENGTH_CODES] = {\n&quot;</span>);</div>
 <div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code" href="deflate_8h.html#a8dd3b78c666b6592944b2acf1706e611">LENGTH_CODES</a>; i++) {</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(header, <span class="stringliteral">&quot;%1u%s&quot;</span>, <a class="code" href="trees_8c.html#a8d04da861714d277b95e3b45f97f4e10">base_length</a>[i],</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        fprintf(header, <span class="stringliteral">&quot;%1u%s&quot;</span>, <a class="code" href="trees_8c.html#a8d04da861714d277b95e3b45f97f4e10">base_length</a>[i],</div>
 <div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;                SEPARATOR(i, LENGTH_CODES-1, 20));</div>
 <div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    }</div>
 <div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(header, <span class="stringliteral">&quot;local const int base_dist[D_CODES] = {\n&quot;</span>);</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    fprintf(header, <span class="stringliteral">&quot;local const int base_dist[D_CODES] = {\n&quot;</span>);</div>
 <div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code" href="deflate_8h.html#a8798a9a526623abbd88fedb0727e21aa">D_CODES</a>; i++) {</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;        <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(header, <span class="stringliteral">&quot;%5u%s&quot;</span>, <a class="code" href="trees_8c.html#af61be67e8bcd86435b28d981d652a6ec">base_dist</a>[i],</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;        fprintf(header, <span class="stringliteral">&quot;%5u%s&quot;</span>, <a class="code" href="trees_8c.html#af61be67e8bcd86435b28d981d652a6ec">base_dist</a>[i],</div>
 <div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;                SEPARATOR(i, D_CODES-1, 10));</div>
 <div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    }</div>
 <div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;</div>
@@ -514,8 +515,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;</div>
 <div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    <span class="comment">/* Initialize the trees. */</span></div>
 <div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    <span class="keywordflow">for</span> (n = 0; n &lt; <a class="code" href="deflate_8h.html#a2b0cc00cc6a7d521fba8d208a1cae477">L_CODES</a>;  n++) s-&gt;<a class="code" href="structinternal__state.html#ae11867c05d54c575dbc713bbea71266c">dyn_ltree</a>[n].Freq = 0;</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;    <a class="code" href="cpu__bucketing_8h.html#a2aa04c664515be413ca118b2125615c1">for</a> (n = 0; n &lt; <a class="code" href="deflate_8h.html#a8798a9a526623abbd88fedb0727e21aa">D_CODES</a>;  n++) s-&gt;dyn_dtree[n].Freq = 0;</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;    <a class="code" href="cpu__bucketing_8h.html#a2aa04c664515be413ca118b2125615c1">for</a> (n = 0; n &lt; <a class="code" href="deflate_8h.html#a9e19158a493307d4f211cdf223da8319">BL_CODES</a>; n++) s-&gt;bl_tree[n].Freq = 0;</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;    <a class="code" href="group__private.html#ga9f9778f8a7845c9769bd1f4531e0b2d4">for</a> (n = 0; n &lt; <a class="code" href="deflate_8h.html#a8798a9a526623abbd88fedb0727e21aa">D_CODES</a>;  n++) s-&gt;dyn_dtree[n].Freq = 0;</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;    <a class="code" href="group__private.html#ga9f9778f8a7845c9769bd1f4531e0b2d4">for</a> (n = 0; n &lt; <a class="code" href="deflate_8h.html#a9e19158a493307d4f211cdf223da8319">BL_CODES</a>; n++) s-&gt;bl_tree[n].Freq = 0;</div>
 <div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;</div>
 <div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    s-&gt;dyn_ltree[<a class="code" href="trees_8c.html#a1e33ae802796dae8694948b87ac62d61">END_BLOCK</a>].Freq = 1;</div>
 <div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    s-&gt;opt_len = s-&gt;static_len = 0L;</div>
@@ -610,7 +611,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;<span class="comment">     */</span></div>
 <div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;    tree[s-&gt;heap[s-&gt;heap_max]].Len = 0; <span class="comment">/* root of the heap */</span></div>
 <div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;</div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;    <a class="code" href="cpu__bucketing_8h.html#a2aa04c664515be413ca118b2125615c1">for</a> (h = s-&gt;heap_max+1; h &lt; <a class="code" href="deflate_8h.html#a1b45302695680930829cac31d65e41e1">HEAP_SIZE</a>; h++) {</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;    <a class="code" href="group__private.html#ga9f9778f8a7845c9769bd1f4531e0b2d4">for</a> (h = s-&gt;heap_max+1; h &lt; <a class="code" href="deflate_8h.html#a1b45302695680930829cac31d65e41e1">HEAP_SIZE</a>; h++) {</div>
 <div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;        n = s-&gt;heap[h];</div>
 <div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;        bits = tree[tree[n].Dad].Len + 1;</div>
 <div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;        <span class="keywordflow">if</span> (bits &gt; max_length) bits = max_length, overflow++;</div>
@@ -778,7 +779,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;        tree[n].Dad = tree[m].Dad = (<a class="code" href="zutil_8h.html#a3754180d606d4ed15468d15d9665aa2e">ush</a>)node;</div>
 <div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;<span class="preprocessor">#ifdef DUMP_BL_TREE</span></div>
 <div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;<span class="preprocessor"></span>        <span class="keywordflow">if</span> (tree == s-&gt;bl_tree) {</div>
-<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;            <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(stderr,<span class="stringliteral">&quot;\nnode %d(%d), sons %d(%d) %d(%d)&quot;</span>,</div>
+<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;            fprintf(stderr,<span class="stringliteral">&quot;\nnode %d(%d), sons %d(%d) %d(%d)&quot;</span>,</div>
 <div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;                    node, tree[node].<a class="code" href="deflate_8h.html#a8bab2775fa423836b05f407d2f8bf6e2">Freq</a>, n, tree[n].Freq, m, tree[m].Freq);</div>
 <div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;        }</div>
 <div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;<span class="preprocessor">#endif</span></div>
@@ -1326,7 +1327,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:41:57 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:22 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

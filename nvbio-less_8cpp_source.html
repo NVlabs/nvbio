@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/vs/nvbio-less/nvbio-less.cpp Source File</title>
+<title>NVBIO: E:/git/nvbio/vs/nvbio-less/nvbio-less.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -145,13 +146,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        {</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordflow">if</span> (((i_bps) % opts.<a class="code" href="struct_options.html#a1c3d370d21a04a7c127500d2b0eadbb8">row_length</a>) == 0)</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            {</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(stdout,<span class="stringliteral">&quot;\n&quot;</span>);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                fprintf(stdout,<span class="stringliteral">&quot;\n&quot;</span>);</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                <span class="keywordflow">if</span> (opts.<a class="code" href="struct_options.html#af33dbc82e9265f603f17f90878d036bf">line_nums</a>)</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                    <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(stdout, <span class="stringliteral">&quot;%03u &quot;</span>, line_num++ );</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                    fprintf(stdout, <span class="stringliteral">&quot;%03u &quot;</span>, line_num++ );</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            }</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            <span class="keyword">const</span> <span class="keywordtype">char</span> bp = <a class="code" href="namespacenvbio.html#a30f8ad3034a17c3dfbccbed4fcbbd363">dna_to_char</a>( stream[i] );</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(stdout,<span class="stringliteral">&quot;%c&quot;</span>, bp);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            fprintf(stdout,<span class="stringliteral">&quot;%c&quot;</span>, bp);</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        }</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    }</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    fflush(stdout);</div>
@@ -167,11 +168,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        fread( &amp;read_id, <span class="keyword">sizeof</span>(<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>), 1, file );</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(stdout, <span class="stringliteral">&quot;%u\n&quot;</span>, read_id);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        fprintf(stdout, <span class="stringliteral">&quot;%u\n&quot;</span>, read_id);</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    }</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno"><a class="code" href="nvbio-less_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">   73</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="suftest_8c.html#ac0f2228420376f4db7e1274f2b41667c">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[])</div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="code" href="nvbio-less_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">   73</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="bgzip_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[])</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;{</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordflow">if</span> (argc &lt; 3 || (argc == 2 &amp;&amp; (strcmp(argv[1],<span class="stringliteral">&quot;--help&quot;</span>) == 0 || strcmp(argv[1],<span class="stringliteral">&quot;-h&quot;</span>) == 0)))</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    {</div>
@@ -212,7 +213,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        FILE* file = fopen( filename.c_str(), <span class="stringliteral">&quot;rb&quot;</span> );</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordflow">if</span> (file == NULL)</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        {</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(stderr, <span class="stringliteral">&quot;error: file \&quot;%s\&quot; not found\n&quot;</span>, filename.c_str());</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            fprintf(stderr, <span class="stringliteral">&quot;error: file \&quot;%s\&quot; not found\n&quot;</span>, filename.c_str());</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            exit(1);</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        }</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
@@ -246,7 +247,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        {</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            fclose( file );</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(stderr, <span class="stringliteral">&quot;error: unsupported file type\n&quot;</span>);</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            fprintf(stderr, <span class="stringliteral">&quot;error: unsupported file type\n&quot;</span>);</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            exit(1);</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        }</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
@@ -258,7 +259,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:10 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:37 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

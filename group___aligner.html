@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -111,6 +112,10 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1transpose__aligner_3_01_smith_waterman_aligner_3_01_t___t_y_p_e_00_01scori7225b1c2370a8c2f16c5d96d34dfa802.html">nvbio::aln::transpose_aligner&lt; SmithWatermanAligner&lt; T_TYPE, scoring_scheme_type, AlgorithmTag &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_hamming_distance_aligner.html">nvbio::aln::HammingDistanceAligner&lt; T_TYPE, scoring_scheme_type, AlgorithmType &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1transpose__aligner_3_01_hamming_distance_aligner_3_01_t___t_y_p_e_00_01sco8cdec7f31d4a0ae2926389670b43a619.html">nvbio::aln::transpose_aligner&lt; HammingDistanceAligner&lt; T_TYPE, scoring_scheme_type, AlgorithmTag &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -170,6 +175,29 @@ TextBlockingTag &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a 
 scoring_scheme_type, <br class="typebreak"/>
 PatternBlockingTag &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___aligner.html#ga4641822919482e14d5e68c9d832896f1">nvbio::aln::transpose</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> SmithWatermanAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_scheme_type, TextBlockingTag &gt; &amp;aligner)</td></tr>
 <tr class="separator:ga4641822919482e14d5e68c9d832896f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga44431182f1f9d6597d6c1a7970392ddd"><td class="memTemplParams" colspan="2">template&lt;AlignmentType TYPE, typename scoring_scheme_type &gt; </td></tr>
+<tr class="memitem:ga44431182f1f9d6597d6c1a7970392ddd"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+HammingDistanceAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, <br class="typebreak"/>
+scoring_scheme_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___aligner.html#ga44431182f1f9d6597d6c1a7970392ddd">nvbio::aln::make_hamming_distance_aligner</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scoring_scheme_type &amp;scheme)</td></tr>
+<tr class="separator:ga44431182f1f9d6597d6c1a7970392ddd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3f67e8c9b06fcd5883338ba1e514090f"><td class="memTemplParams" colspan="2">template&lt;AlignmentType TYPE, typename scoring_scheme_type , typename algorithm_tag &gt; </td></tr>
+<tr class="memitem:ga3f67e8c9b06fcd5883338ba1e514090f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+HammingDistanceAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, <br class="typebreak"/>
+scoring_scheme_type, <br class="typebreak"/>
+algorithm_tag &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___aligner.html#ga3f67e8c9b06fcd5883338ba1e514090f">nvbio::aln::make_hamming_distance_aligner</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scoring_scheme_type &amp;scheme)</td></tr>
+<tr class="separator:ga3f67e8c9b06fcd5883338ba1e514090f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad79b77b4c464e90ebfaee710a81f298d"><td class="memTemplParams" colspan="2">template&lt;AlignmentType TYPE, typename scoring_scheme_type &gt; </td></tr>
+<tr class="memitem:gad79b77b4c464e90ebfaee710a81f298d"><td class="memTemplItemLeft" align="right" valign="top">HammingDistanceAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, <br class="typebreak"/>
+scoring_scheme_type, <br class="typebreak"/>
+TextBlockingTag &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___aligner.html#gad79b77b4c464e90ebfaee710a81f298d">nvbio::aln::transpose</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> HammingDistanceAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_scheme_type, PatternBlockingTag &gt; &amp;aligner)</td></tr>
+<tr class="separator:gad79b77b4c464e90ebfaee710a81f298d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga71623524cf7fecc29082e519d89c96b4"><td class="memTemplParams" colspan="2">template&lt;AlignmentType TYPE, typename scoring_scheme_type &gt; </td></tr>
+<tr class="memitem:ga71623524cf7fecc29082e519d89c96b4"><td class="memTemplItemLeft" align="right" valign="top">HammingDistanceAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, <br class="typebreak"/>
+scoring_scheme_type, <br class="typebreak"/>
+PatternBlockingTag &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___aligner.html#ga71623524cf7fecc29082e519d89c96b4">nvbio::aln::transpose</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> HammingDistanceAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_scheme_type, TextBlockingTag &gt; &amp;aligner)</td></tr>
+<tr class="separator:ga71623524cf7fecc29082e519d89c96b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ga855f2a3899e7fb9df9fdb0b56da9e9aa"></a>
@@ -187,7 +215,7 @@ template&lt;AlignmentType TYPE&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2alignment_8h_source.html#l00382">382</a> of file <a class="el" href="nvbio_2alignment_2alignment_8h_source.html">alignment.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00195">195</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -206,7 +234,7 @@ template&lt;AlignmentType TYPE, typename algorithm_tag &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2alignment_8h_source.html#l00389">389</a> of file <a class="el" href="nvbio_2alignment_2alignment_8h_source.html">alignment.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00202">202</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -226,7 +254,7 @@ template&lt;AlignmentType TYPE, typename scoring_scheme_type &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2alignment_8h_source.html#l00459">459</a> of file <a class="el" href="nvbio_2alignment_2alignment_8h_source.html">alignment.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00272">272</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -246,7 +274,47 @@ template&lt;AlignmentType TYPE, typename algorithm_tag , typename scoring_scheme
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2alignment_8h_source.html#l00466">466</a> of file <a class="el" href="nvbio_2alignment_2alignment_8h_source.html">alignment.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00279">279</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga44431182f1f9d6597d6c1a7970392ddd"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;AlignmentType TYPE, typename scoring_scheme_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> HammingDistanceAligner&lt;<a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>,scoring_scheme_type&gt; nvbio::aln::make_hamming_distance_aligner </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scoring_scheme_type &amp;&#160;</td>
+          <td class="paramname"><em>scheme</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00385">385</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga3f67e8c9b06fcd5883338ba1e514090f"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;AlignmentType TYPE, typename scoring_scheme_type , typename algorithm_tag &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> HammingDistanceAligner&lt;<a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>,scoring_scheme_type,algorithm_tag&gt; nvbio::aln::make_hamming_distance_aligner </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scoring_scheme_type &amp;&#160;</td>
+          <td class="paramname"><em>scheme</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00392">392</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -266,7 +334,7 @@ template&lt;AlignmentType TYPE, typename scoring_scheme_type &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2alignment_8h_source.html#l00529">529</a> of file <a class="el" href="nvbio_2alignment_2alignment_8h_source.html">alignment.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00342">342</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -286,7 +354,7 @@ template&lt;AlignmentType TYPE&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2alignment_8h_source.html#l00395">395</a> of file <a class="el" href="nvbio_2alignment_2alignment_8h_source.html">alignment.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00208">208</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -306,7 +374,7 @@ template&lt;AlignmentType TYPE, typename scoring_scheme_type &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2alignment_8h_source.html#l00400">400</a> of file <a class="el" href="nvbio_2alignment_2alignment_8h_source.html">alignment.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00213">213</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -326,7 +394,7 @@ template&lt;AlignmentType TYPE, typename scoring_scheme_type &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2alignment_8h_source.html#l00472">472</a> of file <a class="el" href="nvbio_2alignment_2alignment_8h_source.html">alignment.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00285">285</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -346,7 +414,7 @@ template&lt;AlignmentType TYPE, typename scoring_scheme_type &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2alignment_8h_source.html#l00477">477</a> of file <a class="el" href="nvbio_2alignment_2alignment_8h_source.html">alignment.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00290">290</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -366,7 +434,7 @@ template&lt;AlignmentType TYPE, typename scoring_scheme_type &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2alignment_8h_source.html#l00535">535</a> of file <a class="el" href="nvbio_2alignment_2alignment_8h_source.html">alignment.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00348">348</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -386,14 +454,54 @@ template&lt;AlignmentType TYPE, typename scoring_scheme_type &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2alignment_8h_source.html#l00540">540</a> of file <a class="el" href="nvbio_2alignment_2alignment_8h_source.html">alignment.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00353">353</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="gad79b77b4c464e90ebfaee710a81f298d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;AlignmentType TYPE, typename scoring_scheme_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">HammingDistanceAligner&lt;<a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>,scoring_scheme_type,TextBlockingTag&gt; nvbio::aln::transpose </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> HammingDistanceAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_scheme_type, PatternBlockingTag &gt; &amp;&#160;</td>
+          <td class="paramname"><em>aligner</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00398">398</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga71623524cf7fecc29082e519d89c96b4"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;AlignmentType TYPE, typename scoring_scheme_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">HammingDistanceAligner&lt;<a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>,scoring_scheme_type,PatternBlockingTag&gt; nvbio::aln::transpose </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> HammingDistanceAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_scheme_type, TextBlockingTag &gt; &amp;&#160;</td>
+          <td class="paramname"><em>aligner</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00403">403</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:17 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:46 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

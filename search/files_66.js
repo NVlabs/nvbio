@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['faidx_2ec',['faidx.c',['../faidx_8c.html',1,'']]],
+  ['faidx_2eh',['faidx.h',['../faidx_8h.html',1,'']]],
   ['fasta_2eh',['fasta.h',['../fasta_8h.html',1,'']]],
   ['fasta_5finl_2eh',['fasta_inl.h',['../fasta__inl_8h.html',1,'']]],
   ['fasta_5ftest_2ecpp',['fasta_test.cpp',['../fasta__test_8cpp.html',1,'']]],
@@ -12,15 +14,17 @@ var searchData=
   ['file_5fbwt_5flz4_2eh',['file_bwt_lz4.h',['../file__bwt__lz4_8h.html',1,'']]],
   ['filelist_2ecpp',['filelist.cpp',['../filelist_8cpp.html',1,'']]],
   ['filelist_2eh',['filelist.h',['../filelist_8h.html',1,'']]],
-  ['filter_2eh',['filter.h',['../aln-diff_2filter_8h.html',1,'']]],
+  ['files_2ec',['files.c',['../files_8c.html',1,'']]],
   ['filter_2eh',['filter.h',['../fmindex_2filter_8h.html',1,'']]],
   ['filter_2eh',['filter.h',['../qgram_2filter_8h.html',1,'']]],
-  ['filter_5finl_2eh',['filter_inl.h',['../fmindex_2filter__inl_8h.html',1,'']]],
+  ['filter_2eh',['filter.h',['../aln-diff_2filter_8h.html',1,'']]],
   ['filter_5finl_2eh',['filter_inl.h',['../qgram_2filter__inl_8h.html',1,'']]],
-  ['fmindex_2eh',['fmindex.h',['../io_2fmindex_2fmindex_8h.html',1,'']]],
+  ['filter_5finl_2eh',['filter_inl.h',['../fmindex_2filter__inl_8h.html',1,'']]],
   ['fmindex_2eh',['fmindex.h',['../fmindex_2fmindex_8h.html',1,'']]],
+  ['fmindex_2eh',['fmindex.h',['../io_2fmindex_2fmindex_8h.html',1,'']]],
   ['fmindex_5fdef_2eh',['fmindex_def.h',['../fmindex__def_8h.html',1,'']]],
   ['fmindex_5fdevice_2eh',['fmindex_device.h',['../fmindex__device_8h.html',1,'']]],
   ['fmindex_5finl_2eh',['fmindex_inl.h',['../fmindex__inl_8h.html',1,'']]],
-  ['format_2eh',['format.h',['../format_8h.html',1,'']]]
+  ['format_2eh',['format.h',['../format_8h.html',1,'']]],
+  ['func_2eh',['func.h',['../func_8h.html',1,'']]]
 ];

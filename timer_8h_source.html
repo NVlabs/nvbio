@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/timer.h Source File</title>
+<title>NVBIO: E:/git/nvbio/nvbio/basic/timer.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -100,153 +101,162 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a href="timer_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (c) 2012-14, NVIDIA CORPORATION.  All rights reserved.</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * NVIDIA CORPORATION and its licensors retain all intellectual property</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * and proprietary rights in and to this software, related documentation</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * and any modifications thereto.  Any use, reproduction, disclosure or</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> * distribution of this software and related documentation without an express</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> * license agreement from NVIDIA CORPORATION is strictly prohibited.</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="types_8h.html">nvbio/basic/types.h</a>&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="numbers_8h.html">nvbio/basic/numbers.h</a>&gt;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;deque&gt;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span>nvbio {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * nvbio</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (c) 2011-2014, NVIDIA CORPORATION. All rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * </span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Redistribution and use in source and binary forms, with or without</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * modification, are permitted provided that the following conditions are met:</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> *    * Redistributions of source code must retain the above copyright</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> *      notice, this list of conditions and the following disclaimer.</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *    * Redistributions in binary form must reproduce the above copyright</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> *      notice, this list of conditions and the following disclaimer in the</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> *      documentation and/or other materials provided with the distribution.</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *    * Neither the name of the NVIDIA CORPORATION nor the</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *      names of its contributors may be used to endorse or promote products</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *      derived from this software without specific prior written permission.</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * </span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> * DISCLAIMED. IN NO EVENT SHALL NVIDIA CORPORATION BE LIABLE FOR ANY</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="types_8h.html">nvbio/basic/types.h</a>&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="numbers_8h.html">nvbio/basic/numbers.h</a>&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;deque&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">namespace </span>nvbio {</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#ifdef WIN32</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">struct </span>Timer</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;{</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <a class="code" href="structnvbio_1_1_timer.html#a18dfbc24fb41c0d463c13a7d3d3aad90" title="constructor ">Timer</a>();</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_timer.html#a81f4a384879cf65815000b582e465a65" title="start timing ">start</a>();</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_timer.html#ac2a1dc2e71d260bd7dba103e745f1136" title="stop timing ">stop</a>();</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordtype">float</span> <a class="code" href="structnvbio_1_1_timer.html#a22f9f6cb393a8355476b0d357afe406f">seconds</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>                  m_freq;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>                  m_start;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>                  m_stop;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;};</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="code" href="structnvbio_1_1_timer.html">   66</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1_timer.html">Timer</a></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;{</div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="code" href="structnvbio_1_1_timer.html#a18dfbc24fb41c0d463c13a7d3d3aad90">   69</a></span>&#160;    <a class="code" href="structnvbio_1_1_timer.html#a18dfbc24fb41c0d463c13a7d3d3aad90" title="constructor ">Timer</a>() {}</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_timer.html#a81f4a384879cf65815000b582e465a65" title="start timing ">start</a>();</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_timer.html#ac2a1dc2e71d260bd7dba103e745f1136" title="stop timing ">stop</a>();</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="structnvbio_1_1_timer.html#a22f9f6cb393a8355476b0d357afe406f">seconds</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <a class="code" href="group___basic.html#ga5c3c265ba689b90891cf49a3aa2ac246">int64</a> m_start;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <a class="code" href="group___basic.html#ga5c3c265ba689b90891cf49a3aa2ac246">int64</a> m_stop;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <a class="code" href="group___basic.html#ga5c3c265ba689b90891cf49a3aa2ac246">int64</a> m_start_ns;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <a class="code" href="group___basic.html#ga5c3c265ba689b90891cf49a3aa2ac246">int64</a> m_stop_ns;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;};</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#ifdef WIN32</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">struct </span>Timer</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;{</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="code" href="structnvbio_1_1_timer.html#a18dfbc24fb41c0d463c13a7d3d3aad90" title="constructor ">Timer</a>();</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_timer.html#a81f4a384879cf65815000b582e465a65" title="start timing ">start</a>();</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_timer.html#ac2a1dc2e71d260bd7dba103e745f1136" title="stop timing ">stop</a>();</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordtype">float</span> <a class="code" href="structnvbio_1_1_timer.html#a22f9f6cb393a8355476b0d357afe406f">seconds</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>                  m_freq;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>                  m_start;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>                  m_stop;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;};</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="code" href="structnvbio_1_1_timer.html">   75</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1_timer.html">Timer</a></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;{</div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="code" href="structnvbio_1_1_timer.html#a18dfbc24fb41c0d463c13a7d3d3aad90">   78</a></span>&#160;    <a class="code" href="structnvbio_1_1_timer.html#a18dfbc24fb41c0d463c13a7d3d3aad90" title="constructor ">Timer</a>() {}</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_timer.html#a81f4a384879cf65815000b582e465a65" title="start timing ">start</a>();</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_timer.html#ac2a1dc2e71d260bd7dba103e745f1136" title="stop timing ">stop</a>();</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00093"></a><span class="lineno"><a class="code" href="structnvbio_1_1_scoped_timer.html">   93</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1_scoped_timer.html">ScopedTimer</a></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;{</div>
-<div class="line"><a name="l00095"></a><span class="lineno"><a class="code" href="structnvbio_1_1_scoped_timer.html#a067956fc092feda1119b994fc431d407">   95</a></span>&#160;         <a class="code" href="structnvbio_1_1_scoped_timer.html#a067956fc092feda1119b994fc431d407">ScopedTimer</a>(T* time) : <a class="code" href="structnvbio_1_1_scoped_timer.html#afa03ed364482b67965272b590beeea7d">m_time</a>( time ), <a class="code" href="structnvbio_1_1_scoped_timer.html#a2b1df3a666173f7d176d8fc8dcf4bff4">m_timer</a>() { <a class="code" href="structnvbio_1_1_scoped_timer.html#a2b1df3a666173f7d176d8fc8dcf4bff4">m_timer</a>.<a class="code" href="structnvbio_1_1_timer.html#a81f4a384879cf65815000b582e465a65" title="start timing ">start</a>(); }</div>
-<div class="line"><a name="l00096"></a><span class="lineno"><a class="code" href="structnvbio_1_1_scoped_timer.html#aca53d3f2214542fcceaa1e5a91e3e57a">   96</a></span>&#160;        <a class="code" href="structnvbio_1_1_scoped_timer.html#aca53d3f2214542fcceaa1e5a91e3e57a">~ScopedTimer</a>() { <a class="code" href="structnvbio_1_1_scoped_timer.html#a2b1df3a666173f7d176d8fc8dcf4bff4">m_timer</a>.<a class="code" href="structnvbio_1_1_timer.html#ac2a1dc2e71d260bd7dba103e745f1136" title="stop timing ">stop</a>(); *<a class="code" href="structnvbio_1_1_scoped_timer.html#afa03ed364482b67965272b590beeea7d">m_time</a> += <a class="code" href="structnvbio_1_1_scoped_timer.html#a2b1df3a666173f7d176d8fc8dcf4bff4">m_timer</a>.<a class="code" href="structnvbio_1_1_timer.html#a22f9f6cb393a8355476b0d357afe406f">seconds</a>(); }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno"><a class="code" href="structnvbio_1_1_scoped_timer.html#afa03ed364482b67965272b590beeea7d">   98</a></span>&#160;        T*              <a class="code" href="structnvbio_1_1_scoped_timer.html#afa03ed364482b67965272b590beeea7d">m_time</a>;</div>
-<div class="line"><a name="l00099"></a><span class="lineno"><a class="code" href="structnvbio_1_1_scoped_timer.html#a2b1df3a666173f7d176d8fc8dcf4bff4">   99</a></span>&#160;        <a class="code" href="structnvbio_1_1_timer.html">Timer</a>   <a class="code" href="structnvbio_1_1_scoped_timer.html#a2b1df3a666173f7d176d8fc8dcf4bff4">m_timer</a>;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;};</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00105"></a><span class="lineno"><a class="code" href="structnvbio_1_1_fake_timer.html">  105</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1_fake_timer.html">FakeTimer</a></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;{</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_fake_timer.html#aa5ec2f8fb396202955b0527baeabea84">start</a>();</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_fake_timer.html#a16ed940a0ff39380d2a470b714bfba94">stop</a>();</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
-<div class="line"><a name="l00110"></a><span class="lineno"><a class="code" href="structnvbio_1_1_fake_timer.html#a3e1e33e6b1ca68f41f65d15cd3b9e592">  110</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="structnvbio_1_1_fake_timer.html#a3e1e33e6b1ca68f41f65d15cd3b9e592">seconds</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0.0f; }</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;};</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;</div>
-<div class="line"><a name="l00116"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html">  116</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1_time_series.html">TimeSeries</a></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;{</div>
-<div class="line"><a name="l00120"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#ad0d53badf700f02c66e7fd6de6ce3682">  120</a></span>&#160;    <a class="code" href="structnvbio_1_1_time_series.html#ad0d53badf700f02c66e7fd6de6ce3682">TimeSeries</a>() : <a class="code" href="structnvbio_1_1_time_series.html#a946d9cc2af185c56c0c76a7fa064352c">num</a>(0), <a class="code" href="structnvbio_1_1_time_series.html#aae83bc7aacba318e365a0287973961da">calls</a>(0), <a class="code" href="structnvbio_1_1_time_series.html#a6b36be6902182e327f3cf4ea36407816">time</a>(0.0f), <a class="code" href="structnvbio_1_1_time_series.html#ae1d0fe4c048a445e3c0c8dd0075b8d51">device_time</a>(0.0f), <a class="code" href="structnvbio_1_1_time_series.html#a28b70e9038f676630eb3b0e97a3c3bf2">max_speed</a>(0.0f)</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    {</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i = 0; i &lt; 32; ++i)</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        {</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#a811719c76fac9c05df85f5c3cd0e1c76">bin_calls</a>[i] = 0;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#ad8307e045386e0105751e99563bf131f">bin_items</a>[i] = 0;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#af882331f2a5a15a0a9f120f53f920e3f">bin_time</a>[i]  = 0.0f;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#a3e0114135d448b24cf854b5bf1aadfdc">bin_speed</a>[i] = 0.0f;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#a60ff050a0fac49cfe59dbcfc09b7a18b">user</a>[i] = 0.0f;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#af55bed7a88297541248a0220cedfcbff">user_names</a>[i] = NULL;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#aeeb3467a330767d2839a9a76665484ec">user_units</a>[i] = <span class="stringliteral">&quot;&quot;</span>;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        }</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    }</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;</div>
-<div class="line"><a name="l00140"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#ad42f010b74cf48e67dee5cbb2518927e">  140</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_time_series.html#ad42f010b74cf48e67dee5cbb2518927e">add</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c, <span class="keyword">const</span> <span class="keywordtype">float</span> t, <span class="keyword">const</span> <span class="keywordtype">float</span> dt = 0.0f)</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    {</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#a946d9cc2af185c56c0c76a7fa064352c">num</a>++;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#aae83bc7aacba318e365a0287973961da">calls</a> += c;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#a6b36be6902182e327f3cf4ea36407816">time</a>  += t;</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#ae1d0fe4c048a445e3c0c8dd0075b8d51">device_time</a> += dt;</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#a28b70e9038f676630eb3b0e97a3c3bf2">max_speed</a> = <a class="code" href="group___basic_utils.html#gaacadfd67f24352782e1d34ba32b040e9">std::max</a>( <a class="code" href="structnvbio_1_1_time_series.html#a28b70e9038f676630eb3b0e97a3c3bf2">max_speed</a>, <span class="keywordtype">float</span>(c) / t );</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="structnvbio_1_1_time_series.html#a09634b45658085d94dc22917a21586b8">info</a>.size() == 10000)</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#a09634b45658085d94dc22917a21586b8">info</a>.pop_front();</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#a09634b45658085d94dc22917a21586b8">info</a>.push_back( std::make_pair( c, t ) );</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> bin = c ? <a class="code" href="group___basic_utils.html#ga5de85844c2da80dc4a1e419a3bc185b1">nvbio::log2</a>( c ) : 0u;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#a811719c76fac9c05df85f5c3cd0e1c76">bin_calls</a>[bin]++;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#af882331f2a5a15a0a9f120f53f920e3f">bin_time</a>[bin]  += t;</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#a3e0114135d448b24cf854b5bf1aadfdc">bin_speed</a>[bin] += float(c) / t;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#ad8307e045386e0105751e99563bf131f">bin_items</a>[bin] += c;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    }</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="comment">// return the average speed</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a9f94de6fe25fb61ec64aaee55c56a392">  159</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="structnvbio_1_1_time_series.html#a9f94de6fe25fb61ec64aaee55c56a392">avg_speed</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> float(<a class="code" href="structnvbio_1_1_time_series.html#aae83bc7aacba318e365a0287973961da">calls</a>) / <a class="code" href="structnvbio_1_1_time_series.html#a6b36be6902182e327f3cf4ea36407816">time</a>; }</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;</div>
-<div class="line"><a name="l00161"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a70d6a7f0cd675abc13e7eeb0f622d387">  161</a></span>&#160;    std::string                             <a class="code" href="structnvbio_1_1_time_series.html#a70d6a7f0cd675abc13e7eeb0f622d387">name</a>;</div>
-<div class="line"><a name="l00162"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#af2baf21662c4a5477c0b594bac5fabd8">  162</a></span>&#160;    std::string                             <a class="code" href="structnvbio_1_1_time_series.html#af2baf21662c4a5477c0b594bac5fabd8">units</a>;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;</div>
-<div class="line"><a name="l00164"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a946d9cc2af185c56c0c76a7fa064352c">  164</a></span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                                  <a class="code" href="structnvbio_1_1_time_series.html#a946d9cc2af185c56c0c76a7fa064352c">num</a>;</div>
-<div class="line"><a name="l00165"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#aae83bc7aacba318e365a0287973961da">  165</a></span>&#160;    <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>                                  <a class="code" href="structnvbio_1_1_time_series.html#aae83bc7aacba318e365a0287973961da">calls</a>;</div>
-<div class="line"><a name="l00166"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a6b36be6902182e327f3cf4ea36407816">  166</a></span>&#160;    <span class="keywordtype">float</span>                                   <a class="code" href="structnvbio_1_1_time_series.html#a6b36be6902182e327f3cf4ea36407816">time</a>;</div>
-<div class="line"><a name="l00167"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#ae1d0fe4c048a445e3c0c8dd0075b8d51">  167</a></span>&#160;    <span class="keywordtype">float</span>                                   <a class="code" href="structnvbio_1_1_time_series.html#ae1d0fe4c048a445e3c0c8dd0075b8d51">device_time</a>;</div>
-<div class="line"><a name="l00168"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a28b70e9038f676630eb3b0e97a3c3bf2">  168</a></span>&#160;    <span class="keywordtype">float</span>                                   <a class="code" href="structnvbio_1_1_time_series.html#a28b70e9038f676630eb3b0e97a3c3bf2">max_speed</a>;</div>
-<div class="line"><a name="l00169"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a811719c76fac9c05df85f5c3cd0e1c76">  169</a></span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                                  <a class="code" href="structnvbio_1_1_time_series.html#a811719c76fac9c05df85f5c3cd0e1c76">bin_calls</a>[32];</div>
-<div class="line"><a name="l00170"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#ad8307e045386e0105751e99563bf131f">  170</a></span>&#160;    <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>                                  <a class="code" href="structnvbio_1_1_time_series.html#ad8307e045386e0105751e99563bf131f">bin_items</a>[32];</div>
-<div class="line"><a name="l00171"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#af882331f2a5a15a0a9f120f53f920e3f">  171</a></span>&#160;    <span class="keywordtype">float</span>                                   <a class="code" href="structnvbio_1_1_time_series.html#af882331f2a5a15a0a9f120f53f920e3f">bin_time</a>[32];</div>
-<div class="line"><a name="l00172"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a3e0114135d448b24cf854b5bf1aadfdc">  172</a></span>&#160;    <span class="keywordtype">float</span>                                   <a class="code" href="structnvbio_1_1_time_series.html#a3e0114135d448b24cf854b5bf1aadfdc">bin_speed</a>[32];</div>
-<div class="line"><a name="l00173"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a09634b45658085d94dc22917a21586b8">  173</a></span>&#160;    std::deque&lt; std::pair&lt;uint32,float&gt; &gt;   <a class="code" href="structnvbio_1_1_time_series.html#a09634b45658085d94dc22917a21586b8">info</a>;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;</div>
-<div class="line"><a name="l00175"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a60ff050a0fac49cfe59dbcfc09b7a18b">  175</a></span>&#160;    <span class="keywordtype">float</span>                                   <a class="code" href="structnvbio_1_1_time_series.html#a60ff050a0fac49cfe59dbcfc09b7a18b">user</a>[32];</div>
-<div class="line"><a name="l00176"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#af55bed7a88297541248a0220cedfcbff">  176</a></span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>*                             <a class="code" href="structnvbio_1_1_time_series.html#af55bed7a88297541248a0220cedfcbff">user_names</a>[32];</div>
-<div class="line"><a name="l00177"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#aeeb3467a330767d2839a9a76665484ec">  177</a></span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>*                             <a class="code" href="structnvbio_1_1_time_series.html#aeeb3467a330767d2839a9a76665484ec">user_units</a>[32];</div>
-<div class="line"><a name="l00178"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#aff8b692a3e1fba0dfbf8c8449cf2c0f8">  178</a></span>&#160;    <span class="keywordtype">bool</span>                                    <a class="code" href="structnvbio_1_1_time_series.html#aff8b692a3e1fba0dfbf8c8449cf2c0f8">user_avg</a>[32];</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;};</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;} <span class="comment">// namespace nvbio</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="structnvbio_1_1_timer.html#a22f9f6cb393a8355476b0d357afe406f">seconds</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <a class="code" href="group___basic.html#ga5c3c265ba689b90891cf49a3aa2ac246">int64</a> m_start;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <a class="code" href="group___basic.html#ga5c3c265ba689b90891cf49a3aa2ac246">int64</a> m_stop;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <a class="code" href="group___basic.html#ga5c3c265ba689b90891cf49a3aa2ac246">int64</a> m_start_ns;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <a class="code" href="group___basic.html#ga5c3c265ba689b90891cf49a3aa2ac246">int64</a> m_stop_ns;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;};</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="code" href="structnvbio_1_1_scoped_timer.html">  102</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1_scoped_timer.html">ScopedTimer</a></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;{</div>
+<div class="line"><a name="l00104"></a><span class="lineno"><a class="code" href="structnvbio_1_1_scoped_timer.html#a067956fc092feda1119b994fc431d407">  104</a></span>&#160;         <a class="code" href="structnvbio_1_1_scoped_timer.html#a067956fc092feda1119b994fc431d407">ScopedTimer</a>(T* time) : <a class="code" href="structnvbio_1_1_scoped_timer.html#afa03ed364482b67965272b590beeea7d">m_time</a>( time ), <a class="code" href="structnvbio_1_1_scoped_timer.html#a2b1df3a666173f7d176d8fc8dcf4bff4">m_timer</a>() { <a class="code" href="structnvbio_1_1_scoped_timer.html#a2b1df3a666173f7d176d8fc8dcf4bff4">m_timer</a>.<a class="code" href="structnvbio_1_1_timer.html#a81f4a384879cf65815000b582e465a65" title="start timing ">start</a>(); }</div>
+<div class="line"><a name="l00105"></a><span class="lineno"><a class="code" href="structnvbio_1_1_scoped_timer.html#aca53d3f2214542fcceaa1e5a91e3e57a">  105</a></span>&#160;        <a class="code" href="structnvbio_1_1_scoped_timer.html#aca53d3f2214542fcceaa1e5a91e3e57a">~ScopedTimer</a>() { <a class="code" href="structnvbio_1_1_scoped_timer.html#a2b1df3a666173f7d176d8fc8dcf4bff4">m_timer</a>.<a class="code" href="structnvbio_1_1_timer.html#ac2a1dc2e71d260bd7dba103e745f1136" title="stop timing ">stop</a>(); *<a class="code" href="structnvbio_1_1_scoped_timer.html#afa03ed364482b67965272b590beeea7d">m_time</a> += <a class="code" href="structnvbio_1_1_scoped_timer.html#a2b1df3a666173f7d176d8fc8dcf4bff4">m_timer</a>.<a class="code" href="structnvbio_1_1_timer.html#a22f9f6cb393a8355476b0d357afe406f">seconds</a>(); }</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
+<div class="line"><a name="l00107"></a><span class="lineno"><a class="code" href="structnvbio_1_1_scoped_timer.html#afa03ed364482b67965272b590beeea7d">  107</a></span>&#160;        T*              <a class="code" href="structnvbio_1_1_scoped_timer.html#afa03ed364482b67965272b590beeea7d">m_time</a>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno"><a class="code" href="structnvbio_1_1_scoped_timer.html#a2b1df3a666173f7d176d8fc8dcf4bff4">  108</a></span>&#160;        <a class="code" href="structnvbio_1_1_timer.html">Timer</a>   <a class="code" href="structnvbio_1_1_scoped_timer.html#a2b1df3a666173f7d176d8fc8dcf4bff4">m_timer</a>;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;};</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="code" href="structnvbio_1_1_fake_timer.html">  114</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1_fake_timer.html">FakeTimer</a></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;{</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_fake_timer.html#aa5ec2f8fb396202955b0527baeabea84">start</a>();</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_fake_timer.html#a16ed940a0ff39380d2a470b714bfba94">stop</a>();</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
+<div class="line"><a name="l00119"></a><span class="lineno"><a class="code" href="structnvbio_1_1_fake_timer.html#a3e1e33e6b1ca68f41f65d15cd3b9e592">  119</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="structnvbio_1_1_fake_timer.html#a3e1e33e6b1ca68f41f65d15cd3b9e592">seconds</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0.0f; }</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;};</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
+<div class="line"><a name="l00125"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html">  125</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1_time_series.html">TimeSeries</a></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;{</div>
+<div class="line"><a name="l00129"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#ad0d53badf700f02c66e7fd6de6ce3682">  129</a></span>&#160;    <a class="code" href="structnvbio_1_1_time_series.html#ad0d53badf700f02c66e7fd6de6ce3682">TimeSeries</a>() : <a class="code" href="structnvbio_1_1_time_series.html#a946d9cc2af185c56c0c76a7fa064352c">num</a>(0), <a class="code" href="structnvbio_1_1_time_series.html#aae83bc7aacba318e365a0287973961da">calls</a>(0), <a class="code" href="structnvbio_1_1_time_series.html#a6b36be6902182e327f3cf4ea36407816">time</a>(0.0f), <a class="code" href="structnvbio_1_1_time_series.html#ae1d0fe4c048a445e3c0c8dd0075b8d51">device_time</a>(0.0f), <a class="code" href="structnvbio_1_1_time_series.html#a28b70e9038f676630eb3b0e97a3c3bf2">max_speed</a>(0.0f)</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    {</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i = 0; i &lt; 32; ++i)</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        {</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#a811719c76fac9c05df85f5c3cd0e1c76">bin_calls</a>[i] = 0;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#ad8307e045386e0105751e99563bf131f">bin_items</a>[i] = 0;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#af882331f2a5a15a0a9f120f53f920e3f">bin_time</a>[i]  = 0.0f;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#a3e0114135d448b24cf854b5bf1aadfdc">bin_speed</a>[i] = 0.0f;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#a60ff050a0fac49cfe59dbcfc09b7a18b">user</a>[i] = 0.0f;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#af55bed7a88297541248a0220cedfcbff">user_names</a>[i] = NULL;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#aeeb3467a330767d2839a9a76665484ec">user_units</a>[i] = <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        }</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    }</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
+<div class="line"><a name="l00149"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#ad42f010b74cf48e67dee5cbb2518927e">  149</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_time_series.html#ad42f010b74cf48e67dee5cbb2518927e">add</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c, <span class="keyword">const</span> <span class="keywordtype">float</span> t, <span class="keyword">const</span> <span class="keywordtype">float</span> dt = 0.0f)</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    {</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#a946d9cc2af185c56c0c76a7fa064352c">num</a>++;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#aae83bc7aacba318e365a0287973961da">calls</a> += c;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#a6b36be6902182e327f3cf4ea36407816">time</a>  += t;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#ae1d0fe4c048a445e3c0c8dd0075b8d51">device_time</a> += dt;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#a28b70e9038f676630eb3b0e97a3c3bf2">max_speed</a> = <a class="code" href="group___basic_utils.html#gaacadfd67f24352782e1d34ba32b040e9">std::max</a>( <a class="code" href="structnvbio_1_1_time_series.html#a28b70e9038f676630eb3b0e97a3c3bf2">max_speed</a>, <span class="keywordtype">float</span>(c) / t );</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="structnvbio_1_1_time_series.html#a09634b45658085d94dc22917a21586b8">info</a>.size() == 10000)</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;            <a class="code" href="structnvbio_1_1_time_series.html#a09634b45658085d94dc22917a21586b8">info</a>.pop_front();</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#a09634b45658085d94dc22917a21586b8">info</a>.push_back( std::make_pair( c, t ) );</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> bin = c ? <a class="code" href="group___basic_utils.html#ga5de85844c2da80dc4a1e419a3bc185b1">nvbio::log2</a>( c ) : 0u;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#a811719c76fac9c05df85f5c3cd0e1c76">bin_calls</a>[bin]++;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#af882331f2a5a15a0a9f120f53f920e3f">bin_time</a>[bin]  += t;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#a3e0114135d448b24cf854b5bf1aadfdc">bin_speed</a>[bin] += float(c) / t;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <a class="code" href="structnvbio_1_1_time_series.html#ad8307e045386e0105751e99563bf131f">bin_items</a>[bin] += c;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    }</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    <span class="comment">// return the average speed</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a9f94de6fe25fb61ec64aaee55c56a392">  168</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="structnvbio_1_1_time_series.html#a9f94de6fe25fb61ec64aaee55c56a392">avg_speed</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> float(<a class="code" href="structnvbio_1_1_time_series.html#aae83bc7aacba318e365a0287973961da">calls</a>) / <a class="code" href="structnvbio_1_1_time_series.html#a6b36be6902182e327f3cf4ea36407816">time</a>; }</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;</div>
+<div class="line"><a name="l00170"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a70d6a7f0cd675abc13e7eeb0f622d387">  170</a></span>&#160;    std::string                             <a class="code" href="structnvbio_1_1_time_series.html#a70d6a7f0cd675abc13e7eeb0f622d387">name</a>;</div>
+<div class="line"><a name="l00171"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#af2baf21662c4a5477c0b594bac5fabd8">  171</a></span>&#160;    std::string                             <a class="code" href="structnvbio_1_1_time_series.html#af2baf21662c4a5477c0b594bac5fabd8">units</a>;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;</div>
+<div class="line"><a name="l00173"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a946d9cc2af185c56c0c76a7fa064352c">  173</a></span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                                  <a class="code" href="structnvbio_1_1_time_series.html#a946d9cc2af185c56c0c76a7fa064352c">num</a>;</div>
+<div class="line"><a name="l00174"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#aae83bc7aacba318e365a0287973961da">  174</a></span>&#160;    <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>                                  <a class="code" href="structnvbio_1_1_time_series.html#aae83bc7aacba318e365a0287973961da">calls</a>;</div>
+<div class="line"><a name="l00175"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a6b36be6902182e327f3cf4ea36407816">  175</a></span>&#160;    <span class="keywordtype">float</span>                                   <a class="code" href="structnvbio_1_1_time_series.html#a6b36be6902182e327f3cf4ea36407816">time</a>;</div>
+<div class="line"><a name="l00176"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#ae1d0fe4c048a445e3c0c8dd0075b8d51">  176</a></span>&#160;    <span class="keywordtype">float</span>                                   <a class="code" href="structnvbio_1_1_time_series.html#ae1d0fe4c048a445e3c0c8dd0075b8d51">device_time</a>;</div>
+<div class="line"><a name="l00177"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a28b70e9038f676630eb3b0e97a3c3bf2">  177</a></span>&#160;    <span class="keywordtype">float</span>                                   <a class="code" href="structnvbio_1_1_time_series.html#a28b70e9038f676630eb3b0e97a3c3bf2">max_speed</a>;</div>
+<div class="line"><a name="l00178"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a811719c76fac9c05df85f5c3cd0e1c76">  178</a></span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                                  <a class="code" href="structnvbio_1_1_time_series.html#a811719c76fac9c05df85f5c3cd0e1c76">bin_calls</a>[32];</div>
+<div class="line"><a name="l00179"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#ad8307e045386e0105751e99563bf131f">  179</a></span>&#160;    <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>                                  <a class="code" href="structnvbio_1_1_time_series.html#ad8307e045386e0105751e99563bf131f">bin_items</a>[32];</div>
+<div class="line"><a name="l00180"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#af882331f2a5a15a0a9f120f53f920e3f">  180</a></span>&#160;    <span class="keywordtype">float</span>                                   <a class="code" href="structnvbio_1_1_time_series.html#af882331f2a5a15a0a9f120f53f920e3f">bin_time</a>[32];</div>
+<div class="line"><a name="l00181"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a3e0114135d448b24cf854b5bf1aadfdc">  181</a></span>&#160;    <span class="keywordtype">float</span>                                   <a class="code" href="structnvbio_1_1_time_series.html#a3e0114135d448b24cf854b5bf1aadfdc">bin_speed</a>[32];</div>
+<div class="line"><a name="l00182"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a09634b45658085d94dc22917a21586b8">  182</a></span>&#160;    std::deque&lt; std::pair&lt;uint32,float&gt; &gt;   <a class="code" href="structnvbio_1_1_time_series.html#a09634b45658085d94dc22917a21586b8">info</a>;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
+<div class="line"><a name="l00184"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#a60ff050a0fac49cfe59dbcfc09b7a18b">  184</a></span>&#160;    <span class="keywordtype">float</span>                                   <a class="code" href="structnvbio_1_1_time_series.html#a60ff050a0fac49cfe59dbcfc09b7a18b">user</a>[32];</div>
+<div class="line"><a name="l00185"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#af55bed7a88297541248a0220cedfcbff">  185</a></span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>*                             <a class="code" href="structnvbio_1_1_time_series.html#af55bed7a88297541248a0220cedfcbff">user_names</a>[32];</div>
+<div class="line"><a name="l00186"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#aeeb3467a330767d2839a9a76665484ec">  186</a></span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>*                             <a class="code" href="structnvbio_1_1_time_series.html#aeeb3467a330767d2839a9a76665484ec">user_units</a>[32];</div>
+<div class="line"><a name="l00187"></a><span class="lineno"><a class="code" href="structnvbio_1_1_time_series.html#aff8b692a3e1fba0dfbf8c8449cf2c0f8">  187</a></span>&#160;    <span class="keywordtype">bool</span>                                    <a class="code" href="structnvbio_1_1_time_series.html#aff8b692a3e1fba0dfbf8c8449cf2c0f8">user_avg</a>[32];</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;};</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;} <span class="comment">// namespace nvbio</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:01 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:27 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

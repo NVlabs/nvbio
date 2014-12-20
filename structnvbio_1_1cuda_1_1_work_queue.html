@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -112,7 +113,7 @@ struct nvbio::cuda::WorkQueue&lt; PolicyTag, WorkUnitT, BLOCKDIM &gt;</h3>
 
 <p>Implements a parallel work queue interface (see <a class="el" href="work_queue_page.html">Work-Queues</a>). This default implementation employs a single kernel launch with static thread assignment and in-place execution of a work-unit and all its continuations. It has very low continuation overhead, but it might suffer from poor SIMT utilization when work-units have wildly varying number of continuations. </p>
 
-<p>Definition at line <a class="el" href="work__queue_8h_source.html#l00248">248</a> of file <a class="el" href="work__queue_8h_source.html">work_queue.h</a>.</p>
+<p>Definition at line <a class="el" href="work__queue_8h_source.html#l00257">257</a> of file <a class="el" href="work__queue_8h_source.html">work_queue.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="work__queue_8h_source.html">work_queue.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -147,7 +148,7 @@ template&lt;typename PolicyTag, typename WorkUnitT, uint32 BLOCKDIM&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="work__queue_8h_source.html#l00250">250</a> of file <a class="el" href="work__queue_8h_source.html">work_queue.h</a>.</p>
+<p>Definition at line <a class="el" href="work__queue_8h_source.html#l00259">259</a> of file <a class="el" href="work__queue_8h_source.html">work_queue.h</a>.</p>
 
 </div>
 </div>
@@ -176,7 +177,7 @@ template&lt;typename PolicyTag, typename WorkUnitT, uint32 BLOCKDIM&gt; </div>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="work__queue_8h_source.html#l00254">254</a> of file <a class="el" href="work__queue_8h_source.html">work_queue.h</a>.</p>
+<p>Definition at line <a class="el" href="work__queue_8h_source.html#l00263">263</a> of file <a class="el" href="work__queue_8h_source.html">work_queue.h</a>.</p>
 
 </div>
 </div>
@@ -218,7 +219,7 @@ template&lt;typename WorkStream &gt; </div>
 </div><div class="memdoc">
 <p>consume a stream of work units </p>
 
-<p>Definition at line <a class="el" href="work__queue_8h_source.html#l00268">268</a> of file <a class="el" href="work__queue_8h_source.html">work_queue.h</a>.</p>
+<p>Definition at line <a class="el" href="work__queue_8h_source.html#l00277">277</a> of file <a class="el" href="work__queue_8h_source.html">work_queue.h</a>.</p>
 
 </div>
 </div>
@@ -257,7 +258,7 @@ template&lt;typename WorkStream , typename WorkMover &gt; </div>
 </div><div class="memdoc">
 <p>consume a stream of work units </p>
 
-<p>Definition at line <a class="el" href="work__queue__inl_8h_source.html#l00089">89</a> of file <a class="el" href="work__queue__inl_8h_source.html">work_queue_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="work__queue__inl_8h_source.html#l00098">98</a> of file <a class="el" href="work__queue__inl_8h_source.html">work_queue_inl.h</a>.</p>
 
 </div>
 </div>
@@ -287,18 +288,18 @@ template&lt;typename PolicyTag, typename WorkUnitT, uint32 BLOCKDIM&gt; </div>
 <p>set queue capacity.</p>
 <p>In this context, the queue capacity is the maximum amount of persistent threads used to run the stream. Limiting it might be useful when the work-units reference some limited external temporary storage. </p>
 
-<p>Definition at line <a class="el" href="work__queue_8h_source.html#l00263">263</a> of file <a class="el" href="work__queue_8h_source.html">work_queue.h</a>.</p>
+<p>Definition at line <a class="el" href="work__queue_8h_source.html#l00272">272</a> of file <a class="el" href="work__queue_8h_source.html">work_queue.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/cuda/<a class="el" href="work__queue_8h_source.html">work_queue.h</a></li>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/cuda/<a class="el" href="work__queue__inl_8h_source.html">work_queue_inl.h</a></li>
+<li>E:/git/nvbio/nvbio/basic/cuda/<a class="el" href="work__queue_8h_source.html">work_queue.h</a></li>
+<li>E:/git/nvbio/nvbio/basic/cuda/<a class="el" href="work__queue__inl_8h_source.html">work_queue_inl.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:43:05 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:47 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

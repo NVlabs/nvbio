@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -100,56 +101,73 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 - DeviceWarpScheduler</pre><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_thread_scheduler.html">nvbio::aln::ThreadScheduler&lt; system_tag &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_host_thread_scheduler.html">nvbio::aln::HostThreadScheduler</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_device_thread_block_scheduler.html">nvbio::aln::DeviceThreadBlockScheduler&lt; BLOCKDIM_T, MINBLOCKS_T &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_device_staged_thread_scheduler.html">nvbio::aln::DeviceStagedThreadScheduler</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_device_warp_scheduler.html">nvbio::aln::DeviceWarpScheduler</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler.html">nvbio::aln::supports_scheduler&lt; T, Scheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_edit_distance_aligner_3_01_t_y_p_e_00_01_algorith48aecd7022cd8ce13a7b90da9c65ab61.html">nvbio::aln::supports_scheduler&lt; EditDistanceAligner&lt; TYPE, AlgorithmTag &gt;, HostThreadScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_edit_distance_aligner_3_01_t_y_p_e_00_01_algorith8e7204932f545ab09128113f921d3158.html">nvbio::aln::supports_scheduler&lt; EditDistanceAligner&lt; TYPE, AlgorithmTag &gt;, DeviceThreadScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_edit_distance_aligner_3_01_t_y_p_e_00_01_algorithcce448e2692a28f331c75ef81e7203db.html">nvbio::aln::supports_scheduler&lt; EditDistanceAligner&lt; TYPE, AlgorithmTag &gt;, DeviceStagedThreadScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_edit_distance_aligner_3_01_t_y_p_e_00_01_algorith379ad177dd5830880a7f55949a557f7c.html">nvbio::aln::supports_scheduler&lt; EditDistanceAligner&lt; TYPE, AlgorithmTag &gt;, DeviceWarpScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_smith_waterman_aligner_3_01_t_y_p_e_00_01_scoring31ef332d3049db0b192d7096542457cb.html">nvbio::aln::supports_scheduler&lt; SmithWatermanAligner&lt; TYPE, ScoringScheme, AlgorithmTag &gt;, HostThreadScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_smith_waterman_aligner_3_01_t_y_p_e_00_01_scoring07d1fd3809b27580a47281ec393e1d02.html">nvbio::aln::supports_scheduler&lt; SmithWatermanAligner&lt; TYPE, ScoringScheme, AlgorithmTag &gt;, DeviceThreadScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_smith_waterman_aligner_3_01_t_y_p_e_00_01_scoringaf20a94a954a91c33ff00523c8096e94.html">nvbio::aln::supports_scheduler&lt; SmithWatermanAligner&lt; TYPE, ScoringScheme, AlgorithmTag &gt;, DeviceStagedThreadScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_smith_waterman_aligner_3_01_t_y_p_e_00_01_scoring295789db9b72e841587e15d0fb4305a2.html">nvbio::aln::supports_scheduler&lt; SmithWatermanAligner&lt; TYPE, ScoringScheme, AlgorithmTag &gt;, DeviceWarpScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_gotoh_aligner_3_01_t_y_p_e_00_01_scoring_scheme_08b5ce6fdcdd9795ff66602541c893b52.html">nvbio::aln::supports_scheduler&lt; GotohAligner&lt; TYPE, ScoringScheme, AlgorithmTag &gt;, HostThreadScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_gotoh_aligner_3_01_t_y_p_e_00_01_scoring_scheme_0d8a8ac5fc56fb2ee1027173a3020d9a3.html">nvbio::aln::supports_scheduler&lt; GotohAligner&lt; TYPE, ScoringScheme, AlgorithmTag &gt;, DeviceThreadScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_gotoh_aligner_3_01_t_y_p_e_00_01_scoring_scheme_05c3446dbeb7c78622f7d6568225328a2.html">nvbio::aln::supports_scheduler&lt; GotohAligner&lt; TYPE, ScoringScheme, AlgorithmTag &gt;, DeviceStagedThreadScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_gotoh_aligner_3_01_t_y_p_e_00_01_scoring_scheme_02ef61ec6b58c31adc1b9fc8b0f5ea472.html">nvbio::aln::supports_scheduler&lt; GotohAligner&lt; TYPE, ScoringScheme, AlgorithmTag &gt;, DeviceWarpScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_hamming_distance_aligner_3_01_t_y_p_e_00_01_scori29316bfde4ee56fcd455522d2e7d66b5.html">nvbio::aln::supports_scheduler&lt; HammingDistanceAligner&lt; TYPE, ScoringScheme, AlgorithmTag &gt;, HostThreadScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_hamming_distance_aligner_3_01_t_y_p_e_00_01_scorife2c9be273b238396173c6cd0e6dbc41.html">nvbio::aln::supports_scheduler&lt; HammingDistanceAligner&lt; TYPE, ScoringScheme, AlgorithmTag &gt;, DeviceThreadScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1supports__scheduler_3_01_hamming_distance_aligner_3_01_t_y_p_e_00_01_scori061073ac173e0e3e3aa8fa7c4b862435.html">nvbio::aln::supports_scheduler&lt; HammingDistanceAligner&lt; TYPE, ScoringScheme, AlgorithmTag &gt;, DeviceStagedThreadScheduler &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ga242018522250d1f54f01839d57b037bf"><td class="memItemLeft" align="right" valign="top">typedef ThreadScheduler&lt; host_tag &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_scheduler.html#ga242018522250d1f54f01839d57b037bf">nvbio::aln::HostThreadScheduler</a></td></tr>
-<tr class="separator:ga242018522250d1f54f01839d57b037bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8cd79d95b552b152e3655b648e59256d"><td class="memItemLeft" align="right" valign="top">typedef ThreadScheduler<br class="typebreak"/>
-&lt; device_tag &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_scheduler.html#ga8cd79d95b552b152e3655b648e59256d">nvbio::aln::DeviceThreadScheduler</a></td></tr>
-<tr class="separator:ga8cd79d95b552b152e3655b648e59256d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8d26fb0c847e458b838e5f98893af1a4"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+DeviceThreadBlockScheduler&lt; 128, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_scheduler.html#ga8d26fb0c847e458b838e5f98893af1a4">nvbio::aln::DeviceThreadScheduler</a></td></tr>
+<tr class="separator:ga8d26fb0c847e458b838e5f98893af1a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a class="anchor" id="ga8cd79d95b552b152e3655b648e59256d"></a>
+<a class="anchor" id="ga8d26fb0c847e458b838e5f98893af1a4"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef ThreadScheduler&lt;device_tag&gt; <a class="el" href="group___batch_scheduler.html#ga8cd79d95b552b152e3655b648e59256d">nvbio::aln::DeviceThreadScheduler</a></td>
+          <td class="memname">typedef DeviceThreadBlockScheduler&lt;128,1&gt; <a class="el" href="group___batch_scheduler.html#ga8d26fb0c847e458b838e5f98893af1a4">nvbio::aln::DeviceThreadScheduler</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Identify a staged thread-parallel batch execution algorithm </p>
 
-<p>Definition at line <a class="el" href="batched_8h_source.html#l00051">51</a> of file <a class="el" href="batched_8h_source.html">batched.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ga242018522250d1f54f01839d57b037bf"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef ThreadScheduler&lt;host_tag&gt; <a class="el" href="group___batch_scheduler.html#ga242018522250d1f54f01839d57b037bf">nvbio::aln::HostThreadScheduler</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Identify a thread-parallel batch execution algorithm </p>
-
-<p>Definition at line <a class="el" href="batched_8h_source.html#l00047">47</a> of file <a class="el" href="batched_8h_source.html">batched.h</a>.</p>
+<p>Definition at line <a class="el" href="batched_8h_source.html#l00064">64</a> of file <a class="el" href="batched_8h_source.html">batched.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:17 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:46 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

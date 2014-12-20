@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -119,7 +120,7 @@ struct nvbio::aln::priv::sw_alignment_score_dispatch&lt; BAND_LEN, TYPE, Pattern
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l00408">408</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l00417">417</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -127,11 +128,11 @@ struct nvbio::aln::priv::sw_alignment_score_dispatch&lt; BAND_LEN, TYPE, Pattern
 Static Public Methods</h2></td></tr>
 <tr class="memitem:a1c8918c938aa7d6665f728ce8098d23e"><td class="memTemplParams" colspan="2">template&lt;bool CHECK_M, typename context_type , typename query_cache , typename score_type , typename temp_iterator , typename sink_type , typename scoring_type &gt; </td></tr>
 <tr class="memitem:a1c8918c938aa7d6665f728ce8098d23e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1sw__alignment__score__dispatch_3_01_b_a_n_d___l_e_n_00_01_t_y_p_e_11c3d4cf0b905442ede86a0c49f9d8b5.html#a1c8918c938aa7d6665f728ce8098d23e">update_row</a> (context_type &amp;context, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> block, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> M, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> N, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> symbol_type r_i, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> query_cache q_cache, temp_iterator temp, score_type &amp;temp_i, score_type *band, sink_type &amp;sink, score_type &amp;max_score, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> score_type G, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> score_type I, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> score_type zero, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scoring_type scoring)</td></tr>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1sw__alignment__score__dispatch_3_01_b_a_n_d___l_e_n_00_01_t_y_p_e_11c3d4cf0b905442ede86a0c49f9d8b5.html#a1c8918c938aa7d6665f728ce8098d23e">update_row</a> (context_type &amp;context, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> block, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> M, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> N, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> symbol_type r_i, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> query_cache q_cache, temp_iterator temp, score_type &amp;temp_i, score_type *band, sink_type &amp;sink, score_type &amp;max_score, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> score_type <a class="el" href="md5_8c.html#ad96b7cf3182ce2ba85e5a7a93b12c441">G</a>, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> score_type <a class="el" href="md5_8c.html#ac0eafdc9ee161b71e7af98af736952fd">I</a>, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> score_type zero, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scoring_type scoring)</td></tr>
 <tr class="separator:a1c8918c938aa7d6665f728ce8098d23e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a157771dc1636f5f40ed78f8c10c5f0db"><td class="memTemplParams" colspan="2">template&lt;typename context_type , typename string_type , typename qual_type , typename ref_type , typename scoring_type , typename sink_type , typename column_type &gt; </td></tr>
 <tr class="memitem:a157771dc1636f5f40ed78f8c10c5f0db"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1sw__alignment__score__dispatch_3_01_b_a_n_d___l_e_n_00_01_t_y_p_e_11c3d4cf0b905442ede86a0c49f9d8b5.html#a157771dc1636f5f40ed78f8c10c5f0db">run</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scoring_type &amp;scoring, context_type &amp;context, string_type query, qual_type quals, ref_type ref, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> min_score, sink_type &amp;sink, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_begin, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_end, column_type temp)</td></tr>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1sw__alignment__score__dispatch_3_01_b_a_n_d___l_e_n_00_01_t_y_p_e_11c3d4cf0b905442ede86a0c49f9d8b5.html#a157771dc1636f5f40ed78f8c10c5f0db">run</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scoring_type &amp;scoring, context_type &amp;context, string_type query, qual_type quals, ref_type ref, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> min_score, sink_type &amp;sink, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_begin, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_end, <a class="el" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a> temp)</td></tr>
 <tr class="separator:a157771dc1636f5f40ed78f8c10c5f0db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fcb5d0bbe198d8662ae8ac0ad025c9f"><td class="memTemplParams" colspan="2">template&lt;uint32 MAX_REF_LEN, typename context_type , typename string_type , typename qual_type , typename ref_type , typename scoring_type , typename sink_type &gt; </td></tr>
 <tr class="memitem:a5fcb5d0bbe198d8662ae8ac0ad025c9f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <br class="typebreak"/>
@@ -207,7 +208,7 @@ template&lt;typename context_type , typename string_type , typename qual_type , 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">column_type&#160;</td>
+          <td class="paramtype"><a class="el" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a>&#160;</td>
           <td class="paramname"><em>temp</em>&#160;</td>
         </tr>
         <tr>
@@ -244,7 +245,7 @@ template&lt;typename context_type , typename string_type , typename qual_type , 
 <div class="line">    <span class="keywordtype">void</span> init(</div>
 <div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>        j,</div>
 <div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>        N,</div>
-<div class="line">              column_type&amp;  column,</div>
+<div class="line">              <a class="code" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a>&amp;  <a class="code" href="group__private.html#ga42cf6551fd7dbc319c92c050d713cb91">column</a>,</div>
 <div class="line">        <span class="keyword">const</span> scoring_type&amp; scoring,</div>
 <div class="line">        <span class="keyword">const</span> score_type    zero);</div>
 <div class="line"></div>
@@ -257,7 +258,7 @@ template&lt;typename context_type , typename string_type , typename qual_type , 
 <div class="line">    <span class="keywordtype">void</span> previous_column(</div>
 <div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>        j,</div>
 <div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>        N,</div>
-<div class="line">        <span class="keyword">const</span> column_type   column);</div>
+<div class="line">        <span class="keyword">const</span> <a class="code" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a>   <a class="code" href="group__private.html#ga42cf6551fd7dbc319c92c050d713cb91">column</a>);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// do something with the newly computed cell</span></div>
 <div class="line">    <span class="comment">//</span></div>
@@ -295,7 +296,7 @@ template&lt;typename context_type , typename string_type , typename qual_type , 
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l00610">610</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l00619">619</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
 
 </div>
 </div>
@@ -398,7 +399,7 @@ template&lt;uint32 MAX_REF_LEN, typename context_type , typename string_type , t
 <div class="line">    <span class="keywordtype">void</span> init(</div>
 <div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>        j,</div>
 <div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>        N,</div>
-<div class="line">              column_type&amp;  column,</div>
+<div class="line">              <a class="code" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a>&amp;  <a class="code" href="group__private.html#ga42cf6551fd7dbc319c92c050d713cb91">column</a>,</div>
 <div class="line">        <span class="keyword">const</span> scoring_type&amp; scoring,</div>
 <div class="line">        <span class="keyword">const</span> score_type    zero);</div>
 <div class="line"></div>
@@ -411,7 +412,7 @@ template&lt;uint32 MAX_REF_LEN, typename context_type , typename string_type , t
 <div class="line">    <span class="keywordtype">void</span> previous_column(</div>
 <div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>        j,</div>
 <div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>        N,</div>
-<div class="line">        <span class="keyword">const</span> column_type   column);</div>
+<div class="line">        <span class="keyword">const</span> <a class="code" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a>   <a class="code" href="group__private.html#ga42cf6551fd7dbc319c92c050d713cb91">column</a>);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// do something with the newly computed cell</span></div>
 <div class="line">    <span class="comment">//</span></div>
@@ -450,7 +451,7 @@ template&lt;uint32 MAX_REF_LEN, typename context_type , typename string_type , t
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>false if early-exited, true otherwise </dd></dl>
 
-<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l00835">835</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l00844">844</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
 
 </div>
 </div>
@@ -574,17 +575,17 @@ template&lt;bool CHECK_M, typename context_type , typename query_cache , typenam
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l00419">419</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l00428">428</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/alignment/sw/<a class="el" href="sw__inl_8h_source.html">sw_inl.h</a></li>
+<li>E:/git/nvbio/nvbio/alignment/sw/<a class="el" href="sw__inl_8h_source.html">sw_inl.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:53 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:33 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

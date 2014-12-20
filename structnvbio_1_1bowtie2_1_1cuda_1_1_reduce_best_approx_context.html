@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -106,7 +107,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><p>A context class for the score_reduce_kernel to be used in best-approx pipeline.</p>
 <p>Implements the basic extension bail-out mechanisms of Bowtie2, namely stopping when a given number of extensions of a read failed in a row. This is done keeping a vector of per-read extension 'trys' counters, which start from the maximum allowed number, and get decremented towards zero upon each failure, or reset upon successful extensions. </p>
 
-<p>Definition at line <a class="el" href="reduce_8h_source.html#l00055">55</a> of file <a class="el" href="reduce_8h_source.html">reduce.h</a>.</p>
+<p>Definition at line <a class="el" href="reduce_8h_source.html#l00063">63</a> of file <a class="el" href="reduce_8h_source.html">reduce.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="reduce_8h_source.html">reduce.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -162,7 +163,7 @@ Public Methods</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="reduce_8h_source.html#l00062">62</a> of file <a class="el" href="reduce_8h_source.html">reduce.h</a>.</p>
+<p>Definition at line <a class="el" href="reduce_8h_source.html#l00070">70</a> of file <a class="el" href="reduce_8h_source.html">reduce.h</a>.</p>
 
 </div>
 </div>
@@ -200,7 +201,7 @@ Public Methods</h2></td></tr>
 </div><div class="memdoc">
 <p>this method is called from score_reduce_kernel to report updates to the best score. </p>
 
-<p>Definition at line <a class="el" href="reduce_8h_source.html#l00067">67</a> of file <a class="el" href="reduce_8h_source.html">reduce.h</a>.</p>
+<p>Definition at line <a class="el" href="reduce_8h_source.html#l00075">75</a> of file <a class="el" href="reduce_8h_source.html">reduce.h</a>.</p>
 
 </div>
 </div>
@@ -249,7 +250,7 @@ Public Methods</h2></td></tr>
 </div><div class="memdoc">
 <p>this method is called from score_reduce_kernel to report extension failures. </p>
 
-<p>Definition at line <a class="el" href="reduce_8h_source.html#l00083">83</a> of file <a class="el" href="reduce_8h_source.html">reduce.h</a>.</p>
+<p>Definition at line <a class="el" href="reduce_8h_source.html#l00091">91</a> of file <a class="el" href="reduce_8h_source.html">reduce.h</a>.</p>
 
 </div>
 </div>
@@ -286,17 +287,17 @@ Public Methods</h2></td></tr>
 </div><div class="memdoc">
 <p>this method is called from score_reduce_kernel to report updates to the second best score. </p>
 
-<p>Definition at line <a class="el" href="reduce_8h_source.html#l00075">75</a> of file <a class="el" href="reduce_8h_source.html">reduce.h</a>.</p>
+<p>Definition at line <a class="el" href="reduce_8h_source.html#l00083">83</a> of file <a class="el" href="reduce_8h_source.html">reduce.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/<a class="el" href="reduce_8h_source.html">reduce.h</a></li>
+<li>E:/git/nvbio/nvBowtie/bowtie2/cuda/<a class="el" href="reduce_8h_source.html">reduce.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:58 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:39 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

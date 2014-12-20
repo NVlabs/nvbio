@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['dc3_5fsufsort_2eh',['dc3_sufsort.h',['../dc3__sufsort_8h.html',1,'']]],
   ['dcs_2eh',['dcs.h',['../dcs_8h.html',1,'']]],
   ['dcs_5finl_2eh',['dcs_inl.h',['../dcs__inl_8h.html',1,'']]],
   ['deflate_2ec',['deflate.c',['../deflate_8c.html',1,'']]],

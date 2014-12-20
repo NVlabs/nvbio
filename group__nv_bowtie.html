@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -148,10 +149,6 @@ Enumerations</h2></td></tr>
 <a class="el" href="group__nv_bowtie.html#gga7df415df8dea3af51fa5b274f8102b4fad76a804715535f5d360b58ed681ee751">nvbio::bowtie2::cuda::SmithWatermanMode</a> = 1
  }</td></tr>
 <tr class="separator:ga7df415df8dea3af51fa5b274f8102b4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga774096281a1bc92f00e0e78548b22b6f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__nv_bowtie.html#ga774096281a1bc92f00e0e78548b22b6f">nvbio::bowtie2::cuda::AlignmentType</a> { <a class="el" href="group__nv_bowtie.html#gga774096281a1bc92f00e0e78548b22b6fa7c4fc11624e416407333980f2cd0d71b">nvbio::bowtie2::cuda::EndToEndAlignment</a> = 0, 
-<a class="el" href="group__nv_bowtie.html#gga774096281a1bc92f00e0e78548b22b6fa2fa00b5322dc2404e6308fbb4c325194">nvbio::bowtie2::cuda::LocalAlignment</a> = 1
- }</td></tr>
-<tr class="separator:ga774096281a1bc92f00e0e78548b22b6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -163,28 +160,13 @@ Functions</h2></td></tr>
 <tr class="separator:ga092110a1d4d60bc154e86dac4a9ebb42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga43f68c79d83bb33c4e4e5cd82c0de674"><td class="memItemLeft" align="right" valign="top">uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__nv_bowtie.html#ga43f68c79d83bb33c4e4e5cd82c0de674">nvbio::bowtie2::cuda::scoring_mode</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *str)</td></tr>
 <tr class="separator:ga43f68c79d83bb33c4e4e5cd82c0de674"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae07971f064493cdc50c2afe0992d545b"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <br class="typebreak"/>
+std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__nv_bowtie.html#gae07971f064493cdc50c2afe0992d545b">nvbio::bowtie2::cuda::load_options</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name)</td></tr>
+<tr class="separator:gae07971f064493cdc50c2afe0992d545b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0c9ce7e4b974d16eafcc01a20632f736"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__nv_bowtie.html#ga0c9ce7e4b974d16eafcc01a20632f736">nvbio::bowtie2::cuda::parse_options</a> (Params &amp;params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> std::map&lt; std::string, std::string &gt; &amp;options, bool init)</td></tr>
+<tr class="separator:ga0c9ce7e4b974d16eafcc01a20632f736"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
-<a class="anchor" id="ga774096281a1bc92f00e0e78548b22b6f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="group__nv_bowtie.html#ga774096281a1bc92f00e0e78548b22b6f">nvbio::bowtie2::cuda::AlignmentType</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="gga774096281a1bc92f00e0e78548b22b6fa7c4fc11624e416407333980f2cd0d71b"></a>EndToEndAlignment</em>&nbsp;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="gga774096281a1bc92f00e0e78548b22b6fa2fa00b5322dc2404e6308fbb4c325194"></a>LocalAlignment</em>&nbsp;</td><td class="fielddoc">
-</td></tr>
-</table>
-
-<p>Definition at line <a class="el" href="params_8h_source.html#l00043">43</a> of file <a class="el" href="params_8h_source.html">params.h</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="ga82f17b4edea2ba6b87a1e0a9fff0ff65"></a>
 <div class="memitem">
 <div class="memproto">
@@ -203,7 +185,7 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="params_8h_source.html#l00032">32</a> of file <a class="el" href="params_8h_source.html">params.h</a>.</p>
+<p>Definition at line <a class="el" href="params_8h_source.html#l00042">42</a> of file <a class="el" href="params_8h_source.html">params.h</a>.</p>
 
 </div>
 </div>
@@ -223,11 +205,30 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="params_8h_source.html#l00038">38</a> of file <a class="el" href="params_8h_source.html">params.h</a>.</p>
+<p>Definition at line <a class="el" href="params_8h_source.html#l00048">48</a> of file <a class="el" href="params_8h_source.html">params.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="gae07971f064493cdc50c2afe0992d545b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt; std::string, std::string &gt; nvbio::bowtie2::cuda::load_options </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *&#160;</td>
+          <td class="paramname"><em>name</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>load options from a file </p>
+
+<p>Definition at line <a class="el" href="params_8cpp_source.html#l00013">13</a> of file <a class="el" href="params_8cpp_source.html">params.cpp</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ga1abaefe9992c5c558cfbabbcb10ebee2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -250,7 +251,7 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="params_8h_source.html#l00053">53</a> of file <a class="el" href="params_8h_source.html">params.h</a>.</p>
+<p>Definition at line <a class="el" href="params_8h_source.html#l00058">58</a> of file <a class="el" href="params_8h_source.html">params.h</a>.</p>
 
 </div>
 </div>
@@ -276,7 +277,42 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="params_8h_source.html#l00058">58</a> of file <a class="el" href="params_8h_source.html">params.h</a>.</p>
+<p>Definition at line <a class="el" href="params_8h_source.html#l00063">63</a> of file <a class="el" href="params_8h_source.html">params.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga0c9ce7e4b974d16eafcc01a20632f736"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::bowtie2::cuda::parse_options </td>
+          <td>(</td>
+          <td class="paramtype">Params &amp;&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> std::map&lt; std::string, std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>options</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>init</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>parse options </p>
+
+<p>Definition at line <a class="el" href="params_8cpp_source.html#l00111">111</a> of file <a class="el" href="params_8cpp_source.html">params.cpp</a>.</p>
 
 </div>
 </div>
@@ -302,7 +338,7 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="params_8h_source.html#l00072">72</a> of file <a class="el" href="params_8h_source.html">params.h</a>.</p>
+<p>Definition at line <a class="el" href="params_8h_source.html#l00077">77</a> of file <a class="el" href="params_8h_source.html">params.h</a>.</p>
 
 </div>
 </div>
@@ -328,14 +364,14 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="params_8h_source.html#l00077">77</a> of file <a class="el" href="params_8h_source.html">params.h</a>.</p>
+<p>Definition at line <a class="el" href="params_8h_source.html#l00082">82</a> of file <a class="el" href="params_8h_source.html">params.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:18 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:47 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

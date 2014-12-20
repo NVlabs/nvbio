@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -107,7 +108,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="details" id="details"></a><h2 class="groupheader">Detailed description</h2>
 <div class="textblock"><p>The <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array.html">SeedHitDequeArray</a> host storage class </p>
 
-<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00069">69</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
+<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00080">80</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -144,9 +145,15 @@ Public Members</h2></td></tr>
 <tr class="memitem:a3fddfc1edc11672d5cecb41383719157"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array_host_storage.html#aae4542044e61d966b1a530fefda8900c">index_storage_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array_host_storage.html#a3fddfc1edc11672d5cecb41383719157">m_index</a></td></tr>
 <tr class="memdesc:a3fddfc1edc11672d5cecb41383719157"><td class="mdescLeft">&#160;</td><td class="mdescRight">per-read index marking the beginning of the read's hits vector in the global arena  <a href="#a3fddfc1edc11672d5cecb41383719157">More...</a><br/></td></tr>
 <tr class="separator:a3fddfc1edc11672d5cecb41383719157"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae591658881cc1e0986660fb145aa2178"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array_host_storage.html#aae4542044e61d966b1a530fefda8900c">index_storage_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array_host_storage.html#ae591658881cc1e0986660fb145aa2178">m_probs_index</a></td></tr>
+<tr class="memdesc:ae591658881cc1e0986660fb145aa2178"><td class="mdescLeft">&#160;</td><td class="mdescRight">per-read index marking the beginning of the read's hits vector in the global arena  <a href="#ae591658881cc1e0986660fb145aa2178">More...</a><br/></td></tr>
+<tr class="separator:ae591658881cc1e0986660fb145aa2178"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04bfaf50eb2332355a23251d42139408"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array_host_storage.html#aae4542044e61d966b1a530fefda8900c">index_storage_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array_host_storage.html#a04bfaf50eb2332355a23251d42139408">m_pool</a></td></tr>
 <tr class="memdesc:a04bfaf50eb2332355a23251d42139408"><td class="mdescLeft">&#160;</td><td class="mdescRight">pool counter for the global arena  <a href="#a04bfaf50eb2332355a23251d42139408">More...</a><br/></td></tr>
 <tr class="separator:a04bfaf50eb2332355a23251d42139408"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a242d6ff7b6a37197f29270d25c992f93"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array_host_storage.html#aae4542044e61d966b1a530fefda8900c">index_storage_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array_host_storage.html#a242d6ff7b6a37197f29270d25c992f93">m_probs_pool</a></td></tr>
+<tr class="memdesc:a242d6ff7b6a37197f29270d25c992f93"><td class="mdescLeft">&#160;</td><td class="mdescRight">pool counter for the global arena  <a href="#a242d6ff7b6a37197f29270d25c992f93">More...</a><br/></td></tr>
+<tr class="separator:a242d6ff7b6a37197f29270d25c992f93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="a67d4ccc4ff58924e295ee337c145ea9a"></a>
@@ -159,7 +166,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00071">71</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
+<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00082">82</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
 
 </div>
 </div>
@@ -173,7 +180,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00072">72</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
+<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00083">83</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
 
 </div>
 </div>
@@ -187,7 +194,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00073">73</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
+<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00084">84</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
 
 </div>
 </div>
@@ -215,7 +222,7 @@ Public Members</h2></td></tr>
 </div><div class="memdoc">
 <p>copy constructor </p>
 
-<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00077">77</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
+<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00088">88</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
 
 </div>
 </div>
@@ -243,7 +250,7 @@ Public Members</h2></td></tr>
 </div><div class="memdoc">
 <p>copy from a device object </p>
 
-<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00081">81</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
+<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00092">92</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
 
 </div>
 </div>
@@ -260,7 +267,7 @@ Public Members</h2></td></tr>
 
 <p>per-read seed hit counters </p>
 
-<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00092">92</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
+<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00105">105</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
 
 </div>
 </div>
@@ -276,7 +283,7 @@ Public Members</h2></td></tr>
 
 <p>global arena of seed hit SA ranges </p>
 
-<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00091">91</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
+<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00104">104</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
 
 </div>
 </div>
@@ -292,7 +299,7 @@ Public Members</h2></td></tr>
 
 <p>per-read index marking the beginning of the read's hits vector in the global arena </p>
 
-<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00094">94</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
+<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00107">107</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
 
 </div>
 </div>
@@ -308,7 +315,7 @@ Public Members</h2></td></tr>
 
 <p>pool counter for the global arena </p>
 
-<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00095">95</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
+<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00109">109</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
 
 </div>
 </div>
@@ -324,17 +331,49 @@ Public Members</h2></td></tr>
 
 <p>global arena of SA probabilities </p>
 
-<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00093">93</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
+<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00106">106</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae591658881cc1e0986660fb145aa2178"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array_host_storage.html#aae4542044e61d966b1a530fefda8900c">index_storage_type</a> nvbio::bowtie2::cuda::SeedHitDequeArrayHostStorage::m_probs_index</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>per-read index marking the beginning of the read's hits vector in the global arena </p>
+
+<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00108">108</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a242d6ff7b6a37197f29270d25c992f93"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array_host_storage.html#aae4542044e61d966b1a530fefda8900c">index_storage_type</a> nvbio::bowtie2::cuda::SeedHitDequeArrayHostStorage::m_probs_pool</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>pool counter for the global arena </p>
+
+<p>Definition at line <a class="el" href="seed__hit__deque__array_8h_source.html#l00110">110</a> of file <a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/<a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a></li>
+<li>E:/git/nvbio/nvBowtie/bowtie2/cuda/<a class="el" href="seed__hit__deque__array_8h_source.html">seed_hit_deque_array.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:43:00 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:40 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvbio/alignment/batched_inl.h File Reference</title>
+<title>NVBIO: E:/git/nvbio/nvbio/alignment/batched_inl.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -98,7 +99,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">batched_inl.h File Reference</div>  </div>
 </div><!--header-->
@@ -118,13 +121,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score_3_01stream__type_00_01_host_thread_scheduler_01_4.html">nvbio::aln::BatchedAlignmentScore&lt; stream_type, HostThreadScheduler &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score_3_01stream__type_00_01_device_thread_scheduler_01_4.html">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceThreadScheduler &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score_3_01stream__type_00_01_device_thread_block_schedu1516e060a2409f4344f97c75c3ae9775.html">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score_3_01stream__type_00_01_device_warp_scheduler_01_4.html">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceWarpScheduler &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score_3_01stream__type_00_01_device_staged_thread_scheduler_01_4.html">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceStagedThreadScheduler &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback_3_01_c_h_e_c_k_p_o_i_n_t_s_00_01stream__type_e51aae34e284483ddac36985bb69bfd9.html">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadScheduler &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback_3_01_c_h_e_c_k_p_o_i_n_t_s_00_01stream__type_e816adbf5880de2a7fcabf42808ba443.html">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1_alignment_stream.html">nvbio::aln::priv::AlignmentStream&lt; t_aligner_type, pattern_set_type, qualities_set_type, text_set_type, sink_iterator &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -143,21 +146,30 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacenvbio_1_1aln_1_1priv"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1aln_1_1priv.html">nvbio::aln::priv</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:ga4a207ead3e758931387c3c6d116c1e62"><td class="memItemLeft" align="right" valign="top">typedef strided_iterator<br class="typebreak"/>
+&lt; cell_type * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">nvbio::aln::column_type</a></td></tr>
+<tr class="separator:ga4a207ead3e758931387c3c6d116c1e62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:gaf61f65b7863580449824c1c7e75b2165"><td class="memTemplParams" colspan="2">template&lt;typename stream_type , typename column_type &gt; </td></tr>
 <tr class="memitem:gaf61f65b7863580449824c1c7e75b2165"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__private.html#gaf61f65b7863580449824c1c7e75b2165">nvbio::aln::batched_alignment_score</a> (stream_type &amp;stream, column_type column, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 work_id, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 thread_id)</td></tr>
 <tr class="separator:gaf61f65b7863580449824c1c7e75b2165"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3319e9d15a76556501d1fc84192dfbc4"><td class="memTemplParams" colspan="2">template&lt;uint32 BLOCKDIM, uint32 COLUMN_SIZE, typename stream_type , typename cell_type &gt; </td></tr>
-<tr class="memitem:ga3319e9d15a76556501d1fc84192dfbc4"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__private.html#ga3319e9d15a76556501d1fc84192dfbc4">nvbio::aln::lmem_batched_alignment_score_kernel</a> (stream_type stream, cell_type *columns, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stride)</td></tr>
-<tr class="separator:ga3319e9d15a76556501d1fc84192dfbc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5c0ebd5d194107176a8b68cfb955d030"><td class="memTemplParams" colspan="2">template&lt;uint32 BLOCKDIM, typename stream_type , typename cell_type &gt; </td></tr>
-<tr class="memitem:ga5c0ebd5d194107176a8b68cfb955d030"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__private.html#ga5c0ebd5d194107176a8b68cfb955d030">nvbio::aln::batched_alignment_score_kernel</a> (stream_type stream, cell_type *columns, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stride)</td></tr>
-<tr class="separator:ga5c0ebd5d194107176a8b68cfb955d030"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga874039a5dc3b0d6bf57e23bd2f5354f6"><td class="memTemplParams" colspan="2">template&lt;uint32 BLOCKDIM, typename stream_type , typename cell_type &gt; </td></tr>
-<tr class="memitem:ga874039a5dc3b0d6bf57e23bd2f5354f6"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__private.html#ga874039a5dc3b0d6bf57e23bd2f5354f6">nvbio::aln::persistent_batched_alignment_score_kernel</a> (stream_type stream, cell_type *columns, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stride)</td></tr>
-<tr class="separator:ga874039a5dc3b0d6bf57e23bd2f5354f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga72e163cecb784aca9adf62441e41093f"><td class="memTemplParams" colspan="2">template&lt;uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 COLUMN_SIZE, typename stream_type , typename cell_type &gt; </td></tr>
+<tr class="memitem:ga72e163cecb784aca9adf62441e41093f"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__private.html#ga72e163cecb784aca9adf62441e41093f">nvbio::aln::__launch_bounds__</a> (BLOCKDIM, MINBLOCKS) lmem_batched_alignment_score_kernel(stream_type stream</td></tr>
+<tr class="separator:ga72e163cecb784aca9adf62441e41093f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga85d958c03886a94278558ccb0d58e95a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__private.html#ga85d958c03886a94278558ccb0d58e95a">nvbio::aln::if</a> (tid &gt;=stream.size()) return</td></tr>
+<tr class="separator:ga85d958c03886a94278558ccb0d58e95a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac034b83d1b42ae6c23a21fdaed18dd09"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__private.html#gac034b83d1b42ae6c23a21fdaed18dd09">nvbio::aln::batched_alignment_score</a> (stream, column, tid, tid)</td></tr>
+<tr class="separator:gac034b83d1b42ae6c23a21fdaed18dd09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga42dc778bdc5c646cb283e8ee39640d33"><td class="memTemplParams" colspan="2">template&lt;uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 BAND_LEN, typename stream_type &gt; </td></tr>
+<tr class="memitem:ga42dc778bdc5c646cb283e8ee39640d33"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__private.html#ga42dc778bdc5c646cb283e8ee39640d33">nvbio::aln::__launch_bounds__</a> (BLOCKDIM, MINBLOCKS) batched_banded_alignment_score_kernel(<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> stream_type stream)</td></tr>
+<tr class="separator:ga42dc778bdc5c646cb283e8ee39640d33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9f9778f8a7845c9769bd1f4531e0b2d4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__private.html#ga9f9778f8a7845c9769bd1f4531e0b2d4">nvbio::aln::for</a> (uint32 stream_begin=0;stream_begin&lt; stream_end;stream_begin+=grid_threads)</td></tr>
+<tr class="separator:ga9f9778f8a7845c9769bd1f4531e0b2d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga535d06562c4c9518f728439885eb8386"><td class="memTemplParams" colspan="2">template&lt;uint32 BLOCKDIM, typename stream_type , typename cell_type &gt; </td></tr>
 <tr class="memitem:ga535d06562c4c9518f728439885eb8386"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#ab1e3db7d296c7ca84db521f23dd81bd3">NVBIO_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__private.html#ga535d06562c4c9518f728439885eb8386">nvbio::aln::warp_batched_alignment_score</a> (stream_type &amp;stream, cell_type *columns, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stride, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 work_id, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 warp_id)</td></tr>
 <tr class="separator:ga535d06562c4c9518f728439885eb8386"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,12 +183,8 @@ Functions</h2></td></tr>
 <tr class="memitem:gaa7a8fed70be51c0ca483c5478affaae0"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__private.html#gaa7a8fed70be51c0ca483c5478affaae0">nvbio::aln::batched_alignment_traceback</a> (stream_type &amp;stream, cell_type *checkpoints, uint32 *submatrices, cell_type *columns, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stride, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 work_id, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 thread_id)</td></tr>
 <tr class="separator:gaa7a8fed70be51c0ca483c5478affaae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3942b0b16e8644eca5ad036110c33936"><td class="memTemplParams" colspan="2">template&lt;uint32 BLOCKDIM, uint32 CHECKPOINTS, typename stream_type , typename cell_type &gt; </td></tr>
-<tr class="memitem:ga3942b0b16e8644eca5ad036110c33936"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__private.html#ga3942b0b16e8644eca5ad036110c33936">nvbio::aln::batched_alignment_traceback_kernel</a> (stream_type stream, cell_type *checkpoints, uint32 *submatrices, cell_type *columns, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stride)</td></tr>
-<tr class="separator:ga3942b0b16e8644eca5ad036110c33936"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga899f135f37c7929515df9e832b9f8815"><td class="memTemplParams" colspan="2">template&lt;uint32 BLOCKDIM, uint32 CHECKPOINTS, typename stream_type , typename cell_type &gt; </td></tr>
-<tr class="memitem:ga899f135f37c7929515df9e832b9f8815"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__private.html#ga899f135f37c7929515df9e832b9f8815">nvbio::aln::persistent_batched_alignment_traceback_kernel</a> (stream_type stream, cell_type *checkpoints, uint32 *submatrices, cell_type *columns, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stride)</td></tr>
-<tr class="separator:ga899f135f37c7929515df9e832b9f8815"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad56f6e23e098c2ba9cbce868d96e1c9e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__private.html#gad56f6e23e098c2ba9cbce868d96e1c9e">nvbio::aln::batched_alignment_traceback&lt; CHECKPOINTS &gt;</a> (stream, checkpoints, submatrices, columns, stride, tid, tid)</td></tr>
+<tr class="separator:gad56f6e23e098c2ba9cbce868d96e1c9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga96aa53d0150bba09d393f544c11a865f"><td class="memTemplParams" colspan="2">template&lt;typename aligner_type , typename pattern_set_type , typename text_set_type , typename sink_iterator , typename scheduler_type &gt; </td></tr>
 <tr class="memitem:ga96aa53d0150bba09d393f544c11a865f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#ga96aa53d0150bba09d393f544c11a865f">nvbio::aln::batch_alignment_score</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> aligner_type aligner, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pattern_set_type patterns, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> text_set_type texts, sink_iterator sinks, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scheduler_type scheduler, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_pattern_length=1000, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_text_length=1000)</td></tr>
 <tr class="separator:ga96aa53d0150bba09d393f544c11a865f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -186,11 +194,29 @@ Functions</h2></td></tr>
 <tr class="memitem:gaa538f11f8c5e272d8b1e5ecb3eb95f02"><td class="memTemplParams" colspan="2">template&lt;uint32 BAND_LEN, typename aligner_type , typename pattern_set_type , typename text_set_type , typename sink_iterator , typename scheduler_type &gt; </td></tr>
 <tr class="memitem:gaa538f11f8c5e272d8b1e5ecb3eb95f02"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#gaa538f11f8c5e272d8b1e5ecb3eb95f02">nvbio::aln::batch_banded_alignment_score</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> aligner_type aligner, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pattern_set_type patterns, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> text_set_type texts, sink_iterator sinks, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scheduler_type scheduler, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_pattern_length, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_text_length)</td></tr>
 <tr class="separator:gaa538f11f8c5e272d8b1e5ecb3eb95f02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:ga593e2c41afb778964ce704c263e2003a"><td class="memItemLeft" align="right" valign="top">__global__ void cell_type *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__private.html#ga593e2c41afb778964ce704c263e2003a">nvbio::aln::columns</a></td></tr>
+<tr class="separator:ga593e2c41afb778964ce704c263e2003a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad351d7c15f63a32844239c823aefca76"><td class="memItemLeft" align="right" valign="top">__global__ void cell_type <br class="typebreak"/>
+<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__private.html#gad351d7c15f63a32844239c823aefca76">nvbio::aln::stride</a></td></tr>
+<tr class="separator:gad351d7c15f63a32844239c823aefca76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga42cf6551fd7dbc319c92c050d713cb91"><td class="memItemLeft" align="right" valign="top">cell_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__private.html#ga42cf6551fd7dbc319c92c050d713cb91">nvbio::aln::column</a> [COLUMN_SIZE] = column_type( columns + tid, stride )</td></tr>
+<tr class="separator:ga42cf6551fd7dbc319c92c050d713cb91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadda27e039f153b64f6bacffb17ed5548"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__private.html#gadda27e039f153b64f6bacffb17ed5548">nvbio::aln::thread_id</a> = threadIdx.x + blockIdx.x*BLOCKDIM</td></tr>
+<tr class="separator:gadda27e039f153b64f6bacffb17ed5548"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaff75436c13480a61933d88dc9b224c52"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__private.html#gaff75436c13480a61933d88dc9b224c52">nvbio::aln::stream_end</a> = stream.size()</td></tr>
+<tr class="separator:gaff75436c13480a61933d88dc9b224c52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga79bab77c39c290c168c83216050371c4"><td class="memItemLeft" align="right" valign="top">__global__ void cell_type *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__private.html#ga79bab77c39c290c168c83216050371c4">nvbio::aln::checkpoints</a></td></tr>
+<tr class="separator:ga79bab77c39c290c168c83216050371c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab64ea6a6e7b3f60ef4b22dbd487b2b88"><td class="memItemLeft" align="right" valign="top">__global__ void cell_type uint32 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__private.html#gab64ea6a6e7b3f60ef4b22dbd487b2b88">nvbio::aln::submatrices</a></td></tr>
+<tr class="separator:gab64ea6a6e7b3f60ef4b22dbd487b2b88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:12 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:41 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

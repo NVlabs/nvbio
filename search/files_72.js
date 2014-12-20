@@ -11,7 +11,7 @@ var searchData=
   ['reads_5ftxt_2ecpp',['reads_txt.cpp',['../reads__txt_8cpp.html',1,'']]],
   ['reads_5ftxt_2eh',['reads_txt.h',['../reads__txt_8h.html',1,'']]],
   ['reduce_2eh',['reduce.h',['../reduce_8h.html',1,'']]],
+  ['reduce_5fimpl_2eh',['reduce_impl.h',['../reduce__impl_8h.html',1,'']]],
   ['reduce_5finl_2eh',['reduce_inl.h',['../reduce__inl_8h.html',1,'']]],
-  ['rope_2eh',['rope.h',['../rope_8h.html',1,'']]],
-  ['rope_5favl_2eh',['rope_avl.h',['../rope__avl_8h.html',1,'']]]
+  ['regions_2eh',['regions.h',['../regions_8h.html',1,'']]]
 ];

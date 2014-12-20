@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/score.h File Reference</title>
+<title>NVBIO: E:/git/nvbio/nvBowtie/bowtie2/cuda/score.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -103,11 +104,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">score.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="string__utils_8h_source.html">nvBowtie/bowtie2/cuda/string_utils.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="nvbio_2alignment_2alignment_8h_source.html">nvbio/alignment/alignment.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="batched_8h_source.html">nvbio/alignment/batched.h</a>&gt;</code><br/>
+<div class="textblock"><code>#include &lt;<a class="el" href="defs_8h_source.html">nvBowtie/bowtie2/cuda/defs.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="string__utils_8h_source.html">nvBowtie/bowtie2/cuda/string_utils.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="scoring_8h_source.html">nvBowtie/bowtie2/cuda/scoring.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="nvbio_2io_2utils_8h_source.html">nvbio/io/utils.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="score__inl_8h_source.html">nvBowtie/bowtie2/cuda/score_inl.h</a>&gt;</code><br/>
 </div>
 <p><a href="score_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -116,6 +116,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_base_scoring_pipeline_state.html">nvbio::bowtie2::cuda::BaseScoringPipelineState&lt; ScoringScheme &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_best_approx_scoring_pipeline_state.html">nvbio::bowtie2::cuda::BestApproxScoringPipelineState&lt; ScoringScheme &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_all_mapping_pipeline_state.html">nvbio::bowtie2::cuda::AllMappingPipelineState&lt; ScoringScheme &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -130,23 +132,27 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga56e68063eee00be8726c13bbb9d92556"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
-<tr class="memitem:ga56e68063eee00be8726c13bbb9d92556"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga56e68063eee00be8726c13bbb9d92556">nvbio::bowtie2::cuda::score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga56e68063eee00be8726c13bbb9d92556"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga7e14ef3067493132a09200cc21bcc82b"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
-<tr class="memitem:ga7e14ef3067493132a09200cc21bcc82b"><td class="memTemplItemLeft" align="right" valign="top">uint32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga7e14ef3067493132a09200cc21bcc82b">nvbio::bowtie2::cuda::score_all</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> AllMappingPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_offset, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_size)</td></tr>
-<tr class="separator:ga7e14ef3067493132a09200cc21bcc82b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga25139a24703152f236d5b0d4dbaf4426"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
-<tr class="memitem:ga25139a24703152f236d5b0d4dbaf4426"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga25139a24703152f236d5b0d4dbaf4426">nvbio::bowtie2::cuda::anchor_score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga25139a24703152f236d5b0d4dbaf4426"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga30a0a305deae846f983459397f8617ed"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
-<tr class="memitem:ga30a0a305deae846f983459397f8617ed"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga30a0a305deae846f983459397f8617ed">nvbio::bowtie2::cuda::opposite_score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga30a0a305deae846f983459397f8617ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gade1f1010066627cb4cf979ec7e67435f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#gade1f1010066627cb4cf979ec7e67435f">nvbio::bowtie2::cuda::score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; EditDistanceScoringScheme &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:gade1f1010066627cb4cf979ec7e67435f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6ea5b43eae5ecfc40140c1b5e737a77c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga6ea5b43eae5ecfc40140c1b5e737a77c">nvbio::bowtie2::cuda::score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; SmithWatermanScoringScheme&lt;&gt; &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:ga6ea5b43eae5ecfc40140c1b5e737a77c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga754ac5c111106ec7e9c63fb61aaca9cc"><td class="memItemLeft" align="right" valign="top">uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga754ac5c111106ec7e9c63fb61aaca9cc">nvbio::bowtie2::cuda::score_all</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> AllMappingPipelineState&lt; EditDistanceScoringScheme &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_offset, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_size)</td></tr>
+<tr class="separator:ga754ac5c111106ec7e9c63fb61aaca9cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4a27e8ec4e3e633a523dfc9b65cdde81"><td class="memItemLeft" align="right" valign="top">uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga4a27e8ec4e3e633a523dfc9b65cdde81">nvbio::bowtie2::cuda::score_all</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> AllMappingPipelineState&lt; SmithWatermanScoringScheme&lt;&gt; &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_offset, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_size)</td></tr>
+<tr class="separator:ga4a27e8ec4e3e633a523dfc9b65cdde81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf1229ce3a465e49c0dc7836abd37747b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#gaf1229ce3a465e49c0dc7836abd37747b">nvbio::bowtie2::cuda::anchor_score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; EditDistanceScoringScheme &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:gaf1229ce3a465e49c0dc7836abd37747b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae61261fdd32fc63d05916ab6cf4b7a30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#gae61261fdd32fc63d05916ab6cf4b7a30">nvbio::bowtie2::cuda::anchor_score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; SmithWatermanScoringScheme&lt;&gt; &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:gae61261fdd32fc63d05916ab6cf4b7a30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga065c6b73e4afdce4afcd4cfac4f7badc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga065c6b73e4afdce4afcd4cfac4f7badc">nvbio::bowtie2::cuda::opposite_score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; EditDistanceScoringScheme &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:ga065c6b73e4afdce4afcd4cfac4f7badc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacd97cdafe94bcd18ce031f7793f2409e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#gacd97cdafe94bcd18ce031f7793f2409e">nvbio::bowtie2::cuda::opposite_score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; SmithWatermanScoringScheme&lt;&gt; &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:gacd97cdafe94bcd18ce031f7793f2409e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:16 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:44 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

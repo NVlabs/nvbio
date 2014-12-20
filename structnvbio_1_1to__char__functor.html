@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -110,9 +111,9 @@ struct nvbio::to_char_functor&lt; ALPHABET &gt;</h3>
 
 <p>conversion functor from a given alphabet to ASCII char </p>
 
-<p>Definition at line <a class="el" href="alphabet_01-_01symbol_8h_source.html#l00310">310</a> of file <a class="el" href="alphabet_01-_01symbol_8h_source.html">alphabet - symbol.h</a>.</p>
+<p>Definition at line <a class="el" href="alphabet_8h_source.html#l00259">259</a> of file <a class="el" href="alphabet_8h_source.html">alphabet.h</a>.</p>
 </div>
-<p><code>#include &lt;<a class="el" href="alphabet_01-_01symbol_8h_source.html">alphabet - symbol.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="alphabet_8h_source.html">alphabet.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
@@ -120,16 +121,9 @@ Public Types</h2></td></tr>
 <tr class="separator:a1792cde9e0249d6c0d6c7af120805885"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8cd8b5e67fc8a4fcea2fea4a4c51e90"><td class="memItemLeft" align="right" valign="top">typedef char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1to__char__functor.html#aa8cd8b5e67fc8a4fcea2fea4a4c51e90">result_type</a></td></tr>
 <tr class="separator:aa8cd8b5e67fc8a4fcea2fea4a4c51e90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1792cde9e0249d6c0d6c7af120805885"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1to__char__functor.html#a1792cde9e0249d6c0d6c7af120805885">argument_type</a></td></tr>
-<tr class="separator:a1792cde9e0249d6c0d6c7af120805885"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8cd8b5e67fc8a4fcea2fea4a4c51e90"><td class="memItemLeft" align="right" valign="top">typedef char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1to__char__functor.html#aa8cd8b5e67fc8a4fcea2fea4a4c51e90">result_type</a></td></tr>
-<tr class="separator:aa8cd8b5e67fc8a4fcea2fea4a4c51e90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Methods</h2></td></tr>
-<tr class="memitem:a1e03a10bd85ff99f57e938f143d60588"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1to__char__functor.html#a1e03a10bd85ff99f57e938f143d60588">operator()</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> c) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
-<tr class="separator:a1e03a10bd85ff99f57e938f143d60588"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e03a10bd85ff99f57e938f143d60588"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1to__char__functor.html#a1e03a10bd85ff99f57e938f143d60588">operator()</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> c) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
 <tr class="separator:a1e03a10bd85ff99f57e938f143d60588"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,23 +141,7 @@ template&lt;Alphabet ALPHABET&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="alphabet_8h_source.html#l00252">252</a> of file <a class="el" href="alphabet_8h_source.html">alphabet.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a1792cde9e0249d6c0d6c7af120805885"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;Alphabet ALPHABET&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> <a class="el" href="structnvbio_1_1to__char__functor.html">nvbio::to_char_functor</a>&lt; ALPHABET &gt;::<a class="el" href="structnvbio_1_1to__char__functor.html#a1792cde9e0249d6c0d6c7af120805885">argument_type</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="alphabet_01-_01symbol_8h_source.html#l00312">312</a> of file <a class="el" href="alphabet_01-_01symbol_8h_source.html">alphabet - symbol.h</a>.</p>
+<p>Definition at line <a class="el" href="alphabet_8h_source.html#l00261">261</a> of file <a class="el" href="alphabet_8h_source.html">alphabet.h</a>.</p>
 
 </div>
 </div>
@@ -179,23 +157,7 @@ template&lt;Alphabet ALPHABET&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="alphabet_8h_source.html#l00253">253</a> of file <a class="el" href="alphabet_8h_source.html">alphabet.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aa8cd8b5e67fc8a4fcea2fea4a4c51e90"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;Alphabet ALPHABET&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef char <a class="el" href="structnvbio_1_1to__char__functor.html">nvbio::to_char_functor</a>&lt; ALPHABET &gt;::<a class="el" href="structnvbio_1_1to__char__functor.html#aa8cd8b5e67fc8a4fcea2fea4a4c51e90">result_type</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="alphabet_01-_01symbol_8h_source.html#l00313">313</a> of file <a class="el" href="alphabet_01-_01symbol_8h_source.html">alphabet - symbol.h</a>.</p>
+<p>Definition at line <a class="el" href="alphabet_8h_source.html#l00262">262</a> of file <a class="el" href="alphabet_8h_source.html">alphabet.h</a>.</p>
 
 </div>
 </div>
@@ -225,47 +187,17 @@ template&lt;Alphabet ALPHABET&gt; </div>
 </div><div class="memdoc">
 <p>functor operator </p>
 
-<p>Definition at line <a class="el" href="alphabet_8h_source.html#l00257">257</a> of file <a class="el" href="alphabet_8h_source.html">alphabet.h</a>.</p>
+<p>Definition at line <a class="el" href="alphabet_8h_source.html#l00266">266</a> of file <a class="el" href="alphabet_8h_source.html">alphabet.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a1e03a10bd85ff99f57e938f143d60588"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;Alphabet ALPHABET&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> char <a class="el" href="structnvbio_1_1to__char__functor.html">nvbio::to_char_functor</a>&lt; ALPHABET &gt;::operator() </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td>
-          <td class="paramname"><em>c</em>)</td><td></td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>functor operator </p>
-
-<p>Definition at line <a class="el" href="alphabet_01-_01symbol_8h_source.html#l00317">317</a> of file <a class="el" href="alphabet_01-_01symbol_8h_source.html">alphabet - symbol.h</a>.</p>
-
-</div>
-</div>
-<hr/>The documentation for this struct was generated from the following files:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/strings/<a class="el" href="alphabet_01-_01symbol_8h_source.html">alphabet - symbol.h</a></li>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/strings/<a class="el" href="alphabet_8h_source.html">alphabet.h</a></li>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>E:/git/nvbio/nvbio/strings/<a class="el" href="alphabet_8h_source.html">alphabet.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:43 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:20 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

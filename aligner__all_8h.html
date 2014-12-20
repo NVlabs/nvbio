@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/aligner_all.h File Reference</title>
+<title>NVBIO: E:/git/nvbio/nvBowtie/bowtie2/cuda/aligner_all.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -96,21 +97,35 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a>  </div>
   <div class="headertitle">
 <div class="title">aligner_all.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="ldg_8h_source.html">nvbio/basic/cuda/ldg.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="primitives_8h_source.html">nvbio/basic/primitives.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="pipeline__states_8h_source.html">nvBowtie/bowtie2/cuda/pipeline_states.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="select_8h_source.html">nvBowtie/bowtie2/cuda/select.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="locate_8h_source.html">nvBowtie/bowtie2/cuda/locate.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="score_8h_source.html">nvBowtie/bowtie2/cuda/score.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="reduce_8h_source.html">nvBowtie/bowtie2/cuda/reduce.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="traceback_8h_source.html">nvBowtie/bowtie2/cuda/traceback.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="output__types_8h_source.html">nvbio/io/output/output_types.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="output__batch_8h_source.html">nvbio/io/output/output_batch.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="output__file_8h_source.html">nvbio/io/output/output_file.h</a>&gt;</code><br/>
+<code>#include &lt;thrust/iterator/transform_iterator.h&gt;</code><br/>
+<code>#include &lt;thrust/adjacent_difference.h&gt;</code><br/>
 </div>
 <p><a href="aligner__all_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_sorting_keys.html">nvbio::bowtie2::cuda::SortingKeys</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1difference__transform.html">nvbio::bowtie2::cuda::difference_transform&lt; Iterator &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacenvbio"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio.html">nvbio</a></td></tr>
@@ -124,7 +139,7 @@ Namespaces</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:15 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:44 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

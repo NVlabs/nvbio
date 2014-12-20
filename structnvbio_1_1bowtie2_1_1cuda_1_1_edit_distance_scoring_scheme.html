@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -108,7 +109,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="details" id="details"></a><h2 class="groupheader">Detailed description</h2>
 <div class="textblock"><p>This class implements an edit-distance based scoring scheme for short read alignment. While the original <a class="el" href="namespacenvbio_1_1bowtie2.html">bowtie2</a> code base always performs alignment using Gotoh's algorithm (i.e. Smith-Waterman with affine gap penalties), nvBowtie also supports edit-distance, which is sometimes better suited for very short reads (e.g. ~100bps). </p>
 
-<p>Definition at line <a class="el" href="scoring_8h_source.html#l00136">136</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00133">133</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="scoring_8h_source.html">scoring.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -116,8 +117,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Types</h2></td></tr>
 <tr class="memitem:a489d30f3a97bbbc5b191b53d2250b0f6"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html">EditDistanceScoringScheme</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a489d30f3a97bbbc5b191b53d2250b0f6">scheme_type</a></td></tr>
 <tr class="separator:a489d30f3a97bbbc5b191b53d2250b0f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2718fdaeae1b42bec653f8acf344221"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1_constant.html">Constant</a>&lt; <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#af2718fdaeae1b42bec653f8acf344221">threshold_score_type</a></td></tr>
-<tr class="separator:af2718fdaeae1b42bec653f8acf344221"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a400f896b935a91e5ccd69707b1cfa790"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_simple_func.html">SimpleFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a400f896b935a91e5ccd69707b1cfa790">threshold_score_type</a></td></tr>
+<tr class="separator:a400f896b935a91e5ccd69707b1cfa790"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf6f6e03e0c0530ea47e9f0f3d554a13"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1aln_1_1_edit_distance_tag.html">aln::EditDistanceTag</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#adf6f6e03e0c0530ea47e9f0f3d554a13">aligner_tag</a></td></tr>
 <tr class="separator:adf6f6e03e0c0530ea47e9f0f3d554a13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff5796bc43f8b9063be837feedff1577"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
@@ -128,6 +129,14 @@ Public Types</h2></td></tr>
 <a class="el" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">aln::EditDistanceAligner</a><br class="typebreak"/>
 &lt; <a class="el" href="group___alignment_type_module.html#ggab731872890371bb772663612b5b9c717a7477ebd7c13511f0b3c5660d337b8413">aln::SEMI_GLOBAL</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a0d18de02a5ccb76d9c3bdd469444b2b0">end_to_end_aligner_type</a></td></tr>
 <tr class="separator:a0d18de02a5ccb76d9c3bdd469444b2b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac93e8e8bbc7c5c57cb13c4de5fb789bc"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+<a class="el" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">aln::EditDistanceAligner</a><br class="typebreak"/>
+&lt; <a class="el" href="group___alignment_type_module.html#ggab731872890371bb772663612b5b9c717a83c90630a3fb75f8bcce0132ce7776fa">aln::LOCAL</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#ac93e8e8bbc7c5c57cb13c4de5fb789bc">ungapped_local_aligner_type</a></td></tr>
+<tr class="separator:ac93e8e8bbc7c5c57cb13c4de5fb789bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fb91b41f86cdd4f7911b5746494dacb"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+<a class="el" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">aln::EditDistanceAligner</a><br class="typebreak"/>
+&lt; <a class="el" href="group___alignment_type_module.html#ggab731872890371bb772663612b5b9c717a7477ebd7c13511f0b3c5660d337b8413">aln::SEMI_GLOBAL</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a2fb91b41f86cdd4f7911b5746494dacb">ungapped_end_to_end_aligner_type</a></td></tr>
+<tr class="separator:a2fb91b41f86cdd4f7911b5746494dacb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Methods</h2></td></tr>
@@ -135,26 +144,25 @@ Public Methods</h2></td></tr>
 <tr class="separator:aff4ef6ce71db300664a560f8ee043e08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa51da192171612cb06510f5eb411e31f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a0d18de02a5ccb76d9c3bdd469444b2b0">end_to_end_aligner_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#aa51da192171612cb06510f5eb411e31f">end_to_end_aligner</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
 <tr class="separator:aa51da192171612cb06510f5eb411e31f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac072b0087ac2faff420fedc5d2c54234"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#ac93e8e8bbc7c5c57cb13c4de5fb789bc">ungapped_local_aligner_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#ac072b0087ac2faff420fedc5d2c54234">ungapped_local_aligner</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:ac072b0087ac2faff420fedc5d2c54234"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92d8bf4e26c688d2ad7f6c147891d2c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a2fb91b41f86cdd4f7911b5746494dacb">ungapped_end_to_end_aligner_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a92d8bf4e26c688d2ad7f6c147891d2c4">ungapped_end_to_end_aligner</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:a92d8bf4e26c688d2ad7f6c147891d2c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5244099a236c662e843ea860a364b807"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a5244099a236c662e843ea860a364b807">EditDistanceScoringScheme</a> ()</td></tr>
 <tr class="separator:a5244099a236c662e843ea860a364b807"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc1f085696e35b091fba22710d1695c3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#adc1f085696e35b091fba22710d1695c3">EditDistanceScoringScheme</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params.html">Params</a> &amp;params)</td></tr>
-<tr class="separator:adc1f085696e35b091fba22710d1695c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5200444b90313ee2c1f7c115ba90dc28"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a5200444b90313ee2c1f7c115ba90dc28">perfect_score</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> read_len) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
 <tr class="separator:a5200444b90313ee2c1f7c115ba90dc28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abef33cc81dc20a135c6987b5a5eeca1f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#abef33cc81dc20a135c6987b5a5eeca1f">min_score</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> len) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
 <tr class="separator:abef33cc81dc20a135c6987b5a5eeca1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a623bfbfb11620333a4911a5312bff7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a5a623bfbfb11620333a4911a5312bff7">score_limit</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params.html">Params</a> &amp;params) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
-<tr class="separator:a5a623bfbfb11620333a4911a5312bff7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aacd8a97bd7f9ed61d74c1e7ee16b6b29"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#af2718fdaeae1b42bec653f8acf344221">threshold_score_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#aacd8a97bd7f9ed61d74c1e7ee16b6b29">threshold_score</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params.html">Params</a> &amp;params) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
-<tr class="separator:aacd8a97bd7f9ed61d74c1e7ee16b6b29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c2bb8d120e656e315f4f91a6a561700"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_simple_func.html">SimpleFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a9c2bb8d120e656e315f4f91a6a561700">threshold_score</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:a9c2bb8d120e656e315f4f91a6a561700"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Members</h2></td></tr>
-<tr class="memitem:a4aa7174683922a6ae5ef234c6b666372"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a4aa7174683922a6ae5ef234c6b666372">m_min_score</a></td></tr>
-<tr class="memdesc:a4aa7174683922a6ae5ef234c6b666372"><td class="mdescLeft">&#160;</td><td class="mdescRight">minimum score  <a href="#a4aa7174683922a6ae5ef234c6b666372">More...</a><br/></td></tr>
-<tr class="separator:a4aa7174683922a6ae5ef234c6b666372"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfd112dc00d6684d1174750f1af06097"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_simple_func.html">SimpleFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#abfd112dc00d6684d1174750f1af06097">m_score_min</a></td></tr>
+<tr class="separator:abfd112dc00d6684d1174750f1af06097"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Members</h2></td></tr>
@@ -174,7 +182,7 @@ Static Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="scoring_8h_source.html#l00140">140</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00137">137</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
 
 </div>
 </div>
@@ -188,7 +196,7 @@ Static Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="scoring_8h_source.html#l00143">143</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00140">140</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
 
 </div>
 </div>
@@ -202,7 +210,7 @@ Static Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="scoring_8h_source.html#l00142">142</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00139">139</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
 
 </div>
 </div>
@@ -216,21 +224,49 @@ Static Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="scoring_8h_source.html#l00138">138</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00135">135</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="af2718fdaeae1b42bec653f8acf344221"></a>
+<a class="anchor" id="a400f896b935a91e5ccd69707b1cfa790"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1_constant.html">Constant</a>&lt;<a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>&gt; <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#af2718fdaeae1b42bec653f8acf344221">nvbio::bowtie2::cuda::EditDistanceScoringScheme::threshold_score_type</a></td>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_simple_func.html">SimpleFunc</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a400f896b935a91e5ccd69707b1cfa790">nvbio::bowtie2::cuda::EditDistanceScoringScheme::threshold_score_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="scoring_8h_source.html#l00139">139</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00136">136</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2fb91b41f86cdd4f7911b5746494dacb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">aln::EditDistanceAligner</a>&lt;<a class="el" href="group___alignment_type_module.html#ggab731872890371bb772663612b5b9c717a7477ebd7c13511f0b3c5660d337b8413">aln::SEMI_GLOBAL</a>&gt; <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a2fb91b41f86cdd4f7911b5746494dacb">nvbio::bowtie2::cuda::EditDistanceScoringScheme::ungapped_end_to_end_aligner_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00143">143</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac93e8e8bbc7c5c57cb13c4de5fb789bc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">aln::EditDistanceAligner</a>&lt;<a class="el" href="group___alignment_type_module.html#ggab731872890371bb772663612b5b9c717a83c90630a3fb75f8bcce0132ce7776fa">aln::LOCAL</a>&gt; <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#ac93e8e8bbc7c5c57cb13c4de5fb789bc">nvbio::bowtie2::cuda::EditDistanceScoringScheme::ungapped_local_aligner_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00142">142</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
 
 </div>
 </div>
@@ -257,34 +293,7 @@ Static Public Members</h2></td></tr>
 </div><div class="memdoc">
 <p>default constructor </p>
 
-<p>Definition at line <a class="el" href="scoring_8h_source.html#l00161">161</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="adc1f085696e35b091fba22710d1695c3"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">nvbio::bowtie2::cuda::EditDistanceScoringScheme::EditDistanceScoringScheme </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params.html">Params</a> &amp;&#160;</td>
-          <td class="paramname"><em>params</em>)</td><td></td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>constructor </p>
-
-<p>Definition at line <a class="el" href="scoring_8h_source.html#l00165">165</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00169">169</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
 
 </div>
 </div>
@@ -364,7 +373,7 @@ Static Public Members</h2></td></tr>
 </div><div class="memdoc">
 <p>min score </p>
 
-<p>Definition at line <a class="el" href="scoring_8h_source.html#l00177">177</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00181">181</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
 
 </div>
 </div>
@@ -391,11 +400,11 @@ Static Public Members</h2></td></tr>
 </div><div class="memdoc">
 <p>best achievable score for a read of given length </p>
 
-<p>Definition at line <a class="el" href="scoring_8h_source.html#l00172">172</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00176">176</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a5a623bfbfb11620333a4911a5312bff7"></a>
+<a class="anchor" id="a9c2bb8d120e656e315f4f91a6a561700"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -403,37 +412,9 @@ Static Public Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> nvbio::bowtie2::cuda::EditDistanceScoringScheme::score_limit </td>
+          <td class="memname"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_simple_func.html">SimpleFunc</a> nvbio::bowtie2::cuda::EditDistanceScoringScheme::threshold_score </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params.html">Params</a> &amp;&#160;</td>
-          <td class="paramname"><em>params</em>)</td><td></td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>score limit value </p>
-
-<p>Definition at line <a class="el" href="scoring_8h_source.html#l00181">181</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aacd8a97bd7f9ed61d74c1e7ee16b6b29"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#af2718fdaeae1b42bec653f8acf344221">threshold_score_type</a> nvbio::bowtie2::cuda::EditDistanceScoringScheme::threshold_score </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params.html">Params</a> &amp;&#160;</td>
-          <td class="paramname"><em>params</em>)</td><td></td>
+          <td class="paramname">)</td><td></td>
           <td> const</td>
         </tr>
       </table>
@@ -446,6 +427,58 @@ Static Public Members</h2></td></tr>
 <p>min score function </p>
 
 <p>Definition at line <a class="el" href="scoring_8h_source.html#l00185">185</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a92d8bf4e26c688d2ad7f6c147891d2c4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a2fb91b41f86cdd4f7911b5746494dacb">ungapped_end_to_end_aligner_type</a> nvbio::bowtie2::cuda::EditDistanceScoringScheme::ungapped_end_to_end_aligner </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>return the end_to_end aligner </p>
+
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00162">162</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac072b0087ac2faff420fedc5d2c54234"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#ac93e8e8bbc7c5c57cb13c4de5fb789bc">ungapped_local_aligner_type</a> nvbio::bowtie2::cuda::EditDistanceScoringScheme::ungapped_local_aligner </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>return the local aligner </p>
+
+<p>Definition at line <a class="el" href="scoring_8h_source.html#l00158">158</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
 
 </div>
 </div>
@@ -472,17 +505,15 @@ Static Public Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4aa7174683922a6ae5ef234c6b666372"></a>
+<a class="anchor" id="abfd112dc00d6684d1174750f1af06097"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> nvbio::bowtie2::cuda::EditDistanceScoringScheme::m_min_score</td>
+          <td class="memname"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_simple_func.html">SimpleFunc</a> nvbio::bowtie2::cuda::EditDistanceScoringScheme::m_score_min</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>minimum score </p>
 
 <p>Definition at line <a class="el" href="scoring_8h_source.html#l00193">193</a> of file <a class="el" href="scoring_8h_source.html">scoring.h</a>.</p>
 
@@ -511,12 +542,12 @@ Static Public Members</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/<a class="el" href="scoring_8h_source.html">scoring.h</a></li>
+<li>E:/git/nvbio/nvBowtie/bowtie2/cuda/<a class="el" href="scoring_8h_source.html">scoring.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:59 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:39 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

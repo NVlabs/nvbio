@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -113,24 +114,12 @@ struct nvbio::priv::HostCoreSetSuffixBucketer&lt; SYMBOL_SIZE, N_BITS, DOLLAR_BI
 
 <p>A context class to perform suffix bucketing for all suffixes of a string-set </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html#l00585">585</a> of file <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html">sufsort_bucketing - unrolled.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00616">616</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 </div>
-<p><code>#include &lt;<a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html">sufsort_bucketing - unrolled.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Methods</h2></td></tr>
-<tr class="memitem:a22f9c9c295902aaa3f2638feac7945bb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#a22f9c9c295902aaa3f2638feac7945bb">HostCoreSetSuffixBucketer</a> ()</td></tr>
-<tr class="separator:a22f9c9c295902aaa3f2638feac7945bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea55089edb594ec4fab2704849392b03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#aea55089edb594ec4fab2704849392b03">clear_timers</a> ()</td></tr>
-<tr class="separator:aea55089edb594ec4fab2704849392b03"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15dec816df0707644c741688691ce440"><td class="memTemplParams" colspan="2">template&lt;typename string_set_type &gt; </td></tr>
-<tr class="memitem:a15dec816df0707644c741688691ce440"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#a15dec816df0707644c741688691ce440">count</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_set_type &amp;string_set)</td></tr>
-<tr class="separator:a15dec816df0707644c741688691ce440"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e945bbc08c2d8124a58c49edc32c9b9"><td class="memTemplParams" colspan="2">template&lt;typename string_set_type , typename bucketmap_iterator &gt; </td></tr>
-<tr class="memitem:a8e945bbc08c2d8124a58c49edc32c9b9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#a8e945bbc08c2d8124a58c49edc32c9b9">collect</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_set_type &amp;string_set, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> bucket_begin, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> bucket_end, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> string_offset, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bucketmap_iterator bucketmap)</td></tr>
-<tr class="separator:a8e945bbc08c2d8124a58c49edc32c9b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00d265b428745900322dc93a13ee6e29"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#a00d265b428745900322dc93a13ee6e29">allocated_device_memory</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
-<tr class="separator:a00d265b428745900322dc93a13ee6e29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22f9c9c295902aaa3f2638feac7945bb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#a22f9c9c295902aaa3f2638feac7945bb">HostCoreSetSuffixBucketer</a> ()</td></tr>
 <tr class="separator:a22f9c9c295902aaa3f2638feac7945bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea55089edb594ec4fab2704849392b03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#aea55089edb594ec4fab2704849392b03">clear_timers</a> ()</td></tr>
@@ -150,12 +139,12 @@ Public Methods</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Members</h2></td></tr>
-<tr class="memitem:a5aa8442fb36fa171aba66bf04de1ab4d"><td class="memItemLeft" align="right" valign="top">thrust::host_vector&lt; <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#a5aa8442fb36fa171aba66bf04de1ab4d">h_buckets</a></td></tr>
-<tr class="separator:a5aa8442fb36fa171aba66bf04de1ab4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd588d4d048bdbb71b2baa934e2f7a8f"><td class="memItemLeft" align="right" valign="top">thrust::host_vector&lt; bucket_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#abd588d4d048bdbb71b2baa934e2f7a8f">h_radices</a></td></tr>
-<tr class="separator:abd588d4d048bdbb71b2baa934e2f7a8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4af8e4d52165d876ed4140c564244068"><td class="memItemLeft" align="right" valign="top">thrust::host_vector&lt; uint2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#a4af8e4d52165d876ed4140c564244068">h_suffixes</a></td></tr>
-<tr class="separator:a4af8e4d52165d876ed4140c564244068"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1b3ce0d5583cce7d2d51c304ab9eb33"><td class="memItemLeft" align="right" valign="top">thrust::host_vector&lt; <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#aa1b3ce0d5583cce7d2d51c304ab9eb33">h_buckets</a></td></tr>
+<tr class="separator:aa1b3ce0d5583cce7d2d51c304ab9eb33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a6cc9bf1e33126dbdf9efbaeda29979"><td class="memItemLeft" align="right" valign="top">thrust::host_vector&lt; bucket_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#a4a6cc9bf1e33126dbdf9efbaeda29979">h_radices</a></td></tr>
+<tr class="separator:a4a6cc9bf1e33126dbdf9efbaeda29979"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d80ed7307c24d401b90eb6af49c8e05"><td class="memItemLeft" align="right" valign="top">thrust::host_vector&lt; uint2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#a1d80ed7307c24d401b90eb6af49c8e05">h_suffixes</a></td></tr>
+<tr class="separator:a1d80ed7307c24d401b90eb6af49c8e05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fdbfd51e8540ded18ef602cb429f08c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#a2fdbfd51e8540ded18ef602cb429f08c">n_suffixes</a></td></tr>
 <tr class="separator:a2fdbfd51e8540ded18ef602cb429f08c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94c0d38d6a4a2e796b7d868b88ae4c33"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html#a94c0d38d6a4a2e796b7d868b88ae4c33">n_collected</a></td></tr>
@@ -188,35 +177,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html#l00589">589</a> of file <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html">sufsort_bucketing - unrolled.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a22f9c9c295902aaa3f2638feac7945bb"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename bucket_type  = uint32&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html">nvbio::priv::HostCoreSetSuffixBucketer</a>&lt; SYMBOL_SIZE, N_BITS, DOLLAR_BITS, bucket_type &gt;::<a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html">HostCoreSetSuffixBucketer</a> </td>
-          <td>(</td>
-          <td class="paramname">)</td><td></td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>constructor </p>
-
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00611">611</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00620">620</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -245,35 +206,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
 </div><div class="memdoc">
 <p>return the amount of used device memory </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00738">738</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a00d265b428745900322dc93a13ee6e29"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename bucket_type  = uint32&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> <a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html">nvbio::priv::HostCoreSetSuffixBucketer</a>&lt; SYMBOL_SIZE, N_BITS, DOLLAR_BITS, bucket_type &gt;::allocated_device_memory </td>
-          <td>(</td>
-          <td class="paramname">)</td><td></td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>return the amount of used device memory </p>
-
-<p>Definition at line <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html#l00766">766</a> of file <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html">sufsort_bucketing - unrolled.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00747">747</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -301,7 +234,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
 </div><div class="memdoc">
 <p>return the amount of used device memory </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00742">742</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00751">751</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -329,35 +262,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
 </div><div class="memdoc">
 <p>clear internal timers </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html#l00593">593</a> of file <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html">sufsort_bucketing - unrolled.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aea55089edb594ec4fab2704849392b03"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename bucket_type  = uint32&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html">nvbio::priv::HostCoreSetSuffixBucketer</a>&lt; SYMBOL_SIZE, N_BITS, DOLLAR_BITS, bucket_type &gt;::clear_timers </td>
-          <td>(</td>
-          <td class="paramname">)</td><td></td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>clear internal timers </p>
-
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00615">615</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00624">624</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -416,66 +321,7 @@ template&lt;typename string_set_type , typename bucketmap_iterator &gt; </div>
 </div><div class="memdoc">
 <p>collect the suffixes falling in a given set of buckets, where the buckets are defined by the first n_bits of the suffix </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html#l00675">675</a> of file <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html">sufsort_bucketing - unrolled.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a8e945bbc08c2d8124a58c49edc32c9b9"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename bucket_type  = uint32&gt; </div>
-<div class="memtemplate">
-template&lt;typename string_set_type , typename bucketmap_iterator &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html">nvbio::priv::HostCoreSetSuffixBucketer</a>&lt; SYMBOL_SIZE, N_BITS, DOLLAR_BITS, bucket_type &gt;::collect </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_set_type &amp;&#160;</td>
-          <td class="paramname"><em>string_set</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
-          <td class="paramname"><em>bucket_begin</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
-          <td class="paramname"><em>bucket_end</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
-          <td class="paramname"><em>string_offset</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bucketmap_iterator&#160;</td>
-          <td class="paramname"><em>bucketmap</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>collect the suffixes falling in a given set of buckets, where the buckets are defined by the first n_bits of the suffix </p>
-
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00680">680</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00689">689</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -506,38 +352,7 @@ template&lt;typename string_set_type &gt; </div>
 </div><div class="memdoc">
 <p>count the number of suffixes falling in each bucket, where the buckets are defined by the first n_bits of the suffix </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html#l00599">599</a> of file <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html">sufsort_bucketing - unrolled.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a15dec816df0707644c741688691ce440"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename bucket_type  = uint32&gt; </div>
-<div class="memtemplate">
-template&lt;typename string_set_type &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> <a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html">nvbio::priv::HostCoreSetSuffixBucketer</a>&lt; SYMBOL_SIZE, N_BITS, DOLLAR_BITS, bucket_type &gt;::count </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_set_type &amp;&#160;</td>
-          <td class="paramname"><em>string_set</em>)</td><td></td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>count the number of suffixes falling in each bucket, where the buckets are defined by the first n_bits of the suffix </p>
-
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00639">639</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00648">648</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -565,56 +380,56 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
 </div><div class="memdoc">
 <p>count the number of suffixes falling in each bucket, where the buckets are defined by the first n_bits of the suffix </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00620">620</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00629">629</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a5aa8442fb36fa171aba66bf04de1ab4d"></a>
+<a class="anchor" id="aa1b3ce0d5583cce7d2d51c304ab9eb33"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename bucket_type  = uint32&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">thrust::host_vector&lt; <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> &gt; <a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html">nvbio::priv::HostCoreSetSuffixBucketer</a>&lt; SYMBOL_SIZE, N_BITS, DOLLAR_BITS, bucket_type &gt;::h_buckets</td>
+          <td class="memname">thrust::host_vector&lt;<a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&gt; <a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html">nvbio::priv::HostCoreSetSuffixBucketer</a>&lt; SYMBOL_SIZE, N_BITS, DOLLAR_BITS, bucket_type &gt;::h_buckets</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html#l00769">769</a> of file <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html">sufsort_bucketing - unrolled.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00760">760</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="abd588d4d048bdbb71b2baa934e2f7a8f"></a>
+<a class="anchor" id="a4a6cc9bf1e33126dbdf9efbaeda29979"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename bucket_type  = uint32&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">thrust::host_vector&lt; bucket_type &gt; <a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html">nvbio::priv::HostCoreSetSuffixBucketer</a>&lt; SYMBOL_SIZE, N_BITS, DOLLAR_BITS, bucket_type &gt;::h_radices</td>
+          <td class="memname">thrust::host_vector&lt;bucket_type&gt; <a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html">nvbio::priv::HostCoreSetSuffixBucketer</a>&lt; SYMBOL_SIZE, N_BITS, DOLLAR_BITS, bucket_type &gt;::h_radices</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html#l00770">770</a> of file <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html">sufsort_bucketing - unrolled.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00761">761</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a4af8e4d52165d876ed4140c564244068"></a>
+<a class="anchor" id="a1d80ed7307c24d401b90eb6af49c8e05"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename bucket_type  = uint32&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">thrust::host_vector&lt; uint2 &gt; <a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html">nvbio::priv::HostCoreSetSuffixBucketer</a>&lt; SYMBOL_SIZE, N_BITS, DOLLAR_BITS, bucket_type &gt;::h_suffixes</td>
+          <td class="memname">thrust::host_vector&lt;uint2&gt; <a class="el" href="structnvbio_1_1priv_1_1_host_core_set_suffix_bucketer.html">nvbio::priv::HostCoreSetSuffixBucketer</a>&lt; SYMBOL_SIZE, N_BITS, DOLLAR_BITS, bucket_type &gt;::h_suffixes</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html#l00771">771</a> of file <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html">sufsort_bucketing - unrolled.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00762">762</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -630,7 +445,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html#l00774">774</a> of file <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html">sufsort_bucketing - unrolled.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00765">765</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -646,7 +461,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html#l00773">773</a> of file <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html">sufsort_bucketing - unrolled.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00764">764</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -662,18 +477,17 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html#l00772">772</a> of file <a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html">sufsort_bucketing - unrolled.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00763">763</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following files:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/sufsort/<a class="el" href="sufsort__bucketing_01-_01unrolled_8h_source.html">sufsort_bucketing - unrolled.h</a></li>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/sufsort/<a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a></li>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>E:/git/nvbio/nvbio/sufsort/<a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:43:24 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:29:08 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

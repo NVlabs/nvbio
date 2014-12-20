@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -113,7 +114,7 @@ struct nvbio::cuda::PingPongQueues&lt; T &gt;</h3>
 <p>This data structure represents a pair of input and output queues built on top of some ping-pong device storage that can be iteratively swapped.</p>
 <p>See <a class="el" href="ping_pong_queues_page.html#PingPongQueuesExample">Example</a>. </p>
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00127">127</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00136">136</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -138,6 +139,8 @@ Public Methods</h2></td></tr>
 <tr class="separator:a7ebe5135c19d181c935eab53980fd3a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeea4862261ee4a5367a7fc189b999eba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#aeea4862261ee4a5367a7fc189b999eba">raw_output_queue</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
 <tr class="separator:aeea4862261ee4a5367a7fc189b999eba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0031468428daab76ddb468febc08e2e"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#ab0031468428daab76ddb468febc08e2e">raw_output_queue</a> ()</td></tr>
+<tr class="separator:ab0031468428daab76ddb468febc08e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5bbc241c3d379d4bd597b77234bfceb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#ac5bbc241c3d379d4bd597b77234bfceb">output_size</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
 <tr class="separator:ac5bbc241c3d379d4bd597b77234bfceb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1eb0e87f2a8e347483710497e280ac3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#a1d72a438c0d1aee674946f736e2532e7">device_view_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#ad1eb0e87f2a8e347483710497e280ac3">device_view</a> ()</td></tr>
@@ -178,7 +181,7 @@ template&lt;typename T = uint32&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00129">129</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00138">138</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -194,7 +197,7 @@ template&lt;typename T = uint32&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00130">130</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00139">139</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -223,7 +226,7 @@ template&lt;typename T = uint32&gt; </div>
 </div><div class="memdoc">
 <p>clear the output queue </p>
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00157">157</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00166">166</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -251,7 +254,7 @@ template&lt;typename T = uint32&gt; </div>
 </div><div class="memdoc">
 <p>return a view of the queues </p>
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00181">181</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00194">194</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -279,7 +282,7 @@ template&lt;typename T = uint32&gt; </div>
 </div><div class="memdoc">
 <p>return the output size </p>
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00177">177</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00190">190</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -307,7 +310,7 @@ template&lt;typename T = uint32&gt; </div>
 </div><div class="memdoc">
 <p>raw input queue </p>
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00169">169</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00178">178</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -335,7 +338,35 @@ template&lt;typename T = uint32&gt; </div>
 </div><div class="memdoc">
 <p>raw output queue </p>
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00173">173</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00182">182</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab0031468428daab76ddb468febc08e2e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T = uint32&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T* <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html">nvbio::cuda::PingPongQueues</a>&lt; T &gt;::raw_output_queue </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>raw output queue </p>
+
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00186">186</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -364,7 +395,7 @@ template&lt;typename T = uint32&gt; </div>
 </div><div class="memdoc">
 <p>resize input queue </p>
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00153">153</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00162">162</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -403,7 +434,7 @@ template&lt;typename T = uint32&gt; </div>
 </div><div class="memdoc">
 <p>resize the arena </p>
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00139">139</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00148">148</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -431,7 +462,7 @@ template&lt;typename T = uint32&gt; </div>
 </div><div class="memdoc">
 <p>swap the input and output queues </p>
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00161">161</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00170">170</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -461,7 +492,7 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 <p>return a view of the queues </p>
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00201">201</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00214">214</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -490,7 +521,7 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 <p>return a view of the queues </p>
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00207">207</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00220">220</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -507,7 +538,7 @@ template&lt;typename T = uint32&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00133">133</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00142">142</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -523,7 +554,7 @@ template&lt;typename T = uint32&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00132">132</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00141">141</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -539,7 +570,7 @@ template&lt;typename T = uint32&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00135">135</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00144">144</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
@@ -555,17 +586,17 @@ template&lt;typename T = uint32&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00134">134</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
+<p>Definition at line <a class="el" href="pingpong__queues_8h_source.html#l00143">143</a> of file <a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/cuda/<a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a></li>
+<li>E:/git/nvbio/nvbio/basic/cuda/<a class="el" href="pingpong__queues_8h_source.html">pingpong_queues.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:43:04 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:46 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

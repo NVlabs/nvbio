@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/alignment_utils.h File Reference</title>
+<title>NVBIO: E:/git/nvbio/nvBowtie/bowtie2/cuda/alignment_utils.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -105,8 +106,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="string__utils_8h_source.html">nvBowtie/bowtie2/cuda/string_utils.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="nvbio_2alignment_2alignment_8h_source.html">nvbio/alignment/alignment.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="batched_8h_source.html">nvbio/alignment/batched.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="params_8h_source.html">nvBowtie/bowtie2/cuda/params.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="alignment__base_8h_source.html">nvbio/alignment/alignment_base.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="alignments_8h_source.html">nvbio/io/alignments.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="nvbio_2io_2utils_8h_source.html">nvbio/io/utils.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="vector__view_8h_source.html">nvbio/basic/vector_view.h</a>&gt;</code><br/>
 </div>
@@ -115,6 +117,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_backtracker.html">nvbio::bowtie2::cuda::detail::Backtracker&lt; vector &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_strings.html">nvbio::bowtie2::cuda::detail::AlignmentStrings&lt; AlignerType, PipelineType &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_context.html">nvbio::bowtie2::cuda::detail::AlignmentStreamContext&lt; TYPE &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -126,7 +130,7 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base_1_1context__type.html">nvbio::bowtie2::cuda::detail::AlignmentStreamBase&lt; TYPE, AlignerType, PipelineType &gt;::context_type</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base_1_1strings__type.html">nvbio::bowtie2::cuda::detail::AlignmentStreamBase&lt; TYPE, AlignerType, PipelineType &gt;::strings_type</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_alignment_scoring_context.html">nvbio::bowtie2::cuda::AlignmentScoringContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -160,7 +164,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:15 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:44 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

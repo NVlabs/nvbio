@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -115,7 +116,7 @@ struct nvbio::priv::ChunkLoader&lt; SYMBOL_SIZE, BIG_ENDIAN, storage_type, offse
 
 <p>A helper class to load a chunk of a string_set from the host onto the device </p>
 
-<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01189">1189</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01198">1198</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -145,6 +146,10 @@ SYMBOL_SIZE, BIG_ENDIAN &gt;&#160;</td><td class="memItemRight" valign="bottom">
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Methods</h2></td></tr>
+<tr class="memitem:a896c64c916d6922c92cfee5c7d59fd27"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_chunk_loader_3_01_s_y_m_b_o_l___s_i_z_e_00_01_b_i_g___e_n_d_i_a_n_00_01sd4d1cb938ac0ade718f287ad34236f17.html#a896c64c916d6922c92cfee5c7d59fd27">needed_device_memory</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> max_strings, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> max_symbols) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:a896c64c916d6922c92cfee5c7d59fd27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a472a5b63c5ab288ad648d30c2368afe0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_chunk_loader_3_01_s_y_m_b_o_l___s_i_z_e_00_01_b_i_g___e_n_d_i_a_n_00_01sd4d1cb938ac0ade718f287ad34236f17.html#a472a5b63c5ab288ad648d30c2368afe0">reserve</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> max_strings, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> max_symbols)</td></tr>
+<tr class="separator:a472a5b63c5ab288ad648d30c2368afe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2afc1ead8d2b40d258b6431e19cd4c8d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1priv_1_1_chunk_loader_3_01_s_y_m_b_o_l___s_i_z_e_00_01_b_i_g___e_n_d_i_a_n_00_01sd4d1cb938ac0ade718f287ad34236f17.html#a08626a878048b754d44216486cedd48c">chunk_set_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_chunk_loader_3_01_s_y_m_b_o_l___s_i_z_e_00_01_b_i_g___e_n_d_i_a_n_00_01sd4d1cb938ac0ade718f287ad34236f17.html#a2afc1ead8d2b40d258b6431e19cd4c8d">load</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_concatenated_string_set.html">ConcatenatedStringSet</a>&lt; typename <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; storage_type, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, SYMBOL_SIZE, BIG_ENDIAN, <a class="el" href="structnvbio_1_1priv_1_1_chunk_loader_3_01_s_y_m_b_o_l___s_i_z_e_00_01_b_i_g___e_n_d_i_a_n_00_01sd4d1cb938ac0ade718f287ad34236f17.html#aff6ea9888032c4478434be120686cfa7">index_type</a> &gt;::iterator, offsets_iterator &gt; string_set, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> chunk_begin, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> chunk_end)</td></tr>
 <tr class="separator:a2afc1ead8d2b40d258b6431e19cd4c8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -175,7 +180,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01200">1200</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01209">1209</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
 
 </div>
 </div>
@@ -191,7 +196,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01193">1193</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01202">1202</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
 
 </div>
 </div>
@@ -207,7 +212,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01198">1198</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01207">1207</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
 
 </div>
 </div>
@@ -223,7 +228,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01197">1197</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01206">1206</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
 
 </div>
 </div>
@@ -239,7 +244,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01195">1195</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01204">1204</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
 
 </div>
 </div>
@@ -255,7 +260,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01192">1192</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01201">1201</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
 
 </div>
 </div>
@@ -300,7 +305,83 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01205">1205</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01231">1231</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a896c64c916d6922c92cfee5c7d59fd27"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typename offsets_iterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> <a class="el" href="structnvbio_1_1priv_1_1_chunk_loader.html">nvbio::priv::ChunkLoader</a>&lt; SYMBOL_SIZE, BIG_ENDIAN, storage_type, offsets_iterator, <a class="el" href="structnvbio_1_1host__tag.html">host_tag</a>, <a class="el" href="structnvbio_1_1device__tag.html">device_tag</a> &gt;::needed_device_memory </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
+          <td class="paramname"><em>max_strings</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
+          <td class="paramname"><em>max_symbols</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01214">1214</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a472a5b63c5ab288ad648d30c2368afe0"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typename offsets_iterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structnvbio_1_1priv_1_1_chunk_loader.html">nvbio::priv::ChunkLoader</a>&lt; SYMBOL_SIZE, BIG_ENDIAN, storage_type, offsets_iterator, <a class="el" href="structnvbio_1_1host__tag.html">host_tag</a>, <a class="el" href="structnvbio_1_1device__tag.html">device_tag</a> &gt;::reserve </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
+          <td class="paramname"><em>max_strings</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
+          <td class="paramname"><em>max_symbols</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01222">1222</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
 
 </div>
 </div>
@@ -317,7 +398,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01255">1255</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01285">1285</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
 
 </div>
 </div>
@@ -333,7 +414,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01254">1254</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01284">1284</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
 
 </div>
 </div>
@@ -349,7 +430,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01253">1253</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01283">1283</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
 
 </div>
 </div>
@@ -373,17 +454,17 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01203">1203</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__priv_8h_source.html#l01212">1212</a> of file <a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/sufsort/<a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a></li>
+<li>E:/git/nvbio/nvbio/sufsort/<a class="el" href="sufsort__priv_8h_source.html">sufsort_priv.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:43:25 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:29:09 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/contrib/zlib-1.2.7/inffast.c Source File</title>
+<title>NVBIO: E:/git/nvbio/contrib/zlib-1.2.7/inffast.c Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -165,9 +166,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment">      requires strm-&gt;avail_out &gt;= 258 for each loop to avoid checking for</span></div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">      output space.</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno"><a class="code" href="inffast_8c.html#abe57be8a6f777dc648ebcb275e57d849">   67</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="compress_8c.html#a59d4d7ef4d73655c759211ec33a5d44f">ZLIB_INTERNAL</a> <a class="code" href="inffast_8c.html#abe57be8a6f777dc648ebcb275e57d849">inflate_fast</a>(strm, <a class="code" href="cpu__bucketing_8h.html#a5537bd5e15087e05c249d4b62d45efac">start</a>)</div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="code" href="inffast_8c.html#abe57be8a6f777dc648ebcb275e57d849">   67</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="compress_8c.html#a59d4d7ef4d73655c759211ec33a5d44f">ZLIB_INTERNAL</a> <a class="code" href="inffast_8c.html#abe57be8a6f777dc648ebcb275e57d849">inflate_fast</a>(strm, start)</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<a class="code" href="contrib_2zlib_2zlib_8h.html#a6ede25c84d3c9f8632305866acffb1d6">z_streamp</a> strm;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keywordtype">unsigned</span> <a class="code" href="cpu__bucketing_8h.html#a5537bd5e15087e05c249d4b62d45efac">start</a>;         <span class="comment">/* inflate()&#39;s starting value for strm-&gt;avail_out */</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keywordtype">unsigned</span> start;         <span class="comment">/* inflate()&#39;s starting value for strm-&gt;avail_out */</span></div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;{</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">struct </span><a class="code" href="structinflate__state.html">inflate_state</a> FAR *state;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> FAR *in;      <span class="comment">/* local strm-&gt;next_in */</span></div>
@@ -442,7 +443,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:41:57 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:22 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -121,13 +122,13 @@ best-mapping, single-end reads</h2>
 <div class="line">seed-mapping-queue[in] := <a class="code" href="group___c_u_d_a_primitives.html#ga9dcce72ad9a2d44f92aa508b91b3378d">all</a> reads</div>
 <div class="line"><span class="keywordflow">while</span> (seed-mapping-queue[in] not empty)</div>
 <div class="line">{</div>
-<div class="line">    (seed-mapping-queue[out], seed-deques) := <a class="code" href="group___mapping.html#gaa3d729454ad2be69f07eda252e522033">map</a>( seed-mapping-queue[in] );</div>
+<div class="line">    (seed-mapping-queue[out], seed-deques) := <a class="code" href="group___mapping.html#ga21eb981e822eac39eb4dda866b3460aa">map</a>( seed-mapping-queue[in] );</div>
 <div class="line"></div>
 <div class="line">    score( seed-mapping-queue[in], seed-deques, best-alignments );          <span class="comment">// find the best alignments for each read</span></div>
 <div class="line"></div>
 <div class="line">    seed-mapping-queue[in] = seed-mapping-queue[out];</div>
 <div class="line">}</div>
-<div class="line"><a class="code" href="group___traceback_detail.html#ga2def93f93f54896e327da2c4adb35a72">traceback_best</a>( best-alignments );                                          <span class="comment">// traceback the best alignments</span></div>
+<div class="line"><a class="code" href="group___traceback_detail.html#ga9fc78dc4580fa6a4c275ab530655a6db">traceback_best</a>( best-alignments );                                          <span class="comment">// traceback the best alignments</span></div>
 </div><!-- fragment --><dl class="section user"><dt></dt><dd>where score() is a sub-pipeline:</dd></dl>
 <div class="fragment"><div class="line">score([in] input-reads, [in] seed-deques, [in/out] best-alignments)</div>
 <div class="line">{</div>
@@ -136,8 +137,8 @@ best-mapping, single-end reads</h2>
 <div class="line">   {</div>
 <div class="line">        (hits-queue, <a class="code" href="group___work_queue_detail.html#ga7c6f0457212ffc4b696a01d5858485b6">active</a>-reads) := <a class="code" href="group___basic_utils.html#gabc969419bf0a10c17e84ceedd624cd49">select</a>( <a class="code" href="group___work_queue_detail.html#ga7c6f0457212ffc4b696a01d5858485b6">active</a>-reads, seed-deques );  <span class="comment">// select the next round of hits to process</span></div>
 <div class="line">        <a class="code" href="group___f_m_index.html#ga036b0d1d5e131f9ae61bf9fc37e4949f">locate</a>( hits-queue );                                               <span class="comment">// SA coordinates -&gt; linear genome coordinates conversion</span></div>
-<div class="line">        <a class="code" href="group___scoring.html#ga56e68063eee00be8726c13bbb9d92556">score_best</a>( hits-queue );                                           <span class="comment">// assign a score to the selected hits using DP alignment</span></div>
-<div class="line">        <a class="code" href="group___reduce.html#ga01103d0dd86260c207369ef1f0d5b067">score_reduce</a>( hits-queue, best-alignments );                        <span class="comment">// keep track of the best alignments found so far for each read</span></div>
+<div class="line">        <a class="code" href="group___scoring.html#gade1f1010066627cb4cf979ec7e67435f">score_best</a>( hits-queue );                                           <span class="comment">// assign a score to the selected hits using DP alignment</span></div>
+<div class="line">        <a class="code" href="group___reduce.html#gaf4b932cd61fa1d6575f21d3e68523bea">score_reduce</a>( hits-queue, best-alignments );                        <span class="comment">// keep track of the best alignments found so far for each read</span></div>
 <div class="line">   }</div>
 <div class="line">}</div>
 </div><!-- fragment --><dl class="section user"><dt></dt><dd>The various functions involved correspond to different pipeline stages:<ul>
@@ -161,15 +162,15 @@ best-mapping, paired-end reads</h2>
 <div class="line">    seed-mapping-queue[in] := <a class="code" href="group___c_u_d_a_primitives.html#ga9dcce72ad9a2d44f92aa508b91b3378d">all</a> reads</div>
 <div class="line">    <span class="keywordflow">while</span> (seed-mapping-queue[in] not empty)</div>
 <div class="line">    {</div>
-<div class="line">        (seed-mapping-queue[out], seed-deques) := <a class="code" href="group___mapping.html#gaa3d729454ad2be69f07eda252e522033">map</a>( seed-mapping-queue[in] );</div>
+<div class="line">        (seed-mapping-queue[out], seed-deques) := <a class="code" href="group___mapping.html#ga21eb981e822eac39eb4dda866b3460aa">map</a>( seed-mapping-queue[in] );</div>
 <div class="line"></div>
 <div class="line">        score( seed-mapping-queue[in], seed-deques, best-anchor-alignments, best-opposite-alignments );</div>
 <div class="line"></div>
 <div class="line">        seed-mapping-queue[in] = seed-mapping-queue[out];</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-<div class="line"><a class="code" href="group___traceback_detail.html#ga2def93f93f54896e327da2c4adb35a72">traceback_best</a>( best-anchor-alignments );</div>
-<div class="line"><a class="code" href="group___traceback.html#ga38c7416da4253853eae783371d0b797e">opposite_traceback_best</a>( best-opposite-alignments );</div>
+<div class="line"><a class="code" href="group___traceback_detail.html#ga9fc78dc4580fa6a4c275ab530655a6db">traceback_best</a>( best-anchor-alignments );</div>
+<div class="line"><a class="code" href="group___traceback.html#ga9e62d21577ddfffb2557d8108ebf0851">opposite_traceback_best</a>( best-opposite-alignments );</div>
 </div><!-- fragment --><dl class="section user"><dt></dt><dd>where again score() is a sub-pipeline:</dd></dl>
 <div class="fragment"><div class="line">score([in] input-reads, [in] seed-deques, [in/out] best-anchor-alignments, [in/out] best-opposite-alignments)</div>
 <div class="line">{</div>
@@ -178,9 +179,9 @@ best-mapping, paired-end reads</h2>
 <div class="line">   {</div>
 <div class="line">        (hits-queue, <a class="code" href="group___work_queue_detail.html#ga7c6f0457212ffc4b696a01d5858485b6">active</a>-reads) := <a class="code" href="group___basic_utils.html#gabc969419bf0a10c17e84ceedd624cd49">select</a>( <a class="code" href="group___work_queue_detail.html#ga7c6f0457212ffc4b696a01d5858485b6">active</a>-reads, seed-deques );  <span class="comment">// select the next round of hits to process</span></div>
 <div class="line">        <a class="code" href="group___f_m_index.html#ga036b0d1d5e131f9ae61bf9fc37e4949f">locate</a>( hits-queue );                                               <span class="comment">// SA coordinates -&gt; linear genome coordinates conversion</span></div>
-<div class="line">        <a class="code" href="group___scoring.html#ga25139a24703152f236d5b0d4dbaf4426">anchor_score_best</a>( hits-queue );                                    <span class="comment">// assign a score to the selected hits using DP alignment</span></div>
-<div class="line">        <a class="code" href="group___scoring.html#ga30a0a305deae846f983459397f8617ed">opposite_score_best</a>( hits-queue );                                  <span class="comment">// assign a score to opposite mate of the selected hits using DP alignment</span></div>
-<div class="line">        <a class="code" href="group___reduce.html#ga6b7b95482ecb303c4827ddb318515609">score_reduce_paired</a>( hits-queue, best-anchor-alignments, best-opposite-alignments ); <span class="comment">// keep track of the best alignments found so far for each read</span></div>
+<div class="line">        <a class="code" href="group___scoring.html#gaf1229ce3a465e49c0dc7836abd37747b">anchor_score_best</a>( hits-queue );                                    <span class="comment">// assign a score to the selected hits using DP alignment</span></div>
+<div class="line">        <a class="code" href="group___scoring.html#ga065c6b73e4afdce4afcd4cfac4f7badc">opposite_score_best</a>( hits-queue );                                  <span class="comment">// assign a score to opposite mate of the selected hits using DP alignment</span></div>
+<div class="line">        <a class="code" href="group___reduce.html#ga156907d3ba196849440395a44ad429b0">score_reduce_paired</a>( hits-queue, best-anchor-alignments, best-opposite-alignments ); <span class="comment">// keep track of the best alignments found so far for each read</span></div>
 <div class="line">   }</div>
 <div class="line">}</div>
 </div><!-- fragment --><h1><a class="anchor" id="nvBowtieUsage"></a>
@@ -192,8 +193,8 @@ Usage</h1>
 *  nvBowtie --pe [options] reference-genome read-file1 read-file2 output
 *   options:
 *     General:
-*       --max-reads        int [-1]      maximum number of reads to process
-*       --device           int [0]       select the given cuda device
+*       --upto | -u        int [-1]      maximum number of reads to process
+*       --device           int [0]       select the given cuda device(s) (e.g. --device 0 --device 1 ...)
 *       --file-ref                       load reference from file
 *       --server-ref                     load reference from server
 *       --phred33                        qualities are ASCII characters equal to Phred quality + 33
@@ -207,24 +208,37 @@ Usage</h1>
 *       --verbosity                      verbosity level
 *       --local                          perform local alignment
 *     Seeding:
-*       --seed-len         int   [22]                   seed lengths
-*       --seed-freq        float [local ? 0.75 : 1.15]  interval between seeds
-*       --max-hits         int   [100]                  maximum amount of seed hits
-*       --max-reseed       int   [2]                    number of reseeding rounds
+*       --seed-len   | -L   int  [22]                       seed lengths
+*       --seed-freq  | -i   func [S,1,local ? 0.75 : 1.15]  seed interval function
+*       --max-hits          int  [100]                      maximum amount of seed hits
+*       --max-reseed | -R   int  [2]                        number of reseeding rounds
 *     Extension:
 *       --rand                           randomized seed selection
-*       --max-dist         int [15]      maximum edit distance
-*       --max-effort-init  int [15]      initial maximum number of consecutive extension failures
-*       --max-effort       int [15]      maximum number of consecutive extension failures
-*       --min-ext          int [30]      minimum number of extensions per read
-*       --max-ext          int [400]     maximum number of extensions per read
-*       --minins           int [0]       minimum insert length
-*       --minins           int [500]     maximum insert length
+*       --no-rand                        disable randomized seed selection
+*       --max-dist          int [15]     maximum edit distance
+*       --max-effort-init   int [15]     initial maximum number of consecutive extension failures
+*       --max-effort | -D   int [15]     maximum number of consecutive extension failures
+*       --min-ext           int [30]     minimum number of extensions per read
+*       --max-ext           int [400]    maximum number of extensions per read
+*       --minins     | -I   int [0]      minimum insert length
+*       --minins     | -X   int [500]    maximum insert length
 *       --overlap                        allow overlapping mates
+*       --no-overlap                     disable overlapping mates
 *       --dovetail                       allow dovetailing mates
 *       --no-mixed                       only report paired alignments
+*       --ungapped-mates | -ug           perform ungapped mate alignment
+*     Scoring:
+*       --scoring-scheme    filename     use a given scoring scheme
+*       --ma                int          match bonus
+*       --mp                int,int      max,min mismatch penalties
+*       --np                int          N penalty
+*       --rdg               int,int      read gap open / extension penalties
+*       --rfg               int,int      reference gap open / extension penalties
+*       --score-min         func         minimum score function
 *     Reporting:
-*       --mapQ-filter      int [0]       minimum mapQ threshold
+*       --mapQ-filter | -Q  int [0]      minimum mapQ threshold
+*     Debug
+*       --report            filename     generate an HTML report
 * </pre><dl class="section user"><dt></dt><dd>While most parameters should be easy to understand, a major difference is that nvBowtie relies on an external program to build the reference indices: </dd></dl>
 <dl class="section user"><dt></dt><dd><ul>
 <li><a class="el" href="nvbwt_page.html">nvBWT</a> : builds the BWT indices of the reference FASTA files</li>
@@ -238,10 +252,28 @@ Usage</h1>
 <pre class="fragment">*  ./nvFM-server hg19-index hg19 &amp;
 * </pre><dl class="section user"><dt></dt><dd>nvBowtie can then pickup the reference from the server:</dd></dl>
 <pre class="fragment">*  ./nvBowtie hg19 my_reads.fastq my_reads.bam
+* </pre><h2><a class="anchor" id="ScoringSchemeSection"></a>
+scoring schemes</h2>
+<dl class="section user"><dt></dt><dd>The <em>&ndash;scoring-scheme filename</em> option allows to provide a custom Smith-Waterman scoring scheme through a text file, where each line must contain a token value pair. The tokens and default values are reported below:</dd></dl>
+<pre class="fragment">*  match               0        // local alignment: 2
+*  mm-penalty-min      2
+*  mm-penalty-max      6
+*  N-penalty-min       1
+*  N-penalty-max       1
+*  score-min-const     -0.6     // local alignment: 0
+*  score-min-coeff     -0.6     // local alignment: 10
+*  score-min-type      linear   // local alignment: log
+*  N-ceil-const        0
+*  N-ceil-coeff        0.15
+*  read-gap-const      5
+*  read-gap-coeff      3
+*  ref-gap-const       5
+*  ref-gap-coeff       3
+*  gap-free            5
 * </pre> </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:17 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:46 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

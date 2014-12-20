@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -103,21 +104,21 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gaef96d413b630acb92fabe16583e379ba"><td class="memTemplParams" colspan="2">template&lt;uint32 ALN_IDX, typename aligner_type , typename pipeline_type &gt; </td></tr>
-<tr class="memitem:gaef96d413b630acb92fabe16583e379ba"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___traceback_detail.html#gaef96d413b630acb92fabe16583e379ba">nvbio::bowtie2::cuda::detail::banded_traceback_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> MateType mate_type, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *idx, io::BestAlignments *best_data, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pipeline_type &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> aligner_type aligner, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:gaef96d413b630acb92fabe16583e379ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2def93f93f54896e327da2c4adb35a72"><td class="memTemplParams" colspan="2">template&lt;uint32 ALN_IDX, typename aligner_type , typename pipeline_type &gt; </td></tr>
-<tr class="memitem:ga2def93f93f54896e327da2c4adb35a72"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___traceback_detail.html#ga2def93f93f54896e327da2c4adb35a72">nvbio::bowtie2::cuda::detail::traceback_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> MateType mate_type, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *idx, io::BestAlignments *best_data, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pipeline_type &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> aligner_type aligner, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga2def93f93f54896e327da2c4adb35a72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga08334192c9201c6f69a4626e7dc5ee09"><td class="memTemplParams" colspan="2">template&lt;uint32 ALN_IDX, typename aligner_type , typename pipeline_type &gt; </td></tr>
+<tr class="memitem:ga08334192c9201c6f69a4626e7dc5ee09"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___traceback_detail.html#ga08334192c9201c6f69a4626e7dc5ee09">nvbio::bowtie2::cuda::detail::banded_traceback_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> MateType mate_type, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *idx, io::Alignment *best_data, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 best_stride, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pipeline_type &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> aligner_type aligner, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
+<tr class="separator:ga08334192c9201c6f69a4626e7dc5ee09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9fc78dc4580fa6a4c275ab530655a6db"><td class="memTemplParams" colspan="2">template&lt;uint32 ALN_IDX, typename aligner_type , typename pipeline_type &gt; </td></tr>
+<tr class="memitem:ga9fc78dc4580fa6a4c275ab530655a6db"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___traceback_detail.html#ga9fc78dc4580fa6a4c275ab530655a6db">nvbio::bowtie2::cuda::detail::traceback_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> MateType mate_type, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *idx, io::Alignment *best_data, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 best_stride, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pipeline_type &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> aligner_type aligner, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
+<tr class="separator:ga9fc78dc4580fa6a4c275ab530655a6db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1817843cc37b41f0d3cfd9e3a022e34f"><td class="memTemplParams" colspan="2">template&lt;typename aligner_type , typename pipeline_type &gt; </td></tr>
 <tr class="memitem:ga1817843cc37b41f0d3cfd9e3a022e34f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___traceback_detail.html#ga1817843cc37b41f0d3cfd9e3a022e34f">nvbio::bowtie2::cuda::detail::banded_traceback_all</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *idx, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_offset, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_size, io::Alignment *alignments, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pipeline_type &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> aligner_type aligner, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
 <tr class="separator:ga1817843cc37b41f0d3cfd9e3a022e34f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gabd1a33ad9d7457934cfa092865cdab02"><td class="memTemplParams" colspan="2">template&lt;typename stream_type , typename scheme_type , typename pipeline_type &gt; </td></tr>
 <tr class="memitem:gabd1a33ad9d7457934cfa092865cdab02"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___traceback_detail.html#gabd1a33ad9d7457934cfa092865cdab02">nvbio::bowtie2::cuda::detail::finish_alignment_kernel</a> (stream_type stream, pipeline_type pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scheme_type scoring_scheme, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
 <tr class="separator:gabd1a33ad9d7457934cfa092865cdab02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga18f0997fe566d962befad57cfd4a039b"><td class="memTemplParams" colspan="2">template&lt;uint32 ALN_IDX, typename scheme_type , typename pipeline_type &gt; </td></tr>
-<tr class="memitem:ga18f0997fe566d962befad57cfd4a039b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___traceback_detail.html#ga18f0997fe566d962befad57cfd4a039b">nvbio::bowtie2::cuda::detail::finish_alignment_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> MateType mate_type, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *idx, io::BestAlignments *best_data, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pipeline_type &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scheme_type scoring_scheme, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga18f0997fe566d962befad57cfd4a039b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabedcdaf4f81841ea4b56202ccea436ff"><td class="memTemplParams" colspan="2">template&lt;uint32 ALN_IDX, typename scheme_type , typename pipeline_type &gt; </td></tr>
+<tr class="memitem:gabedcdaf4f81841ea4b56202ccea436ff"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___traceback_detail.html#gabedcdaf4f81841ea4b56202ccea436ff">nvbio::bowtie2::cuda::detail::finish_alignment_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> MateType mate_type, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *idx, io::Alignment *best_data, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 best_stride, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pipeline_type &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scheme_type scoring_scheme, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
+<tr class="separator:gabedcdaf4f81841ea4b56202ccea436ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gade32a85540ef924801ac3a671e674130"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type , typename pipeline_type &gt; </td></tr>
 <tr class="memitem:gade32a85540ef924801ac3a671e674130"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___traceback_detail.html#gade32a85540ef924801ac3a671e674130">nvbio::bowtie2::cuda::detail::finish_alignment_all</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *idx, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_offset, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_size, io::Alignment *alignments, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pipeline_type &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scheme_type scoring_scheme, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
 <tr class="separator:gade32a85540ef924801ac3a671e674130"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -192,11 +193,11 @@ template&lt;typename aligner_type , typename pipeline_type &gt; </div>
 </div><div class="memdoc">
 <p>dispatch the execution of a batch of single-ended banded-alignment traceback calculations </p>
 
-<p>Definition at line <a class="el" href="traceback__inl_8h_source.html#l00445">445</a> of file <a class="el" href="traceback__inl_8h_source.html">traceback_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="traceback__inl_8h_source.html#l00460">460</a> of file <a class="el" href="traceback__inl_8h_source.html">traceback_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="gaef96d413b630acb92fabe16583e379ba"></a>
+<a class="anchor" id="ga08334192c9201c6f69a4626e7dc5ee09"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -223,8 +224,14 @@ template&lt;uint32 ALN_IDX, typename aligner_type , typename pipeline_type &gt; 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">io::BestAlignments *&#160;</td>
+          <td class="paramtype">io::Alignment *&#160;</td>
           <td class="paramname"><em>best_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>best_stride</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -259,7 +266,7 @@ template&lt;uint32 ALN_IDX, typename aligner_type , typename pipeline_type &gt; 
 </div><div class="memdoc">
 <p>dispatch the execution of a batch of single-ended banded-alignment traceback calculations </p>
 
-<p>Definition at line <a class="el" href="traceback__inl_8h_source.html#l00196">196</a> of file <a class="el" href="traceback__inl_8h_source.html">traceback_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="traceback__inl_8h_source.html#l00205">205</a> of file <a class="el" href="traceback__inl_8h_source.html">traceback_inl.h</a>.</p>
 
 </div>
 </div>
@@ -332,11 +339,11 @@ template&lt;typename scheme_type , typename pipeline_type &gt; </div>
 </div><div class="memdoc">
 <p>finish computing the final alignments, i.e. computing the MD strings and the final scores (given the CIGARs) </p>
 
-<p>Definition at line <a class="el" href="traceback__inl_8h_source.html#l00760">760</a> of file <a class="el" href="traceback__inl_8h_source.html">traceback_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="traceback__inl_8h_source.html#l00777">777</a> of file <a class="el" href="traceback__inl_8h_source.html">traceback_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga18f0997fe566d962befad57cfd4a039b"></a>
+<a class="anchor" id="gabedcdaf4f81841ea4b56202ccea436ff"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -363,8 +370,14 @@ template&lt;uint32 ALN_IDX, typename scheme_type , typename pipeline_type &gt; <
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">io::BestAlignments *&#160;</td>
+          <td class="paramtype">io::Alignment *&#160;</td>
           <td class="paramname"><em>best_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>best_stride</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -399,7 +412,7 @@ template&lt;uint32 ALN_IDX, typename scheme_type , typename pipeline_type &gt; <
 </div><div class="memdoc">
 <p>finish computing the final alignments, i.e. computing the MD strings and the final scores (given the CIGARs) </p>
 
-<p>Definition at line <a class="el" href="traceback__inl_8h_source.html#l00713">713</a> of file <a class="el" href="traceback__inl_8h_source.html">traceback_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="traceback__inl_8h_source.html#l00728">728</a> of file <a class="el" href="traceback__inl_8h_source.html">traceback_inl.h</a>.</p>
 
 </div>
 </div>
@@ -442,11 +455,11 @@ template&lt;typename stream_type , typename scheme_type , typename pipeline_type
 </div><div class="memdoc">
 <p>finish computing the final alignments, i.e. computing the MD strings and the final scores (given the CIGARs) </p>
 
-<p>Definition at line <a class="el" href="traceback__inl_8h_source.html#l00508">508</a> of file <a class="el" href="traceback__inl_8h_source.html">traceback_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="traceback__inl_8h_source.html#l00523">523</a> of file <a class="el" href="traceback__inl_8h_source.html">traceback_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga2def93f93f54896e327da2c4adb35a72"></a>
+<a class="anchor" id="ga9fc78dc4580fa6a4c275ab530655a6db"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -473,8 +486,14 @@ template&lt;uint32 ALN_IDX, typename aligner_type , typename pipeline_type &gt; 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">io::BestAlignments *&#160;</td>
+          <td class="paramtype">io::Alignment *&#160;</td>
           <td class="paramname"><em>best_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>best_stride</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -503,14 +522,14 @@ template&lt;uint32 ALN_IDX, typename aligner_type , typename pipeline_type &gt; 
 </div><div class="memdoc">
 <p>dispatch the execution of a batch of full DP alignment traceback calculations </p>
 
-<p>Definition at line <a class="el" href="traceback__inl_8h_source.html#l00256">256</a> of file <a class="el" href="traceback__inl_8h_source.html">traceback_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="traceback__inl_8h_source.html#l00267">267</a> of file <a class="el" href="traceback__inl_8h_source.html">traceback_inl.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:19 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:48 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

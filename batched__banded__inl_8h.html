@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvbio/alignment/batched_banded_inl.h File Reference</title>
+<title>NVBIO: E:/git/nvbio/nvbio/alignment/batched_banded_inl.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -116,7 +117,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_score_3_01_b_a_n_d___l_e_n_00_01stream__type_00_01_host_thread_scheduler_01_4.html">nvbio::aln::BatchedBandedAlignmentScore&lt; BAND_LEN, stream_type, HostThreadScheduler &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_score_3_01_b_a_n_d___l_e_n_00_01stream__type_00_01_device_thread_scheduler_01_4.html">nvbio::aln::BatchedBandedAlignmentScore&lt; BAND_LEN, stream_type, DeviceThreadScheduler &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_score_3_01_b_a_n_d___l_e_n_00_01stream__type_00_92a6a56ac1e8212dc58c3b10191e5fd1.html">nvbio::aln::BatchedBandedAlignmentScore&lt; BAND_LEN, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_score_3_01_b_a_n_d___l_e_n_00_01stream__type_00_eeba9ca5ffeeeeb87c6cb1ef40282f90.html">nvbio::aln::BatchedBandedAlignmentScore&lt; BAND_LEN, stream_type, DeviceStagedThreadScheduler &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,9 +138,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gad0eb158d7447c75018525c54acbb312f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__private.html#gad0eb158d7447c75018525c54acbb312f">nvbio::aln::batched_banded_alignment_score</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> stream_type &amp;stream, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 work_id)</td></tr>
 <tr class="separator:gad0eb158d7447c75018525c54acbb312f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae95a6ea68ce3d38024f821aa343938d7"><td class="memTemplParams" colspan="2">template&lt;const uint32 BAND_LEN, typename stream_type &gt; </td></tr>
-<tr class="memitem:gae95a6ea68ce3d38024f821aa343938d7"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__private.html#gae95a6ea68ce3d38024f821aa343938d7">nvbio::aln::batched_banded_alignment_score_kernel</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> stream_type stream)</td></tr>
-<tr class="separator:gae95a6ea68ce3d38024f821aa343938d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga42dc778bdc5c646cb283e8ee39640d33"><td class="memTemplParams" colspan="2">template&lt;uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 BAND_LEN, typename stream_type &gt; </td></tr>
+<tr class="memitem:ga42dc778bdc5c646cb283e8ee39640d33"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__private.html#ga42dc778bdc5c646cb283e8ee39640d33">nvbio::aln::__launch_bounds__</a> (BLOCKDIM, MINBLOCKS) batched_banded_alignment_score_kernel(<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> stream_type stream)</td></tr>
+<tr class="separator:ga42dc778bdc5c646cb283e8ee39640d33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga27de54d093e2a7cf4b024501b4b7003e"><td class="memTemplParams" colspan="2">template&lt;uint32 BAND_LEN, uint32 CHECKPOINTS, typename stream_type , typename cell_type &gt; </td></tr>
 <tr class="memitem:ga27de54d093e2a7cf4b024501b4b7003e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__private.html#ga27de54d093e2a7cf4b024501b4b7003e">nvbio::aln::batched_banded_alignment_traceback</a> (stream_type &amp;stream, cell_type *checkpoints, uint32 *submatrices, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stride, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 work_id, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 thread_id)</td></tr>
@@ -154,7 +155,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:12 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:41 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -120,13 +121,13 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score_3_01stream__type_00_01_host_thread_scheduler_01_4.html">nvbio::aln::BatchedAlignmentScore&lt; stream_type, HostThreadScheduler &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score_3_01stream__type_00_01_device_thread_scheduler_01_4.html">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceThreadScheduler &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score_3_01stream__type_00_01_device_thread_block_schedu1516e060a2409f4344f97c75c3ae9775.html">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score_3_01stream__type_00_01_device_warp_scheduler_01_4.html">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceWarpScheduler &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score_3_01stream__type_00_01_device_staged_thread_scheduler_01_4.html">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceStagedThreadScheduler &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback_3_01_c_h_e_c_k_p_o_i_n_t_s_00_01stream__type_e51aae34e284483ddac36985bb69bfd9.html">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadScheduler &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback_3_01_c_h_e_c_k_p_o_i_n_t_s_00_01stream__type_e816adbf5880de2a7fcabf42808ba443.html">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -146,24 +147,24 @@ Functions</h2></td></tr>
 <tr class="separator:gaff160ca4a683daa6881fa93076b81533"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga55467298e4047e5d54573a62a7d476d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#ga55467298e4047e5d54573a62a7d476d1">nvbio::aln::BatchedAlignmentScore&lt; stream_type, HostThreadScheduler &gt;::enact</a> (stream_type stream, uint64 temp_size=0u, uint8 *temp=NULL)</td></tr>
 <tr class="separator:ga55467298e4047e5d54573a62a7d476d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2cb89b75c6ad568c5c3d17a94b07d56e"><td class="memItemLeft" align="right" valign="top">static uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#ga2cb89b75c6ad568c5c3d17a94b07d56e">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceThreadScheduler &gt;::min_temp_storage</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_pattern_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_text_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stream_size)</td></tr>
-<tr class="separator:ga2cb89b75c6ad568c5c3d17a94b07d56e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga93e0cadde6f91b2b5912072aced08efe"><td class="memItemLeft" align="right" valign="top">static uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#ga93e0cadde6f91b2b5912072aced08efe">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceThreadScheduler &gt;::max_temp_storage</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_pattern_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_text_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stream_size)</td></tr>
-<tr class="separator:ga93e0cadde6f91b2b5912072aced08efe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf5489e8ee3c3f27057b4b683c744cee1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#gaf5489e8ee3c3f27057b4b683c744cee1">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceThreadScheduler &gt;::enact</a> (stream_type stream, uint64 temp_size=0u, uint8 *temp=NULL)</td></tr>
-<tr class="separator:gaf5489e8ee3c3f27057b4b683c744cee1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3dd20230f88ae49df6f10fd6d2a11bfe"><td class="memItemLeft" align="right" valign="top">static uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#ga3dd20230f88ae49df6f10fd6d2a11bfe">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;::min_temp_storage</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_pattern_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_text_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stream_size)</td></tr>
+<tr class="separator:ga3dd20230f88ae49df6f10fd6d2a11bfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2d4dd64ba211e489f3097d39cdafbbb7"><td class="memItemLeft" align="right" valign="top">static uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#ga2d4dd64ba211e489f3097d39cdafbbb7">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;::max_temp_storage</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_pattern_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_text_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stream_size)</td></tr>
+<tr class="separator:ga2d4dd64ba211e489f3097d39cdafbbb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9941db53358b80ff6e8e327b87a170df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#ga9941db53358b80ff6e8e327b87a170df">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;::enact</a> (stream_type stream, uint64 temp_size=0u, uint8 *temp=NULL)</td></tr>
+<tr class="separator:ga9941db53358b80ff6e8e327b87a170df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga778b5cea887d55ecc99f90e8c5379754"><td class="memItemLeft" align="right" valign="top">static uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#ga778b5cea887d55ecc99f90e8c5379754">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceWarpScheduler &gt;::min_temp_storage</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_pattern_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_text_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stream_size)</td></tr>
 <tr class="separator:ga778b5cea887d55ecc99f90e8c5379754"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gab3912710dc9d82e816662261d9173f7e"><td class="memItemLeft" align="right" valign="top">static uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#gab3912710dc9d82e816662261d9173f7e">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceWarpScheduler &gt;::max_temp_storage</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_pattern_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_text_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stream_size)</td></tr>
 <tr class="separator:gab3912710dc9d82e816662261d9173f7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga72c3b6c0e4ac94e18e075082245661d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#ga72c3b6c0e4ac94e18e075082245661d4">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceWarpScheduler &gt;::enact</a> (stream_type stream, uint64 temp_size=0u, uint8 *temp=NULL)</td></tr>
 <tr class="separator:ga72c3b6c0e4ac94e18e075082245661d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga60566e0956bc24e1f0745aee8f443d5f"><td class="memItemLeft" align="right" valign="top">static uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#ga60566e0956bc24e1f0745aee8f443d5f">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadScheduler &gt;::min_temp_storage</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_pattern_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_text_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stream_size)</td></tr>
-<tr class="separator:ga60566e0956bc24e1f0745aee8f443d5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2d2de979f5f898b37723c8385610d4bf"><td class="memItemLeft" align="right" valign="top">static uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#ga2d2de979f5f898b37723c8385610d4bf">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadScheduler &gt;::max_temp_storage</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_pattern_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_text_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stream_size)</td></tr>
-<tr class="separator:ga2d2de979f5f898b37723c8385610d4bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3042a37431f027bb50837b6e4a25fe21"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#ga3042a37431f027bb50837b6e4a25fe21">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadScheduler &gt;::enact</a> (stream_type stream, uint64 temp_size=0u, uint8 *temp=NULL)</td></tr>
-<tr class="separator:ga3042a37431f027bb50837b6e4a25fe21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac10b57bc8f0f4236ca77f39413f141c5"><td class="memItemLeft" align="right" valign="top">static uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#gac10b57bc8f0f4236ca77f39413f141c5">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;::min_temp_storage</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_pattern_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_text_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stream_size)</td></tr>
+<tr class="separator:gac10b57bc8f0f4236ca77f39413f141c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga056dfe87850540d4fddcaf1a9f8b7d3e"><td class="memItemLeft" align="right" valign="top">static uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#ga056dfe87850540d4fddcaf1a9f8b7d3e">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;::max_temp_storage</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_pattern_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_text_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stream_size)</td></tr>
+<tr class="separator:ga056dfe87850540d4fddcaf1a9f8b7d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4bfbdd587843882b423d160e2ae51846"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___batch_alignment.html#ga4bfbdd587843882b423d160e2ae51846">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;::enact</a> (stream_type stream, uint64 temp_size=0u, uint8 *temp=NULL)</td></tr>
+<tr class="separator:ga4bfbdd587843882b423d160e2ae51846"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ga96aa53d0150bba09d393f544c11a865f"></a>
@@ -245,7 +246,7 @@ template&lt;typename aligner_type , typename pattern_set_type , typename text_se
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00980">980</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00995">995</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
@@ -336,7 +337,7 @@ template&lt;typename aligner_type , typename pattern_set_type , typename qualiti
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l01019">1019</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l01034">1034</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
@@ -419,7 +420,7 @@ template&lt;uint32 BAND_LEN, typename aligner_type , typename pattern_set_type ,
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l01059">1059</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l01074">1074</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
@@ -456,18 +457,18 @@ template&lt;typename stream_type &gt; </div>
 </div><div class="memdoc">
 <p>enact the batch execution </p>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00272">272</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00287">287</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="gaf5489e8ee3c3f27057b4b683c744cee1"></a>
+<a class="anchor" id="ga9941db53358b80ff6e8e327b87a170df"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename stream_type &gt; </div>
+template&lt;uint32 BLOCKDIM, uint32 MINBLOCKS, typename stream_type &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score.html">nvbio::aln::BatchedAlignmentScore</a>&lt; stream_type, DeviceThreadScheduler &gt;::enact </td>
+          <td class="memname">void <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score.html">nvbio::aln::BatchedAlignmentScore</a>&lt; stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;::enact </td>
           <td>(</td>
           <td class="paramtype">stream_type&#160;</td>
           <td class="paramname"><em>stream</em>, </td>
@@ -493,7 +494,7 @@ template&lt;typename stream_type &gt; </div>
 </div><div class="memdoc">
 <p>enact the batch execution </p>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00365">365</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00378">378</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
@@ -530,18 +531,18 @@ template&lt;typename stream_type &gt; </div>
 </div><div class="memdoc">
 <p>enact the batch execution </p>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00469">469</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00482">482</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga3042a37431f027bb50837b6e4a25fe21"></a>
+<a class="anchor" id="ga4bfbdd587843882b423d160e2ae51846"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;uint32 CHECKPOINTS, typename stream_type &gt; </div>
+template&lt;uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 CHECKPOINTS, typename stream_type &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback.html">nvbio::aln::BatchedAlignmentTraceback</a>&lt; CHECKPOINTS, stream_type, DeviceThreadScheduler &gt;::enact </td>
+          <td class="memname">void <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback.html">nvbio::aln::BatchedAlignmentTraceback</a>&lt; CHECKPOINTS, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;::enact </td>
           <td>(</td>
           <td class="paramtype">stream_type&#160;</td>
           <td class="paramname"><em>stream</em>, </td>
@@ -567,7 +568,7 @@ template&lt;uint32 CHECKPOINTS, typename stream_type &gt; </div>
 </div><div class="memdoc">
 <p>enact the batch execution </p>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00779">779</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00794">794</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
@@ -612,21 +613,21 @@ template&lt;typename stream_type &gt; </div>
 </div><div class="memdoc">
 <p>return the maximum number of bytes required by the algorithm </p>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00264">264</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00279">279</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga93e0cadde6f91b2b5912072aced08efe"></a>
+<a class="anchor" id="ga2d4dd64ba211e489f3097d39cdafbbb7"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename stream_type &gt; </div>
+template&lt;uint32 BLOCKDIM, uint32 MINBLOCKS, typename stream_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint64 <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score.html">nvbio::aln::BatchedAlignmentScore</a>&lt; stream_type, DeviceThreadScheduler &gt;::max_temp_storage </td>
+          <td class="memname">uint64 <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score.html">nvbio::aln::BatchedAlignmentScore</a>&lt; stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;::max_temp_storage </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
           <td class="paramname"><em>max_pattern_len</em>, </td>
@@ -657,7 +658,7 @@ template&lt;typename stream_type &gt; </div>
 </div><div class="memdoc">
 <p>return the maximum number of bytes required by the algorithm </p>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00357">357</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00370">370</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
@@ -702,21 +703,21 @@ template&lt;typename stream_type &gt; </div>
 </div><div class="memdoc">
 <p>return the maximum number of bytes required by the algorithm </p>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00461">461</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00474">474</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga2d2de979f5f898b37723c8385610d4bf"></a>
+<a class="anchor" id="ga056dfe87850540d4fddcaf1a9f8b7d3e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;uint32 CHECKPOINTS, typename stream_type &gt; </div>
+template&lt;uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 CHECKPOINTS, typename stream_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint64 <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback.html">nvbio::aln::BatchedAlignmentTraceback</a>&lt; CHECKPOINTS, stream_type, DeviceThreadScheduler &gt;::max_temp_storage </td>
+          <td class="memname">uint64 <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback.html">nvbio::aln::BatchedAlignmentTraceback</a>&lt; CHECKPOINTS, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;::max_temp_storage </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
           <td class="paramname"><em>max_pattern_len</em>, </td>
@@ -747,7 +748,7 @@ template&lt;uint32 CHECKPOINTS, typename stream_type &gt; </div>
 </div><div class="memdoc">
 <p>return the maximum number of bytes required by the algorithm </p>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00771">771</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00786">786</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
@@ -792,21 +793,21 @@ template&lt;typename stream_type &gt; </div>
 </div><div class="memdoc">
 <p>return the minimum number of bytes required by the algorithm </p>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00256">256</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00271">271</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga2cb89b75c6ad568c5c3d17a94b07d56e"></a>
+<a class="anchor" id="ga3dd20230f88ae49df6f10fd6d2a11bfe"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename stream_type &gt; </div>
+template&lt;uint32 BLOCKDIM, uint32 MINBLOCKS, typename stream_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint64 <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score.html">nvbio::aln::BatchedAlignmentScore</a>&lt; stream_type, DeviceThreadScheduler &gt;::min_temp_storage </td>
+          <td class="memname">uint64 <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score.html">nvbio::aln::BatchedAlignmentScore</a>&lt; stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;::min_temp_storage </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
           <td class="paramname"><em>max_pattern_len</em>, </td>
@@ -837,7 +838,7 @@ template&lt;typename stream_type &gt; </div>
 </div><div class="memdoc">
 <p>return the minimum number of bytes required by the algorithm </p>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00349">349</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00362">362</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
@@ -882,21 +883,21 @@ template&lt;typename stream_type &gt; </div>
 </div><div class="memdoc">
 <p>return the minimum number of bytes required by the algorithm </p>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00453">453</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00466">466</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga60566e0956bc24e1f0745aee8f443d5f"></a>
+<a class="anchor" id="gac10b57bc8f0f4236ca77f39413f141c5"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;uint32 CHECKPOINTS, typename stream_type &gt; </div>
+template&lt;uint32 BLOCKDIM, uint32 MINBLOCKS, uint32 CHECKPOINTS, typename stream_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint64 <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback.html">nvbio::aln::BatchedAlignmentTraceback</a>&lt; CHECKPOINTS, stream_type, DeviceThreadScheduler &gt;::min_temp_storage </td>
+          <td class="memname">uint64 <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback.html">nvbio::aln::BatchedAlignmentTraceback</a>&lt; CHECKPOINTS, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;::min_temp_storage </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
           <td class="paramname"><em>max_pattern_len</em>, </td>
@@ -927,14 +928,14 @@ template&lt;uint32 CHECKPOINTS, typename stream_type &gt; </div>
 </div><div class="memdoc">
 <p>return the minimum number of bytes required by the algorithm </p>
 
-<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00763">763</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="batched__inl_8h_source.html#l00778">778</a> of file <a class="el" href="batched__inl_8h_source.html">batched_inl.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:17 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:46 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

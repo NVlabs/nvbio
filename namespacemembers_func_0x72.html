@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -131,6 +132,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 &#160;
 
 <h3><a class="anchor" id="index_r"></a>- r -</h3><ul>
+<li>radical_inverse()
+: <a class="el" href="group___basic_utils.html#gacfb559e4ab01464981824cd5fd2b7341">nvbio</a>
+</li>
 <li>Rand()
 : <a class="el" href="namespacemgpu.html#a21cc2f25d7b721bed4a385a6fac3714d">mgpu</a>
 </li>
@@ -140,17 +144,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>rand_select_kernel()
 : <a class="el" href="group___select_detail.html#ga7bd04ce69e9617342cebc8bc539ba0ea">nvbio::bowtie2::cuda</a>
 </li>
+<li>rand_select_multi()
+: <a class="el" href="namespacenvbio_1_1bowtie2_1_1cuda.html#a66e1d4b744a807a44bea0c478be1bbe7">nvbio::bowtie2::cuda</a>
+</li>
+<li>rand_select_multi_kernel()
+: <a class="el" href="group___select_detail.html#ga68f8021fa75da0f22bfb6ab66441b964">nvbio::bowtie2::cuda</a>
+</li>
+<li>randomized_select()
+: <a class="el" href="group___select_detail.html#gae886c46187ada17484d842b8059c5b8f">nvbio::bowtie2::cuda</a>
+</li>
 <li>rank()
-: <a class="el" href="namespacenvbio.html#af17edf0fa9c5891cc1a6117a7fa9fe5b">nvbio</a>
+: <a class="el" href="namespacenvbio.html#a3179e9ff0fa716b603088a175b56c554">nvbio</a>
 </li>
 <li>rank4()
-: <a class="el" href="namespacenvbio.html#ae5d9231d75a7f076f0629a750b1351f6">nvbio</a>
-</li>
-<li>rank_2bits()
-: <a class="el" href="namespacenvbio_1_1priv.html#a44fedad5ed0072c53e0cf61e18fa27cd">nvbio::priv</a>
-</li>
-<li>rank_reduction_kernel()
-: <a class="el" href="namespacenvbio_1_1priv.html#a828bb4db47137329206aa5692060710d">nvbio::priv</a>
+: <a class="el" href="namespacenvbio.html#a5543e3fdd7f430ca369f8be1eb9e384e">nvbio</a>
 </li>
 <li>rank_test()
 : <a class="el" href="namespacenvbio.html#abdfbb7dd8931551e65d687a083c1dd91">nvbio</a>
@@ -178,11 +185,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="group___primitives.html#ga5a34466c84069a847a416ca5c8c4d771">nvbio</a>
 </li>
 <li>reduce_by_key()
-: <a class="el" href="group___c_u_d_a_primitives.html#gaee8cb8a5a27204b087e9c3d332716e99">nvbio::cuda</a>
-, <a class="el" href="group___primitives.html#gac282f202efe51d7a7d4b9543fbafbf51">nvbio</a>
+: <a class="el" href="group___primitives.html#gac282f202efe51d7a7d4b9543fbafbf51">nvbio</a>
+, <a class="el" href="group___c_u_d_a_primitives.html#gaee8cb8a5a27204b087e9c3d332716e99">nvbio::cuda</a>
 </li>
 <li>ref_banded_sw()
-: <a class="el" href="namespacenvbio_1_1aln.html#a7134deedb165abee2d3f709c4920eb83">nvbio::aln</a>
+: <a class="el" href="namespacenvbio_1_1aln.html#af4c5d03b8be2005f53d17c1426c01791">nvbio::aln</a>
 </li>
 <li>ref_sw()
 : <a class="el" href="namespacenvbio_1_1aln.html#a61522d1606014c92d447efc145a4c96d">nvbio::aln</a>
@@ -215,8 +222,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="namespacenvbio.html#a7b9f60ace813cba41a0ee6f250c6d88b">nvbio</a>
 </li>
 <li>round()
-: <a class="el" href="group___basic_utils.html#ga0ee7dabd414ed8ebce1feed9928a007f">nvbio::util</a>
-, <a class="el" href="group___basic_utils.html#ga0d6e886fd1c4f4954036ccfe4b5a4706">nvbio</a>
+: <a class="el" href="group___basic_utils.html#ga0d6e886fd1c4f4954036ccfe4b5a4706">nvbio</a>
+, <a class="el" href="group___basic_utils.html#ga0ee7dabd414ed8ebce1feed9928a007f">nvbio::util</a>
 </li>
 <li>round_i()
 : <a class="el" href="group___basic_utils.html#ga7ceb401b1594e464b83af7938c81dd2f">nvbio::util</a>
@@ -225,15 +232,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="group___basic_utils.html#gae5464dd50f7fa1c725fb64891776c256">nvbio::util</a>
 </li>
 <li>runlength_encode()
-: <a class="el" href="namespacenvbio.html#a9686b1681a0fec2ba556b8d4fd24db37">nvbio</a>
+: <a class="el" href="group___primitives.html#ga6ebbe79e443fc6326095245cd45ae782">nvbio</a>
 , <a class="el" href="group___c_u_d_a_primitives.html#ga67af151a66d862a84a34ca6aee8db24c">nvbio::cuda</a>
-, <a class="el" href="group___primitives.html#ga6ebbe79e443fc6326095245cd45ae782">nvbio</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:43:26 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:29:11 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

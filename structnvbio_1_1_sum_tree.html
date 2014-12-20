@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -112,7 +113,7 @@ struct nvbio::SumTree&lt; Iterator &gt;</h3>
 <p>Given an array of length N, it's possible to build a binary tree on top of it with 2*N-1 nodes, where each internal node encodes the sum of the values associated with its leaves. The original N cells will be the leaves of such a tree. This class encodes such a tree, allowing incremental modifications of the values associated with the leaves. If N is not a power of 2, the base array is conceptually padded with zeros.</p>
 <p>An example usage of this class is to sample CDFs that are continuously updated over time. </p>
 
-<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00099">99</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00108">108</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -172,7 +173,7 @@ template&lt;typename Iterator&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00101">101</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00110">110</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
 
 </div>
 </div>
@@ -188,7 +189,7 @@ template&lt;typename Iterator&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00102">102</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00111">111</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
 
 </div>
 </div>
@@ -220,7 +221,7 @@ template&lt;typename Iterator &gt; </div>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="sum__tree__inl_8h_source.html#l00042">42</a> of file <a class="el" href="sum__tree__inl_8h_source.html">sum_tree_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sum__tree__inl_8h_source.html#l00051">51</a> of file <a class="el" href="sum__tree__inl_8h_source.html">sum_tree_inl.h</a>.</p>
 
 </div>
 </div>
@@ -252,7 +253,7 @@ template&lt;typename Iterator &gt; </div>
 </div><div class="memdoc">
 <p>increment a cell's value </p>
 
-<p>Definition at line <a class="el" href="sum__tree__inl_8h_source.html#l00086">86</a> of file <a class="el" href="sum__tree__inl_8h_source.html">sum_tree_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sum__tree__inl_8h_source.html#l00088">88</a> of file <a class="el" href="sum__tree__inl_8h_source.html">sum_tree_inl.h</a>.</p>
 
 </div>
 </div>
@@ -281,7 +282,7 @@ template&lt;typename Iterator&gt; </div>
 </div><div class="memdoc">
 <p>return a cell's value </p>
 
-<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00152">152</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00161">161</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
 
 </div>
 </div>
@@ -310,7 +311,7 @@ template&lt;typename Iterator &gt; </div>
 </div><div class="memdoc">
 <p>return the number of nodes corresponding to a given number of leaves </p>
 
-<p>Definition at line <a class="el" href="sum__tree__inl_8h_source.html#l00027">27</a> of file <a class="el" href="sum__tree__inl_8h_source.html">sum_tree_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sum__tree__inl_8h_source.html#l00036">36</a> of file <a class="el" href="sum__tree__inl_8h_source.html">sum_tree_inl.h</a>.</p>
 
 </div>
 </div>
@@ -338,7 +339,7 @@ template&lt;typename Iterator&gt; </div>
 </div><div class="memdoc">
 <p>return the total node count </p>
 
-<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00127">127</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00136">136</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
 
 </div>
 </div>
@@ -366,7 +367,7 @@ template&lt;typename Iterator&gt; </div>
 </div><div class="memdoc">
 <p>return the number of leaves, padded to the nearest power of 2 </p>
 
-<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00122">122</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00131">131</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
 
 </div>
 </div>
@@ -397,7 +398,7 @@ template&lt;typename Iterator &gt; </div>
 </div><div class="memdoc">
 <p>reset a cell's value </p>
 
-<p>Definition at line <a class="el" href="sum__tree__inl_8h_source.html#l00102">102</a> of file <a class="el" href="sum__tree__inl_8h_source.html">sum_tree_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sum__tree__inl_8h_source.html#l00104">104</a> of file <a class="el" href="sum__tree__inl_8h_source.html">sum_tree_inl.h</a>.</p>
 
 </div>
 </div>
@@ -418,7 +419,7 @@ template&lt;typename Iterator &gt; </div>
 </div><div class="memdoc">
 <p>setup the tree structure </p>
 
-<p>Definition at line <a class="el" href="sum__tree__inl_8h_source.html#l00055">55</a> of file <a class="el" href="sum__tree__inl_8h_source.html">sum_tree_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sum__tree__inl_8h_source.html#l00064">64</a> of file <a class="el" href="sum__tree__inl_8h_source.html">sum_tree_inl.h</a>.</p>
 
 </div>
 </div>
@@ -447,7 +448,7 @@ template&lt;typename Iterator&gt; </div>
 </div><div class="memdoc">
 <p>return the number of leaves </p>
 
-<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00117">117</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00126">126</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
 
 </div>
 </div>
@@ -475,18 +476,18 @@ template&lt;typename Iterator&gt; </div>
 </div><div class="memdoc">
 <p>return the total tree sum </p>
 
-<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00147">147</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="sum__tree_8h_source.html#l00156">156</a> of file <a class="el" href="sum__tree_8h_source.html">sum_tree.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/<a class="el" href="sum__tree_8h_source.html">sum_tree.h</a></li>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/<a class="el" href="sum__tree__inl_8h_source.html">sum_tree_inl.h</a></li>
+<li>E:/git/nvbio/nvbio/basic/<a class="el" href="sum__tree_8h_source.html">sum_tree.h</a></li>
+<li>E:/git/nvbio/nvbio/basic/<a class="el" href="sum__tree__inl_8h_source.html">sum_tree_inl.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:32 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:08 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

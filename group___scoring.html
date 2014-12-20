@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -115,28 +116,130 @@ Modules</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga56e68063eee00be8726c13bbb9d92556"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
-<tr class="memitem:ga56e68063eee00be8726c13bbb9d92556"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga56e68063eee00be8726c13bbb9d92556">nvbio::bowtie2::cuda::score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga56e68063eee00be8726c13bbb9d92556"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga7e14ef3067493132a09200cc21bcc82b"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
-<tr class="memitem:ga7e14ef3067493132a09200cc21bcc82b"><td class="memTemplItemLeft" align="right" valign="top">uint32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga7e14ef3067493132a09200cc21bcc82b">nvbio::bowtie2::cuda::score_all</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> AllMappingPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_offset, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_size)</td></tr>
-<tr class="separator:ga7e14ef3067493132a09200cc21bcc82b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga25139a24703152f236d5b0d4dbaf4426"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
-<tr class="memitem:ga25139a24703152f236d5b0d4dbaf4426"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga25139a24703152f236d5b0d4dbaf4426">nvbio::bowtie2::cuda::anchor_score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga25139a24703152f236d5b0d4dbaf4426"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga30a0a305deae846f983459397f8617ed"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
-<tr class="memitem:ga30a0a305deae846f983459397f8617ed"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga30a0a305deae846f983459397f8617ed">nvbio::bowtie2::cuda::opposite_score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga30a0a305deae846f983459397f8617ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gade1f1010066627cb4cf979ec7e67435f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#gade1f1010066627cb4cf979ec7e67435f">nvbio::bowtie2::cuda::score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; EditDistanceScoringScheme &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:gade1f1010066627cb4cf979ec7e67435f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6ea5b43eae5ecfc40140c1b5e737a77c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga6ea5b43eae5ecfc40140c1b5e737a77c">nvbio::bowtie2::cuda::score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; SmithWatermanScoringScheme&lt;&gt; &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:ga6ea5b43eae5ecfc40140c1b5e737a77c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga754ac5c111106ec7e9c63fb61aaca9cc"><td class="memItemLeft" align="right" valign="top">uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga754ac5c111106ec7e9c63fb61aaca9cc">nvbio::bowtie2::cuda::score_all</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> AllMappingPipelineState&lt; EditDistanceScoringScheme &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_offset, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_size)</td></tr>
+<tr class="separator:ga754ac5c111106ec7e9c63fb61aaca9cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4a27e8ec4e3e633a523dfc9b65cdde81"><td class="memItemLeft" align="right" valign="top">uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga4a27e8ec4e3e633a523dfc9b65cdde81">nvbio::bowtie2::cuda::score_all</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> AllMappingPipelineState&lt; SmithWatermanScoringScheme&lt;&gt; &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_offset, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_size)</td></tr>
+<tr class="separator:ga4a27e8ec4e3e633a523dfc9b65cdde81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf1229ce3a465e49c0dc7836abd37747b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#gaf1229ce3a465e49c0dc7836abd37747b">nvbio::bowtie2::cuda::anchor_score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; EditDistanceScoringScheme &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:gaf1229ce3a465e49c0dc7836abd37747b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae61261fdd32fc63d05916ab6cf4b7a30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#gae61261fdd32fc63d05916ab6cf4b7a30">nvbio::bowtie2::cuda::anchor_score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; SmithWatermanScoringScheme&lt;&gt; &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:gae61261fdd32fc63d05916ab6cf4b7a30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga065c6b73e4afdce4afcd4cfac4f7badc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga065c6b73e4afdce4afcd4cfac4f7badc">nvbio::bowtie2::cuda::opposite_score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; EditDistanceScoringScheme &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:ga065c6b73e4afdce4afcd4cfac4f7badc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacd97cdafe94bcd18ce031f7793f2409e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scoring.html#gacd97cdafe94bcd18ce031f7793f2409e">nvbio::bowtie2::cuda::opposite_score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; SmithWatermanScoringScheme&lt;&gt; &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:gacd97cdafe94bcd18ce031f7793f2409e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7b2211344d6ab648d4f16caab12f361d"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
+<tr class="memitem:ga7b2211344d6ab648d4f16caab12f361d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga7b2211344d6ab648d4f16caab12f361d">nvbio::bowtie2::cuda::score_best_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
+<tr class="separator:ga7b2211344d6ab648d4f16caab12f361d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7d75c761f7a8c31ba98f2965cbbae4b0"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
+<tr class="memitem:ga7d75c761f7a8c31ba98f2965cbbae4b0"><td class="memTemplItemLeft" align="right" valign="top">uint32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga7d75c761f7a8c31ba98f2965cbbae4b0">nvbio::bowtie2::cuda::score_all_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> AllMappingPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_offset, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_size)</td></tr>
+<tr class="separator:ga7d75c761f7a8c31ba98f2965cbbae4b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6f54bad488b339a50b5a87b260eb6abc"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
+<tr class="memitem:ga6f54bad488b339a50b5a87b260eb6abc"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga6f54bad488b339a50b5a87b260eb6abc">nvbio::bowtie2::cuda::anchor_score_best_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
+<tr class="separator:ga6f54bad488b339a50b5a87b260eb6abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga682b2f0d609d1721d6361911c516dc1d"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
+<tr class="memitem:ga682b2f0d609d1721d6361911c516dc1d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga682b2f0d609d1721d6361911c516dc1d">nvbio::bowtie2::cuda::opposite_score_best_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
+<tr class="separator:ga682b2f0d609d1721d6361911c516dc1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ga25139a24703152f236d5b0d4dbaf4426"></a>
+<a class="anchor" id="gaf1229ce3a465e49c0dc7836abd37747b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::bowtie2::cuda::anchor_score_best </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>band_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; EditDistanceScoringScheme &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pipeline</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>execute a batch of banded-alignment score calculations for the anchor mates, best mapping</p>
+<p><b>inputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a1a8f372f6ab40aa242a6a247bbcc6710" title="hit info ">HitQueues::seed</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a></li>
+</ul>
+<p><b>outputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a32473baa96ece1f915475b9f87fcecd8" title="hit scores ">HitQueues::score</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#aea5030f46c9177322dec95d2db92f107" title="hit sinks ">HitQueues::sink</a> </li>
+</ul>
+
+</div>
+</div>
+<a class="anchor" id="gae61261fdd32fc63d05916ab6cf4b7a30"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::bowtie2::cuda::anchor_score_best </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>band_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; SmithWatermanScoringScheme&lt;&gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pipeline</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>execute a batch of banded-alignment score calculations for the anchor mates, best mapping</p>
+<p><b>inputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a1a8f372f6ab40aa242a6a247bbcc6710" title="hit info ">HitQueues::seed</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a></li>
+</ul>
+<p><b>outputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a32473baa96ece1f915475b9f87fcecd8" title="hit scores ">HitQueues::score</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#aea5030f46c9177322dec95d2db92f107" title="hit sinks ">HitQueues::sink</a> </li>
+</ul>
+
+</div>
+</div>
+<a class="anchor" id="ga6f54bad488b339a50b5a87b260eb6abc"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename scheme_type &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void nvbio::bowtie2::cuda::anchor_score_best </td>
+          <td class="memname">void nvbio::bowtie2::cuda::anchor_score_best_t </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
           <td class="paramname"><em>band_len</em>, </td>
@@ -172,18 +275,98 @@ template&lt;typename scheme_type &gt; </div>
 <li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#aea5030f46c9177322dec95d2db92f107" title="hit sinks ">HitQueues::sink</a> </li>
 </ul>
 
-<p>Definition at line <a class="el" href="score__inl_8h_source.html#l00798">798</a> of file <a class="el" href="score__inl_8h_source.html">score_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="score__inl_8h_source.html#l00810">810</a> of file <a class="el" href="score__inl_8h_source.html">score_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga30a0a305deae846f983459397f8617ed"></a>
+<a class="anchor" id="ga065c6b73e4afdce4afcd4cfac4f7badc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::bowtie2::cuda::opposite_score_best </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; EditDistanceScoringScheme &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pipeline</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>execute a batch of full-DP alignment score calculations for the opposite mates, best mapping</p>
+<p><b>inputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a1a8f372f6ab40aa242a6a247bbcc6710" title="hit info ">HitQueues::seed</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a32473baa96ece1f915475b9f87fcecd8" title="hit scores ">HitQueues::score</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#aea5030f46c9177322dec95d2db92f107" title="hit sinks ">HitQueues::sink</a></li>
+</ul>
+<p><b>outputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#aa05ddf917a6f4c4ece1a742a379c215e" title="hit scores, opposite mate ">HitQueues::opposite_score</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a53eb08963fbe05a037fa697133d9f4e3" title="hit locations, opposite mate ">HitQueues::opposite_loc</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a186da4cc103a4bf07cda646f39f35d5f" title="hit sinks, opposite mate ">HitQueues::opposite_sink</a> </li>
+</ul>
+
+</div>
+</div>
+<a class="anchor" id="gacd97cdafe94bcd18ce031f7793f2409e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::bowtie2::cuda::opposite_score_best </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; SmithWatermanScoringScheme&lt;&gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pipeline</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>execute a batch of full-DP alignment score calculations for the opposite mates, best mapping</p>
+<p><b>inputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a1a8f372f6ab40aa242a6a247bbcc6710" title="hit info ">HitQueues::seed</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a32473baa96ece1f915475b9f87fcecd8" title="hit scores ">HitQueues::score</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#aea5030f46c9177322dec95d2db92f107" title="hit sinks ">HitQueues::sink</a></li>
+</ul>
+<p><b>outputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#aa05ddf917a6f4c4ece1a742a379c215e" title="hit scores, opposite mate ">HitQueues::opposite_score</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a53eb08963fbe05a037fa697133d9f4e3" title="hit locations, opposite mate ">HitQueues::opposite_loc</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a186da4cc103a4bf07cda646f39f35d5f" title="hit sinks, opposite mate ">HitQueues::opposite_sink</a> </li>
+</ul>
+
+</div>
+</div>
+<a class="anchor" id="ga682b2f0d609d1721d6361911c516dc1d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename scheme_type &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void nvbio::bowtie2::cuda::opposite_score_best </td>
+          <td class="memname">void nvbio::bowtie2::cuda::opposite_score_best_t </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;&#160;</td>
           <td class="paramname"><em>pipeline</em>, </td>
@@ -216,18 +399,148 @@ template&lt;typename scheme_type &gt; </div>
 <li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a186da4cc103a4bf07cda646f39f35d5f" title="hit sinks, opposite mate ">HitQueues::opposite_sink</a> </li>
 </ul>
 
-<p>Definition at line <a class="el" href="score__inl_8h_source.html#l00825">825</a> of file <a class="el" href="score__inl_8h_source.html">score_inl.h</a>.</p>
+</div>
+</div>
+<a class="anchor" id="ga754ac5c111106ec7e9c63fb61aaca9cc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32 nvbio::bowtie2::cuda::score_all </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>band_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> AllMappingPipelineState&lt; EditDistanceScoringScheme &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pipeline</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>buffer_offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>buffer_size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>execute a batch of single-ended banded-alignment score calculations, all-mapping</p>
+<p><b>inputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a1a8f372f6ab40aa242a6a247bbcc6710" title="hit info ">HitQueues::seed</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a></li>
+</ul>
+<p><b>outputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a32473baa96ece1f915475b9f87fcecd8" title="hit scores ">HitQueues::score</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#aea5030f46c9177322dec95d2db92f107" title="hit sinks ">HitQueues::sink</a></li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">band_len</td><td>alignment band length </td></tr>
+    <tr><td class="paramname">pipeline</td><td>all mapping pipeline </td></tr>
+    <tr><td class="paramname">params</td><td>alignment params </td></tr>
+    <tr><td class="paramname">buffer_offset</td><td>ring buffer offset </td></tr>
+    <tr><td class="paramname">buffer_size</td><td>ring buffer size </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>number of valid alignments </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ga7e14ef3067493132a09200cc21bcc82b"></a>
+<a class="anchor" id="ga4a27e8ec4e3e633a523dfc9b65cdde81"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32 nvbio::bowtie2::cuda::score_all </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>band_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> AllMappingPipelineState&lt; SmithWatermanScoringScheme&lt;&gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pipeline</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>buffer_offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>buffer_size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>execute a batch of single-ended banded-alignment score calculations, all-mapping</p>
+<p><b>inputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a1a8f372f6ab40aa242a6a247bbcc6710" title="hit info ">HitQueues::seed</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a></li>
+</ul>
+<p><b>outputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a32473baa96ece1f915475b9f87fcecd8" title="hit scores ">HitQueues::score</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#aea5030f46c9177322dec95d2db92f107" title="hit sinks ">HitQueues::sink</a></li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">band_len</td><td>alignment band length </td></tr>
+    <tr><td class="paramname">pipeline</td><td>all mapping pipeline </td></tr>
+    <tr><td class="paramname">params</td><td>alignment params </td></tr>
+    <tr><td class="paramname">buffer_offset</td><td>ring buffer offset </td></tr>
+    <tr><td class="paramname">buffer_size</td><td>ring buffer size </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>number of valid alignments </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ga7d75c761f7a8c31ba98f2965cbbae4b0"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename scheme_type &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">uint32 nvbio::bowtie2::cuda::score_all </td>
+          <td class="memname">uint32 nvbio::bowtie2::cuda::score_all_t </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
           <td class="paramname"><em>band_len</em>, </td>
@@ -286,18 +599,104 @@ template&lt;typename scheme_type &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>number of valid alignments </dd></dl>
 
-<p>Definition at line <a class="el" href="score__inl_8h_source.html#l00855">855</a> of file <a class="el" href="score__inl_8h_source.html">score_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="score__inl_8h_source.html#l00843">843</a> of file <a class="el" href="score__inl_8h_source.html">score_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga56e68063eee00be8726c13bbb9d92556"></a>
+<a class="anchor" id="gade1f1010066627cb4cf979ec7e67435f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::bowtie2::cuda::score_best </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>band_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; EditDistanceScoringScheme &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pipeline</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>execute a batch of single-ended banded-alignment score calculations, best mapping</p>
+<p><b>inputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a1a8f372f6ab40aa242a6a247bbcc6710" title="hit info ">HitQueues::seed</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a></li>
+</ul>
+<p><b>outputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a32473baa96ece1f915475b9f87fcecd8" title="hit scores ">HitQueues::score</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#aea5030f46c9177322dec95d2db92f107" title="hit sinks ">HitQueues::sink</a> </li>
+</ul>
+
+</div>
+</div>
+<a class="anchor" id="ga6ea5b43eae5ecfc40140c1b5e737a77c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::bowtie2::cuda::score_best </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>band_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; SmithWatermanScoringScheme&lt;&gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pipeline</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>execute a batch of single-ended banded-alignment score calculations, best mapping</p>
+<p><b>inputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a1a8f372f6ab40aa242a6a247bbcc6710" title="hit info ">HitQueues::seed</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a></li>
+</ul>
+<p><b>outputs:</b> </p>
+<ul>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a32473baa96ece1f915475b9f87fcecd8" title="hit scores ">HitQueues::score</a></li>
+<li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#aea5030f46c9177322dec95d2db92f107" title="hit sinks ">HitQueues::sink</a> </li>
+</ul>
+
+</div>
+</div>
+<a class="anchor" id="ga7b2211344d6ab648d4f16caab12f361d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename scheme_type &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void nvbio::bowtie2::cuda::score_best </td>
+          <td class="memname">void nvbio::bowtie2::cuda::score_best_t </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
           <td class="paramname"><em>band_len</em>, </td>
@@ -333,14 +732,14 @@ template&lt;typename scheme_type &gt; </div>
 <li><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#aea5030f46c9177322dec95d2db92f107" title="hit sinks ">HitQueues::sink</a> </li>
 </ul>
 
-<p>Definition at line <a class="el" href="score__inl_8h_source.html#l00771">771</a> of file <a class="el" href="score__inl_8h_source.html">score_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="score__inl_8h_source.html#l00783">783</a> of file <a class="el" href="score__inl_8h_source.html">score_inl.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:19 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:47 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

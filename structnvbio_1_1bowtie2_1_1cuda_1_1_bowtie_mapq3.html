@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -110,7 +111,7 @@ struct nvbio::bowtie2::cuda::BowtieMapq3&lt; ScoringSchemeType &gt;</h3>
 
 <p>Bowtie2 Mapping Quality Calculator, V3 </p>
 
-<p>Definition at line <a class="el" href="mapq_8h_source.html#l00034">34</a> of file <a class="el" href="mapq_8h_source.html">mapq.h</a>.</p>
+<p>Definition at line <a class="el" href="mapq_8h_source.html#l00043">43</a> of file <a class="el" href="mapq_8h_source.html">mapq.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="mapq_8h_source.html">mapq.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -123,8 +124,8 @@ Public Types</h2></td></tr>
 Public Methods</h2></td></tr>
 <tr class="memitem:a02acd6582d2b5e8a6810120b19783e2c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_bowtie_mapq3.html#a02acd6582d2b5e8a6810120b19783e2c">BowtieMapq3</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ScoringSchemeType sc)</td></tr>
 <tr class="separator:a02acd6582d2b5e8a6810120b19783e2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ab24d1008945962a9b8779736137652"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_bowtie_mapq3.html#a6ab24d1008945962a9b8779736137652">operator()</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1io_1_1_best_paired_alignments.html">io::BestPairedAlignments</a> &amp;best_alignments, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> read_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> o_read_len) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
-<tr class="separator:a6ab24d1008945962a9b8779736137652"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4e8e14582169cf855b8b5a1cf3cbe45"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_bowtie_mapq3.html#aa4e8e14582169cf855b8b5a1cf3cbe45">operator()</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1io_1_1_best_paired_alignments.html">io::BestPairedAlignments</a> &amp;best_alignments, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> read_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> o_read_len) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:aa4e8e14582169cf855b8b5a1cf3cbe45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="af465830ec48770c41ec57f205e2b44f5"></a>
@@ -139,7 +140,7 @@ template&lt;typename ScoringSchemeType &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="mapq_8h_source.html#l00036">36</a> of file <a class="el" href="mapq_8h_source.html">mapq.h</a>.</p>
+<p>Definition at line <a class="el" href="mapq_8h_source.html#l00045">45</a> of file <a class="el" href="mapq_8h_source.html">mapq.h</a>.</p>
 
 </div>
 </div>
@@ -169,12 +170,12 @@ template&lt;typename ScoringSchemeType &gt; </div>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="mapq_8h_source.html#l00040">40</a> of file <a class="el" href="mapq_8h_source.html">mapq.h</a>.</p>
+<p>Definition at line <a class="el" href="mapq_8h_source.html#l00049">49</a> of file <a class="el" href="mapq_8h_source.html">mapq.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a6ab24d1008945962a9b8779736137652"></a>
+<a class="anchor" id="aa4e8e14582169cf855b8b5a1cf3cbe45"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -184,7 +185,7 @@ template&lt;typename ScoringSchemeType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_bowtie_mapq3.html">nvbio::bowtie2::cuda::BowtieMapq3</a>&lt; ScoringSchemeType &gt;::operator() </td>
+          <td class="memname"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_bowtie_mapq3.html">nvbio::bowtie2::cuda::BowtieMapq3</a>&lt; ScoringSchemeType &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1io_1_1_best_paired_alignments.html">io::BestPairedAlignments</a> &amp;&#160;</td>
           <td class="paramname"><em>best_alignments</em>, </td>
@@ -215,17 +216,17 @@ template&lt;typename ScoringSchemeType &gt; </div>
 </div><div class="memdoc">
 <p>compute mapping quality </p>
 
-<p>Definition at line <a class="el" href="mapq_8h_source.html#l00044">44</a> of file <a class="el" href="mapq_8h_source.html">mapq.h</a>.</p>
+<p>Definition at line <a class="el" href="mapq_8h_source.html#l00054">54</a> of file <a class="el" href="mapq_8h_source.html">mapq.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/<a class="el" href="mapq_8h_source.html">mapq.h</a></li>
+<li>E:/git/nvbio/nvBowtie/bowtie2/cuda/<a class="el" href="mapq_8h_source.html">mapq.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:57 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:38 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

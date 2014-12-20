@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -124,10 +125,10 @@ Sequence Data</h1>
 <li><a class="el" href="structnvbio_1_1io_1_1_sequence_data_m_m_a_p.html">io::SequenceDataMMAP</a> </li>
 </ul>
 </dd></dl>
-<dl class="section user"><dt></dt><dd>Each <a class="el" href="structnvbio_1_1io_1_1_sequence_data.html">SequenceData</a> object might contain several distinct sequences, which are represented as a packed string-set of sequence symbols accompanied by corresponding string-sets of sequence quality scores and sequence names. Internally, all the string-sets are stored as <a class="el" href="structnvbio_1_1_concatenated_string_set.html">ConcatenatedStringSet</a>'s, with an index specifying the position of the i-th sequence in the concatenated arrays. The packed sequences can in turn be encoded with a user-specified <a class="el" href="group___alphabets_module.html#gacd06da18687b2a345bef56a9fdad1a48">alphabet</a>. However, <a class="el" href="structnvbio_1_1io_1_1_sequence_data.html">SequenceData</a> has only runtime knowledge of the alphabet encoding, and hence does not provide any method to perform decoding - rather, it only exposes methods to obtain <a class="el" href="group___sequence_data_views.html">plain-views</a> of the underlying sequence storage. However, by providing compile-time knowledge of the alphabet, one can construct a <a class="el" href="structnvbio_1_1io_1_1_sequence_data_access.html">SequenceDataAccess</a> wrapper around any <a class="el" href="structnvbio_1_1io_1_1_sequence_data.html">SequenceData</a> (or SequenceDataView) object and access the decoded string-sets transparently. The following example shows how to load a sequence file and access it at compile-time: <div class="fragment"><div class="line"><span class="keyword">typedef</span> io::SequenceDataAccess&lt;DNA&gt;::sequence_string_set_type sequence_string_set_type;</div>
+<dl class="section user"><dt></dt><dd>Each <a class="el" href="structnvbio_1_1io_1_1_sequence_data.html">SequenceData</a> object might contain several distinct sequences, which are represented as a packed string-set of sequence symbols accompanied by corresponding string-sets of sequence quality scores and sequence names. Internally, all the string-sets are stored as <a class="el" href="structnvbio_1_1_concatenated_string_set.html">ConcatenatedStringSet</a>'s, with an index specifying the position of the i-th sequence in the concatenated arrays. The packed sequences can in turn be encoded with a user-specified <a class="el" href="group___alphabets_module.html#gacd06da18687b2a345bef56a9fdad1a48">alphabet</a>. However, <a class="el" href="structnvbio_1_1io_1_1_sequence_data.html">SequenceData</a> has only runtime knowledge of the alphabet encoding, and hence does not provide any method to perform decoding - rather, it only exposes methods to obtain <a class="el" href="group___sequence_data_views.html">plain-views</a> of the underlying sequence storage. However, by providing compile-time knowledge of the alphabet, one can construct a <a class="el" href="structnvbio_1_1io_1_1_sequence_data_access.html">SequenceDataAccess</a> wrapper around any <a class="el" href="structnvbio_1_1io_1_1_sequence_data.html">SequenceData</a> (or SequenceDataView) object and access the decoded string-sets transparently. The following example shows how to load a sequence file and access it at compile-time: <div class="fragment"><div class="line"><span class="keyword">typedef</span> <a class="code" href="structnvbio_1_1io_1_1_sequence_data_access.html#a13adb79b0c4a3a96a4b08028845f548d" title="string-set type ">io::SequenceDataAccess&lt;DNA&gt;::sequence_string_set_type</a> sequence_string_set_type;</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// load a SequenceData object</span></div>
-<div class="line">SharedPointer&lt;io::SequenceDataHost&gt; genome = io::load_sequence_data( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48add63351f5393872b63ceda3485d48483" title="4-letter DNA alphabet { A,C,G,T } ">DNA</a>, <span class="stringliteral">&quot;drosophila.fa&quot;</span> );</div>
+<div class="line">SharedPointer&lt;io::SequenceDataHost&gt; genome = io::load_sequence_data( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a6c8c7655bd0085241eed95780a3aa4c4" title="4-letter DNA alphabet { A,C,G,T } ">DNA</a>, <span class="stringliteral">&quot;drosophila.fa&quot;</span> );</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// access it specifying the alphabet at compile-time</span></div>
 <div class="line"><span class="keyword">const</span> io::SequenceDataAccess&lt;DNA&gt; genome_access( genome.get() );</div>
@@ -159,7 +160,7 @@ Sequence Data Streams</h1>
 <div class="line"><span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>   bps_per_batch = 128*1024*100;    <span class="comment">// the maximum number of base pairs</span></div>
 <div class="line"></div>
 <div class="line"><span class="comment">// loop through the stream in batches</span></div>
-<div class="line"><span class="keywordflow">while</span> (<a class="code" href="group___sequence_i_o.html#ga0b124ee3d2c51b0a1f555c91ad4948a2">io::next</a>( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a8a2224a6a384b941b7bcbde9843c92a8" title="5-letter DNA + N alphabet { A,C,G,T,N } ">DNA_N</a>, &amp;reads, reads_file.get(), seqs_per_batch, bps_per_batch ))</div>
+<div class="line"><span class="keywordflow">while</span> (<a class="code" href="group___sequence_i_o.html#ga0b124ee3d2c51b0a1f555c91ad4948a2">io::next</a>( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a312b63ba76d209928476bcefde8f124d" title="5-letter DNA + N alphabet { A,C,G,T,N } ">DNA_N</a>, &amp;reads, reads_file.get(), seqs_per_batch, bps_per_batch ))</div>
 <div class="line">{</div>
 <div class="line">    <span class="comment">// copy the loaded batch on the device</span></div>
 <div class="line">    <span class="keyword">const</span> <a class="code" href="group___sequence_i_o.html#ga320e6b720c7ea82793f41b21c184d960" title="a SequenceData object stored in device memory ">io::SequenceDataDevice</a> device_reads( reads );</div>
@@ -172,7 +173,7 @@ Technical Documentation</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:16 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:45 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

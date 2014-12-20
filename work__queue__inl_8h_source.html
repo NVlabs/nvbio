@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/cuda/work_queue_inl.h Source File</title>
+<title>NVBIO: E:/git/nvbio/nvbio/basic/cuda/work_queue_inl.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -100,135 +101,144 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a href="work__queue__inl_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (c) 2012-14, NVIDIA CORPORATION.  All rights reserved.</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * NVIDIA CORPORATION and its licensors retain all intellectual property</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * and proprietary rights in and to this software, related documentation</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * and any modifications thereto.  Any use, reproduction, disclosure or</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> * distribution of this software and related documentation without an express</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> * license agreement from NVIDIA CORPORATION is strictly prohibited.</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="types_8h.html">nvbio/basic/types.h</a>&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="numbers_8h.html">nvbio/basic/numbers.h</a>&gt;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="arch_8h.html">nvbio/basic/cuda/arch.h</a>&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;cub/cub.cuh&gt;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;thrust/copy.h&gt;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span>nvbio {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span>cuda {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="code" href="namespacenvbio_1_1cuda_1_1wq.html">   30</a></span>&#160;<span class="keyword">namespace </span>wq {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>   <a class="code" href="group___defs.html#gga4e030c73900bf557f24a494d70a0d6c1a55acd4ff0f7cc398c553b00baa29a518">BLOCKDIM</a>,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">typename</span> WorkUnitT,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">typename</span> WorkStreamT&gt;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;__global__</div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="code" href="group___work_queue_detail.html#ga2acdf92037e4aa4156db893b2814f4ce">   43</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___work_queue_detail.html#ga2acdf92037e4aa4156db893b2814f4ce">inplace_work_queue_kernel</a>(<span class="keyword">const</span> WorkStreamT <a class="code" href="group___work_queue_detail.html#ga6a9ef7a5de8befd9e8232679a6d58e26">stream</a>, <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html">WorkQueueStats::View</a> <a class="code" href="group___work_queue_detail.html#ga066726173aa1a4d079ac3f55085d4e21">stats</a>)</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;{</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">typedef</span> WorkUnitT WorkUnit;</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * nvbio</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (c) 2011-2014, NVIDIA CORPORATION. All rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * </span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Redistribution and use in source and binary forms, with or without</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * modification, are permitted provided that the following conditions are met:</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> *    * Redistributions of source code must retain the above copyright</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> *      notice, this list of conditions and the following disclaimer.</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *    * Redistributions in binary form must reproduce the above copyright</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> *      notice, this list of conditions and the following disclaimer in the</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> *      documentation and/or other materials provided with the distribution.</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *    * Neither the name of the NVIDIA CORPORATION nor the</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *      names of its contributors may be used to endorse or promote products</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *      derived from this software without specific prior written permission.</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * </span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> * DISCLAIMED. IN NO EVENT SHALL NVIDIA CORPORATION BE LIABLE FOR ANY</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="types_8h.html">nvbio/basic/types.h</a>&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="numbers_8h.html">nvbio/basic/numbers.h</a>&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="arch_8h.html">nvbio/basic/cuda/arch.h</a>&gt;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;cub/cub.cuh&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;thrust/copy.h&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">namespace </span>nvbio {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">namespace </span>cuda {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="code" href="namespacenvbio_1_1cuda_1_1wq.html">   39</a></span>&#160;<span class="keyword">namespace </span>wq {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> grid_threads = gridDim.x * <a class="code" href="group___defs.html#gga4e030c73900bf557f24a494d70a0d6c1a55acd4ff0f7cc398c553b00baa29a518">BLOCKDIM</a>;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="group___work_queue_detail.html#gaa01555552f806ae9dc8041e6c489082b">thread_id</a>    = threadIdx.x + blockIdx.x*<a class="code" href="group___defs.html#gga4e030c73900bf557f24a494d70a0d6c1a55acd4ff0f7cc398c553b00baa29a518">BLOCKDIM</a>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="comment">// place a work-unit in local memory</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    WorkUnit <a class="code" href="group___work_queue_detail.html#gac49c20b2dd9dabac8da8024266099edc">unit</a>;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> stream_end = stream.size();</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">// let this CTA fetch all tiles at a grid-threads stride, starting from blockIdx.x*BLOCKDIM</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> stream_begin = 0; stream_begin &lt; stream_end; stream_begin += grid_threads)</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    {</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="group___work_queue_detail.html#gaa8486eb4a48d55ee372667b7c8fbd341">work_id</a> = thread_id + stream_begin;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">if</span> (work_id &lt; stream_end)</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="comment">// fetch the work unit</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            stream.get( work_id, &amp;unit, make_uint2( thread_id, 0u ) );</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            stats.<a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#af68fa5b59edfab4c72f38920be3323b0">sample</a>( <a class="code" href="group___work_queue.html#ggab1df1f51ac49f4c8732ffaddeb1a3fdbad28c0d225ddf2d908d1564f67b0530c8">STREAM_EVENT</a> );</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <span class="comment">// keep an iteration counter</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="group___work_queue_detail.html#ga9859fe013a2f3583ae7c6502c0ce4b44">work_iter</a> = 0;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>   <a class="code" href="group___defs.html#gga526ecbe8a73c3761fcfe02a89ca04c60a55acd4ff0f7cc398c553b00baa29a518">BLOCKDIM</a>,</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">typename</span> WorkUnitT,</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">typename</span> WorkStreamT&gt;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;__global__</div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="code" href="group___work_queue_detail.html#ga2acdf92037e4aa4156db893b2814f4ce">   52</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___work_queue_detail.html#ga2acdf92037e4aa4156db893b2814f4ce">inplace_work_queue_kernel</a>(<span class="keyword">const</span> WorkStreamT <a class="code" href="group___work_queue_detail.html#ga6a9ef7a5de8befd9e8232679a6d58e26">stream</a>, <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html">WorkQueueStats::View</a> <a class="code" href="group___work_queue_detail.html#ga066726173aa1a4d079ac3f55085d4e21">stats</a>)</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;{</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">typedef</span> WorkUnitT WorkUnit;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> grid_threads = gridDim.x * <a class="code" href="group___defs.html#gga526ecbe8a73c3761fcfe02a89ca04c60a55acd4ff0f7cc398c553b00baa29a518">BLOCKDIM</a>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="group___work_queue_detail.html#gaa01555552f806ae9dc8041e6c489082b">thread_id</a>    = threadIdx.x + blockIdx.x*<a class="code" href="group___defs.html#gga526ecbe8a73c3761fcfe02a89ca04c60a55acd4ff0f7cc398c553b00baa29a518">BLOCKDIM</a>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="comment">// place a work-unit in local memory</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    WorkUnit <a class="code" href="group___work_queue_detail.html#gac49c20b2dd9dabac8da8024266099edc">unit</a>;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="group__private.html#gaff75436c13480a61933d88dc9b224c52">stream_end</a> = stream.size();</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="comment">// let this CTA fetch all tiles at a grid-threads stride, starting from blockIdx.x*BLOCKDIM</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> stream_begin = 0; stream_begin &lt; <a class="code" href="group__private.html#gaff75436c13480a61933d88dc9b224c52">stream_end</a>; stream_begin += grid_threads)</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    {</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="group___work_queue_detail.html#gaa8486eb4a48d55ee372667b7c8fbd341">work_id</a> = thread_id + stream_begin;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="comment">// run the unit until completion</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordflow">do</span> { stats.<a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#af68fa5b59edfab4c72f38920be3323b0">sample</a>( <a class="code" href="group___work_queue.html#ggab1df1f51ac49f4c8732ffaddeb1a3fdbadec77e8c1583ebc28a04b0d10450d1bf">RUN_EVENT</a> ); ++<a class="code" href="group___work_queue_detail.html#ga9859fe013a2f3583ae7c6502c0ce4b44">work_iter</a>; } <span class="keywordflow">while</span> (unit.run( stream ));</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="comment">// sample the number of iterations this unit has been running</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            stats.<a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#aaa14ffb1e3733eb04f6a0e7d7db0db4e">sample_iterations</a>( work_iter );</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        }</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    }</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;}</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">if</span> (work_id &lt; stream_end)</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="comment">// fetch the work unit</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            stream.get( work_id, &amp;unit, make_uint2( thread_id, 0u ) );</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            stats.<a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#af68fa5b59edfab4c72f38920be3323b0">sample</a>( <a class="code" href="group___work_queue.html#ggab1df1f51ac49f4c8732ffaddeb1a3fdbad28c0d225ddf2d908d1564f67b0530c8">STREAM_EVENT</a> );</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="comment">// keep an iteration counter</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="group___work_queue_detail.html#ga9859fe013a2f3583ae7c6502c0ce4b44">work_iter</a> = 0;</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">// namespace wq</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment">// consume a stream of work units</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keyword">typename</span> PolicyTag,</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">typename</span> WorkUnitT,</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>   <a class="code" href="group___defs.html#gga4e030c73900bf557f24a494d70a0d6c1a55acd4ff0f7cc398c553b00baa29a518">BLOCKDIM</a>&gt;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> WorkStream, <span class="keyword">typename</span> WorkMover&gt;</div>
-<div class="line"><a name="l00089"></a><span class="lineno"><a class="code" href="structnvbio_1_1cuda_1_1_work_queue.html#a9ea1dd0f4d66eb19389fa6cb46742b3a">   89</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1cuda_1_1_work_queue.html#ab38e2faa750a84096e5c79802a589a9b">WorkQueue&lt;PolicyTag,WorkUnitT,BLOCKDIM&gt;::consume</a>(<span class="keyword">const</span> WorkStream <a class="code" href="group___work_queue_detail.html#ga6a9ef7a5de8befd9e8232679a6d58e26">stream</a>, <span class="keyword">const</span> WorkMover, <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats.html">WorkQueueStats</a>* <a class="code" href="group___work_queue_detail.html#ga066726173aa1a4d079ac3f55085d4e21">stats</a>)</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;{</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="comment">// compute the number of blocks we are going to launch</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_blocks = (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>)<a class="code" href="namespacenvbio_1_1cuda.html#a15b9e30316921c79e9aef83ef483c266">cuda::max_active_blocks</a>( wq::inplace_work_queue_kernel&lt;BLOCKDIM,WorkUnit,WorkStream&gt;, <a class="code" href="group___defs.html#gga4e030c73900bf557f24a494d70a0d6c1a55acd4ff0f7cc398c553b00baa29a518">BLOCKDIM</a>, 0u );</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="comment">// launch the consuming kernel</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    wq::inplace_work_queue_kernel&lt;BLOCKDIM,WorkUnit,WorkStream&gt; &lt;&lt;&lt;n_blocks,<a class="code" href="group___defs.html#gga4e030c73900bf557f24a494d70a0d6c1a55acd4ff0f7cc398c553b00baa29a518">BLOCKDIM</a>&gt;&gt;&gt;( <a class="code" href="group___work_queue_detail.html#ga6a9ef7a5de8befd9e8232679a6d58e26">stream</a>, <a class="code" href="group___work_queue.html#gaf1ec0823296d6961c46c9451456d1186">view</a>( stats ) );</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;}</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="comment">// sample utilization</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#ab1e3db7d296c7ca84db521f23dd81bd3">NVBIO_DEVICE</a></div>
-<div class="line"><a name="l00102"></a><span class="lineno"><a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#af68fa5b59edfab4c72f38920be3323b0">  102</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#af68fa5b59edfab4c72f38920be3323b0">WorkQueueStats::View::sample</a>(<span class="keyword">const</span> <a class="code" href="group___work_queue.html#gab1df1f51ac49f4c8732ffaddeb1a3fdb">WorkQueueStatsEvent</a> type)</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;{</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#a99a3be254d78e93c46d1376292e636b8">valid</a>() == <span class="keyword">false</span>)</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <span class="comment">// run the unit until completion</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <span class="keywordflow">do</span> { stats.<a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#af68fa5b59edfab4c72f38920be3323b0">sample</a>( <a class="code" href="group___work_queue.html#ggab1df1f51ac49f4c8732ffaddeb1a3fdbadec77e8c1583ebc28a04b0d10450d1bf">RUN_EVENT</a> ); ++<a class="code" href="group___work_queue_detail.html#ga9859fe013a2f3583ae7c6502c0ce4b44">work_iter</a>; } <span class="keywordflow">while</span> (unit.run( stream ));</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            <span class="comment">// sample the number of iterations this unit has been running</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            stats.<a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#aaa14ffb1e3733eb04f6a0e7d7db0db4e">sample_iterations</a>( work_iter );</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        }</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    }</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;}</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;} <span class="comment">// namespace wq</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment">// consume a stream of work units</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">typename</span> PolicyTag,</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keyword">typename</span> WorkUnitT,</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>   <a class="code" href="group___defs.html#gga526ecbe8a73c3761fcfe02a89ca04c60a55acd4ff0f7cc398c553b00baa29a518">BLOCKDIM</a>&gt;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> WorkStream, <span class="keyword">typename</span> WorkMover&gt;</div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="code" href="structnvbio_1_1cuda_1_1_work_queue.html#a9ea1dd0f4d66eb19389fa6cb46742b3a">   98</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1cuda_1_1_work_queue.html#ab38e2faa750a84096e5c79802a589a9b">WorkQueue&lt;PolicyTag,WorkUnitT,BLOCKDIM&gt;::consume</a>(<span class="keyword">const</span> WorkStream <a class="code" href="group___work_queue_detail.html#ga6a9ef7a5de8befd9e8232679a6d58e26">stream</a>, <span class="keyword">const</span> WorkMover, <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats.html">WorkQueueStats</a>* <a class="code" href="group___work_queue_detail.html#ga066726173aa1a4d079ac3f55085d4e21">stats</a>)</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;{</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="comment">// compute the number of blocks we are going to launch</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_blocks = (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>)<a class="code" href="namespacenvbio_1_1cuda.html#a15b9e30316921c79e9aef83ef483c266">cuda::max_active_blocks</a>( wq::inplace_work_queue_kernel&lt;BLOCKDIM,WorkUnit,WorkStream&gt;, <a class="code" href="group___defs.html#gga526ecbe8a73c3761fcfe02a89ca04c60a55acd4ff0f7cc398c553b00baa29a518">BLOCKDIM</a>, 0u );</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="comment">// launch the consuming kernel</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    wq::inplace_work_queue_kernel&lt;BLOCKDIM,WorkUnit,WorkStream&gt; &lt;&lt;&lt;n_blocks,<a class="code" href="group___defs.html#gga526ecbe8a73c3761fcfe02a89ca04c60a55acd4ff0f7cc398c553b00baa29a518">BLOCKDIM</a>&gt;&gt;&gt;( <a class="code" href="group___work_queue_detail.html#ga6a9ef7a5de8befd9e8232679a6d58e26">stream</a>, <a class="code" href="group___work_queue.html#gaf1ec0823296d6961c46c9451456d1186">view</a>( stats ) );</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;}</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> active_mask  = __ballot(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> active_count = __popc(active_mask);</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keywordflow">if</span> (__popc(active_mask &gt;&gt; warp_tid()) == 1u)</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    {</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        atomicAdd( <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#a67facb3098cc1bb664ff5c46a66d972c">active_lanes</a> + type, active_count );</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        atomicAdd( <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#ab9d5e71850ee750482b4a1ee9666b900">issued_warps</a> + type, 1u );</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    };</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;}</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment">// sample utilization</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#ab1e3db7d296c7ca84db521f23dd81bd3">NVBIO_DEVICE</a></div>
+<div class="line"><a name="l00111"></a><span class="lineno"><a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#af68fa5b59edfab4c72f38920be3323b0">  111</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#af68fa5b59edfab4c72f38920be3323b0">WorkQueueStats::View::sample</a>(<span class="keyword">const</span> <a class="code" href="group___work_queue.html#gab1df1f51ac49f4c8732ffaddeb1a3fdb">WorkQueueStatsEvent</a> type)</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;{</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#a99a3be254d78e93c46d1376292e636b8">valid</a>() == <span class="keyword">false</span>)</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="comment">// sample iterations</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#ab1e3db7d296c7ca84db521f23dd81bd3">NVBIO_DEVICE</a></div>
-<div class="line"><a name="l00119"></a><span class="lineno"><a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#aaa14ffb1e3733eb04f6a0e7d7db0db4e">  119</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#aaa14ffb1e3733eb04f6a0e7d7db0db4e">WorkQueueStats::View::sample_iterations</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i)</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;{</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#a99a3be254d78e93c46d1376292e636b8">valid</a>() == <span class="keyword">false</span>)</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    atomicAdd( <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#ae8d6ee732b0b391e39a302e022ee0db0">iterations</a>,    i );              <span class="comment">// add to the total sum</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    atomicMax( (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>*)(<a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#ae8d6ee732b0b391e39a302e022ee0db0">iterations</a>+1u), i );   <span class="comment">// take the maximum</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    atomicAdd( <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#ae8d6ee732b0b391e39a302e022ee0db0">iterations</a>+2u, 1u );             <span class="comment">// increase the event counter</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;}</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;} <span class="comment">// namespace cuda</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;} <span class="comment">// namespace nvbio</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> active_mask  = __ballot(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> active_count = __popc(active_mask);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordflow">if</span> (__popc(active_mask &gt;&gt; warp_tid()) == 1u)</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    {</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        atomicAdd( <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#a67facb3098cc1bb664ff5c46a66d972c">active_lanes</a> + type, active_count );</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        atomicAdd( <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#ab9d5e71850ee750482b4a1ee9666b900">issued_warps</a> + type, 1u );</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    };</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;}</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="comment">// sample iterations</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#ab1e3db7d296c7ca84db521f23dd81bd3">NVBIO_DEVICE</a></div>
+<div class="line"><a name="l00128"></a><span class="lineno"><a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#aaa14ffb1e3733eb04f6a0e7d7db0db4e">  128</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#aaa14ffb1e3733eb04f6a0e7d7db0db4e">WorkQueueStats::View::sample_iterations</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i)</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;{</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#a99a3be254d78e93c46d1376292e636b8">valid</a>() == <span class="keyword">false</span>)</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    atomicAdd( <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#ae8d6ee732b0b391e39a302e022ee0db0">iterations</a>,    i );              <span class="comment">// add to the total sum</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    atomicMax( (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>*)(<a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#ae8d6ee732b0b391e39a302e022ee0db0">iterations</a>+1u), i );   <span class="comment">// take the maximum</span></div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    atomicAdd( <a class="code" href="structnvbio_1_1cuda_1_1_work_queue_stats_view.html#ae8d6ee732b0b391e39a302e022ee0db0">iterations</a>+2u, 1u );             <span class="comment">// increase the event counter</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;}</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;} <span class="comment">// namespace cuda</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;} <span class="comment">// namespace nvbio</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:01 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:27 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

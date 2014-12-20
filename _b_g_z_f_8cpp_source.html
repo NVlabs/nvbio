@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/contrib/bamtools/BGZF.cpp Source File</title>
+<title>NVBIO: E:/git/nvbio/contrib/bamtools/BGZF.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -112,7 +113,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// Provides the basic functionality for reading &amp; writing BGZF files</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// ***************************************************************************</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_b_g_z_f_8h.html">BGZF.h</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="bamtools_2_b_g_z_f_8h.html">BGZF.h</a>&quot;</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="threads_8h.html">nvbio/basic/threads.h</a>&gt;</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="console_8h.html">nvbio/basic/console.h</a>&gt;</span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
@@ -152,7 +153,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00051"></a><span class="lineno"><a class="code" href="struct_bam_tools_1_1_bgzf_thread.html#a435974caa794a15c3e22d09eb7482834">   51</a></span>&#160;    <a class="code" href="struct_bam_tools_1_1_bgzf_data.html">BgzfData</a>* <a class="code" href="struct_bam_tools_1_1_bgzf_thread.html#a435974caa794a15c3e22d09eb7482834">m_data</a>;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;};</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="struct_bam_tools_1_1_bgzf_data.html#afa512a87bf38182ad02630d8ae40ee7b">   54</a></span>&#160;<a class="code" href="struct_bam_tools_1_1_bgzf_data.html#afa512a87bf38182ad02630d8ae40ee7b">BgzfData::BgzfData</a>(<span class="keyword">const</span> <a class="code" href="cpu_8cpp.html#a04909d1366bb244ff2482beb51635f37">uint32_t</a> threads)</div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="struct_bam_tools_1_1_bgzf_data.html#afa512a87bf38182ad02630d8ae40ee7b">   54</a></span>&#160;<a class="code" href="struct_bam_tools_1_1_bgzf_data.html#afa512a87bf38182ad02630d8ae40ee7b">BgzfData::BgzfData</a>(<span class="keyword">const</span> <a class="code" href="kstdint_8h.html#a06896e8c53f721507066c079052171f8">uint32_t</a> threads)</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    : UncompressedBlockSize(<a class="code" href="namespace_bam_tools.html#a36b7ed39eb765c33610a05fd849f055b">DEFAULT_BLOCK_SIZE</a>)</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    , CompressedBlockSize(<a class="code" href="namespace_bam_tools.html#adb4cbb211053f10933feeae14e059091">MAX_BLOCK_SIZE</a>)</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    , BlockLength(0)</div>
@@ -175,7 +176,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a868b2cf293ea5704c25c41755f1314dd">ThreadPool</a>        = <span class="keyword">new</span> <a class="code" href="struct_bam_tools_1_1_bgzf_thread.html">BgzfThread</a>[<a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ad3040e3b6a5e9bb06da37a7f8a1827ca">ThreadCount</a>];</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="comment">// launch background threads</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="cpu_8cpp.html#a04909d1366bb244ff2482beb51635f37">uint32_t</a> i = 0; i &lt; <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ad3040e3b6a5e9bb06da37a7f8a1827ca">ThreadCount</a>; ++i)</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="kstdint_8h.html#a06896e8c53f721507066c079052171f8">uint32_t</a> i = 0; i &lt; <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ad3040e3b6a5e9bb06da37a7f8a1827ca">ThreadCount</a>; ++i)</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        {</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a868b2cf293ea5704c25c41755f1314dd">ThreadPool</a>[i].<a class="code" href="struct_bam_tools_1_1_bgzf_thread.html#a1eeb1040978c1bb28767022028c0f7b2">set_data</a>( <span class="keyword">this</span> );</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a868b2cf293ea5704c25c41755f1314dd">ThreadPool</a>[i].<a class="code" href="classnvbio_1_1_thread.html#a2d6d9c60ffcf84ff23421c2ea02fa031" title="create the thread ">create</a>();</div>
@@ -196,7 +197,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="comment">// stop background threads</span></div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a5ab1e6ef8e3ae1b5c06714c6644b96bc">BackgroundThreads</a> = 0;</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordflow">for</span> (<a class="code" href="cpu_8cpp.html#a04909d1366bb244ff2482beb51635f37">uint32_t</a> i = 0; i &lt; <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ad3040e3b6a5e9bb06da37a7f8a1827ca">ThreadCount</a>; ++i)</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordflow">for</span> (<a class="code" href="kstdint_8h.html#a06896e8c53f721507066c079052171f8">uint32_t</a> i = 0; i &lt; <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ad3040e3b6a5e9bb06da37a7f8a1827ca">ThreadCount</a>; ++i)</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a868b2cf293ea5704c25c41755f1314dd">ThreadPool</a>[i].join();</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">if</span>(<a class="code" href="struct_bam_tools_1_1_bgzf_data.html#aeaf7c940732a72eff7c97c10dd157f46">CompressedBlock</a>)   <span class="keyword">delete</span> [] <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#aeaf7c940732a72eff7c97c10dd157f46">CompressedBlock</a>;</div>
@@ -223,7 +224,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00122"></a><span class="lineno"><a class="code" href="struct_bam_tools_1_1_bgzf_data.html#aff7fa54af1a8efa4f13591fa40acd3ee">  122</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#aff7fa54af1a8efa4f13591fa40acd3ee">BgzfData::DeflateBlocks</a>(<span class="keywordtype">void</span>)</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;{</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="comment">// count the number of blocks to deflate</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <a class="code" href="cpu_8cpp.html#a115ba3a1b24a8702355c5dbd61ce01e0">int32_t</a> blockSize = <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ae8d177185fa7e689093dedab810e7a4c">UncompressedBlockSize</a>;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <a class="code" href="kstdint_8h.html#a2ba621978a511250f7250fb10e05ffbe">int32_t</a> blockSize = <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ae8d177185fa7e689093dedab810e7a4c">UncompressedBlockSize</a>;</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keywordflow">while</span> (1)</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    {</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">int</span> n_blocks = (<a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a23d9ab6927aef5b06f8f4a95890c3e77">BlockOffset</a> + blockSize-1) / blockSize;</div>
@@ -264,7 +265,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;}</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="comment">// compresses the current block</span></div>
-<div class="line"><a name="l00166"></a><span class="lineno"><a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ad9ac0ec664ccc99913514c1bc563e2d4">  166</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ad9ac0ec664ccc99913514c1bc563e2d4">BgzfData::DeflateBlock</a>(<a class="code" href="cpu_8cpp.html#a115ba3a1b24a8702355c5dbd61ce01e0">int32_t</a> <span class="keywordtype">id</span>, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> uncompressedBlockSize)</div>
+<div class="line"><a name="l00166"></a><span class="lineno"><a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ad9ac0ec664ccc99913514c1bc563e2d4">  166</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ad9ac0ec664ccc99913514c1bc563e2d4">BgzfData::DeflateBlock</a>(<a class="code" href="kstdint_8h.html#a2ba621978a511250f7250fb10e05ffbe">int32_t</a> <span class="keywordtype">id</span>, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> uncompressedBlockSize)</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;{</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    <span class="comment">// check if the block is within the proper range</span></div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="keywordflow">if</span> (uncompressedBlockSize * <span class="keywordtype">id</span> &gt;= <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a23d9ab6927aef5b06f8f4a95890c3e77">BlockOffset</a>)</div>
@@ -452,7 +453,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00351"></a><span class="lineno"><a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a3ea139380849c76b8ca5e35a00c2b438">  351</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a3ea139380849c76b8ca5e35a00c2b438">BgzfData::ReadBlock</a>(<span class="keywordtype">void</span>) {</div>
 <div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;</div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    <span class="keywordtype">char</span>    <a class="code" href="namespacenvbio_1_1html.html#aa3843a2dc8135f20908b5ca3ed5cfc3f">header</a>[<a class="code" href="namespace_bam_tools.html#a45d7fec3ac8957fe3c86c698362116a3">BLOCK_HEADER_LENGTH</a>];</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <a class="code" href="cpu_8cpp.html#aea572cd399ed8fc8b0ff09021c40fe8c">int64_t</a> blockAddress = ftell(<a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a7ba6774acb9170d12d79c4b92c3e028d">Stream</a>);</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <a class="code" href="kstdint_8h.html#adec1df1b8b51cb32b77e5b86fff46471">int64_t</a> blockAddress = ftell(<a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a7ba6774acb9170d12d79c4b92c3e028d">Stream</a>);</div>
 <div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;</div>
 <div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    <span class="keywordtype">int</span> count = (int)fread(header, 1, <span class="keyword">sizeof</span>(header), <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a7ba6774acb9170d12d79c4b92c3e028d">Stream</a>);</div>
 <div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    <span class="keywordflow">if</span> (count == 0) {</div>
@@ -493,10 +494,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;}</div>
 <div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;</div>
-<div class="line"><a name="l00395"></a><span class="lineno"><a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a68d40ff077ca2ea7841d8cd901b73f21">  395</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a68d40ff077ca2ea7841d8cd901b73f21">BgzfData::Seek</a>(<a class="code" href="cpu_8cpp.html#aea572cd399ed8fc8b0ff09021c40fe8c">int64_t</a> position) {</div>
+<div class="line"><a name="l00395"></a><span class="lineno"><a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a68d40ff077ca2ea7841d8cd901b73f21">  395</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a68d40ff077ca2ea7841d8cd901b73f21">BgzfData::Seek</a>(<a class="code" href="kstdint_8h.html#adec1df1b8b51cb32b77e5b86fff46471">int64_t</a> position) {</div>
 <div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;</div>
 <div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    <span class="keywordtype">int</span>     blockOffset  = (position &amp; 0xFFFF);</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    <a class="code" href="cpu_8cpp.html#aea572cd399ed8fc8b0ff09021c40fe8c">int64_t</a> blockAddress = (position &gt;&gt; 16) &amp; 0xFFFFFFFFFFFFLL;</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    <a class="code" href="kstdint_8h.html#adec1df1b8b51cb32b77e5b86fff46471">int64_t</a> blockAddress = (position &gt;&gt; 16) &amp; 0xFFFFFFFFFFFFLL;</div>
 <div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;</div>
 <div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    <span class="keywordflow">if</span> (fseek(<a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a7ba6774acb9170d12d79c4b92c3e028d">Stream</a>, (<span class="keywordtype">long</span>)blockAddress, <a class="code" href="build_2contrib_2zlib-1_82_87_2zconf_8h.html#a0d112bae8fd35be772185b6ec6bcbe64">SEEK_SET</a>) != 0) {</div>
 <div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        printf(<span class="stringliteral">&quot;ERROR: Unable to seek in BAM file\n&quot;</span>);</div>
@@ -509,7 +510,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;}</div>
 <div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;</div>
-<div class="line"><a name="l00411"></a><span class="lineno"><a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ad0133d108d08c9e9cae601e24d5901fb">  411</a></span>&#160;<a class="code" href="cpu_8cpp.html#aea572cd399ed8fc8b0ff09021c40fe8c">int64_t</a> <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ad0133d108d08c9e9cae601e24d5901fb">BgzfData::Tell</a>(<span class="keywordtype">void</span>) {</div>
+<div class="line"><a name="l00411"></a><span class="lineno"><a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ad0133d108d08c9e9cae601e24d5901fb">  411</a></span>&#160;<a class="code" href="kstdint_8h.html#adec1df1b8b51cb32b77e5b86fff46471">int64_t</a> <a class="code" href="struct_bam_tools_1_1_bgzf_data.html#ad0133d108d08c9e9cae601e24d5901fb">BgzfData::Tell</a>(<span class="keywordtype">void</span>) {</div>
 <div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;    <span class="keywordflow">return</span> ( (<a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a0d48efce92a2a459b89848069187e3ea">BlockAddress</a> &lt;&lt; 16) | (<a class="code" href="struct_bam_tools_1_1_bgzf_data.html#a23d9ab6927aef5b06f8f4a95890c3e77">BlockOffset</a> &amp; 0xFFFF) );</div>
 <div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;}</div>
 <div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;</div>
@@ -543,7 +544,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:41:55 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:18 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

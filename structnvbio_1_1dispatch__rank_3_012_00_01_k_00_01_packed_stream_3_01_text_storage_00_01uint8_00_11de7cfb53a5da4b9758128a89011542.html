@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -115,7 +116,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 struct nvbio::dispatch_rank&lt; 2, K, PackedStream&lt; TextStorage, uint8, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00207">207</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00216">216</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -124,7 +125,7 @@ Public Types</h2></td></tr>
 <tr class="memitem:a44edd0ee8003a5a542dbbae423aac12d"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a><br class="typebreak"/>
 &lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#a44edd0ee8003a5a542dbbae423aac12d">text_type</a></td></tr>
 <tr class="separator:a44edd0ee8003a5a542dbbae423aac12d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a2d659da9b54b895931f6af2897e9ad"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; 2, K, <br class="typebreak"/>
+<tr class="memitem:a3a2d659da9b54b895931f6af2897e9ad"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, <br class="typebreak"/>
 <a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#a44edd0ee8003a5a542dbbae423aac12d">text_type</a>, OccIterator, <br class="typebreak"/>
 CountTable &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#a3a2d659da9b54b895931f6af2897e9ad">dictionary_type</a></td></tr>
 <tr class="separator:a3a2d659da9b54b895931f6af2897e9ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,12 +172,12 @@ Static Public Members</h2></td></tr>
 template&lt;uint32 K, typename TextStorage , typename OccIterator , typename CountTable , typename word_type , typename index_type &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt;2,K,<a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#a44edd0ee8003a5a542dbbae423aac12d">text_type</a>,OccIterator,CountTable&gt; <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, K, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::dictionary_type</td>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt;2,<a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>,<a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#a44edd0ee8003a5a542dbbae423aac12d">text_type</a>,OccIterator,CountTable&gt; <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::dictionary_type</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00210">210</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00219">219</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -187,12 +188,12 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
 template&lt;uint32 K, typename TextStorage , typename OccIterator , typename CountTable , typename word_type , typename index_type &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#af4ad082524574e9db955cad3798d9f3a">vec2_type</a> <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, K, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::range_type</td>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#af4ad082524574e9db955cad3798d9f3a">vec2_type</a> <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::range_type</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00214">214</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00223">223</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -208,7 +209,7 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00209">209</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00218">218</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -219,12 +220,12 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
 template&lt;uint32 K, typename TextStorage , typename OccIterator , typename CountTable , typename word_type , typename index_type &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1vector__type.html">vector_type</a>&lt;index_type,2&gt;::type <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, K, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::vec2_type</td>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1vector__type.html">vector_type</a>&lt;index_type,2&gt;::type <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::vec2_type</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00212">212</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00221">221</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -235,12 +236,12 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
 template&lt;uint32 K, typename TextStorage , typename OccIterator , typename CountTable , typename word_type , typename index_type &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1vector__type.html">vector_type</a>&lt;index_type,4&gt;::type <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, K, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::vec4_type</td>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1vector__type.html">vector_type</a>&lt;index_type,4&gt;::type <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::vec4_type</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00213">213</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00222">222</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -257,7 +258,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> uint2 <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, K, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::popc2 </td>
+          <td class="memname">static <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> uint2 <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::popc2 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> TextStorage&#160;</td>
           <td class="paramname"><em>text</em>, </td>
@@ -299,7 +300,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00223">223</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00232">232</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -313,7 +314,7 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> index_type <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, K, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::run </td>
+          <td class="memname">static <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> index_type <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::run </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#a3a2d659da9b54b895931f6af2897e9ad">dictionary_type</a> &amp;&#160;</td>
           <td class="paramname"><em>dict</em>, </td>
@@ -343,7 +344,7 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00262">262</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00271">271</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -357,7 +358,7 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#af4ad082524574e9db955cad3798d9f3a">vec2_type</a> <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, K, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::run </td>
+          <td class="memname">static <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#af4ad082524574e9db955cad3798d9f3a">vec2_type</a> <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::run </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#a3a2d659da9b54b895931f6af2897e9ad">dictionary_type</a> &amp;&#160;</td>
           <td class="paramname"><em>dict</em>, </td>
@@ -387,7 +388,7 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00280">280</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00289">289</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -401,7 +402,7 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#a2586ad5c2db2a2b2c2a8869a9a215379">vec4_type</a> <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, K, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::run4 </td>
+          <td class="memname">static <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#a2586ad5c2db2a2b2c2a8869a9a215379">vec4_type</a> <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::run4 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#a3a2d659da9b54b895931f6af2897e9ad">dictionary_type</a> &amp;&#160;</td>
           <td class="paramname"><em>dict</em>, </td>
@@ -425,7 +426,7 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00305">305</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00314">314</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -439,7 +440,7 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, K, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::run4 </td>
+          <td class="memname">static <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::run4 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1dispatch__rank_3_012_00_01_k_00_01_packed_stream_3_01_text_storage_00_01uint8_00_11de7cfb53a5da4b9758128a89011542.html#a3a2d659da9b54b895931f6af2897e9ad">dictionary_type</a> &amp;&#160;</td>
           <td class="paramname"><em>dict</em>, </td>
@@ -475,7 +476,7 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00321">321</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00330">330</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -490,7 +491,7 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, K, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::LOG_SYMS_PER_WORD = <a class="el" href="structnvbio_1_1rank__word__traits.html">rank_word_traits</a>&lt;word_type&gt;::LOG_SYMS_PER_WORD</td>
+          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::LOG_SYMS_PER_WORD = <a class="el" href="structnvbio_1_1rank__word__traits.html">rank_word_traits</a>&lt;word_type&gt;::LOG_SYMS_PER_WORD</td>
         </tr>
       </table>
   </td>
@@ -500,7 +501,7 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00216">216</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00225">225</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -514,7 +515,7 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, K, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::SYMS_PER_WORD = <a class="el" href="structnvbio_1_1rank__word__traits.html">rank_word_traits</a>&lt;word_type&gt;::SYMS_PER_WORD</td>
+          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1dispatch__rank.html">nvbio::dispatch_rank</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; TextStorage, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>, 2u, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;::SYMS_PER_WORD = <a class="el" href="structnvbio_1_1rank__word__traits.html">rank_word_traits</a>&lt;word_type&gt;::SYMS_PER_WORD</td>
         </tr>
       </table>
   </td>
@@ -524,17 +525,17 @@ template&lt;uint32 K, typename TextStorage , typename OccIterator , typename Cou
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00217">217</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00226">226</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/fmindex/<a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a></li>
+<li>E:/git/nvbio/nvbio/fmindex/<a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:39 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:15 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -100,6 +101,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1checkpoint__storage__type_3_01_edit_distance_aligner_3_01_t_y_p_e_00_01algorithm__tag_01_4_01_4.html">nvbio::aln::checkpoint_storage_type&lt; EditDistanceAligner&lt; TYPE, algorithm_tag &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1checkpoint__storage__type_3_01_hamming_distance_aligner_3_01_t_y_p_e_00_01304effff927977eb325876ce636eb466.html">nvbio::aln::checkpoint_storage_type&lt; HammingDistanceAligner&lt; TYPE, scoring_type, algorithm_tag &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1checkpoint__storage__type_3_01_smith_waterman_aligner_3_01_t_y_p_e_00_01sce06f32b84ad03322f980942861eed557.html">nvbio::aln::checkpoint_storage_type&lt; SmithWatermanAligner&lt; TYPE, scoring_type, algorithm_tag &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1checkpoint__storage__type_3_01_gotoh_aligner_3_01_t_y_p_e_00_01scoring__tycbb0ee894d3d052b0dfd17c9b1dee303.html">nvbio::aln::checkpoint_storage_type&lt; GotohAligner&lt; TYPE, scoring_type, algorithm_tag &gt; &gt;</a></td></tr>
@@ -107,6 +110,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1column__storage__type.html">nvbio::aln::column_storage_type&lt; aligner_type &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1column__storage__type_3_01_edit_distance_aligner_3_01_t_y_p_e_00_01algorithm__tag_01_4_01_4.html">nvbio::aln::column_storage_type&lt; EditDistanceAligner&lt; TYPE, algorithm_tag &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1column__storage__type_3_01_hamming_distance_aligner_3_01_t_y_p_e_00_01scorf74090550529e26f60cdc8b0b7ebe5f5.html">nvbio::aln::column_storage_type&lt; HammingDistanceAligner&lt; TYPE, scoring_type, algorithm_tag &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1column__storage__type_3_01_smith_waterman_aligner_3_01_t_y_p_e_00_01scorin66675788ed421ab5227bda03c49e3bbc.html">nvbio::aln::column_storage_type&lt; SmithWatermanAligner&lt; TYPE, scoring_type, algorithm_tag &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -127,6 +132,14 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ga6ac2b964f1abb6206f64cc8c98b6f10b"><td class="memTemplParams" colspan="2">template&lt;AlignmentType TYPE, typename scoring_scheme_type , typename algorithm_tag &gt; </td></tr>
+<tr class="memitem:ga6ac2b964f1abb6206f64cc8c98b6f10b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> uint32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___utilities.html#ga6ac2b964f1abb6206f64cc8c98b6f10b">nvbio::aln::max_pattern_gaps</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> HammingDistanceAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_scheme_type, algorithm_tag &gt; &amp;aligner, int32 min_score, int32 pattern_len)</td></tr>
+<tr class="separator:ga6ac2b964f1abb6206f64cc8c98b6f10b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5c51e11a697e95eb570b396a56294d37"><td class="memTemplParams" colspan="2">template&lt;AlignmentType TYPE, typename scoring_scheme_type , typename algorithm_tag &gt; </td></tr>
+<tr class="memitem:ga5c51e11a697e95eb570b396a56294d37"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> uint32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___utilities.html#ga5c51e11a697e95eb570b396a56294d37">nvbio::aln::max_text_gaps</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> HammingDistanceAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_scheme_type, algorithm_tag &gt; &amp;aligner, int32 min_score, int32 pattern_len)</td></tr>
+<tr class="separator:ga5c51e11a697e95eb570b396a56294d37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9194404f76cdfb463e65fed1e8e92129"><td class="memTemplParams" colspan="2">template&lt;AlignmentType TYPE, typename scoring_scheme_type , typename algorithm_tag &gt; </td></tr>
 <tr class="memitem:ga9194404f76cdfb463e65fed1e8e92129"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> uint32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___utilities.html#ga9194404f76cdfb463e65fed1e8e92129">nvbio::aln::max_pattern_gaps</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> SmithWatermanAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_scheme_type, algorithm_tag &gt; &amp;aligner, int32 min_score, int32 pattern_len)</td></tr>
@@ -153,6 +166,43 @@ Functions</h2></td></tr>
 <tr class="separator:ga6213e78a0bb3b373ab3380975a624f70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="ga6ac2b964f1abb6206f64cc8c98b6f10b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;AlignmentType TYPE, typename scoring_scheme_type , typename algorithm_tag &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> uint32 nvbio::aln::max_pattern_gaps </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> HammingDistanceAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_scheme_type, algorithm_tag &gt; &amp;&#160;</td>
+          <td class="paramname"><em>aligner</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32&#160;</td>
+          <td class="paramname"><em>min_score</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32&#160;</td>
+          <td class="paramname"><em>pattern_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Calculate the maximum possible number of pattern gaps that could occur in a given score boundary </p>
+
+<p>Definition at line <a class="el" href="utils__inl_8h_source.html#l00070">70</a> of file <a class="el" href="utils__inl_8h_source.html">utils_inl.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ga9194404f76cdfb463e65fed1e8e92129"></a>
 <div class="memitem">
 <div class="memproto">
@@ -186,7 +236,7 @@ template&lt;AlignmentType TYPE, typename scoring_scheme_type , typename algorith
 </div><div class="memdoc">
 <p>Calculate the maximum possible number of pattern gaps that could occur in a given score boundary </p>
 
-<p>Definition at line <a class="el" href="utils__inl_8h_source.html#l00061">61</a> of file <a class="el" href="utils__inl_8h_source.html">utils_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="utils__inl_8h_source.html#l00098">98</a> of file <a class="el" href="utils__inl_8h_source.html">utils_inl.h</a>.</p>
 
 </div>
 </div>
@@ -223,7 +273,7 @@ template&lt;AlignmentType TYPE, typename scoring_scheme_type , typename algorith
 </div><div class="memdoc">
 <p>Calculate the maximum possible number of pattern gaps that could occur in a given score boundary </p>
 
-<p>Definition at line <a class="el" href="utils__inl_8h_source.html#l00115">115</a> of file <a class="el" href="utils__inl_8h_source.html">utils_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="utils__inl_8h_source.html#l00152">152</a> of file <a class="el" href="utils__inl_8h_source.html">utils_inl.h</a>.</p>
 
 </div>
 </div>
@@ -260,7 +310,44 @@ template&lt;AlignmentType TYPE, typename algorithm_tag &gt; </div>
 </div><div class="memdoc">
 <p>Calculate the maximum possible number of pattern gaps that could occur in a given score boundary </p>
 
-<p>Definition at line <a class="el" href="utils__inl_8h_source.html#l00033">33</a> of file <a class="el" href="utils__inl_8h_source.html">utils_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="utils__inl_8h_source.html#l00042">42</a> of file <a class="el" href="utils__inl_8h_source.html">utils_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga5c51e11a697e95eb570b396a56294d37"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;AlignmentType TYPE, typename scoring_scheme_type , typename algorithm_tag &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> uint32 nvbio::aln::max_text_gaps </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> HammingDistanceAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_scheme_type, algorithm_tag &gt; &amp;&#160;</td>
+          <td class="paramname"><em>aligner</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32&#160;</td>
+          <td class="paramname"><em>min_score</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32&#160;</td>
+          <td class="paramname"><em>pattern_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Calculate the maximum possible number of reference gaps that could occur in a given score boundary </p>
+
+<p>Definition at line <a class="el" href="utils__inl_8h_source.html#l00084">84</a> of file <a class="el" href="utils__inl_8h_source.html">utils_inl.h</a>.</p>
 
 </div>
 </div>
@@ -297,7 +384,7 @@ template&lt;AlignmentType TYPE, typename scoring_scheme_type , typename algorith
 </div><div class="memdoc">
 <p>Calculate the maximum possible number of reference gaps that could occur in a given score boundary </p>
 
-<p>Definition at line <a class="el" href="utils__inl_8h_source.html#l00088">88</a> of file <a class="el" href="utils__inl_8h_source.html">utils_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="utils__inl_8h_source.html#l00125">125</a> of file <a class="el" href="utils__inl_8h_source.html">utils_inl.h</a>.</p>
 
 </div>
 </div>
@@ -334,7 +421,7 @@ template&lt;AlignmentType TYPE, typename scoring_scheme_type , typename algorith
 </div><div class="memdoc">
 <p>Calculate the maximum possible number of reference gaps that could occur in a given score boundary </p>
 
-<p>Definition at line <a class="el" href="utils__inl_8h_source.html#l00145">145</a> of file <a class="el" href="utils__inl_8h_source.html">utils_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="utils__inl_8h_source.html#l00182">182</a> of file <a class="el" href="utils__inl_8h_source.html">utils_inl.h</a>.</p>
 
 </div>
 </div>
@@ -371,14 +458,14 @@ template&lt;AlignmentType TYPE, typename algorithm_tag &gt; </div>
 </div><div class="memdoc">
 <p>Calculate the maximum possible number of reference gaps that could occur in a given score boundary </p>
 
-<p>Definition at line <a class="el" href="utils__inl_8h_source.html#l00047">47</a> of file <a class="el" href="utils__inl_8h_source.html">utils_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="utils__inl_8h_source.html#l00056">56</a> of file <a class="el" href="utils__inl_8h_source.html">utils_inl.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:18 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:46 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -113,7 +114,7 @@ struct nvbio::cuda::WorkQueue&lt; OrderedQueueTag, WorkUnitT, BLOCKDIM &gt;</h3>
 <p>Implements a self-compacting parallel <a class="el" href="structnvbio_1_1cuda_1_1_work_queue.html">WorkQueue</a>, using a single-kernel launch that compacts continuations maintaining while input ordering in the thread assignment (see <a class="el" href="work_queue_page.html">Work-Queues</a>). Useful to maintain memory access coherence. Relatively high continuation overhead, but much lower than the MultiPass queue if the queue capacity is low.</p>
 <p>see <a class="el" href="group___work_queue.html">Work-Queues</a> </p>
 
-<p>Definition at line <a class="el" href="work__queue__ordered_8h_source.html#l00047">47</a> of file <a class="el" href="work__queue__ordered_8h_source.html">work_queue_ordered.h</a>.</p>
+<p>Definition at line <a class="el" href="work__queue__ordered_8h_source.html#l00056">56</a> of file <a class="el" href="work__queue__ordered_8h_source.html">work_queue_ordered.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="work__queue__ordered_8h_source.html">work_queue_ordered.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -153,7 +154,7 @@ template&lt;typename WorkUnitT , uint32 BLOCKDIM&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="work__queue__ordered_8h_source.html#l00052">52</a> of file <a class="el" href="work__queue__ordered_8h_source.html">work_queue_ordered.h</a>.</p>
+<p>Definition at line <a class="el" href="work__queue__ordered_8h_source.html#l00061">61</a> of file <a class="el" href="work__queue__ordered_8h_source.html">work_queue_ordered.h</a>.</p>
 
 </div>
 </div>
@@ -182,7 +183,7 @@ template&lt;typename WorkUnitT , uint32 BLOCKDIM&gt; </div>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="work__queue__ordered_8h_source.html#l00056">56</a> of file <a class="el" href="work__queue__ordered_8h_source.html">work_queue_ordered.h</a>.</p>
+<p>Definition at line <a class="el" href="work__queue__ordered_8h_source.html#l00065">65</a> of file <a class="el" href="work__queue__ordered_8h_source.html">work_queue_ordered.h</a>.</p>
 
 </div>
 </div>
@@ -214,7 +215,7 @@ template&lt;typename WorkStream &gt; </div>
 </div><div class="memdoc">
 <p>consume a stream of work units </p>
 
-<p>Definition at line <a class="el" href="work__queue__ordered_8h_source.html#l00070">70</a> of file <a class="el" href="work__queue__ordered_8h_source.html">work_queue_ordered.h</a>.</p>
+<p>Definition at line <a class="el" href="work__queue__ordered_8h_source.html#l00079">79</a> of file <a class="el" href="work__queue__ordered_8h_source.html">work_queue_ordered.h</a>.</p>
 
 </div>
 </div>
@@ -243,18 +244,18 @@ template&lt;typename WorkUnitT , uint32 BLOCKDIM&gt; </div>
 </div><div class="memdoc">
 <p>set queue capacity </p>
 
-<p>Definition at line <a class="el" href="work__queue__ordered_8h_source.html#l00060">60</a> of file <a class="el" href="work__queue__ordered_8h_source.html">work_queue_ordered.h</a>.</p>
+<p>Definition at line <a class="el" href="work__queue__ordered_8h_source.html#l00069">69</a> of file <a class="el" href="work__queue__ordered_8h_source.html">work_queue_ordered.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/cuda/<a class="el" href="work__queue__ordered_8h_source.html">work_queue_ordered.h</a></li>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/cuda/<a class="el" href="work__queue__ordered__inl_8h_source.html">work_queue_ordered_inl.h</a></li>
+<li>E:/git/nvbio/nvbio/basic/cuda/<a class="el" href="work__queue__ordered_8h_source.html">work_queue_ordered.h</a></li>
+<li>E:/git/nvbio/nvbio/basic/cuda/<a class="el" href="work__queue__ordered__inl_8h_source.html">work_queue_ordered_inl.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:43:05 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:47 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

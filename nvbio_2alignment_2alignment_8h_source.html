@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvbio/alignment/alignment.h Source File</title>
+<title>NVBIO: E:/git/nvbio/nvbio/alignment/alignment.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -100,410 +101,232 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a href="nvbio_2alignment_2alignment_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (c) 2012-14, NVIDIA CORPORATION.  All rights reserved.</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * NVIDIA CORPORATION and its licensors retain all intellectual property</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * and proprietary rights in and to this software, related documentation</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * and any modifications thereto.  Any use, reproduction, disclosure or</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> * distribution of this software and related documentation without an express</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> * license agreement from NVIDIA CORPORATION is strictly prohibited.</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="types_8h.html">nvbio/basic/types.h</a>&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="keyword">namespace </span>nvbio {</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;</div>
-<div class="line"><a name="l00224"></a><span class="lineno"><a class="code" href="namespacenvbio_1_1aln.html">  224</a></span>&#160;<span class="keyword">namespace </span>aln {</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;</div>
-<div class="line"><a name="l00242"></a><span class="lineno"><a class="code" href="group___alignment_type_module.html#ggab731872890371bb772663612b5b9c717a7477ebd7c13511f0b3c5660d337b8413">  242</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="group___alignment_type_module.html#gab731872890371bb772663612b5b9c717">AlignmentType</a> { <a class="code" href="group___alignment_type_module.html#ggab731872890371bb772663612b5b9c717a86ac8a6732111a83d906fde8a8f06190">GLOBAL</a>, <a class="code" href="group___alignment_type_module.html#ggab731872890371bb772663612b5b9c717a83c90630a3fb75f8bcce0132ce7776fa">LOCAL</a>, <a class="code" href="group___alignment_type_module.html#ggab731872890371bb772663612b5b9c717a7477ebd7c13511f0b3c5660d337b8413">SEMI_GLOBAL</a> };</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;</div>
-<div class="line"><a name="l00261"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_pattern_blocking_tag.html">  261</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1_pattern_blocking_tag.html" title="block along the pattern ">PatternBlockingTag</a> {};  </div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;</div>
-<div class="line"><a name="l00267"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_text_blocking_tag.html">  267</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1_text_blocking_tag.html" title="block along the text (at the moment, this is only supported for scoring) ">TextBlockingTag</a> {};     </div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;</div>
-<div class="line"><a name="l00275"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_myers_tag.html#a69990feac70eb9a05c04ebc524af3a7c">  275</a></span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T&gt; <span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1_myers_tag.html" title="Myers bit-vector algorithm. ">MyersTag</a> { <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1aln_1_1_myers_tag.html#a69990feac70eb9a05c04ebc524af3a7c">ALPHABET_SIZE</a> = ALPHABET_SIZE_T; }; </div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;</div>
-<div class="line"><a name="l00277"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1transpose__tag.html">  277</a></span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1transpose__tag.html">transpose_tag</a> {};</div>
-<div class="line"><a name="l00278"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1transpose__tag_3_01_pattern_blocking_tag_01_4.html#af2c50fb492244bdf60c95dc29875bf10">  278</a></span>&#160;<span class="keyword">template</span> &lt;&gt;           <span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1transpose__tag.html">transpose_tag</a>&lt;<a class="code" href="structnvbio_1_1aln_1_1_pattern_blocking_tag.html" title="block along the pattern ">PatternBlockingTag</a>&gt; { <span class="keyword">typedef</span> <a class="code" href="structnvbio_1_1aln_1_1_text_blocking_tag.html" title="block along the text (at the moment, this is only supported for scoring) ">TextBlockingTag</a> <a class="code" href="structnvbio_1_1aln_1_1transpose__tag_3_01_pattern_blocking_tag_01_4.html#af2c50fb492244bdf60c95dc29875bf10">type</a>; };</div>
-<div class="line"><a name="l00279"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1transpose__tag_3_01_text_blocking_tag_01_4.html#a09b564590ec66030823af08933990042">  279</a></span>&#160;<span class="keyword">template</span> &lt;&gt;           <span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1transpose__tag.html">transpose_tag</a>&lt;<a class="code" href="structnvbio_1_1aln_1_1_text_blocking_tag.html" title="block along the text (at the moment, this is only supported for scoring) ">TextBlockingTag</a>&gt;    { <span class="keyword">typedef</span> <a class="code" href="structnvbio_1_1aln_1_1_pattern_blocking_tag.html" title="block along the pattern ">PatternBlockingTag</a> <a class="code" href="structnvbio_1_1aln_1_1transpose__tag_3_01_text_blocking_tag_01_4.html#a09b564590ec66030823af08933990042">type</a>; };</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;</div>
-<div class="line"><a name="l00281"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1transpose__aligner.html">  281</a></span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1transpose__aligner.html">transpose_aligner</a> {};</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;</div>
-<div class="line"><a name="l00293"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_tag.html">  293</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_tag.html" title="the Smith-Waterman aligner tag ">SmithWatermanTag</a> {}; </div>
-<div class="line"><a name="l00294"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_gotoh_tag.html">  294</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1_gotoh_tag.html" title="the Gotoh aligner tag ">GotohTag</a> {};         </div>
-<div class="line"><a name="l00295"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_edit_distance_tag.html">  295</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1_edit_distance_tag.html" title="the Edit Distance aligner tag ">EditDistanceTag</a> {};  </div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> aligner_type&gt;</div>
-<div class="line"><a name="l00302"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1aligner__tag.html">  302</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1aligner__tag.html">aligner_tag</a> {</div>
-<div class="line"><a name="l00303"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1aligner__tag.html#ae237c1b63462cd426b7881e916cbc54f">  303</a></span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> aligner_type::aligner_tag <a class="code" href="structnvbio_1_1aln_1_1aligner__tag.html#ae237c1b63462cd426b7881e916cbc54f" title="the type of the aligner&#39;s tag ">type</a>; </div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;};</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> ScoreType&gt;</div>
-<div class="line"><a name="l00311"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_alignment.html">  311</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1_alignment.html">Alignment</a></div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;{</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00314"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_alignment.html#afa9ceb2fe3a8a92e27e4f772aad01044">  314</a></span>&#160;    <a class="code" href="structnvbio_1_1aln_1_1_alignment.html#afa9ceb2fe3a8a92e27e4f772aad01044">Alignment</a>() {}</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00317"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_alignment.html#abf7d49f19b697f5a833cb30b33bc825d">  317</a></span>&#160;    <a class="code" href="structnvbio_1_1aln_1_1_alignment.html#abf7d49f19b697f5a833cb30b33bc825d">Alignment</a>(<span class="keyword">const</span> ScoreType _score, <span class="keyword">const</span> uint2 _source, <span class="keyword">const</span> uint2 _sink) : <a class="code" href="structnvbio_1_1aln_1_1_alignment.html#a3d1a5992a98e214f50ae800b96d3fd02" title="alignment score ">score</a>( _score ), <a class="code" href="structnvbio_1_1aln_1_1_alignment.html#a327cd1ea44b303bb4f2e9537839d86fc" title="alignment start cells in the pattern &amp; text ">source</a>( _source ), <a class="code" href="structnvbio_1_1aln_1_1_alignment.html#accbc2a65faa5bd99916197c33b711df1" title="alignment terminal cells in the pattern &amp; text ">sink</a>(_sink) {}</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;</div>
-<div class="line"><a name="l00319"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_alignment.html#a3d1a5992a98e214f50ae800b96d3fd02">  319</a></span>&#160;    ScoreType <a class="code" href="structnvbio_1_1aln_1_1_alignment.html#a3d1a5992a98e214f50ae800b96d3fd02" title="alignment score ">score</a>;    </div>
-<div class="line"><a name="l00320"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_alignment.html#a327cd1ea44b303bb4f2e9537839d86fc">  320</a></span>&#160;    uint2     <a class="code" href="structnvbio_1_1aln_1_1_alignment.html#a327cd1ea44b303bb4f2e9537839d86fc" title="alignment start cells in the pattern &amp; text ">source</a>;   </div>
-<div class="line"><a name="l00321"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_alignment.html#accbc2a65faa5bd99916197c33b711df1">  321</a></span>&#160;    uint2     <a class="code" href="structnvbio_1_1aln_1_1_alignment.html#accbc2a65faa5bd99916197c33b711df1" title="alignment terminal cells in the pattern &amp; text ">sink</a>;     </div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;};</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;</div>
-<div class="line"><a name="l00326"></a><span class="lineno"><a class="code" href="group___alignment.html#ga89d5658212e7771ce32cc2504c4edb10">  326</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="group___alignment.html#ga89d5658212e7771ce32cc2504c4edb10">DirectionVector</a> {</div>
-<div class="line"><a name="l00327"></a><span class="lineno"><a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10a40687576bfae8283f1e2ff778860555f">  327</a></span>&#160;    <a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10a40687576bfae8283f1e2ff778860555f">SUBSTITUTION</a>   = 0u,</div>
-<div class="line"><a name="l00328"></a><span class="lineno"><a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10ac25cb3fd9762186017a7600ad7d0c446">  328</a></span>&#160;    <a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10ac25cb3fd9762186017a7600ad7d0c446">INSERTION</a>      = 1u,</div>
-<div class="line"><a name="l00329"></a><span class="lineno"><a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10a7ccc72f8028062a553b19105b165783e">  329</a></span>&#160;    <a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10a7ccc72f8028062a553b19105b165783e">DELETION</a>       = 2u,</div>
-<div class="line"><a name="l00330"></a><span class="lineno"><a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10a27aab596094ae965e3635bbea5010d1e">  330</a></span>&#160;    <a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10a27aab596094ae965e3635bbea5010d1e">SINK</a>           = 3u,</div>
-<div class="line"><a name="l00331"></a><span class="lineno"><a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10aa1e07d23b2c562e563cd13d134e54417">  331</a></span>&#160;    <a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10aa1e07d23b2c562e563cd13d134e54417">INSERTION_EXT</a>  = 4u,</div>
-<div class="line"><a name="l00332"></a><span class="lineno"><a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10a9cd73cfb343cf424e6bdb7e7f8303064">  332</a></span>&#160;    <a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10a9cd73cfb343cf424e6bdb7e7f8303064">DELETION_EXT</a>   = 8u,</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    <span class="comment">// MASKS</span></div>
-<div class="line"><a name="l00334"></a><span class="lineno"><a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10a8ac95d7e6b81c2a26427c84eed463ff7">  334</a></span>&#160;    <a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10a8ac95d7e6b81c2a26427c84eed463ff7">HMASK</a>          = 3u,</div>
-<div class="line"><a name="l00335"></a><span class="lineno"><a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10a6599592eb4bea4c92c0a0b673c4f87b2">  335</a></span>&#160;    <a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10a6599592eb4bea4c92c0a0b673c4f87b2">EMASK</a>          = 4u,</div>
-<div class="line"><a name="l00336"></a><span class="lineno"><a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10a53842aba2e2f13404f33477b9edf8fff">  336</a></span>&#160;    <a class="code" href="group___alignment.html#gga89d5658212e7771ce32cc2504c4edb10a53842aba2e2f13404f33477b9edf8fff">FMASK</a>          = 8u,</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;};</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;</div>
-<div class="line"><a name="l00341"></a><span class="lineno"><a class="code" href="group___alignment.html#gaf75921f1fc0f4f15d79833bade9cee41">  341</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="group___alignment.html#gaf75921f1fc0f4f15d79833bade9cee41">State</a></div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;{</div>
-<div class="line"><a name="l00343"></a><span class="lineno"><a class="code" href="group___alignment.html#ggaf75921f1fc0f4f15d79833bade9cee41a36991c1ed1b4e221df05ef5cac37a469">  343</a></span>&#160;    <a class="code" href="group___alignment.html#ggaf75921f1fc0f4f15d79833bade9cee41a36991c1ed1b4e221df05ef5cac37a469">HSTATE</a> = 0,</div>
-<div class="line"><a name="l00344"></a><span class="lineno"><a class="code" href="group___alignment.html#ggaf75921f1fc0f4f15d79833bade9cee41ace1149ce910358da8e412fce2f9711ef">  344</a></span>&#160;    <a class="code" href="group___alignment.html#ggaf75921f1fc0f4f15d79833bade9cee41ace1149ce910358da8e412fce2f9711ef">ESTATE</a> = 1,</div>
-<div class="line"><a name="l00345"></a><span class="lineno"><a class="code" href="group___alignment.html#ggaf75921f1fc0f4f15d79833bade9cee41af47bc7b119411d3540645e55062020c3">  345</a></span>&#160;    <a class="code" href="group___alignment.html#ggaf75921f1fc0f4f15d79833bade9cee41af47bc7b119411d3540645e55062020c3">FSTATE</a> = 2</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;};</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;<span class="keyword">template</span> &lt;AlignmentType T_TYPE, <span class="keyword">typename</span> AlgorithmType = PatternBlockingTag&gt;</div>
-<div class="line"><a name="l00366"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">  366</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">EditDistanceAligner</a></div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;{</div>
-<div class="line"><a name="l00368"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html#a56af16429f92a2a7f66b9d42f4581bd1">  368</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="group___alignment_type_module.html#gab731872890371bb772663612b5b9c717">AlignmentType</a> <a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html#a56af16429f92a2a7f66b9d42f4581bd1" title="the AlignmentType ">TYPE</a> =   T_TYPE;         </div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;</div>
-<div class="line"><a name="l00370"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html#abc408356aa305e2c31542f36eb98828d">  370</a></span>&#160;    <span class="keyword">typedef</span> <a class="code" href="structnvbio_1_1aln_1_1_edit_distance_tag.html" title="the Edit Distance aligner tag ">EditDistanceTag</a>             <a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html#abc408356aa305e2c31542f36eb98828d" title="the Aligner Tag ">aligner_tag</a>;    </div>
-<div class="line"><a name="l00371"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html#a4ead6cd43d355d6277edab177efee149">  371</a></span>&#160;    <span class="keyword">typedef</span> AlgorithmType               <a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html#a4ead6cd43d355d6277edab177efee149" title="the Algorithm Tag ">algorithm_tag</a>;  </div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;};</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;<span class="keyword">template</span> &lt;AlignmentType T_TYPE, <span class="keyword">typename</span> AlgorithmTag&gt;</div>
-<div class="line"><a name="l00375"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1transpose__aligner_3_01_edit_distance_aligner_3_01_t___t_y_p_e_00_01_algorithm_tag_01_4_01_4.html">  375</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1transpose__aligner.html">transpose_aligner</a>&lt; <a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">EditDistanceAligner</a>&lt;T_TYPE,AlgorithmTag&gt; &gt;</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;{</div>
-<div class="line"><a name="l00377"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1transpose__aligner_3_01_edit_distance_aligner_3_01_t___t_y_p_e_00_01_algorithm_tag_01_4_01_4.html#aaad35e7118acdf5b4634d41f3e2d4fdf">  377</a></span>&#160;    <span class="keyword">typedef</span> <a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">EditDistanceAligner&lt;T_TYPE, typename transpose_tag&lt;AlgorithmTag&gt;::type</a>&gt; <a class="code" href="structnvbio_1_1aln_1_1transpose__aligner_3_01_edit_distance_aligner_3_01_t___t_y_p_e_00_01_algorithm_tag_01_4_01_4.html#aaad35e7118acdf5b4634d41f3e2d4fdf">type</a>;</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;};</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;<span class="keyword">template</span> &lt;AlignmentType TYPE&gt;</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00382"></a><span class="lineno"><a class="code" href="group___aligner.html#ga855f2a3899e7fb9df9fdb0b56da9e9aa">  382</a></span>&#160;<a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">EditDistanceAligner&lt;TYPE&gt;</a> <a class="code" href="group___aligner.html#ga855f2a3899e7fb9df9fdb0b56da9e9aa">make_edit_distance_aligner</a>()</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;{</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">EditDistanceAligner&lt;TYPE&gt;</a>();</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;}</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;<span class="keyword">template</span> &lt;AlignmentType TYPE, <span class="keyword">typename</span> algorithm_tag&gt;</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00389"></a><span class="lineno"><a class="code" href="group___aligner.html#gaf89dec7eeb1769a0c4871cca42c6316b">  389</a></span>&#160;<a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">EditDistanceAligner&lt;TYPE,algorithm_tag&gt;</a> <a class="code" href="group___aligner.html#ga855f2a3899e7fb9df9fdb0b56da9e9aa">make_edit_distance_aligner</a>()</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;{</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">EditDistanceAligner&lt;TYPE,algorithm_tag&gt;</a>();</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;}</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;<span class="keyword">template</span> &lt;AlignmentType TYPE&gt;</div>
-<div class="line"><a name="l00395"></a><span class="lineno"><a class="code" href="group___aligner.html#gad43fe977b6f17da0acadfe8adfacdbc3">  395</a></span>&#160;<a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">EditDistanceAligner&lt;TYPE,TextBlockingTag&gt;</a> <a class="code" href="group___aligner.html#gad43fe977b6f17da0acadfe8adfacdbc3">transpose</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">EditDistanceAligner&lt;TYPE,PatternBlockingTag&gt;</a>&amp; aligner)</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;{</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">EditDistanceAligner&lt;TYPE,TextBlockingTag&gt;</a>();</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;}</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;<span class="keyword">template</span> &lt;AlignmentType TYPE, <span class="keyword">typename</span> scoring_scheme_type&gt;</div>
-<div class="line"><a name="l00400"></a><span class="lineno"><a class="code" href="group___aligner.html#ga03aa4bf6e211b902d6deaa3fb2a37a20">  400</a></span>&#160;<a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">EditDistanceAligner&lt;TYPE,PatternBlockingTag&gt;</a> <a class="code" href="group___aligner.html#gad43fe977b6f17da0acadfe8adfacdbc3">transpose</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">EditDistanceAligner&lt;TYPE,TextBlockingTag&gt;</a>&amp; aligner)</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;{</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="structnvbio_1_1aln_1_1_edit_distance_aligner.html">EditDistanceAligner&lt;TYPE,PatternBlockingTag&gt;</a>();</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;}</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * nvbio</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (c) 2011-2014, NVIDIA CORPORATION. All rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * </span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Redistribution and use in source and binary forms, with or without</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * modification, are permitted provided that the following conditions are met:</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> *    * Redistributions of source code must retain the above copyright</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> *      notice, this list of conditions and the following disclaimer.</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *    * Redistributions in binary form must reproduce the above copyright</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> *      notice, this list of conditions and the following disclaimer in the</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> *      documentation and/or other materials provided with the distribution.</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *    * Neither the name of the NVIDIA CORPORATION nor the</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *      names of its contributors may be used to endorse or promote products</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *      derived from this software without specific prior written permission.</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * </span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> * DISCLAIMED. IN NO EVENT SHALL NVIDIA CORPORATION BE LIABLE FOR ANY</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="types_8h.html">nvbio/basic/types.h</a>&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="alignment__base_8h.html">nvbio/alignment/alignment_base.h</a>&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;</div>
+<div class="line"><a name="l00230"></a><span class="lineno"><a class="code" href="namespacenvbio.html">  230</a></span>&#160;<span class="keyword">namespace </span>nvbio {</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;</div>
+<div class="line"><a name="l00234"></a><span class="lineno"><a class="code" href="namespacenvbio_1_1aln.html">  234</a></span>&#160;<span class="keyword">namespace </span>aln {</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          BAND_LEN,</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <span class="keyword">typename</span>        sink_type&gt;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="group___alignment.html#ga0ff728fc0b7e7d91671772d29b3279d2">banded_alignment_score</a>(</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="keyword">const</span> text_string       <a class="code" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>,</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <span class="keyword">const</span>  <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>            min_score,</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;          sink_type&amp;        sink);</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          BAND_LEN,</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keyword">typename</span>        sink_type&gt;</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="group___alignment.html#ga0ff728fc0b7e7d91671772d29b3279d2">banded_alignment_score</a>(</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    <span class="keyword">const</span> text_string       text,</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    <span class="keyword">const</span>  <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>            min_score,</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;          sink_type&amp;        sink);</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          BAND_LEN,</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="keyword">typename</span>        sink_type&gt;</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> <a class="code" href="group___alignment.html#ga0ff728fc0b7e7d91671772d29b3279d2">banded_alignment_score</a>(</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    <span class="keyword">const</span> text_string       text,</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    <span class="keyword">const</span>  <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>            min_score);</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          BAND_LEN,</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    <span class="keyword">typename</span>        sink_type&gt;</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;<a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> <a class="code" href="group___alignment.html#ga0ff728fc0b7e7d91671772d29b3279d2">banded_alignment_score</a>(</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    <span class="keyword">const</span> text_string       text,</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="keyword">const</span>  <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>            min_score);</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          BAND_LEN,</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          CHECKPOINTS,</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    <span class="keyword">typename</span>        backtracer_type,</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    <span class="keyword">typename</span>        checkpoints_type,</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    <span class="keyword">typename</span>        submatrix_type&gt;</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;<a class="code" href="structnvbio_1_1aln_1_1_alignment.html">Alignment&lt;int32&gt;</a> <a class="code" href="group___alignment.html#gae82a0091deb359cd5c13bf1c2daf90c8">banded_alignment_traceback</a>(</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    <span class="keyword">const</span> text_string       text,</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>             min_score,</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    backtracer_type&amp;        backtracer,</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    checkpoints_type        <a class="code" href="group__private.html#ga79bab77c39c290c168c83216050371c4">checkpoints</a>,</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    submatrix_type          submatrix);</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;</div>
 <div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;</div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;<span class="keyword">template</span> &lt;AlignmentType T_TYPE, <span class="keyword">typename</span> scoring_scheme_type, <span class="keyword">typename</span> AlgorithmType = PatternBlockingTag&gt;</div>
-<div class="line"><a name="l00438"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html">  438</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html">GotohAligner</a></div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;{</div>
-<div class="line"><a name="l00440"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#aa14d8c8bc62c737e44865346ace46faa">  440</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="group___alignment_type_module.html#gab731872890371bb772663612b5b9c717">AlignmentType</a> <a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#aa14d8c8bc62c737e44865346ace46faa" title="the AlignmentType ">TYPE</a> =   T_TYPE;         </div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;</div>
-<div class="line"><a name="l00442"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#a8d7e438dfdfaada1b9dc4dffe8133cda">  442</a></span>&#160;    <span class="keyword">typedef</span> <a class="code" href="structnvbio_1_1aln_1_1_gotoh_tag.html" title="the Gotoh aligner tag ">GotohTag</a>                    <a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#a8d7e438dfdfaada1b9dc4dffe8133cda" title="the Aligner Tag ">aligner_tag</a>;    </div>
-<div class="line"><a name="l00443"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#a31caef62bc744b254c8689815e3eeabe">  443</a></span>&#160;    <span class="keyword">typedef</span> AlgorithmType               <a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#a31caef62bc744b254c8689815e3eeabe" title="the Algorithm Tag ">algorithm_tag</a>;  </div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160; </div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00446"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#a324462c697dab9d2a8cb9a949b9ee250">  446</a></span>&#160;    <a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#a324462c697dab9d2a8cb9a949b9ee250">GotohAligner</a>(<span class="keyword">const</span> scoring_scheme_type _scheme) : <a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#aaf91ac67f08ad473e6f0412adbdd90e6">scheme</a>(_scheme) {}</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;</div>
-<div class="line"><a name="l00448"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#aaf91ac67f08ad473e6f0412adbdd90e6">  448</a></span>&#160;    scoring_scheme_type <a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#aaf91ac67f08ad473e6f0412adbdd90e6">scheme</a>;</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;};</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;<span class="keyword">template</span> &lt;AlignmentType T_TYPE, <span class="keyword">typename</span> scoring_scheme_type, <span class="keyword">typename</span> AlgorithmTag&gt;</div>
-<div class="line"><a name="l00452"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1transpose__aligner_3_01_gotoh_aligner_3_01_t___t_y_p_e_00_01scoring__schem80532d7d535a1d0568668340891dfcd8.html">  452</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1transpose__aligner.html">transpose_aligner</a>&lt; <a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html">GotohAligner</a>&lt;T_TYPE, scoring_scheme_type, AlgorithmTag&gt; &gt;</div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;{</div>
-<div class="line"><a name="l00454"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1transpose__aligner_3_01_gotoh_aligner_3_01_t___t_y_p_e_00_01scoring__schem80532d7d535a1d0568668340891dfcd8.html#aa4d0f2502e953d81b21de7e497e93ee1">  454</a></span>&#160;    <span class="keyword">typedef</span> <a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html">GotohAligner&lt;T_TYPE, scoring_scheme_type, typename transpose_tag&lt;AlgorithmTag&gt;::type</a>&gt; <a class="code" href="structnvbio_1_1aln_1_1transpose__aligner_3_01_gotoh_aligner_3_01_t___t_y_p_e_00_01scoring__schem80532d7d535a1d0568668340891dfcd8.html#aa4d0f2502e953d81b21de7e497e93ee1">type</a>;</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;};</div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;</div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;<span class="keyword">template</span> &lt;AlignmentType TYPE, <span class="keyword">typename</span> scoring_scheme_type&gt;</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00459"></a><span class="lineno"><a class="code" href="group___aligner.html#ga9da0d90282e4a8f0d952d5cf8ef6d3b4">  459</a></span>&#160;<a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html">GotohAligner&lt;TYPE,scoring_scheme_type&gt;</a> <a class="code" href="group___aligner.html#ga9da0d90282e4a8f0d952d5cf8ef6d3b4">make_gotoh_aligner</a>(<span class="keyword">const</span> scoring_scheme_type&amp; scheme)</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;{</div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html">GotohAligner&lt;TYPE,scoring_scheme_type&gt;</a>( scheme );</div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;}</div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;</div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;<span class="keyword">template</span> &lt;AlignmentType TYPE, <span class="keyword">typename</span> algorithm_tag, <span class="keyword">typename</span> scoring_scheme_type&gt;</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00466"></a><span class="lineno"><a class="code" href="group___aligner.html#ga9cb88cc95e4e64aa133536f53edc855a">  466</a></span>&#160;<a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html">GotohAligner&lt;TYPE,scoring_scheme_type,algorithm_tag&gt;</a> <a class="code" href="group___aligner.html#ga9da0d90282e4a8f0d952d5cf8ef6d3b4">make_gotoh_aligner</a>(<span class="keyword">const</span> scoring_scheme_type&amp; scheme)</div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;{</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html">GotohAligner&lt;TYPE,scoring_scheme_type,algorithm_tag&gt;</a>( scheme );</div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;}</div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;</div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;<span class="keyword">template</span> &lt;AlignmentType TYPE, <span class="keyword">typename</span> scoring_scheme_type&gt;</div>
-<div class="line"><a name="l00472"></a><span class="lineno"><a class="code" href="group___aligner.html#ga2438ad5256f41301f97ef9a2fc7db646">  472</a></span>&#160;<a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html">GotohAligner&lt;TYPE,scoring_scheme_type,TextBlockingTag&gt;</a> <a class="code" href="group___aligner.html#gad43fe977b6f17da0acadfe8adfacdbc3">transpose</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html">GotohAligner&lt;TYPE,scoring_scheme_type,PatternBlockingTag&gt;</a>&amp; aligner)</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;{</div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html">GotohAligner&lt;TYPE,scoring_scheme_type,TextBlockingTag&gt;</a>( aligner.<a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#aaf91ac67f08ad473e6f0412adbdd90e6">scheme</a> );</div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;}</div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;<span class="keyword">template</span> &lt;AlignmentType TYPE, <span class="keyword">typename</span> scoring_scheme_type&gt;</div>
-<div class="line"><a name="l00477"></a><span class="lineno"><a class="code" href="group___aligner.html#ga53e8bbfaafe14fff2d50ea70012a5bff">  477</a></span>&#160;<a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html">GotohAligner&lt;TYPE,scoring_scheme_type,PatternBlockingTag&gt;</a> <a class="code" href="group___aligner.html#gad43fe977b6f17da0acadfe8adfacdbc3">transpose</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html">GotohAligner&lt;TYPE,scoring_scheme_type,TextBlockingTag&gt;</a>&amp; aligner)</div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;{</div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html">GotohAligner&lt;TYPE,scoring_scheme_type,PatternBlockingTag&gt;</a>( aligner.<a class="code" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#aaf91ac67f08ad473e6f0412adbdd90e6">scheme</a> );</div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;}</div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;<span class="keyword">template</span> &lt;AlignmentType T_TYPE, <span class="keyword">typename</span> scoring_scheme_type, <span class="keyword">typename</span> AlgorithmType = PatternBlockingTag&gt;</div>
-<div class="line"><a name="l00508"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">  508</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner</a></div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;{</div>
-<div class="line"><a name="l00510"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html#a63ddef2797d4dd337053ecfd10c88c56">  510</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="group___alignment_type_module.html#gab731872890371bb772663612b5b9c717">AlignmentType</a> <a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html#a63ddef2797d4dd337053ecfd10c88c56" title="the AlignmentType ">TYPE</a> =   T_TYPE;         </div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;</div>
-<div class="line"><a name="l00512"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html#aa62eb0b5f033dd68637e619218a523dd">  512</a></span>&#160;    <span class="keyword">typedef</span> <a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_tag.html" title="the Smith-Waterman aligner tag ">SmithWatermanTag</a>            <a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html#aa62eb0b5f033dd68637e619218a523dd" title="the Aligner Tag ">aligner_tag</a>;    </div>
-<div class="line"><a name="l00513"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html#a051925039ed759016436eeaea86fa29d">  513</a></span>&#160;    <span class="keyword">typedef</span> AlgorithmType               <a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html#a051925039ed759016436eeaea86fa29d" title="the Algorithm Tag ">algorithm_tag</a>;  </div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;</div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00516"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html#ad68fcbd733eff7e8a0e8dc3f6a4046a9">  516</a></span>&#160;    <a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html#ad68fcbd733eff7e8a0e8dc3f6a4046a9">SmithWatermanAligner</a>(<span class="keyword">const</span> scoring_scheme_type _scheme) : <a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html#a7053c9b435c0e969cf536c7e7f13cfc8">scheme</a>(_scheme) {}</div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;</div>
-<div class="line"><a name="l00518"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html#a7053c9b435c0e969cf536c7e7f13cfc8">  518</a></span>&#160;    scoring_scheme_type <a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html#a7053c9b435c0e969cf536c7e7f13cfc8">scheme</a>;</div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;};</div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;</div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;<span class="keyword">template</span> &lt;AlignmentType T_TYPE, <span class="keyword">typename</span> scoring_scheme_type, <span class="keyword">typename</span> AlgorithmTag&gt;</div>
-<div class="line"><a name="l00522"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1transpose__aligner_3_01_smith_waterman_aligner_3_01_t___t_y_p_e_00_01scori7225b1c2370a8c2f16c5d96d34dfa802.html">  522</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1aln_1_1transpose__aligner.html">transpose_aligner</a>&lt; <a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner</a>&lt;T_TYPE, scoring_scheme_type, AlgorithmTag&gt; &gt;</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;{</div>
-<div class="line"><a name="l00524"></a><span class="lineno"><a class="code" href="structnvbio_1_1aln_1_1transpose__aligner_3_01_smith_waterman_aligner_3_01_t___t_y_p_e_00_01scori7225b1c2370a8c2f16c5d96d34dfa802.html#a13229d13febc66817bbfa7a30dd05e2c">  524</a></span>&#160;    <span class="keyword">typedef</span> <a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner&lt;T_TYPE, scoring_scheme_type, typename transpose_tag&lt;AlgorithmTag&gt;::type</a>&gt; <a class="code" href="structnvbio_1_1aln_1_1transpose__aligner_3_01_smith_waterman_aligner_3_01_t___t_y_p_e_00_01scori7225b1c2370a8c2f16c5d96d34dfa802.html#a13229d13febc66817bbfa7a30dd05e2c">type</a>;</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;};</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;    <span class="keyword">typename</span>        sink_type,</div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;    <span class="keyword">typename</span>        <a class="code" href="structnvbio_1_1strided__iterator.html">column_type</a>&gt;</div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="group___alignment.html#gaf145af0b7332e9e003ea3cdf2db87a3c">alignment_score</a>(</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;    <span class="keyword">const</span> text_string       text,</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;    <span class="keyword">const</span>  <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>            min_score,</div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;          sink_type&amp;        sink,</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;          <a class="code" href="structnvbio_1_1strided__iterator.html">column_type</a>       <a class="code" href="group__private.html#ga42cf6551fd7dbc319c92c050d713cb91">column</a>);</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          MAX_TEXT_LEN,</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;    <span class="keyword">typename</span>        sink_type&gt;</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="group___alignment.html#gaf145af0b7332e9e003ea3cdf2db87a3c">alignment_score</a>(</div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;    <span class="keyword">const</span> text_string       text,</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;    <span class="keyword">const</span>  <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>            min_score,</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;          sink_type&amp;        sink);</div>
 <div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;</div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;<span class="keyword">template</span> &lt;AlignmentType TYPE, <span class="keyword">typename</span> scoring_scheme_type&gt;</div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00529"></a><span class="lineno"><a class="code" href="group___aligner.html#gaf38af94e1155914937f456e210faba9b">  529</a></span>&#160;<a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner&lt;TYPE,scoring_scheme_type&gt;</a> <a class="code" href="group___aligner.html#gaf38af94e1155914937f456e210faba9b">make_smith_waterman_aligner</a>(<span class="keyword">const</span> scoring_scheme_type&amp; scheme)</div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;{</div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner&lt;TYPE,scoring_scheme_type&gt;</a>( scheme );</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;}</div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;</div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;<span class="keyword">template</span> &lt;AlignmentType TYPE, <span class="keyword">typename</span> scoring_scheme_type&gt;</div>
-<div class="line"><a name="l00535"></a><span class="lineno"><a class="code" href="group___aligner.html#ga3c0143b43cbc6d888c45f3e51ab6e7c2">  535</a></span>&#160;<a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner&lt;TYPE,scoring_scheme_type,TextBlockingTag&gt;</a> <a class="code" href="group___aligner.html#gad43fe977b6f17da0acadfe8adfacdbc3">transpose</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner&lt;TYPE,scoring_scheme_type,PatternBlockingTag&gt;</a>&amp; aligner)</div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;{</div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner&lt;TYPE,scoring_scheme_type,TextBlockingTag&gt;</a>( aligner.<a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html#a7053c9b435c0e969cf536c7e7f13cfc8">scheme</a> );</div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;}</div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;<span class="keyword">template</span> &lt;AlignmentType TYPE, <span class="keyword">typename</span> scoring_scheme_type&gt;</div>
-<div class="line"><a name="l00540"></a><span class="lineno"><a class="code" href="group___aligner.html#ga4641822919482e14d5e68c9d832896f1">  540</a></span>&#160;<a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner&lt;TYPE,scoring_scheme_type,PatternBlockingTag&gt;</a> <a class="code" href="group___aligner.html#gad43fe977b6f17da0acadfe8adfacdbc3">transpose</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner&lt;TYPE,scoring_scheme_type,TextBlockingTag&gt;</a>&amp; aligner)</div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;{</div>
-<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner&lt;TYPE,scoring_scheme_type,PatternBlockingTag&gt;</a>( aligner.<a class="code" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html#a7053c9b435c0e969cf536c7e7f13cfc8">scheme</a> );</div>
-<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;}</div>
-<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;</div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;</div>
-<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          BAND_LEN,</div>
-<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
-<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
-<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
-<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
-<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;    <span class="keyword">typename</span>        sink_type&gt;</div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="group___alignment.html#ga0ff728fc0b7e7d91671772d29b3279d2">banded_alignment_score</a>(</div>
-<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
-<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;    <span class="keyword">const</span> text_string       <a class="code" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>,</div>
-<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;    <span class="keyword">const</span>  <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>            min_score,</div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;          sink_type&amp;        sink);</div>
-<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;</div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          BAND_LEN,</div>
-<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
-<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
-<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;    <span class="keyword">typename</span>        sink_type&gt;</div>
-<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="group___alignment.html#ga0ff728fc0b7e7d91671772d29b3279d2">banded_alignment_score</a>(</div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;    <span class="keyword">const</span> text_string       <a class="code" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>,</div>
-<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;    <span class="keyword">const</span>  <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>            min_score,</div>
-<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;          sink_type&amp;        sink);</div>
-<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;</div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          BAND_LEN,</div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
-<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;    <span class="keyword">typename</span>        sink_type&gt;</div>
-<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;<a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> <a class="code" href="group___alignment.html#ga0ff728fc0b7e7d91671772d29b3279d2">banded_alignment_score</a>(</div>
-<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
-<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
-<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
-<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;    <span class="keyword">const</span> text_string       <a class="code" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>,</div>
-<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;    <span class="keyword">const</span>  <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>            min_score);</div>
-<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;</div>
-<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          BAND_LEN,</div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
-<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;    <span class="keyword">typename</span>        sink_type&gt;</div>
-<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;<a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> <a class="code" href="group___alignment.html#ga0ff728fc0b7e7d91671772d29b3279d2">banded_alignment_score</a>(</div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
-<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;    <span class="keyword">const</span> text_string       <a class="code" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>,</div>
-<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;    <span class="keyword">const</span>  <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>            min_score);</div>
-<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;</div>
-<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          BAND_LEN,</div>
-<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          CHECKPOINTS,</div>
-<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
-<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
-<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
-<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
-<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;    <span class="keyword">typename</span>        backtracer_type,</div>
-<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;    <span class="keyword">typename</span>        checkpoints_type,</div>
-<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;    <span class="keyword">typename</span>        submatrix_type&gt;</div>
-<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;Alignment&lt;int32&gt; <a class="code" href="group___alignment.html#gae82a0091deb359cd5c13bf1c2daf90c8">banded_alignment_traceback</a>(</div>
-<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
-<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
-<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
-<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;    <span class="keyword">const</span> text_string       <a class="code" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>,</div>
-<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>             min_score,</div>
-<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;    backtracer_type&amp;        backtracer,</div>
-<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;    checkpoints_type        checkpoints,</div>
-<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;    submatrix_type          submatrix);</div>
-<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;</div>
-<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;</div>
-<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
-<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
-<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
-<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
-<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;    <span class="keyword">typename</span>        sink_type,</div>
-<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;    <span class="keyword">typename</span>        column_type&gt;</div>
-<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="group___alignment.html#gaf145af0b7332e9e003ea3cdf2db87a3c">alignment_score</a>(</div>
-<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
-<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
-<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
-<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;    <span class="keyword">const</span> text_string       <a class="code" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>,</div>
-<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;    <span class="keyword">const</span>  <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>            min_score,</div>
-<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;          sink_type&amp;        sink,</div>
-<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;          column_type       column);</div>
-<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;</div>
-<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          MAX_TEXT_LEN,</div>
-<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
-<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
-<div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
-<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
-<div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160;    <span class="keyword">typename</span>        sink_type&gt;</div>
-<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="group___alignment.html#gaf145af0b7332e9e003ea3cdf2db87a3c">alignment_score</a>(</div>
-<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
-<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
-<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
-<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;    <span class="keyword">const</span> text_string       <a class="code" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>,</div>
-<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;    <span class="keyword">const</span>  <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>            min_score,</div>
-<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;          sink_type&amp;        sink);</div>
-<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;</div>
-<div class="line"><a name="l00910"></a><span class="lineno">  910</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l00911"></a><span class="lineno">  911</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          CHECKPOINTS,</div>
-<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
-<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
-<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
-<div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
-<div class="line"><a name="l00916"></a><span class="lineno">  916</span>&#160;    <span class="keyword">typename</span>        backtracer_type,</div>
-<div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160;    <span class="keyword">typename</span>        checkpoints_type,</div>
-<div class="line"><a name="l00918"></a><span class="lineno">  918</span>&#160;    <span class="keyword">typename</span>        submatrix_type,</div>
-<div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160;    <span class="keyword">typename</span>        column_type&gt;</div>
-<div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160;Alignment&lt;int32&gt; <a class="code" href="group___alignment.html#ga3e64b99b9bec41f3892c94976283cd26">alignment_traceback</a>(</div>
-<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
-<div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
-<div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
-<div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160;    <span class="keyword">const</span> text_string       <a class="code" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>,</div>
-<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>             min_score,</div>
-<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;    backtracer_type&amp;        backtracer,</div>
-<div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160;    checkpoints_type        checkpoints,</div>
-<div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160;    submatrix_type          submatrix,</div>
-<div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;    column_type             column);</div>
-<div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160;</div>
-<div class="line"><a name="l00957"></a><span class="lineno">  957</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l00958"></a><span class="lineno">  958</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          MAX_PATTERN_LEN,</div>
-<div class="line"><a name="l00959"></a><span class="lineno">  959</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          MAX_TEXT_LEN,</div>
-<div class="line"><a name="l00960"></a><span class="lineno">  960</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          CHECKPOINTS,</div>
-<div class="line"><a name="l00961"></a><span class="lineno">  961</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
-<div class="line"><a name="l00962"></a><span class="lineno">  962</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
-<div class="line"><a name="l00963"></a><span class="lineno">  963</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
-<div class="line"><a name="l00964"></a><span class="lineno">  964</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
-<div class="line"><a name="l00965"></a><span class="lineno">  965</span>&#160;    <span class="keyword">typename</span>        backtracer_type&gt;</div>
-<div class="line"><a name="l00966"></a><span class="lineno">  966</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00967"></a><span class="lineno">  967</span>&#160;Alignment&lt;int32&gt; <a class="code" href="group___alignment.html#ga3e64b99b9bec41f3892c94976283cd26">alignment_traceback</a>(</div>
-<div class="line"><a name="l00968"></a><span class="lineno">  968</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
-<div class="line"><a name="l00969"></a><span class="lineno">  969</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
-<div class="line"><a name="l00970"></a><span class="lineno">  970</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
-<div class="line"><a name="l00971"></a><span class="lineno">  971</span>&#160;    <span class="keyword">const</span> text_string       <a class="code" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>,</div>
-<div class="line"><a name="l00972"></a><span class="lineno">  972</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>             min_score,</div>
-<div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160;    backtracer_type&amp;        backtracer);</div>
-<div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160;</div>
-<div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160;<span class="preprocessor">#if defined(__CUDACC__)</span></div>
-<div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160;<span class="preprocessor"></span><span class="keyword">namespace </span>warp {</div>
-<div class="line"><a name="l00977"></a><span class="lineno">  977</span>&#160;</div>
-<div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l01001"></a><span class="lineno"> 1001</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          <a class="code" href="group___defs.html#gga4e030c73900bf557f24a494d70a0d6c1a55acd4ff0f7cc398c553b00baa29a518">BLOCKDIM</a>,</div>
-<div class="line"><a name="l01002"></a><span class="lineno"> 1002</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
-<div class="line"><a name="l01003"></a><span class="lineno"> 1003</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
-<div class="line"><a name="l01004"></a><span class="lineno"> 1004</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
-<div class="line"><a name="l01005"></a><span class="lineno"> 1005</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
-<div class="line"><a name="l01006"></a><span class="lineno"> 1006</span>&#160;    <span class="keyword">typename</span>        column_type&gt;</div>
-<div class="line"><a name="l01007"></a><span class="lineno"> 1007</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l01008"></a><span class="lineno"> 1008</span>&#160;<a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> <a class="code" href="group___alignment.html#gaf145af0b7332e9e003ea3cdf2db87a3c">alignment_score</a>(</div>
-<div class="line"><a name="l01009"></a><span class="lineno"> 1009</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
-<div class="line"><a name="l01010"></a><span class="lineno"> 1010</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
-<div class="line"><a name="l01011"></a><span class="lineno"> 1011</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
-<div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160;    <span class="keyword">const</span> text_string       <a class="code" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>,</div>
-<div class="line"><a name="l01013"></a><span class="lineno"> 1013</span>&#160;    <span class="keyword">const</span>  <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>            min_score,</div>
-<div class="line"><a name="l01014"></a><span class="lineno"> 1014</span>&#160;          uint2*            sink,</div>
-<div class="line"><a name="l01015"></a><span class="lineno"> 1015</span>&#160;          column_type       column);</div>
-<div class="line"><a name="l01016"></a><span class="lineno"> 1016</span>&#160;</div>
-<div class="line"><a name="l01017"></a><span class="lineno"> 1017</span>&#160;} <span class="comment">// namespace warp</span></div>
-<div class="line"><a name="l01018"></a><span class="lineno"> 1018</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l01019"></a><span class="lineno"> 1019</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l01021"></a><span class="lineno"> 1021</span>&#160;</div>
-<div class="line"><a name="l01022"></a><span class="lineno"> 1022</span>&#160;} <span class="comment">// namespace aln</span></div>
-<div class="line"><a name="l01023"></a><span class="lineno"> 1023</span>&#160;} <span class="comment">// namespace nvbio</span></div>
-<div class="line"><a name="l01024"></a><span class="lineno"> 1024</span>&#160;</div>
-<div class="line"><a name="l01025"></a><span class="lineno"> 1025</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="alignment__inl_8h.html">nvbio/alignment/alignment_inl.h</a>&gt;</span></div>
-<div class="line"><a name="l01026"></a><span class="lineno"> 1026</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="banded__inl_8h.html">nvbio/alignment/banded_inl.h</a>&gt;</span></div>
-<div class="line"><a name="l01027"></a><span class="lineno"> 1027</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="nvbio_2alignment_2utils_8h.html">nvbio/alignment/utils.h</a>&gt;</span></div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          CHECKPOINTS,</div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;    <span class="keyword">typename</span>        backtracer_type,</div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;    <span class="keyword">typename</span>        checkpoints_type,</div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;    <span class="keyword">typename</span>        submatrix_type,</div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;    <span class="keyword">typename</span>        <a class="code" href="structnvbio_1_1strided__iterator.html">column_type</a>&gt;</div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;<a class="code" href="structnvbio_1_1aln_1_1_alignment.html">Alignment&lt;int32&gt;</a> <a class="code" href="group___alignment.html#ga3e64b99b9bec41f3892c94976283cd26">alignment_traceback</a>(</div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;    <span class="keyword">const</span> text_string       text,</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>             min_score,</div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;    backtracer_type&amp;        backtracer,</div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;    checkpoints_type        checkpoints,</div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;    submatrix_type          submatrix,</div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;    <a class="code" href="structnvbio_1_1strided__iterator.html">column_type</a>             column);</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;</div>
+<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          MAX_PATTERN_LEN,</div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          MAX_TEXT_LEN,</div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          CHECKPOINTS,</div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
+<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;    <span class="keyword">typename</span>        backtracer_type&gt;</div>
+<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;<a class="code" href="structnvbio_1_1aln_1_1_alignment.html">Alignment&lt;int32&gt;</a> <a class="code" href="group___alignment.html#ga3e64b99b9bec41f3892c94976283cd26">alignment_traceback</a>(</div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
+<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
+<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
+<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;    <span class="keyword">const</span> text_string       text,</div>
+<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>             min_score,</div>
+<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;    backtracer_type&amp;        backtracer);</div>
+<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;</div>
+<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;<span class="preprocessor">#if defined(__CUDACC__)</span></div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;<span class="preprocessor"></span><span class="keyword">namespace </span>warp {</div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;</div>
+<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>          <a class="code" href="group___defs.html#gga526ecbe8a73c3761fcfe02a89ca04c60a55acd4ff0f7cc398c553b00baa29a518">BLOCKDIM</a>,</div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;    <span class="keyword">typename</span>        aligner_type,</div>
+<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;    <span class="keyword">typename</span>        pattern_string,</div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;    <span class="keyword">typename</span>        qual_string,</div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;    <span class="keyword">typename</span>        text_string,</div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;    <span class="keyword">typename</span>        <a class="code" href="structnvbio_1_1strided__iterator.html">column_type</a>&gt;</div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;<a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> <a class="code" href="group___alignment.html#gaf145af0b7332e9e003ea3cdf2db87a3c">alignment_score</a>(</div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;    <span class="keyword">const</span> aligner_type      aligner,</div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;    <span class="keyword">const</span> pattern_string    pattern,</div>
+<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;    <span class="keyword">const</span> qual_string       quals,</div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;    <span class="keyword">const</span> text_string       text,</div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;    <span class="keyword">const</span>  <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>            min_score,</div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;          uint2*            sink,</div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;          <a class="code" href="structnvbio_1_1strided__iterator.html">column_type</a>       column);</div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;</div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;} <span class="comment">// namespace warp</span></div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;</div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;} <span class="comment">// namespace aln</span></div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;} <span class="comment">// namespace nvbio</span></div>
+<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;</div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="alignment__inl_8h.html">nvbio/alignment/alignment_inl.h</a>&gt;</span></div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="banded__inl_8h.html">nvbio/alignment/banded_inl.h</a>&gt;</span></div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="nvbio_2alignment_2utils_8h.html">nvbio/alignment/utils.h</a>&gt;</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:41:57 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:23 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

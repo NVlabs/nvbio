@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -110,7 +111,7 @@ struct nvbio::HostBWTHandler&lt; OutputIterator &gt;</h3>
 
 <p>A class to output the BWT to a host string </p>
 
-<p>Definition at line <a class="el" href="sufsort__utils_8h_source.html#l00086">86</a> of file <a class="el" href="sufsort__utils_8h_source.html">sufsort_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__utils_8h_source.html#l00123">123</a> of file <a class="el" href="sufsort__utils_8h_source.html">sufsort_utils.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="sufsort__utils_8h_source.html">sufsort_utils.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -119,7 +120,7 @@ Inheritance diagram for nvbio::HostBWTHandler&lt; OutputIterator &gt;:</div>
  <div class="center">
   <img src="structnvbio_1_1_host_b_w_t_handler.png" usemap="#nvbio::HostBWTHandler&lt; OutputIterator &gt;_map" alt=""/>
   <map id="nvbio::HostBWTHandler&lt; OutputIterator &gt;_map" name="nvbio::HostBWTHandler&lt; OutputIterator &gt;_map">
-<area href="structnvbio_1_1_base_b_w_t_handler.html" alt="nvbio::BaseBWTHandler" shape="rect" coords="0,0,246,24"/>
+<area href="structnvbio_1_1_set_b_w_t_handler.html" alt="nvbio::SetBWTHandler" shape="rect" coords="0,0,246,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -127,11 +128,16 @@ Inheritance diagram for nvbio::HostBWTHandler&lt; OutputIterator &gt;:</div>
 Public Methods</h2></td></tr>
 <tr class="memitem:a1d545de7a10527eeccf0426b25961fc0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html#a1d545de7a10527eeccf0426b25961fc0">HostBWTHandler</a> (OutputIterator _output)</td></tr>
 <tr class="separator:a1d545de7a10527eeccf0426b25961fc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7b2b9cff752eadffaa063c20440aead"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html#aa7b2b9cff752eadffaa063c20440aead">process</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_suffixes, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *h_bwt, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *d_bwt, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 *h_suffixes, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 *d_suffixes, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> *d_indices)</td></tr>
-<tr class="separator:aa7b2b9cff752eadffaa063c20440aead"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_structnvbio_1_1_base_b_w_t_handler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structnvbio_1_1_base_b_w_t_handler')"><img src="closed.png" alt="-"/>&#160;Public Methods inherited from <a class="el" href="structnvbio_1_1_base_b_w_t_handler.html">nvbio::BaseBWTHandler</a></td></tr>
-<tr class="memitem:a87dec0ffae549b89f3538a7c23aa8b18 inherit pub_methods_structnvbio_1_1_base_b_w_t_handler"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_base_b_w_t_handler.html#a87dec0ffae549b89f3538a7c23aa8b18">~BaseBWTHandler</a> ()</td></tr>
-<tr class="separator:a87dec0ffae549b89f3538a7c23aa8b18 inherit pub_methods_structnvbio_1_1_base_b_w_t_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae18ba6af31fa1cd144f115c4b1d328b5"><td class="memTemplParams" colspan="2">template&lt;typename bwt_iterator &gt; </td></tr>
+<tr class="memitem:ae18ba6af31fa1cd144f115c4b1d328b5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html#ae18ba6af31fa1cd144f115c4b1d328b5">do_process</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_suffixes, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bwt_iterator bwt)</td></tr>
+<tr class="separator:ae18ba6af31fa1cd144f115c4b1d328b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af683bae3cacdfd72fc7cac98e45bc855"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html#af683bae3cacdfd72fc7cac98e45bc855">process</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_suffixes, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="group___alphabets_module.html#gadfe57edc69b20ba0fc59fb6b8b9060b0">bits_per_symbol</a>, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> *bwt, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_dollars, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> *dollar_pos, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> *dollar_ids)</td></tr>
+<tr class="separator:af683bae3cacdfd72fc7cac98e45bc855"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73708a10cf81d99c99c168ed3faee669"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html#a73708a10cf81d99c99c168ed3faee669">process</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_suffixes, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *bwt, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_dollars, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> *dollar_pos, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> *dollar_ids)</td></tr>
+<tr class="separator:a73708a10cf81d99c99c168ed3faee669"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_structnvbio_1_1_set_b_w_t_handler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structnvbio_1_1_set_b_w_t_handler')"><img src="closed.png" alt="-"/>&#160;Public Methods inherited from <a class="el" href="structnvbio_1_1_set_b_w_t_handler.html">nvbio::SetBWTHandler</a></td></tr>
+<tr class="memitem:a7795cafe7c9687bfa3f2789c9319a14b inherit pub_methods_structnvbio_1_1_set_b_w_t_handler"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_set_b_w_t_handler.html#a7795cafe7c9687bfa3f2789c9319a14b">~SetBWTHandler</a> ()</td></tr>
+<tr class="separator:a7795cafe7c9687bfa3f2789c9319a14b inherit pub_methods_structnvbio_1_1_set_b_w_t_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Members</h2></td></tr>
@@ -163,12 +169,118 @@ template&lt;typename OutputIterator &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__utils_8h_source.html#l00088">88</a> of file <a class="el" href="sufsort__utils_8h_source.html">sufsort_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__utils_8h_source.html#l00125">125</a> of file <a class="el" href="sufsort__utils_8h_source.html">sufsort_utils.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aa7b2b9cff752eadffaa063c20440aead"></a>
+<a class="anchor" id="ae18ba6af31fa1cd144f115c4b1d328b5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename OutputIterator &gt; </div>
+<div class="memtemplate">
+template&lt;typename bwt_iterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structnvbio_1_1_host_b_w_t_handler.html">nvbio::HostBWTHandler</a>&lt; OutputIterator &gt;::do_process </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
+          <td class="paramname"><em>n_suffixes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bwt_iterator&#160;</td>
+          <td class="paramname"><em>bwt</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>process a batch of BWT symbols </p>
+
+<p>Definition at line <a class="el" href="sufsort__utils_8h_source.html#l00130">130</a> of file <a class="el" href="sufsort__utils_8h_source.html">sufsort_utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af683bae3cacdfd72fc7cac98e45bc855"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename OutputIterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structnvbio_1_1_host_b_w_t_handler.html">nvbio::HostBWTHandler</a>&lt; OutputIterator &gt;::process </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
+          <td class="paramname"><em>n_suffixes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
+          <td class="paramname"><em>bits_per_symbol</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> *&#160;</td>
+          <td class="paramname"><em>bwt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
+          <td class="paramname"><em>n_dollars</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> *&#160;</td>
+          <td class="paramname"><em>dollar_pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> *&#160;</td>
+          <td class="paramname"><em>dollar_ids</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>process a batch of BWT symbols </p>
+
+<p>Reimplemented from <a class="el" href="structnvbio_1_1_set_b_w_t_handler.html#af18de144c369effaa7f115413e2c2ed1">nvbio::SetBWTHandler</a>.</p>
+
+<p>Definition at line <a class="el" href="sufsort__utils_8h_source.html#l00142">142</a> of file <a class="el" href="sufsort__utils_8h_source.html">sufsort_utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a73708a10cf81d99c99c168ed3faee669"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -187,31 +299,25 @@ template&lt;typename OutputIterator &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *&#160;</td>
-          <td class="paramname"><em>h_bwt</em>, </td>
+          <td class="paramname"><em>bwt</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *&#160;</td>
-          <td class="paramname"><em>d_bwt</em>, </td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
+          <td class="paramname"><em>n_dollars</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 *&#160;</td>
-          <td class="paramname"><em>h_suffixes</em>, </td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> *&#160;</td>
+          <td class="paramname"><em>dollar_pos</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 *&#160;</td>
-          <td class="paramname"><em>d_suffixes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> *&#160;</td>
-          <td class="paramname"><em>d_indices</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> *&#160;</td>
+          <td class="paramname"><em>dollar_ids</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -227,9 +333,9 @@ template&lt;typename OutputIterator &gt; </div>
 </div><div class="memdoc">
 <p>process a batch of BWT symbols </p>
 
-<p>Reimplemented from <a class="el" href="structnvbio_1_1_base_b_w_t_handler.html#ac211da7447a4936bfd328a87f6a4ad14">nvbio::BaseBWTHandler</a>.</p>
+<p>Reimplemented from <a class="el" href="structnvbio_1_1_set_b_w_t_handler.html#ae6b7bfd902295cd144fc15f3c8d92753">nvbio::SetBWTHandler</a>.</p>
 
-<p>Definition at line <a class="el" href="sufsort__utils_8h_source.html#l00092">92</a> of file <a class="el" href="sufsort__utils_8h_source.html">sufsort_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__utils_8h_source.html#l00160">160</a> of file <a class="el" href="sufsort__utils_8h_source.html">sufsort_utils.h</a>.</p>
 
 </div>
 </div>
@@ -246,17 +352,17 @@ template&lt;typename OutputIterator &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__utils_8h_source.html#l00106">106</a> of file <a class="el" href="sufsort__utils_8h_source.html">sufsort_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__utils_8h_source.html#l00170">170</a> of file <a class="el" href="sufsort__utils_8h_source.html">sufsort_utils.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/sufsort/<a class="el" href="sufsort__utils_8h_source.html">sufsort_utils.h</a></li>
+<li>E:/git/nvbio/nvbio/sufsort/<a class="el" href="sufsort__utils_8h_source.html">sufsort_utils.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:47 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:25 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -102,14 +103,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>This is the complete list of members for <a class="el" href="structnvbio_1_1_host_b_w_t_handler.html">nvbio::HostBWTHandler&lt; OutputIterator &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html#a1d545de7a10527eeccf0426b25961fc0">HostBWTHandler</a>(OutputIterator _output)</td><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html">nvbio::HostBWTHandler&lt; OutputIterator &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html#ac05ba6a90420d4b9e7e1cd5c06fc0c0d">output</a></td><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html">nvbio::HostBWTHandler&lt; OutputIterator &gt;</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html#aa7b2b9cff752eadffaa063c20440aead">process</a>(const uint32 n_suffixes, const uint8 *h_bwt, const uint8 *d_bwt, const uint2 *h_suffixes, const uint2 *d_suffixes, const uint32 *d_indices)</td><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html">nvbio::HostBWTHandler&lt; OutputIterator &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="structnvbio_1_1_base_b_w_t_handler.html#a87dec0ffae549b89f3538a7c23aa8b18">~BaseBWTHandler</a>()</td><td class="entry"><a class="el" href="structnvbio_1_1_base_b_w_t_handler.html">nvbio::BaseBWTHandler</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html#ae18ba6af31fa1cd144f115c4b1d328b5">do_process</a>(const uint32 n_suffixes, const bwt_iterator bwt)</td><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html">nvbio::HostBWTHandler&lt; OutputIterator &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html#a1d545de7a10527eeccf0426b25961fc0">HostBWTHandler</a>(OutputIterator _output)</td><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html">nvbio::HostBWTHandler&lt; OutputIterator &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html#ac05ba6a90420d4b9e7e1cd5c06fc0c0d">output</a></td><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html">nvbio::HostBWTHandler&lt; OutputIterator &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html#af683bae3cacdfd72fc7cac98e45bc855">process</a>(const uint32 n_suffixes, const uint32 bits_per_symbol, const uint32 *bwt, const uint32 n_dollars, const uint64 *dollar_pos, const uint64 *dollar_ids)</td><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html">nvbio::HostBWTHandler&lt; OutputIterator &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html#a73708a10cf81d99c99c168ed3faee669">process</a>(const uint32 n_suffixes, const uint8 *bwt, const uint32 n_dollars, const uint64 *dollar_pos, const uint64 *dollar_ids)</td><td class="entry"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html">nvbio::HostBWTHandler&lt; OutputIterator &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="structnvbio_1_1_set_b_w_t_handler.html#a7795cafe7c9687bfa3f2789c9319a14b">~SetBWTHandler</a>()</td><td class="entry"><a class="el" href="structnvbio_1_1_set_b_w_t_handler.html">nvbio::SetBWTHandler</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:47 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:25 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

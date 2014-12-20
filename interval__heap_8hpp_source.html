@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/contrib/priority-deque/interval_heap.hpp Source File</title>
+<title>NVBIO: E:/git/nvbio/contrib/priority-deque/interval_heap.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -317,16 +318,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;  Offset index = index_end ^ (index_end &amp; 1);</div>
 <div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;  <span class="keywordflow">do</span> {</div>
 <div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    index -= 2;</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="keyword">const</span> Offset <a class="code" href="cpu__bucketing_8h.html#a53e202bc67af0743392aa0cbe5d30cec">stop</a> = (index &lt;= end_parent) ? (index * 2 + 2) : index_end;</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="keyword">const</span> Offset stop = (index &lt;= end_parent) ? (index * 2 + 2) : index_end;</div>
 <div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="comment">//  If compare throws, heap property cannot be verified or enforced.</span></div>
 <div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;<span class="comment">//  If swap throws, heap property is violated and cannot be enforced.</span></div>
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacedivsufsortxx_1_1substring.html#a245a1be9e0e54b3c762cb65000b137f3">compare</a>(*(first + index + 1), *(first + index)))</div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;      <a class="code" href="namespaceboost_1_1container.html#a632b521f178dcd9dad1f76389669dd27" title="Swaps the elements of two priority deques. ">swap</a>(*(first + index + 1), *(first + index));</div>
 <div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;</div>
 <div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    sift_down&lt;false, Iterator, Offset, Compare&gt;(first, last, index + 1,</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                                               <a class="code" href="namespacedivsufsortxx_1_1substring.html#a245a1be9e0e54b3c762cb65000b137f3">compare</a>, <a class="code" href="cpu__bucketing_8h.html#a53e202bc67af0743392aa0cbe5d30cec">stop</a>);</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                                               <a class="code" href="namespacedivsufsortxx_1_1substring.html#a245a1be9e0e54b3c762cb65000b137f3">compare</a>, stop);</div>
 <div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    sift_down&lt;true , Iterator, Offset, Compare&gt;(first, last, index,</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;                                               <a class="code" href="namespacedivsufsortxx_1_1substring.html#a245a1be9e0e54b3c762cb65000b137f3">compare</a>, <a class="code" href="cpu__bucketing_8h.html#a53e202bc67af0743392aa0cbe5d30cec">stop</a>);</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;                                               <a class="code" href="namespacedivsufsortxx_1_1substring.html#a245a1be9e0e54b3c762cb65000b137f3">compare</a>, stop);</div>
 <div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;</div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;  } <span class="keywordflow">while</span> (index &gt;= 2);</div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;}</div>
@@ -553,7 +554,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:41:56 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:22 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

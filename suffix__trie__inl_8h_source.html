@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvbio/trie/suffix_trie_inl.h Source File</title>
+<title>NVBIO: E:/git/nvbio/nvbio/trie/suffix_trie_inl.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -100,290 +101,299 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a href="suffix__trie__inl_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (c) 2012-14, NVIDIA CORPORATION.  All rights reserved.</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * NVIDIA CORPORATION and its licensors retain all intellectual property</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * and proprietary rights in and to this software, related documentation</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * and any modifications thereto.  Any use, reproduction, disclosure or</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> * distribution of this software and related documentation without an express</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> * license agreement from NVIDIA CORPORATION is strictly prohibited.</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="numbers_8h.html">nvbio/basic/numbers.h</a>&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="popcount_8h.html">nvbio/basic/popcount.h</a>&gt;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span>nvbio {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#a475a2156de57dd314dc3a0bd2b570b28">   28</a></span>&#160;<a class="code" href="structnvbio_1_1_trie_node.html#a475a2156de57dd314dc3a0bd2b570b28">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::TrieNode</a>() : m_child(invalid_node), m_mask(0u), m_size(1u) {}</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#a115e64babf1021172da9b4a04db0eb69">   32</a></span>&#160;<a class="code" href="structnvbio_1_1_trie_node.html#a475a2156de57dd314dc3a0bd2b570b28">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::TrieNode</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> _child, <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> _mask) :</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    m_child( _child ), m_mask( _mask ), m_size(1u)</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    assert( (_child &lt;= <a class="code" href="structnvbio_1_1_trie_node.html#a8b3b0327ff4e32698ba10015fcf28196">invalid_node</a>) &amp;&amp; (<a class="code" href="structnvbio_1_1_trie_node.html#aeaa99e00b5e236f2e86bc7f4fb0351e8">m_child</a> == _child) );</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;}</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#aae67d91dc68d3ff5182c3cce5c4c5045">   40</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="structnvbio_1_1_trie_node.html#aae67d91dc68d3ff5182c3cce5c4c5045">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::is_leaf</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_mask == 0u; }</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#aa5c5fb0d9daae761f64a5177d80a36e5">   44</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node.html#aa5c5fb0d9daae761f64a5177d80a36e5">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::child</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_child; }</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#a132b5e077a0252087429ceb0c3eea49f">   48</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node.html#aa5c5fb0d9daae761f64a5177d80a36e5">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::child</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordflow">if</span> (TYPE_T == <a class="code" href="group___suffix_tries_module.html#gga7690102937e5d46b082e24102388e26aa82117015538d466a2ebebf1e94baa47d">CompressedTrie</a>)</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordflow">return</span> m_child + <a class="code" href="group___basic_utils.html#ga2afcfc8ce7e9228b8e530d531afbc782">nvbio::popc</a>( m_mask &amp; ((1u &lt;&lt; c)-1u) );</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">return</span> m_child + c;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00058"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#ab95fed621a8d9ca8674084aff918b31b">   58</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node.html#ab95fed621a8d9ca8674084aff918b31b">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::nth_child</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">if</span> (TYPE_T == <a class="code" href="group___suffix_tries_module.html#gga7690102937e5d46b082e24102388e26aa82117015538d466a2ebebf1e94baa47d">CompressedTrie</a>)</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordflow">return</span> m_child + c;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">return</span> m_child + <a class="code" href="namespacenvbio.html#af50e3b6f5b9f21a98cf35bc41436cf41">find_nthbit</a>( m_mask, c+1u );</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;}</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#ad35673b533c8151503b33d703af02c86">   68</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node.html#ad35673b533c8151503b33d703af02c86">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::first_child</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordflow">if</span> (TYPE_T == <a class="code" href="group___suffix_tries_module.html#gga7690102937e5d46b082e24102388e26aa82117015538d466a2ebebf1e94baa47d">CompressedTrie</a>)</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordflow">return</span> m_child;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordflow">return</span> m_child + <a class="code" href="group___basic_utils.html#ga987d23c90a8bfd6a9972fc33a40d853e">ffs</a>( m_mask );</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;}</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00078"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#a7fc414d44c37e2608474ab4d77885efe">   78</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node.html#a7fc414d44c37e2608474ab4d77885efe">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::mask</a>()<span class="keyword">  const </span>{ <span class="keywordflow">return</span> m_mask; }</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00082"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#a720e19c5268bfba9862d972a473588c8">   82</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_trie_node.html#a720e19c5268bfba9862d972a473588c8">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::set_child_bit</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c) { m_mask |= (1u &lt;&lt; c); }</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00086"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#adee87e4508237019bddd1915431952a7">   86</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node.html#adee87e4508237019bddd1915431952a7">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::child_bit</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_mask &amp; (1u &lt;&lt; c); }</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00090"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#aee80054dd4d1727d4b03a8781255b520">   90</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_trie_node.html#aee80054dd4d1727d4b03a8781255b520">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::set_size</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> size) { m_size = size; }</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00094"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#a455c74c9e991c32615ac15213a692df3">   94</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node.html#a455c74c9e991c32615ac15213a692df3">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::size</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_size; }</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * nvbio</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (c) 2011-2014, NVIDIA CORPORATION. All rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * </span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Redistribution and use in source and binary forms, with or without</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * modification, are permitted provided that the following conditions are met:</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> *    * Redistributions of source code must retain the above copyright</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> *      notice, this list of conditions and the following disclaimer.</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *    * Redistributions in binary form must reproduce the above copyright</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> *      notice, this list of conditions and the following disclaimer in the</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> *      documentation and/or other materials provided with the distribution.</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *    * Neither the name of the NVIDIA CORPORATION nor the</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *      names of its contributors may be used to endorse or promote products</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *      derived from this software without specific prior written permission.</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * </span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> * DISCLAIMED. IN NO EVENT SHALL NVIDIA CORPORATION BE LIABLE FOR ANY</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="numbers_8h.html">nvbio/basic/numbers.h</a>&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="popcount_8h.html">nvbio/basic/popcount.h</a>&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span>nvbio {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#a475a2156de57dd314dc3a0bd2b570b28">   37</a></span>&#160;<a class="code" href="structnvbio_1_1_trie_node.html#a475a2156de57dd314dc3a0bd2b570b28">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::TrieNode</a>() : m_child(invalid_node), m_mask(0u), m_size(1u) {}</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#a115e64babf1021172da9b4a04db0eb69">   41</a></span>&#160;<a class="code" href="structnvbio_1_1_trie_node.html#a475a2156de57dd314dc3a0bd2b570b28">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::TrieNode</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> _child, <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> _mask) :</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    m_child( _child ), m_mask( _mask ), m_size(1u)</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;{</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    assert( (_child &lt;= <a class="code" href="structnvbio_1_1_trie_node.html#a8b3b0327ff4e32698ba10015fcf28196">invalid_node</a>) &amp;&amp; (<a class="code" href="structnvbio_1_1_trie_node.html#aeaa99e00b5e236f2e86bc7f4fb0351e8">m_child</a> == _child) );</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#aae67d91dc68d3ff5182c3cce5c4c5045">   49</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="structnvbio_1_1_trie_node.html#aae67d91dc68d3ff5182c3cce5c4c5045">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::is_leaf</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_mask == 0u; }</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#aa5c5fb0d9daae761f64a5177d80a36e5">   53</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node.html#aa5c5fb0d9daae761f64a5177d80a36e5">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::child</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_child; }</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#a132b5e077a0252087429ceb0c3eea49f">   57</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node.html#aa5c5fb0d9daae761f64a5177d80a36e5">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::child</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">if</span> (TYPE_T == <a class="code" href="group___suffix_tries_module.html#gga7690102937e5d46b082e24102388e26aa82117015538d466a2ebebf1e94baa47d">CompressedTrie</a>)</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">return</span> m_child + <a class="code" href="group___basic_utils.html#ga2afcfc8ce7e9228b8e530d531afbc782">nvbio::popc</a>( m_mask &amp; ((1u &lt;&lt; c)-1u) );</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">return</span> m_child + c;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;}</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#ab95fed621a8d9ca8674084aff918b31b">   67</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node.html#ab95fed621a8d9ca8674084aff918b31b">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::nth_child</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">if</span> (TYPE_T == <a class="code" href="group___suffix_tries_module.html#gga7690102937e5d46b082e24102388e26aa82117015538d466a2ebebf1e94baa47d">CompressedTrie</a>)</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">return</span> m_child + c;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordflow">return</span> m_child + <a class="code" href="namespacenvbio.html#af50e3b6f5b9f21a98cf35bc41436cf41">find_nthbit</a>( m_mask, c+1u );</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;}</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#ad35673b533c8151503b33d703af02c86">   77</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node.html#ad35673b533c8151503b33d703af02c86">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::first_child</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordflow">if</span> (TYPE_T == <a class="code" href="group___suffix_tries_module.html#gga7690102937e5d46b082e24102388e26aa82117015538d466a2ebebf1e94baa47d">CompressedTrie</a>)</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordflow">return</span> m_child;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">return</span> m_child + <a class="code" href="group___basic_utils.html#ga987d23c90a8bfd6a9972fc33a40d853e">ffs</a>( m_mask );</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;}</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00087"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#a7fc414d44c37e2608474ab4d77885efe">   87</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node.html#a7fc414d44c37e2608474ab4d77885efe">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::mask</a>()<span class="keyword">  const </span>{ <span class="keywordflow">return</span> m_mask; }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#a720e19c5268bfba9862d972a473588c8">   91</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_trie_node.html#a720e19c5268bfba9862d972a473588c8">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::set_child_bit</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c) { m_mask |= (1u &lt;&lt; c); }</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#adee87e4508237019bddd1915431952a7">   95</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node.html#adee87e4508237019bddd1915431952a7">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::child_bit</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_mask &amp; (1u &lt;&lt; c); }</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<a class="code" href="structnvbio_1_1_trie_node5.html">TrieNode5&lt;TYPE_T&gt;::TrieNode5</a>() : m_child(invalid_node), m_mask(0u), m_size(1u) {}</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;TrieNode5&lt;TYPE_T&gt;::TrieNode5(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> _child, <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> _mask) :</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    m_child( _child ), m_mask( _mask ), m_size(1u)</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;{</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    assert( (_child &lt;= <a class="code" href="structnvbio_1_1_trie_node.html#a8b3b0327ff4e32698ba10015fcf28196">invalid_node</a>) &amp;&amp; (<a class="code" href="structnvbio_1_1_trie_node.html#aeaa99e00b5e236f2e86bc7f4fb0351e8">m_child</a> == _child) );</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;}</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00112"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a1b4cb276573643f51fea8558d8da3f0e">  112</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="structnvbio_1_1_trie_node5.html#a1b4cb276573643f51fea8558d8da3f0e">TrieNode5&lt;TYPE_T&gt;::is_leaf</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_mask == 0u; }</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00116"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a0410b80fdbc421a911fb20e18576fc27">  116</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node5.html#a0410b80fdbc421a911fb20e18576fc27">TrieNode5&lt;TYPE_T&gt;::child</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_child; }</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00120"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a095574985628c0b52766a97ede7f3998">  120</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node5.html#a0410b80fdbc421a911fb20e18576fc27">TrieNode5&lt;TYPE_T&gt;::child</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordflow">if</span> (TYPE_T == <a class="code" href="group___suffix_tries_module.html#gga7690102937e5d46b082e24102388e26aa82117015538d466a2ebebf1e94baa47d">CompressedTrie</a>)</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordflow">return</span> m_child + <a class="code" href="group___basic_utils.html#ga2afcfc8ce7e9228b8e530d531afbc782">nvbio::popc</a>( m_mask &amp; ((1u &lt;&lt; c)-1u) );</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keywordflow">return</span> m_child + c;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;}</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00130"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a71c603680adc26ecca81ad1825da9061">  130</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node5.html#a71c603680adc26ecca81ad1825da9061">TrieNode5&lt;TYPE_T&gt;::nth_child</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordflow">if</span> (TYPE_T == <a class="code" href="group___suffix_tries_module.html#gga7690102937e5d46b082e24102388e26aa82117015538d466a2ebebf1e94baa47d">CompressedTrie</a>)</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordflow">return</span> m_child + c;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <span class="keywordflow">return</span> m_child + <a class="code" href="group___basic_utils.html#ga05a4edf6c156322b751b25413e26562b">find_nthbit8</a>( m_mask, c+1u );</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;}</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00140"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a82788a68f17a8d5c8c2713d6d23d603d">  140</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node5.html#a82788a68f17a8d5c8c2713d6d23d603d">TrieNode5&lt;TYPE_T&gt;::first_child</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keywordflow">if</span> (TYPE_T == <a class="code" href="group___suffix_tries_module.html#gga7690102937e5d46b082e24102388e26aa82117015538d466a2ebebf1e94baa47d">CompressedTrie</a>)</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <span class="keywordflow">return</span> m_child;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordflow">return</span> m_child + <a class="code" href="group___basic_utils.html#ga987d23c90a8bfd6a9972fc33a40d853e">ffs</a>( m_mask );</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;}</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00150"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#ab36a22a15453586f7ea2f60b8d5cce0c">  150</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node5.html#ab36a22a15453586f7ea2f60b8d5cce0c">TrieNode5&lt;TYPE_T&gt;::mask</a>()<span class="keyword">  const </span>{ <span class="keywordflow">return</span> m_mask; }</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00154"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a076d5365d625e7ad20b2f56ecdeed1ae">  154</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_trie_node5.html#a076d5365d625e7ad20b2f56ecdeed1ae">TrieNode5&lt;TYPE_T&gt;::set_child_bit</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c) { m_mask |= (1u &lt;&lt; c); }</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00158"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a2006a1248617282ef609129589f40992">  158</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node5.html#a2006a1248617282ef609129589f40992">TrieNode5&lt;TYPE_T&gt;::child_bit</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_mask &amp; (1u &lt;&lt; c); }</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00162"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#af7e99556abc8f355f38d0f2a7dcec1b6">  162</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_trie_node5.html#af7e99556abc8f355f38d0f2a7dcec1b6">TrieNode5&lt;TYPE_T&gt;::set_size</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> size) { m_size = size; }</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00166"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a84d27061b603488d1cd93dffeb9f0d31">  166</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node5.html#a84d27061b603488d1cd93dffeb9f0d31">TrieNode5&lt;TYPE_T&gt;::size</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_size; }</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00099"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#aee80054dd4d1727d4b03a8781255b520">   99</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_trie_node.html#aee80054dd4d1727d4b03a8781255b520">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::set_size</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> size) { m_size = size; }</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00103"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node.html#a455c74c9e991c32615ac15213a692df3">  103</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node.html#a455c74c9e991c32615ac15213a692df3">TrieNode&lt;ALPHABET_SIZE_T,TYPE_T&gt;::size</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_size; }</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<a class="code" href="structnvbio_1_1_trie_node5.html">TrieNode5&lt;TYPE_T&gt;::TrieNode5</a>() : m_child(invalid_node), m_mask(0u), m_size(1u) {}</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;TrieNode5&lt;TYPE_T&gt;::TrieNode5(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> _child, <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> _mask) :</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    m_child( _child ), m_mask( _mask ), m_size(1u)</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;{</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    assert( (_child &lt;= <a class="code" href="structnvbio_1_1_trie_node.html#a8b3b0327ff4e32698ba10015fcf28196">invalid_node</a>) &amp;&amp; (<a class="code" href="structnvbio_1_1_trie_node.html#aeaa99e00b5e236f2e86bc7f4fb0351e8">m_child</a> == _child) );</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;}</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00121"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a1b4cb276573643f51fea8558d8da3f0e">  121</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="structnvbio_1_1_trie_node5.html#a1b4cb276573643f51fea8558d8da3f0e">TrieNode5&lt;TYPE_T&gt;::is_leaf</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_mask == 0u; }</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00125"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a0410b80fdbc421a911fb20e18576fc27">  125</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node5.html#a0410b80fdbc421a911fb20e18576fc27">TrieNode5&lt;TYPE_T&gt;::child</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_child; }</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00129"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a095574985628c0b52766a97ede7f3998">  129</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node5.html#a0410b80fdbc421a911fb20e18576fc27">TrieNode5&lt;TYPE_T&gt;::child</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordflow">if</span> (TYPE_T == <a class="code" href="group___suffix_tries_module.html#gga7690102937e5d46b082e24102388e26aa82117015538d466a2ebebf1e94baa47d">CompressedTrie</a>)</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="keywordflow">return</span> m_child + <a class="code" href="group___basic_utils.html#ga2afcfc8ce7e9228b8e530d531afbc782">nvbio::popc</a>( m_mask &amp; ((1u &lt;&lt; c)-1u) );</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordflow">return</span> m_child + c;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;}</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a71c603680adc26ecca81ad1825da9061">  139</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node5.html#a71c603680adc26ecca81ad1825da9061">TrieNode5&lt;TYPE_T&gt;::nth_child</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="keywordflow">if</span> (TYPE_T == <a class="code" href="group___suffix_tries_module.html#gga7690102937e5d46b082e24102388e26aa82117015538d466a2ebebf1e94baa47d">CompressedTrie</a>)</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <span class="keywordflow">return</span> m_child + c;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keywordflow">return</span> m_child + <a class="code" href="group___basic_utils.html#ga05a4edf6c156322b751b25413e26562b">find_nthbit8</a>( m_mask, c+1u );</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;}</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00149"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a82788a68f17a8d5c8c2713d6d23d603d">  149</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node5.html#a82788a68f17a8d5c8c2713d6d23d603d">TrieNode5&lt;TYPE_T&gt;::first_child</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keywordflow">if</span> (TYPE_T == <a class="code" href="group___suffix_tries_module.html#gga7690102937e5d46b082e24102388e26aa82117015538d466a2ebebf1e94baa47d">CompressedTrie</a>)</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keywordflow">return</span> m_child;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <span class="keywordflow">return</span> m_child + <a class="code" href="group___basic_utils.html#ga987d23c90a8bfd6a9972fc33a40d853e">ffs</a>( m_mask );</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;}</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00159"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#ab36a22a15453586f7ea2f60b8d5cce0c">  159</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node5.html#ab36a22a15453586f7ea2f60b8d5cce0c">TrieNode5&lt;TYPE_T&gt;::mask</a>()<span class="keyword">  const </span>{ <span class="keywordflow">return</span> m_mask; }</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00163"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a076d5365d625e7ad20b2f56ecdeed1ae">  163</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_trie_node5.html#a076d5365d625e7ad20b2f56ecdeed1ae">TrieNode5&lt;TYPE_T&gt;::set_child_bit</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c) { m_mask |= (1u &lt;&lt; c); }</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00167"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a2006a1248617282ef609129589f40992">  167</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node5.html#a2006a1248617282ef609129589f40992">TrieNode5&lt;TYPE_T&gt;::child_bit</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_mask &amp; (1u &lt;&lt; c); }</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="comment">// constructor</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, <span class="keyword">typename</span> NodeIterator&gt;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00174"></a><span class="lineno"><a class="code" href="structnvbio_1_1_suffix_trie.html#a7d9fa8d58a20b0a2bac388ac6a3ad0cd">  174</a></span>&#160;<a class="code" href="structnvbio_1_1_suffix_trie.html#a9a49899fd30d7fa27cabdd9d72f0a313">SuffixTrie&lt;ALPHABET_SIZE_T,NodeIterator&gt;::SuffixTrie</a>(<span class="keyword">const</span> NodeIterator seq) :</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    m_seq( seq )</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;{}</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00171"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#af7e99556abc8f355f38d0f2a7dcec1b6">  171</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_trie_node5.html#af7e99556abc8f355f38d0f2a7dcec1b6">TrieNode5&lt;TYPE_T&gt;::set_size</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> size) { m_size = size; }</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="keyword">template</span> &lt;TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00175"></a><span class="lineno"><a class="code" href="structnvbio_1_1_trie_node5.html#a84d27061b603488d1cd93dffeb9f0d31">  175</a></span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1_trie_node5.html#a84d27061b603488d1cd93dffeb9f0d31">TrieNode5&lt;TYPE_T&gt;::size</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_size; }</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="comment">// return the root node of the dictionary seen as a trie</span></div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, <span class="keyword">typename</span> NodeIterator&gt;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="keyword">typename</span> <a class="code" href="structnvbio_1_1_suffix_trie.html#a822a559e48347f7ed637bd9c26afdafc">SuffixTrie&lt;ALPHABET_SIZE_T,NodeIterator&gt;::node_type</a></div>
-<div class="line"><a name="l00183"></a><span class="lineno"><a class="code" href="structnvbio_1_1_suffix_trie.html#a1a0af833301af2e69c6da91ca2d2fd7f">  183</a></span>&#160;<a class="code" href="structnvbio_1_1_suffix_trie.html#a1a0af833301af2e69c6da91ca2d2fd7f">SuffixTrie&lt;ALPHABET_SIZE_T,NodeIterator&gt;::root</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <span class="keywordflow">return</span> m_seq[0];</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;}</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="comment">// visit the children of a given node</span></div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, <span class="keyword">typename</span> NodeIterator&gt;</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Visitor&gt;</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00193"></a><span class="lineno"><a class="code" href="structnvbio_1_1_suffix_trie.html#a72bded0bb0029d7d3e65f96d24ff0b8f">  193</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_suffix_trie.html#a72bded0bb0029d7d3e65f96d24ff0b8f">SuffixTrie&lt;ALPHABET_SIZE_T,NodeIterator&gt;::children</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1_suffix_trie.html#a822a559e48347f7ed637bd9c26afdafc">node_type</a> node, Visitor&amp; visitor)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> c = 0; c &lt; <a class="code" href="divsufsort_8c.html#a6572f1706059832f94025fa12c6c45ed">ALPHABET_SIZE</a>; ++c)</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    {</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="keywordflow">if</span> (node.child_bit(c))</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;            visitor.visit( c, node.child(c) );</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    }</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;}</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, <span class="keyword">typename</span> NodeType&gt;</div>
-<div class="line"><a name="l00203"></a><span class="lineno"><a class="code" href="structnvbio_1_1_collector.html">  203</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1_collector.html">Collector</a></div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;{</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00206"></a><span class="lineno"><a class="code" href="structnvbio_1_1_collector.html#aa9b12e7cf6623ab2d436e55295892a87">  206</a></span>&#160;    <a class="code" href="structnvbio_1_1_collector.html#aa9b12e7cf6623ab2d436e55295892a87">Collector</a>() : <a class="code" href="structnvbio_1_1_collector.html#ad6950700f8b0fbac20655d698c7fe503">count</a>(0), <a class="code" href="structnvbio_1_1_collector.html#a64121fb2dfe1702625d58a3c096aa424">mask</a>(0) {}</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00209"></a><span class="lineno"><a class="code" href="structnvbio_1_1_collector.html#a668c0607bf8503d9b326c3254dd5fea8">  209</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_collector.html#a668c0607bf8503d9b326c3254dd5fea8">visit</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> c, <span class="keyword">const</span> NodeType node)</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    {</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <a class="code" href="structnvbio_1_1_collector.html#a73bb8322107d4d2ffd6ed293e2351587">nodes</a>[<a class="code" href="structnvbio_1_1_collector.html#ad6950700f8b0fbac20655d698c7fe503">count</a>++] = node;</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <a class="code" href="structnvbio_1_1_collector.html#a64121fb2dfe1702625d58a3c096aa424">mask</a> |= (1u &lt;&lt; c);</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    }</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;</div>
-<div class="line"><a name="l00215"></a><span class="lineno"><a class="code" href="structnvbio_1_1_collector.html#ad6950700f8b0fbac20655d698c7fe503">  215</a></span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>      <a class="code" href="structnvbio_1_1_collector.html#ad6950700f8b0fbac20655d698c7fe503">count</a>;</div>
-<div class="line"><a name="l00216"></a><span class="lineno"><a class="code" href="structnvbio_1_1_collector.html#a64121fb2dfe1702625d58a3c096aa424">  216</a></span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>      <a class="code" href="structnvbio_1_1_collector.html#a64121fb2dfe1702625d58a3c096aa424">mask</a>;</div>
-<div class="line"><a name="l00217"></a><span class="lineno"><a class="code" href="structnvbio_1_1_collector.html#a73bb8322107d4d2ffd6ed293e2351587">  217</a></span>&#160;    NodeType    <a class="code" href="structnvbio_1_1_collector.html#a73bb8322107d4d2ffd6ed293e2351587">nodes</a>[ALPHABET_SIZE_T];</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;};</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
-<div class="line"><a name="l00221"></a><span class="lineno"><a class="code" href="structnvbio_1_1trie__copy.html">  221</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1trie__copy.html">trie_copy</a> {};</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T&gt;</div>
-<div class="line"><a name="l00224"></a><span class="lineno"><a class="code" href="structnvbio_1_1trie__copy_3_01_a_l_p_h_a_b_e_t___s_i_z_e___t_00_01_compressed_trie_01_4.html">  224</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1trie__copy.html">trie_copy</a>&lt;ALPHABET_SIZE_T, <a class="code" href="group___suffix_tries_module.html#gga7690102937e5d46b082e24102388e26aa82117015538d466a2ebebf1e94baa47d">CompressedTrie</a>&gt;</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;{</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InTrieType, <span class="keyword">typename</span> OutVectorType&gt;</div>
-<div class="line"><a name="l00227"></a><span class="lineno"><a class="code" href="structnvbio_1_1trie__copy_3_01_a_l_p_h_a_b_e_t___s_i_z_e___t_00_01_compressed_trie_01_4.html#a4a69b9c3331e3024e495f1e524fe5753">  227</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1trie__copy_3_01_a_l_p_h_a_b_e_t___s_i_z_e___t_00_01_compressed_trie_01_4.html#a4a69b9c3331e3024e495f1e524fe5753">enact</a>(</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        <span class="keyword">const</span> InTrieType&amp;                    in_trie,</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <span class="keyword">const</span> <span class="keyword">typename</span> InTrieType::node_type in_node,</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;              OutVectorType&amp;                 out_nodes,</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                         out_node_index)</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    {</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <span class="keyword">typedef</span> <span class="keyword">typename</span> InTrieType::node_type in_node_type;</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <span class="comment">// check if the input node is a leaf</span></div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        <span class="keywordflow">if</span> (in_trie.is_leaf( in_node ))</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        {</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            out_nodes[ out_node_index ].set_size( in_trie.size( in_node ) );</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        }</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        <a class="code" href="structnvbio_1_1_collector.html">Collector&lt;ALPHABET_SIZE_T,in_node_type&gt;</a> children;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="comment">// constructor</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, <span class="keyword">typename</span> NodeIterator&gt;</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00183"></a><span class="lineno"><a class="code" href="structnvbio_1_1_suffix_trie.html#a7d9fa8d58a20b0a2bac388ac6a3ad0cd">  183</a></span>&#160;<a class="code" href="structnvbio_1_1_suffix_trie.html#a9a49899fd30d7fa27cabdd9d72f0a313">SuffixTrie&lt;ALPHABET_SIZE_T,NodeIterator&gt;::SuffixTrie</a>(<span class="keyword">const</span> NodeIterator seq) :</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    m_seq( seq )</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;{}</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="comment">// return the root node of the dictionary seen as a trie</span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, <span class="keyword">typename</span> NodeIterator&gt;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="keyword">typename</span> <a class="code" href="structnvbio_1_1_suffix_trie.html#a822a559e48347f7ed637bd9c26afdafc">SuffixTrie&lt;ALPHABET_SIZE_T,NodeIterator&gt;::node_type</a></div>
+<div class="line"><a name="l00192"></a><span class="lineno"><a class="code" href="structnvbio_1_1_suffix_trie.html#a1a0af833301af2e69c6da91ca2d2fd7f">  192</a></span>&#160;<a class="code" href="structnvbio_1_1_suffix_trie.html#a1a0af833301af2e69c6da91ca2d2fd7f">SuffixTrie&lt;ALPHABET_SIZE_T,NodeIterator&gt;::root</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <span class="keywordflow">return</span> m_seq[0];</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;}</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="comment">// visit the children of a given node</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, <span class="keyword">typename</span> NodeIterator&gt;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Visitor&gt;</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00202"></a><span class="lineno"><a class="code" href="structnvbio_1_1_suffix_trie.html#a72bded0bb0029d7d3e65f96d24ff0b8f">  202</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_suffix_trie.html#a72bded0bb0029d7d3e65f96d24ff0b8f">SuffixTrie&lt;ALPHABET_SIZE_T,NodeIterator&gt;::children</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1_suffix_trie.html#a822a559e48347f7ed637bd9c26afdafc">node_type</a> node, Visitor&amp; visitor)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> c = 0; c &lt; <a class="code" href="divsufsort_8c.html#a6572f1706059832f94025fa12c6c45ed">ALPHABET_SIZE</a>; ++c)</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    {</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        <span class="keywordflow">if</span> (node.child_bit(c))</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            visitor.visit( c, node.child(c) );</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    }</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;}</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, <span class="keyword">typename</span> NodeType&gt;</div>
+<div class="line"><a name="l00212"></a><span class="lineno"><a class="code" href="structnvbio_1_1_collector.html">  212</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1_collector.html">Collector</a></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;{</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00215"></a><span class="lineno"><a class="code" href="structnvbio_1_1_collector.html#aa9b12e7cf6623ab2d436e55295892a87">  215</a></span>&#160;    <a class="code" href="structnvbio_1_1_collector.html#aa9b12e7cf6623ab2d436e55295892a87">Collector</a>() : <a class="code" href="structnvbio_1_1_collector.html#ad6950700f8b0fbac20655d698c7fe503">count</a>(0), <a class="code" href="structnvbio_1_1_collector.html#a64121fb2dfe1702625d58a3c096aa424">mask</a>(0) {}</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00218"></a><span class="lineno"><a class="code" href="structnvbio_1_1_collector.html#a668c0607bf8503d9b326c3254dd5fea8">  218</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1_collector.html#a668c0607bf8503d9b326c3254dd5fea8">visit</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> c, <span class="keyword">const</span> NodeType node)</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    {</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        <a class="code" href="structnvbio_1_1_collector.html#a73bb8322107d4d2ffd6ed293e2351587">nodes</a>[<a class="code" href="structnvbio_1_1_collector.html#ad6950700f8b0fbac20655d698c7fe503">count</a>++] = node;</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <a class="code" href="structnvbio_1_1_collector.html#a64121fb2dfe1702625d58a3c096aa424">mask</a> |= (1u &lt;&lt; c);</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    }</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;</div>
+<div class="line"><a name="l00224"></a><span class="lineno"><a class="code" href="structnvbio_1_1_collector.html#ad6950700f8b0fbac20655d698c7fe503">  224</a></span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>      <a class="code" href="structnvbio_1_1_collector.html#ad6950700f8b0fbac20655d698c7fe503">count</a>;</div>
+<div class="line"><a name="l00225"></a><span class="lineno"><a class="code" href="structnvbio_1_1_collector.html#a64121fb2dfe1702625d58a3c096aa424">  225</a></span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>      <a class="code" href="structnvbio_1_1_collector.html#a64121fb2dfe1702625d58a3c096aa424">mask</a>;</div>
+<div class="line"><a name="l00226"></a><span class="lineno"><a class="code" href="structnvbio_1_1_collector.html#a73bb8322107d4d2ffd6ed293e2351587">  226</a></span>&#160;    NodeType    <a class="code" href="structnvbio_1_1_collector.html#a73bb8322107d4d2ffd6ed293e2351587">nodes</a>[ALPHABET_SIZE_T];</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;};</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T, TrieType TYPE_T&gt;</div>
+<div class="line"><a name="l00230"></a><span class="lineno"><a class="code" href="structnvbio_1_1trie__copy.html">  230</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1trie__copy.html">trie_copy</a> {};</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 ALPHABET_SIZE_T&gt;</div>
+<div class="line"><a name="l00233"></a><span class="lineno"><a class="code" href="structnvbio_1_1trie__copy_3_01_a_l_p_h_a_b_e_t___s_i_z_e___t_00_01_compressed_trie_01_4.html">  233</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1trie__copy.html">trie_copy</a>&lt;ALPHABET_SIZE_T, <a class="code" href="group___suffix_tries_module.html#gga7690102937e5d46b082e24102388e26aa82117015538d466a2ebebf1e94baa47d">CompressedTrie</a>&gt;</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;{</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InTrieType, <span class="keyword">typename</span> OutVectorType&gt;</div>
+<div class="line"><a name="l00236"></a><span class="lineno"><a class="code" href="structnvbio_1_1trie__copy_3_01_a_l_p_h_a_b_e_t___s_i_z_e___t_00_01_compressed_trie_01_4.html#a4a69b9c3331e3024e495f1e524fe5753">  236</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1trie__copy_3_01_a_l_p_h_a_b_e_t___s_i_z_e___t_00_01_compressed_trie_01_4.html#a4a69b9c3331e3024e495f1e524fe5753">enact</a>(</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <span class="keyword">const</span> InTrieType&amp;                    in_trie,</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        <span class="keyword">const</span> <span class="keyword">typename</span> InTrieType::node_type in_node,</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;              OutVectorType&amp;                 out_nodes,</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                         out_node_index)</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    {</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        <span class="keyword">typedef</span> <span class="keyword">typename</span> InTrieType::node_type in_node_type;</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        in_trie.children( in_node, children );</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> child_offset = <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( out_nodes.size() );</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        out_nodes.resize( child_offset + children.<a class="code" href="structnvbio_1_1_collector.html#ad6950700f8b0fbac20655d698c7fe503">count</a> );</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        out_nodes[ out_node_index ] = <a class="code" href="structnvbio_1_1_trie_node.html">TrieNode&lt;ALPHABET_SIZE_T,CompressedTrie&gt;</a>(</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            child_offset,</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            children.<a class="code" href="structnvbio_1_1_collector.html#a64121fb2dfe1702625d58a3c096aa424">mask</a> );</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        <span class="comment">// check if the input node is a leaf</span></div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keywordflow">if</span> (in_trie.is_leaf( in_node ))</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        {</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            out_nodes[ out_node_index ].set_size( in_trie.size( in_node ) );</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        }</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        <a class="code" href="structnvbio_1_1_collector.html">Collector&lt;ALPHABET_SIZE_T,in_node_type&gt;</a> children;</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i = 0; i &lt; children.<a class="code" href="structnvbio_1_1_collector.html#ad6950700f8b0fbac20655d698c7fe503">count</a>; ++i)</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        {</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;            enact(</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;                in_trie,</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;                children.<a class="code" href="structnvbio_1_1_collector.html#a73bb8322107d4d2ffd6ed293e2351587">nodes</a>[i],</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;                out_nodes,</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;                child_offset + i );</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        }</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    }</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;};</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> TrieType, <span class="keyword">typename</span> NodeVector&gt;</div>
-<div class="line"><a name="l00265"></a><span class="lineno"><a class="code" href="group___suffix_tries_module.html#ga20a017d24f83ca3c27f2c2ad0a29eaa5">  265</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___suffix_tries_module.html#ga20a017d24f83ca3c27f2c2ad0a29eaa5">build_suffix_trie</a>(</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___suffix_tries_module.html#ga7690102937e5d46b082e24102388e26a">TrieType</a>&amp;     in_trie,</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    NodeVector&amp;         out_nodes)</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;{</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> NodeVector::value_type out_node_type;</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    <span class="comment">// alloc the root node</span></div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    out_nodes.resize(1u);</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    <a class="code" href="structnvbio_1_1trie__copy.html">trie_copy&lt;TrieType::ALPHABET_SIZE, out_node_type::trie_type&gt;::enact</a>(</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        in_trie,</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        in_trie.root(),</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        out_nodes,</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        0u );</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;}</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;} <span class="comment">// namespace nvbio</span></div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        in_trie.children( in_node, children );</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> child_offset = <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( out_nodes.size() );</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        out_nodes.resize( child_offset + children.<a class="code" href="structnvbio_1_1_collector.html#ad6950700f8b0fbac20655d698c7fe503">count</a> );</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        out_nodes[ out_node_index ] = <a class="code" href="structnvbio_1_1_trie_node.html">TrieNode&lt;ALPHABET_SIZE_T,CompressedTrie&gt;</a>(</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;            child_offset,</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            children.<a class="code" href="structnvbio_1_1_collector.html#a64121fb2dfe1702625d58a3c096aa424">mask</a> );</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i = 0; i &lt; children.<a class="code" href="structnvbio_1_1_collector.html#ad6950700f8b0fbac20655d698c7fe503">count</a>; ++i)</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        {</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;            enact(</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                in_trie,</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;                children.<a class="code" href="structnvbio_1_1_collector.html#a73bb8322107d4d2ffd6ed293e2351587">nodes</a>[i],</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                out_nodes,</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;                child_offset + i );</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        }</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    }</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;};</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> TrieType, <span class="keyword">typename</span> NodeVector&gt;</div>
+<div class="line"><a name="l00274"></a><span class="lineno"><a class="code" href="group___suffix_tries_module.html#ga20a017d24f83ca3c27f2c2ad0a29eaa5">  274</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___suffix_tries_module.html#ga20a017d24f83ca3c27f2c2ad0a29eaa5">build_suffix_trie</a>(</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___suffix_tries_module.html#ga7690102937e5d46b082e24102388e26a">TrieType</a>&amp;     in_trie,</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    NodeVector&amp;         out_nodes)</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;{</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> NodeVector::value_type out_node_type;</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <span class="comment">// alloc the root node</span></div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    out_nodes.resize(1u);</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    <a class="code" href="structnvbio_1_1trie__copy.html">trie_copy&lt;TrieType::ALPHABET_SIZE, out_node_type::trie_type&gt;::enact</a>(</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        in_trie,</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        in_trie.root(),</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        out_nodes,</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        0u );</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;}</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;} <span class="comment">// namespace nvbio</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:08 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:34 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

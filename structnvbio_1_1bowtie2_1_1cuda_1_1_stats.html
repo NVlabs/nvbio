@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -105,14 +106,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00036">36</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00112">112</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Methods</h2></td></tr>
-<tr class="memitem:a17cb123144513211c1e477f120d871b2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a17cb123144513211c1e477f120d871b2">Stats</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params.html">Params</a> &amp;params_)</td></tr>
-<tr class="separator:a17cb123144513211c1e477f120d871b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ddae923e8affd0d1578371d0a931bea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a6ddae923e8affd0d1578371d0a931bea">Stats</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params.html">Params</a> _params=<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params.html">Params</a>())</td></tr>
+<tr class="separator:a6ddae923e8affd0d1578371d0a931bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d19d8c87bcbad4ea787b5463b1a83e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a1d19d8c87bcbad4ea787b5463b1a83e4">track_alignment_statistics</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1io_1_1_best_alignments.html">io::BestAlignments</a> &amp;alignment1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1io_1_1_best_alignments.html">io::BestAlignments</a> &amp;alignment2, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> mapq)</td></tr>
+<tr class="separator:a1d19d8c87bcbad4ea787b5463b1a83e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab964db4b57670892018bc5fcced3818e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#ab964db4b57670892018bc5fcced3818e">track_alignment_statistics</a> (<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_alignment_stats.html">AlignmentStats</a> *mate, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1io_1_1_best_alignments.html">io::BestAlignments</a> &amp;alignment, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> mapq)</td></tr>
+<tr class="separator:ab964db4b57670892018bc5fcced3818e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Members</h2></td></tr>
@@ -146,30 +151,14 @@ Public Members</h2></td></tr>
 <tr class="separator:add013f757fc4475d48d21a3d283c0669"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a509eab096ed5d7fd104aad1571988b84"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacenvbio_1_1bowtie2_1_1cuda.html#a01433e70d070adbfc97670d287989468">KernelStats</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a509eab096ed5d7fd104aad1571988b84">scoring_pipe</a></td></tr>
 <tr class="separator:a509eab096ed5d7fd104aad1571988b84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23449a6cd437724beddbb75f16c6c970"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_alignment_stats.html">AlignmentStats</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a23449a6cd437724beddbb75f16c6c970">paired</a></td></tr>
+<tr class="separator:a23449a6cd437724beddbb75f16c6c970"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86bf7b314c4fe2e7d19df01679eaed17"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_alignment_stats.html">AlignmentStats</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a86bf7b314c4fe2e7d19df01679eaed17">mate1</a></td></tr>
+<tr class="separator:a86bf7b314c4fe2e7d19df01679eaed17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af81be6f273093df8df20c42ba4003da7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_alignment_stats.html">AlignmentStats</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#af81be6f273093df8df20c42ba4003da7">mate2</a></td></tr>
+<tr class="separator:af81be6f273093df8df20c42ba4003da7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84829cb53c926cf58151fb6b9826d20f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a84829cb53c926cf58151fb6b9826d20f">n_reads</a></td></tr>
 <tr class="separator:a84829cb53c926cf58151fb6b9826d20f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92960dffc6a66e8ea34af1292b9ac81c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a92960dffc6a66e8ea34af1292b9ac81c">n_mapped</a></td></tr>
-<tr class="separator:a92960dffc6a66e8ea34af1292b9ac81c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c2800c6ecb9e475336e4e47bb4690bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a2c2800c6ecb9e475336e4e47bb4690bd">n_unique</a></td></tr>
-<tr class="separator:a2c2800c6ecb9e475336e4e47bb4690bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac36514141588871cb5dcbc8e777de002"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#ac36514141588871cb5dcbc8e777de002">n_multiple</a></td></tr>
-<tr class="separator:ac36514141588871cb5dcbc8e777de002"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9336cc56dbcb7493099c36b31930dfc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#ae9336cc56dbcb7493099c36b31930dfc">n_ambiguous</a></td></tr>
-<tr class="separator:ae9336cc56dbcb7493099c36b31930dfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3426d6614f738251bbb236439363a606"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a3426d6614f738251bbb236439363a606">n_nonambiguous</a></td></tr>
-<tr class="separator:a3426d6614f738251bbb236439363a606"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60e060f630f0df8b9fa748334cb8e16c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a60e060f630f0df8b9fa748334cb8e16c">mapped</a></td></tr>
-<tr class="separator:a60e060f630f0df8b9fa748334cb8e16c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d1fb982998712a2ebc71eaf606ec8f7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a1d1fb982998712a2ebc71eaf606ec8f7">f_mapped</a></td></tr>
-<tr class="separator:a1d1fb982998712a2ebc71eaf606ec8f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72d74c8aa7d8d5fce32178b7dfec67b3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a72d74c8aa7d8d5fce32178b7dfec67b3">r_mapped</a></td></tr>
-<tr class="separator:a72d74c8aa7d8d5fce32178b7dfec67b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27ede421d656cb48c31b0b0e34da0cf8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a27ede421d656cb48c31b0b0e34da0cf8">mapped2</a> [64][64]</td></tr>
-<tr class="separator:a27ede421d656cb48c31b0b0e34da0cf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af95671614c5b7c17bb11842809678792"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#af95671614c5b7c17bb11842809678792">mapq_bins</a> [64]</td></tr>
-<tr class="separator:af95671614c5b7c17bb11842809678792"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6e560749321efcec24773b6b0d30cc3"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#ad6e560749321efcec24773b6b0d30cc3">stats_ready</a></td></tr>
-<tr class="separator:ad6e560749321efcec24773b6b0d30cc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46cc8dfaca8ba2c51dced0145f6ea2d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a46cc8dfaca8ba2c51dced0145f6ea2d8">hits_total</a></td></tr>
 <tr class="separator:a46cc8dfaca8ba2c51dced0145f6ea2d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f8bd7c198a9bce142be12329ca9ad64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a2f8bd7c198a9bce142be12329ca9ad64">hits_ranges</a></td></tr>
@@ -192,21 +181,92 @@ Public Members</h2></td></tr>
 <tr class="separator:a42f74af7d51ccf399ca5309f3ce29833"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a17cb123144513211c1e477f120d871b2"></a>
+<a class="anchor" id="a6ddae923e8affd0d1578371d0a931bea"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">nvbio::bowtie2::cuda::Stats::Stats </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params.html">Params</a> &amp;&#160;</td>
-          <td class="paramname"><em>params_</em>)</td><td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params.html">Params</a>&#160;</td>
+          <td class="paramname"><em>_params</em> = <code><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params.html">Params</a>()</code>)</td><td></td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="stats_8cpp_source.html#l00036">36</a> of file <a class="el" href="stats_8cpp_source.html">stats.cpp</a>.</p>
+<p>Definition at line <a class="el" href="stats_8cpp_source.html#l00046">46</a> of file <a class="el" href="stats_8cpp_source.html">stats.cpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a1d19d8c87bcbad4ea787b5463b1a83e4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::bowtie2::cuda::Stats::track_alignment_statistics </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1io_1_1_best_alignments.html">io::BestAlignments</a> &amp;&#160;</td>
+          <td class="paramname"><em>alignment1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1io_1_1_best_alignments.html">io::BestAlignments</a> &amp;&#160;</td>
+          <td class="paramname"><em>alignment2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td>
+          <td class="paramname"><em>mapq</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>... which counts as a nonambiguous alignment </p>
+
+<p>Definition at line <a class="el" href="stats_8cpp_source.html#l00083">83</a> of file <a class="el" href="stats_8cpp_source.html">stats.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab964db4b57670892018bc5fcced3818e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::bowtie2::cuda::Stats::track_alignment_statistics </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_alignment_stats.html">AlignmentStats</a> *&#160;</td>
+          <td class="paramname"><em>mate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1io_1_1_best_alignments.html">io::BestAlignments</a> &amp;&#160;</td>
+          <td class="paramname"><em>alignment</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td>
+          <td class="paramname"><em>mapq</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>... which counts as a nonambiguous alignment </p>
+
+<p>Definition at line <a class="el" href="stats_8cpp_source.html#l00164">164</a> of file <a class="el" href="stats_8cpp_source.html">stats.cpp</a>.</p>
 
 </div>
 </div>
@@ -221,7 +281,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00052">52</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00128">128</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -235,7 +295,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00049">49</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00125">125</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -249,21 +309,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00050">50</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a1d1fb982998712a2ebc71eaf606ec8f7"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&gt; nvbio::bowtie2::cuda::Stats::f_mapped</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00066">66</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00126">126</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -277,7 +323,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00051">51</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00127">127</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -291,7 +337,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00042">42</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00118">118</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -305,7 +351,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00081">81</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00149">149</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -319,7 +365,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00077">77</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00145">145</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -333,7 +379,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00078">78</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00146">146</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -347,7 +393,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00076">76</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00144">144</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -361,7 +407,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00083">83</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00151">151</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -375,7 +421,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00082">82</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00150">150</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -389,7 +435,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00080">80</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00148">148</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -403,7 +449,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00079">79</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00147">147</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -417,7 +463,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00075">75</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00143">143</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -431,7 +477,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00055">55</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00131">131</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -445,7 +491,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00046">46</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00122">122</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -459,105 +505,35 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00043">43</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00119">119</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a60e060f630f0df8b9fa748334cb8e16c"></a>
+<a class="anchor" id="a86bf7b314c4fe2e7d19df01679eaed17"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&gt; nvbio::bowtie2::cuda::Stats::mapped</td>
+          <td class="memname"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_alignment_stats.html">AlignmentStats</a> nvbio::bowtie2::cuda::Stats::mate1</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00065">65</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00136">136</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a27ede421d656cb48c31b0b0e34da0cf8"></a>
+<a class="anchor" id="af81be6f273093df8df20c42ba4003da7"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> nvbio::bowtie2::cuda::Stats::mapped2[64][64]</td>
+          <td class="memname"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_alignment_stats.html">AlignmentStats</a> nvbio::bowtie2::cuda::Stats::mate2</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00068">68</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="af95671614c5b7c17bb11842809678792"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> nvbio::bowtie2::cuda::Stats::mapq_bins[64]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00071">71</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ae9336cc56dbcb7493099c36b31930dfc"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> nvbio::bowtie2::cuda::Stats::n_ambiguous</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00063">63</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a92960dffc6a66e8ea34af1292b9ac81c"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> nvbio::bowtie2::cuda::Stats::n_mapped</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00060">60</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ac36514141588871cb5dcbc8e777de002"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> nvbio::bowtie2::cuda::Stats::n_multiple</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00062">62</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a3426d6614f738251bbb236439363a606"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> nvbio::bowtie2::cuda::Stats::n_nonambiguous</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00064">64</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00137">137</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -571,21 +547,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00059">59</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a2c2800c6ecb9e475336e4e47bb4690bd"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> nvbio::bowtie2::cuda::Stats::n_unique</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00061">61</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00140">140</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -599,7 +561,21 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00048">48</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00124">124</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a23449a6cd437724beddbb75f16c6c970"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_alignment_stats.html">AlignmentStats</a> nvbio::bowtie2::cuda::Stats::paired</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00135">135</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -613,21 +589,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00085">85</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a72d74c8aa7d8d5fce32178b7dfec67b3"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&gt; nvbio::bowtie2::cuda::Stats::r_mapped</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00067">67</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00153">153</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -641,7 +603,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00053">53</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00129">129</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -655,7 +617,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00054">54</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00130">130</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -669,7 +631,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00047">47</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00123">123</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -683,7 +645,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00056">56</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00132">132</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -697,7 +659,7 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00044">44</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00120">120</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
@@ -711,32 +673,18 @@ Public Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00045">45</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ad6e560749321efcec24773b6b0d30cc3"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">volatile bool nvbio::bowtie2::cuda::Stats::stats_ready</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00074">74</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html#l00121">121</a> of file <a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/<a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a></li>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/<a class="el" href="stats_8cpp_source.html">stats.cpp</a></li>
+<li>E:/git/nvbio/nvBowtie/bowtie2/cuda/<a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">stats.h</a></li>
+<li>E:/git/nvbio/nvBowtie/bowtie2/cuda/<a class="el" href="stats_8cpp_source.html">stats.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:43:00 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:41 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

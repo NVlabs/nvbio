@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/contrib/zlib-1.2.7/infback.c Source File</title>
+<title>NVBIO: E:/git/nvbio/contrib/zlib-1.2.7/infback.c Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -361,7 +362,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="structinflate__state.html#a4a2b15912256bcf7b39980e15095ba58">have</a>, left;        <span class="comment">/* available input and output */</span></div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <a class="code" href="structinflate__state.html#a5a91b1c59e52f1aa7eda75b86b05b843">hold</a>;         <span class="comment">/* bit buffer */</span></div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="structinflate__state.html#ab37c3563f306f29e6ded8e933af14365">bits</a>;              <span class="comment">/* bits in bit buffer */</span></div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="namespacenvbio.html#a34d9d5d8887ce8bb60887a0a86ce687b">copy</a>;              <span class="comment">/* number of stored or match bytes to copy */</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">copy</a>;              <span class="comment">/* number of stored or match bytes to copy */</span></div>
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> FAR *from;    <span class="comment">/* where to copy match bytes from */</span></div>
 <div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    <a class="code" href="structcode.html">code</a> here;                  <span class="comment">/* current decoding table entry */</span></div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <a class="code" href="structcode.html">code</a> <a class="code" href="structinflate__state.html#ab3cbcd2c5ff3b0b8b34ef402a13afdf7">last</a>;                  <span class="comment">/* parent table entry */</span></div>
@@ -388,7 +389,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    left = state-&gt;<a class="code" href="structinflate__state.html#acca16ca86216760eaf307bf71e15e470">wsize</a>;</div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;</div>
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="comment">/* Inflate until end of block marked as last */</span></div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <a class="code" href="cpu__bucketing_8h.html#a2aa04c664515be413ca118b2125615c1">for</a> (;;)</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <a class="code" href="group__private.html#ga9f9778f8a7845c9769bd1f4531e0b2d4">for</a> (;;)</div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <span class="keywordflow">switch</span> (state-&gt;<a class="code" href="structinflate__state.html#a9c7906fee7eeeb450b13576531ca639d">mode</a>) {</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>:</div>
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;            <span class="comment">/* determine and dispatch block type */</span></div>
@@ -446,11 +447,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;                <span class="keywordflow">if</span> (copy &gt; have) copy = <a class="code" href="structinflate__state.html#a4a2b15912256bcf7b39980e15095ba58">have</a>;</div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;                <span class="keywordflow">if</span> (copy &gt; left) copy = left;</div>
 <div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;                <a class="code" href="zutil_8c.html#aac7aa2bbd8584b96c89e311b6c3409a5">zmemcpy</a>(put, next, copy);</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;                have -= <a class="code" href="namespacenvbio.html#a34d9d5d8887ce8bb60887a0a86ce687b">copy</a>;</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                next += <a class="code" href="namespacenvbio.html#a34d9d5d8887ce8bb60887a0a86ce687b">copy</a>;</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                left -= <a class="code" href="namespacenvbio.html#a34d9d5d8887ce8bb60887a0a86ce687b">copy</a>;</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;                put += <a class="code" href="namespacenvbio.html#a34d9d5d8887ce8bb60887a0a86ce687b">copy</a>;</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;                state-&gt;<a class="code" href="structinflate__state.html#a5179d4c9b332d976cce7c6cce6bdf3c1">length</a> -= <a class="code" href="namespacenvbio.html#a34d9d5d8887ce8bb60887a0a86ce687b">copy</a>;</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;                have -= <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">copy</a>;</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                next += <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">copy</a>;</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                left -= <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">copy</a>;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;                put += <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">copy</a>;</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;                state-&gt;<a class="code" href="structinflate__state.html#a5179d4c9b332d976cce7c6cce6bdf3c1">length</a> -= <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">copy</a>;</div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;            }</div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;            <a class="code" href="zutil_8h.html#a67eab10382e740297e8a59d69f85464e">Tracev</a>((stderr, <span class="stringliteral">&quot;inflate:       stored end\n&quot;</span>));</div>
 <div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;            state-&gt;<a class="code" href="structinflate__state.html#a9c7906fee7eeeb450b13576531ca639d">mode</a> = <a class="code" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>;</div>
@@ -610,7 +611,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;            state-&gt;<a class="code" href="structinflate__state.html#a5179d4c9b332d976cce7c6cce6bdf3c1">length</a> = (unsigned)here.<a class="code" href="structcode.html#a6f9c73627997e8fc6df02e620cf9a6f5">val</a>;</div>
 <div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;</div>
 <div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;            <span class="comment">/* process literal */</span></div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;            if (here.<a class="code" href="structcode.html#a4f075d73a9177d05cc7d332105295b83">op</a> == 0) {</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;            <a class="code" href="group__private.html#ga85d958c03886a94278558ccb0d58e95a">if</a> (here.<a class="code" href="structcode.html#a4f075d73a9177d05cc7d332105295b83">op</a> == 0) {</div>
 <div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;                <a class="code" href="zutil_8h.html#ae65182ff511f0b12345c20b6533f32d9">Tracevv</a>((stderr, here.<a class="code" href="structcode.html#a6f9c73627997e8fc6df02e620cf9a6f5">val</a> &gt;= 0x20 &amp;&amp; here.<a class="code" href="structcode.html#a6f9c73627997e8fc6df02e620cf9a6f5">val</a> &lt; 0x7f ?</div>
 <div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;                        <span class="stringliteral">&quot;inflate:         literal &#39;%c&#39;\n&quot;</span> :</div>
 <div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;                        <span class="stringliteral">&quot;inflate:         literal 0x%02x\n&quot;</span>, here.<a class="code" href="structcode.html#a6f9c73627997e8fc6df02e620cf9a6f5">val</a>));</div>
@@ -688,16 +689,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;                <a class="code" href="infback_8c.html#aa86fac2e845f337d5369513dea1759b0">ROOM</a>();</div>
 <div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;                copy = state-&gt;<a class="code" href="structinflate__state.html#acca16ca86216760eaf307bf71e15e470">wsize</a> - state-&gt;<a class="code" href="structinflate__state.html#af1e38258e8585b1a37854066ef9d939c">offset</a>;</div>
 <div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;                <span class="keywordflow">if</span> (copy &lt; left) {</div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;                    from = put + <a class="code" href="namespacenvbio.html#a34d9d5d8887ce8bb60887a0a86ce687b">copy</a>;</div>
-<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;                    copy = left - <a class="code" href="namespacenvbio.html#a34d9d5d8887ce8bb60887a0a86ce687b">copy</a>;</div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;                    from = put + <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">copy</a>;</div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;                    copy = left - <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">copy</a>;</div>
 <div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;                }</div>
 <div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;                <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;                    from = put - state-&gt;<a class="code" href="structinflate__state.html#af1e38258e8585b1a37854066ef9d939c">offset</a>;</div>
 <div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;                    copy = left;</div>
 <div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;                }</div>
 <div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;                <span class="keywordflow">if</span> (copy &gt; state-&gt;<a class="code" href="structinflate__state.html#a5179d4c9b332d976cce7c6cce6bdf3c1">length</a>) copy = state-&gt;<a class="code" href="structinflate__state.html#a5179d4c9b332d976cce7c6cce6bdf3c1">length</a>;</div>
-<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;                state-&gt;<a class="code" href="structinflate__state.html#a5179d4c9b332d976cce7c6cce6bdf3c1">length</a> -= <a class="code" href="namespacenvbio.html#a34d9d5d8887ce8bb60887a0a86ce687b">copy</a>;</div>
-<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;                left -= <a class="code" href="namespacenvbio.html#a34d9d5d8887ce8bb60887a0a86ce687b">copy</a>;</div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;                state-&gt;<a class="code" href="structinflate__state.html#a5179d4c9b332d976cce7c6cce6bdf3c1">length</a> -= <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">copy</a>;</div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;                left -= <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">copy</a>;</div>
 <div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;                <span class="keywordflow">do</span> {</div>
 <div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;                    *put++ = *from++;</div>
 <div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;                } <span class="keywordflow">while</span> (--copy);</div>
@@ -742,7 +743,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:41:57 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:22 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

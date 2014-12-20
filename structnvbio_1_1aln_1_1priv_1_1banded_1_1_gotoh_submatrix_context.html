@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -114,13 +115,13 @@ struct nvbio::aln::priv::banded::GotohSubmatrixContext&lt; BAND_LEN, TYPE, CHECK
 
 <p>A helper scoring context class, instantiated to configure <a class="el" href="structnvbio_1_1aln_1_1priv_1_1banded_1_1gotoh__alignment__score__dispatch.html">gotoh_alignment_score_dispatch</a> to keep track of the direction vectors of a DP submatrix between given checkpoints </p>
 
-<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00270">270</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00279">279</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Methods</h2></td></tr>
-<tr class="memitem:a90effb85a5abc6033d94cd12c00d564a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1banded_1_1_gotoh_submatrix_context.html#a90effb85a5abc6033d94cd12c00d564a">GotohSubmatrixContext</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> checkpoint_type checkpoints, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> checkpoint_id, submatrix_type submatrix)</td></tr>
+<tr class="memitem:a90effb85a5abc6033d94cd12c00d564a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1banded_1_1_gotoh_submatrix_context.html#a90effb85a5abc6033d94cd12c00d564a">GotohSubmatrixContext</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> checkpoint_type <a class="el" href="group__private.html#ga79bab77c39c290c168c83216050371c4">checkpoints</a>, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> checkpoint_id, submatrix_type submatrix)</td></tr>
 <tr class="separator:a90effb85a5abc6033d94cd12c00d564a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a201deba4b25d2c7fe868ccf9d294011a"><td class="memTemplParams" colspan="2">template&lt;typename H_band_type , typename F_band_type , typename scoring_type , typename score_type &gt; </td></tr>
 <tr class="memitem:a201deba4b25d2c7fe868ccf9d294011a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
@@ -189,7 +190,7 @@ template&lt;uint32 BAND_LEN, AlignmentType TYPE, uint32 CHECKPOINTS, typename ch
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00273">273</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00282">282</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -248,7 +249,7 @@ template&lt;typename H_band_type , typename F_band_type , typename scoring_type 
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00283">283</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00292">292</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -294,7 +295,7 @@ template&lt;typename H_band_type , typename F_band_type &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00309">309</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00318">318</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -358,7 +359,7 @@ template&lt;typename score_type &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00316">316</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00325">325</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -404,7 +405,7 @@ template&lt;typename H_band_type , typename F_band_type &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00302">302</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00311">311</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -421,7 +422,7 @@ template&lt;uint32 BAND_LEN, AlignmentType TYPE, uint32 CHECKPOINTS, typename ch
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00333">333</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00342">342</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -437,7 +438,7 @@ template&lt;uint32 BAND_LEN, AlignmentType TYPE, uint32 CHECKPOINTS, typename ch
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00332">332</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00341">341</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -453,17 +454,17 @@ template&lt;uint32 BAND_LEN, AlignmentType TYPE, uint32 CHECKPOINTS, typename ch
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00334">334</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="gotoh__banded__inl_8h_source.html#l00343">343</a> of file <a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/alignment/gotoh/<a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a></li>
+<li>E:/git/nvbio/nvbio/alignment/gotoh/<a class="el" href="gotoh__banded__inl_8h_source.html">gotoh_banded_inl.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:54 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:33 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

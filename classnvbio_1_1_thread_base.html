@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -105,7 +106,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="threads_8h_source.html#l00049">49</a> of file <a class="el" href="threads_8h_source.html">threads.h</a>.</p>
+<p>Definition at line <a class="el" href="threads_8h_source.html#l00058">58</a> of file <a class="el" href="threads_8h_source.html">threads.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="threads_8h_source.html">threads.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -114,17 +115,14 @@ Inheritance diagram for nvbio::ThreadBase:</div>
  <div class="center">
   <img src="classnvbio_1_1_thread_base.png" usemap="#nvbio::ThreadBase_map" alt=""/>
   <map id="nvbio::ThreadBase_map" name="nvbio::ThreadBase_map">
-<area href="classnvbio_1_1_thread.html" alt="nvbio::Thread&lt; DerivedThreadType &gt;" shape="rect" coords="0,56,278,80"/>
-<area href="classnvbio_1_1_thread.html" alt="nvbio::Thread&lt; BgzfThread &gt;" shape="rect" coords="288,56,566,80"/>
-<area href="classnvbio_1_1_thread.html" alt="nvbio::Thread&lt; InputThread &gt;" shape="rect" coords="576,56,854,80"/>
-<area href="classnvbio_1_1_thread.html" alt="nvbio::Thread&lt; InputThreadPaired &gt;" shape="rect" coords="864,56,1142,80"/>
-<area href="classnvbio_1_1_thread.html" alt="nvbio::Thread&lt; PipelineThreadBase &gt;" shape="rect" coords="1152,56,1430,80"/>
-<area href="struct_bam_tools_1_1_bgzf_thread.html" alt="BamTools::BgzfThread" shape="rect" coords="288,112,566,136"/>
-<area href="structnvbio_1_1bowtie2_1_1cuda_1_1_input_thread.html" alt="nvbio::bowtie2::cuda::InputThread" shape="rect" coords="576,112,854,136"/>
-<area href="structnvbio_1_1bowtie2_1_1cuda_1_1_input_thread_paired.html" alt="nvbio::bowtie2::cuda::InputThreadPaired" shape="rect" coords="864,112,1142,136"/>
-<area href="structnvbio_1_1priv_1_1_pipeline_thread_base.html" alt="nvbio::priv::PipelineThreadBase" shape="rect" coords="1152,112,1430,136"/>
-<area href="structnvbio_1_1priv_1_1_pipeline_sink_thread.html" alt="nvbio::priv::PipelineSinkThread&lt; SinkType &gt;" shape="rect" coords="1008,168,1286,192"/>
-<area href="structnvbio_1_1priv_1_1_pipeline_stage_thread.html" alt="nvbio::priv::PipelineStageThread&lt; StageType &gt;" shape="rect" coords="1296,168,1574,192"/>
+<area href="classnvbio_1_1_thread.html" alt="nvbio::Thread&lt; DerivedThreadType &gt;" shape="rect" coords="236,56,462,80"/>
+<area href="classnvbio_1_1_thread.html" alt="nvbio::Thread&lt; BgzfThread &gt;" shape="rect" coords="236,112,462,136"/>
+<area href="classnvbio_1_1_thread.html" alt="nvbio::Thread&lt; ComputeThreadPE &gt;" shape="rect" coords="236,168,462,192"/>
+<area href="classnvbio_1_1_thread.html" alt="nvbio::Thread&lt; ComputeThreadSE &gt;" shape="rect" coords="236,224,462,248"/>
+<area href="classnvbio_1_1_thread.html" alt="nvbio::Thread&lt; InputThreadPE &gt;" shape="rect" coords="236,280,462,304"/>
+<area href="classnvbio_1_1_thread.html" alt="nvbio::Thread&lt; InputThreadSE &gt;" shape="rect" coords="236,336,462,360"/>
+<area href="classnvbio_1_1_thread.html" alt="nvbio::Thread&lt; OutputThread &gt;" shape="rect" coords="236,392,462,416"/>
+<area href="classnvbio_1_1_thread.html" alt="nvbio::Thread&lt; PipelineThreadBase &gt;" shape="rect" coords="236,448,462,472"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -164,7 +162,7 @@ Public Methods</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threads_8cpp_source.html#l00262">262</a> of file <a class="el" href="threads_8cpp_source.html">threads.cpp</a>.</p>
+<p>Definition at line <a class="el" href="threads_8cpp_source.html#l00271">271</a> of file <a class="el" href="threads_8cpp_source.html">threads.cpp</a>.</p>
 
 </div>
 </div>
@@ -181,7 +179,7 @@ Public Methods</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threads_8cpp_source.html#l00267">267</a> of file <a class="el" href="threads_8cpp_source.html">threads.cpp</a>.</p>
+<p>Definition at line <a class="el" href="threads_8cpp_source.html#l00276">276</a> of file <a class="el" href="threads_8cpp_source.html">threads.cpp</a>.</p>
 
 </div>
 </div>
@@ -212,7 +210,7 @@ Public Methods</h2></td></tr>
 
 <p>create the thread </p>
 
-<p>Definition at line <a class="el" href="threads_8cpp_source.html#l00272">272</a> of file <a class="el" href="threads_8cpp_source.html">threads.cpp</a>.</p>
+<p>Definition at line <a class="el" href="threads_8cpp_source.html#l00281">281</a> of file <a class="el" href="threads_8cpp_source.html">threads.cpp</a>.</p>
 
 </div>
 </div>
@@ -237,7 +235,7 @@ Public Methods</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threads_8h_source.html#l00056">56</a> of file <a class="el" href="threads_8h_source.html">threads.h</a>.</p>
+<p>Definition at line <a class="el" href="threads_8h_source.html#l00065">65</a> of file <a class="el" href="threads_8h_source.html">threads.h</a>.</p>
 
 </div>
 </div>
@@ -256,7 +254,7 @@ Public Methods</h2></td></tr>
 
 <p>join the thread </p>
 
-<p>Definition at line <a class="el" href="threads_8cpp_source.html#l00277">277</a> of file <a class="el" href="threads_8cpp_source.html">threads.cpp</a>.</p>
+<p>Definition at line <a class="el" href="threads_8cpp_source.html#l00286">286</a> of file <a class="el" href="threads_8cpp_source.html">threads.cpp</a>.</p>
 
 </div>
 </div>
@@ -282,18 +280,18 @@ Public Methods</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threads_8h_source.html#l00055">55</a> of file <a class="el" href="threads_8h_source.html">threads.h</a>.</p>
+<p>Definition at line <a class="el" href="threads_8h_source.html#l00064">64</a> of file <a class="el" href="threads_8h_source.html">threads.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/<a class="el" href="threads_8h_source.html">threads.h</a></li>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/<a class="el" href="threads_8cpp_source.html">threads.cpp</a></li>
+<li>E:/git/nvbio/nvbio/basic/<a class="el" href="threads_8h_source.html">threads.h</a></li>
+<li>E:/git/nvbio/nvbio/basic/<a class="el" href="threads_8cpp_source.html">threads.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:32 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:08 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

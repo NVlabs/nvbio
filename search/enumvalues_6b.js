@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['k',['K',['../structnvbio_1_1_alphabet_traits_3_01_d_n_a___i_u_p_a_c_01_4.html#a15c877c5500ab6997e781097c1859dbcaa3ae5baa0af3e1b675f496229ed6ec74',1,'nvbio::AlphabetTraits&lt; DNA_IUPAC &gt;::K()'],['../structnvbio_1_1_alphabet_traits_3_01_p_r_o_t_e_i_n_01_4.html#a87f9f74f48d09677016d783f71feb4f0aa2f8af6e55ec877797b8b97fe5e3783a',1,'nvbio::AlphabetTraits&lt; PROTEIN &gt;::K()']]],
+  ['k',['K',['../structnvbio_1_1_alphabet_traits_3_01_d_n_a___i_u_p_a_c_01_4.html#a0c99051276f51a45914e46d9dd1813cbaa3ae5baa0af3e1b675f496229ed6ec74',1,'nvbio::AlphabetTraits&lt; DNA_IUPAC &gt;::K()'],['../structnvbio_1_1_alphabet_traits_3_01_p_r_o_t_e_i_n_01_4.html#a7fe03a1348be532d9d02111642dcbb07aa2f8af6e55ec877797b8b97fe5e3783a',1,'nvbio::AlphabetTraits&lt; PROTEIN &gt;::K()']]],
   ['kalignment',['kAlignment',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0a58ac240a2595c240eef5e476c1eeaf0a',1,'nvbio-test.cpp']]],
   ['kall',['kALL',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0af21c7069639c247a4c8e34aa0c65cce8',1,'nvbio-test.cpp']]],
   ['kalloc',['kAlloc',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0aba8232a08fa3d33c675c08481d731997',1,'nvbio-test.cpp']]],

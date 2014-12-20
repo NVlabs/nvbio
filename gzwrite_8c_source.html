@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/contrib/zlib-1.2.7/gzwrite.c Source File</title>
+<title>NVBIO: E:/git/nvbio/contrib/zlib-1.2.7/gzwrite.c Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -651,7 +652,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;    <span class="keywordflow">if</span> (state-&gt;size) {</div>
 <div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="gzwrite_8c.html#a578bb1f539c1df875e6ebe887663d425">gz_comp</a>(state, <a class="code" href="contrib_2zlib_2zlib_8h.html#a876a626ba14eb12eea4bbf6823b6ca50">Z_FINISH</a>) == -1)</div>
 <div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;            ret = state-&gt;err;</div>
-<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;        if (!state-&gt;direct) {</div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;        <a class="code" href="group__private.html#ga85d958c03886a94278558ccb0d58e95a">if</a> (!state-&gt;direct) {</div>
 <div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;            (void)<a class="code" href="deflate_8c.html#ada68769789b1d84de7e708d6e848a075">deflateEnd</a>(&amp;(state-&gt;strm));</div>
 <div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;            free(state-&gt;out);</div>
 <div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;        }</div>
@@ -667,7 +668,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:41:56 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:22 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

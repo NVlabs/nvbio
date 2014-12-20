@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['scoringfunctype',['ScoringFuncType',['../group___alignment.html#gaafd3d8be887acc2c35ffdf3c7c7df494',1,'nvbio::bowtie2::cuda']]],
   ['scoringmode',['ScoringMode',['../group__nv_bowtie.html#ga7df415df8dea3af51fa5b274f8102b4f',1,'nvbio::bowtie2::cuda']]],
   ['sequenceencoding',['SequenceEncoding',['../group___sequence_i_o.html#gaa3df48d0ab11675e05f2c34fb70e5673',1,'nvbio::io']]],
   ['sequenceflags',['SequenceFlags',['../group___sequence_i_o.html#ga9a93b533157e6a1e4dc7aa5399340ca3',1,'nvbio::io']]],

@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -108,8 +109,6 @@ Options</h1>
 <pre class="fragment">*    nvSetBWT [options] input_file output_file
 *    options:
 *     -v       | --verbosity     int (0-6) [5]
-*     -cpu-mem | --cpu-memory    int (MB)  [8192]
-*     -gpu-mem | --gpu-memory    int (MB)  [2048]
 *     -c       | --compression   string    [1R]   (e.g. \"1\", ..., \"9\", \"1R\")
 *     -F       | --skip-forward
 *     -R       | --skip-reverse
@@ -135,19 +134,13 @@ File Formats</h1>
 *   struct { uint64 position; uint32 string_id; } pairs[n];
 * </pre><h1><a class="anchor" id="DetailsSection"></a>
 Details</h1>
-<dl class="section user"><dt></dt><dd>nvSetBWT implements a novel variant of the algorithms described in: <br/>
- <em>GPU-Accelerated BWT Construction for Large Collection of Short Reads</em> <br/>
- C.M. Liu, R.Luo, T-W. Lam <br/>
- <a href="http://arxiv.org/abs/1401.7457">http://arxiv.org/abs/1401.7457</a> </dd></dl>
-<dl class="section user"><dt></dt><dd>In more detail, it implements a GPU-parallel version of the same Blockwise Suffix Sorting skeleton, replacing the core block sorter with a new high performance MSD radix sorter. As the new block sorter sifts unique keys incrementally, it is less sensitive to read length (as its performance is linear in the LCP length, rather than the total read length). </dd></dl>
-<dl class="section user"><dt></dt><dd>Moreover, nvSetBWT specializes the algorithms according to the string-set size: if it can fit entirely in GPU memory, it will move all data there and proceed without ever needing to go through host memory again. On a Tesla K40, this allows to process sets containing up to 50Gbps at a greater speed. </dd></dl>
-<dl class="section user"><dt></dt><dd>Larger sets can still be processed <em>out-of-core</em>. The size of the data-set and the processing speed are essentially limited by the amount of available host memory. In fact, the Blockwise Suffix Sorting skeleton partitions the suffixes in buckets, and performs many parallel scans through the entire data set to collect all suffixes belonging to each bucket: the size of the buckets, and the number of scans are directly determined by the amount of available host memory.<br/>
- The amount of memory reserved as working space can be determined with the <em>&ndash;cpu-memory [MB]</em> option.<br/>
- For example, in order to process 100Gbp data-sets we recommend a minimum of 48-64GB of memory: 25GB to hold the data set, and 20GB or 32GB of working space. </dd></dl>
+<dl class="section user"><dt></dt><dd>nvSetBWT implements a novel algorithm for the BWT construction of very large string sets, called <b>set-bwte</b>:</dd></dl>
+<p><a href="http://arxiv.org/pdf/1410.0562.pdf">http://arxiv.org/pdf/1410.0562.pdf</a></p>
+<dl class="section user"><dt></dt><dd>The algorithm can be considered an adaptation of Ferragina's serial <b>bwte</b> algorithm to string sets and massive parallelism. Among its properties, it is well suited to process reads of arbitrary length, and it allows incremental updates (though this option is not yet implemented). </dd></dl>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:17 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:46 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

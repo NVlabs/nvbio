@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -100,7 +101,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Methods</a> &#124;
 <a href="#pub-attribs">Public Members</a> &#124;
-<a href="#pub-static-attribs">Static Public Members</a> &#124;
 <a href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">nvbio::bowtie2::cuda::detail::AlignmentStreamBase&lt; TYPE, AlignerType, PipelineType &gt; Struct Template Reference<div class="ingroups"><a class="el" href="group___alignment_detail.html">AlignmentDetail</a></div></div>  </div>
@@ -115,7 +115,7 @@ struct nvbio::bowtie2::cuda::detail::AlignmentStreamBase&lt; TYPE, AlignerType, 
 
 <p>A base stream class to be used in conjunction with the <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score.html">aln::BatchedAlignmentScore</a> class. This class implements the <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a1646c3593fcfd513b6d679ca4dee3a08">load_strings()</a> method, which performs read and genome loading, and defers the implementation of init_context() to its inheritors, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_score_stream.html">BestScoreStream</a>, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_anchor_score_stream.html">BestAnchorScoreStream</a>, and <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_opposite_score_stream.html">BestOppositeScoreStream</a>. </p>
 
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00194">194</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00261">261</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -123,46 +123,16 @@ struct nvbio::bowtie2::cuda::detail::AlignmentStreamBase&lt; TYPE, AlignerType, 
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base_1_1context__type.html">context_type</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base_1_1strings__type.html">strings_type</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a57c348bfda7da107f2b3ba4bdfd30716"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
-PipelineType::genome_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a57c348bfda7da107f2b3ba4bdfd30716">genome_iterator</a></td></tr>
-<tr class="separator:a57c348bfda7da107f2b3ba4bdfd30716"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f15c867d0c05c272653c2e7730f9ef3"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
-PipelineType::read_batch_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a9f15c867d0c05c272653c2e7730f9ef3">read_batch_type</a></td></tr>
-<tr class="separator:a9f15c867d0c05c272653c2e7730f9ef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6532dafa80d7cbfdc57205871092f7dc"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_strings.html">AlignmentStrings</a><br class="typebreak"/>
+&lt; AlignerType, PipelineType &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a6532dafa80d7cbfdc57205871092f7dc">strings_type</a></td></tr>
+<tr class="separator:a6532dafa80d7cbfdc57205871092f7dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b3391c353f96b1480df619a848dc1c3"><td class="memItemLeft" align="right" valign="top">typedef PipelineType::scheme_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a0b3391c353f96b1480df619a848dc1c3">scheme_type</a></td></tr>
 <tr class="separator:a0b3391c353f96b1480df619a848dc1c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b9b4d491d8a844061b5e517ecb40dd5"><td class="memItemLeft" align="right" valign="top">typedef AlignerType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a4b9b4d491d8a844061b5e517ecb40dd5">aligner_type</a></td></tr>
 <tr class="separator:a4b9b4d491d8a844061b5e517ecb40dd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a531b51daafa5f66aa0437dc671f42e05"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1lmem__cache__tag.html">nvbio::lmem_cache_tag</a><br class="typebreak"/>
-&lt; <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#ae11c6bb5dd73e9b2242c1f30893bdf9e">CACHE_SIZE</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a531b51daafa5f66aa0437dc671f42e05">lmem_cache_type</a></td></tr>
-<tr class="separator:a531b51daafa5f66aa0437dc671f42e05"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa693fb94e3996a96ad52a50af2d85b0"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1_read_loader.html">ReadLoader</a><br class="typebreak"/>
-&lt; <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a9f15c867d0c05c272653c2e7730f9ef3">read_batch_type</a>, <br class="typebreak"/>
-<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a531b51daafa5f66aa0437dc671f42e05">lmem_cache_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#aaa693fb94e3996a96ad52a50af2d85b0">pattern_loader_type</a></td></tr>
-<tr class="separator:aaa693fb94e3996a96ad52a50af2d85b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa339c7c2ef356e9654b43eed42bba051"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
-<a class="el" href="structnvbio_1_1_read_loader.html#ab3b6f04ab17846ddbd732bdef8344f5b">pattern_loader_type::string_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#aa339c7c2ef356e9654b43eed42bba051">pattern_string</a></td></tr>
-<tr class="separator:aa339c7c2ef356e9654b43eed42bba051"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad294699fc8318ce542328b2e6ce05701"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
-pattern_string::qual_string_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#ad294699fc8318ce542328b2e6ce05701">qual_string</a></td></tr>
-<tr class="separator:ad294699fc8318ce542328b2e6ce05701"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad65902c473449a7d7e1d3343fa0ba79f"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1_packed_string_loader.html">PackedStringLoader</a><br class="typebreak"/>
-&lt; typename <br class="typebreak"/>
-genome_iterator::storage_iterator, <br class="typebreak"/>
-genome_iterator::SYMBOL_SIZE, <br class="typebreak"/>
-genome_iterator::BIG_ENDIAN, <br class="typebreak"/>
-<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a531b51daafa5f66aa0437dc671f42e05">lmem_cache_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#ad65902c473449a7d7e1d3343fa0ba79f">text_loader_type</a></td></tr>
-<tr class="separator:ad65902c473449a7d7e1d3343fa0ba79f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae6fa962c5c3e2133ff1037aa0bb2fc0"><td class="memItemLeft" align="right" valign="top">typedef text_loader_type::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#aae6fa962c5c3e2133ff1037aa0bb2fc0">text_iterator</a></td></tr>
-<tr class="separator:aae6fa962c5c3e2133ff1037aa0bb2fc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae908a5a28bd22caba5ac4c56c57b503a"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1vector__view.html">vector_view</a><br class="typebreak"/>
-&lt; <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#aae6fa962c5c3e2133ff1037aa0bb2fc0">text_iterator</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#ae908a5a28bd22caba5ac4c56c57b503a">text_string</a></td></tr>
-<tr class="separator:ae908a5a28bd22caba5ac4c56c57b503a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Methods</h2></td></tr>
@@ -179,7 +149,7 @@ Public Methods</h2></td></tr>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a095ba242650bb3896662c979e3f81341">text_length</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base_1_1context__type.html">context_type</a> *context) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
 <tr class="separator:a095ba242650bb3896662c979e3f81341"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1646c3593fcfd513b6d679ca4dee3a08"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a1646c3593fcfd513b6d679ca4dee3a08">load_strings</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_begin, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_end, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base_1_1context__type.html">context_type</a> *context, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base_1_1strings__type.html">strings_type</a> *strings) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a1646c3593fcfd513b6d679ca4dee3a08">load_strings</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_begin, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_end, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base_1_1context__type.html">context_type</a> *context, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a6532dafa80d7cbfdc57205871092f7dc">strings_type</a> *strings) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
 <tr class="separator:a1646c3593fcfd513b6d679ca4dee3a08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -193,11 +163,6 @@ Public Members</h2></td></tr>
 <tr class="memitem:a9eea02ef97d4c04e140743af0b4e20b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params_p_o_d.html">ParamsPOD</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a9eea02ef97d4c04e140743af0b4e20b3">m_params</a></td></tr>
 <tr class="memdesc:a9eea02ef97d4c04e140743af0b4e20b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">global parameters  <a href="#a9eea02ef97d4c04e140743af0b4e20b3">More...</a><br/></td></tr>
 <tr class="separator:a9eea02ef97d4c04e140743af0b4e20b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
-Static Public Members</h2></td></tr>
-<tr class="memitem:ae11c6bb5dd73e9b2242c1f30893bdf9e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#ae11c6bb5dd73e9b2242c1f30893bdf9e">CACHE_SIZE</a> = 64</td></tr>
-<tr class="separator:ae11c6bb5dd73e9b2242c1f30893bdf9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="a4b9b4d491d8a844061b5e517ecb40dd5"></a>
@@ -212,103 +177,7 @@ template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineTyp
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00199">199</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a57c348bfda7da107f2b3ba4bdfd30716"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineType&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef PipelineType::genome_iterator <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html">nvbio::bowtie2::cuda::detail::AlignmentStreamBase</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, AlignerType, PipelineType &gt;::<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a57c348bfda7da107f2b3ba4bdfd30716">genome_iterator</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00196">196</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a531b51daafa5f66aa0437dc671f42e05"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineType&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1lmem__cache__tag.html">nvbio::lmem_cache_tag</a>&lt;<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#ae11c6bb5dd73e9b2242c1f30893bdf9e">CACHE_SIZE</a>&gt; <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html">nvbio::bowtie2::cuda::detail::AlignmentStreamBase</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, AlignerType, PipelineType &gt;::<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a531b51daafa5f66aa0437dc671f42e05">lmem_cache_type</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00202">202</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aaa693fb94e3996a96ad52a50af2d85b0"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineType&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1_read_loader.html">ReadLoader</a>&lt;<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a9f15c867d0c05c272653c2e7730f9ef3">read_batch_type</a>,<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a531b51daafa5f66aa0437dc671f42e05">lmem_cache_type</a> &gt; <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html">nvbio::bowtie2::cuda::detail::AlignmentStreamBase</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, AlignerType, PipelineType &gt;::<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#aaa693fb94e3996a96ad52a50af2d85b0">pattern_loader_type</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00204">204</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aa339c7c2ef356e9654b43eed42bba051"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineType&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1_read_loader.html#ab3b6f04ab17846ddbd732bdef8344f5b">pattern_loader_type::string_type</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html">nvbio::bowtie2::cuda::detail::AlignmentStreamBase</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, AlignerType, PipelineType &gt;::<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#aa339c7c2ef356e9654b43eed42bba051">pattern_string</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00205">205</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ad294699fc8318ce542328b2e6ce05701"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineType&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef pattern_string::qual_string_type <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html">nvbio::bowtie2::cuda::detail::AlignmentStreamBase</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, AlignerType, PipelineType &gt;::<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#ad294699fc8318ce542328b2e6ce05701">qual_string</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00206">206</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a9f15c867d0c05c272653c2e7730f9ef3"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineType&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef PipelineType::read_batch_type <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html">nvbio::bowtie2::cuda::detail::AlignmentStreamBase</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, AlignerType, PipelineType &gt;::<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a9f15c867d0c05c272653c2e7730f9ef3">read_batch_type</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00197">197</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00265">265</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
 
 </div>
 </div>
@@ -324,55 +193,23 @@ template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineTyp
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00198">198</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00264">264</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aae6fa962c5c3e2133ff1037aa0bb2fc0"></a>
+<a class="anchor" id="a6532dafa80d7cbfdc57205871092f7dc"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineType&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef text_loader_type::iterator <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html">nvbio::bowtie2::cuda::detail::AlignmentStreamBase</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, AlignerType, PipelineType &gt;::<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#aae6fa962c5c3e2133ff1037aa0bb2fc0">text_iterator</a></td>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_strings.html">AlignmentStrings</a>&lt;AlignerType,PipelineType&gt; <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html">nvbio::bowtie2::cuda::detail::AlignmentStreamBase</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, AlignerType, PipelineType &gt;::<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a6532dafa80d7cbfdc57205871092f7dc">strings_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00213">213</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ad65902c473449a7d7e1d3343fa0ba79f"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineType&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1_packed_string_loader.html">PackedStringLoader</a>&lt; typename genome_iterator::storage_iterator, genome_iterator::SYMBOL_SIZE, genome_iterator::BIG_ENDIAN, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a531b51daafa5f66aa0437dc671f42e05">lmem_cache_type</a>&gt; <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html">nvbio::bowtie2::cuda::detail::AlignmentStreamBase</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, AlignerType, PipelineType &gt;::<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#ad65902c473449a7d7e1d3343fa0ba79f">text_loader_type</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00212">212</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ae908a5a28bd22caba5ac4c56c57b503a"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineType&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1vector__view.html">vector_view</a>&lt;<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#aae6fa962c5c3e2133ff1037aa0bb2fc0">text_iterator</a>&gt; <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html">nvbio::bowtie2::cuda::detail::AlignmentStreamBase</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, AlignerType, PipelineType &gt;::<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#ae908a5a28bd22caba5ac4c56c57b503a">text_string</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00214">214</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00263">263</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
 
 </div>
 </div>
@@ -418,7 +255,7 @@ template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineTyp
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00242">242</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00283">283</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
 
 </div>
 </div>
@@ -447,7 +284,7 @@ template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineTyp
 </div><div class="memdoc">
 <p>get the aligner </p>
 
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00251">251</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00292">292</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
 
 </div>
 </div>
@@ -487,7 +324,7 @@ template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineTyp
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base_1_1strings__type.html">strings_type</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a6532dafa80d7cbfdc57205871092f7dc">strings_type</a> *&#160;</td>
           <td class="paramname"><em>strings</em>&#160;</td>
         </tr>
         <tr>
@@ -514,7 +351,7 @@ template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineTyp
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00277">277</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00318">318</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
 
 </div>
 </div>
@@ -553,7 +390,7 @@ template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineTyp
 </div><div class="memdoc">
 <p>return the pattern length </p>
 
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00256">256</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00297">297</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
 
 </div>
 </div>
@@ -592,35 +429,11 @@ template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineTyp
 </div><div class="memdoc">
 <p>return the text length </p>
 
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00264">264</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00305">305</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="ae11c6bb5dd73e9b2242c1f30893bdf9e"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineType&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html">nvbio::bowtie2::cuda::detail::AlignmentStreamBase</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, AlignerType, PipelineType &gt;::CACHE_SIZE = 64</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00201">201</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="ab6824ff06e801c915b1ec972f01423f0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -635,7 +448,7 @@ template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineTyp
 
 <p>the aligner </p>
 
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00305">305</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00330">330</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
 
 </div>
 </div>
@@ -653,7 +466,7 @@ template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineTyp
 
 <p>global parameters </p>
 
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00306">306</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00331">331</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
 
 </div>
 </div>
@@ -671,17 +484,17 @@ template&lt;AlignmentStreamType TYPE, typename AlignerType, typename PipelineTyp
 
 <p>the pipeline object </p>
 
-<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00304">304</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__utils_8h_source.html#l00329">329</a> of file <a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/<a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a></li>
+<li>E:/git/nvbio/nvBowtie/bowtie2/cuda/<a class="el" href="alignment__utils_8h_source.html">alignment_utils.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:43:00 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:42 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

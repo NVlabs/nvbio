@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -114,13 +115,13 @@ struct nvbio::aln::priv::banded::SmithWatermanSubmatrixContext&lt; BAND_LEN, TYP
 
 <p>A helper scoring context class, instantiated to configure <a class="el" href="structnvbio_1_1aln_1_1priv_1_1banded_1_1sw__alignment__score__dispatch.html">sw_alignment_score_dispatch</a> to keep track of the direction vectors of a DP submatrix between given checkpoints </p>
 
-<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00222">222</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00231">231</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Methods</h2></td></tr>
-<tr class="memitem:a0b768aa59b82c5418e6eb46f5f910598"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1banded_1_1_smith_waterman_submatrix_context.html#a0b768aa59b82c5418e6eb46f5f910598">SmithWatermanSubmatrixContext</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> checkpoint_type checkpoints, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> checkpoint_id, submatrix_type submatrix)</td></tr>
+<tr class="memitem:a0b768aa59b82c5418e6eb46f5f910598"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1banded_1_1_smith_waterman_submatrix_context.html#a0b768aa59b82c5418e6eb46f5f910598">SmithWatermanSubmatrixContext</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> checkpoint_type <a class="el" href="group__private.html#ga79bab77c39c290c168c83216050371c4">checkpoints</a>, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> checkpoint_id, submatrix_type submatrix)</td></tr>
 <tr class="separator:a0b768aa59b82c5418e6eb46f5f910598"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06c2e3951e53113db7f0b9b4cfdbf988"><td class="memTemplParams" colspan="2">template&lt;typename band_type , typename scoring_type , typename score_type &gt; </td></tr>
 <tr class="memitem:a06c2e3951e53113db7f0b9b4cfdbf988"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
@@ -189,7 +190,7 @@ template&lt;uint32 BAND_LEN, AlignmentType TYPE, uint32 CHECKPOINTS, typename ch
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00225">225</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00234">234</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -242,7 +243,7 @@ template&lt;typename band_type , typename scoring_type , typename score_type &gt
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00235">235</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00244">244</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -282,7 +283,7 @@ template&lt;typename band_type &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00255">255</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00264">264</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -334,7 +335,7 @@ template&lt;typename score_type &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00261">261</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00270">270</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -374,7 +375,7 @@ template&lt;typename band_type &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00249">249</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00258">258</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -391,7 +392,7 @@ template&lt;uint32 BAND_LEN, AlignmentType TYPE, uint32 CHECKPOINTS, typename ch
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00273">273</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00282">282</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -407,7 +408,7 @@ template&lt;uint32 BAND_LEN, AlignmentType TYPE, uint32 CHECKPOINTS, typename ch
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00272">272</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00281">281</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
 
 </div>
 </div>
@@ -423,17 +424,17 @@ template&lt;uint32 BAND_LEN, AlignmentType TYPE, uint32 CHECKPOINTS, typename ch
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00274">274</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__banded__inl_8h_source.html#l00283">283</a> of file <a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/alignment/sw/<a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a></li>
+<li>E:/git/nvbio/nvbio/alignment/sw/<a class="el" href="sw__banded__inl_8h_source.html">sw_banded_inl.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:54 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:33 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

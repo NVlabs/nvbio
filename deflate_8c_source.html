@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/contrib/zlib-1.2.7/deflate.c Source File</title>
+<title>NVBIO: E:/git/nvbio/contrib/zlib-1.2.7/deflate.c Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -194,7 +195,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">#ifdef DEBUG</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor"></span><a class="code" href="adler32_8c.html#a08023ea6765c99d60a6a3840cd07156e">local</a>  <span class="keywordtype">void</span> <a class="code" href="deflate_8c.html#a4041db99b23ca08963d3e5c284d837d6">check_match</a> <a class="code" href="build_2contrib_2zlib-1_82_87_2zconf_8h.html#aa6c3c093d0900e1d96d07c91b53c1b5d">OF</a>((<a class="code" href="structinternal__state.html">deflate_state</a> *s, <a class="code" href="deflate_8h.html#ada696b787a46d01634b6365afcec1a9e">IPos</a> <a class="code" href="cpu__bucketing_8h.html#a5537bd5e15087e05c249d4b62d45efac">start</a>, <a class="code" href="deflate_8h.html#ada696b787a46d01634b6365afcec1a9e">IPos</a> <a class="code" href="group___f_m_index.html#ga6bd073dd2ab22f3ac945181646d9c190">match</a>,</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor"></span><a class="code" href="adler32_8c.html#a08023ea6765c99d60a6a3840cd07156e">local</a>  <span class="keywordtype">void</span> <a class="code" href="deflate_8c.html#a4041db99b23ca08963d3e5c284d837d6">check_match</a> <a class="code" href="build_2contrib_2zlib-1_82_87_2zconf_8h.html#aa6c3c093d0900e1d96d07c91b53c1b5d">OF</a>((<a class="code" href="structinternal__state.html">deflate_state</a> *s, <a class="code" href="deflate_8h.html#ada696b787a46d01634b6365afcec1a9e">IPos</a> start, <a class="code" href="deflate_8h.html#ada696b787a46d01634b6365afcec1a9e">IPos</a> <a class="code" href="group___f_m_index.html#ga6bd073dd2ab22f3ac945181646d9c190">match</a>,</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                            <span class="keywordtype">int</span> <a class="code" href="group___basic.html#gae962be09940c267ce467e74a160a542a">length</a>));</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor"></span></div>
@@ -508,7 +509,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    s-&gt;<a class="code" href="structinternal__state.html#ac92f5b70c269be4685539daef10b15a3">pending</a> = 0;</div>
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    s-&gt;<a class="code" href="structinternal__state.html#a6e15ed78675c3c7bdb312623b5eceb7a">pending_out</a> = s-&gt;<a class="code" href="structinternal__state.html#ae5f393e8d0d569da6038749768f65b94">pending_buf</a>;</div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    if (s-&gt;<a class="code" href="structinternal__state.html#ae80327ea7ad4ad0ef5baeef5ef3a6807">wrap</a> &lt; 0) {</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    <a class="code" href="group__private.html#ga85d958c03886a94278558ccb0d58e95a">if</a> (s-&gt;<a class="code" href="structinternal__state.html#ae80327ea7ad4ad0ef5baeef5ef3a6807">wrap</a> &lt; 0) {</div>
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;        s-&gt;<a class="code" href="structinternal__state.html#ae80327ea7ad4ad0ef5baeef5ef3a6807">wrap</a> = -s-&gt;<a class="code" href="structinternal__state.html#ae80327ea7ad4ad0ef5baeef5ef3a6807">wrap</a>; <span class="comment">/* was made negative by deflate(..., Z_FINISH); */</span></div>
 <div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;    }</div>
 <div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    s-&gt;<a class="code" href="structinternal__state.html#a8756cacdbac452a2633f87e06fae6c52">status</a> = s-&gt;<a class="code" href="structinternal__state.html#ae80327ea7ad4ad0ef5baeef5ef3a6807">wrap</a> ? <a class="code" href="deflate_8h.html#a96cb576b9a3b5f8cb90bd4bb7ee449d2">INIT_STATE</a> : <a class="code" href="deflate_8h.html#a4821f69a5605c2618cd4dc4d3f60979c">BUSY_STATE</a>;</div>
@@ -1452,23 +1453,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01351"></a><span class="lineno"> 1351</span>&#160;<span class="preprocessor"></span><span class="comment">/* ===========================================================================</span></div>
 <div class="line"><a name="l01352"></a><span class="lineno"> 1352</span>&#160;<span class="comment"> * Check that the match at match_start is indeed a match.</span></div>
 <div class="line"><a name="l01353"></a><span class="lineno"> 1353</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l01354"></a><span class="lineno"> 1354</span>&#160;<a class="code" href="adler32_8c.html#a08023ea6765c99d60a6a3840cd07156e">local</a> <span class="keywordtype">void</span> <a class="code" href="deflate_8c.html#a4041db99b23ca08963d3e5c284d837d6">check_match</a>(s, <a class="code" href="cpu__bucketing_8h.html#a5537bd5e15087e05c249d4b62d45efac">start</a>, match, <a class="code" href="group___basic.html#gae962be09940c267ce467e74a160a542a">length</a>)</div>
+<div class="line"><a name="l01354"></a><span class="lineno"> 1354</span>&#160;<a class="code" href="adler32_8c.html#a08023ea6765c99d60a6a3840cd07156e">local</a> <span class="keywordtype">void</span> <a class="code" href="deflate_8c.html#a4041db99b23ca08963d3e5c284d837d6">check_match</a>(s, start, match, <a class="code" href="group___basic.html#gae962be09940c267ce467e74a160a542a">length</a>)</div>
 <div class="line"><a name="l01355"></a><span class="lineno"> 1355</span>&#160;    <a class="code" href="structinternal__state.html">deflate_state</a> *s;</div>
-<div class="line"><a name="l01356"></a><span class="lineno"> 1356</span>&#160;    <a class="code" href="deflate_8h.html#ada696b787a46d01634b6365afcec1a9e">IPos</a> <a class="code" href="cpu__bucketing_8h.html#a5537bd5e15087e05c249d4b62d45efac">start</a>, match;</div>
+<div class="line"><a name="l01356"></a><span class="lineno"> 1356</span>&#160;    <a class="code" href="deflate_8h.html#ada696b787a46d01634b6365afcec1a9e">IPos</a> start, match;</div>
 <div class="line"><a name="l01357"></a><span class="lineno"> 1357</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="group___basic.html#gae962be09940c267ce467e74a160a542a">length</a>;</div>
 <div class="line"><a name="l01358"></a><span class="lineno"> 1358</span>&#160;{</div>
 <div class="line"><a name="l01359"></a><span class="lineno"> 1359</span>&#160;    <span class="comment">/* check that the match is indeed a match */</span></div>
 <div class="line"><a name="l01360"></a><span class="lineno"> 1360</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="zutil_8c.html#afa24e136b162a10f0ad3b2ed3000b413">zmemcmp</a>(s-&gt;window + match,</div>
 <div class="line"><a name="l01361"></a><span class="lineno"> 1361</span>&#160;                s-&gt;window + start, length) != <a class="code" href="deflate_8c.html#a214c717b2e51e1993a749ac99df7de58">EQUAL</a>) {</div>
-<div class="line"><a name="l01362"></a><span class="lineno"> 1362</span>&#160;        <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(stderr, <span class="stringliteral">&quot; start %u, match %u, length %d\n&quot;</span>,</div>
+<div class="line"><a name="l01362"></a><span class="lineno"> 1362</span>&#160;        fprintf(stderr, <span class="stringliteral">&quot; start %u, match %u, length %d\n&quot;</span>,</div>
 <div class="line"><a name="l01363"></a><span class="lineno"> 1363</span>&#160;                start, match, length);</div>
 <div class="line"><a name="l01364"></a><span class="lineno"> 1364</span>&#160;        <span class="keywordflow">do</span> {</div>
-<div class="line"><a name="l01365"></a><span class="lineno"> 1365</span>&#160;            <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(stderr, <span class="stringliteral">&quot;%c%c&quot;</span>, s-&gt;window[match++], s-&gt;window[start++]);</div>
+<div class="line"><a name="l01365"></a><span class="lineno"> 1365</span>&#160;            fprintf(stderr, <span class="stringliteral">&quot;%c%c&quot;</span>, s-&gt;window[match++], s-&gt;window[start++]);</div>
 <div class="line"><a name="l01366"></a><span class="lineno"> 1366</span>&#160;        } <span class="keywordflow">while</span> (--length != 0);</div>
 <div class="line"><a name="l01367"></a><span class="lineno"> 1367</span>&#160;        z_error(<span class="stringliteral">&quot;invalid match&quot;</span>);</div>
 <div class="line"><a name="l01368"></a><span class="lineno"> 1368</span>&#160;    }</div>
 <div class="line"><a name="l01369"></a><span class="lineno"> 1369</span>&#160;    <span class="keywordflow">if</span> (z_verbose &gt; 1) {</div>
-<div class="line"><a name="l01370"></a><span class="lineno"> 1370</span>&#160;        <a class="code" href="cpu__bucketing_8h.html#a7d2005f0c7f1063b71cb35a79b9d73bd">fprintf</a>(stderr,<span class="stringliteral">&quot;\\[%d,%d]&quot;</span>, start-match, length);</div>
+<div class="line"><a name="l01370"></a><span class="lineno"> 1370</span>&#160;        fprintf(stderr,<span class="stringliteral">&quot;\\[%d,%d]&quot;</span>, start-match, length);</div>
 <div class="line"><a name="l01371"></a><span class="lineno"> 1371</span>&#160;        <span class="keywordflow">do</span> { putc(s-&gt;window[start++], stderr); } <span class="keywordflow">while</span> (--length != 0);</div>
 <div class="line"><a name="l01372"></a><span class="lineno"> 1372</span>&#160;    }</div>
 <div class="line"><a name="l01373"></a><span class="lineno"> 1373</span>&#160;}</div>
@@ -1619,7 +1620,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01518"></a><span class="lineno"> 1518</span>&#160;<span class="comment">             * to end of window, whichever is less.</span></div>
 <div class="line"><a name="l01519"></a><span class="lineno"> 1519</span>&#160;<span class="comment">             */</span></div>
 <div class="line"><a name="l01520"></a><span class="lineno"> 1520</span>&#160;            init = (<a class="code" href="zutil_8h.html#abd6f60bf9450af2ecb94097a32c19a64">ulg</a>)curr + <a class="code" href="deflate_8h.html#ac2836f69eb1551bb9699e4dd87dfbdc0">WIN_INIT</a> - s-&gt;high_water;</div>
-<div class="line"><a name="l01521"></a><span class="lineno"> 1521</span>&#160;            if (init &gt; s-&gt;window_size - s-&gt;high_water)</div>
+<div class="line"><a name="l01521"></a><span class="lineno"> 1521</span>&#160;            <a class="code" href="group__private.html#ga85d958c03886a94278558ccb0d58e95a">if</a> (init &gt; s-&gt;window_size - s-&gt;high_water)</div>
 <div class="line"><a name="l01522"></a><span class="lineno"> 1522</span>&#160;                init = s-&gt;window_size - s-&gt;high_water;</div>
 <div class="line"><a name="l01523"></a><span class="lineno"> 1523</span>&#160;            <a class="code" href="zutil_8c.html#a9d1ad31f82b89b791ce9c70c24d3947c">zmemzero</a>(s-&gt;window + s-&gt;high_water, (<span class="keywordtype">unsigned</span>)init);</div>
 <div class="line"><a name="l01524"></a><span class="lineno"> 1524</span>&#160;            s-&gt;high_water += init;</div>
@@ -2067,7 +2068,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:41:56 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:22 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

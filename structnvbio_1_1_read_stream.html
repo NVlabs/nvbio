@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -112,7 +113,7 @@ struct nvbio::ReadStream&lt; StreamType, QualType &gt;</h3>
 
 <p>Helper class to represent a read or its reverse-complement - useful to avoid warp-divergence. </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00118">118</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00127">127</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -154,12 +155,12 @@ Public Methods</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Members</h2></td></tr>
-<tr class="memitem:a4aa0a4b9eec86c7dde62f796c1cf2dab"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream.html#a4aa0a4b9eec86c7dde62f796c1cf2dab">rev</a></td></tr>
-<tr class="memdesc:a4aa0a4b9eec86c7dde62f796c1cf2dab"><td class="mdescLeft">&#160;</td><td class="mdescRight">reverse flag  <a href="#a4aa0a4b9eec86c7dde62f796c1cf2dab">More...</a><br/></td></tr>
-<tr class="separator:a4aa0a4b9eec86c7dde62f796c1cf2dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a385199190f6955bab28092003499b886"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream.html#a385199190f6955bab28092003499b886">comp</a></td></tr>
-<tr class="memdesc:a385199190f6955bab28092003499b886"><td class="mdescLeft">&#160;</td><td class="mdescRight">complement flag  <a href="#a385199190f6955bab28092003499b886">More...</a><br/></td></tr>
-<tr class="separator:a385199190f6955bab28092003499b886"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a9594fccc86bca143d01be8148678bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream.html#a7a9594fccc86bca143d01be8148678bd">rev</a></td></tr>
+<tr class="memdesc:a7a9594fccc86bca143d01be8148678bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">reverse flag  <a href="#a7a9594fccc86bca143d01be8148678bd">More...</a><br/></td></tr>
+<tr class="separator:a7a9594fccc86bca143d01be8148678bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67c3b57a65c501d7830c800bcbaa097d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream.html#a67c3b57a65c501d7830c800bcbaa097d">comp</a></td></tr>
+<tr class="memdesc:a67c3b57a65c501d7830c800bcbaa097d"><td class="mdescLeft">&#160;</td><td class="mdescRight">complement flag  <a href="#a67c3b57a65c501d7830c800bcbaa097d">More...</a><br/></td></tr>
+<tr class="separator:a67c3b57a65c501d7830c800bcbaa097d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b37e886ed6e56fbebda2ee4fcf37b45"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream.html#a3b37e886ed6e56fbebda2ee4fcf37b45">first</a></td></tr>
 <tr class="separator:a3b37e886ed6e56fbebda2ee4fcf37b45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fdfd0a5e2d2a6aa429dffee077335f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream.html#a9fdfd0a5e2d2a6aa429dffee077335f9">last</a></td></tr>
@@ -185,7 +186,7 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00122">122</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00131">131</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -201,7 +202,7 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00121">121</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00130">130</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -217,7 +218,7 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00120">120</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00129">129</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -246,7 +247,7 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
 </div><div class="memdoc">
 <p>default constructor </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00127">127</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00136">136</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -285,7 +286,7 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00132">132</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00141">141</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -330,7 +331,7 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00138">138</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00147">147</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -359,7 +360,7 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
 </div><div class="memdoc">
 <p>return string length </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00149">149</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00158">158</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -388,7 +389,7 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
 </div><div class="memdoc">
 <p>return a given base </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00154">154</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00163">163</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -416,7 +417,7 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
 </div><div class="memdoc">
 <p>return qualities </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00174">174</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00183">183</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -445,7 +446,7 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
 </div><div class="memdoc">
 <p>return a given base quality </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00165">165</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00174">174</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -484,26 +485,26 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
 </div><div class="memdoc">
 <p>set the read flags </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00144">144</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00153">153</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a385199190f6955bab28092003499b886"></a>
+<a class="anchor" id="a67c3b57a65c501d7830c800bcbaa097d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="structnvbio_1_1_read_stream.html">nvbio::ReadStream</a>&lt; StreamType, QualType &gt;::comp</td>
+          <td class="memname"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1_read_stream.html">nvbio::ReadStream</a>&lt; StreamType, QualType &gt;::comp</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>complement flag </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00177">177</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00186">186</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -519,7 +520,7 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00178">178</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00187">187</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -537,7 +538,7 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
 
 <p>offset of first and last elements </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00178">178</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00187">187</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -555,25 +556,25 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
 
 <p>quality stream </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00180">180</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00189">189</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a4aa0a4b9eec86c7dde62f796c1cf2dab"></a>
+<a class="anchor" id="a7a9594fccc86bca143d01be8148678bd"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="structnvbio_1_1_read_stream.html">nvbio::ReadStream</a>&lt; StreamType, QualType &gt;::rev</td>
+          <td class="memname"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1_read_stream.html">nvbio::ReadStream</a>&lt; StreamType, QualType &gt;::rev</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>reverse flag </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00176">176</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00185">185</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -591,17 +592,17 @@ template&lt;typename StreamType, typename QualType = quality_nop&gt; </div>
 
 <p>read stream </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00179">179</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00188">188</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/io/<a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a></li>
+<li>E:/git/nvbio/nvbio/io/<a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:39 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:16 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

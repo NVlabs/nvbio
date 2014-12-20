@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/score_inl.h File Reference</title>
+<title>NVBIO: E:/git/nvbio/nvBowtie/bowtie2/cuda/score_inl.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -145,23 +146,20 @@ Functions</h2></td></tr>
 <tr class="memitem:ga5a668c8dde6b0bc161bfe953308677a2"><td class="memTemplParams" colspan="2">template&lt;typename aligner_type , typename pipeline_type &gt; </td></tr>
 <tr class="memitem:ga5a668c8dde6b0bc161bfe953308677a2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring_detail.html#ga5a668c8dde6b0bc161bfe953308677a2">nvbio::bowtie2::cuda::detail::banded_score_all</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pipeline_type &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> aligner_type aligner, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_offset, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_size, uint32 *counter)</td></tr>
 <tr class="separator:ga5a668c8dde6b0bc161bfe953308677a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga56e68063eee00be8726c13bbb9d92556"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
-<tr class="memitem:ga56e68063eee00be8726c13bbb9d92556"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga56e68063eee00be8726c13bbb9d92556">nvbio::bowtie2::cuda::score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga56e68063eee00be8726c13bbb9d92556"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga25139a24703152f236d5b0d4dbaf4426"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
-<tr class="memitem:ga25139a24703152f236d5b0d4dbaf4426"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga25139a24703152f236d5b0d4dbaf4426">nvbio::bowtie2::cuda::anchor_score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga25139a24703152f236d5b0d4dbaf4426"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga30a0a305deae846f983459397f8617ed"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
-<tr class="memitem:ga30a0a305deae846f983459397f8617ed"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga30a0a305deae846f983459397f8617ed">nvbio::bowtie2::cuda::opposite_score_best</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga30a0a305deae846f983459397f8617ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga7e14ef3067493132a09200cc21bcc82b"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
-<tr class="memitem:ga7e14ef3067493132a09200cc21bcc82b"><td class="memTemplItemLeft" align="right" valign="top">uint32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga7e14ef3067493132a09200cc21bcc82b">nvbio::bowtie2::cuda::score_all</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> AllMappingPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_offset, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_size)</td></tr>
-<tr class="separator:ga7e14ef3067493132a09200cc21bcc82b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7b2211344d6ab648d4f16caab12f361d"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
+<tr class="memitem:ga7b2211344d6ab648d4f16caab12f361d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga7b2211344d6ab648d4f16caab12f361d">nvbio::bowtie2::cuda::score_best_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
+<tr class="separator:ga7b2211344d6ab648d4f16caab12f361d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6f54bad488b339a50b5a87b260eb6abc"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
+<tr class="memitem:ga6f54bad488b339a50b5a87b260eb6abc"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga6f54bad488b339a50b5a87b260eb6abc">nvbio::bowtie2::cuda::anchor_score_best_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
+<tr class="separator:ga6f54bad488b339a50b5a87b260eb6abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7d75c761f7a8c31ba98f2965cbbae4b0"><td class="memTemplParams" colspan="2">template&lt;typename scheme_type &gt; </td></tr>
+<tr class="memitem:ga7d75c761f7a8c31ba98f2965cbbae4b0"><td class="memTemplItemLeft" align="right" valign="top">uint32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___scoring.html#ga7d75c761f7a8c31ba98f2965cbbae4b0">nvbio::bowtie2::cuda::score_all_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 band_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> AllMappingPipelineState&lt; scheme_type &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_offset, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_size)</td></tr>
+<tr class="separator:ga7d75c761f7a8c31ba98f2965cbbae4b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:16 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:44 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

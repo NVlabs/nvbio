@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/aligner.h File Reference</title>
+<title>NVBIO: E:/git/nvbio/nvBowtie/bowtie2/cuda/aligner.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -109,18 +110,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;<a class="el" href="seed__hit_8h_source.html">nvBowtie/bowtie2/cuda/seed_hit.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="seed__hit__deque__array_8h_source.html">nvBowtie/bowtie2/cuda/seed_hit_deque_array.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="scoring__queues_8h_source.html">nvBowtie/bowtie2/cuda/scoring_queues.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="bowtie2__cuda__driver_8h_source.html">nvBowtie/bowtie2/cuda/bowtie2_cuda_driver.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="params_8h_source.html">nvBowtie/bowtie2/cuda/params.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">nvBowtie/bowtie2/cuda/stats.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="mapping_8h_source.html">nvBowtie/bowtie2/cuda/mapping.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="alignments_8h_source.html">nvbio/io/alignments.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="output__file_8h_source.html">nvbio/io/output/output_file.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="output__batch_8h_source.html">nvbio/io/output/output_batch.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="sequence_8h_source.html">nvbio/io/sequence/sequence.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="scoring_8h_source.html">nvBowtie/bowtie2/cuda/scoring.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="mapq_8h_source.html">nvBowtie/bowtie2/cuda/mapq.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="nv_bowtie_2bowtie2_2cuda_2input__thread_8h_source.html">nvBowtie/bowtie2/cuda/input_thread.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="arch_8h_source.html">nvbio/basic/cuda/arch.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="nvbio_2basic_2cuda_2sort_8h_source.html">nvbio/basic/cuda/sort.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="sort_8h_source.html">nvbio/basic/cuda/sort.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="host__device__buffer_8h_source.html">nvbio/basic/cuda/host_device_buffer.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="work__queue_8h_source.html">nvbio/basic/cuda/work_queue.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="timer_8h_source.html">nvbio/basic/timer.h</a>&gt;</code><br/>
@@ -169,11 +169,13 @@ Functions</h2></td></tr>
 <tr class="separator:a072985b31bf7296bfd0d300a874f512a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a587f0c4c9f796ecc82059fb5037ab001"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1bowtie2_1_1cuda.html#a587f0c4c9f796ecc82059fb5037ab001">nvbio::bowtie2::cuda::ring_buffer_to_plain_array</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *buffer, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 buffer_size, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 begin, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 end, uint32 *output)</td></tr>
 <tr class="separator:a587f0c4c9f796ecc82059fb5037ab001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d6765a81b18e4876601e88b2be4a441"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1bowtie2_1_1cuda.html#a9d6765a81b18e4876601e88b2be4a441">nvbio::bowtie2::cuda::mark_unaligned</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 n_active_reads, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *active_reads, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> io::Alignment *best_data, uint8 *reseed)</td></tr>
+<tr class="separator:a9d6765a81b18e4876601e88b2be4a441"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:15 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:44 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

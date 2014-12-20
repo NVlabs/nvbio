@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/simd.h Source File</title>
+<title>NVBIO: E:/git/nvbio/nvbio/basic/simd.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -100,124 +101,133 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a href="simd_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (c) 2012-14, NVIDIA CORPORATION.  All rights reserved.</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * NVIDIA CORPORATION and its licensors retain all intellectual property</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * and proprietary rights in and to this software, related documentation</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * and any modifications thereto.  Any use, reproduction, disclosure or</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> * distribution of this software and related documentation without an express</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> * license agreement from NVIDIA CORPORATION is strictly prohibited.</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="types_8h.html">nvbio/basic/types.h</a>&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#ifdef __CUDACC__</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;<a class="code" href="nvbio_2basic_2cuda_2simd__functions_8h.html">nvbio/basic/cuda/simd_functions.h</a>&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;cmath&gt;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;limits&gt;</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * nvbio</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (c) 2011-2014, NVIDIA CORPORATION. All rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * </span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Redistribution and use in source and binary forms, with or without</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * modification, are permitted provided that the following conditions are met:</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> *    * Redistributions of source code must retain the above copyright</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> *      notice, this list of conditions and the following disclaimer.</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *    * Redistributions in binary form must reproduce the above copyright</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> *      notice, this list of conditions and the following disclaimer in the</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> *      documentation and/or other materials provided with the distribution.</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *    * Neither the name of the NVIDIA CORPORATION nor the</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *      names of its contributors may be used to endorse or promote products</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *      derived from this software without specific prior written permission.</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * </span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> * DISCLAIMED. IN NO EVENT SHALL NVIDIA CORPORATION BE LIABLE FOR ANY</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span>nvbio {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="code" href="structnvbio_1_1simd4u8.html">   33</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1simd4u8.html">simd4u8</a></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="code" href="structnvbio_1_1simd4u8_1_1base__rep__tag.html">   35</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structnvbio_1_1simd4u8_1_1base__rep__tag.html">base_rep_tag</a> {};</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="types_8h.html">nvbio/basic/types.h</a>&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#ifdef __CUDACC__</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;<a class="code" href="nvbio_2basic_2cuda_2simd__functions_8h.html">nvbio/basic/cuda/simd_functions.h</a>&gt;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;cmath&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &lt;limits&gt;</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="code" href="structnvbio_1_1simd4u8.html#ad478992b50797fc5d90f6ff797d80f6f">   38</a></span>&#160;    <a class="code" href="structnvbio_1_1simd4u8.html#ad478992b50797fc5d90f6ff797d80f6f">simd4u8</a>() {}</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="code" href="structnvbio_1_1simd4u8.html#ae9440c9fd39e90f492d2340772303722">   41</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="structnvbio_1_1simd4u8.html#ae9440c9fd39e90f492d2340772303722">simd4u8</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> op, <span class="keyword">const</span> <a class="code" href="structnvbio_1_1simd4u8_1_1base__rep__tag.html">base_rep_tag</a>) { <a class="code" href="structnvbio_1_1simd4u8.html#abd136805d443f76062acc019097b1427">m</a> = op; }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="structnvbio_1_1simd4u8.html#ad478992b50797fc5d90f6ff797d80f6f">simd4u8</a>(<span class="keyword">const</span> uint4 v);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">namespace </span>nvbio {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="code" href="structnvbio_1_1simd4u8.html">   42</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1simd4u8.html">simd4u8</a></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;{</div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="code" href="structnvbio_1_1simd4u8_1_1base__rep__tag.html">   44</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structnvbio_1_1simd4u8_1_1base__rep__tag.html">base_rep_tag</a> {};</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="structnvbio_1_1simd4u8.html#ad478992b50797fc5d90f6ff797d80f6f">simd4u8</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> v);</div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="code" href="structnvbio_1_1simd4u8.html#ad478992b50797fc5d90f6ff797d80f6f">   47</a></span>&#160;    <a class="code" href="structnvbio_1_1simd4u8.html#ad478992b50797fc5d90f6ff797d80f6f">simd4u8</a>() {}</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="structnvbio_1_1simd4u8.html#ad478992b50797fc5d90f6ff797d80f6f">simd4u8</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> v1, <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> v2, <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> v3, <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> v4);</div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="code" href="structnvbio_1_1simd4u8.html#ae9440c9fd39e90f492d2340772303722">   50</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="structnvbio_1_1simd4u8.html#ae9440c9fd39e90f492d2340772303722">simd4u8</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> op, <span class="keyword">const</span> <a class="code" href="structnvbio_1_1simd4u8_1_1base__rep__tag.html">base_rep_tag</a>) { <a class="code" href="structnvbio_1_1simd4u8.html#abd136805d443f76062acc019097b1427">m</a> = op; }</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <a class="code" href="structnvbio_1_1simd4u8.html">simd4u8</a>&amp; <a class="code" href="structnvbio_1_1simd4u8.html#a36fc77122c8b616fd8804d46105f26fa">operator= </a>(<span class="keyword">const</span> uint4 v);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="structnvbio_1_1simd4u8.html#ad478992b50797fc5d90f6ff797d80f6f">simd4u8</a>(<span class="keyword">const</span> uint4 v);</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="structnvbio_1_1simd4u8.html">simd4u8</a>&amp; <a class="code" href="structnvbio_1_1simd4u8.html#a36fc77122c8b616fd8804d46105f26fa">operator= </a>(<span class="keyword">const</span> uchar4 v);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="structnvbio_1_1simd4u8.html#ad478992b50797fc5d90f6ff797d80f6f">simd4u8</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> v);</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00058"></a><span class="lineno"><a class="code" href="structnvbio_1_1simd4u8.html#abd136805d443f76062acc019097b1427">   58</a></span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1simd4u8.html#abd136805d443f76062acc019097b1427">m</a>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;};</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <a class="code" href="structnvbio_1_1simd4u8.html#ad478992b50797fc5d90f6ff797d80f6f">simd4u8</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> v1, <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> v2, <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> v3, <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> v4);</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00062"></a><span class="lineno"><a class="code" href="namespacenvbio.html#aff9f90371823d65f3601703d0aa8698f">   62</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="group___primitives.html#gacc4f07953d774c03e710348fad815a38">any</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1simd4u8.html">simd4u8</a> op) { <span class="keywordflow">return</span> op.<a class="code" href="structnvbio_1_1simd4u8.html#abd136805d443f76062acc019097b1427">m</a> != 0; }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <a class="code" href="structnvbio_1_1simd4u8.html">simd4u8</a>&amp; <a class="code" href="structnvbio_1_1simd4u8.html#a36fc77122c8b616fd8804d46105f26fa">operator= </a>(<span class="keyword">const</span> uint4 v);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00065"></a><span class="lineno"><a class="code" href="namespacenvbio.html#a37f58e07b9f5e35f699d894d14e26eca">   65</a></span>&#160;<a class="code" href="structnvbio_1_1simd4u8.html">simd4u8</a> <a class="code" href="namespacenvbio.html#a37f58e07b9f5e35f699d894d14e26eca">operator~</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1simd4u8.html">simd4u8</a> op) { <span class="keywordflow">return</span> <a class="code" href="structnvbio_1_1simd4u8.html">simd4u8</a>( ~op.<a class="code" href="structnvbio_1_1simd4u8.html#abd136805d443f76062acc019097b1427">m</a> ); }</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <a class="code" href="structnvbio_1_1simd4u8.html">simd4u8</a>&amp; <a class="code" href="structnvbio_1_1simd4u8.html#a36fc77122c8b616fd8804d46105f26fa">operator= </a>(<span class="keyword">const</span> uchar4 v);</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;simd4u8 <a class="code" href="group___atomics.html#ga244b35c041c92bfc1c395d241a5e01ac" title="comparisons ">operator== </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="code" href="structnvbio_1_1simd4u8.html#abd136805d443f76062acc019097b1427">   67</a></span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="code" href="structnvbio_1_1simd4u8.html#abd136805d443f76062acc019097b1427">m</a>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;};</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;simd4u8 <a class="code" href="group___atomics.html#ga908eb1782de6c9783d0fec79c7295490">operator!= </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00071"></a><span class="lineno"><a class="code" href="namespacenvbio.html#aff9f90371823d65f3601703d0aa8698f">   71</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="group___primitives.html#gacc4f07953d774c03e710348fad815a38">any</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1simd4u8.html">simd4u8</a> op) { <span class="keywordflow">return</span> op.<a class="code" href="structnvbio_1_1simd4u8.html#abd136805d443f76062acc019097b1427">m</a> != 0; }</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;simd4u8 <a class="code" href="group___atomics.html#ga28875462cc0b5ea5d3a7bd2f17651044">operator&gt;= </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="code" href="namespacenvbio.html#a37f58e07b9f5e35f699d894d14e26eca">   74</a></span>&#160;<a class="code" href="structnvbio_1_1simd4u8.html">simd4u8</a> <a class="code" href="namespacenvbio.html#a37f58e07b9f5e35f699d894d14e26eca">operator~</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1simd4u8.html">simd4u8</a> op) { <span class="keywordflow">return</span> <a class="code" href="structnvbio_1_1simd4u8.html">simd4u8</a>( ~op.<a class="code" href="structnvbio_1_1simd4u8.html#abd136805d443f76062acc019097b1427">m</a> ); }</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;simd4u8 <a class="code" href="group___atomics.html#ga546a378f3b4e4fcd125c899892272bf3">operator&gt; </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;simd4u8 <a class="code" href="group___atomics.html#ga244b35c041c92bfc1c395d241a5e01ac" title="comparisons ">operator== </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;simd4u8 <a class="code" href="group___atomics.html#ga76d97d1e3185722fab23dc333e730658">operator&lt;= </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;simd4u8 <a class="code" href="group___atomics.html#ga908eb1782de6c9783d0fec79c7295490">operator!= </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;simd4u8 <a class="code" href="group___atomics.html#ga3810cb3caa91710376436aa53bb0e33a">operator&lt; </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;simd4u8 <a class="code" href="group___atomics.html#ga28875462cc0b5ea5d3a7bd2f17651044">operator&gt;= </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;simd4u8 <a class="code" href="group___iterators.html#gac826ef2040ac3f1aeabd2c6b9db2bb26">operator+ </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;simd4u8 <a class="code" href="group___atomics.html#ga546a378f3b4e4fcd125c899892272bf3">operator&gt; </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;simd4u8&amp; <a class="code" href="group___iterators.html#gaa564e6effcc429700ad9d6498e1da66b">operator+= </a>(simd4u8&amp; op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;simd4u8 <a class="code" href="group___atomics.html#ga76d97d1e3185722fab23dc333e730658">operator&lt;= </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;simd4u8 <a class="code" href="group___iterators.html#ga714232e39ef840b4c0f0ceaadbd00d27">operator- </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;simd4u8 <a class="code" href="group___atomics.html#ga3810cb3caa91710376436aa53bb0e33a">operator&lt; </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;simd4u8&amp; <a class="code" href="group___iterators.html#ga173efa4e92df3846807a3660130b10e0">operator-= </a>(simd4u8&amp; op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;simd4u8 <a class="code" href="group___iterators.html#gac826ef2040ac3f1aeabd2c6b9db2bb26">operator+ </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;simd4u8 <a class="code" href="group___basic_utils.html#gaacadfd67f24352782e1d34ba32b040e9">max</a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;simd4u8&amp; <a class="code" href="group___iterators.html#gaa564e6effcc429700ad9d6498e1da66b">operator+= </a>(simd4u8&amp; op1, <span class="keyword">const</span> simd4u8 op2);</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;simd4u8 <a class="code" href="group___basic_utils.html#gaeeb2406339f4edfcee3f007aaccd478e">min</a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;simd4u8 <a class="code" href="group___iterators.html#ga714232e39ef840b4c0f0ceaadbd00d27">operator- </a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;simd4u8 <a class="code" href="namespacenvbio.html#a32677f7fc7b14dad86bc0ef66a631cd2">and_op</a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;simd4u8&amp; <a class="code" href="group___iterators.html#ga173efa4e92df3846807a3660130b10e0">operator-= </a>(simd4u8&amp; op1, <span class="keyword">const</span> simd4u8 op2);</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;simd4u8 <a class="code" href="namespacenvbio.html#a481dc70b5d4b5e951bf8872970dc0ee8">or_op</a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;simd4u8 <a class="code" href="group___basic_utils.html#gaacadfd67f24352782e1d34ba32b040e9">max</a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;simd4u8 <a class="code" href="namespacenvbio.html#a5498217f3b7775434c4fafcfc88b755c">ternary_op</a>(<span class="keyword">const</span> simd4u8 mask, <span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;simd4u8 <a class="code" href="group___basic_utils.html#gaeeb2406339f4edfcee3f007aaccd478e">min</a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 I&gt;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> <span class="keyword">get</span>(<span class="keyword">const</span> simd4u8 op);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;} <span class="comment">// namespace nvbio</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;simd4u8 <a class="code" href="namespacenvbio.html#a32677f7fc7b14dad86bc0ef66a631cd2">and_op</a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;simd4u8 <a class="code" href="namespacenvbio.html#a481dc70b5d4b5e951bf8872970dc0ee8">or_op</a>(<span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="simd__inl_8h.html">nvbio/basic/simd_inl.h</a>&gt;</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;simd4u8 <a class="code" href="namespacenvbio.html#a5498217f3b7775434c4fafcfc88b755c">ternary_op</a>(<span class="keyword">const</span> simd4u8 mask, <span class="keyword">const</span> simd4u8 op1, <span class="keyword">const</span> simd4u8 op2);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="keyword">template</span> &lt;u<span class="keywordtype">int</span>32 I&gt;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> <span class="keyword">get</span>(<span class="keyword">const</span> simd4u8 op);</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;} <span class="comment">// namespace nvbio</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="simd__inl_8h.html">nvbio/basic/simd_inl.h</a>&gt;</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:02 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:28 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

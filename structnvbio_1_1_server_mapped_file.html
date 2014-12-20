@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -106,7 +107,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="details" id="details"></a><h2 class="groupheader">Detailed description</h2>
 <div class="textblock"><p>A class to create a memory mapped object into a server process. The mapped file is destroyed when the destructor is called. See <a class="el" href="structnvbio_1_1_mapped_file.html">MappedFile</a>. </p>
 
-<p>Definition at line <a class="el" href="mmap_8h_source.html#l00123">123</a> of file <a class="el" href="mmap_8h_source.html">mmap.h</a>.</p>
+<p>Definition at line <a class="el" href="mmap_8h_source.html#l00132">132</a> of file <a class="el" href="mmap_8h_source.html">mmap.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="mmap_8h_source.html">mmap.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -125,7 +126,7 @@ Public Methods</h2></td></tr>
 <tr class="separator:acc58c618a425d14126e45cecaff84bc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acff3f61e50d18b0bbac9ce537100ad96"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_server_mapped_file.html#acff3f61e50d18b0bbac9ce537100ad96">~ServerMappedFile</a> ()</td></tr>
 <tr class="separator:acff3f61e50d18b0bbac9ce537100ad96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf823ecb72529397b4e7ecf26b445a2c"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_server_mapped_file.html#adf823ecb72529397b4e7ecf26b445a2c">init</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> file_size, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> void *src)</td></tr>
+<tr class="memitem:adf823ecb72529397b4e7ecf26b445a2c"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_server_mapped_file.html#adf823ecb72529397b4e7ecf26b445a2c">init</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> <a class="el" href="misc_8h.html#a2125fb60f31c50b28d276e30184e564a">file_size</a>, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> void *src)</td></tr>
 <tr class="memdesc:adf823ecb72529397b4e7ecf26b445a2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">initialize the memory mapped file  <a href="#adf823ecb72529397b4e7ecf26b445a2c">More...</a><br/></td></tr>
 <tr class="separator:adf823ecb72529397b4e7ecf26b445a2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -144,7 +145,7 @@ Public Methods</h2></td></tr>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="mmap_8cpp_source.html#l00210">210</a> of file <a class="el" href="mmap_8cpp_source.html">mmap.cpp</a>.</p>
+<p>Definition at line <a class="el" href="mmap_8cpp_source.html#l00219">219</a> of file <a class="el" href="mmap_8cpp_source.html">mmap.cpp</a>.</p>
 
 </div>
 </div>
@@ -162,7 +163,7 @@ Public Methods</h2></td></tr>
 </div><div class="memdoc">
 <p>destructor </p>
 
-<p>Definition at line <a class="el" href="mmap_8cpp_source.html#l00243">243</a> of file <a class="el" href="mmap_8cpp_source.html">mmap.cpp</a>.</p>
+<p>Definition at line <a class="el" href="mmap_8cpp_source.html#l00252">252</a> of file <a class="el" href="mmap_8cpp_source.html">mmap.cpp</a>.</p>
 
 </div>
 </div>
@@ -199,19 +200,18 @@ Public Methods</h2></td></tr>
 
 <p>initialize the memory mapped file </p>
 
-<p>Definition at line <a class="el" href="mmap_8cpp_source.html#l00212">212</a> of file <a class="el" href="mmap_8cpp_source.html">mmap.cpp</a>.</p>
+<p>Definition at line <a class="el" href="mmap_8cpp_source.html#l00221">221</a> of file <a class="el" href="mmap_8cpp_source.html">mmap.cpp</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/<a class="el" href="mmap_8h_source.html">mmap.h</a></li>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/<a class="el" href="mmap_8cpp_source.html">mmap.cpp</a></li>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/<a class="el" href="mmap__test_8cpp_source.html">mmap_test.cpp</a></li>
+<li>E:/git/nvbio/nvbio/basic/<a class="el" href="mmap_8h_source.html">mmap.h</a></li>
+<li>E:/git/nvbio/nvbio/basic/<a class="el" href="mmap_8cpp_source.html">mmap.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:29 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:05 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

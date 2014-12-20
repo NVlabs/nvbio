@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/defs.h File Reference</title>
+<title>NVBIO: E:/git/nvbio/nvBowtie/bowtie2/cuda/defs.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -105,8 +106,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="arch_8h_source.html">nvbio/basic/cuda/arch.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="cached__iterator_8h_source.html">nvbio/basic/cached_iterator.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="packedstream_8h_source.html">nvbio/basic/packedstream.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="pod_8h_source.html">nvbio/basic/pod.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="sequence_8h_source.html">nvbio/io/sequence/sequence.h</a>&gt;</code><br/>
 <code>#include &lt;algorithm&gt;</code><br/>
@@ -169,52 +168,52 @@ Enumerations</h2></td></tr>
 <a class="el" href="group___defs.html#gga10cf8b86a671ff4e4061aaa0d086cdf5a9d373d6c204e7eaf4a9849f33b2b1415">nvbio::bowtie2::cuda::kPairedEnds</a> = 1u
  }</td></tr>
 <tr class="separator:ga10cf8b86a671ff4e4061aaa0d086cdf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga70277e0e643f488ff56e9daa37fe95d6"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#gga70277e0e643f488ff56e9daa37fe95d6a868f7c15e50331675951132ce5bf0349">nvbio::bowtie2::cuda::MAX_BATCH</a> = 512*1024
+<tr class="memitem:gaeaa32ae3d0ee0909291058b3f12da60d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#ggaeaa32ae3d0ee0909291058b3f12da60da868f7c15e50331675951132ce5bf0349">nvbio::bowtie2::cuda::MAX_BATCH</a> = 512*1024
  }</td></tr>
-<tr class="separator:ga70277e0e643f488ff56e9daa37fe95d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4e030c73900bf557f24a494d70a0d6c1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#gga4e030c73900bf557f24a494d70a0d6c1a55acd4ff0f7cc398c553b00baa29a518">nvbio::bowtie2::cuda::BLOCKDIM</a> = 96
+<tr class="separator:gaeaa32ae3d0ee0909291058b3f12da60d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga526ecbe8a73c3761fcfe02a89ca04c60"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#gga526ecbe8a73c3761fcfe02a89ca04c60a55acd4ff0f7cc398c553b00baa29a518">nvbio::bowtie2::cuda::BLOCKDIM</a> = 96
  }</td></tr>
-<tr class="separator:ga4e030c73900bf557f24a494d70a0d6c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga7e26cdbe054ef51506c75cbf2d546d3b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#gga7e26cdbe054ef51506c75cbf2d546d3bab3c0873f43d99d5d0a14c52ed035839c">nvbio::bowtie2::cuda::SCORE_MATE_BLOCKDIM</a> = 128
+<tr class="separator:ga526ecbe8a73c3761fcfe02a89ca04c60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaacdbe56d292141e971444f299881c0dc"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#ggaacdbe56d292141e971444f299881c0dcab3c0873f43d99d5d0a14c52ed035839c">nvbio::bowtie2::cuda::SCORE_MATE_BLOCKDIM</a> = 128
  }</td></tr>
-<tr class="separator:ga7e26cdbe054ef51506c75cbf2d546d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab9b61087a503a892203857bbc36d89d4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#ggab9b61087a503a892203857bbc36d89d4ac96bf60d9abe5e14caf819396dc7111a">nvbio::bowtie2::cuda::MAX_BAND_LEN</a> = 63
+<tr class="separator:gaacdbe56d292141e971444f299881c0dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaefea48b6f818819d0ba70304fc89d01e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#ggaefea48b6f818819d0ba70304fc89d01eac96bf60d9abe5e14caf819396dc7111a">nvbio::bowtie2::cuda::MAX_BAND_LEN</a> = 63
  }</td></tr>
-<tr class="separator:gab9b61087a503a892203857bbc36d89d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3f9b9f77f2f5d25cc0545eb9661d3fdd"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#gga3f9b9f77f2f5d25cc0545eb9661d3fdda1366480922dd33874d5cdba78c577bbe">nvbio::bowtie2::cuda::MAXIMUM_READ_LENGTH</a> = 512
+<tr class="separator:gaefea48b6f818819d0ba70304fc89d01e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaff36dcf7ea79fc2a6e307b2cc02f322c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#ggaff36dcf7ea79fc2a6e307b2cc02f322ca1366480922dd33874d5cdba78c577bbe">nvbio::bowtie2::cuda::MAXIMUM_READ_LENGTH</a> = 512
  }</td></tr>
-<tr class="separator:ga3f9b9f77f2f5d25cc0545eb9661d3fdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4a6445c614cc36627f8beaba695196b0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#gga4a6445c614cc36627f8beaba695196b0a3f432d157d493f6eba6fbd71f8df768e">nvbio::bowtie2::cuda::MAXIMUM_INSERT_LENGTH</a> = 1024
+<tr class="separator:gaff36dcf7ea79fc2a6e307b2cc02f322c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2e359a4b2a0a76efab21443344570055"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#gga2e359a4b2a0a76efab21443344570055a3f432d157d493f6eba6fbd71f8df768e">nvbio::bowtie2::cuda::MAXIMUM_INSERT_LENGTH</a> = 1024
  }</td></tr>
-<tr class="separator:ga4a6445c614cc36627f8beaba695196b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga587345df9e300828ac00563293347443"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#gga587345df9e300828ac00563293347443a11804173ce8a2deb9858a830a0dd0107">nvbio::bowtie2::cuda::MAXIMUM_BAND_LENGTH</a> = 31
+<tr class="separator:ga2e359a4b2a0a76efab21443344570055"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3fc34c2390c5a868c9841588fb3f3bb5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#gga3fc34c2390c5a868c9841588fb3f3bb5a11804173ce8a2deb9858a830a0dd0107">nvbio::bowtie2::cuda::MAXIMUM_BAND_LENGTH</a> = 31
  }</td></tr>
-<tr class="separator:ga587345df9e300828ac00563293347443"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1355d4043d9cb83d91a8b2213357da07"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#gga1355d4043d9cb83d91a8b2213357da07a9a185a21bf5738122189879c6dd7eb8f">nvbio::bowtie2::cuda::MAXIMUM_BAND_LEN_MULT</a> = 4
+<tr class="separator:ga3fc34c2390c5a868c9841588fb3f3bb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4ef1046b2a3b5a165badc021eb22254d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#gga4ef1046b2a3b5a165badc021eb22254da9a185a21bf5738122189879c6dd7eb8f">nvbio::bowtie2::cuda::MAXIMUM_BAND_LEN_MULT</a> = 4
  }</td></tr>
-<tr class="separator:ga1355d4043d9cb83d91a8b2213357da07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga98f967d999f43af83263edff1d4e9d17"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#gga98f967d999f43af83263edff1d4e9d17aa82c9a7113a8f88a2fd1d31468bc70d8">nvbio::bowtie2::cuda::BANDED_DP_CHECKPOINTS</a> = 16
+<tr class="separator:ga4ef1046b2a3b5a165badc021eb22254d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa7ed4e307f2d4eab885f659d388f57ab"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#ggaa7ed4e307f2d4eab885f659d388f57abaa82c9a7113a8f88a2fd1d31468bc70d8">nvbio::bowtie2::cuda::BANDED_DP_CHECKPOINTS</a> = 16
  }</td></tr>
-<tr class="separator:ga98f967d999f43af83263edff1d4e9d17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2b5845988e5845bfeddfba4b9c6fa765"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#gga2b5845988e5845bfeddfba4b9c6fa765aa17c0f1b19d20e7d3a682a806dfb85bb">nvbio::bowtie2::cuda::FULL_DP_CHECKPOINTS</a> = 64
+<tr class="separator:gaa7ed4e307f2d4eab885f659d388f57ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac9f907830256759ff45a5ae7fb1a4e19"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#ggac9f907830256759ff45a5ae7fb1a4e19aa17c0f1b19d20e7d3a682a806dfb85bb">nvbio::bowtie2::cuda::FULL_DP_CHECKPOINTS</a> = 64
  }</td></tr>
-<tr class="separator:ga2b5845988e5845bfeddfba4b9c6fa765"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae18c90fc3aa55530f7a6d2d9514746d0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#ggae18c90fc3aa55530f7a6d2d9514746d0a1fb23f9b6a71a7126d10084020837c16">nvbio::bowtie2::cuda::LMEM_CACHE_WORDS</a> = 64
+<tr class="separator:gac9f907830256759ff45a5ae7fb1a4e19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga48c101c87183dd9b9315963c66156942"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group___defs.html#gga48c101c87183dd9b9315963c66156942a1fb23f9b6a71a7126d10084020837c16">nvbio::bowtie2::cuda::LMEM_CACHE_WORDS</a> = 64
  }</td></tr>
-<tr class="separator:gae18c90fc3aa55530f7a6d2d9514746d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga59b4a36767660b9e2213689b47948284"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
-&#160;&#160;<a class="el" href="group___defs.html#gga59b4a36767660b9e2213689b47948284a41706cdcb8ae4f1dd7360bdf13edb26f">nvbio::bowtie2::cuda::HIT_STATS_RANGES</a> = 0, 
-<a class="el" href="group___defs.html#gga59b4a36767660b9e2213689b47948284a475c9aa1b06467cd2d6626eea7f15215">nvbio::bowtie2::cuda::HIT_STATS_MAX_RANGE</a> = 1, 
-<a class="el" href="group___defs.html#gga59b4a36767660b9e2213689b47948284ae8a8ea34af62c3ac810af6c94cd79c86">nvbio::bowtie2::cuda::HIT_STATS_TOTAL</a> = 2, 
-<a class="el" href="group___defs.html#gga59b4a36767660b9e2213689b47948284a6de7c03028d189535cbf5c8d48e91571">nvbio::bowtie2::cuda::HIT_STATS_MAX</a> = 3, 
+<tr class="separator:ga48c101c87183dd9b9315963c66156942"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0894ad0408d551d07f44f362668536c0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+&#160;&#160;<a class="el" href="group___defs.html#gga0894ad0408d551d07f44f362668536c0a41706cdcb8ae4f1dd7360bdf13edb26f">nvbio::bowtie2::cuda::HIT_STATS_RANGES</a> = 0, 
+<a class="el" href="group___defs.html#gga0894ad0408d551d07f44f362668536c0a475c9aa1b06467cd2d6626eea7f15215">nvbio::bowtie2::cuda::HIT_STATS_MAX_RANGE</a> = 1, 
+<a class="el" href="group___defs.html#gga0894ad0408d551d07f44f362668536c0ae8a8ea34af62c3ac810af6c94cd79c86">nvbio::bowtie2::cuda::HIT_STATS_TOTAL</a> = 2, 
+<a class="el" href="group___defs.html#gga0894ad0408d551d07f44f362668536c0a6de7c03028d189535cbf5c8d48e91571">nvbio::bowtie2::cuda::HIT_STATS_MAX</a> = 3, 
 <br/>
-&#160;&#160;<a class="el" href="group___defs.html#gga59b4a36767660b9e2213689b47948284a08de417235eae1367a095a551b000db6">nvbio::bowtie2::cuda::HIT_STATS_TOP</a> = 4, 
-<a class="el" href="group___defs.html#gga59b4a36767660b9e2213689b47948284a384dd73e285bce1607e24c4d98a5a12d">nvbio::bowtie2::cuda::HIT_STATS_TOP_MAX</a> = 5, 
-<a class="el" href="group___defs.html#gga59b4a36767660b9e2213689b47948284aec1ece4bf3191c1c8a155c560616c69c">nvbio::bowtie2::cuda::HIT_STATS_BINS</a> = 6, 
-<a class="el" href="group___defs.html#gga59b4a36767660b9e2213689b47948284a1151fa5ea7659823d39a95aff4f305df">nvbio::bowtie2::cuda::HIT_STATS_TOP_BINS</a> = 6 + 32
+&#160;&#160;<a class="el" href="group___defs.html#gga0894ad0408d551d07f44f362668536c0a08de417235eae1367a095a551b000db6">nvbio::bowtie2::cuda::HIT_STATS_TOP</a> = 4, 
+<a class="el" href="group___defs.html#gga0894ad0408d551d07f44f362668536c0a384dd73e285bce1607e24c4d98a5a12d">nvbio::bowtie2::cuda::HIT_STATS_TOP_MAX</a> = 5, 
+<a class="el" href="group___defs.html#gga0894ad0408d551d07f44f362668536c0aec1ece4bf3191c1c8a155c560616c69c">nvbio::bowtie2::cuda::HIT_STATS_BINS</a> = 6, 
+<a class="el" href="group___defs.html#gga0894ad0408d551d07f44f362668536c0a1151fa5ea7659823d39a95aff4f305df">nvbio::bowtie2::cuda::HIT_STATS_TOP_BINS</a> = 6 + 32
 <br/>
  }</td></tr>
-<tr class="separator:ga59b4a36767660b9e2213689b47948284"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:ga0894ad0408d551d07f44f362668536c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="aa7984e7fef36ed763404a03ab79eed92"></a>
@@ -227,7 +226,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="defs_8h_source.html#l00056">56</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
+<p>Definition at line <a class="el" href="defs_8h_source.html#l00065">65</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
 
 </div>
 </div>
@@ -241,7 +240,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="defs_8h_source.html#l00055">55</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
+<p>Definition at line <a class="el" href="defs_8h_source.html#l00064">64</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
 
 </div>
 </div>
@@ -269,7 +268,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="defs_8h_source.html#l00046">46</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
+<p>Definition at line <a class="el" href="defs_8h_source.html#l00055">55</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
 
 </div>
 </div>
@@ -287,7 +286,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="defs_8h_source.html#l00045">45</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
+<p>Definition at line <a class="el" href="defs_8h_source.html#l00054">54</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
 
 </div>
 </div>
@@ -315,7 +314,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="defs_8h_source.html#l00038">38</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
+<p>Definition at line <a class="el" href="defs_8h_source.html#l00047">47</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
 
 </div>
 </div>
@@ -333,7 +332,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="defs_8h_source.html#l00037">37</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
+<p>Definition at line <a class="el" href="defs_8h_source.html#l00046">46</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
 
 </div>
 </div>
@@ -347,7 +346,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="defs_8h_source.html#l00053">53</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
+<p>Definition at line <a class="el" href="defs_8h_source.html#l00062">62</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
 
 </div>
 </div>
@@ -361,7 +360,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="defs_8h_source.html#l00032">32</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
+<p>Definition at line <a class="el" href="defs_8h_source.html#l00041">41</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
 
 </div>
 </div>
@@ -375,7 +374,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="defs_8h_source.html#l00033">33</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
+<p>Definition at line <a class="el" href="defs_8h_source.html#l00042">42</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
 
 </div>
 </div>
@@ -389,7 +388,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="defs_8h_source.html#l00034">34</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
+<p>Definition at line <a class="el" href="defs_8h_source.html#l00043">43</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
 
 </div>
 </div>
@@ -403,14 +402,14 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="defs_8h_source.html#l00052">52</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
+<p>Definition at line <a class="el" href="defs_8h_source.html#l00061">61</a> of file <a class="el" href="defs_8h_source.html">defs.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:15 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:44 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

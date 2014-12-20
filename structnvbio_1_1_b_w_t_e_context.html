@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -122,7 +123,7 @@ struct nvbio::BWTEContext&lt; SYMBOL_SIZE, BIG_ENDIAN, storage_type, offsets_ite
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="bwte_8h_source.html#l00077">77</a> of file <a class="el" href="bwte_8h_source.html">bwte.h</a>.</p>
+<p>Definition at line <a class="el" href="bwte_8h_source.html#l00086">86</a> of file <a class="el" href="bwte_8h_source.html">bwte.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="bwte_8h_source.html">bwte.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -142,6 +143,8 @@ Public Types</h2></td></tr>
 Public Methods</h2></td></tr>
 <tr class="memitem:aeb9cedb4595d5dc2f08d9e13e84a8ccd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_b_w_t_e_context.html#aeb9cedb4595d5dc2f08d9e13e84a8ccd">BWTEContext</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> int device)</td></tr>
 <tr class="separator:aeb9cedb4595d5dc2f08d9e13e84a8ccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10a5a9bae368bdb183241083b053fac7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_b_w_t_e_context.html#a10a5a9bae368bdb183241083b053fac7">needed_device_memory</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> _max_block_strings, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> _max_block_suffixes) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:a10a5a9bae368bdb183241083b053fac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbe70b67a23188446701ca81de760829"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_b_w_t_e_context.html#acbe70b67a23188446701ca81de760829">reserve</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> _max_block_strings, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> _max_block_suffixes)</td></tr>
 <tr class="separator:acbe70b67a23188446701ca81de760829"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a055e46cbbdb6e2d553bed8a1264ba287"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_b_w_t_e_context.html#a055e46cbbdb6e2d553bed8a1264ba287">append_block</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> block_begin, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> block_end, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_b_w_t_e_context.html#a57e60eafb9ce766896f7b9f7e5116e13">string_set_type</a> string_set, <a class="el" href="structnvbio_1_1_paged_text.html">PagedText</a>&lt; SYMBOL_SIZE, BIG_ENDIAN &gt; &amp;BWT_ext, <a class="el" href="structnvbio_1_1_sparse_symbol_set.html">SparseSymbolSet</a> &amp;BWT_ext_dollars, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool forward)</td></tr>
@@ -164,7 +167,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type = const u
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bwte_8h_source.html#l00079">79</a> of file <a class="el" href="bwte_8h_source.html">bwte.h</a>.</p>
+<p>Definition at line <a class="el" href="bwte_8h_source.html#l00088">88</a> of file <a class="el" href="bwte_8h_source.html">bwte.h</a>.</p>
 
 </div>
 </div>
@@ -180,7 +183,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type = const u
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bwte_8h_source.html#l00082">82</a> of file <a class="el" href="bwte_8h_source.html">bwte.h</a>.</p>
+<p>Definition at line <a class="el" href="bwte_8h_source.html#l00091">91</a> of file <a class="el" href="bwte_8h_source.html">bwte.h</a>.</p>
 
 </div>
 </div>
@@ -202,7 +205,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="bwte__inl_8h_source.html#l00066">66</a> of file <a class="el" href="bwte__inl_8h_source.html">bwte_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="bwte__inl_8h_source.html#l00075">75</a> of file <a class="el" href="bwte__inl_8h_source.html">bwte_inl.h</a>.</p>
 
 </div>
 </div>
@@ -264,13 +267,12 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
     <tr><td class="paramname">string_set</td><td>the input string-set </td></tr>
     <tr><td class="paramname">BWT_ext</td><td>the output BWT </td></tr>
     <tr><td class="paramname">BWT_ext_dollars</td><td>the output BWT dollars </td></tr>
-    <tr><td class="paramname">forward</td><td>true if appending the result, false if prepending it</td></tr>
+    <tr><td class="paramname">forward</td><td>true if appending the result, false if prepending it </td></tr>
   </table>
   </dd>
 </dl>
-<p>append a new block of strings </p>
 
-<p>Definition at line <a class="el" href="bwte__inl_8h_source.html#l00139">139</a> of file <a class="el" href="bwte__inl_8h_source.html">bwte_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="bwte__inl_8h_source.html#l00171">171</a> of file <a class="el" href="bwte__inl_8h_source.html">bwte_inl.h</a>.</p>
 
 </div>
 </div>
@@ -330,7 +332,38 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bwte__inl_8h_source.html#l00162">162</a> of file <a class="el" href="bwte__inl_8h_source.html">bwte_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="bwte__inl_8h_source.html#l00194">194</a> of file <a class="el" href="bwte__inl_8h_source.html">bwte_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a10a5a9bae368bdb183241083b053fac7"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typename offsets_iterator &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> <a class="el" href="structnvbio_1_1_b_w_t_e_context.html">nvbio::BWTEContext</a>&lt; SYMBOL_SIZE, BIG_ENDIAN, storage_type, offsets_iterator &gt;::needed_device_memory </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
+          <td class="paramname"><em>_max_block_strings</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
+          <td class="paramname"><em>_max_block_suffixes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>needed device memory </p>
+
+<p>Definition at line <a class="el" href="bwte__inl_8h_source.html#l00097">97</a> of file <a class="el" href="bwte__inl_8h_source.html">bwte_inl.h</a>.</p>
 
 </div>
 </div>
@@ -361,7 +394,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
 </div><div class="memdoc">
 <p>reserve space for a maximum block size </p>
 
-<p>Definition at line <a class="el" href="bwte__inl_8h_source.html#l00088">88</a> of file <a class="el" href="bwte__inl_8h_source.html">bwte_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="bwte__inl_8h_source.html#l00116">116</a> of file <a class="el" href="bwte__inl_8h_source.html">bwte_inl.h</a>.</p>
 
 </div>
 </div>
@@ -403,18 +436,18 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bwte__inl_8h_source.html#l00258">258</a> of file <a class="el" href="bwte__inl_8h_source.html">bwte_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="bwte__inl_8h_source.html#l00290">290</a> of file <a class="el" href="bwte__inl_8h_source.html">bwte_inl.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/sufsort/<a class="el" href="bwte_8h_source.html">bwte.h</a></li>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/sufsort/<a class="el" href="bwte__inl_8h_source.html">bwte_inl.h</a></li>
+<li>E:/git/nvbio/nvbio/sufsort/<a class="el" href="bwte_8h_source.html">bwte.h</a></li>
+<li>E:/git/nvbio/nvbio/sufsort/<a class="el" href="bwte__inl_8h_source.html">bwte_inl.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:46 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:23 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

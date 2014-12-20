@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/contrib/zlib-1.2.7/gzread.c Source File</title>
+<title>NVBIO: E:/git/nvbio/contrib/zlib-1.2.7/gzread.c Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -236,7 +237,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keywordflow">if</span> (strm-&gt;avail_in &gt; 1 &amp;&amp;</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;            strm-&gt;next_in[0] == 31 &amp;&amp; strm-&gt;next_in[1] == 139) {</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <a class="code" href="inflate_8c.html#adb02c2100f9179f4075b220395b1553c">inflateReset</a>(strm);</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        state-&gt;how = <a class="code" href="deflate_8h.html#a9564352992f7a4001386d1c8e2977571">GZIP</a>;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        state-&gt;how = <a class="code" href="cram__structs_8h.html#aaba757c9ea23fabb284dc002713c30a5a388483cd14bd349b3e0f2a7511bbec0e">GZIP</a>;</div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        state-&gt;direct = 0;</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    }</div>
@@ -342,7 +343,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;                <span class="keywordflow">return</span> -1;</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;            state-&gt;x.next = state-&gt;out;</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="deflate_8h.html#a9564352992f7a4001386d1c8e2977571">GZIP</a>:      <span class="comment">/* -&gt; GZIP or LOOK (if end of gzip stream) */</span></div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="cram__structs_8h.html#aaba757c9ea23fabb284dc002713c30a5a388483cd14bd349b3e0f2a7511bbec0e">GZIP</a>:      <span class="comment">/* -&gt; GZIP or LOOK (if end of gzip stream) */</span></div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;            strm-&gt;avail_out = state-&gt;size &lt;&lt; 1;</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;            strm-&gt;next_out = state-&gt;out;</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="gzread_8c.html#a4b2cb72f18826fd5410e1cbdd9cf3941">gz_decomp</a>(state) == -1)</div>
@@ -691,7 +692,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:41:56 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:22 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

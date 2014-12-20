@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -126,6 +127,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga7dab37b175d65f2efd99995d05e7ca75"><td class="memTemplParams" colspan="2">template&lt;typename ScoringScheme &gt; </td></tr>
 <tr class="memitem:ga7dab37b175d65f2efd99995d05e7ca75"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___locate.html#ga7dab37b175d65f2efd99995d05e7ca75">nvbio::bowtie2::cuda::locate_lookup</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BaseScoringPipelineState&lt; ScoringScheme &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
 <tr class="separator:ga7dab37b175d65f2efd99995d05e7ca75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5f6d6fa3358f8511b2b0ef3b11dec3eb"><td class="memTemplParams" colspan="2">template&lt;typename index_iterator , typename flags_iterator &gt; </td></tr>
+<tr class="memitem:ga5f6d6fa3358f8511b2b0ef3b11dec3eb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___locate.html#ga5f6d6fa3358f8511b2b0ef3b11dec3eb">nvbio::bowtie2::cuda::mark_straddling</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 in_count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *idx_queue, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 reference_count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> index_iterator reference_index, HitQueuesDeviceView hits, flags_iterator flags, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
+<tr class="separator:ga5f6d6fa3358f8511b2b0ef3b11dec3eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ga1e29dc96f82f667597cef9423d0c3c31"></a>
@@ -185,7 +189,7 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>Locate the SA row of the the hits in the <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html">HitQueues</a>. Since the input might have been sorted to gather locality, the entries in the <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html">HitQueues</a> are now specified by an index (idx_queue). This function reads <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a1a8f372f6ab40aa242a6a247bbcc6710" title="hit info ">HitQueues::seed</a> and <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a> fields and rewrites the <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a> field. </p>
 
-<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00213">213</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00259">259</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
 
 </div>
 </div>
@@ -246,7 +250,7 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>Locate the SA row of the the hits in the <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html">HitQueues</a>. Since the input might have been sorted to gather locality, the entries in the <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html">HitQueues</a> are now specified by an index (idx_queue). This function reads <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a1a8f372f6ab40aa242a6a247bbcc6710" title="hit info ">HitQueues::seed</a> and <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a> fields and writes the <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a> and <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a97bd3946267cbcf70d07b96a38ce27dd" title="hit ssa info ">HitQueues::ssa</a> fields with temporary values that can be later consumed by locate_lookup. </p>
 
-<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00236">236</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00282">282</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
 
 </div>
 </div>
@@ -277,7 +281,7 @@ template&lt;typename ScoringScheme &gt; </div>
 </div><div class="memdoc">
 <p>Locate the SA row of the the hits in the <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html">HitQueues</a>. This function reads <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a1a8f372f6ab40aa242a6a247bbcc6710" title="hit info ">HitQueues::seed</a> and <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a> fields and writes the <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a> and <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a97bd3946267cbcf70d07b96a38ce27dd" title="hit ssa info ">HitQueues::ssa</a> fields with temporary values that can be later consumed by locate_lookup. </p>
 
-<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00259">259</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00305">305</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
 
 </div>
 </div>
@@ -338,7 +342,7 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>Locate the SA row of the the hits in the <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html">HitQueues</a>. Since the input might have been sorted to gather locality, the entries in the <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html">HitQueues</a> are now specified by an index (idx_queue). This function reads <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a1a8f372f6ab40aa242a6a247bbcc6710" title="hit info ">HitQueues::seed</a>, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a> and <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a97bd3946267cbcf70d07b96a38ce27dd" title="hit ssa info ">HitQueues::ssa</a> fields (which must have been previously produced by a call to locate_init) and rewrites the <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a> field with the final linear coordinate value. </p>
 
-<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00279">279</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00325">325</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
 
 </div>
 </div>
@@ -369,14 +373,75 @@ template&lt;typename ScoringScheme &gt; </div>
 </div><div class="memdoc">
 <p>Locate the SA row of the the hits in the <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html">HitQueues</a>. This function reads <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a1a8f372f6ab40aa242a6a247bbcc6710" title="hit info ">HitQueues::seed</a>, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a> and <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a97bd3946267cbcf70d07b96a38ce27dd" title="hit ssa info ">HitQueues::ssa</a> fields (which must have been previously produced by a call to locate_init) and rewrites the <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a0532ab2116e9e11248c9ded8adb194ea" title="hit locations ">HitQueues::loc</a> field with the final linear coordinate value. </p>
 
-<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00302">302</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00348">348</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga5f6d6fa3358f8511b2b0ef3b11dec3eb"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename index_iterator , typename flags_iterator &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::bowtie2::cuda::mark_straddling </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>in_count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *&#160;</td>
+          <td class="paramname"><em>idx_queue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>reference_count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> index_iterator&#160;</td>
+          <td class="paramname"><em>reference_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">HitQueuesDeviceView&#160;</td>
+          <td class="paramname"><em>hits</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flags_iterator&#160;</td>
+          <td class="paramname"><em>flags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>mark seeds straddling the reference boundaries. </p>
+
+<p>Definition at line <a class="el" href="locate__inl_8h_source.html#l00368">368</a> of file <a class="el" href="locate__inl_8h_source.html">locate_inl.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:18 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:47 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -116,7 +117,7 @@ struct nvbio::QGramFilter&lt; device_tag, qgram_index_type, query_iterator, inde
 <dl class="section user"><dt></dt><dd>For string-set q-gram indices, the filter will return an ordered set of <em>(string-id,string-pos,query-pos)</em> pairs (encoded as uint4), where <em>string-id</em> is the index of the hit into the string-set used to build qgram-index, and <em>query-pos</em> corresponds to one of the input query q-gram indices. </dd></dl>
 <dl class="section user"><dt></dt><dd>Furthermore, the filter offers the ability to <em>merge</em> hits by diagonal bucket: in this case, the output type will be either a simple uint32 linear coordinate describing the diagonal, or a (string-id,diagonal) for string-set indices. </dd></dl>
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00205">205</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00214">214</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="qgram_2filter_8h_source.html">filter.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -203,7 +204,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
 
 <p>the coordinate type of the q-gram index, uint32|uint2 </p>
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00211">211</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00220">220</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -219,7 +220,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00217">217</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00226">226</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -236,7 +237,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
 </div><div class="memdoc">
 <p>the type of the hits will be either a uint2, if qgram_index_type is a string index, or a uint4 if it is a string-set index (the last entry of the uint4 is unused) </p>
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00216">216</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00225">225</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -252,7 +253,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00209">209</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00218">218</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -268,7 +269,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00207">207</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00216">216</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -330,7 +331,7 @@ template&lt;typename hits_iterator , typename output_iterator &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="qgram_2filter__inl_8h_source.html#l00417">417</a> of file <a class="el" href="qgram_2filter__inl_8h_source.html">filter_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter__inl_8h_source.html#l00426">426</a> of file <a class="el" href="qgram_2filter__inl_8h_source.html">filter_inl.h</a>.</p>
 
 </div>
 </div>
@@ -370,7 +371,7 @@ template&lt;typename hits_iterator &gt; </div>
 <p>enumerate all hits in a given range</p>
 <p>hits_iterator a uint2 iterator </p>
 
-<p>Definition at line <a class="el" href="qgram_2filter__inl_8h_source.html#l00386">386</a> of file <a class="el" href="qgram_2filter__inl_8h_source.html">filter_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter__inl_8h_source.html#l00395">395</a> of file <a class="el" href="qgram_2filter__inl_8h_source.html">filter_inl.h</a>.</p>
 
 </div>
 </div>
@@ -440,7 +441,7 @@ template&lt;typename hits_iterator , typename output_iterator , typename count_i
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the number of merged hits </dd></dl>
 
-<p>Definition at line <a class="el" href="qgram_2filter__inl_8h_source.html#l00446">446</a> of file <a class="el" href="qgram_2filter__inl_8h_source.html">filter_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter__inl_8h_source.html#l00455">455</a> of file <a class="el" href="qgram_2filter__inl_8h_source.html">filter_inl.h</a>.</p>
 
 </div>
 </div>
@@ -468,7 +469,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
 </div><div class="memdoc">
 <p>return the individual ranges of the ranked queries </p>
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00288">288</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00297">297</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -521,7 +522,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="qgram_2filter__inl_8h_source.html#l00336">336</a> of file <a class="el" href="qgram_2filter__inl_8h_source.html">filter_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter__inl_8h_source.html#l00345">345</a> of file <a class="el" href="qgram_2filter__inl_8h_source.html">filter_inl.h</a>.</p>
 
 </div>
 </div>
@@ -549,7 +550,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
 </div><div class="memdoc">
 <p>return the global ranks of the output hits (i.e. the range <em>[ranks[i], ranks[i+1])</em> identifies the position of the hits corresponding to the i-th query in the locate output) </p>
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00293">293</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00302">302</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -566,7 +567,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00303">303</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00312">312</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -582,7 +583,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00302">302</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00311">311</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -598,7 +599,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00297">297</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00306">306</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -614,7 +615,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00299">299</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00308">308</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -630,7 +631,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00295">295</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00304">304</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -646,7 +647,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00298">298</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00307">307</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -662,7 +663,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00296">296</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00305">305</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -678,7 +679,7 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00300">300</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00309">309</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
@@ -694,18 +695,18 @@ template&lt;typename qgram_index_type , typename query_iterator , typename index
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00301">301</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
+<p>Definition at line <a class="el" href="qgram_2filter_8h_source.html#l00310">310</a> of file <a class="el" href="qgram_2filter_8h_source.html">filter.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/qgram/<a class="el" href="qgram_2filter_8h_source.html">filter.h</a></li>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/qgram/<a class="el" href="qgram_2filter__inl_8h_source.html">filter_inl.h</a></li>
+<li>E:/git/nvbio/nvbio/qgram/<a class="el" href="qgram_2filter_8h_source.html">filter.h</a></li>
+<li>E:/git/nvbio/nvbio/qgram/<a class="el" href="qgram_2filter__inl_8h_source.html">filter_inl.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:40 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:17 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvBowtie/bowtie2/cuda/reduce.h File Reference</title>
+<title>NVBIO: E:/git/nvbio/nvBowtie/bowtie2/cuda/reduce.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -104,11 +105,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="defs_8h_source.html">nvBowtie/bowtie2/cuda/defs.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="alignments_8h_source.html">nvbio/io/alignments.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="seed__hit_8h_source.html">nvBowtie/bowtie2/cuda/seed_hit.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="scoring_8h_source.html">nvBowtie/bowtie2/cuda/scoring.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="params_8h_source.html">nvBowtie/bowtie2/cuda/params.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="nvbio_2io_2utils_8h_source.html">nvbio/io/utils.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="exceptions_8h_source.html">nvbio/basic/exceptions.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="reduce__inl_8h_source.html">nvBowtie/bowtie2/cuda/reduce_inl.h</a>&gt;</code><br/>
 </div>
 <p><a href="reduce_8h_source.html">Go to the source code of this file.</a></p>
@@ -136,17 +134,19 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga01103d0dd86260c207369ef1f0d5b067"><td class="memTemplParams" colspan="2">template&lt;typename ScoringScheme , typename ReduceContext &gt; </td></tr>
-<tr class="memitem:ga01103d0dd86260c207369ef1f0d5b067"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___reduce.html#ga01103d0dd86260c207369ef1f0d5b067">nvbio::bowtie2::cuda::score_reduce</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReduceContext context, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; ScoringScheme &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga01103d0dd86260c207369ef1f0d5b067"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga6b7b95482ecb303c4827ddb318515609"><td class="memTemplParams" colspan="2">template&lt;typename ScoringScheme , typename ReduceContext &gt; </td></tr>
-<tr class="memitem:ga6b7b95482ecb303c4827ddb318515609"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___reduce.html#ga6b7b95482ecb303c4827ddb318515609">nvbio::bowtie2::cuda::score_reduce_paired</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReduceContext context, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; ScoringScheme &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga6b7b95482ecb303c4827ddb318515609"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf4b932cd61fa1d6575f21d3e68523bea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___reduce.html#gaf4b932cd61fa1d6575f21d3e68523bea">nvbio::bowtie2::cuda::score_reduce</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReduceBestApproxContext context, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; EditDistanceScoringScheme &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:gaf4b932cd61fa1d6575f21d3e68523bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga074f644a67e6772922c65608112cecf4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___reduce.html#ga074f644a67e6772922c65608112cecf4">nvbio::bowtie2::cuda::score_reduce</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReduceBestApproxContext context, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; SmithWatermanScoringScheme&lt;&gt; &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:ga074f644a67e6772922c65608112cecf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga156907d3ba196849440395a44ad429b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___reduce.html#ga156907d3ba196849440395a44ad429b0">nvbio::bowtie2::cuda::score_reduce_paired</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReduceBestApproxContext context, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; EditDistanceScoringScheme &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:ga156907d3ba196849440395a44ad429b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad9df46727720f332d9c27f5b6f6c33b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___reduce.html#gad9df46727720f332d9c27f5b6f6c33b5">nvbio::bowtie2::cuda::score_reduce_paired</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReduceBestApproxContext context, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BestApproxScoringPipelineState&lt; SmithWatermanScoringScheme&lt;&gt; &gt; &amp;pipeline, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD &amp;params)</td></tr>
+<tr class="separator:gad9df46727720f332d9c27f5b6f6c33b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:16 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:44 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

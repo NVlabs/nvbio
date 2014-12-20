@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvbio/io/sequence/sequence_sam.h Source File</title>
+<title>NVBIO: E:/git/nvbio/nvbio/io/sequence/sequence_sam.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -100,123 +101,132 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a href="sequence__sam_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (c) 2012-14, NVIDIA CORPORATION.  All rights reserved.</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * NVIDIA CORPORATION and its licensors retain all intellectual property</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * and proprietary rights in and to this software, related documentation</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * and any modifications thereto.  Any use, reproduction, disclosure or</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> * distribution of this software and related documentation without an express</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> * license agreement from NVIDIA CORPORATION is strictly prohibited.</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;zlib/zlib.h&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="sequence_8h.html">nvbio/io/sequence/sequence.h</a>&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="sequence__priv_8h.html">nvbio/io/sequence/sequence_priv.h</a>&gt;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="console_8h.html">nvbio/basic/console.h</a>&gt;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span>nvbio {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span>io {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment">// SAM format description: http://samtools.sourceforge.net/SAM1.pdf</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * nvbio</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (c) 2011-2014, NVIDIA CORPORATION. All rights reserved.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * </span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Redistribution and use in source and binary forms, with or without</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * modification, are permitted provided that the following conditions are met:</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> *    * Redistributions of source code must retain the above copyright</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> *      notice, this list of conditions and the following disclaimer.</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *    * Redistributions in binary form must reproduce the above copyright</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> *      notice, this list of conditions and the following disclaimer in the</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> *      documentation and/or other materials provided with the distribution.</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *    * Neither the name of the NVIDIA CORPORATION nor the</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *      names of its contributors may be used to endorse or promote products</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *      derived from this software without specific prior written permission.</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * </span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> * DISCLAIMED. IN NO EVENT SHALL NVIDIA CORPORATION BE LIABLE FOR ANY</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;zlib/zlib.h&gt;</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment">// flag comments come from SAMtools spec</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">// a better explanation is available at:</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">// http://genome.sph.umich.edu/wiki/SAM#What_Information_Does_SAM.2FBAM_Have_for_an_Alignment</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01c">   35</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01c">AlignmentFlags</a></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;{</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="comment">// SAMtools: template having multiple segments in sequencing</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca6ce61a403c71bfbc1ab0dcc935d0201d">SAMFlag_MultipleSegments</a> = 0x1,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="comment">// each segment properly aligned according to the aligner</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca5f130a3c059a0f6198826b5401d67a1e">SAMFlag_AllSegmentsAligned</a> = 0x2,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="comment">// segment unmapped</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca358f97e30dbfb19712a90b6c0696ba44">SAMFlag_SegmentUnmapped</a> = 0x4,</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="comment">// next segment in the template unmapped</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca590e611bbc6d09ee221d8949b8cbf50d">SAMFlag_NextSegmentUnmapped</a> = 0x8,</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="comment">// SEQ being reverse complemented</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01caa35c9d7c06d10c40225aee844ff108a3">SAMFlag_ReverseComplemented</a> = 0x10,</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="comment">// SEQ of the next segment in the template being reversed</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca0eb3a0f33224798cd075ccaaa4037114">SAMFlag_NextSegmentReverseComplemented</a> = 0x20,</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="comment">// the first segment in the template</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca11ccbc4c0be98ef38e239664b4bf8d88">SAMFlag_FirstSegment</a> = 0x40,</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">// the last segment in the template</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca79f0896d03b2d6a6a3d797a0ddd0abac">SAMFlag_LastSegment</a> = 0x80,</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="comment">// secondary alignment</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01caa9921da9f797fff0dbece334676da532">SAMFlag_SecondaryAlignment</a> = 0x100,</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">// not passing quality controls</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca3436ed63d00d40e2811a2fd3a945fd69">SAMFlag_FailedQC</a> = 0x200,</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="comment">// PCR or optical duplicate</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca4aa73eff27f322fc9f2fce2b6342bb9a">SAMFlag_Duplicate</a> = 0x400,</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;};</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">// SequenceDataFile from a SAM file</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html">   63</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html">SequenceDataFile_SAM</a> : <span class="keyword">public</span> <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html">SequenceDataFile</a></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;{</div>
-<div class="line"><a name="l00065"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#a97a6247c5591bb30c23081435ce50602a07236618e8aa3c030503f4f102934c38">   65</a></span>&#160;    <span class="keyword">enum</span> { <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#a97a6247c5591bb30c23081435ce50602a07236618e8aa3c030503f4f102934c38">LINE_BUFFER_INIT_SIZE</a> = 1024 };</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cb">   67</a></span>&#160;    <span class="keyword">enum</span> <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cb">SortOrder</a></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    {</div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cba7c19a58aa61c33f009da0da9a556cfd8">   69</a></span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cba7c19a58aa61c33f009da0da9a556cfd8">SortOrder_unknown</a>,</div>
-<div class="line"><a name="l00070"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cbad9c1e9604285f3d8ca94094a17e8bc42">   70</a></span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cbad9c1e9604285f3d8ca94094a17e8bc42">SortOrder_unsorted</a>,</div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cba06c11b6b347c7f5c9eff10f5ad74e9dd">   71</a></span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cba06c11b6b347c7f5c9eff10f5ad74e9dd">SortOrder_queryname</a>,</div>
-<div class="line"><a name="l00072"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cbaa9bf347aec7eaf78ea6fecc3735881d7">   72</a></span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cbaa9bf347aec7eaf78ea6fecc3735881d7">SortOrder_coordinate</a>,</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    };</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#a59196472c2f110f685e6fef1d3d918e8">SequenceDataFile_SAM</a>(</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span>*             read_file_name,</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            max_reads,</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            max_read_len,</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___sequence_i_o.html#gaa3df48d0ab11675e05f2c34fb70e5673">SequenceEncoding</a>  flags);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#a2343a8cfbfc598ba665d971f069f233f">nextChunk</a>(<span class="keyword">struct</span> <a class="code" href="structnvbio_1_1io_1_1_sequence_data_encoder.html">SequenceDataEncoder</a> *output, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> max_reads, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> max_bps);</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#a40cd0152f4e5f7488f10ce90d7ed4be3">init</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordtype">bool</span> readLine(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordtype">void</span> rewindLine(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordtype">bool</span> parseHeaderLine(<span class="keywordtype">char</span> *<a class="code" href="cpu__bucketing_8h.html#a5537bd5e15087e05c249d4b62d45efac">start</a>);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">bool</span> parseReferenceSequenceLine(<span class="keywordtype">char</span> *<a class="code" href="cpu__bucketing_8h.html#a5537bd5e15087e05c249d4b62d45efac">start</a>);</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <a class="code" href="contrib_2zlib_2zlib_8h.html#acd0143ddd532551631ecc7093fd7adfc">gzFile</a> fp;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="comment">// a buffer for a full line; this will grow as needed</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordtype">char</span> *linebuf;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="comment">// current size of the buffer</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordtype">int</span> linebuf_size;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="comment">// length of the current line in the buffer</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordtype">int</span> line_length;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="sequence_8h.html">nvbio/io/sequence/sequence.h</a>&gt;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="sequence__priv_8h.html">nvbio/io/sequence/sequence_priv.h</a>&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="console_8h.html">nvbio/basic/console.h</a>&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">namespace </span>nvbio {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">namespace </span>io {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">// SAM format description: http://samtools.sourceforge.net/SAM1.pdf</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">// flag comments come from SAMtools spec</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">// a better explanation is available at:</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">// http://genome.sph.umich.edu/wiki/SAM#What_Information_Does_SAM.2FBAM_Have_for_an_Alignment</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01c">   44</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01c">AlignmentFlags</a></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;{</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="comment">// SAMtools: template having multiple segments in sequencing</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca6ce61a403c71bfbc1ab0dcc935d0201d">SAMFlag_MultipleSegments</a> = 0x1,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="comment">// each segment properly aligned according to the aligner</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca5f130a3c059a0f6198826b5401d67a1e">SAMFlag_AllSegmentsAligned</a> = 0x2,</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="comment">// segment unmapped</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca358f97e30dbfb19712a90b6c0696ba44">SAMFlag_SegmentUnmapped</a> = 0x4,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="comment">// next segment in the template unmapped</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca590e611bbc6d09ee221d8949b8cbf50d">SAMFlag_NextSegmentUnmapped</a> = 0x8,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="comment">// SEQ being reverse complemented</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01caa35c9d7c06d10c40225aee844ff108a3">SAMFlag_ReverseComplemented</a> = 0x10,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">// SEQ of the next segment in the template being reversed</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca0eb3a0f33224798cd075ccaaa4037114">SAMFlag_NextSegmentReverseComplemented</a> = 0x20,</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="comment">// the first segment in the template</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca11ccbc4c0be98ef38e239664b4bf8d88">SAMFlag_FirstSegment</a> = 0x40,</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="comment">// the last segment in the template</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca79f0896d03b2d6a6a3d797a0ddd0abac">SAMFlag_LastSegment</a> = 0x80,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="comment">// secondary alignment</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01caa9921da9f797fff0dbece334676da532">SAMFlag_SecondaryAlignment</a> = 0x100,</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="comment">// not passing quality controls</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca3436ed63d00d40e2811a2fd3a945fd69">SAMFlag_FailedQC</a> = 0x200,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="comment">// PCR or optical duplicate</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <a class="code" href="namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01ca4aa73eff27f322fc9f2fce2b6342bb9a">SAMFlag_Duplicate</a> = 0x400,</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;};</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">// SequenceDataFile from a SAM file</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html">   72</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html">SequenceDataFile_SAM</a> : <span class="keyword">public</span> <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html">SequenceDataFile</a></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;{</div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#a368c95ab64b30ad7275bc7c6699b3699a07236618e8aa3c030503f4f102934c38">   74</a></span>&#160;    <span class="keyword">enum</span> { <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#a368c95ab64b30ad7275bc7c6699b3699a07236618e8aa3c030503f4f102934c38">LINE_BUFFER_INIT_SIZE</a> = 1024 };</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cb">   76</a></span>&#160;    <span class="keyword">enum</span> <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cb">SortOrder</a></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    {</div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cba7c19a58aa61c33f009da0da9a556cfd8">   78</a></span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cba7c19a58aa61c33f009da0da9a556cfd8">SortOrder_unknown</a>,</div>
+<div class="line"><a name="l00079"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cbad9c1e9604285f3d8ca94094a17e8bc42">   79</a></span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cbad9c1e9604285f3d8ca94094a17e8bc42">SortOrder_unsorted</a>,</div>
+<div class="line"><a name="l00080"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cba06c11b6b347c7f5c9eff10f5ad74e9dd">   80</a></span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cba06c11b6b347c7f5c9eff10f5ad74e9dd">SortOrder_queryname</a>,</div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cbaa9bf347aec7eaf78ea6fecc3735881d7">   81</a></span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cbaa9bf347aec7eaf78ea6fecc3735881d7">SortOrder_coordinate</a>,</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    };</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#a59196472c2f110f685e6fef1d3d918e8">SequenceDataFile_SAM</a>(</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span>*             read_file_name,</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            max_reads,</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            max_read_len,</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___sequence_i_o.html#gaa3df48d0ab11675e05f2c34fb70e5673">SequenceEncoding</a>  flags);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#a2343a8cfbfc598ba665d971f069f233f">nextChunk</a>(<span class="keyword">struct</span> <a class="code" href="structnvbio_1_1io_1_1_sequence_data_encoder.html">SequenceDataEncoder</a> *output, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> max_reads, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> max_bps);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#a40cd0152f4e5f7488f10ce90d7ed4be3">init</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordtype">bool</span> readLine(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordtype">void</span> rewindLine(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">bool</span> parseHeaderLine(<span class="keywordtype">char</span> *start);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordtype">bool</span> parseReferenceSequenceLine(<span class="keywordtype">char</span> *start);</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="comment">// how many lines we parsed so far</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordtype">int</span> numLines;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="comment">// info from the header</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordtype">char</span> *version;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cb">SortOrder</a> sortOrder;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="comment">// reference sequence info</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#acc4721ad07c664f09e04fcf935358277">  109</a></span>&#160;    std::vector&lt;std::string&gt; <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#acc4721ad07c664f09e04fcf935358277">sq_names</a>;</div>
-<div class="line"><a name="l00110"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#ae9c9f7e82421a1b1b2a6f88e6278b7a1">  110</a></span>&#160;    std::vector&lt;uint64&gt; <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#ae9c9f7e82421a1b1b2a6f88e6278b7a1">sq_lengths</a>;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;};</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;}</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;}</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <a class="code" href="contrib_2zlib_2zlib_8h.html#acd0143ddd532551631ecc7093fd7adfc">gzFile</a> fp;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="comment">// a buffer for a full line; this will grow as needed</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">char</span> *linebuf;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="comment">// current size of the buffer</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keywordtype">int</span> linebuf_size;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="comment">// length of the current line in the buffer</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordtype">int</span> line_length;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="comment">// how many lines we parsed so far</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordtype">int</span> numLines;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="comment">// info from the header</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordtype">char</span> *version;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cb">SortOrder</a> sortOrder;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="comment">// reference sequence info</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#acc4721ad07c664f09e04fcf935358277">  118</a></span>&#160;    std::vector&lt;std::string&gt; <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#acc4721ad07c664f09e04fcf935358277">sq_names</a>;</div>
+<div class="line"><a name="l00119"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#ae9c9f7e82421a1b1b2a6f88e6278b7a1">  119</a></span>&#160;    std::vector&lt;uint64&gt; <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#ae9c9f7e82421a1b1b2a6f88e6278b7a1">sq_lengths</a>;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;};</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;}</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:06 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:32 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

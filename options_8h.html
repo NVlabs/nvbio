@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: E:/p4sw/sw/gpgpu/nvbio/main/nvbio/basic/options.h File Reference</title>
+<title>NVBIO: E:/git/nvbio/nvbio/basic/options.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -103,6 +104,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="types_8h_source.html">nvbio/basic/types.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="console_8h_source.html">nvbio/basic/console.h</a>&gt;</code><br/>
+<code>#include &lt;stdlib.h&gt;</code><br/>
 <code>#include &lt;string&gt;</code><br/>
 </div>
 <p><a href="options_8h_source.html">Go to the source code of this file.</a></p>
@@ -118,23 +121,41 @@ Functions</h2></td></tr>
 <tr class="memitem:a4c875b39419deff23bc9300212843dc2"><td class="memTemplParams" colspan="2">template&lt;typename options_type &gt; </td></tr>
 <tr class="memitem:a4c875b39419deff23bc9300212843dc2"><td class="memTemplItemLeft" align="right" valign="top">uint32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#a4c875b39419deff23bc9300212843dc2">nvbio::uint_option</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> options_type &amp;options, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 val)</td></tr>
 <tr class="separator:a4c875b39419deff23bc9300212843dc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8b33e756d83b81c712476ffdc146336"><td class="memTemplParams" colspan="2">template&lt;typename options_type &gt; </td></tr>
+<tr class="memitem:af8b33e756d83b81c712476ffdc146336"><td class="memTemplItemLeft" align="right" valign="top">uint32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#af8b33e756d83b81c712476ffdc146336">nvbio::uint_option</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> options_type &amp;options, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name2, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 val)</td></tr>
+<tr class="separator:af8b33e756d83b81c712476ffdc146336"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab63b651f5f998f8ea32c43167ce0130d"><td class="memTemplParams" colspan="2">template&lt;typename options_type &gt; </td></tr>
 <tr class="memitem:ab63b651f5f998f8ea32c43167ce0130d"><td class="memTemplItemLeft" align="right" valign="top">int32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#ab63b651f5f998f8ea32c43167ce0130d">nvbio::int_option</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> options_type &amp;options, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> int32 val)</td></tr>
 <tr class="separator:ab63b651f5f998f8ea32c43167ce0130d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2050dfa72d2c24fefaff1d1cf87b92e8"><td class="memTemplParams" colspan="2">template&lt;typename options_type &gt; </td></tr>
+<tr class="memitem:a2050dfa72d2c24fefaff1d1cf87b92e8"><td class="memTemplItemLeft" align="right" valign="top">int32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#a2050dfa72d2c24fefaff1d1cf87b92e8">nvbio::int_option</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> options_type &amp;options, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name2, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 val)</td></tr>
+<tr class="separator:a2050dfa72d2c24fefaff1d1cf87b92e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7845839904fdbf578c3e1d3fdec7f93"><td class="memTemplParams" colspan="2">template&lt;typename options_type &gt; </td></tr>
 <tr class="memitem:af7845839904fdbf578c3e1d3fdec7f93"><td class="memTemplItemLeft" align="right" valign="top">int64&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#af7845839904fdbf578c3e1d3fdec7f93">nvbio::int64_option</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> options_type &amp;options, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> int64 val)</td></tr>
 <tr class="separator:af7845839904fdbf578c3e1d3fdec7f93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74ea76d418b5cf6098f27e9caa74c541"><td class="memTemplParams" colspan="2">template&lt;typename options_type &gt; </td></tr>
+<tr class="memitem:a74ea76d418b5cf6098f27e9caa74c541"><td class="memTemplItemLeft" align="right" valign="top">int64&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#a74ea76d418b5cf6098f27e9caa74c541">nvbio::int64_option</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> options_type &amp;options, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name2, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 val)</td></tr>
+<tr class="separator:a74ea76d418b5cf6098f27e9caa74c541"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe9889ec17ba0d1566fec8ba7c49aeb0"><td class="memTemplParams" colspan="2">template&lt;typename options_type &gt; </td></tr>
 <tr class="memitem:abe9889ec17ba0d1566fec8ba7c49aeb0"><td class="memTemplItemLeft" align="right" valign="top">float&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#abe9889ec17ba0d1566fec8ba7c49aeb0">nvbio::float_option</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> options_type &amp;options, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> float val)</td></tr>
 <tr class="separator:abe9889ec17ba0d1566fec8ba7c49aeb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29835db5d18a8e71b1c36f89e7132823"><td class="memTemplParams" colspan="2">template&lt;typename options_type &gt; </td></tr>
+<tr class="memitem:a29835db5d18a8e71b1c36f89e7132823"><td class="memTemplItemLeft" align="right" valign="top">float&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#a29835db5d18a8e71b1c36f89e7132823">nvbio::float_option</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> options_type &amp;options, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name2, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 val)</td></tr>
+<tr class="separator:a29835db5d18a8e71b1c36f89e7132823"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad56fce79245c86230c3d145c9d052780"><td class="memTemplParams" colspan="2">template&lt;typename options_type &gt; </td></tr>
 <tr class="memitem:ad56fce79245c86230c3d145c9d052780"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#ad56fce79245c86230c3d145c9d052780">nvbio::string_option</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> options_type &amp;options, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *val)</td></tr>
 <tr class="separator:ad56fce79245c86230c3d145c9d052780"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4555817f28d344f10f4f96de8d2c224c"><td class="memTemplParams" colspan="2">template&lt;typename options_type &gt; </td></tr>
+<tr class="memitem:a4555817f28d344f10f4f96de8d2c224c"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#a4555817f28d344f10f4f96de8d2c224c">nvbio::string_option</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> options_type &amp;options, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name2, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *val)</td></tr>
+<tr class="separator:a4555817f28d344f10f4f96de8d2c224c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8243a1069c23d0495f9cc168ae6e5a0b"><td class="memTemplParams" colspan="2">template&lt;typename options_type &gt; </td></tr>
+<tr class="memitem:a8243a1069c23d0495f9cc168ae6e5a0b"><td class="memTemplItemLeft" align="right" valign="top">int2&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#a8243a1069c23d0495f9cc168ae6e5a0b">nvbio::int2_option</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> options_type &amp;options, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *name, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> int2 val)</td></tr>
+<tr class="separator:a8243a1069c23d0495f9cc168ae6e5a0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:13 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:42 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

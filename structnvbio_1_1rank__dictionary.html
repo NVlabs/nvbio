@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -127,7 +128,7 @@ struct nvbio::rank_dictionary&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, Cou
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00054">54</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00063">63</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -175,7 +176,7 @@ Public Members</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Members</h2></td></tr>
-<tr class="memitem:a9f055b62a92236e2e4daa919c1037873"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1rank__dictionary.html#a9f055b62a92236e2e4daa919c1037873">BLOCK_INTERVAL</a> = K</td></tr>
+<tr class="memitem:a9f055b62a92236e2e4daa919c1037873"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1rank__dictionary.html#a9f055b62a92236e2e4daa919c1037873">BLOCK_INTERVAL</a> = <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a></td></tr>
 <tr class="separator:a9f055b62a92236e2e4daa919c1037873"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b35f2c4ff8683bb4ba98cb89e867aff"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1rank__dictionary.html#a6b35f2c4ff8683bb4ba98cb89e867aff">SYMBOL_SIZE</a> = SYMBOL_SIZE_T</td></tr>
 <tr class="separator:a6b35f2c4ff8683bb4ba98cb89e867aff"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -186,33 +187,33 @@ Related Functions</h2></td></tr>
 </td></tr>
 <tr class="memitem:ga71a2197ba0cf4fd168a7c8f60865d0a6"><td class="memTemplParams" colspan="2">template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString , typename OccIterator , typename CountTable &gt; </td></tr>
 <tr class="memitem:ga71a2197ba0cf4fd168a7c8f60865d0a6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#ga71a2197ba0cf4fd168a7c8f60865d0a6">text</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i)</td></tr>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#ga71a2197ba0cf4fd168a7c8f60865d0a6">text</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i)</td></tr>
 <tr class="separator:ga71a2197ba0cf4fd168a7c8f60865d0a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac4f298aba0e069cf8c78049a4cd88f24"><td class="memTemplParams" colspan="2">template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString , typename OccIterator , typename CountTable &gt; </td></tr>
 <tr class="memitem:gac4f298aba0e069cf8c78049a4cd88f24"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#gac4f298aba0e069cf8c78049a4cd88f24">text</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> i)</td></tr>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#gac4f298aba0e069cf8c78049a4cd88f24">text</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> i)</td></tr>
 <tr class="separator:gac4f298aba0e069cf8c78049a4cd88f24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaaca197f9af8999c97781bc7866e9be9a"><td class="memTemplParams" colspan="2">template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString , typename OccIterator , typename CountTable , typename IndexType &gt; </td></tr>
 <tr class="memitem:gaaca197f9af8999c97781bc7866e9be9a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> IndexType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#gaaca197f9af8999c97781bc7866e9be9a">rank</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> IndexType i, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)</td></tr>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> IndexType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#gaaca197f9af8999c97781bc7866e9be9a">rank</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> IndexType i, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)</td></tr>
 <tr class="separator:gaaca197f9af8999c97781bc7866e9be9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gab761c8335e705049efd15ee55327206b"><td class="memTemplParams" colspan="2">template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString , typename OccIterator , typename CountTable , typename IndexType &gt; </td></tr>
 <tr class="memitem:gab761c8335e705049efd15ee55327206b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1vector__type.html">vector_type</a><br class="typebreak"/>
-&lt; IndexType, 2 &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#gab761c8335e705049efd15ee55327206b">rank</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1vector__type.html">vector_type</a>&lt; IndexType, 2 &gt;::type range, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)</td></tr>
+&lt; IndexType, 2 &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#gab761c8335e705049efd15ee55327206b">rank</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1vector__type.html">vector_type</a>&lt; IndexType, 2 &gt;::type range, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c)</td></tr>
 <tr class="separator:gab761c8335e705049efd15ee55327206b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga6a69219c93a659e6dcc5a511f2728891"><td class="memTemplParams" colspan="2">template&lt;uint32 K, typename TextString , typename OccIterator , typename CountTable , typename IndexType &gt; </td></tr>
 <tr class="memitem:ga6a69219c93a659e6dcc5a511f2728891"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1vector__type.html">vector_type</a><br class="typebreak"/>
-&lt; IndexType, 4 &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#ga6a69219c93a659e6dcc5a511f2728891">rank4</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; 2, K, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> IndexType i)</td></tr>
+&lt; IndexType, 4 &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#ga6a69219c93a659e6dcc5a511f2728891">rank4</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> IndexType i)</td></tr>
 <tr class="separator:ga6a69219c93a659e6dcc5a511f2728891"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1065ec297262831c14c732c5df5fa95c"><td class="memTemplParams" colspan="2">template&lt;uint32 K, typename TextString , typename OccIterator , typename CountTable &gt; </td></tr>
 <tr class="memitem:ga1065ec297262831c14c732c5df5fa95c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#ga1065ec297262831c14c732c5df5fa95c">rank4</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; 2, K, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 range, uint4 *outl, uint4 *outh)</td></tr>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#ga1065ec297262831c14c732c5df5fa95c">rank4</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 range, uint4 *outl, uint4 *outh)</td></tr>
 <tr class="separator:ga1065ec297262831c14c732c5df5fa95c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga67084f2812f84bb8acac18fc9e6ab82a"><td class="memTemplParams" colspan="2">template&lt;uint32 K, typename TextString , typename OccIterator , typename CountTable &gt; </td></tr>
 <tr class="memitem:ga67084f2812f84bb8acac18fc9e6ab82a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#ga67084f2812f84bb8acac18fc9e6ab82a">rank4</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; 2, K, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___vector_types.html#ga0b3c60884d56b8c3738a8cfb5d804197">uint64_2</a> range, <a class="el" href="group___vector_types.html#ga052e55b626f58296624b5418fde56055">uint64_4</a> *outl, <a class="el" href="group___vector_types.html#ga052e55b626f58296624b5418fde56055">uint64_4</a> *outh)</td></tr>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#ga67084f2812f84bb8acac18fc9e6ab82a">rank4</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>&lt; 2, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___vector_types.html#ga0b3c60884d56b8c3738a8cfb5d804197">uint64_2</a> range, <a class="el" href="group___vector_types.html#ga052e55b626f58296624b5418fde56055">uint64_4</a> *outl, <a class="el" href="group___vector_types.html#ga052e55b626f58296624b5418fde56055">uint64_4</a> *outh)</td></tr>
 <tr class="separator:ga67084f2812f84bb8acac18fc9e6ab82a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
@@ -223,12 +224,12 @@ Related Functions</h2></td></tr>
 template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIterator, typename CountTable&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef CountTable <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html#a58289250b6cd8781237be1e8c306e50e">count_table_type</a></td>
+          <td class="memname">typedef CountTable <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html#a58289250b6cd8781237be1e8c306e50e">count_table_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00061">61</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00070">70</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 
 </div>
 </div>
@@ -239,12 +240,12 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
 template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIterator, typename CountTable&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1vector__traits.html">vector_traits</a>&lt; typename std::iterator_traits&lt;<a class="el" href="structnvbio_1_1rank__dictionary.html#abb27a6c7422ae6c002fbcba943c52859">occ_iterator</a>&gt;::value_type&gt;::value_type <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html#ae4658ce72ea2adbb5621dccc2dc2c27f">index_type</a></td>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1vector__traits.html">vector_traits</a>&lt; typename std::iterator_traits&lt;<a class="el" href="structnvbio_1_1rank__dictionary.html#abb27a6c7422ae6c002fbcba943c52859">occ_iterator</a>&gt;::value_type&gt;::value_type <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html#ae4658ce72ea2adbb5621dccc2dc2c27f">index_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00065">65</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00074">74</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 
 </div>
 </div>
@@ -255,12 +256,12 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
 template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIterator, typename CountTable&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef OccIterator <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html#abb27a6c7422ae6c002fbcba943c52859">occ_iterator</a></td>
+          <td class="memname">typedef OccIterator <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html#abb27a6c7422ae6c002fbcba943c52859">occ_iterator</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00060">60</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00069">69</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 
 </div>
 </div>
@@ -271,12 +272,12 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
 template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIterator, typename CountTable&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1vector__type.html">vector_type</a>&lt;<a class="el" href="structnvbio_1_1rank__dictionary.html#ae4658ce72ea2adbb5621dccc2dc2c27f">index_type</a>,2&gt;::type <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html#a8cb45107d4ed57feaa8778889c9dac2a">range_type</a></td>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1vector__type.html">vector_type</a>&lt;<a class="el" href="structnvbio_1_1rank__dictionary.html#ae4658ce72ea2adbb5621dccc2dc2c27f">index_type</a>,2&gt;::type <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html#a8cb45107d4ed57feaa8778889c9dac2a">range_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00067">67</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00076">76</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 
 </div>
 </div>
@@ -287,12 +288,12 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
 template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIterator, typename CountTable&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef TextString <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html#a796aa54697e495a3eac83d1af716d677">text_type</a></td>
+          <td class="memname">typedef TextString <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html#a796aa54697e495a3eac83d1af716d677">text_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00059">59</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00068">68</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 
 </div>
 </div>
@@ -303,12 +304,12 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
 template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIterator, typename CountTable&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1vector__type.html">vector_type</a>&lt;<a class="el" href="structnvbio_1_1rank__dictionary.html#ae4658ce72ea2adbb5621dccc2dc2c27f">index_type</a>,2&gt;::type <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html#a63606da0aa730b5ec4b0eb2a4909364f">vec2_type</a></td>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1vector__type.html">vector_type</a>&lt;<a class="el" href="structnvbio_1_1rank__dictionary.html#ae4658ce72ea2adbb5621dccc2dc2c27f">index_type</a>,2&gt;::type <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html#a63606da0aa730b5ec4b0eb2a4909364f">vec2_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00068">68</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00077">77</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 
 </div>
 </div>
@@ -319,12 +320,12 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
 template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIterator, typename CountTable&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1vector__type.html">vector_type</a>&lt;<a class="el" href="structnvbio_1_1rank__dictionary.html#ae4658ce72ea2adbb5621dccc2dc2c27f">index_type</a>,4&gt;::type <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html#a55f34acecc229b8877979880caad4e8f">vec4_type</a></td>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1vector__type.html">vector_type</a>&lt;<a class="el" href="structnvbio_1_1rank__dictionary.html#ae4658ce72ea2adbb5621dccc2dc2c27f">index_type</a>,4&gt;::type <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html#a55f34acecc229b8877979880caad4e8f">vec4_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00069">69</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00078">78</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 
 </div>
 </div>
@@ -339,7 +340,7 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a> </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a> </td>
           <td>(</td>
           <td class="paramname">)</td><td></td>
           <td></td>
@@ -353,7 +354,7 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
 </div><div class="memdoc">
 <p>default constructor </p>
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00074">74</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00083">83</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 
 </div>
 </div>
@@ -367,7 +368,7 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a> </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt;::<a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> TextString&#160;</td>
           <td class="paramname"><em>_text</em>, </td>
@@ -398,7 +399,7 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00079">79</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00088">88</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 
 </div>
 </div>
@@ -413,7 +414,7 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;::BLOCK_INTERVAL = K</td>
+          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt;::BLOCK_INTERVAL = <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a></td>
         </tr>
       </table>
   </td>
@@ -423,7 +424,7 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00056">56</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00065">65</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 
 </div>
 </div>
@@ -434,13 +435,13 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
 template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIterator, typename CountTable&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">CountTable <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;::count_table</td>
+          <td class="memname">CountTable <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt;::count_table</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>a helper lookup table used to efficiently count the number of occurrences of all the characters in a given byte </p>
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00089">89</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00098">98</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 
 </div>
 </div>
@@ -451,14 +452,14 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
 template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIterator, typename CountTable&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">OccIterator <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;::occ</td>
+          <td class="memname">OccIterator <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt;::occ</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>the dictionary's occurrence table </p>
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00088">88</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00097">97</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 
 </div>
 </div>
@@ -472,7 +473,7 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;::SYMBOL_SIZE = SYMBOL_SIZE_T</td>
+          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt;::SYMBOL_SIZE = SYMBOL_SIZE_T</td>
         </tr>
       </table>
   </td>
@@ -482,7 +483,7 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00057">57</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00066">66</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 
 </div>
 </div>
@@ -493,24 +494,24 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIte
 template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIterator, typename CountTable&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">TextString <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;::text</td>
+          <td class="memname">TextString <a class="el" href="structnvbio_1_1rank__dictionary.html">nvbio::rank_dictionary</a>&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt;::text</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>the dictionary's text </p>
 
-<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00087">87</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary_8h_source.html#l00096">96</a> of file <a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/fmindex/<a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a></li>
+<li>E:/git/nvbio/nvbio/fmindex/<a class="el" href="rank__dictionary_8h_source.html">rank_dictionary.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:39 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:15 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

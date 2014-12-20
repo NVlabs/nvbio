@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -110,7 +111,7 @@ Input</h1>
 <div class="line"></div>
 <div class="line"><span class="preprocessor">#include &quot;util.h&quot;</span></div>
 <div class="line"></div>
-<div class="line"><span class="keywordtype">void</span> <a class="code" href="suftest_8c.html#ac0f2228420376f4db7e1274f2b41667c">main</a>(<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>** argv)</div>
+<div class="line"><span class="keywordtype">void</span> <a class="code" href="bgzip_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a>(<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>** argv)</div>
 <div class="line">{</div>
 <div class="line">    <span class="comment">// perform some basic option parsing</span></div>
 <div class="line">    Params params( argc-2, argv );</div>
@@ -120,7 +121,7 @@ Input</h1>
 <div class="line"></div>
 <div class="line">    <span class="comment">// load a reference sequence in RAM</span></div>
 <div class="line">    <a class="code" href="group___sequence_i_o.html#gaeda29063a8a35631e18372d8a6001e27" title="a SequenceData object stored in host memory ">io::SequenceDataHost</a> h_ref;</div>
-<div class="line">    <span class="keywordflow">if</span> (!<a class="code" href="group___sequence_i_o.html#ga51edb4491c012a5c6c91b8de1472cb13">io::load_sequence_file</a>( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48add63351f5393872b63ceda3485d48483" title="4-letter DNA alphabet { A,C,G,T } ">DNA</a>, &amp;h_ref, index ))</div>
+<div class="line">    <span class="keywordflow">if</span> (!<a class="code" href="group___sequence_i_o.html#ga51edb4491c012a5c6c91b8de1472cb13">io::load_sequence_file</a>( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a6c8c7655bd0085241eed95780a3aa4c4" title="4-letter DNA alphabet { A,C,G,T } ">DNA</a>, &amp;h_ref, index ))</div>
 <div class="line">    {</div>
 <div class="line">        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;    failed loading reference \&quot;%s\&quot;\n&quot;</span>, index);</div>
 <div class="line">        <span class="keywordflow">return</span> 1u;</div>
@@ -182,7 +183,7 @@ Input</h1>
 <div class="line">    <span class="keywordflow">while</span> (1)</div>
 <div class="line">    {</div>
 <div class="line">        <span class="comment">// load a batch of reads</span></div>
-<div class="line">        <span class="keywordflow">if</span> (<a class="code" href="group___sequence_i_o.html#ga0b124ee3d2c51b0a1f555c91ad4948a2">io::next</a>( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a8a2224a6a384b941b7bcbde9843c92a8" title="5-letter DNA + N alphabet { A,C,G,T,N } ">DNA_N</a>, &amp;h_read_data, read_data_file, batch_reads, batch_bps ) == 0);</div>
+<div class="line">        <span class="keywordflow">if</span> (<a class="code" href="group___sequence_i_o.html#ga0b124ee3d2c51b0a1f555c91ad4948a2">io::next</a>( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a312b63ba76d209928476bcefde8f124d" title="5-letter DNA + N alphabet { A,C,G,T,N } ">DNA_N</a>, &amp;h_read_data, read_data_file, batch_reads, batch_bps ) == 0);</div>
 <div class="line">            <span class="keywordflow">break</span>;</div>
 <div class="line"></div>
 <div class="line">        <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;  loading reads... started\n&quot;</span>);</div>
@@ -197,7 +198,7 @@ Input</h1>
 <div class="line">        <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;    %u reads\n&quot;</span>, n_reads);</div>
 <div class="line"></div>
 <div class="line">        <span class="comment">// do the real mapping work</span></div>
-<div class="line">        <a class="code" href="group___mapping.html#gaa3d729454ad2be69f07eda252e522033">map</a>( pipeline, d_read_data );</div>
+<div class="line">        <a class="code" href="group___mapping.html#ga21eb981e822eac39eb4dda866b3460aa">map</a>( pipeline, d_read_data );</div>
 <div class="line">    }</div>
 <div class="line">}</div>
 </div><!-- fragment --><dl class="section user"><dt></dt><dd>Now we are ready to start the real mapping work. In order to do it, we'll need to store another data structure in our pipeline, namely the <a class="el" href="fmindex_page.html#FMIndexFilters">FMIndexFilter</a>. This data structure is just a context for performing FM-index based filtering, i.e. the process of finding potential matches of a set of strings using an FM-index.</dd></dl>
@@ -215,7 +216,7 @@ Input</h1>
 <h1><a class="anchor" id="MappingSection"></a>
 Mapping</h1>
 <dl class="section user"><dt></dt><dd>We'll write a simple seed &amp; extend aligner, so the first thing we'll want to do is split our reads in equal segments. As shown in the previous example, the collection of these seeds can be seen as an InfixSet . Let's start with some boiler-plate code to make sure we have everythin we need:</dd></dl>
-<div class="fragment"><div class="line"><span class="keywordtype">void</span> <a class="code" href="group___mapping.html#gaa3d729454ad2be69f07eda252e522033">map</a>(Pipeline&amp; pipeline, <span class="keyword">const</span> io::SequenceDataAccess&lt;DNA_N&gt; reads)</div>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> <a class="code" href="group___mapping.html#ga21eb981e822eac39eb4dda866b3460aa">map</a>(Pipeline&amp; pipeline, <span class="keyword">const</span> io::SequenceDataAccess&lt;DNA_N&gt; reads)</div>
 <div class="line">{</div>
 <div class="line">    <span class="comment">// the reads can be accessed as a string-set, of this type</span></div>
 <div class="line">    <span class="keyword">typedef</span> io::SequenceDataAccess&lt;DNA&gt;::sequence_string_set_type               genome_string;</div>
@@ -363,7 +364,7 @@ Mapping</h1>
 <div class="line">            read_infix_set,</div>
 <div class="line">            genome_infix_set,</div>
 <div class="line">            sinks.begin(),</div>
-<div class="line">            <a class="code" href="group___batch_scheduler.html#ga8cd79d95b552b152e3655b648e59256d">aln::DeviceThreadScheduler</a>(),</div>
+<div class="line">            <a class="code" href="group___batch_scheduler.html#ga8d26fb0c847e458b838e5f98893af1a4">aln::DeviceThreadScheduler</a>(),</div>
 <div class="line">            reads.max_read_len(),</div>
 <div class="line">            reads.max_read_len() + BAND_LEN );</div>
 <div class="line">    }</div>
@@ -374,7 +375,7 @@ Mapping</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:17 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:27:46 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

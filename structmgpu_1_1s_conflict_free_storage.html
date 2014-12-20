@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -116,21 +117,21 @@ struct mgpu::sConflictFreeStorage&lt; NT, X, NumBanks &gt;</h3>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a86cec3e3dec049466f8ee8a5dec1585d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="structmgpu_1_1s_conflict_free_storage.html#a86cec3e3dec049466f8ee8a5dec1585da3de2dd2572dd6b5828f0f902e8e183d6">count</a> = NT * X
+<tr class="memitem:ac4687e9a7e5fb086c7e48dbe5d57fb0c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="structmgpu_1_1s_conflict_free_storage.html#ac4687e9a7e5fb086c7e48dbe5d57fb0ca3de2dd2572dd6b5828f0f902e8e183d6">count</a> = NT * X
  }</td></tr>
-<tr class="separator:a86cec3e3dec049466f8ee8a5dec1585d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91378970723f5bc7c87e12d86123f33a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="structmgpu_1_1s_conflict_free_storage.html#a91378970723f5bc7c87e12d86123f33aae3b37c7ba2cc0c68bbdef88f76794f74">divisor</a> = sBankConflictDivisor&lt;X, NumBanks&gt;::value
+<tr class="separator:ac4687e9a7e5fb086c7e48dbe5d57fb0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a830ec073f103a97fb39e0c27d320f782"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="structmgpu_1_1s_conflict_free_storage.html#a830ec073f103a97fb39e0c27d320f782ae3b37c7ba2cc0c68bbdef88f76794f74">divisor</a> = sBankConflictDivisor&lt;X, NumBanks&gt;::value
  }</td></tr>
-<tr class="separator:a91378970723f5bc7c87e12d86123f33a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6fd381db46526b5b38bcbb4b8152cce"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="structmgpu_1_1s_conflict_free_storage.html#aa6fd381db46526b5b38bcbb4b8152cceadd4bb8be9452d15ff378b10fb9b35586">padding</a> = sDivSafe&lt;count, divisor&gt;::value
+<tr class="separator:a830ec073f103a97fb39e0c27d320f782"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9727d1ba704213f1b6cbd7e9e26fba1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="structmgpu_1_1s_conflict_free_storage.html#ae9727d1ba704213f1b6cbd7e9e26fba1add4bb8be9452d15ff378b10fb9b35586">padding</a> = sDivSafe&lt;count, divisor&gt;::value
  }</td></tr>
-<tr class="separator:aa6fd381db46526b5b38bcbb4b8152cce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1969b4471e98c7001917ea18c1d499b1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="structmgpu_1_1s_conflict_free_storage.html#a1969b4471e98c7001917ea18c1d499b1aea9fdb30303e380cbf36fbe4d94b7bfe">value</a> = count + padding
+<tr class="separator:ae9727d1ba704213f1b6cbd7e9e26fba1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3f33ade180c55d2f5dddce02fa96ad8"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="structmgpu_1_1s_conflict_free_storage.html#ab3f33ade180c55d2f5dddce02fa96ad8aea9fdb30303e380cbf36fbe4d94b7bfe">value</a> = count + padding
  }</td></tr>
-<tr class="separator:a1969b4471e98c7001917ea18c1d499b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:ab3f33ade180c55d2f5dddce02fa96ad8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
-<a class="anchor" id="a86cec3e3dec049466f8ee8a5dec1585d"></a>
+<a class="anchor" id="ac4687e9a7e5fb086c7e48dbe5d57fb0c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -142,7 +143,7 @@ template&lt;int NT, int X, int NumBanks = 32&gt; </div>
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a86cec3e3dec049466f8ee8a5dec1585da3de2dd2572dd6b5828f0f902e8e183d6"></a>count</em>&nbsp;</td><td class="fielddoc">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ac4687e9a7e5fb086c7e48dbe5d57fb0ca3de2dd2572dd6b5828f0f902e8e183d6"></a>count</em>&nbsp;</td><td class="fielddoc">
 </td></tr>
 </table>
 
@@ -150,7 +151,7 @@ template&lt;int NT, int X, int NumBanks = 32&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a91378970723f5bc7c87e12d86123f33a"></a>
+<a class="anchor" id="a830ec073f103a97fb39e0c27d320f782"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -162,7 +163,7 @@ template&lt;int NT, int X, int NumBanks = 32&gt; </div>
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a91378970723f5bc7c87e12d86123f33aae3b37c7ba2cc0c68bbdef88f76794f74"></a>divisor</em>&nbsp;</td><td class="fielddoc">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a830ec073f103a97fb39e0c27d320f782ae3b37c7ba2cc0c68bbdef88f76794f74"></a>divisor</em>&nbsp;</td><td class="fielddoc">
 </td></tr>
 </table>
 
@@ -170,7 +171,7 @@ template&lt;int NT, int X, int NumBanks = 32&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aa6fd381db46526b5b38bcbb4b8152cce"></a>
+<a class="anchor" id="ae9727d1ba704213f1b6cbd7e9e26fba1"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -182,7 +183,7 @@ template&lt;int NT, int X, int NumBanks = 32&gt; </div>
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="aa6fd381db46526b5b38bcbb4b8152cceadd4bb8be9452d15ff378b10fb9b35586"></a>padding</em>&nbsp;</td><td class="fielddoc">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ae9727d1ba704213f1b6cbd7e9e26fba1add4bb8be9452d15ff378b10fb9b35586"></a>padding</em>&nbsp;</td><td class="fielddoc">
 </td></tr>
 </table>
 
@@ -190,7 +191,7 @@ template&lt;int NT, int X, int NumBanks = 32&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a1969b4471e98c7001917ea18c1d499b1"></a>
+<a class="anchor" id="ab3f33ade180c55d2f5dddce02fa96ad8"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -202,7 +203,7 @@ template&lt;int NT, int X, int NumBanks = 32&gt; </div>
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a1969b4471e98c7001917ea18c1d499b1aea9fdb30303e380cbf36fbe4d94b7bfe"></a>value</em>&nbsp;</td><td class="fielddoc">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ab3f33ade180c55d2f5dddce02fa96ad8aea9fdb30303e380cbf36fbe4d94b7bfe"></a>value</em>&nbsp;</td><td class="fielddoc">
 </td></tr>
 </table>
 
@@ -211,12 +212,12 @@ template&lt;int NT, int X, int NumBanks = 32&gt; </div>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/contrib/moderngpu/include/util/<a class="el" href="static_8h_source.html">static.h</a></li>
+<li>E:/git/nvbio/contrib/moderngpu/include/util/<a class="el" href="static_8h_source.html">static.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:27 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:02 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -127,7 +128,7 @@ struct nvbio::aln::priv::alignment_checkpointed_dispatch&lt; CHECKPOINTS, SmithW
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l01491">1491</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l01500">1500</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -141,11 +142,11 @@ Public Types</h2></td></tr>
 Static Public Methods</h2></td></tr>
 <tr class="memitem:a6065d6e3acad5555d0faf38667af73d7"><td class="memTemplParams" colspan="2">template&lt;typename sink_type , typename checkpoint_type &gt; </td></tr>
 <tr class="memitem:a6065d6e3acad5555d0faf38667af73d7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_012d91b605d39c8b91c23fa7f94e856635.html#a6065d6e3acad5555d0faf38667af73d7">dispatch_checkpoints</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_012d91b605d39c8b91c23fa7f94e856635.html#a0fba8f544cf27fbc7a34a6b3b18dd07a">aligner_type</a> aligner, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pattern_string pattern, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> qual_string quals, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> text_string <a class="el" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> min_score, sink_type &amp;sink, checkpoint_type checkpoints, column_type column)</td></tr>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_012d91b605d39c8b91c23fa7f94e856635.html#a6065d6e3acad5555d0faf38667af73d7">dispatch_checkpoints</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_012d91b605d39c8b91c23fa7f94e856635.html#a0fba8f544cf27fbc7a34a6b3b18dd07a">aligner_type</a> aligner, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pattern_string pattern, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> qual_string quals, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> text_string <a class="el" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> min_score, sink_type &amp;sink, checkpoint_type <a class="el" href="group__private.html#ga79bab77c39c290c168c83216050371c4">checkpoints</a>, <a class="el" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a> <a class="el" href="group__private.html#ga42cf6551fd7dbc319c92c050d713cb91">column</a>)</td></tr>
 <tr class="separator:a6065d6e3acad5555d0faf38667af73d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f015fc4b414d5bb0f140c72d880d008"><td class="memTemplParams" colspan="2">template&lt;typename checkpoint_type , typename submatrix_type &gt; </td></tr>
 <tr class="memitem:a7f015fc4b414d5bb0f140c72d880d008"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_012d91b605d39c8b91c23fa7f94e856635.html#a7f015fc4b414d5bb0f140c72d880d008">dispatch_submatrix</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_012d91b605d39c8b91c23fa7f94e856635.html#a0fba8f544cf27fbc7a34a6b3b18dd07a">aligner_type</a> aligner, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pattern_string pattern, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> qual_string quals, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> text_string <a class="el" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> min_score, checkpoint_type checkpoints, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> checkpoint_id, submatrix_type submatrix, column_type column)</td></tr>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_012d91b605d39c8b91c23fa7f94e856635.html#a7f015fc4b414d5bb0f140c72d880d008">dispatch_submatrix</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_012d91b605d39c8b91c23fa7f94e856635.html#a0fba8f544cf27fbc7a34a6b3b18dd07a">aligner_type</a> aligner, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pattern_string pattern, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> qual_string quals, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> text_string <a class="el" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> min_score, checkpoint_type <a class="el" href="group__private.html#ga79bab77c39c290c168c83216050371c4">checkpoints</a>, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> checkpoint_id, submatrix_type submatrix, <a class="el" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a> <a class="el" href="group__private.html#ga42cf6551fd7dbc319c92c050d713cb91">column</a>)</td></tr>
 <tr class="separator:a7f015fc4b414d5bb0f140c72d880d008"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
@@ -156,12 +157,12 @@ Static Public Methods</h2></td></tr>
 template&lt;uint32 CHECKPOINTS, AlignmentType TYPE, typename scoring_type , typename pattern_string , typename qual_string , typename text_string , typename column_type &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner</a>&lt;<a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>,scoring_type&gt; <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch.html">nvbio::aln::priv::alignment_checkpointed_dispatch</a>&lt; CHECKPOINTS, <a class="el" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_type &gt;, pattern_string, qual_string, text_string, column_type &gt;::<a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_012d91b605d39c8b91c23fa7f94e856635.html#a0fba8f544cf27fbc7a34a6b3b18dd07a">aligner_type</a></td>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner</a>&lt;<a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>,scoring_type&gt; <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch.html">nvbio::aln::priv::alignment_checkpointed_dispatch</a>&lt; CHECKPOINTS, <a class="el" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_type &gt;, pattern_string, qual_string, text_string, <a class="el" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a> &gt;::<a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_012d91b605d39c8b91c23fa7f94e856635.html#a0fba8f544cf27fbc7a34a6b3b18dd07a">aligner_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l01499">1499</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l01508">1508</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
 
 </div>
 </div>
@@ -178,7 +179,7 @@ template&lt;typename sink_type , typename checkpoint_type &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch.html">nvbio::aln::priv::alignment_checkpointed_dispatch</a>&lt; CHECKPOINTS, <a class="el" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_type &gt;, pattern_string, qual_string, text_string, column_type &gt;::dispatch_checkpoints </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch.html">nvbio::aln::priv::alignment_checkpointed_dispatch</a>&lt; CHECKPOINTS, <a class="el" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_type &gt;, pattern_string, qual_string, text_string, <a class="el" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a> &gt;::dispatch_checkpoints </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_012d91b605d39c8b91c23fa7f94e856635.html#a0fba8f544cf27fbc7a34a6b3b18dd07a">aligner_type</a>&#160;</td>
           <td class="paramname"><em>aligner</em>, </td>
@@ -222,7 +223,7 @@ template&lt;typename sink_type , typename checkpoint_type &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">column_type&#160;</td>
+          <td class="paramtype"><a class="el" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a>&#160;</td>
           <td class="paramname"><em>column</em>&#160;</td>
         </tr>
         <tr>
@@ -258,7 +259,7 @@ template&lt;typename sink_type , typename checkpoint_type &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true iff the minimum score was reached </dd></dl>
 
-<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l01525">1525</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l01534">1534</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
 
 </div>
 </div>
@@ -274,7 +275,7 @@ template&lt;typename checkpoint_type , typename submatrix_type &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch.html">nvbio::aln::priv::alignment_checkpointed_dispatch</a>&lt; CHECKPOINTS, <a class="el" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_type &gt;, pattern_string, qual_string, text_string, column_type &gt;::dispatch_submatrix </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch.html">nvbio::aln::priv::alignment_checkpointed_dispatch</a>&lt; CHECKPOINTS, <a class="el" href="structnvbio_1_1aln_1_1_smith_waterman_aligner.html">SmithWatermanAligner</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_type &gt;, pattern_string, qual_string, text_string, <a class="el" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a> &gt;::dispatch_submatrix </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_012d91b605d39c8b91c23fa7f94e856635.html#a0fba8f544cf27fbc7a34a6b3b18dd07a">aligner_type</a>&#160;</td>
           <td class="paramname"><em>aligner</em>, </td>
@@ -324,7 +325,7 @@ template&lt;typename checkpoint_type , typename submatrix_type &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">column_type&#160;</td>
+          <td class="paramtype"><a class="el" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a>&#160;</td>
           <td class="paramname"><em>column</em>&#160;</td>
         </tr>
         <tr>
@@ -358,17 +359,17 @@ template&lt;typename checkpoint_type , typename submatrix_type &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the submatrix width </dd></dl>
 
-<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l01573">1573</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="sw__inl_8h_source.html#l01582">1582</a> of file <a class="el" href="sw__inl_8h_source.html">sw_inl.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>E:/p4sw/sw/gpgpu/nvbio/main/nvbio/alignment/sw/<a class="el" href="sw__inl_8h_source.html">sw_inl.h</a></li>
+<li>E:/git/nvbio/nvbio/alignment/sw/<a class="el" href="sw__inl_8h_source.html">sw_inl.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 10 2014 07:42:54 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 20 2014 12:28:33 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

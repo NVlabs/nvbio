@@ -542,7 +542,8 @@ int main(int argc, char* argv[])
             io::IOStats iostats = output_file->get_aggregate_statistics();
             const bowtie2::cuda::KernelStats& io = iostats.output_process_timings;
 
-            log_stats(stderr, "  output I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", io.time, 1.0e-6f * io.avg_speed(), 1.0e-6f * io.max_speed);
+            log_stats(stderr, "  reads   I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", input_stats.read_io.time, 1.0e-6f * input_stats.read_io.avg_speed(), 1.0e-6f * input_stats.read_io.max_speed);
+            log_stats(stderr, "  results I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", io.time, 1.0e-6f * io.avg_speed(), 1.0e-6f * io.max_speed);
 
             std::vector<uint32>& mapped         = paired.mapped_ed_histogram;
             uint32&              n_mapped       = paired.n_mapped;
@@ -696,7 +697,8 @@ int main(int argc, char* argv[])
             io::IOStats iostats = output_file->get_aggregate_statistics();
             const bowtie2::cuda::KernelStats& io = iostats.output_process_timings;
 
-            log_stats(stderr, "  output I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", io.time, 1.0e-6f * io.avg_speed(), 1.0e-6f * io.max_speed);
+            log_stats(stderr, "  reads   I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", input_stats.read_io.time, 1.0e-6f * input_stats.read_io.avg_speed(), 1.0e-6f * input_stats.read_io.max_speed);
+            log_stats(stderr, "  results I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", io.time, 1.0e-6f * io.avg_speed(), 1.0e-6f * io.max_speed);
 
             std::vector<uint32>& mapped         = mate1.mapped_ed_histogram;
             uint32&              n_mapped       = mate1.n_mapped;

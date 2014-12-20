@@ -206,7 +206,7 @@ void ComputeThreadSE::do_run()
         io::SequenceDataHost* read_data_host = input_thread->next( &read_begin );
 
         io_timer.stop();
-        stats.io.add( read_data_host ? read_data_host->size() : 0u, io_timer.seconds() );
+        stats.read_io.add( read_data_host ? read_data_host->size() : 0u, io_timer.seconds() );
 
         if (read_data_host == NULL)
         {
@@ -533,7 +533,7 @@ void ComputeThreadPE::do_run()
         io::SequenceDataHost* read_data_host2 = read_data_host_pair.second;
 
         io_timer.stop();
-        stats.io.add( read_data_host1 ? read_data_host1->size() : 0u, io_timer.seconds() );
+        stats.read_io.add( read_data_host1 ? read_data_host1->size() : 0u, io_timer.seconds() );
 
         if (read_data_host1 == NULL ||
             read_data_host2 == NULL)

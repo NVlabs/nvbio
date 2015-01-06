@@ -165,6 +165,7 @@ bool Aligner::init_alloc(const uint32 BATCH_SIZE, const Params& params, const En
         //
 
         const uint32 read_mem = 250u * BATCH_SIZE * (type == kPairedEnds ? 2u : 1u);
+                                                  // assume 250B per read
 
         const uint32 guard_band = 512*1024*1024 + // we want to leave 512MB free,
                                   read_mem;       // needed for kernels using lmem

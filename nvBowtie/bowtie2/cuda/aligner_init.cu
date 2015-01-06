@@ -163,8 +163,11 @@ bool Aligner::init_alloc(const uint32 BATCH_SIZE, const Params& params, const En
         //
         // allocate two thirds of available device memory for scoring / traceback
         //
-        const uint32 guard_band = 512*1024*1024; // we want to leave 512MB free,
-                                                 // needed for kernels using lmem
+
+        const uint32 read_mem = 250u * BATCH_SIZE * (type == kPairedEnds ? 2u : 1u);
+
+        const uint32 guard_band = 512*1024*1024 + // we want to leave 512MB free,
+                                  read_mem;       // needed for kernels using lmem
 
         const uint32 min_dp_storage = 64*1024*1024; // minimum amount of DP storage
 

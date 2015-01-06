@@ -181,7 +181,7 @@
 ///  options:
 ///    General:
 ///      --upto | -u        int [-1]      maximum number of reads to process
-///      --device           int [0]       select the given cuda device
+///      --device           int [0]       select the given cuda device(s) (e.g. --device 0 --device 1 ...)
 ///      --file-ref                       load reference from file
 ///      --server-ref                     load reference from server
 ///      --phred33                        qualities are ASCII characters equal to Phred quality + 33

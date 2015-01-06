@@ -68,7 +68,7 @@
 ///
 /// <a href="https://github.com/NVlabs/nvbio"><img src="download-icon.png" style="position:relative; bottom:-10px; border:0px;"/></a>
 /// &nbsp;&nbsp;
-/// <a href="https://github.com/NVlabs/nvbio">Download NVBIO 0.9.95</a>
+/// <a href="https://github.com/NVlabs/nvbio">Download NVBIO 0.9.98</a>
 /// </div>
 ///\endhtmlonly
 ///
@@ -86,7 +86,16 @@
 /// \section RecentNew Recent News
 ///\par
 /// <table>
-/// <tr><td style="white-space: nowrap; vertical-align:text-top;">15/09/2014 \n NVBIO 0.9.95</td>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">20/12/2014 \n NVBIO 0.9.98</td>
+/// <td style="vertical-align:text-top;" width="90%">
+/// - <b>New Features:</b> \n
+///   * Added multi-GPU support to nvBowtie, together with many accuracy and sensitivity improvements
+///   * Released a new version of nvSetBWT based on our freshly developed massively parallel algorithm: http://arxiv.org/pdf/1410.0562.pdf
+/// </td></tr>
+/// </table>
+///\par
+/// <table>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">15/09/2014 \n NVBIO 0.9.98</td>
 /// <td style="vertical-align:text-top;" width="90%">
 /// - <b>New Features:</b> \n
 ///   * Added many Bowtie2-compatible command line options to nvBowtie

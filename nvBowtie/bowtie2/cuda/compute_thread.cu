@@ -96,6 +96,24 @@ ComputeThreadSE::ComputeThreadSE(
     cudaSetDeviceFlags( cudaDeviceMapHost | cudaDeviceLmemResizeToMax );
 
     aligner = SharedPointer<Aligner>( new Aligner() );
+
+    Timer timer;
+    timer.start();
+
+    const bool need_reverse =
+        (params.allow_sub == 0 && USE_REVERSE_INDEX) ||
+        (params.allow_sub == 1 && params.subseed_len == 0 && params.mode == BestMappingApprox);
+
+    reference_data_device.reset( new io::SequenceDataDevice( reference_data_host ) );
+
+    driver_data_device.reset( new io::FMIndexDataDevice( driver_data_host,
+                        io::FMIndexDataDevice::FORWARD |
+        (need_reverse ? io::FMIndexDataDevice::REVERSE : 0u) |
+                        io::FMIndexDataDevice::SA ) );
+
+    timer.stop();
+
+    log_stats(stderr, "[%u]   allocated device driver data (%.2f GB - %.1fs)\n", thread_id, float(driver_data_device->allocated()) / 1.0e9f, timer.seconds() );
 }
 
 // gauge the favourite batch size
@@ -109,9 +127,17 @@ uint32 ComputeThreadSE::gauge_batch_size()
 
     for (BATCH_SIZE = params.max_batch_size*1024; BATCH_SIZE >= 16*1024; BATCH_SIZE /= 2)
     {
+        std::pair<uint64,uint64> mem_stats;
+
         // gauge how much memory we'd need
-        if (aligner->init_alloc( BATCH_SIZE, params, kSingleEnd, false ) == true)
+        if (aligner->init_alloc( BATCH_SIZE, params, kSingleEnd, false, &mem_stats ) == true)
+        {
+            log_stats(stderr, "[%u]   estimated allocation sizes: HOST %lu MB, DEVICE %lu MB)\n",
+                thread_id,
+                mem_stats.first / (1024*1024),
+                mem_stats.second / (1024*1024) );
             break;
+        }
     }
 
     return BATCH_SIZE;
@@ -141,22 +167,10 @@ void ComputeThreadSE::do_run()
         fclose( html_output );
     }
 
-    const bool need_reverse =
-        (params.allow_sub == 0 && USE_REVERSE_INDEX) ||
-        (params.allow_sub == 1 && params.subseed_len == 0 && params.mode == BestMappingApprox);
-
     Timer timer;
 
-    timer.start();
-
-    io::SequenceDataDevice reference_data( reference_data_host );
-
-    io::FMIndexDataDevice driver_data( driver_data_host,
-                        io::FMIndexDataDevice::FORWARD |
-        (need_reverse ? io::FMIndexDataDevice::REVERSE : 0u) |
-                        io::FMIndexDataDevice::SA );
-
-    timer.stop();
+    io::SequenceDataDevice& reference_data = *reference_data_device.get();
+    io::FMIndexDataDevice&  driver_data    = *driver_data_device.get();
 
     log_stats(stderr, "[%u]   allocated device driver data (%.2f GB - %.1fs)\n", thread_id, float(driver_data.allocated()) / 1.0e9f, timer.seconds() );
 
@@ -415,6 +429,24 @@ ComputeThreadPE::ComputeThreadPE(
     cudaSetDeviceFlags( cudaDeviceMapHost | cudaDeviceLmemResizeToMax );
 
     aligner = SharedPointer<Aligner>( new Aligner() );
+
+    Timer timer;
+    timer.start();
+
+    const bool need_reverse =
+        (params.allow_sub == 0 && USE_REVERSE_INDEX) ||
+        (params.allow_sub == 1 && params.subseed_len == 0 && params.mode == BestMappingApprox);
+
+    reference_data_device.reset( new io::SequenceDataDevice( reference_data_host ) );
+
+    driver_data_device.reset( new io::FMIndexDataDevice( driver_data_host,
+                        io::FMIndexDataDevice::FORWARD |
+        (need_reverse ? io::FMIndexDataDevice::REVERSE : 0u) |
+                        io::FMIndexDataDevice::SA ) );
+
+    timer.stop();
+
+    log_stats(stderr, "[%u]   allocated device driver data (%.2f GB - %.1fs)\n", thread_id, float(driver_data_device->allocated()) / 1.0e9f, timer.seconds() );
 }
 
 // gauge the favourite batch size
@@ -428,9 +460,17 @@ uint32 ComputeThreadPE::gauge_batch_size()
 
     for (BATCH_SIZE = params.max_batch_size*1024; BATCH_SIZE >= 16*1024; BATCH_SIZE /= 2)
     {
+        std::pair<uint64,uint64> mem_stats;
+
         // gauge how much memory we'd need
-        if (aligner->init_alloc( BATCH_SIZE, params, kPairedEnds, false ) == true)
+        if (aligner->init_alloc( BATCH_SIZE, params, kPairedEnds, false, &mem_stats ) == true)
+        {
+            log_stats(stderr, "[%u]   estimated allocation sizes: HOST %lu MB, DEVICE %lu MB)\n",
+                thread_id,
+                mem_stats.first / (1024*1024),
+                mem_stats.second / (1024*1024) );
             break;
+        }
     }
 
     return BATCH_SIZE;
@@ -460,24 +500,10 @@ void ComputeThreadPE::do_run()
         fclose( html_output );
     }
 
-    const bool need_reverse =
-        (params.allow_sub == 0 && USE_REVERSE_INDEX) ||
-        (params.allow_sub == 1 && params.subseed_len == 0 && params.mode == BestMappingApprox);
-
     Timer timer;
 
-    timer.start();
-
-    io::SequenceDataDevice reference_data( reference_data_host );
-
-    io::FMIndexDataDevice driver_data( driver_data_host,
-                        io::FMIndexDataDevice::FORWARD |
-        (need_reverse ? io::FMIndexDataDevice::REVERSE : 0u) |
-                        io::FMIndexDataDevice::SA );
-
-    timer.stop();
-
-    log_stats(stderr, "[%u]   allocated device driver data (%.2f GB - %.1fs)\n", thread_id, float(driver_data.allocated()) / 1.0e9f, timer.seconds() );
+    io::SequenceDataDevice& reference_data = *reference_data_device.get();
+    io::FMIndexDataDevice&  driver_data    = *driver_data_device.get();
 
     typedef FMIndexDef::type fm_index_type;
 

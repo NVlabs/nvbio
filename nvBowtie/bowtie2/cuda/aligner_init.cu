@@ -164,13 +164,13 @@ bool Aligner::init_alloc(const uint32 BATCH_SIZE, const Params& params, const En
         // allocate two thirds of available device memory for scoring / traceback
         //
 
-        const uint32 read_mem = 250u * BATCH_SIZE * (type == kPairedEnds ? 2u : 1u);
+        const uint64 read_mem = 250u * BATCH_SIZE * (type == kPairedEnds ? 2u : 1u);
                                                   // assume 250B per read
 
-        const uint32 guard_band = 512*1024*1024 + // we want to leave 512MB free,
+        const uint64 guard_band = 512*1024*1024 + // we want to leave 512MB free,
                                   read_mem;       // needed for kernels using lmem
 
-        const uint32 min_dp_storage = 64*1024*1024; // minimum amount of DP storage
+        const uint64 min_dp_storage = 64*1024*1024; // minimum amount of DP storage
 
         if (do_alloc)
             cudaMemGetInfo(&free, &total);
@@ -180,7 +180,7 @@ bool Aligner::init_alloc(const uint32 BATCH_SIZE, const Params& params, const En
             return false;
 
         const uint32 free_words    = uint32( free / 4u );
-        const uint32 min_free_words = guard_band / 4u;
+        const uint32 min_free_words = uint32( guard_band / 4u );
 
         uint32 target_words  = (free_words * 2u) / 3u;
                target_words  = nvbio::min( target_words, free_words - min_free_words );

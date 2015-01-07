@@ -84,6 +84,8 @@ struct ComputeThreadSE : public Thread<ComputeThreadSE>
           Params                             params;
           Stats&                             stats;
     SharedPointer<Aligner>                   aligner;
+    SharedPointer<io::SequenceDataDevice>    reference_data_device;
+    SharedPointer<io::FMIndexDataDevice>     driver_data_device;
 };
 
 struct ComputeThreadPE : public Thread<ComputeThreadPE>
@@ -125,6 +127,8 @@ struct ComputeThreadPE : public Thread<ComputeThreadPE>
           Params                             params;
           Stats&                             stats;
     SharedPointer<Aligner>                   aligner;
+    SharedPointer<io::SequenceDataDevice>    reference_data_device;
+    SharedPointer<io::FMIndexDataDevice>     driver_data_device;
 };
 
 } // namespace cuda

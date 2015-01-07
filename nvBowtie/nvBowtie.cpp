@@ -500,6 +500,9 @@ int main(int argc, char* argv[])
             // Setup the input thread
             //
 
+            Timer timer;
+            timer.start();
+
             bowtie2::cuda::Stats input_stats( params );
 
             bowtie2::cuda::InputThreadPE input_thread( read_data_file1.get(),  read_data_file2.get(), input_stats, batch_size );
@@ -529,6 +532,8 @@ int main(int argc, char* argv[])
 
             input_thread.join();
 
+            timer.stop();
+
             log_verbose( stderr, "  compute threads joined\n" );
 
             // close the output file
@@ -542,6 +547,7 @@ int main(int argc, char* argv[])
             io::IOStats iostats = output_file->get_aggregate_statistics();
             const bowtie2::cuda::KernelStats& io = iostats.output_process_timings;
 
+            log_stats(stderr, "  total         : %.2f sec (avg: %.3fK reads/s).\n", timer.seconds(), 1.0e-3f * float(n_reads) / timer.seconds());
             log_stats(stderr, "  reads   I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", input_stats.read_io.time, 1.0e-6f * input_stats.read_io.avg_speed(), 1.0e-6f * input_stats.read_io.max_speed);
             log_stats(stderr, "  results I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", io.time, 1.0e-6f * io.avg_speed(), 1.0e-6f * io.max_speed);
 
@@ -659,6 +665,10 @@ int main(int argc, char* argv[])
             //
             // Setup the input thread
             //
+
+            Timer timer;
+            timer.start();
+
             bowtie2::cuda::Stats input_stats( params );
 
             bowtie2::cuda::InputThreadSE input_thread( read_data_file.get(), input_stats, batch_size );
@@ -684,6 +694,8 @@ int main(int argc, char* argv[])
 
             input_thread.join();
 
+            timer.stop();
+
             log_verbose( stderr, "  compute threads joined\n" );
 
             // close the output file
@@ -697,6 +709,7 @@ int main(int argc, char* argv[])
             io::IOStats iostats = output_file->get_aggregate_statistics();
             const bowtie2::cuda::KernelStats& io = iostats.output_process_timings;
 
+            log_stats(stderr, "  total         : %.2f sec (avg: %.3fK reads/s).\n", timer.seconds(), 1.0e-3f * float(n_reads) / timer.seconds());
             log_stats(stderr, "  reads   I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", input_stats.read_io.time, 1.0e-6f * input_stats.read_io.avg_speed(), 1.0e-6f * input_stats.read_io.max_speed);
             log_stats(stderr, "  results I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", io.time, 1.0e-6f * io.avg_speed(), 1.0e-6f * io.max_speed);
 

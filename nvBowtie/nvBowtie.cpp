@@ -162,6 +162,13 @@ int main(int argc, char* argv[])
     std::string rg_id;
     std::string rg_string;
 
+    bool legacy_cmdline = true;
+
+    const char* read_name1      = "";
+    const char* read_name2      = "";
+    const char* reference_name  = "";
+    const char* output_name     = "";
+
     for (int32 i = 1; i < argc; ++i)
     {
         if (strcmp( argv[i], "--pe" ) == 0 ||
@@ -225,6 +232,34 @@ int main(int argc, char* argv[])
         {
             rg_string += "\t";
             rg_string += argv[++i];
+        }
+        else if (strcmp( argv[i], "-1") == 0)
+        {
+            legacy_cmdline = false;
+            paired_end     = true;
+            read_name1     = argv[++i];
+        }
+        else if (strcmp( argv[i], "-2") == 0)
+        {
+            legacy_cmdline = false;
+            paired_end     = true;
+            read_name2     = argv[++i];
+        }
+        else if (strcmp( argv[i], "-U") == 0)
+        {
+            legacy_cmdline = false;
+            paired_end     = false;
+            read_name1     = argv[++i];
+        }
+        else if (strcmp( argv[i], "-S") == 0)
+        {
+            legacy_cmdline = false;
+            output_name    = argv[++i];
+        }
+        else if (strcmp( argv[i], "-x") == 0)
+        {
+            legacy_cmdline = false;
+            reference_name = argv[++i];
         }
         else if (argv[i][0] == '-')
         {
@@ -310,7 +345,20 @@ int main(int argc, char* argv[])
         exit(1);
     }
 
-    uint32 arg_offset = paired_end ? argc-4 : argc-3;
+    if (legacy_cmdline)
+    {
+        const uint32 arg_offset = paired_end ? argc-4 : argc-3;
+        reference_name = argv[arg_offset];
+        if (paired_end)
+        {
+            read_name1 = argv[arg_offset+1];
+            read_name2 = argv[arg_offset+2];
+        }
+        else
+            read_name1 = argv[arg_offset+1];
+
+        output_name = argv[argc-1];
+    }
 
     try
     {
@@ -344,20 +392,20 @@ int main(int argc, char* argv[])
         if (from_file)
         {
             log_visible(stderr, "loading reference index... started\n");
-            log_info(stderr, "  file: \"%s\"\n", argv[arg_offset]);
+            log_info(stderr, "  file: \"%s\"\n", reference_name);
 
             // load the reference data
-            reference_data = io::load_sequence_file( DNA, argv[arg_offset] );
+            reference_data = io::load_sequence_file( DNA, reference_name );
             if (reference_data == NULL)
             {
-                log_error(stderr, "unable to load reference index \"%s\"\n", argv[arg_offset]);
+                log_error(stderr, "unable to load reference index \"%s\"\n", reference_name);
                 return 1;
             }
 
             log_visible(stderr, "loading reference index... done\n");
 
             nvbio::io::FMIndexDataHost* loader = new nvbio::io::FMIndexDataHost;
-            if (!loader->load( argv[arg_offset] ))
+            if (!loader->load( reference_name ))
                 return 1;
 
             driver_data = loader;
@@ -365,20 +413,20 @@ int main(int argc, char* argv[])
         else
         {
             log_visible(stderr, "mapping reference index... started\n");
-            log_info(stderr, "  file: \"%s\"\n", argv[arg_offset]);
+            log_info(stderr, "  file: \"%s\"\n", reference_name);
 
             // map the reference data
-            reference_data = io::map_sequence_file( argv[arg_offset] );
+            reference_data = io::map_sequence_file( reference_name );
             if (reference_data == NULL)
             {
-                log_error(stderr, "mapping reference index \"%s\" failed\n", argv[arg_offset]);
+                log_error(stderr, "mapping reference index \"%s\" failed\n", reference_name);
                 return 1;
             }
 
             log_visible(stderr, "mapping reference index... done\n");
 
             nvbio::io::FMIndexDataMMAP* loader = new nvbio::io::FMIndexDataMMAP;
-            if (!loader->load( argv[arg_offset] ))
+            if (!loader->load( reference_name ))
                 return 1;
 
             driver_data = loader;
@@ -387,8 +435,6 @@ int main(int argc, char* argv[])
         //
         // Setup the output file
         //
-
-        const char* output_name = argv[argc-1];
 
         SharedPointer<io::OutputFile> output_file( io::OutputFile::open(
                                                     output_name,
@@ -411,33 +457,35 @@ int main(int argc, char* argv[])
             // Open the input read files
             //
 
-            log_visible(stderr, "opening read file [1] \"%s\"\n", argv[arg_offset+1]);
+            log_visible(stderr, "opening read file [1] \"%s\"\n", read_name1);
             SharedPointer<nvbio::io::SequenceDataStream> read_data_file1(
-                nvbio::io::open_sequence_file(argv[arg_offset+1],
-                                          qencoding,
-                                          max_reads,
-                                          max_read_len,
-                                          io::REVERSE)
+                nvbio::io::open_sequence_file(
+                    read_name1,
+                    qencoding,
+                    max_reads,
+                    max_read_len,
+                    io::REVERSE)
             );
 
             if (read_data_file1 == NULL || read_data_file1->is_ok() == false)
             {
-                log_error(stderr, "unable to open read file \"%s\"\n", argv[arg_offset+1]);
+                log_error(stderr, "unable to open read file \"%s\"\n", read_name1);
                 return 1;
             }
 
-            log_visible(stderr, "opening read file [2] \"%s\"\n", argv[arg_offset+2]);
+            log_visible(stderr, "opening read file [2] \"%s\"\n", read_name2);
             SharedPointer<nvbio::io::SequenceDataStream> read_data_file2(
-                nvbio::io::open_sequence_file(argv[arg_offset+2],
-                                          qencoding,
-                                          max_reads,
-                                          max_read_len,
-                                          io::REVERSE)
+                nvbio::io::open_sequence_file(
+                    read_name2,
+                    qencoding,
+                    max_reads,
+                    max_read_len,
+                    io::REVERSE)
             );
 
             if (read_data_file2 == NULL || read_data_file2->is_ok() == false)
             {
-                log_error(stderr, "unable to open read file \"%s\"\n", argv[arg_offset+2]);
+                log_error(stderr, "unable to open read file \"%s\"\n", read_name2);
                 return 1;
             }
 
@@ -598,18 +646,19 @@ int main(int argc, char* argv[])
             // Open the input read file
             //
 
-            log_visible(stderr, "opening read file \"%s\"\n", argv[arg_offset+1]);
+            log_visible(stderr, "opening read file \"%s\"\n", read_name1);
             SharedPointer<io::SequenceDataStream> read_data_file(
-                io::open_sequence_file(argv[arg_offset+1],
-                                          qencoding,
-                                          max_reads,
-                                          max_read_len,
-                                          io::REVERSE)
+                io::open_sequence_file(
+                    read_name1,
+                    qencoding,
+                    max_reads,
+                    max_read_len,
+                    io::REVERSE)
             );
 
             if (read_data_file == NULL || read_data_file->is_ok() == false)
             {
-                log_error(stderr, "unable to open read file \"%s\"\n", argv[arg_offset+1]);
+                log_error(stderr, "unable to open read file \"%s\"\n", read_name1);
                 return 1;
             }
 

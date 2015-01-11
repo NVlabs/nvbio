@@ -90,17 +90,17 @@ bool SequenceDataMMAP::load(const char* file_name)
     }
     catch (MappedFile::mapping_error error)
     {
-        log_error(stderr, "SequenceDataMMAP: error mapping file \"%s\" (%d)!\n", error.m_file_name, error.m_code);
+        log_info(stderr, "SequenceDataMMAP: error mapping file \"%s\" (%d)!\n", error.m_file_name, error.m_code);
         return false;
     }
     catch (MappedFile::view_error error)
     {
-        log_error(stderr, "SequenceDataMMAP: error viewing file \"%s\" (%d)!\n", error.m_file_name, error.m_code);
+        log_info(stderr, "SequenceDataMMAP: error viewing file \"%s\" (%d)!\n", error.m_file_name, error.m_code);
         return false;
     }
     catch (...)
     {
-        log_error(stderr, "SequenceDataMMAP: error mapping file (unknown)!\n");
+        log_info(stderr, "SequenceDataMMAP: error mapping file (unknown)!\n");
         return false;
     }
     return true;

@@ -414,7 +414,10 @@ int main(int argc, char* argv[])
 
             nvbio::io::FMIndexDataHost* loader = new nvbio::io::FMIndexDataHost;
             if (!loader->load( reference_name ))
+            {
+                log_error(stderr, "unable to load reference index \"%s\"\n", reference_name);
                 return 1;
+            }
 
             driver_data = loader;
         }
@@ -427,17 +430,42 @@ int main(int argc, char* argv[])
             reference_data = io::map_sequence_file( reference_name );
             if (reference_data == NULL)
             {
-                log_error(stderr, "mapping reference index \"%s\" failed\n", reference_name);
-                return 1;
+                log_visible(stderr, "mapping reference index... failed\n");
+                log_visible(stderr, "loading reference index... started\n");
+                log_info(stderr, "  file: \"%s\"\n", reference_name);
+
+                // load the reference data
+                reference_data = io::load_sequence_file( DNA, reference_name );
+                if (reference_data == NULL)
+                {
+                    log_error(stderr, "unable to load reference index \"%s\"\n", reference_name);
+                    return 1;
+                }
+
+                log_visible(stderr, "loading reference index... done\n");
+
+                nvbio::io::FMIndexDataHost* loader = new nvbio::io::FMIndexDataHost;
+                if (!loader->load( reference_name ))
+                {
+                    log_error(stderr, "unable to load reference index \"%s\"\n", reference_name);
+                    return 1;
+                }
+
+                driver_data = loader;
             }
+            else
+            {
+                log_visible(stderr, "mapping reference index... done\n");
 
-            log_visible(stderr, "mapping reference index... done\n");
+                nvbio::io::FMIndexDataMMAP* loader = new nvbio::io::FMIndexDataMMAP;
+                if (!loader->load( reference_name ))
+                {
+                    log_error(stderr, "unable to load reference index \"%s\"\n", reference_name);
+                    return 1;
+                }
 
-            nvbio::io::FMIndexDataMMAP* loader = new nvbio::io::FMIndexDataMMAP;
-            if (!loader->load( reference_name ))
-                return 1;
-
-            driver_data = loader;
+                driver_data = loader;
+            }
         }
 
         //

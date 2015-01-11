@@ -187,7 +187,7 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.persist_extension =  int_option(options, "persist-extension",     init ? -1         : params.persist_extension);     // persist pass
     params.persist_file      =  string_option(options, "persist-file",       init ? ""         : params.persist_file.c_str() ); // persist file
 
-    params.no_multi_hits     =  int_option(options, "no-multi-hits",      init ? 0          : params.no_multi_hits ); // disable multi-hit selection
+    params.no_multi_hits     =  int_option(options, "no-multi-hits",  init ? 0           : params.no_multi_hits ); // disable multi-hit selection
 
     params.max_effort_init = nvbio::max( params.max_effort_init, params.max_effort );
     params.max_ext         = nvbio::max( params.max_ext,         params.max_effort );
@@ -234,6 +234,70 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     const int2 rfg        = int2_option( options, "rfg", make_int2( sc.sw.m_ref_gap_const, sc.sw.m_ref_gap_coeff ) );
     sc.sw.m_ref_gap_const = rfg.x;
     sc.sw.m_ref_gap_coeff = rfg.y;
+
+    // presets
+    if (params.alignment_type == EndToEndAlignment)
+    {
+        if (uint_option(options, "--very-fast", 0u))
+        {
+            params.max_effort = 5u;
+            params.max_reseed = 1u;
+            params.seed_len   = 22u;
+            params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 0.0f, 2.5f );
+        }
+        if (uint_option(options, "--fast", 0u))
+        {
+            params.max_effort = 10u;
+            params.max_reseed = 2u;
+            params.seed_len   = 22u;
+            params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 0.0f, 2.5f );
+        }
+        if (uint_option(options, "--sensitive", 0u))
+        {
+            params.max_effort = 15u;
+            params.max_reseed = 2u;
+            params.seed_len   = 22u;
+            params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 1.15f );
+        }
+        if (uint_option(options, "--very-sensitive", 0u))
+        {
+            params.max_effort = 20u;
+            params.max_reseed = 3u;
+            params.seed_len   = 20u;
+            params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 0.5f );
+        }
+    }
+    else
+    {
+        if (uint_option(options, "--very-fast", "--very-fast-local", 0u))
+        {
+            params.max_effort = 5u;
+            params.max_reseed = 1u;
+            params.seed_len   = 25u;
+            params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 2.0f );
+        }
+        if (uint_option(options, "--fast", "--fast-local", 0u))
+        {
+            params.max_effort = 10u;
+            params.max_reseed = 2u;
+            params.seed_len   = 22u;
+            params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 1.75f );
+        }
+        if (uint_option(options, "--sensitive", "--sensitive-local", 0u))
+        {
+            params.max_effort = 15u;
+            params.max_reseed = 2u;
+            params.seed_len   = 20u;
+            params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 0.75f );
+        }
+        if (uint_option(options, "--very-sensitive", "--very-sensitive-local", 0u))
+        {
+            params.max_effort = 20u;
+            params.max_reseed = 3u;
+            params.seed_len   = 20u;
+            params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 0.5f );
+        }
+    }
 }
 
 } // namespace cuda

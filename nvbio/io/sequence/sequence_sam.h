@@ -82,10 +82,8 @@ struct SequenceDataFile_SAM : public SequenceDataFile
     };
 
     SequenceDataFile_SAM(
-        const char*             read_file_name,
-        const uint32            max_reads,
-        const uint32            max_read_len,
-        const SequenceEncoding  flags);
+        const char*                      read_file_name,
+        const SequenceDataFile::Options& options);
 
     virtual int nextChunk(struct SequenceDataEncoder *output, uint32 max_reads, uint32 max_bps);
 

@@ -317,12 +317,19 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
         const uint8*             base_pairs,
         const uint8*             quality,
         const QualityEncoding    quality_encoding,
-        const uint32             truncate_sequence_len,
+        const uint32             max_sequence_len,
+        const uint32             trim3,
+        const uint32             trim5,
         const StrandOp           conversion_flags)
     {
+        const uint32 trimmed_len = in_sequence_len > trim3 + trim5 ?
+                                   in_sequence_len - trim3 - trim5 : 0u;
+
         // truncate sequence
-        // xxx: should we do this silently?
-        const uint32 sequence_len = nvbio::min(in_sequence_len, truncate_sequence_len);
+        const uint32 sequence_len = nvbio::min( trimmed_len, max_sequence_len );
+
+        base_pairs += trim5;
+        quality    += trim5;
 
         assert(sequence_len);
 

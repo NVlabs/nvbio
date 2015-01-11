@@ -52,11 +52,8 @@ struct SequenceDataFile_FASTA_gz : public SequenceDataFile
     /// constructor
     ///
     SequenceDataFile_FASTA_gz(
-        const char*             read_file_name,
-        const QualityEncoding   qualities,
-        const uint32            max_reads,
-        const uint32            max_read_len,
-        const SequenceEncoding  flags);
+        const char*                         read_file_name,
+        const SequenceDataFile::Options&    options);
 
     /// get a chunk of reads
     ///

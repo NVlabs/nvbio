@@ -67,20 +67,28 @@ struct SequenceDataEncoder
     /// \param base_pairs                   list of base pairs
     /// \param quality                      list of base qualities
     /// \param quality_encoding             quality encoding scheme
-    /// \param truncate_sequence_len        truncate the read if longer than this
+    /// \param max_sequence_len             truncate the read if longer than this
     /// \param conversion_flags             conversion operators applied to the strand
     ///
     virtual void push_back(
-        const uint32            sequence_len,
+        const uint32            in_sequence_len,
         const char*             name,
         const uint8*            base_pairs,
         const uint8*            quality,
         const QualityEncoding   quality_encoding,
-        const uint32            truncate_sequence_len,
+        const uint32            max_sequence_len,
+        const uint32            trim3,
+        const uint32            trim5,
         const StrandOp          conversion_flags)
     {
+        const uint32 trimmed_len = in_sequence_len > trim3 + trim5 ?
+                                   in_sequence_len - trim3 - trim5 : 0u;
+
+        // truncate sequence
+        const uint32 sequence_len = nvbio::min( trimmed_len, max_sequence_len );
+
         // keep stats, needed for the implementation of io::skip()
-        m_info.m_sequence_stream_len += nvbio::min( sequence_len, truncate_sequence_len );
+        m_info.m_sequence_stream_len += sequence_len;
         m_info.m_n_seqs++;
     }
 

@@ -47,6 +47,24 @@ namespace io {
 ///
 struct SequenceDataFile : public SequenceDataStream
 {
+    struct Options
+    {
+        Options() :
+            qualities(Phred),
+            max_seqs(uint32(-1)), 
+            max_sequence_len(uint32(-1)),
+            trim3(0),
+            trim5(0),
+            flags(FORWARD) {}
+
+        QualityEncoding    qualities;
+        uint32             max_seqs;
+        uint32             max_sequence_len;
+        uint32             trim3;
+        uint32             trim5;
+        SequenceEncoding   flags;
+    };
+
     static const uint32 LONG_READ = 32*1024;
 
     /// enum describing various possible file states
@@ -68,13 +86,9 @@ struct SequenceDataFile : public SequenceDataStream
 
 protected:
     SequenceDataFile(
-        const uint32            max_reads,
-        const uint32            truncate_read_len,
-        const SequenceEncoding  flags)
+        const Options&          options)
       : SequenceDataStream(),
-        m_max_reads(max_reads),
-        m_truncate_read_len( truncate_read_len ),
-        m_flags(flags),
+        m_options( options ),
         m_loaded(0),
         m_file_state(FILE_NOT_READY)
     {};
@@ -98,9 +112,7 @@ public:
 protected:
     virtual int nextChunk(struct SequenceDataEncoder* encoder, uint32 max_reads, uint32 max_bps) = 0;
 
-    uint32                  m_max_reads;
-    uint32                  m_truncate_read_len; ///< maximum length of a read; longer reads are truncated to this size
-    SequenceEncoding        m_flags;
+    Options                 m_options;
     uint32                  m_loaded;
 
     // current file state

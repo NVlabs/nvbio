@@ -143,6 +143,8 @@ int main(int argc, char* argv[])
 
     uint32 max_reads    = uint32(-1);
     uint32 max_read_len = uint32(-1);
+    uint32 trim3        = 0;
+    uint32 trim5        = 0;
     //bool   debug        = false;
     bool   from_file    = false;
     bool   paired_end   = false;
@@ -187,10 +189,16 @@ int main(int argc, char* argv[])
                  strcmp( argv[i], "--max-reads" ) == 0 ||
                  strcmp( argv[i], "-u" )          == 0 ||
                  strcmp( argv[i], "--upto" )      == 0)
-            max_reads = atoi( argv[++i] );
+            max_reads = (uint32)atoi( argv[++i] );
         else if (strcmp( argv[i], "-max-read-len" )  == 0 ||
                  strcmp( argv[i], "--max-read-len" ) == 0)
-            max_read_len = atoi( argv[++i] );
+            max_read_len = (uint32)atoi( argv[++i] );
+        else if (strcmp( argv[i], "-3") == 0 ||
+                 strcmp( argv[i], "--trim3") == 0)
+            trim3 = (uint32)atoi( argv[++i] );
+        else if (strcmp( argv[i], "-5") == 0 ||
+                 strcmp( argv[i], "--trim5") == 0)
+            trim5 = (uint32)atoi( argv[++i] );
         else if (strcmp( argv[i], "-file-ref" )  == 0 ||
                  strcmp( argv[i], "--file-ref" ) == 0)
             from_file = true;
@@ -464,7 +472,9 @@ int main(int argc, char* argv[])
                     qencoding,
                     max_reads,
                     max_read_len,
-                    io::REVERSE)
+                    io::REVERSE,
+                    trim3,
+                    trim5 )
             );
 
             if (read_data_file1 == NULL || read_data_file1->is_ok() == false)
@@ -480,7 +490,9 @@ int main(int argc, char* argv[])
                     qencoding,
                     max_reads,
                     max_read_len,
-                    io::REVERSE)
+                    io::REVERSE,
+                    trim3,
+                    trim5 )
             );
 
             if (read_data_file2 == NULL || read_data_file2->is_ok() == false)
@@ -653,7 +665,9 @@ int main(int argc, char* argv[])
                     qencoding,
                     max_reads,
                     max_read_len,
-                    io::REVERSE)
+                    io::REVERSE,
+                    trim3,
+                    trim5 )
             );
 
             if (read_data_file == NULL || read_data_file->is_ok() == false)

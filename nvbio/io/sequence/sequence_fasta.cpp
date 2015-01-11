@@ -50,68 +50,73 @@ namespace { // anonymous namespace
 struct FASTAHandler
 {
     FASTAHandler(
-        SequenceDataEncoder*    output,
-        const uint32            flags,
-        const uint32            truncate_read_len) :
+        SequenceDataEncoder*             output,
+        const SequenceDataFile::Options& options) :
         m_output( output ),
-        m_flags( flags ),
-        m_truncate_read_len( truncate_read_len ) {}
+        m_options( options ) {}
 
     void push_back(const char* id, const uint32 read_len, const uint8* bp)
     {
         if (m_quals.size() < size_t( read_len ))
             m_quals.resize( read_len, 50u );
 
-        if (m_flags & FORWARD)
+        if (m_options.flags & FORWARD)
         {
             m_output->push_back(
                 read_len,
                 id,
                 bp,
                 &m_quals[0],
-                Phred,
-                m_truncate_read_len,
+                m_options.qualities,
+                m_options.max_sequence_len,
+                m_options.trim3,
+                m_options.trim5,
                 SequenceDataEncoder::NO_OP );
         }
-        if (m_flags & REVERSE)
+        if (m_options.flags & REVERSE)
         {
             m_output->push_back(
                 read_len,
                 id,
                 bp,
                 &m_quals[0],
-                Phred,
-                m_truncate_read_len,
+                m_options.qualities,
+                m_options.max_sequence_len,
+                m_options.trim3,
+                m_options.trim5,
                 SequenceDataEncoder::REVERSE_OP );
         }
-        if (m_flags & FORWARD_COMPLEMENT)
+        if (m_options.flags & FORWARD_COMPLEMENT)
         {
             m_output->push_back(
                 read_len,
                 id,
                 bp,
                 &m_quals[0],
-                Phred,
-                m_truncate_read_len,
+                m_options.qualities,
+                m_options.max_sequence_len,
+                m_options.trim3,
+                m_options.trim5,
                 SequenceDataEncoder::COMPLEMENT_OP );
         }
-        if (m_flags & REVERSE_COMPLEMENT)
+        if (m_options.flags & REVERSE_COMPLEMENT)
         {
             m_output->push_back(
                 read_len,
                 id,
                 bp,
                 &m_quals[0],
-                Phred,
-                m_truncate_read_len,
+                m_options.qualities,
+                m_options.max_sequence_len,
+                m_options.trim3,
+                m_options.trim5,
                 SequenceDataEncoder::REVERSE_COMPLEMENT_OP );
         }
     }
 
-    SequenceDataEncoder*    m_output;
-    const uint32            m_flags;
-    const uint32            m_truncate_read_len;
-    std::vector<uint8>      m_quals;
+    SequenceDataEncoder*                m_output;
+    const SequenceDataFile::Options     m_options;
+    std::vector<uint8>                  m_quals;
 };
 
 } // anonymous namespace
@@ -119,12 +124,9 @@ struct FASTAHandler
 // constructor
 //
 SequenceDataFile_FASTA_gz::SequenceDataFile_FASTA_gz(
-    const char*             read_file_name,
-    const QualityEncoding   qualities,
-    const uint32            max_reads,
-    const uint32            max_read_len,
-    const SequenceEncoding  flags) :
-    SequenceDataFile( max_reads, max_read_len, flags ),
+    const char*                         read_file_name,
+    const SequenceDataFile::Options&    options) :
+    SequenceDataFile( options ),
     m_fasta_reader( read_file_name )
 {
 	if (!m_fasta_reader.valid()) {
@@ -139,13 +141,13 @@ SequenceDataFile_FASTA_gz::SequenceDataFile_FASTA_gz(
 int SequenceDataFile_FASTA_gz::nextChunk(SequenceDataEncoder *output, uint32 max_reads, uint32 max_bps)
 {
     const uint32 read_mult =
-        ((m_flags & FORWARD)            ? 1u : 0u) +
-        ((m_flags & REVERSE)            ? 1u : 0u) +
-        ((m_flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
-        ((m_flags & REVERSE_COMPLEMENT) ? 1u : 0u);
+        ((m_options.flags & FORWARD)            ? 1u : 0u) +
+        ((m_options.flags & REVERSE)            ? 1u : 0u) +
+        ((m_options.flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
+        ((m_options.flags & REVERSE_COMPLEMENT) ? 1u : 0u);
 
     // build a writer
-    FASTAHandler writer( output, m_flags, m_truncate_read_len );
+    FASTAHandler writer( output, m_options );
 
     return m_fasta_reader.read( max_reads / read_mult, writer );
 }

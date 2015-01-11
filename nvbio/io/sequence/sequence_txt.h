@@ -52,15 +52,11 @@ struct SequenceDataFile_TXT : public SequenceDataFile
 {
 protected:
     SequenceDataFile_TXT(
-        const char*                 read_file_name,
-        const QualityEncoding       quality_encoding,
-        const uint32                max_reads,
-        const uint32                max_read_len,
-        const SequenceEncoding      flags,
-        const uint32                buffer_size = 64536u)
-      : SequenceDataFile(max_reads, max_read_len, flags),
+        const char*     read_file_name,
+        const Options&  options,
+        const uint32    buffer_size = 64536u)
+      : SequenceDataFile( options ),
         m_file_name(read_file_name),
-        m_quality_encoding(quality_encoding),
         m_buffer(buffer_size),
         m_buffer_size(buffer_size),
         m_buffer_pos(buffer_size),
@@ -83,8 +79,6 @@ private:
 protected:
     // file name we're reading from
     const char *            m_file_name;
-    // the quality encoding we're using (for FASTQ, this comes from the command line or defaults to Phred33)
-    QualityEncoding         m_quality_encoding;
 
     // buffers input from the fastq file
     std::vector<char>       m_buffer;
@@ -107,12 +101,10 @@ protected:
 // this also works for plain uncompressed files, as zlib does that transparently
 struct SequenceDataFile_TXT_gz : public SequenceDataFile_TXT
 {
-    SequenceDataFile_TXT_gz(const char *read_file_name,
-                          const QualityEncoding qualities,
-                          const uint32 max_reads,
-                          const uint32 max_read_len,
-                          const SequenceEncoding flags,
-                          const uint32 buffer_size = 64536u);
+    SequenceDataFile_TXT_gz(
+        const char*     read_file_name,
+        const Options&  options,
+        const uint32    buffer_size = 64536u);
 
     ~SequenceDataFile_TXT_gz();
 

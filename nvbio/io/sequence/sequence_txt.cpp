@@ -52,10 +52,10 @@ int SequenceDataFile_TXT::nextChunk(SequenceDataEncoder* output, uint32 max_read
     uint32 n_bps   = 0;
 
     const uint32 read_mult =
-        ((m_flags & FORWARD)            ? 1u : 0u) +
-        ((m_flags & REVERSE)            ? 1u : 0u) +
-        ((m_flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
-        ((m_flags & REVERSE_COMPLEMENT) ? 1u : 0u);
+        ((m_options.flags & FORWARD)            ? 1u : 0u) +
+        ((m_options.flags & REVERSE)            ? 1u : 0u) +
+        ((m_options.flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
+        ((m_options.flags & REVERSE_COMPLEMENT) ? 1u : 0u);
 
     while (n_reads + read_mult                             <= max_reads &&
            n_bps   + read_mult*SequenceDataFile::LONG_READ <= max_bps)
@@ -84,45 +84,53 @@ int SequenceDataFile_TXT::nextChunk(SequenceDataEncoder* output, uint32 max_read
 
         if (m_read_bp.size())
         {
-            if (m_flags & FORWARD)
+            if (m_options.flags & FORWARD)
             {
                 output->push_back(uint32( m_read_bp.size() ),
-                                  name,
-                                  &m_read_bp[0],
-                                  &m_read_q[0],
-                                  m_quality_encoding,
-                                  m_truncate_read_len,
-                                  SequenceDataEncoder::NO_OP );
+                                name,
+                                &m_read_bp[0],
+                                &m_read_q[0],
+                                m_options.qualities,
+                                m_options.max_sequence_len,
+                                m_options.trim3,
+                                m_options.trim5,
+                                SequenceDataEncoder::NO_OP );
             }
-            if (m_flags & REVERSE)
+            if (m_options.flags & REVERSE)
             {
                 output->push_back(uint32( m_read_bp.size() ),
-                                  name,
-                                  &m_read_bp[0],
-                                  &m_read_q[0],
-                                  m_quality_encoding,
-                                  m_truncate_read_len,
-                                  SequenceDataEncoder::REVERSE_OP );
+                                name,
+                                &m_read_bp[0],
+                                &m_read_q[0],
+                                m_options.qualities,
+                                m_options.max_sequence_len,
+                                m_options.trim3,
+                                m_options.trim5,
+                                SequenceDataEncoder::REVERSE_OP );
             }
-            if (m_flags & FORWARD_COMPLEMENT)
+            if (m_options.flags & FORWARD_COMPLEMENT)
             {
                 output->push_back(uint32( m_read_bp.size() ),
-                                  name,
-                                  &m_read_bp[0],
-                                  &m_read_q[0],
-                                  m_quality_encoding,
-                                  m_truncate_read_len,
-                                  SequenceDataEncoder::COMPLEMENT_OP );
+                                name,
+                                &m_read_bp[0],
+                                &m_read_q[0],
+                                m_options.qualities,
+                                m_options.max_sequence_len,
+                                m_options.trim3,
+                                m_options.trim5,
+                                SequenceDataEncoder::COMPLEMENT_OP );
             }
-            if (m_flags & REVERSE_COMPLEMENT)
+            if (m_options.flags & REVERSE_COMPLEMENT)
             {
                 output->push_back(uint32( m_read_bp.size() ),
-                                  name,
-                                  &m_read_bp[0],
-                                  &m_read_q[0],
-                                  m_quality_encoding,
-                                  m_truncate_read_len,
-                                  SequenceDataEncoder::REVERSE_COMPLEMENT_OP );
+                                name,
+                                &m_read_bp[0],
+                                &m_read_q[0],
+                                m_options.qualities,
+                                m_options.max_sequence_len,
+                                m_options.trim3,
+                                m_options.trim5,
+                                SequenceDataEncoder::REVERSE_COMPLEMENT_OP );
             }
 
             n_bps   += read_mult * (uint32)m_read_bp.size();
@@ -138,12 +146,9 @@ int SequenceDataFile_TXT::nextChunk(SequenceDataEncoder* output, uint32 max_read
 
 SequenceDataFile_TXT_gz::SequenceDataFile_TXT_gz(
     const char*             read_file_name,
-    const QualityEncoding   qualities,
-    const uint32            max_reads,
-    const uint32            max_read_len,
-    const SequenceEncoding  flags,
+    const Options&          options,
     const uint32            buffer_size)
-    : SequenceDataFile_TXT(read_file_name, qualities, max_reads, max_read_len, flags, buffer_size)
+    : SequenceDataFile_TXT(read_file_name, options, buffer_size)
 {
     m_file = gzopen(read_file_name, "r");
     if (!m_file) {

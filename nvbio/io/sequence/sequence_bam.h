@@ -53,10 +53,8 @@ struct SequenceDataFile_BAM : public SequenceDataFile
     /// constructor
     ///
     SequenceDataFile_BAM(
-        const char*         read_file_name,
-        const uint32        max_reads,
-        const uint32        max_read_len,
-        const SequenceEncoding  flags);
+        const char*                      read_file_name,
+        const SequenceDataFile::Options& options);
 
     /// read the next chunk
     ///

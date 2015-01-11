@@ -43,7 +43,7 @@ namespace io {
 // grab the next batch of reads into a host memory buffer
 int SequenceDataFile::next(SequenceDataEncoder* encoder, const uint32 batch_size, const uint32 batch_bps)
 {
-    const uint32 reads_to_load = std::min(m_max_reads - m_loaded, batch_size);
+    const uint32 reads_to_load = std::min(m_options.max_seqs - m_loaded, batch_size);
 
     if (!is_ok() || reads_to_load == 0)
         return 0;
@@ -87,11 +87,21 @@ SequenceDataStream *open_sequence_file(
     const QualityEncoding    qualities,
     const uint32             max_seqs,
     const uint32             max_sequence_len,
-    const SequenceEncoding   flags)
+    const SequenceEncoding   flags,
+    const uint32             trim3,
+    const uint32             trim5)
 {
     // parse out file extension; look for .fastq.gz, .fastq suffixes
     uint32 len = uint32( strlen(sequence_file_name) );
     bool is_gzipped = false;
+
+    SequenceDataFile::Options options;
+    options.qualities        = qualities;
+    options.max_seqs         = max_seqs;
+    options.max_sequence_len = max_sequence_len;
+    options.flags            = flags;
+    options.trim3            = trim3;
+    options.trim5            = trim5;
 
     // do we have a .gz suffix?
     if (len >= strlen(".gz"))
@@ -110,10 +120,7 @@ SequenceDataStream *open_sequence_file(
         {
             return new SequenceDataFile_FASTA_gz(
                 sequence_file_name,
-                qualities,
-                max_seqs,
-                max_sequence_len,
-                flags);
+                options );
         }
     }
     // check for fastq suffix
@@ -123,10 +130,7 @@ SequenceDataStream *open_sequence_file(
         {
             return new SequenceDataFile_FASTA_gz(
                 sequence_file_name,
-                qualities,
-                max_seqs,
-                max_sequence_len,
-                flags);
+                options );
         }
     }
 
@@ -137,10 +141,7 @@ SequenceDataStream *open_sequence_file(
         {
             return new SequenceDataFile_FASTQ_gz(
                 sequence_file_name,
-                qualities,
-                max_seqs,
-                max_sequence_len,
-                flags);
+                options );
         }
     }
 
@@ -151,10 +152,7 @@ SequenceDataStream *open_sequence_file(
         {
             return new SequenceDataFile_FASTQ_gz(
                 sequence_file_name,
-                qualities,
-                max_seqs,
-                max_sequence_len,
-                flags);
+                options );
         }
     }
 
@@ -165,10 +163,7 @@ SequenceDataStream *open_sequence_file(
         {
             return new SequenceDataFile_TXT_gz(
                 sequence_file_name,
-                qualities,
-                max_seqs,
-                max_sequence_len,
-                flags);
+                options );
         }
     }
 
@@ -181,9 +176,7 @@ SequenceDataStream *open_sequence_file(
 
             ret = new SequenceDataFile_SAM(
                 sequence_file_name,
-                max_seqs,
-                max_sequence_len,
-                flags);
+                options );
 
             if (ret->init() == false)
             {
@@ -204,9 +197,7 @@ SequenceDataStream *open_sequence_file(
 
             ret = new SequenceDataFile_BAM(
                 sequence_file_name,
-                max_seqs,
-                max_sequence_len,
-                flags);
+                options );
 
             if (ret->init() == false)
             {
@@ -222,10 +213,7 @@ SequenceDataStream *open_sequence_file(
     log_warning(stderr, "could not determine file type for %s; guessing %sfastq\n", sequence_file_name, is_gzipped ? "compressed " : "");
     return new SequenceDataFile_FASTQ_gz(
         sequence_file_name,
-        qualities,
-        max_seqs,
-        max_sequence_len,
-        flags);
+        options );
 }
 
 // load a sequence file

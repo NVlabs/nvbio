@@ -52,10 +52,10 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
     uint8  marker;
 
     const uint32 read_mult =
-        ((m_flags & FORWARD)            ? 1u : 0u) +
-        ((m_flags & REVERSE)            ? 1u : 0u) +
-        ((m_flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
-        ((m_flags & REVERSE_COMPLEMENT) ? 1u : 0u);
+        ((m_options.flags & FORWARD)            ? 1u : 0u) +
+        ((m_options.flags & REVERSE)            ? 1u : 0u) +
+        ((m_options.flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
+        ((m_options.flags & REVERSE_COMPLEMENT) ? 1u : 0u);
 
     while (n_reads + read_mult                         <= max_reads &&
            n_bps   + read_mult*SequenceDataFile::LONG_READ <= max_bps)
@@ -164,44 +164,52 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
 
         m_line++;
 
-        if (m_flags & FORWARD)
+        if (m_options.flags & FORWARD)
         {
             output->push_back( len,
                               &m_name[0],
                               &m_read_bp[0],
                               &m_read_q[0],
-                              m_quality_encoding,
-                              m_truncate_read_len,
+                              m_options.qualities,
+                              m_options.max_sequence_len,
+                              m_options.trim3,
+                              m_options.trim5,
                               SequenceDataEncoder::NO_OP );
         }
-        if (m_flags & REVERSE)
+        if (m_options.flags & REVERSE)
         {
             output->push_back( len,
                               &m_name[0],
                               &m_read_bp[0],
                               &m_read_q[0],
-                              m_quality_encoding,
-                              m_truncate_read_len,
+                              m_options.qualities,
+                              m_options.max_sequence_len,
+                              m_options.trim3,
+                              m_options.trim5,
                               SequenceDataEncoder::REVERSE_OP );
         }
-        if (m_flags & FORWARD_COMPLEMENT)
+        if (m_options.flags & FORWARD_COMPLEMENT)
         {
             output->push_back( len,
                               &m_name[0],
                               &m_read_bp[0],
                               &m_read_q[0],
-                              m_quality_encoding,
-                              m_truncate_read_len,
+                              m_options.qualities,
+                              m_options.max_sequence_len,
+                              m_options.trim3,
+                              m_options.trim5,
                               SequenceDataEncoder::COMPLEMENT_OP );
         }
-        if (m_flags & REVERSE_COMPLEMENT)
+        if (m_options.flags & REVERSE_COMPLEMENT)
         {
             output->push_back( len,
                               &m_name[0],
                               &m_read_bp[0],
                               &m_read_q[0],
-                              m_quality_encoding,
-                              m_truncate_read_len,
+                              m_options.qualities,
+                              m_options.max_sequence_len,
+                              m_options.trim3,
+                              m_options.trim5,
                               SequenceDataEncoder::REVERSE_COMPLEMENT_OP );
         }
 
@@ -211,12 +219,10 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
     return n_reads;
 }
 
-SequenceDataFile_FASTQ_gz::SequenceDataFile_FASTQ_gz(const char *read_file_name,
-                                             const QualityEncoding qualities,
-                                             const uint32 max_reads,
-                                             const uint32 max_read_len,
-                                             const SequenceEncoding flags)
-    : SequenceDataFile_FASTQ_parser(read_file_name, qualities, max_reads, max_read_len, flags)
+SequenceDataFile_FASTQ_gz::SequenceDataFile_FASTQ_gz(
+    const char*                         read_file_name,
+    const SequenceDataFile::Options&    options)
+    : SequenceDataFile_FASTQ_parser(read_file_name, options)
 {
     m_file = gzopen(read_file_name, "r");
     if (!m_file) {

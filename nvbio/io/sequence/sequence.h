@@ -638,7 +638,9 @@ SequenceDataStream* open_sequence_file(
     const QualityEncoding    qualities        = Phred33,
     const uint32             max_seqs         = uint32(-1),
     const uint32             max_sequence_len = uint32(-1),
-    const SequenceEncoding   flags            = FORWARD);
+    const SequenceEncoding   flags            = FORWARD,
+    const uint32             trim3            = 0,
+    const uint32             trim5            = 0);
 
 /// load a sequence file
 ///

@@ -49,10 +49,8 @@ namespace io {
 
 SequenceDataFile_BAM::SequenceDataFile_BAM(
     const char*             read_file_name,
-    const uint32            max_reads,
-    const uint32            truncate_read_len,
-    const SequenceEncoding  flags)
-  : SequenceDataFile(max_reads, truncate_read_len, flags)
+    const SequenceDataFile::Options& options)
+  : SequenceDataFile( options )
 {
     fp = gzopen(read_file_name, "rb");
     if (fp == NULL)
@@ -303,7 +301,7 @@ int SequenceDataFile_BAM::nextChunk(SequenceDataEncoder *output, uint32 max_read
         data.decoded_read[c] = decode_BAM_bp(stream[c]);
     }
 
-    if (m_flags & FORWARD)
+    if (m_options.flags & FORWARD)
     {
         const SequenceDataEncoder::StrandOp op = (read_flags & SAMFlag_ReverseComplemented) ?
               SequenceDataEncoder::REVERSE_COMPLEMENT_OP : SequenceDataEncoder::NO_OP;
@@ -314,10 +312,12 @@ int SequenceDataFile_BAM::nextChunk(SequenceDataEncoder *output, uint32 max_read
                           data.decoded_read,
                           data.quality,
                           Phred,
-                          m_truncate_read_len,
+                          m_options.max_sequence_len,
+                          m_options.trim3,
+                          m_options.trim5,
                           op );
     }
-    if (m_flags & REVERSE)
+    if (m_options.flags & REVERSE)
     {
         const SequenceDataEncoder::StrandOp op = (read_flags & SAMFlag_ReverseComplemented) ?
               SequenceDataEncoder::COMPLEMENT_OP : SequenceDataEncoder::REVERSE_OP;
@@ -327,10 +327,12 @@ int SequenceDataFile_BAM::nextChunk(SequenceDataEncoder *output, uint32 max_read
                           data.decoded_read,
                           data.quality,
                           Phred,
-                          m_truncate_read_len,
+                          m_options.max_sequence_len,
+                          m_options.trim3,
+                          m_options.trim5,
                           op );
     }
-    if (m_flags & FORWARD_COMPLEMENT)
+    if (m_options.flags & FORWARD_COMPLEMENT)
     {
         const SequenceDataEncoder::StrandOp op = (read_flags & SAMFlag_ReverseComplemented) ?
               SequenceDataEncoder::REVERSE_OP : SequenceDataEncoder::COMPLEMENT_OP;
@@ -340,10 +342,12 @@ int SequenceDataFile_BAM::nextChunk(SequenceDataEncoder *output, uint32 max_read
                           data.decoded_read,
                           data.quality,
                           Phred,
-                          m_truncate_read_len,
+                          m_options.max_sequence_len,
+                          m_options.trim3,
+                          m_options.trim5,
                           op );
     }
-    if (m_flags & REVERSE_COMPLEMENT)
+    if (m_options.flags & REVERSE_COMPLEMENT)
     {
         const SequenceDataEncoder::StrandOp op = (read_flags & SAMFlag_ReverseComplemented) ?
               SequenceDataEncoder::NO_OP : SequenceDataEncoder::REVERSE_COMPLEMENT_OP;
@@ -353,7 +357,9 @@ int SequenceDataFile_BAM::nextChunk(SequenceDataEncoder *output, uint32 max_read
                           data.decoded_read,
                           data.quality,
                           Phred,
-                          m_truncate_read_len,
+                          m_options.max_sequence_len,
+                          m_options.trim3,
+                          m_options.trim5,
                           op );
     }
 

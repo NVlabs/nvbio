@@ -238,28 +238,28 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     // presets
     if (params.alignment_type == EndToEndAlignment)
     {
-        if (uint_option(options, "--very-fast", 0u))
+        if (uint_option(options, "very-fast", 0u))
         {
             params.max_effort = 5u;
             params.max_reseed = 1u;
             params.seed_len   = 22u;
             params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 0.0f, 2.5f );
         }
-        if (uint_option(options, "--fast", 0u))
+        if (uint_option(options, "fast", 0u))
         {
             params.max_effort = 10u;
             params.max_reseed = 2u;
             params.seed_len   = 22u;
             params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 0.0f, 2.5f );
         }
-        if (uint_option(options, "--sensitive", 0u))
+        if (uint_option(options, "sensitive", 0u))
         {
             params.max_effort = 15u;
             params.max_reseed = 2u;
             params.seed_len   = 22u;
             params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 1.15f );
         }
-        if (uint_option(options, "--very-sensitive", 0u))
+        if (uint_option(options, "very-sensitive", 0u))
         {
             params.max_effort = 20u;
             params.max_reseed = 3u;
@@ -269,28 +269,28 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     }
     else
     {
-        if (uint_option(options, "--very-fast", "--very-fast-local", 0u))
+        if (uint_option(options, "very-fast", "very-fast-local", 0u))
         {
             params.max_effort = 5u;
             params.max_reseed = 1u;
             params.seed_len   = 25u;
             params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 2.0f );
         }
-        if (uint_option(options, "--fast", "--fast-local", 0u))
+        if (uint_option(options, "fast", "fast-local", 0u))
         {
             params.max_effort = 10u;
             params.max_reseed = 2u;
             params.seed_len   = 22u;
             params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 1.75f );
         }
-        if (uint_option(options, "--sensitive", "--sensitive-local", 0u))
+        if (uint_option(options, "sensitive", "sensitive-local", 0u))
         {
             params.max_effort = 15u;
             params.max_reseed = 2u;
             params.seed_len   = 20u;
             params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 0.75f );
         }
-        if (uint_option(options, "--very-sensitive", "--very-sensitive-local", 0u))
+        if (uint_option(options, "very-sensitive", "very-sensitive-local", 0u))
         {
             params.max_effort = 20u;
             params.max_reseed = 3u;

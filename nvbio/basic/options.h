@@ -35,6 +35,25 @@
 namespace nvbio {
 
 template <typename options_type>
+bool bool_option(const options_type& options, const char* name, const bool val)
+{
+    return ( (options.find( std::string(name) ) != options.end()) ?
+        atoi( options.find(std::string(name))->second.c_str() ) :
+        val ) ? true : false;
+}
+
+template <typename options_type>
+bool bool_option(const options_type& options, const char* name1, const char* name2, const bool val)
+{
+    return (
+        (options.find( std::string(name1) ) != options.end()) ?
+            atoi( options.find(std::string(name1))->second.c_str() ) :
+        (options.find( std::string(name2) ) != options.end()) ?
+            atoi( options.find(std::string(name2))->second.c_str() ) :
+            val ) ? true : false;
+}
+
+template <typename options_type>
 uint32 uint_option(const options_type& options, const char* name, const uint32 val)
 {
     return (options.find( std::string(name) ) != options.end()) ?

@@ -116,7 +116,7 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.mode             = mapping_mode( string_option(options, "mode",    init ? "best" : mapping_mode( params.mode )).c_str() ); // mapping mode
     params.scoring_mode     = scoring_mode( string_option(options, "scoring", init ? "sw"   : scoring_mode( params.scoring_mode )).c_str() ); // scoring mode
     params.alignment_type   = uint_option(options, "local",                 init ? 0u      : params.alignment_type == LocalAlignment ) ? LocalAlignment : EndToEndAlignment;           // local alignment
-    params.keep_stats       = uint_option(options, "stats",                 init ? 1u      : params.keep_stats) ? true : false; // keep stats
+    params.keep_stats       = bool_option(options, "stats",                 init ? 1u      : params.keep_stats);           // keep stats
     params.max_hits         = uint_option(options, "max-hits",              init ? 100u    : params.max_hits);             // too big = memory exhaustion 
     params.max_dist         = uint_option(options, "max-dist",              init ? 15u     : params.max_dist);             // must be <= MAX_BAND_LEN/2
     params.max_effort_init  = uint_option(options, "max-effort-init",       init ? 15u     : params.max_effort_init);      // initial scoring effort limit
@@ -129,11 +129,11 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.mapq_filter      = uint_option(options, "mapQ-filter",   "Q",    init ? 0u      : params.mapq_filter);          // filter anything below this
     params.report           = string_option(options, "report",              init ? ""      : params.report.c_str());       // generate a report file
     params.scoring_file     = string_option(options, "scoring-scheme",      init ? ""      : params.scoring_file.c_str());
-    params.randomized       = uint_option(options, "rand",                  init ? 1u      : params.randomized) ? true : false; // use randomized selection
-    params.randomized       =!uint_option(options, "no-rand",                               !params.randomized) ? true : false; // don't use randomized selection
+    params.randomized       = bool_option(options, "rand",                  init ? 1u      : params.randomized);           // use randomized selection
+    params.randomized       =!bool_option(options, "no-rand",                               !params.randomized);           // don't use randomized selection
     params.top_seed         = uint_option(options, "top",                   init ? 0u      : params.top_seed);             // explore top seed entirely
     params.min_read_len     = uint_option(options, "min-read-len",          init ? 12u     : params.min_read_len);         // minimum read length
-    params.ungapped_mates   = uint_option(options, "ungapped-mates", "ug",  init ? 0u      : params.ungapped_mates) ? true : false; // ungapped mate alignment
+    params.ungapped_mates   = bool_option(options, "ungapped-mates", "ug",  init ? 0u      : params.ungapped_mates);       // ungapped mate alignment
 
     // force the all-mapping mode with the '--all|-a' option
     if (uint_option(options, "all", "a", params.mode == AllMapping))
@@ -156,38 +156,38 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
         params.seed_freq = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, (local ? 0.75f : 1.15f) );
     }
 
-    params.seed_len         = uint_option(options,  "seed-len",      "L",                    params.seed_len);      // no greater than 32
-    params.seed_freq        = func_option( options, "seed-freq",     "i",                    params.seed_freq );    // seed interval
-    params.subseed_len      = uint_option(options,  "subseed-len",          init ? 0u      : params.subseed_len);   // no greater than 32
+    params.seed_len         = uint_option(options,  "seed-len",      "L",                    params.seed_len);          // no greater than 32
+    params.seed_freq        = func_option( options, "seed-freq",     "i",                    params.seed_freq );        // seed interval
+    params.subseed_len      = uint_option(options,  "subseed-len",          init ? 0u      : params.subseed_len);       // no greater than 32
 
-    params.pe_overlap    =  uint_option(options, "overlap",         init ? 1u      : params.pe_overlap) ? true : false;            // paired-end overlap
-    params.pe_overlap    = !uint_option(options, "no-overlap",                      !params.pe_overlap) ? true : false;            // paired-end overlap
-    params.pe_dovetail   =  uint_option(options, "dovetail",        init ? 0u      : params.pe_dovetail) ? true : false;           // paired-end dovetail
-    params.pe_unpaired   = !uint_option(options, "no-mixed",        init ? 0u      :!params.pe_unpaired) ? true : false;           // paired-end no-mixed
-    params.min_frag_len  = uint_option(options, "minins", "I",      init ? 0u      : params.min_frag_len);          // paired-end minimum fragment length
-    params.max_frag_len  = uint_option(options, "maxins", "X",      init ? 500u    : params.max_frag_len);          // paired-end maximum fragment length
+    params.pe_overlap    =  bool_option(options, "overlap",         init ? true    : params.pe_overlap);                // paired-end overlap
+    params.pe_overlap    = !bool_option(options, "no-overlap",                      !params.pe_overlap);                // paired-end overlap
+    params.pe_dovetail   =  bool_option(options, "dovetail",        init ? false   : params.pe_dovetail);               // paired-end dovetail
+    params.pe_unpaired   = !bool_option(options, "no-mixed",        init ? false   :!params.pe_unpaired);               // paired-end no-mixed
+    params.min_frag_len  = uint_option(options, "minins", "I",      init ? 0u      : params.min_frag_len);              // paired-end minimum fragment length
+    params.max_frag_len  = uint_option(options, "maxins", "X",      init ? 500u    : params.max_frag_len);              // paired-end maximum fragment length
 
     // the maximum batch of reads processed in parallel
-    params.max_batch_size = uint_option(options, "batch-size",  init ? 1024u : params.max_batch_size );   // maximum batch size
+    params.max_batch_size = uint_option(options, "batch-size",      init ? 1024u   : params.max_batch_size );           // maximum batch size
 
     // internal controls
-    params.scoring_window   = uint_option(options, "scoring-window",   init ? 32u        : params.scoring_window);       // scoring window size
-    params.debug.read_id    = (uint32)int_option(options, "debug-read",      init ? -1         : (int32)params.debug.read_id); // debug read id
-    params.debug.select     = uint_option(options, "debug-select",     init ? 0u         : params.debug.select)     ? true : false;       // debug select kernel
-    params.debug.locate     = uint_option(options, "debug-locate",     init ? 0u         : params.debug.locate)     ? true : false;       // debug locate kernel
-    params.debug.score      = uint_option(options, "debug-score",      init ? 1u         : params.debug.score)      ? true : false;        // debug score kernel
-    params.debug.score_bad  = uint_option(options, "debug-score-bad",  init ? 0u         : params.debug.score_bad)  ? true : false;    // debug score bad
-    params.debug.score_info = uint_option(options, "debug-score-info", init ? 0u         : params.debug.score_info) ? true : false;   // debug score info
-    params.debug.reduce     = uint_option(options, "debug-reduce",     init ? 1u         : params.debug.reduce)     ? true : false;       // debug reduce kernel
-    params.debug.traceback  = uint_option(options, "debug-traceback",  init ? 1u         : params.debug.traceback)  ? true : false;    // debug traceback kernel
-    params.debug.asserts    = uint_option(options, "debug-asserts",    init ? 1u         : params.debug.asserts)    ? true : false;      // debug asserts
+    params.scoring_window   = uint_option(options, "scoring-window",        init ? 32u  : params.scoring_window);       // scoring window size
+    params.debug.read_id    = (uint32)int_option(options, "debug-read",     init ? -1   : (int32)params.debug.read_id); // debug read id
+    params.debug.select     = bool_option(options, "debug-select",          init ? false: params.debug.select);         // debug select kernel
+    params.debug.locate     = bool_option(options, "debug-locate",          init ? false: params.debug.locate);         // debug locate kernel
+    params.debug.score      = bool_option(options, "debug-score",           init ? true : params.debug.score);          // debug score kernel
+    params.debug.score_bad  = bool_option(options, "debug-score-bad",       init ? false: params.debug.score_bad);      // debug score bad
+    params.debug.score_info = bool_option(options, "debug-score-info",      init ? false: params.debug.score_info);     // debug score info
+    params.debug.reduce     = bool_option(options, "debug-reduce",          init ? true : params.debug.reduce);         // debug reduce kernel
+    params.debug.traceback  = bool_option(options, "debug-traceback",       init ? true : params.debug.traceback);      // debug traceback kernel
+    params.debug.asserts    = bool_option(options, "debug-asserts",         init ? true : params.debug.asserts);        // debug asserts
 
-    params.persist_batch     =  int_option(options, "persist-batch",         init ? -1         : params.persist_batch);         // persist pass
-    params.persist_seeding   =  int_option(options, "persist-seeding",       init ? -1         : params.persist_seeding);       // persist pass
-    params.persist_extension =  int_option(options, "persist-extension",     init ? -1         : params.persist_extension);     // persist pass
-    params.persist_file      =  string_option(options, "persist-file",       init ? ""         : params.persist_file.c_str() ); // persist file
+    params.persist_batch     =  int_option(options, "persist-batch",        init ? -1   : params.persist_batch);         // persist pass
+    params.persist_seeding   =  int_option(options, "persist-seeding",      init ? -1   : params.persist_seeding);       // persist pass
+    params.persist_extension =  int_option(options, "persist-extension",    init ? -1   : params.persist_extension);     // persist pass
+    params.persist_file      =  string_option(options, "persist-file",      init ? ""   : params.persist_file.c_str() ); // persist file
 
-    params.no_multi_hits     =  int_option(options, "no-multi-hits",  init ? 0           : params.no_multi_hits ); // disable multi-hit selection
+    params.no_multi_hits     =  int_option(options, "no-multi-hits",        init ? 0    : params.no_multi_hits );       // disable multi-hit selection
 
     params.max_effort_init = nvbio::max( params.max_effort_init, params.max_effort );
     params.max_ext         = nvbio::max( params.max_ext,         params.max_effort );

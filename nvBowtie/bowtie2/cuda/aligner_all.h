@@ -115,7 +115,9 @@ void Aligner::all(
                 reads, fmi, rfmi,
                 hits,
                 make_uint2( seed, seed+1 ),
-                params );
+                params,
+                params.fw,
+                params.rc );
 
             optional_device_synchronize();
             nvbio::cuda::check_error("mapping kernel");
@@ -131,7 +133,9 @@ void Aligner::all(
                 reads, fmi, rfmi,
                 hits,
                 make_uint2( seed, seed+1 ),
-                params );
+                params,
+                params.fw,
+                params.rc );
 
             optional_device_synchronize();
             nvbio::cuda::check_error("mapping kernel");
@@ -178,7 +182,9 @@ void Aligner::all(
                 reads, fmi, rfmi,
                 hits,
                 make_uint2( 0u, max_seeds ),
-                params );
+                params,
+                params.fw,
+                params.rc );
 
             optional_device_synchronize();
             nvbio::cuda::check_error("mapping kernel");
@@ -194,7 +200,9 @@ void Aligner::all(
                 reads, fmi, rfmi,
                 hits,
                 make_uint2( 0u, max_seeds ),
-                params );
+                params,
+                params.fw,
+                params.rc );
 
             optional_device_synchronize();
             nvbio::cuda::check_error("mapping kernel");

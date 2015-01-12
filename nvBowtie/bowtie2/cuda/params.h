@@ -96,6 +96,8 @@ struct ParamsPOD
 {
     bool          keep_stats;
     bool          randomized;
+    bool          fw;
+    bool          rc;
     uint32        mode;
     uint32        scoring_mode;
     uint32        alignment_type;

@@ -91,9 +91,11 @@ void map_whole_read(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params)
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc)
 {
-    map_whole_read_t( read_batch, fmi, rfmi, queues, reseed, hits, params );
+    map_whole_read_t( read_batch, fmi, rfmi, queues, reseed, hits, params, fw, rc );
 }
 
 //
@@ -108,9 +110,11 @@ void map_exact(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params)
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc)
 {
-    map_exact_t( read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+    map_exact_t( read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
 }
 
 //
@@ -122,9 +126,11 @@ void map_exact(
     const FMIndexDef::type                          rfmi,
     SeedHitDequeArrayDeviceView                     hits,
     const uint2                                     seed_range,
-    const ParamsPOD                                 params)
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc)
 {
-    map_exact_t( read_batch, fmi, rfmi, hits, seed_range, params );
+    map_exact_t( read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
 }
 
 //
@@ -139,9 +145,11 @@ void map_approx(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params)
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc)
 {
-    map_approx_t( read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+    map_approx_t( read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
 }
 
 //
@@ -153,9 +161,11 @@ void map_approx(
     const FMIndexDef::type                          rfmi,
     SeedHitDequeArrayDeviceView                     hits,
     const uint2                                     seed_range,
-    const ParamsPOD                                 params)
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc)
 {
-    map_approx_t( read_batch, fmi, rfmi, hits, seed_range, params );
+    map_approx_t( read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
 }
 
 //
@@ -169,9 +179,11 @@ void map(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params)
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc)
 {
-    map_t( read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+    map_t( read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
 }
 
 } // namespace cuda

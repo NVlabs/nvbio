@@ -95,7 +95,9 @@ void map_whole_read(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params);
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc);
 
 ///
 /// perform one run of exact seed mapping for all the reads in the input queue,
@@ -109,7 +111,9 @@ void map_exact(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params);
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc);
 
 ///
 /// perform multiple runs of exact seed mapping in one go and keep the best
@@ -120,7 +124,9 @@ void map_exact(
     const FMIndexDef::type                          rfmi,
     SeedHitDequeArrayDeviceView                     hits,
     const uint2                                     seed_range,
-    const ParamsPOD                                 params);
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc);
 
 ///
 /// perform one run of approximate seed mapping for all the reads in the input queue,
@@ -134,7 +140,9 @@ void map_approx(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params);
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc);
 
 ///
 /// perform multiple runs of approximate seed mapping in one go and keep the best
@@ -145,7 +153,9 @@ void map_approx(
     const FMIndexDef::type                          rfmi,
     SeedHitDequeArrayDeviceView                     hits,
     const uint2                                     seed_range,
-    const ParamsPOD                                 params);
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc);
 
 ///
 /// perform one run of seed mapping
@@ -158,7 +168,9 @@ void map(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params);
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc);
 
 ///@}  // group Mapping
 ///@}  // group nvBowtie

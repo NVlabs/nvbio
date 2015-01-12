@@ -164,7 +164,9 @@ void Aligner::best_approx(
                 seed_queues.device_view(),
                 reseed_dptr,
                 hits,
-                params );
+                params,
+                params.fw,
+                params.rc );
 
             optional_device_synchronize();
             nvbio::cuda::check_error("mapping kernel");
@@ -227,7 +229,9 @@ void Aligner::best_approx(
                 seeding_pass, seed_queues.device_view(),
                 reseed_dptr,
                 hits,
-                params );
+                params,
+                params.fw,
+                params.rc );
 
             optional_device_synchronize();
             nvbio::cuda::check_error("mapping kernel");

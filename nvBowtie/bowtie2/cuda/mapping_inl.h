@@ -239,7 +239,9 @@ struct seed_mapper<EXACT_MAPPING>
         HitType&            hitheap,
         uint32&             range_sum,
         uint32&             range_count,
-        const ParamsPOD&    params)
+        const ParamsPOD&    params,
+        const bool          fw,
+        const bool          rc)
     {
         //typedef const_cached_iterator<const uint32*> BaseStream;
         typedef PackedStream<
@@ -268,50 +270,57 @@ struct seed_mapper<EXACT_MAPPING>
         const fSeedReader f_reader(reader, forward_offset);
         if (util::count_occurrences( f_reader, seed_len, 4u, 1u ))
             return;
-        range = make_uint2(0, fmi.length());
-        range = match_range(range, fmi, f_reader, 0, seed_len);
-        if (range.x <= range.y)
-        {
-            flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-seed_len);
-            if (hitheap.size() == params.max_hits)
-                hitheap.pop_bottom();
-            hitheap.push(SeedHit(flags, inclusive_to_exclusive(range)));
 
-            range_sum += range.y - range.x + 1u;
-            range_count++;
+        if (fw)
+        {
+            range = make_uint2(0, fmi.length());
+            range = match_range(range, fmi, f_reader, 0, seed_len);
+            if (range.x <= range.y)
+            {
+                flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-seed_len);
+                if (hitheap.size() == params.max_hits)
+                    hitheap.pop_bottom();
+                hitheap.push(SeedHit(flags, inclusive_to_exclusive(range)));
+
+                range_sum += range.y - range.x + 1u;
+                range_count++;
+            }
         }
 
-    #if USE_REVERSE_INDEX
-        // Complement seed=1, forward scan, reverse index=1
-        const transform_iterator<fSeedReader, complement_functor<4> > cf_reader(f_reader, complement_functor<4>());
-
-        range = make_uint2(0, rfmi.length());
-        range = match_range(range, rfmi, cf_reader, 0, seed_len);
-        if (range.x <= range.y)
+        if (rc)
         {
-            flags = SeedHit::build_flags(COMPLEMENT, REVERSE, pos-read_range.x+seed_len-1);
-            if (hitheap.size() == params.max_hits)
-                hitheap.pop_bottom();
-            hitheap.push(SeedHit(flags, inclusive_to_exclusive(range)));
-        }
-    #else
-        // Complement seed=1, reverse scan, forward index=0
-        const rSeedReader r_reader(reader, reverse_offset);                        
-        const transform_iterator<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
+        #if USE_REVERSE_INDEX
+            // Complement seed=1, forward scan, reverse index=1
+            const transform_iterator<fSeedReader, complement_functor<4> > cf_reader(f_reader, complement_functor<4>());
 
-        range = make_uint2(0, fmi.length());
-        range = match_range(range, fmi, cr_reader, 0, seed_len);
-        if (range.x <= range.y)
-        {
-            flags = SeedHit::build_flags(COMPLEMENT, FORWARD, pos-read_range.x);
-            if (hitheap.size() == params.max_hits)
-                hitheap.pop_bottom();
-            hitheap.push(SeedHit(flags, inclusive_to_exclusive(range)));
+            range = make_uint2(0, rfmi.length());
+            range = match_range(range, rfmi, cf_reader, 0, seed_len);
+            if (range.x <= range.y)
+            {
+                flags = SeedHit::build_flags(COMPLEMENT, REVERSE, pos-read_range.x+seed_len-1);
+                if (hitheap.size() == params.max_hits)
+                    hitheap.pop_bottom();
+                hitheap.push(SeedHit(flags, inclusive_to_exclusive(range)));
+            }
+        #else
+            // Complement seed=1, reverse scan, forward index=0
+            const rSeedReader r_reader(reader, reverse_offset);                        
+            const transform_iterator<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
 
-            range_sum += range.y - range.x + 1u;
-            range_count++;
+            range = make_uint2(0, fmi.length());
+            range = match_range(range, fmi, cr_reader, 0, seed_len);
+            if (range.x <= range.y)
+            {
+                flags = SeedHit::build_flags(COMPLEMENT, FORWARD, pos-read_range.x);
+                if (hitheap.size() == params.max_hits)
+                    hitheap.pop_bottom();
+                hitheap.push(SeedHit(flags, inclusive_to_exclusive(range)));
+
+                range_sum += range.y - range.x + 1u;
+                range_count++;
+            }
+        #endif
         }
-    #endif
     }
 };
 
@@ -333,7 +342,9 @@ struct seed_mapper<APPROX_MAPPING>
         HitType&            hitheap,
         uint32&             range_sum,
         uint32&             range_count,
-        const ParamsPOD&    params)
+        const ParamsPOD&    params,
+        const bool          fw,
+        const bool          rc)
     {
     #if 0
         typedef PackedStream<
@@ -370,14 +381,21 @@ struct seed_mapper<APPROX_MAPPING>
         const fSeedReader f_reader(reader, forward_offset);
         if (util::count_occurrences( f_reader, seed_len, 4u, 2u ))
             return;
-        flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-seed_len);
-        map<CHECK_EXACT> (f_reader,  params.subseed_len, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
+
+        if (fw)
+        {
+            flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-seed_len);
+            map<CHECK_EXACT> (f_reader,  params.subseed_len, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        }
 
         // Complement seed=1, reverse scan, forward  index=0
-        const rSeedReader r_reader(reader, reverse_offset);                        
-        const transform_iterator<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
-        flags = SeedHit::build_flags(COMPLEMENT, FORWARD, pos-read_range.x);
-        map<IGNORE_EXACT>(cr_reader, params.subseed_len, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        if (rc)
+        {
+            const rSeedReader r_reader(reader, reverse_offset);                        
+            const transform_iterator<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
+            flags = SeedHit::build_flags(COMPLEMENT, FORWARD, pos-read_range.x);
+            map<IGNORE_EXACT>(cr_reader, params.subseed_len, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        }
     }
 };
 
@@ -401,7 +419,9 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
         HitType&            hitheap,
         uint32&             range_sum,
         uint32&             range_count,
-        const ParamsPOD&    params)
+        const ParamsPOD&    params,
+        const bool          fw,
+        const bool          rc)
     {
     #if 0
         typedef PackedStream<
@@ -436,23 +456,34 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
 
         // Standard seed=0, forward scan, forward index=0
         const fSeedReader f_reader(reader, forward_offset);
-        flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-seed_len);
-        map<CHECK_EXACT> (f_reader,  (seed_len  )/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
-
+        if (fw)
+        {
+            flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-seed_len);
+            map<CHECK_EXACT> (f_reader,  (seed_len  )/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        }
         // Standard seed=0, reverse scan, reverse index=1
         const rSeedReader r_reader(reader, reverse_offset);
-        flags = SeedHit::build_flags(STANDARD, REVERSE, read_range.y-pos-1);
-        map<IGNORE_EXACT>(r_reader,  (seed_len+1)/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        if (fw)
+        {
+            flags = SeedHit::build_flags(STANDARD, REVERSE, read_range.y-pos-1);
+            map<IGNORE_EXACT>(r_reader,  (seed_len+1)/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        }
 
         // Complement seed=1, forward scan, reverse index=1
-        const transform_iterator<fSeedReader, complement_functor<4> > cf_reader(f_reader, complement_functor<4>());
-        flags = SeedHit::build_flags(COMPLEMENT, REVERSE, pos-read_range.x+seed_len-1);
-        map<CHECK_EXACT> (cf_reader, (seed_len  )/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        if (rc)
+        {
+            const transform_iterator<fSeedReader, complement_functor<4> > cf_reader(f_reader, complement_functor<4>());
+            flags = SeedHit::build_flags(COMPLEMENT, REVERSE, pos-read_range.x+seed_len-1);
+            map<CHECK_EXACT> (cf_reader, (seed_len  )/2, seed_len, rfmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        }
 
         // Complement seed=1, reverse scan, forward  index=0
-        const transform_iterator<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
-        flags = SeedHit::build_flags(COMPLEMENT, FORWARD, pos-read_range.x);
-        map<IGNORE_EXACT>(cr_reader, (seed_len+1)/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        if (rc)
+        {
+            const transform_iterator<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
+            flags = SeedHit::build_flags(COMPLEMENT, FORWARD, pos-read_range.x);
+            map<IGNORE_EXACT>(cr_reader, (seed_len+1)/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
+        }
     }
 };
 
@@ -465,7 +496,9 @@ void map_whole_read_kernel(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params)
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc)
 {
     __shared__ volatile uint32 sm_broadcast[BLOCKDIM >> 5];
     volatile uint32& warp_broadcast = sm_broadcast[ warp_id() ];
@@ -504,7 +537,9 @@ void map_whole_read_kernel(
         hitheap,
         range_sum,
         range_count,
-        params );
+        params,
+        fw,
+        rc );
 
     // save the hits
     store_deque( hits, read_id, hitheap.size(), local_hits );
@@ -526,7 +561,9 @@ void map_kernel(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params)
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc)
 {
     __shared__ volatile uint32 sm_broadcast[BLOCKDIM >> 5];
     volatile uint32& warp_broadcast = sm_broadcast[ warp_id() ];
@@ -576,7 +613,9 @@ void map_kernel(
             hitheap,
             range_sum,
             range_count,
-            params );
+            params,
+            fw,
+            rc );
     }
 
     // save the hits
@@ -599,7 +638,9 @@ void map_kernel(
     const BatchType             read_batch, const FMType fmi, const rFMType rfmi,
     SeedHitDequeArrayDeviceView hits,
     const uint2                 seed_range,
-    const ParamsPOD             params)
+    const ParamsPOD             params,
+    const bool                  fw,
+    const bool                  rc)
 {
     __shared__ volatile uint32 sm_broadcast[BLOCKDIM >> 5];
     volatile uint32& warp_broadcast = sm_broadcast[ warp_id() ];
@@ -661,7 +702,9 @@ void map_kernel(
                         hitheap,
                         range_sum,
                         range_count,
-                        params );
+                        params,
+                        fw,
+                        rc );
                 }
             }
 
@@ -691,29 +734,31 @@ void map_case_pruning_t(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params)
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc)
 {
     const int blocks = (read_batch.size() + BLOCKDIM-1) / BLOCKDIM;
 
     if (params.seed_len <= 16)
     {
         detail::map_kernel<detail::CASE_PRUNING_MAPPING,16> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
     }
     else if (params.seed_len <= 24)
     {
         detail::map_kernel<detail::CASE_PRUNING_MAPPING,24> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
     }
     else if (params.seed_len <= 32)
     {
         detail::map_kernel<detail::CASE_PRUNING_MAPPING,32> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
     }
     else if (params.seed_len <= 40)
     {
         detail::map_kernel<detail::CASE_PRUNING_MAPPING,40> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
     }
 }
 
@@ -727,29 +772,31 @@ void map_approx_t(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params)
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc)
 {
     const int blocks = (queues.in_size + BLOCKDIM-1) / BLOCKDIM;
 
     if (params.seed_len <= 16)
     {
         detail::map_kernel<detail::APPROX_MAPPING,16> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
     }
     else if (params.seed_len <= 24)
     {
         detail::map_kernel<detail::APPROX_MAPPING,24> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
     }
     else if (params.seed_len <= 32)
     {
         detail::map_kernel<detail::APPROX_MAPPING,32> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
     }
     else if (params.seed_len <= 40)
     {
         detail::map_kernel<detail::APPROX_MAPPING,40> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
     }
 }
 
@@ -761,29 +808,31 @@ void map_approx_t(
     const BatchType&            read_batch, const FMType fmi, const rFMType rfmi,
     SeedHitDequeArrayDeviceView hits,
     const uint2                 seed_range,
-    const ParamsPOD             params)
+    const ParamsPOD             params,
+    const bool                  fw,
+    const bool                  rc)
 {
     const int blocks = (read_batch.size() + BLOCKDIM-1) / BLOCKDIM;
 
     if (params.seed_len <= 16)
     {
         detail::map_kernel<detail::APPROX_MAPPING,16> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params );
+            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
     }
     else if (params.seed_len <= 24)
     {
         detail::map_kernel<detail::APPROX_MAPPING,24> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params );
+            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
     }
     else if (params.seed_len <= 32)
     {
         detail::map_kernel<detail::APPROX_MAPPING,32> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params );
+            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
     }
     else if (params.seed_len <= 40)
     {
         detail::map_kernel<detail::APPROX_MAPPING,40> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params );
+            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
     }
 }
 
@@ -796,12 +845,14 @@ void map_whole_read_t(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params)
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc)
 {
     const int blocks = (queues.in_size + BLOCKDIM-1) / BLOCKDIM;
 
     detail::map_whole_read_kernel<<<blocks, BLOCKDIM>>> (
-        read_batch, fmi, rfmi, queues, reseed, hits, params );
+        read_batch, fmi, rfmi, queues, reseed, hits, params, fw, rc );
 }
 
 //
@@ -814,29 +865,31 @@ void map_exact_t(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params)
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc)
 {
     const int blocks = (queues.in_size + BLOCKDIM-1) / BLOCKDIM;
 
     if (params.seed_len <= 16)
     {
         detail::map_kernel<detail::EXACT_MAPPING,16> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
     }
     else if (params.seed_len <= 24)
     {
         detail::map_kernel<detail::EXACT_MAPPING,24> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
     }
     else if (params.seed_len <= 32)
     {
         detail::map_kernel<detail::EXACT_MAPPING,32> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
     }
     else if (params.seed_len <= 40)
     {
         detail::map_kernel<detail::EXACT_MAPPING,40> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
     }
 }
 
@@ -848,29 +901,31 @@ void map_exact_t(
     const BatchType&            read_batch, const FMType fmi, const rFMType rfmi,
     SeedHitDequeArrayDeviceView hits,
     const uint2                 seed_range,
-    const ParamsPOD             params)
+    const ParamsPOD             params,
+    const bool                  fw,
+    const bool                  rc)
 {
     const int blocks = (read_batch.size() + BLOCKDIM-1) / BLOCKDIM;
 
     if (params.seed_len <= 16)
     {
         detail::map_kernel<detail::EXACT_MAPPING,16> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params );
+            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
     }
     else if (params.seed_len <= 24)
     {
         detail::map_kernel<detail::EXACT_MAPPING,24> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params );
+            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
     }
     else if (params.seed_len <= 32)
     {
         detail::map_kernel<detail::EXACT_MAPPING,32> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params );
+            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
     }
     else if (params.seed_len <= 40)
     {
         detail::map_kernel<detail::EXACT_MAPPING,40> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params );
+            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
     }
 }
 
@@ -884,7 +939,9 @@ void map_t(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params)
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc)
 {
     // check whether we allow substitutions
     if (params.allow_sub)
@@ -894,20 +951,20 @@ void map_t(
         {
             // call the hybrid fuzzy mapping kernel
             map_case_pruning_t(
-                read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+                read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
         }
         else
         {
             // call the hybrid exact-fuzzy mapping kernel
             map_approx_t(
-                read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+                read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
         }
     }
     else
     {
         // call the hybrid exact mapping kernel
         map_exact_t(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params );
+            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
     }
 }
 

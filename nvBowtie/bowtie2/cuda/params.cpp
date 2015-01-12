@@ -134,6 +134,8 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.top_seed         = uint_option(options, "top",                   init ? 0u      : params.top_seed);             // explore top seed entirely
     params.min_read_len     = uint_option(options, "min-read-len",          init ? 12u     : params.min_read_len);         // minimum read length
     params.ungapped_mates   = bool_option(options, "ungapped-mates", "ug",  init ? 0u      : params.ungapped_mates);       // ungapped mate alignment
+    params.fw               = !bool_option(options, "nofw",                 init ? false   : !params.fw);                  // fw alignment
+    params.rc               = !bool_option(options, "norc",                 init ? false   : !params.rc);                  // rc alignment
 
     // force the all-mapping mode with the '--all|-a' option
     if (uint_option(options, "all", "a", params.mode == AllMapping))

@@ -157,6 +157,20 @@ void Aligner::best_approx(
         // iteration.
         //
 
+        bool fw_strand;
+        if (anchor == 0)
+        {
+            fw_strand = (params.pe_policy == io::PE_POLICY_FF ||
+                         params.pe_policy == io::PE_POLICY_FR);
+        }
+        else
+        {
+            fw_strand = (params.pe_policy == io::PE_POLICY_RF ||
+                         params.pe_policy == io::PE_POLICY_RR);
+        }
+        const bool fw = fw_strand ? params.fw : params.rc;
+        const bool rc = fw_strand ? params.rc : params.fw;
+
         for (uint32 seeding_pass = 0; seeding_pass < params.max_reseed+1; ++seeding_pass)
         {
             // check whether the input queue is empty
@@ -191,7 +205,9 @@ void Aligner::best_approx(
                     seeding_pass, seed_queues.device_view(),
                     reseed_dptr,
                     hits,
-                    params );
+                    params,
+                    fw,
+                    rc );
 
                 optional_device_synchronize();
                 nvbio::cuda::check_error("mapping kernel");

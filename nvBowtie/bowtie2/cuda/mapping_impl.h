@@ -84,7 +84,9 @@ void map_whole_read_t(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params);
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc);
 
 ///
 /// perform one run of exact seed mapping for all the reads in the input queue,
@@ -97,17 +99,21 @@ void map_exact_t(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params);
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc);
 
 ///
 /// perform multiple runs of exact seed mapping in one go and keep the best
 ///
 template <typename BatchType, typename FMType, typename rFMType>
 void map_exact_t(
-    const BatchType&            read_batch, const FMType fmi, const rFMType rfmi,
-    SeedHitDequeArrayDeviceView hits,
-    const uint2                 seed_range,
-    const ParamsPOD             params);
+    const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
+    SeedHitDequeArrayDeviceView                     hits,
+    const uint2                                     seed_range,
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc);
 
 ///
 /// perform one run of approximate seed mapping using case pruning for all the reads in
@@ -120,7 +126,9 @@ void map_case_pruning_t(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params);
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc);
 
 ///
 /// perform one run of approximate seed mapping for all the reads in the input queue,
@@ -133,17 +141,21 @@ void map_approx_t(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params);
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc);
 
 ///
 /// perform multiple runs of approximate seed mapping in one go and keep the best
 ///
 template <typename BatchType, typename FMType, typename rFMType>
 void map_approx_t(
-    const BatchType&            read_batch, const FMType fmi, const rFMType rfmi,
-    SeedHitDequeArrayDeviceView hits,
-    const uint2                 seed_range,
-    const ParamsPOD             params);
+    const BatchType&                                read_batch, const FMType fmi, const rFMType rfmi,
+    SeedHitDequeArrayDeviceView                     hits,
+    const uint2                                     seed_range,
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc);
 
 ///
 /// perform one run of seed mapping
@@ -155,7 +167,9 @@ void map_t(
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
     uint8*                                          reseed,
     SeedHitDequeArrayDeviceView                     hits,
-    const ParamsPOD                                 params);
+    const ParamsPOD                                 params,
+    const bool                                      fw,
+    const bool                                      rc);
 
 ///@}  // group Mapping
 ///@}  // group nvBowtie

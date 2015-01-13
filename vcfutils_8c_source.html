@@ -278,7 +278,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;</div>
 <div class="line"><a name="l00177"></a><span class="lineno"><a class="code" href="vcfutils_8c.html#a7fdca7bb92ece07991ee197b37427504">  177</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="vcfutils_8h.html#a0f552fbe9578bfec9facc0d1f71df017">bcf_remove_alleles</a>(<span class="keyword">const</span> <a class="code" href="structbcf__hdr__t.html">bcf_hdr_t</a> *<a class="code" href="namespacenvbio_1_1html.html#aa3843a2dc8135f20908b5ca3ed5cfc3f">header</a>, <a class="code" href="structbcf1__t.html">bcf1_t</a> *line, <span class="keywordtype">int</span> rm_mask)</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;{</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <span class="keywordtype">int</span> *<a class="code" href="group___mapping.html#ga21eb981e822eac39eb4dda866b3460aa">map</a> = (<span class="keywordtype">int</span>*) calloc(line-&gt;<a class="code" href="structbcf1__t.html#a7ca6a3f496a646c3c948528841609edf">n_allele</a>, <span class="keyword">sizeof</span>(<span class="keywordtype">int</span>));</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <span class="keywordtype">int</span> *<a class="code" href="group___mapping.html#gad30b05e1249763bbda8b4745c92a42ae">map</a> = (<span class="keywordtype">int</span>*) calloc(line-&gt;<a class="code" href="structbcf1__t.html#a7ca6a3f496a646c3c948528841609edf">n_allele</a>, <span class="keyword">sizeof</span>(<span class="keywordtype">int</span>));</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;</div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    <span class="comment">// create map of indexes from old to new ALT numbering and modify ALT</span></div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    <a class="code" href="struct____kstring__t.html">kstring_t</a> str = {0,0,0};</div>
@@ -745,7 +745,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 20 2014 12:27:21 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 13 2015 09:34:05 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

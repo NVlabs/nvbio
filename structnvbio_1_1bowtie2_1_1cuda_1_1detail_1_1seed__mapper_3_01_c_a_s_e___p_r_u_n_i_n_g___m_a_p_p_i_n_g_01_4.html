@@ -114,19 +114,19 @@ struct nvbio::bowtie2::cuda::detail::seed_mapper&lt; CASE_PRUNING_MAPPING &gt;</
 <li>perform exact mapping of the second half and allow 1 mismatch in the first half </li>
 </ul>
 
-<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00391">391</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00409">409</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Methods</h2></td></tr>
-<tr class="memitem:a407a6916ee6bb7ab6b311bb9e2d1c034"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType , typename HitType &gt; </td></tr>
-<tr class="memitem:a407a6916ee6bb7ab6b311bb9e2d1c034"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <br class="typebreak"/>
-<a class="el" href="types_8h.html#ab1e3db7d296c7ca84db521f23dd81bd3">NVBIO_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1seed__mapper_3_01_c_a_s_e___p_r_u_n_i_n_g___m_a_p_p_i_n_g_01_4.html#a407a6916ee6bb7ab6b311bb9e2d1c034">enact</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 read_range, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> pos, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> seed_len, <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> *S, HitType &amp;hitheap, <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> &amp;range_sum, <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> &amp;range_count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params_p_o_d.html">ParamsPOD</a> &amp;params)</td></tr>
-<tr class="separator:a407a6916ee6bb7ab6b311bb9e2d1c034"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba74e5a8d7f16170373c5614eaff7b48"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType , typename HitType &gt; </td></tr>
+<tr class="memitem:aba74e5a8d7f16170373c5614eaff7b48"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <br class="typebreak"/>
+<a class="el" href="types_8h.html#ab1e3db7d296c7ca84db521f23dd81bd3">NVBIO_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1seed__mapper_3_01_c_a_s_e___p_r_u_n_i_n_g___m_a_p_p_i_n_g_01_4.html#aba74e5a8d7f16170373c5614eaff7b48">enact</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 read_range, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> pos, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> seed_len, <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> *S, HitType &amp;hitheap, <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> &amp;range_sum, <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> &amp;range_count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params_p_o_d.html">ParamsPOD</a> &amp;params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool fw, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool rc)</td></tr>
+<tr class="separator:aba74e5a8d7f16170373c5614eaff7b48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a407a6916ee6bb7ab6b311bb9e2d1c034"></a>
+<a class="anchor" id="aba74e5a8d7f16170373c5614eaff7b48"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -199,7 +199,19 @@ template&lt;typename BatchType , typename FMType , typename rFMType , typename H
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params_p_o_d.html">ParamsPOD</a> &amp;&#160;</td>
-          <td class="paramname"><em>params</em>&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>fw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -214,7 +226,7 @@ template&lt;typename BatchType , typename FMType , typename rFMType , typename H
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00395">395</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00413">413</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
 
 </div>
 </div>
@@ -224,7 +236,7 @@ template&lt;typename BatchType , typename FMType , typename rFMType , typename H
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 20 2014 12:28:42 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 13 2015 09:35:22 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

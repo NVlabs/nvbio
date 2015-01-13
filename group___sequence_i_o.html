@@ -192,8 +192,8 @@ Functions</h2></td></tr>
 <tr class="separator:ga92ab2ec86711b977073b780d1fd1b478"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1f71ff7822855f422bf93c2731793aa8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___sequence_i_o.html#ga1f71ff7822855f422bf93c2731793aa8">nvbio::io::skip</a> (SequenceDataStream *stream, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 batch_size)</td></tr>
 <tr class="separator:ga1f71ff7822855f422bf93c2731793aa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gadd1892c7b881fe606d66b597fed7d687"><td class="memItemLeft" align="right" valign="top">SequenceDataStream *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___sequence_i_o.html#gadd1892c7b881fe606d66b597fed7d687">nvbio::io::open_sequence_file</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *sequence_file_name, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> QualityEncoding qualities=Phred33, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_seqs=uint32(-1), <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_sequence_len=uint32(-1), <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> SequenceEncoding flags=FORWARD)</td></tr>
-<tr class="separator:gadd1892c7b881fe606d66b597fed7d687"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga249422025262954363e6857c7903dfa6"><td class="memItemLeft" align="right" valign="top">SequenceDataStream *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___sequence_i_o.html#ga249422025262954363e6857c7903dfa6">nvbio::io::open_sequence_file</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *sequence_file_name, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> QualityEncoding qualities=Phred33, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_seqs=uint32(-1), <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 max_sequence_len=uint32(-1), <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> SequenceEncoding flags=FORWARD, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 trim3=0, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 trim5=0)</td></tr>
+<tr class="separator:ga249422025262954363e6857c7903dfa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga51edb4491c012a5c6c91b8de1472cb13"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___sequence_i_o.html#ga51edb4491c012a5c6c91b8de1472cb13">nvbio::io::load_sequence_file</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Alphabet alphabet, SequenceDataHost *sequence_data, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *sequence_file_name, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> SequenceFlags load_flags=io::SequenceFlags(io::SEQUENCE_DATA|io::SEQUENCE_QUALS|io::SEQUENCE_NAMES), <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> QualityEncoding qualities=Phred33)</td></tr>
 <tr class="separator:ga51edb4491c012a5c6c91b8de1472cb13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8f8ea7cb5a1270b11d0c3a60d1a11e0e"><td class="memItemLeft" align="right" valign="top">SequenceDataHost *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___sequence_i_o.html#ga8f8ea7cb5a1270b11d0c3a60d1a11e0e">nvbio::io::load_sequence_file</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Alphabet alphabet, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *sequence_file_name, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> SequenceFlags load_flags=io::SequenceFlags(io::SEQUENCE_DATA|io::SEQUENCE_QUALS|io::SEQUENCE_NAMES), <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> QualityEncoding qualities=Phred33)</td></tr>
@@ -401,7 +401,7 @@ SequenceDataT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a cl
 </div><div class="memdoc">
 <p>utility method to append the next batch from a <a class="el" href="structnvbio_1_1io_1_1_sequence_data_stream.html">SequenceDataStream</a> </p>
 
-<p>Definition at line <a class="el" href="sequence__encoder_8cpp_source.html#l00454">454</a> of file <a class="el" href="sequence__encoder_8cpp_source.html">sequence_encoder.cpp</a>.</p>
+<p>Definition at line <a class="el" href="sequence__encoder_8cpp_source.html#l00461">461</a> of file <a class="el" href="sequence__encoder_8cpp_source.html">sequence_encoder.cpp</a>.</p>
 
 </div>
 </div>
@@ -458,7 +458,7 @@ SequenceDataT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a cl
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="sequence__priv_8cpp_source.html#l00239">239</a> of file <a class="el" href="sequence__priv_8cpp_source.html">sequence_priv.cpp</a>.</p>
+<p>Definition at line <a class="el" href="sequence__priv_8cpp_source.html#l00227">227</a> of file <a class="el" href="sequence__priv_8cpp_source.html">sequence_priv.cpp</a>.</p>
 
 </div>
 </div>
@@ -508,7 +508,7 @@ SequenceDataT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a cl
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="sequence__priv_8cpp_source.html#l00267">267</a> of file <a class="el" href="sequence__priv_8cpp_source.html">sequence_priv.cpp</a>.</p>
+<p>Definition at line <a class="el" href="sequence__priv_8cpp_source.html#l00255">255</a> of file <a class="el" href="sequence__priv_8cpp_source.html">sequence_priv.cpp</a>.</p>
 
 </div>
 </div>
@@ -601,11 +601,11 @@ template&lt;Alphabet ALPHABET, typename SequenceDataT &gt; </div>
 </div><div class="memdoc">
 <p>utility method to get the next batch from a <a class="el" href="structnvbio_1_1io_1_1_sequence_data_stream.html">SequenceDataStream</a> </p>
 
-<p>Definition at line <a class="el" href="sequence__encoder_8cpp_source.html#l00423">423</a> of file <a class="el" href="sequence__encoder_8cpp_source.html">sequence_encoder.cpp</a>.</p>
+<p>Definition at line <a class="el" href="sequence__encoder_8cpp_source.html#l00430">430</a> of file <a class="el" href="sequence__encoder_8cpp_source.html">sequence_encoder.cpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="gadd1892c7b881fe606d66b597fed7d687"></a>
+<a class="anchor" id="ga249422025262954363e6857c7903dfa6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -637,7 +637,19 @@ template&lt;Alphabet ALPHABET, typename SequenceDataT &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> SequenceEncoding&#160;</td>
-          <td class="paramname"><em>flags</em> = <code>FORWARD</code>&#160;</td>
+          <td class="paramname"><em>flags</em> = <code>FORWARD</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>trim3</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>trim5</em> = <code>0</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -750,7 +762,7 @@ template&lt;Alphabet ALPHABET, typename SequenceDataT &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 20 2014 12:27:47 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 13 2015 09:34:31 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

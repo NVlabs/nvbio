@@ -257,6 +257,7 @@ var searchData=
   ['body_5fbegin',['body_begin',['../namespacenvbio_1_1html.html#a5f29ff24e5257aba6cb1bd72f0ea5743',1,'nvbio::html']]],
   ['body_5fend',['body_end',['../namespacenvbio_1_1html.html#ae14448c2da80bfcc728ad3268afdb9d4',1,'nvbio::html']]],
   ['body_5fobject',['body_object',['../structnvbio_1_1html_1_1body__object.html#aff895dfde085e053d49bbc740bfd9a43',1,'nvbio::html::body_object']]],
+  ['bool_5foption',['bool_option',['../namespacenvbio.html#ae7ce876cfcce874c3b7a3475344f5ba7',1,'nvbio::bool_option(const options_type &amp;options, const char *name, const bool val)'],['../namespacenvbio.html#a18118fcaef1e0f4667c918cf2bc220f9',1,'nvbio::bool_option(const options_type &amp;options, const char *name1, const char *name2, const bool val)']]],
   ['booleanstats',['BooleanStats',['../structnvbio_1_1alndiff_1_1_boolean_stats.html#a2a17618fd372101d56ba07379f50fade',1,'nvbio::alndiff::BooleanStats']]],
   ['bottom',['bottom',['../group___priority_deques.html#gafa23c5a4f7c99b88fbcfffe85eba3ac9',1,'nvbio::priority_deque::bottom()'],['../structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_reference.html#abc662c0b764f5647176dd74a3145ebb1',1,'nvbio::bowtie2::cuda::SeedHitDequeReference::bottom()']]],
   ['bowtiemapq2',['BowtieMapq2',['../structnvbio_1_1bowtie2_1_1cuda_1_1_bowtie_mapq2.html#aabe2e671a625d4801b2210dc8a2c3520',1,'nvbio::bowtie2::cuda::BowtieMapq2']]],

@@ -197,7 +197,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00095"></a><span class="lineno"><a class="code" href="cram__encode_8h.html#a8c0406b7c40a8843fd04c6569614a2b0">   95</a></span>&#160;<a class="code" href="structcram__block.html">cram_block</a> *<a class="code" href="cram__encode_8c.html#a8c0406b7c40a8843fd04c6569614a2b0">cram_encode_compression_header</a>(<a class="code" href="structcram__fd.html">cram_fd</a> *fd, <a class="code" href="structcram__container.html">cram_container</a> *c,</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                                           <a class="code" href="structcram__block__compression__hdr.html">cram_block_compression_hdr</a> *h) {</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <a class="code" href="structcram__block.html">cram_block</a> *cb  = <a class="code" href="cram__io_8c.html#a991dcfd8577ade942c778b3c4ab6c34e">cram_new_block</a>(<a class="code" href="cram__structs_8h.html#af9934fb23b7763e058c4dfb074ce9a49a2e2b585e9729f519f2df9d64ba20a4f7">COMPRESSION_HEADER</a>, 0);</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <a class="code" href="structcram__block.html">cram_block</a> *<a class="code" href="group___mapping.html#ga21eb981e822eac39eb4dda866b3460aa">map</a> = <a class="code" href="cram__io_8c.html#a991dcfd8577ade942c778b3c4ab6c34e">cram_new_block</a>(<a class="code" href="cram__structs_8h.html#af9934fb23b7763e058c4dfb074ce9a49a2e2b585e9729f519f2df9d64ba20a4f7">COMPRESSION_HEADER</a>, 0);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <a class="code" href="structcram__block.html">cram_block</a> *<a class="code" href="group___mapping.html#gad30b05e1249763bbda8b4745c92a42ae">map</a> = <a class="code" href="cram__io_8c.html#a991dcfd8577ade942c778b3c4ab6c34e">cram_new_block</a>(<a class="code" href="cram__structs_8h.html#af9934fb23b7763e058c4dfb074ce9a49a2e2b585e9729f519f2df9d64ba20a4f7">COMPRESSION_HEADER</a>, 0);</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">int</span> i, mc;</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">if</span> (!cb || !map)</div>
@@ -534,7 +534,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;</div>
 <div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    <span class="comment">/* tag encoding map */</span></div>
 <div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;<span class="preprocessor">#if 0</span></div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;<span class="preprocessor"></span>    mp = <a class="code" href="group___mapping.html#ga21eb981e822eac39eb4dda866b3460aa">map</a>; mc = 0;</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;<span class="preprocessor"></span>    mp = <a class="code" href="group___mapping.html#gad30b05e1249763bbda8b4745c92a42ae">map</a>; mc = 0;</div>
 <div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    <span class="keywordflow">if</span> (h-&gt;<a class="code" href="structcram__block__compression__hdr.html#aef84c4931febc2ed9ad409bdc5fe7414">tag_encoding_map</a>) {</div>
 <div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;        HashItem *hi;</div>
 <div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;        HashIter *iter = HashTableIterCreate();</div>
@@ -2733,7 +2733,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 20 2014 12:27:19 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 13 2015 09:34:03 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

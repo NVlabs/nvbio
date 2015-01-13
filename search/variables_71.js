@@ -19,7 +19,7 @@ var searchData=
   ['qual_5fblk',['qual_blk',['../structcram__slice.html#a1a1a5896a637b6b757e123b360715e4a',1,'cram_slice']]],
   ['qual_5flen',['qual_len',['../struct_b_a_m___c_r_q__index.html#a86cec9753c04962eedf5a95eeebac1cc',1,'BAM_CRQ_index']]],
   ['qual_5fstart',['qual_start',['../struct_b_a_m___c_r_q__index.html#ab3c0202245d0a9bc4c2bac2306a5279f',1,'BAM_CRQ_index']]],
-  ['qualities',['qualities',['../struct_b_a_m__alignment__batch___so_a.html#ab58c635fc570d5175e674a726f77e947',1,'BAM_alignment_batch_SoA::qualities()'],['../struct_bam_tools_1_1_bam_alignment.html#a193194d549a49fde96518c376be38933',1,'BamTools::BamAlignment::Qualities()']]],
+  ['qualities',['qualities',['../structnvbio_1_1io_1_1_sequence_data_file_1_1_options.html#ac1ef9f624e5c03929b0d28cab19a61ee',1,'nvbio::io::SequenceDataFile::Options::qualities()'],['../struct_b_a_m__alignment__batch___so_a.html#ab58c635fc570d5175e674a726f77e947',1,'BAM_alignment_batch_SoA::qualities()'],['../struct_bam_tools_1_1_bam_alignment.html#a193194d549a49fde96518c376be38933',1,'BamTools::BamAlignment::Qualities()']]],
   ['quals',['quals',['../structnvbio_1_1aln_1_1priv_1_1_alignment_stream_1_1strings__type.html#ab631d66eb9f28dd5265921b64eff451c',1,'nvbio::aln::priv::AlignmentStream::strings_type::quals()'],['../structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_strings.html#adf9d9443182fa931dd901cd8a59f9100',1,'nvbio::bowtie2::cuda::detail::AlignmentStrings::quals()']]],
   ['querybases',['QueryBases',['../struct_bam_tools_1_1_bam_alignment.html#ae06866cc0ec0e4328c89aaa386d2a7f2',1,'BamTools::BamAlignment']]],
   ['queue_5flen',['queue_len',['../structt__results__queue.html#a62b5d52c1ff444a5187457d89c44d971',1,'t_results_queue']]],

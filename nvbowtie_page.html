@@ -122,7 +122,7 @@ best-mapping, single-end reads</h2>
 <div class="line">seed-mapping-queue[in] := <a class="code" href="group___c_u_d_a_primitives.html#ga9dcce72ad9a2d44f92aa508b91b3378d">all</a> reads</div>
 <div class="line"><span class="keywordflow">while</span> (seed-mapping-queue[in] not empty)</div>
 <div class="line">{</div>
-<div class="line">    (seed-mapping-queue[out], seed-deques) := <a class="code" href="group___mapping.html#ga21eb981e822eac39eb4dda866b3460aa">map</a>( seed-mapping-queue[in] );</div>
+<div class="line">    (seed-mapping-queue[out], seed-deques) := <a class="code" href="group___mapping.html#gad30b05e1249763bbda8b4745c92a42ae">map</a>( seed-mapping-queue[in] );</div>
 <div class="line"></div>
 <div class="line">    score( seed-mapping-queue[in], seed-deques, best-alignments );          <span class="comment">// find the best alignments for each read</span></div>
 <div class="line"></div>
@@ -162,7 +162,7 @@ best-mapping, paired-end reads</h2>
 <div class="line">    seed-mapping-queue[in] := <a class="code" href="group___c_u_d_a_primitives.html#ga9dcce72ad9a2d44f92aa508b91b3378d">all</a> reads</div>
 <div class="line">    <span class="keywordflow">while</span> (seed-mapping-queue[in] not empty)</div>
 <div class="line">    {</div>
-<div class="line">        (seed-mapping-queue[out], seed-deques) := <a class="code" href="group___mapping.html#ga21eb981e822eac39eb4dda866b3460aa">map</a>( seed-mapping-queue[in] );</div>
+<div class="line">        (seed-mapping-queue[out], seed-deques) := <a class="code" href="group___mapping.html#gad30b05e1249763bbda8b4745c92a42ae">map</a>( seed-mapping-queue[in] );</div>
 <div class="line"></div>
 <div class="line">        score( seed-mapping-queue[in], seed-deques, best-anchor-alignments, best-opposite-alignments );</div>
 <div class="line"></div>
@@ -189,37 +189,31 @@ Usage</h1>
 <dl class="section user"><dt></dt><dd>At the moment, the command line options of nvBowtie differ from those of bowtie2. A comprehensive list can be obtained running:</dd></dl>
 <pre class="fragment">*  ./nvBowtie --help
 * 
-*  nvBowtie [options] reference-genome read-file output |
-*  nvBowtie --pe [options] reference-genome read-file1 read-file2 output
+*  nvBowtie [options]
 *   options:
 *     General:
-*       --upto | -u        int [-1]      maximum number of reads to process
+*       -U                 file-name     unpaired reads
+*       -1                 file-name     first mate reads
+*       -2                 file-name     second mate reads
+*       -S                 file-name     output file (.sam|.bam)
+*       -x                 file-name     reference index
+*       --verbosity                      verbosity level
+*       --upto  | -u       int [-1]      maximum number of reads to process
+*       --trim3 | -3       int [0]       trim the first N bases of 3'
+*       --trim5 | -5       int [0]       trim the first N bases of 5'
+*       --nofw                           do not align the forward strand
+*       --norc                           do not align the reverse-complemented strand
 *       --device           int [0]       select the given cuda device(s) (e.g. --device 0 --device 1 ...)
 *       --file-ref                       load reference from file
 *       --server-ref                     load reference from server
 *       --phred33                        qualities are ASCII characters equal to Phred quality + 33
 *       --phred64                        qualities are ASCII characters equal to Phred quality + 64
 *       --solexa-quals                   qualities are in the Solexa format
-*       --pe                             paired ends input
+*     Paired-end:
 *       --ff                             paired mates are forward-forward
 *       --fr                             paired mates are forward-reverse
 *       --rf                             paired mates are reverse-forward
 *       --rr                             paired mates are reverse-reverse
-*       --verbosity                      verbosity level
-*       --local                          perform local alignment
-*     Seeding:
-*       --seed-len   | -L   int  [22]                       seed lengths
-*       --seed-freq  | -i   func [S,1,local ? 0.75 : 1.15]  seed interval function
-*       --max-hits          int  [100]                      maximum amount of seed hits
-*       --max-reseed | -R   int  [2]                        number of reseeding rounds
-*     Extension:
-*       --rand                           randomized seed selection
-*       --no-rand                        disable randomized seed selection
-*       --max-dist          int [15]     maximum edit distance
-*       --max-effort-init   int [15]     initial maximum number of consecutive extension failures
-*       --max-effort | -D   int [15]     maximum number of consecutive extension failures
-*       --min-ext           int [30]     minimum number of extensions per read
-*       --max-ext           int [400]    maximum number of extensions per read
 *       --minins     | -I   int [0]      minimum insert length
 *       --minins     | -X   int [500]    maximum insert length
 *       --overlap                        allow overlapping mates
@@ -227,6 +221,29 @@ Usage</h1>
 *       --dovetail                       allow dovetailing mates
 *       --no-mixed                       only report paired alignments
 *       --ungapped-mates | -ug           perform ungapped mate alignment
+*     Seeding:
+*       --seed-len   | -L   int  [22]                       seed lengths
+*       --seed-freq  | -i   func [S,1,local ? 0.75 : 1.15]  seed interval function
+*       --max-hits          int  [100]                      maximum amount of seed hits
+*       --max-reseed | -R   int  [2]                        number of reseeding rounds
+*     Extension:
+*       --all        | -a                perform all-mapping (i.e. find and report all alignments)
+*       --local                          perform local alignment
+*       --rand                           randomized seed selection
+*       --no-rand                        disable randomized seed selection
+*       --max-dist          int [15]     maximum edit distance
+*       --max-effort-init   int [15]     initial maximum number of consecutive extension failures
+*       --max-effort | -D   int [15]     maximum number of consecutive extension failures
+*       --min-ext           int [30]     minimum number of extensions per read
+*       --max-ext           int [400]    maximum number of extensions per read
+*       --fast                           apply the fast presets
+*       --very-fast                      apply the very-fast presets
+*       --sensitive                      apply the sensitive presets
+*       --very-sensitive                 apply the very-sensitive presets
+*       --fast-local                     apply the fast presets
+*       --very-fast-local                apply the very-fast presets
+*       --sensitive-local                apply the sensitive presets
+*       --very-sensitive-local           apply the very-sensitive presets
 *     Scoring:
 *       --scoring-scheme    filename     use a given scoring scheme
 *       --ma                int          match bonus
@@ -247,11 +264,11 @@ Usage</h1>
 <dl class="section user"><dt></dt><dd>e.g. suppose you have the human genome in a single FASTA file, <em>hg19.fa</em>; the following commands will create all indices needed by nvBowtie:</dd></dl>
 <pre class="fragment">*  ./nvBWT hg19.fa hg19-index
 * </pre><dl class="section user"><dt></dt><dd>At this point, one can run nvBowtie:</dd></dl>
-<pre class="fragment">*  ./nvBowtie --file-ref hg19 my_reads.fastq my_reads.bam
-* </pre><dl class="section user"><dt></dt><dd>Note the presence of the option <em>&ndash;file-ref</em>, specifying that the reference indices come from disk. Another noteworthy option is to let nvBowtie fetch them from a <em>shared memory</em> server which can be run in the background: the <a class="el" href="nvfm_server_page.html">nvFM-server</a>. It be launched with:</dd></dl>
+<pre class="fragment">*  ./nvBowtie -x hg19 -U my_reads.fastq -S my_reads.bam
+* </pre><dl class="section user"><dt></dt><dd>Another noteworthy option is to let nvBowtie fetch them from a <em>shared memory</em> server which can be run in the background: the <a class="el" href="nvfm_server_page.html">nvFM-server</a>. It be launched with:</dd></dl>
 <pre class="fragment">*  ./nvFM-server hg19-index hg19 &amp;
 * </pre><dl class="section user"><dt></dt><dd>nvBowtie can then pickup the reference from the server:</dd></dl>
-<pre class="fragment">*  ./nvBowtie hg19 my_reads.fastq my_reads.bam
+<pre class="fragment">*  ./nvBowtie -x hg19 -U my_reads.fastq -S my_reads.bam
 * </pre><h2><a class="anchor" id="ScoringSchemeSection"></a>
 scoring schemes</h2>
 <dl class="section user"><dt></dt><dd>The <em>&ndash;scoring-scheme filename</em> option allows to provide a custom Smith-Waterman scoring scheme through a text file, where each line must contain a token value pair. The tokens and default values are reported below:</dd></dl>
@@ -273,7 +290,7 @@ scoring schemes</h2>
 * </pre> </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 20 2014 12:27:46 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 13 2015 09:34:30 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -490,19 +490,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;</div>
 <div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;            <span class="keyword">template</span>&lt;<span class="keyword">typename</span> U&gt;</div>
 <div class="line"><a name="l00392"></a><span class="lineno"><a class="code" href="classnvbio_1_1_shared_pointer.html#a5bdd2660f3a6eb228006a10d66816cec">  392</a></span>&#160;            <a class="code" href="classnvbio_1_1_shared_pointer.html#a5bdd2660f3a6eb228006a10d66816cec">SharedPointer</a>(<span class="keyword">const</span> <a class="code" href="classnvbio_1_1_shared_pointer.html">SharedPointer&lt;U&gt;</a>&amp; other, <a class="code" href="structnvbio_1_1internals_1_1static__cast__marker.html">internals::static_cast_marker</a>) :</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;                m_ptr(static_cast&lt;<a class="code" href="structnvbio_1_1_thread_base_1_1_impl.html">element_type</a>*&gt;(other.m_ptr)),</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;                m_ptr(static_cast&lt;<a class="code" href="structnvbio_1_1io_1_1_sequence_data_storage.html">element_type</a>*&gt;(other.m_ptr)),</div>
 <div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;                m_count(other.m_count)</div>
 <div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;            {}</div>
 <div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;</div>
 <div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;            <span class="keyword">template</span>&lt;<span class="keyword">typename</span> U&gt;</div>
 <div class="line"><a name="l00398"></a><span class="lineno"><a class="code" href="classnvbio_1_1_shared_pointer.html#ad116d2307183fd075cbe61c065e54f76">  398</a></span>&#160;            <a class="code" href="classnvbio_1_1_shared_pointer.html#ad116d2307183fd075cbe61c065e54f76">SharedPointer</a>(<span class="keyword">const</span> <a class="code" href="classnvbio_1_1_shared_pointer.html">SharedPointer&lt;U&gt;</a>&amp; other, <a class="code" href="structnvbio_1_1internals_1_1const__cast__marker.html">internals::const_cast_marker</a>) :</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;                m_ptr(const_cast&lt;<a class="code" href="structnvbio_1_1_thread_base_1_1_impl.html">element_type</a>*&gt;(other.m_ptr)),</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;                m_ptr(const_cast&lt;<a class="code" href="structnvbio_1_1io_1_1_sequence_data_storage.html">element_type</a>*&gt;(other.m_ptr)),</div>
 <div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;                m_count(other.m_count)</div>
 <div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;            {}</div>
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;</div>
 <div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;            <span class="keyword">template</span>&lt;<span class="keyword">typename</span> U&gt;</div>
 <div class="line"><a name="l00404"></a><span class="lineno"><a class="code" href="classnvbio_1_1_shared_pointer.html#afcd01bb20ce0cb7a56ef5694cf08edce">  404</a></span>&#160;            <a class="code" href="classnvbio_1_1_shared_pointer.html#afcd01bb20ce0cb7a56ef5694cf08edce">SharedPointer</a>(<span class="keyword">const</span> <a class="code" href="classnvbio_1_1_shared_pointer.html">SharedPointer&lt;U&gt;</a>&amp; other, <a class="code" href="structnvbio_1_1internals_1_1dynamic__cast__marker.html">internals::dynamic_cast_marker</a>) :</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;                m_ptr(dynamic_cast&lt;<a class="code" href="structnvbio_1_1_thread_base_1_1_impl.html">element_type</a>*&gt;(other.m_ptr)),</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;                m_ptr(dynamic_cast&lt;<a class="code" href="structnvbio_1_1io_1_1_sequence_data_storage.html">element_type</a>*&gt;(other.m_ptr)),</div>
 <div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;                m_count(other.m_count)</div>
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;            {</div>
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;                <span class="comment">// the cast may fail at runtime</span></div>
@@ -546,9 +546,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;                    <a class="code" href="classnvbio_1_1_shared_pointer.html#a06235cd06cb03f8a0b1b6dfca99b6421">SharedPointer</a>(p, d).swap(*<span class="keyword">this</span>);</div>
 <div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;            }</div>
 <div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;</div>
-<div class="line"><a name="l00449"></a><span class="lineno"><a class="code" href="classnvbio_1_1_shared_pointer.html#a42ef2c3a416df45c0aa995444d51f1f0">  449</a></span>&#160;            <a class="code" href="structnvbio_1_1_thread_base_1_1_impl.html">_Reference</a>    <a class="code" href="classnvbio_1_1_shared_pointer.html#a42ef2c3a416df45c0aa995444d51f1f0">operator*</a>()<span class="keyword">  const </span>{ <span class="keywordflow">return</span> *m_ptr; }</div>
-<div class="line"><a name="l00450"></a><span class="lineno"><a class="code" href="classnvbio_1_1_shared_pointer.html#adcfbdb1f873f252b7b4216e1c644caff">  450</a></span>&#160;            <a class="code" href="structnvbio_1_1_thread_base_1_1_impl.html">element_type</a>* <a class="code" href="classnvbio_1_1_shared_pointer.html#adcfbdb1f873f252b7b4216e1c644caff">operator-&gt;</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_ptr; }</div>
-<div class="line"><a name="l00451"></a><span class="lineno"><a class="code" href="classnvbio_1_1_shared_pointer.html#ab09bca418f4b47897fd910c3b88215c4">  451</a></span>&#160;            <a class="code" href="structnvbio_1_1_thread_base_1_1_impl.html">element_type</a>* <span class="keyword">get</span>()        <span class="keyword">const</span> { <span class="keywordflow">return</span> m_ptr; }</div>
+<div class="line"><a name="l00449"></a><span class="lineno"><a class="code" href="classnvbio_1_1_shared_pointer.html#a42ef2c3a416df45c0aa995444d51f1f0">  449</a></span>&#160;            <a class="code" href="structnvbio_1_1io_1_1_sequence_data_storage.html">_Reference</a>    <a class="code" href="classnvbio_1_1_shared_pointer.html#a42ef2c3a416df45c0aa995444d51f1f0">operator*</a>()<span class="keyword">  const </span>{ <span class="keywordflow">return</span> *m_ptr; }</div>
+<div class="line"><a name="l00450"></a><span class="lineno"><a class="code" href="classnvbio_1_1_shared_pointer.html#adcfbdb1f873f252b7b4216e1c644caff">  450</a></span>&#160;            <a class="code" href="structnvbio_1_1io_1_1_sequence_data_storage.html">element_type</a>* <a class="code" href="classnvbio_1_1_shared_pointer.html#adcfbdb1f873f252b7b4216e1c644caff">operator-&gt;</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_ptr; }</div>
+<div class="line"><a name="l00451"></a><span class="lineno"><a class="code" href="classnvbio_1_1_shared_pointer.html#ab09bca418f4b47897fd910c3b88215c4">  451</a></span>&#160;            <a class="code" href="structnvbio_1_1io_1_1_sequence_data_storage.html">element_type</a>* <span class="keyword">get</span>()        <span class="keyword">const</span> { <span class="keywordflow">return</span> m_ptr; }</div>
 <div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;</div>
 <div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;        <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;            <span class="comment">// conversion to &quot;bool&quot;</span></div>
@@ -759,7 +759,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 20 2014 12:27:28 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 13 2015 09:34:13 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

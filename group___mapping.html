@@ -111,39 +111,39 @@ Modules</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:ga2ebd52b93e81f5db00d89b06e809c386"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga2ebd52b93e81f5db00d89b06e809c386">nvbio::bowtie2::cuda::gather_ranges</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 count, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 n_reads, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 *hit_counts_scan, uint64 *out_ranges)</td></tr>
 <tr class="separator:ga2ebd52b93e81f5db00d89b06e809c386"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1ff036af21e6d11c1934bf8e2878eb34"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga1ff036af21e6d11c1934bf8e2878eb34">nvbio::bowtie2::cuda::map_whole_read</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReadsDef::type &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga1ff036af21e6d11c1934bf8e2878eb34"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga57f0f79e6c680afd2a7e5d608dadac4a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga57f0f79e6c680afd2a7e5d608dadac4a">nvbio::bowtie2::cuda::map_exact</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReadsDef::type &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 retry, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga57f0f79e6c680afd2a7e5d608dadac4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf493728d198c96f7f967946ad95072b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___mapping.html#gaf493728d198c96f7f967946ad95072b6">nvbio::bowtie2::cuda::map_exact</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReadsDef::type &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type rfmi, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 seed_range, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:gaf493728d198c96f7f967946ad95072b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa17f56af90d3cd090b0fa80e3bec02d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___mapping.html#gaa17f56af90d3cd090b0fa80e3bec02d5">nvbio::bowtie2::cuda::map_approx</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReadsDef::type &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 retry, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:gaa17f56af90d3cd090b0fa80e3bec02d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8f8ec088aaa2301883048b4bbc684fb5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga8f8ec088aaa2301883048b4bbc684fb5">nvbio::bowtie2::cuda::map_approx</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReadsDef::type &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type rfmi, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 seed_range, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga8f8ec088aaa2301883048b4bbc684fb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga21eb981e822eac39eb4dda866b3460aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga21eb981e822eac39eb4dda866b3460aa">nvbio::bowtie2::cuda::map</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReadsDef::type &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 retry, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga21eb981e822eac39eb4dda866b3460aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac70f4b1e5a7aa2122ed3470cafabe0c9"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
-<tr class="memitem:gac70f4b1e5a7aa2122ed3470cafabe0c9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___mapping.html#gac70f4b1e5a7aa2122ed3470cafabe0c9">nvbio::bowtie2::cuda::map_whole_read_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:gac70f4b1e5a7aa2122ed3470cafabe0c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga765554bc644c4394130241e8a59678e4"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
-<tr class="memitem:ga765554bc644c4394130241e8a59678e4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga765554bc644c4394130241e8a59678e4">nvbio::bowtie2::cuda::map_exact_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 retry, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga765554bc644c4394130241e8a59678e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5d53100d418b60d73fc54554c3fe9a3e"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
-<tr class="memitem:ga5d53100d418b60d73fc54554c3fe9a3e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga5d53100d418b60d73fc54554c3fe9a3e">nvbio::bowtie2::cuda::map_exact_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 seed_range, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga5d53100d418b60d73fc54554c3fe9a3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga01f80fa7d6d644f073a4377f0fe7d9dd"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
-<tr class="memitem:ga01f80fa7d6d644f073a4377f0fe7d9dd"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga01f80fa7d6d644f073a4377f0fe7d9dd">nvbio::bowtie2::cuda::map_case_pruning_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 retry, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga01f80fa7d6d644f073a4377f0fe7d9dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1e52a6e66445483ad892ca164ecf3ed4"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
-<tr class="memitem:ga1e52a6e66445483ad892ca164ecf3ed4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga1e52a6e66445483ad892ca164ecf3ed4">nvbio::bowtie2::cuda::map_approx_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 retry, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga1e52a6e66445483ad892ca164ecf3ed4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0354fdb950a5bf52e04dc953b72c6a6a"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
-<tr class="memitem:ga0354fdb950a5bf52e04dc953b72c6a6a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga0354fdb950a5bf52e04dc953b72c6a6a">nvbio::bowtie2::cuda::map_approx_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 seed_range, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga0354fdb950a5bf52e04dc953b72c6a6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8e64bc208f0f18dd6147e789bf2dce48"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
-<tr class="memitem:ga8e64bc208f0f18dd6147e789bf2dce48"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga8e64bc208f0f18dd6147e789bf2dce48">nvbio::bowtie2::cuda::map_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 retry, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params)</td></tr>
-<tr class="separator:ga8e64bc208f0f18dd6147e789bf2dce48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae5f587af3b918ccff6ae9f3c950a7405"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___mapping.html#gae5f587af3b918ccff6ae9f3c950a7405">nvbio::bowtie2::cuda::map_whole_read</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReadsDef::type &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool fw, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool rc)</td></tr>
+<tr class="separator:gae5f587af3b918ccff6ae9f3c950a7405"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4d2896090d046f27183169e8aef43e8c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga4d2896090d046f27183169e8aef43e8c">nvbio::bowtie2::cuda::map_exact</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReadsDef::type &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 retry, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool fw, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool rc)</td></tr>
+<tr class="separator:ga4d2896090d046f27183169e8aef43e8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabbda25e6761fef02d390c945d40bdc68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___mapping.html#gabbda25e6761fef02d390c945d40bdc68">nvbio::bowtie2::cuda::map_exact</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReadsDef::type &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type rfmi, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 seed_range, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool fw, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool rc)</td></tr>
+<tr class="separator:gabbda25e6761fef02d390c945d40bdc68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga47128abe130a6c06dc2cb6ad718efa03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga47128abe130a6c06dc2cb6ad718efa03">nvbio::bowtie2::cuda::map_approx</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReadsDef::type &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 retry, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool fw, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool rc)</td></tr>
+<tr class="separator:ga47128abe130a6c06dc2cb6ad718efa03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad37601ff97b8d8a70e89959fbbf409d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___mapping.html#gad37601ff97b8d8a70e89959fbbf409d3">nvbio::bowtie2::cuda::map_approx</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReadsDef::type &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type rfmi, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 seed_range, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool fw, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool rc)</td></tr>
+<tr class="separator:gad37601ff97b8d8a70e89959fbbf409d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad30b05e1249763bbda8b4745c92a42ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___mapping.html#gad30b05e1249763bbda8b4745c92a42ae">nvbio::bowtie2::cuda::map</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReadsDef::type &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMIndexDef::type rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 retry, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool fw, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool rc)</td></tr>
+<tr class="separator:gad30b05e1249763bbda8b4745c92a42ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4281c100121eec277193937329b35442"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
+<tr class="memitem:ga4281c100121eec277193937329b35442"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga4281c100121eec277193937329b35442">nvbio::bowtie2::cuda::map_whole_read_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool fw, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool rc)</td></tr>
+<tr class="separator:ga4281c100121eec277193937329b35442"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga96e8cf3c724beb8cfe8fa42a02d8bbb6"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
+<tr class="memitem:ga96e8cf3c724beb8cfe8fa42a02d8bbb6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga96e8cf3c724beb8cfe8fa42a02d8bbb6">nvbio::bowtie2::cuda::map_exact_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 retry, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool fw, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool rc)</td></tr>
+<tr class="separator:ga96e8cf3c724beb8cfe8fa42a02d8bbb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab1813a7bc8801ed8630f545588d6633b"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
+<tr class="memitem:gab1813a7bc8801ed8630f545588d6633b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___mapping.html#gab1813a7bc8801ed8630f545588d6633b">nvbio::bowtie2::cuda::map_exact_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 seed_range, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool fw, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool rc)</td></tr>
+<tr class="separator:gab1813a7bc8801ed8630f545588d6633b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga27e062a1ec0c94a37a6b82168f9eac61"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
+<tr class="memitem:ga27e062a1ec0c94a37a6b82168f9eac61"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga27e062a1ec0c94a37a6b82168f9eac61">nvbio::bowtie2::cuda::map_case_pruning_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 retry, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool fw, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool rc)</td></tr>
+<tr class="separator:ga27e062a1ec0c94a37a6b82168f9eac61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga860a1c79e9576cb038ba0326308c9085"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
+<tr class="memitem:ga860a1c79e9576cb038ba0326308c9085"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga860a1c79e9576cb038ba0326308c9085">nvbio::bowtie2::cuda::map_approx_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 retry, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool fw, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool rc)</td></tr>
+<tr class="separator:ga860a1c79e9576cb038ba0326308c9085"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf75200c782130cd0a707637059c6a5ae"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
+<tr class="memitem:gaf75200c782130cd0a707637059c6a5ae"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___mapping.html#gaf75200c782130cd0a707637059c6a5ae">nvbio::bowtie2::cuda::map_approx_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint2 seed_range, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool fw, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool rc)</td></tr>
+<tr class="separator:gaf75200c782130cd0a707637059c6a5ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga45655648e272a8e6071b79f646e4c287"><td class="memTemplParams" colspan="2">template&lt;typename BatchType , typename FMType , typename rFMType &gt; </td></tr>
+<tr class="memitem:ga45655648e272a8e6071b79f646e4c287"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___mapping.html#ga45655648e272a8e6071b79f646e4c287">nvbio::bowtie2::cuda::map_t</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> BatchType &amp;read_batch, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> FMType fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rFMType rfmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 retry, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues_view.html">nvbio::cuda::PingPongQueuesView</a>&lt; uint32 &gt; queues, uint8 *reseed, SeedHitDequeArrayDeviceView hits, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD params, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool fw, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool rc)</td></tr>
+<tr class="separator:ga45655648e272a8e6071b79f646e4c287"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ga2ebd52b93e81f5db00d89b06e809c386"></a>
@@ -191,7 +191,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ga21eb981e822eac39eb4dda866b3460aa"></a>
+<a class="anchor" id="gad30b05e1249763bbda8b4745c92a42ae"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -241,7 +241,19 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
-          <td class="paramname"><em>params</em>&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>fw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -254,7 +266,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="gaa17f56af90d3cd090b0fa80e3bec02d5"></a>
+<a class="anchor" id="ga47128abe130a6c06dc2cb6ad718efa03"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -304,7 +316,19 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
-          <td class="paramname"><em>params</em>&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>fw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -317,7 +341,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ga8f8ec088aaa2301883048b4bbc684fb5"></a>
+<a class="anchor" id="gad37601ff97b8d8a70e89959fbbf409d3"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -355,7 +379,19 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
-          <td class="paramname"><em>params</em>&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>fw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -368,7 +404,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ga1e52a6e66445483ad892ca164ecf3ed4"></a>
+<a class="anchor" id="ga860a1c79e9576cb038ba0326308c9085"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -420,7 +456,19 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
-          <td class="paramname"><em>params</em>&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>fw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -431,11 +479,11 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>perform one run of approximate seed mapping for all the reads in the input queue, writing reads that need another run in the output queue </p>
 
-<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00724">724</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00769">769</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga0354fdb950a5bf52e04dc953b72c6a6a"></a>
+<a class="anchor" id="gaf75200c782130cd0a707637059c6a5ae"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -475,7 +523,19 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
-          <td class="paramname"><em>params</em>&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>fw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -486,11 +546,11 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>perform multiple runs of approximate seed mapping in one go and keep the best </p>
 
-<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00760">760</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00807">807</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga01f80fa7d6d644f073a4377f0fe7d9dd"></a>
+<a class="anchor" id="ga27e062a1ec0c94a37a6b82168f9eac61"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -542,7 +602,19 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
-          <td class="paramname"><em>params</em>&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>fw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -553,11 +625,11 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>perform one run of approximate seed mapping using case pruning for all the reads in the input queue, writing reads that need another run in the output queue </p>
 
-<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00688">688</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00731">731</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga57f0f79e6c680afd2a7e5d608dadac4a"></a>
+<a class="anchor" id="ga4d2896090d046f27183169e8aef43e8c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -607,7 +679,19 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
-          <td class="paramname"><em>params</em>&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>fw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -620,7 +704,7 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="gaf493728d198c96f7f967946ad95072b6"></a>
+<a class="anchor" id="gabbda25e6761fef02d390c945d40bdc68"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -658,7 +742,19 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
-          <td class="paramname"><em>params</em>&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>fw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -671,7 +767,7 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ga765554bc644c4394130241e8a59678e4"></a>
+<a class="anchor" id="ga96e8cf3c724beb8cfe8fa42a02d8bbb6"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -723,7 +819,19 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
-          <td class="paramname"><em>params</em>&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>fw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -734,11 +842,11 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>perform one run of exact seed mapping for all the reads in the input queue, writing reads that need another run in the output queue </p>
 
-<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00811">811</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00862">862</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga5d53100d418b60d73fc54554c3fe9a3e"></a>
+<a class="anchor" id="gab1813a7bc8801ed8630f545588d6633b"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -778,7 +886,19 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
-          <td class="paramname"><em>params</em>&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>fw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -789,11 +909,11 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>perform multiple runs of exact seed mapping in one go and keep the best </p>
 
-<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00847">847</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00900">900</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga8e64bc208f0f18dd6147e789bf2dce48"></a>
+<a class="anchor" id="ga45655648e272a8e6071b79f646e4c287"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -845,7 +965,19 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
-          <td class="paramname"><em>params</em>&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>fw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -856,11 +988,11 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>perform one run of seed mapping </p>
 
-<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00881">881</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00936">936</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga1ff036af21e6d11c1934bf8e2878eb34"></a>
+<a class="anchor" id="gae5f587af3b918ccff6ae9f3c950a7405"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -904,7 +1036,19 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
-          <td class="paramname"><em>params</em>&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>fw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -917,7 +1061,7 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="gac70f4b1e5a7aa2122ed3470cafabe0c9"></a>
+<a class="anchor" id="ga4281c100121eec277193937329b35442"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -963,7 +1107,19 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ParamsPOD&#160;</td>
-          <td class="paramname"><em>params</em>&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>fw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> bool&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -974,14 +1130,14 @@ template&lt;typename BatchType , typename FMType , typename rFMType &gt; </div>
 </div><div class="memdoc">
 <p>perform exact read mapping </p>
 
-<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00794">794</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="mapping__inl_8h_source.html#l00843">843</a> of file <a class="el" href="mapping__inl_8h_source.html">mapping_inl.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 20 2014 12:27:47 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 13 2015 09:34:31 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -25,7 +25,7 @@ var searchData=
   ['first_5fcontainer',['first_container',['../structcram__fd.html#a03be317a13069b155f7e153f1ce4c251',1,'cram_fd']]],
   ['flag',['flag',['../structbam1__core__t.html#a02509d1f11f9c2f3437a6953f0990793',1,'bam1_core_t::flag()'],['../structnvbio_1_1io_1_1_debug_output_1_1_dbg_info.html#a932405c6d3fcbe9e0e019d688a90a5db',1,'nvbio::io::DebugOutput::DbgInfo::flag()'],['../structnvbio_1_1alndiff_1_1_alignment.html#a3f612923adbb4842f7abef0df4357614',1,'nvbio::alndiff::Alignment::flag()'],['../structnvbio_1_1alndiff_1_1_debug_alignment_stream_1_1_info.html#ace5666f0f912c7e350f79988a12e5920',1,'nvbio::alndiff::DebugAlignmentStream::Info::flag()']]],
   ['flag_5fnc',['flag_nc',['../structnvbio_1_1io_1_1_b_a_m__alignment.html#a5c25fea402211e23e911d13dd1d1c927',1,'nvbio::io::BAM_alignment::flag_nc()'],['../struct_b_a_m__alignment__header.html#afd801fd2ae1b067f766606532083273d',1,'BAM_alignment_header::flag_nc()']]],
-  ['flags',['flags',['../structcram__record.html#aaa40424bf813940ef02f74e60f7b2810',1,'cram_record::flags()'],['../structinflate__state.html#a9dcf6151443750d75b2283d0a3e62c39',1,'inflate_state::flags()'],['../struct_b_a_m__alignment__batch___so_a.html#aa8986ccbfe7f7df4b732b08017282e5d',1,'BAM_alignment_batch_SoA::flags()']]],
+  ['flags',['flags',['../structcram__record.html#aaa40424bf813940ef02f74e60f7b2810',1,'cram_record::flags()'],['../structinflate__state.html#a9dcf6151443750d75b2283d0a3e62c39',1,'inflate_state::flags()'],['../structnvbio_1_1io_1_1_sequence_data_file_1_1_options.html#acf91cbb93d20c8648c6148c047445c7d',1,'nvbio::io::SequenceDataFile::Options::flags()'],['../struct_b_a_m__alignment__batch___so_a.html#aa8986ccbfe7f7df4b732b08017282e5d',1,'BAM_alignment_batch_SoA::flags()']]],
   ['flags_5fdptr',['flags_dptr',['../structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#a247f48d8001e15a278919fdb9e5e574f',1,'nvbio::bowtie2::cuda::Aligner']]],
   ['flags_5fdvec',['flags_dvec',['../structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#aa33d37603cdd121f80ca0206e4d59d11',1,'nvbio::bowtie2::cuda::Aligner']]],
   ['flg_5ffextra',['FLG_FEXTRA',['../namespace_bam_tools.html#a2e849209f3ae7cee3f4bced465867882',1,'BamTools']]],
@@ -48,5 +48,6 @@ var searchData=
   ['freq',['freq',['../structct__data__s.html#a67cd3c3267ba768c4494b36d5929c4bf',1,'ct_data_s']]],
   ['freqs',['freqs',['../structcram__stats.html#a69f7f57f316acb73de90f42cab8780ce',1,'cram_stats']]],
   ['full_5fc',['full_c',['../structt__pool.html#a80a35f1adcd51901d850ff4405142baa',1,'t_pool']]],
-  ['func',['func',['../structt__pool__job.html#a47d1257dc45669b072288f9071fb787b',1,'t_pool_job::func()'],['../structconfig__s.html#aea5a0fe31d694079966523a49d60174b',1,'config_s::func()']]]
+  ['func',['func',['../structt__pool__job.html#a47d1257dc45669b072288f9071fb787b',1,'t_pool_job::func()'],['../structconfig__s.html#aea5a0fe31d694079966523a49d60174b',1,'config_s::func()']]],
+  ['fw',['fw',['../structnvbio_1_1bowtie2_1_1cuda_1_1_params_p_o_d.html#aab31378d6f10f283666b5d764789378a',1,'nvbio::bowtie2::cuda::ParamsPOD']]]
 ];

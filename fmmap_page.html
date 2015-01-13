@@ -163,7 +163,7 @@ Input</h1>
 <div class="line"></div>
 <div class="line">    <span class="comment">// open a read file, storing for each read both its forward and its reverse-complemented representations</span></div>
 <div class="line">    SharedPointer&lt;io::SequenceDataStream&gt; read_data_file(</div>
-<div class="line">        <a class="code" href="group___sequence_i_o.html#gadd1892c7b881fe606d66b597fed7d687">io::open_sequence_file</a>(</div>
+<div class="line">        <a class="code" href="group___sequence_i_o.html#ga249422025262954363e6857c7903dfa6">io::open_sequence_file</a>(</div>
 <div class="line">            reads,</div>
 <div class="line">            <a class="code" href="group___sequence_i_o.html#gga3415ac326089788da99884c50b8ccb16a014958857dbbddee90a1489d4fa5d3d2" title="phred quality + 33 ">io::Phred33</a>,</div>
 <div class="line">            2*params.max_reads,</div>
@@ -198,7 +198,7 @@ Input</h1>
 <div class="line">        <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;    %u reads\n&quot;</span>, n_reads);</div>
 <div class="line"></div>
 <div class="line">        <span class="comment">// do the real mapping work</span></div>
-<div class="line">        <a class="code" href="group___mapping.html#ga21eb981e822eac39eb4dda866b3460aa">map</a>( pipeline, d_read_data );</div>
+<div class="line">        <a class="code" href="group___mapping.html#gad30b05e1249763bbda8b4745c92a42ae">map</a>( pipeline, d_read_data );</div>
 <div class="line">    }</div>
 <div class="line">}</div>
 </div><!-- fragment --><dl class="section user"><dt></dt><dd>Now we are ready to start the real mapping work. In order to do it, we'll need to store another data structure in our pipeline, namely the <a class="el" href="fmindex_page.html#FMIndexFilters">FMIndexFilter</a>. This data structure is just a context for performing FM-index based filtering, i.e. the process of finding potential matches of a set of strings using an FM-index.</dd></dl>
@@ -216,7 +216,7 @@ Input</h1>
 <h1><a class="anchor" id="MappingSection"></a>
 Mapping</h1>
 <dl class="section user"><dt></dt><dd>We'll write a simple seed &amp; extend aligner, so the first thing we'll want to do is split our reads in equal segments. As shown in the previous example, the collection of these seeds can be seen as an InfixSet . Let's start with some boiler-plate code to make sure we have everythin we need:</dd></dl>
-<div class="fragment"><div class="line"><span class="keywordtype">void</span> <a class="code" href="group___mapping.html#ga21eb981e822eac39eb4dda866b3460aa">map</a>(Pipeline&amp; pipeline, <span class="keyword">const</span> io::SequenceDataAccess&lt;DNA_N&gt; reads)</div>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> <a class="code" href="group___mapping.html#gad30b05e1249763bbda8b4745c92a42ae">map</a>(Pipeline&amp; pipeline, <span class="keyword">const</span> io::SequenceDataAccess&lt;DNA_N&gt; reads)</div>
 <div class="line">{</div>
 <div class="line">    <span class="comment">// the reads can be accessed as a string-set, of this type</span></div>
 <div class="line">    <span class="keyword">typedef</span> io::SequenceDataAccess&lt;DNA&gt;::sequence_string_set_type               genome_string;</div>
@@ -375,7 +375,7 @@ Mapping</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 20 2014 12:27:46 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 13 2015 09:34:30 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

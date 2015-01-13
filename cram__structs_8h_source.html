@@ -181,7 +181,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment">// Generates static functions here which isn&#39;t ideal, but we have no way</span></div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment">// currently to declare the kh_map_t structure here without also declaring a</span></div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="comment">// duplicate in the .c files due to the nature of the KHASH macros.</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<a class="code" href="khash_8h.html#a296c6de6bacb01ad7565979ac15a68c2">KHASH_MAP_INIT_STR</a>(<a class="code" href="group___mapping.html#ga21eb981e822eac39eb4dda866b3460aa">map</a>, pmap_t)</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<a class="code" href="khash_8h.html#a296c6de6bacb01ad7565979ac15a68c2">KHASH_MAP_INIT_STR</a>(<a class="code" href="group___mapping.html#gad30b05e1249763bbda8b4745c92a42ae">map</a>, pmap_t)</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;struct <a class="code" href="structh_f_i_l_e.html">hFILE</a>;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;typedef struct hFILE <a class="code" href="cram__structs_8h.html#ae89ef453a84c7efb414039d3c093a4e5">cram_FILE</a>;</div>
@@ -319,7 +319,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    <a class="code" href="khash_8h.html#a918655286199787582304265cd9d4463">khash_t</a>(m_s2i) *TD_hash;     <span class="comment">// Keyed on TD strings, map to TL[] indices</span></div>
 <div class="line"><a name="l00218"></a><span class="lineno"><a class="code" href="structcram__block__compression__hdr.html#a28d319baf7005fd77b649881b257be87">  218</a></span>&#160;    <a class="code" href="structstring__alloc__t.html">string_alloc_t</a> *<a class="code" href="structcram__block__compression__hdr.html#a28d319baf7005fd77b649881b257be87">TD_keys</a>;     <span class="comment">// Pooled keys for TD hash.</span></div>
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    </div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    <a class="code" href="khash_8h.html#a918655286199787582304265cd9d4463">khash_t</a>(<a class="code" href="group___mapping.html#ga21eb981e822eac39eb4dda866b3460aa">map</a>) *preservation_map;</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    <a class="code" href="khash_8h.html#a918655286199787582304265cd9d4463">khash_t</a>(<a class="code" href="group___mapping.html#gad30b05e1249763bbda8b4745c92a42ae">map</a>) *preservation_map;</div>
 <div class="line"><a name="l00221"></a><span class="lineno"><a class="code" href="structcram__block__compression__hdr.html#ab46d7c9f316d3f555dc01240194f3c70">  221</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structcram__map.html">cram_map</a> *rec_encoding_map[<a class="code" href="cram__structs_8h.html#a4000ef4e5246a3e9cc030c26ac1730d1">CRAM_MAP_HASH</a>];</div>
 <div class="line"><a name="l00222"></a><span class="lineno"><a class="code" href="structcram__block__compression__hdr.html#aef84c4931febc2ed9ad409bdc5fe7414">  222</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structcram__map.html">cram_map</a> *tag_encoding_map[<a class="code" href="cram__structs_8h.html#a4000ef4e5246a3e9cc030c26ac1730d1">CRAM_MAP_HASH</a>];</div>
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;</div>
@@ -855,7 +855,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 20 2014 12:27:19 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 13 2015 09:34:04 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

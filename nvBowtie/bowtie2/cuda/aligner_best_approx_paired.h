@@ -157,17 +157,11 @@ void Aligner::best_approx(
         // iteration.
         //
 
-        bool fw_strand;
-        if (anchor == 0)
-        {
-            fw_strand = (params.pe_policy == io::PE_POLICY_FF ||
-                         params.pe_policy == io::PE_POLICY_FR);
-        }
-        else
-        {
-            fw_strand = (params.pe_policy == io::PE_POLICY_RF ||
-                         params.pe_policy == io::PE_POLICY_RR);
-        }
+        const bool fw_strand =
+            (anchor == 0) ? (params.pe_policy == io::PE_POLICY_FF || // anchor = 0
+                             params.pe_policy == io::PE_POLICY_FR) :
+                            (params.pe_policy == io::PE_POLICY_FF || // anchor = 1
+                             params.pe_policy == io::PE_POLICY_RF);
         const bool fw = fw_strand ? params.fw : params.rc;
         const bool rc = fw_strand ? params.rc : params.fw;
 

@@ -268,6 +268,59 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
             params.seed_len   = 20u;
             params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 0.5f );
         }
+
+        if (uint_option(options, "very-fast-local", 0u))
+        {
+            if (uint_option(options, "end-to-end", 0u ) == 0)
+            {
+                params.alignment_type = LocalAlignment;
+                params.max_effort = 5u;
+                params.max_reseed = 1u;
+                params.seed_len   = 25u;
+                params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 2.0f );
+            }
+            else
+                log_warning(stderr, "--very-fast-local is incompatible with --end-to-end\n");
+        }
+        if (uint_option(options, "fast-local", 0u))
+        {
+            if (uint_option(options, "end-to-end", 0u ) == 0)
+            {
+                params.alignment_type = LocalAlignment;
+                params.max_effort = 10u;
+                params.max_reseed = 2u;
+                params.seed_len   = 22u;
+                params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 1.75f );
+            }
+            else
+                log_warning(stderr, "--fast-local is incompatible with --end-to-end\n");
+        }
+        if (uint_option(options, "sensitive-local", 0u))
+        {
+            if (uint_option(options, "end-to-end", 0u ) == 0)
+            {
+                params.alignment_type = LocalAlignment;
+                params.max_effort = 15u;
+                params.max_reseed = 2u;
+                params.seed_len   = 20u;
+                params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 0.75f );
+            }
+            else
+                log_warning(stderr, "--sensitive-local is incompatible with --end-to-end\n");
+        }
+        if (uint_option(options, "very-sensitive-local", 0u))
+        {
+            if (uint_option(options, "end-to-end", 0u ) == 0)
+            {
+                params.alignment_type = LocalAlignment;
+                params.max_effort = 20u;
+                params.max_reseed = 3u;
+                params.seed_len   = 20u;
+                params.seed_freq  = SimpleFunc( SimpleFunc::SqrtFunc, 1.0f, 0.5f );
+            }
+            else
+                log_warning(stderr, "--very-sensitive-local is incompatible with --end-to-end\n");
+        }
     }
     else
     {

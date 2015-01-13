@@ -176,7 +176,7 @@
 ///\verbatim
 /// ./nvBowtie --help
 ///
-/// nvBowtie [options] |
+/// nvBowtie [options]
 ///  options:
 ///    General:
 ///      -U                 file-name     unpaired reads
@@ -263,12 +263,10 @@
 /// At this point, one can run nvBowtie:
 ///
 ///\verbatim
-/// ./nvBowtie --file-ref hg19 my_reads.fastq my_reads.bam
+/// ./nvBowtie -x hg19 -U my_reads.fastq -S my_reads.bam
 ///\endverbatim
 ///
 ///\par
-/// Note the presence of the option <i>--file-ref</i>, specifying that the reference
-/// indices come from disk.
 /// Another noteworthy option is to let nvBowtie fetch them from a <i>shared memory</i> server 
 /// which can be run in the background: the \subpage nvfm_server_page.
 /// It be launched with:
@@ -281,7 +279,7 @@
 /// nvBowtie can then pickup the reference from the server:
 ///
 ///\verbatim
-/// ./nvBowtie hg19 my_reads.fastq my_reads.bam
+/// ./nvBowtie -x hg19 -U my_reads.fastq -S my_reads.bam
 ///\endverbatim
 ///
 /// \subsection ScoringSchemeSection scoring schemes

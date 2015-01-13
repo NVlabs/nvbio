@@ -94,12 +94,12 @@ int main(int argc, char* argv[])
         log_info(stderr,"    -S                  file-name      output file (.sam|.bam)\n");
         log_info(stderr,"    -x                  file-name      reference index\n");
         log_info(stderr,"    --verbosity         int [5]        verbosity level\n");
-        log_info(stderr,"    --max-reads         int [-1]       maximum number of reads to process\n");
+        log_info(stderr,"    --upto       | -u   int [-1]       maximum number of reads to process\n");
         log_info(stderr,"    --trim3      | -3   int [0]        trim the first N bases of 3'\n");
         log_info(stderr,"    --trim5      | -5   int [0]        trim the first N bases of 5'\n");
         log_info(stderr,"    --nofw                             do not align the forward strand\n");
         log_info(stderr,"    --norc                             do not align the reverse-complemented strand\n");
-        log_info(stderr,"    --device            int [0]        select the given cuda device (can appear multiple times)\n");
+        log_info(stderr,"    --device            int [0]        select the given cuda device(s) (e.g. --device 0 --device 1 ...)\n");
         log_info(stderr,"    --file-ref                         load reference from file\n");
         log_info(stderr,"    --server-ref                       load reference from server\n");
         log_info(stderr,"    --phred33                          qualities are ASCII characters equal to Phred quality + 33\n");
@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
         log_info(stderr,"    --max-hits          int   [100]    maximum amount of seed hits\n");
         log_info(stderr,"    --max-reseed | -R   int   [2]      number of reseeding rounds\n");
         log_info(stderr,"  Extension:\n");
-        log_info(stderr,"    -a                                 find and report all alignments (i.e. all-mapping)\n");
+        log_info(stderr,"    --all        | -a                  perform all-mapping (i.e. find and report all alignments)\n");
         log_info(stderr,"    --local                            perform local alignment\n");
         log_info(stderr,"    --rand                             randomized seed selection\n");
         log_info(stderr,"    --no-rand                          do not randomize seed hit selection\n");

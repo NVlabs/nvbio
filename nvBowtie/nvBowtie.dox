@@ -176,37 +176,31 @@
 ///\verbatim
 /// ./nvBowtie --help
 ///
-/// nvBowtie [options] reference-genome read-file output |
-/// nvBowtie --pe [options] reference-genome read-file1 read-file2 output
+/// nvBowtie [options] |
 ///  options:
 ///    General:
-///      --upto | -u        int [-1]      maximum number of reads to process
+///      -U                 file-name     unpaired reads
+///      -1                 file-name     first mate reads
+///      -2                 file-name     second mate reads
+///      -S                 file-name     output file (.sam|.bam)
+///      -x                 file-name     reference index
+///      --verbosity                      verbosity level
+///      --upto  | -u       int [-1]      maximum number of reads to process
+///      --trim3 | -3       int [0]       trim the first N bases of 3'
+///      --trim5 | -5       int [0]       trim the first N bases of 5'
+///      --nofw                           do not align the forward strand
+///      --norc                           do not align the reverse-complemented strand
 ///      --device           int [0]       select the given cuda device(s) (e.g. --device 0 --device 1 ...)
 ///      --file-ref                       load reference from file
 ///      --server-ref                     load reference from server
 ///      --phred33                        qualities are ASCII characters equal to Phred quality + 33
 ///      --phred64                        qualities are ASCII characters equal to Phred quality + 64
 ///      --solexa-quals                   qualities are in the Solexa format
-///      --pe                             paired ends input
+///    Paired-end:
 ///      --ff                             paired mates are forward-forward
 ///      --fr                             paired mates are forward-reverse
 ///      --rf                             paired mates are reverse-forward
 ///      --rr                             paired mates are reverse-reverse
-///      --verbosity                      verbosity level
-///      --local                          perform local alignment
-///    Seeding:
-///      --seed-len   | -L   int  [22]                       seed lengths
-///      --seed-freq  | -i   func [S,1,local ? 0.75 : 1.15]  seed interval function
-///      --max-hits          int  [100]                      maximum amount of seed hits
-///      --max-reseed | -R   int  [2]                        number of reseeding rounds
-///    Extension:
-///      --rand                           randomized seed selection
-///      --no-rand                        disable randomized seed selection
-///      --max-dist          int [15]     maximum edit distance
-///      --max-effort-init   int [15]     initial maximum number of consecutive extension failures
-///      --max-effort | -D   int [15]     maximum number of consecutive extension failures
-///      --min-ext           int [30]     minimum number of extensions per read
-///      --max-ext           int [400]    maximum number of extensions per read
 ///      --minins     | -I   int [0]      minimum insert length
 ///      --minins     | -X   int [500]    maximum insert length
 ///      --overlap                        allow overlapping mates
@@ -214,6 +208,29 @@
 ///      --dovetail                       allow dovetailing mates
 ///      --no-mixed                       only report paired alignments
 ///      --ungapped-mates | -ug           perform ungapped mate alignment
+///    Seeding:
+///      --seed-len   | -L   int  [22]                       seed lengths
+///      --seed-freq  | -i   func [S,1,local ? 0.75 : 1.15]  seed interval function
+///      --max-hits          int  [100]                      maximum amount of seed hits
+///      --max-reseed | -R   int  [2]                        number of reseeding rounds
+///    Extension:
+///      --all        | -a                perform all-mapping (i.e. find and report all alignments)
+///      --local                          perform local alignment
+///      --rand                           randomized seed selection
+///      --no-rand                        disable randomized seed selection
+///      --max-dist          int [15]     maximum edit distance
+///      --max-effort-init   int [15]     initial maximum number of consecutive extension failures
+///      --max-effort | -D   int [15]     maximum number of consecutive extension failures
+///      --min-ext           int [30]     minimum number of extensions per read
+///      --max-ext           int [400]    maximum number of extensions per read
+///      --fast                           apply the fast presets
+///      --very-fast                      apply the very-fast presets
+///      --sensitive                      apply the sensitive presets
+///      --very-sensitive                 apply the very-sensitive presets
+///      --fast-local                     apply the fast presets
+///      --very-fast-local                apply the very-fast presets
+///      --sensitive-local                apply the sensitive presets
+///      --very-sensitive-local           apply the very-sensitive presets
 ///    Scoring:
 ///      --scoring-scheme    filename     use a given scoring scheme
 ///      --ma                int          match bonus

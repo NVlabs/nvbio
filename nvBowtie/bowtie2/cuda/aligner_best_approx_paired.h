@@ -271,6 +271,16 @@ void Aligner::best_approx(
     io::Alignment* best_anchor_ptr   = thrust::raw_pointer_cast( best_anchor_iterator.base() );
     io::Alignment* best_opposite_ptr = thrust::raw_pointer_cast( best_opposite_iterator.base() );
 
+    // reclassify here "discordant" alignments as "paired" (if discordant alignments are allowed)
+    if (params.pe_discordant)
+    {
+        mark_discordant(
+            count,
+            best_anchor_ptr,
+            best_opposite_ptr,
+            BATCH_SIZE );
+    }
+
     // compute mapq
     {
         log_debug(stderr, "[%u]    compute mapq\n", ID);
@@ -377,8 +387,8 @@ void Aligner::best_approx(
         mds.clear();
 
         //
-        // these alignments are of two kinds: paired, or unpaired: this requires some attention,
-        // as true opposite paired alignments require full DP backtracking, while unpaired
+        // these alignments are of two kinds: concordant, or discordant: this requires some attention,
+        // as true opposite paired alignments require full DP backtracking, while unpaired or discordant
         // alignments require the banded version.
         //
         timer.start();
@@ -387,13 +397,13 @@ void Aligner::best_approx(
         // overlap the paired indices with the loc queue
         thrust::device_vector<uint32>::iterator paired_idx_begin = scoring_queues.hits.loc.begin();
 
-        // compact the indices of the best paired alignments
+        // compact the indices of the best concordant alignments
         const uint32 n_paired = uint32( thrust::copy_if(
             thrust::make_counting_iterator(0u),
             thrust::make_counting_iterator(0u) + count,
             best_opposite_iterator,
             paired_idx_begin,
-            io::is_paired() ) - paired_idx_begin );
+            io::is_concordant() ) - paired_idx_begin );
 
         if (n_paired)
         {
@@ -419,13 +429,13 @@ void Aligner::best_approx(
         // overlap the unpaired indices with the loc queue
         thrust::device_vector<uint32>::iterator unpaired_idx_begin = scoring_queues.hits.loc.begin();
 
-        // compact the indices of the best unpaired alignments
+        // compact the indices of the best unpaired or discordant alignments
         const uint32 n_unpaired = uint32( thrust::copy_if(
             thrust::make_counting_iterator(0u),
             thrust::make_counting_iterator(0u) + count,
             best_opposite_iterator,
             unpaired_idx_begin,
-            io::is_unpaired() ) - unpaired_idx_begin );
+            io::is_not_concordant() ) - unpaired_idx_begin );
 
         if (n_unpaired)
         {
@@ -458,7 +468,7 @@ void Aligner::best_approx(
 
         thrust::device_vector<uint32>::iterator aligned_idx_begin = scoring_queues.hits.loc.begin();
 
-        // compact the indices of the best unpaired alignments
+        // compact the indices of the best opposite alignments (concordant or not)
         const uint32 n_aligned = uint32( thrust::copy_if(
             thrust::make_counting_iterator(0u),
             thrust::make_counting_iterator(0u) + count,

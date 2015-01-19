@@ -89,8 +89,8 @@
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">13/1/2015 \n NVBIO 0.9.99</td>
 /// <td style="vertical-align:text-top;" width="90%">
 /// - <b>New Features:</b> \n
-///   * Made nvBowtie2's command line compatible with Bowtie2
-///   * Added many missing features to nvBowtie2, including support for:
+///   * Made nvBowtie's command line compatible with Bowtie2
+///   * Added many missing features to nvBowtie, including support for:
 ///      * trimming (-3/--trim3, -5/--trim5)
 ///      * forward/reverse alignment (--nofw,--norc)
 ///      * presets (--fast,--very-fast,--sensitive,--very-sensitive)

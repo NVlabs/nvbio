@@ -375,6 +375,14 @@ void mark_unaligned(
     const io::Alignment*    best_data,
     uint8*                  reseed);
 
+// mark unique unaligned read pairs as discordant
+//
+void mark_discordant(
+    const uint32            n_reads,
+          io::Alignment*    anchor_data,
+          io::Alignment*    opposite_data,
+    const uint32            stride);
+
 } // namespace cuda
 } // namespace bowtie2
 } // namespace nvbio

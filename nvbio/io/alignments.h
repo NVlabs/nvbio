@@ -83,10 +83,10 @@ struct Alignment
     static uint32 max_ed() { return 255u; }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
-    static int32 max_score() { return (1 << 18) - 1; }
+    static int32 max_score() { return (1 << 17) - 1; }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
-    static int32 min_score() { return -((1 << 18) - 1); }
+    static int32 min_score() { return -((1 << 17) - 1); }
 
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE Alignment() {}
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE Alignment(
@@ -95,33 +95,37 @@ struct Alignment
         const  int32 score,
         const uint32 rc,
         const uint32 mate = 0,
-        const bool   paired = false)
+        const bool   paired = false,
+        const bool   discordant = false)
     {
         //NVBIO_CUDA_ASSERT( ed < 1024u );
         //NVBIO_CUDA_ASSERT( score >= min_score() && score <= max_score() );
-        m_align     = pos;
-        m_ed        = ed;
-        m_score     = score < 0 ? uint32( -score ) : uint32( score );
-        m_score_sgn = score < 0 ? 1u               : 0u;
-        m_rc        = rc;
-        m_mate      = mate;
-        m_paired    = paired ? 1u : 0u;
+        m_align      = pos;
+        m_ed         = ed;
+        m_score      = score < 0 ? uint32( -score ) : uint32( score );
+        m_score_sgn  = score < 0 ? 1u               : 0u;
+        m_rc         = rc;
+        m_mate       = mate;
+        m_paired     = paired ? 1u : 0u;
+        m_discordant = discordant ? 1u : 0u;
     }
 
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE int32  score()       const { return m_score_sgn ? -int32( m_score ) : int32( m_score ); }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool   is_aligned()  const { return m_align != uint32(-1); }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 alignment()   const { return m_align; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool   is_rc()       const { return m_rc; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 ed()          const { return m_ed; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 sink()        const { return m_ed; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 mate()        const { return m_mate; }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool   is_paired()   const { return (m_paired == true)  && is_aligned(); }
-    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool   is_unpaired() const { return (m_paired == false) && is_aligned(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE int32  score()         const { return m_score_sgn ? -int32( m_score ) : int32( m_score ); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool   is_aligned()    const { return m_align != uint32(-1); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 alignment()     const { return m_align; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool   is_rc()         const { return m_rc; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 ed()            const { return m_ed; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 sink()          const { return m_ed; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE uint32 mate()          const { return m_mate; }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool   is_paired()     const { return (m_paired == true)  && is_aligned(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool   is_unpaired()   const { return (m_paired == false) && is_aligned(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool   is_concordant() const { return (m_paired == true)  && (m_discordant == false); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool   is_discordant() const { return (m_paired == true)  && (m_discordant == true); }
 
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE 
     static Alignment invalid() { return Alignment( uint32(-1), max_ed(), max_score(), 0u, 0u, false ); }
 
-    uint32 m_score_sgn : 1, m_score:18, m_ed:10, m_rc:1, m_mate:1, m_paired:1;
+    uint32 m_score_sgn : 1, m_score:17, m_ed:10, m_rc:1, m_mate:1, m_paired:1, m_discordant:1;
     uint32 m_align;
 };
 
@@ -202,6 +206,8 @@ struct PairedAlignments
 
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool   is_aligned()           const { return m_a.is_aligned() && m_o.is_aligned(); }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool   is_paired()            const { return m_a.is_paired(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool   is_concordant()        const { return m_a.is_concordant(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE bool   is_discordant()        const { return m_a.is_discordant(); }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE int32  score()                const { return m_a.score() + m_o.score(); }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE int32  ed()                   const { return m_a.ed()    + m_o.ed(); }
 
@@ -378,6 +384,30 @@ struct is_unpaired
 
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE 
     bool operator() (const Alignment& op) { return op.is_unpaired(); }
+};
+struct is_concordant
+{
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE 
+    bool operator() (const BestAlignments& op) { return op.alignment<0>().is_concordant(); }
+
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE 
+    bool operator() (const Alignment& op) { return op.is_concordant(); }
+};
+struct is_discordant
+{
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE 
+    bool operator() (const BestAlignments& op) { return op.alignment<0>().is_discordant(); }
+
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE 
+    bool operator() (const Alignment& op) { return op.is_discordant(); }
+};
+struct is_not_concordant // note: !concordant = discordant | unpaired - i.e. this is different from is_discordant
+{
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE 
+    bool operator() (const BestAlignments& op) { return op.alignment<0>().is_concordant() == false; }
+
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE 
+    bool operator() (const Alignment& op) { return op.is_concordant() == false; }
 };
 struct is_aligned
 {

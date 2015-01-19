@@ -451,6 +451,51 @@ void mark_unaligned(
         reseed );
 }
 
+// initialize a set of alignments
+//
+__global__
+void mark_discordant_kernel(
+    const uint32            n_reads,
+          io::Alignment*    anchor_data,
+          io::Alignment*    opposite_data,
+    const uint32            stride)
+{
+    const uint32 read_id = threadIdx.x + BLOCKDIM*blockIdx.x;
+    if (read_id >= n_reads) return;
+
+    // A pair of alignments is considered "discordant" if they are unique and
+    // they are not concordant.
+    if (anchor_data[ read_id            ].is_aligned()    == true  && // anchor is   : aligned
+        anchor_data[ read_id            ].is_concordant() == false && //               unpaired
+        anchor_data[ read_id + stride   ].is_aligned()    == false && //               unique
+        opposite_data[ read_id          ].is_aligned()    == true  && // opposite is : aligned
+        opposite_data[ read_id + stride ].is_aligned()    == false)   //               unique
+    {
+        // mark as paired and discordant
+        anchor_data[ read_id ].m_paired       = 1u;
+        anchor_data[ read_id ].m_discordant   = 1u;
+        opposite_data[ read_id ].m_paired     = 1u;
+        opposite_data[ read_id ].m_discordant = 1u;
+    }
+}
+
+// mark unique unaligned read pairs as discordant
+//
+void mark_discordant(
+    const uint32            n_reads,
+          io::Alignment*    anchor_data,
+          io::Alignment*    opposite_data,
+    const uint32            stride)
+{
+    const int blocks = (n_reads + BLOCKDIM-1) / BLOCKDIM;
+
+    mark_discordant_kernel<<<blocks, BLOCKDIM>>>(
+        n_reads,
+        anchor_data,
+        opposite_data,
+        stride );
+}
+
 } // namespace cuda
 } // namespace bowtie2
 } // namespace nvbio

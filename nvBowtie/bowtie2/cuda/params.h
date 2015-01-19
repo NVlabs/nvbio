@@ -124,6 +124,7 @@ struct ParamsPOD
     bool          pe_overlap;
     bool          pe_dovetail;
     bool          pe_unpaired;
+    bool          pe_discordant;
     uint32        min_frag_len;
     uint32        max_frag_len;
 

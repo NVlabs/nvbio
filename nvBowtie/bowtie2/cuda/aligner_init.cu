@@ -164,7 +164,9 @@ bool Aligner::init_alloc(const uint32 BATCH_SIZE, const Params& params, const En
         // allocate two thirds of available device memory for scoring / traceback
         //
 
-        const uint64 read_mem = 250u * BATCH_SIZE * (type == kPairedEnds ? 2u : 1u);
+        const uint32 bytes_per_read = uint32( float( params.avg_read_length ) * 1.5f );
+
+        const uint64 read_mem = bytes_per_read * BATCH_SIZE * (type == kPairedEnds ? 2u : 1u);
                                                   // assume 250B per read
 
         const uint64 guard_band = 512*1024*1024 + // we want to leave 512MB free,

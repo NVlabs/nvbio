@@ -562,26 +562,26 @@ int main(int argc, char* argv[])
                     params.scoring_scheme.ed.m_score_min :
                     params.scoring_scheme.sw.m_score_min;
 
-                log_visible(stderr, "  mode           = %s\n", bowtie2::cuda::mapping_mode( params.mode ));
-                log_visible(stderr, "  scoring        = %s\n", bowtie2::cuda::scoring_mode( params.scoring_mode ));
-                log_visible(stderr, "  score-min      = %s:%.2f:%.2f\n", score_min.type_string(), score_min.k, score_min.m);
-                log_visible(stderr, "  alignment type = %s\n", params.alignment_type == bowtie2::cuda::LocalAlignment ? "local" : "end-to-end");
-                log_visible(stderr, "  pe-policy      = %s\n",
+                log_verbose(stderr, "  mode           = %s\n", bowtie2::cuda::mapping_mode( params.mode ));
+                log_verbose(stderr, "  scoring        = %s\n", bowtie2::cuda::scoring_mode( params.scoring_mode ));
+                log_verbose(stderr, "  score-min      = %s:%.2f:%.2f\n", score_min.type_string(), score_min.k, score_min.m);
+                log_verbose(stderr, "  alignment type = %s\n", params.alignment_type == bowtie2::cuda::LocalAlignment ? "local" : "end-to-end");
+                log_verbose(stderr, "  pe-policy      = %s\n",
                                                                pe_policy == io::PE_POLICY_FF ? "ff" :
                                                                pe_policy == io::PE_POLICY_FR ? "fr" :
                                                                pe_policy == io::PE_POLICY_RF ? "rf" :
                                                                                                "rr" );
-                log_visible(stderr, "  seed length    = %u\n", params.seed_len);
-                log_visible(stderr, "  seed interval  = (%s, %.3f, %.3f)\n", params.seed_freq.type_symbol(), params.seed_freq.k, params.seed_freq.m);
-                log_visible(stderr, "  seed rounds    = %u\n", params.max_reseed);
-                log_visible(stderr, "  max hits       = %u\n", params.max_hits);
-                log_visible(stderr, "  max edit dist  = %u\n", params.max_dist);
-                log_visible(stderr, "  max effort     = %u\n", params.max_effort);
-                log_visible(stderr, "  substitutions  = %u\n", params.allow_sub);
-                log_visible(stderr, "  mapQ filter    = %u\n", params.mapq_filter);
-                log_visible(stderr, "  randomized     = %s\n", params.randomized ? "yes" : "no");
+                log_verbose(stderr, "  seed length    = %u\n", params.seed_len);
+                log_verbose(stderr, "  seed interval  = (%s, %.3f, %.3f)\n", params.seed_freq.type_symbol(), params.seed_freq.k, params.seed_freq.m);
+                log_verbose(stderr, "  seed rounds    = %u\n", params.max_reseed);
+                log_verbose(stderr, "  max hits       = %u\n", params.max_hits);
+                log_verbose(stderr, "  max edit dist  = %u\n", params.max_dist);
+                log_verbose(stderr, "  max effort     = %u\n", params.max_effort);
+                log_verbose(stderr, "  substitutions  = %u\n", params.allow_sub);
+                log_verbose(stderr, "  mapq filter    = %u\n", params.mapq_filter);
+                log_verbose(stderr, "  randomized     = %s\n", params.randomized ? "yes" : "no");
                 if (params.allow_sub)
-                    log_visible(stderr, "  subseed length = %u\n", params.subseed_len);
+                    log_verbose(stderr, "  subseed length = %u\n", params.subseed_len);
             }
 
             //
@@ -630,7 +630,8 @@ int main(int argc, char* argv[])
             }
 
             uint32                        n_reads = 0;
-            bowtie2::cuda::AlignmentStats paired;
+            bowtie2::cuda::AlignmentStats concordant;
+            bowtie2::cuda::AlignmentStats discordant;
             bowtie2::cuda::AlignmentStats mate1;
             bowtie2::cuda::AlignmentStats mate2;
 
@@ -639,7 +640,8 @@ int main(int argc, char* argv[])
                 compute_threads[i]->join();
 
                 n_reads += device_stats[i].n_reads;
-                paired.merge( device_stats[i].paired );
+                concordant.merge( device_stats[i].concordant );
+                discordant.merge( device_stats[i].discordant );
                 mate1.merge( device_stats[i].mate1 );
                 mate2.merge( device_stats[i].mate2 );
             }
@@ -665,12 +667,12 @@ int main(int argc, char* argv[])
             log_stats(stderr, "  reads   I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", input_stats.read_io.time, 1.0e-6f * input_stats.read_io.avg_speed(), 1.0e-6f * input_stats.read_io.max_speed);
             log_stats(stderr, "  results I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", io.time, 1.0e-6f * io.avg_speed(), 1.0e-6f * io.max_speed);
 
-            std::vector<uint32>& mapped         = paired.mapped_ed_histogram;
-            uint32&              n_mapped       = paired.n_mapped;
-            uint32&              n_unique       = paired.n_unique;
-            uint32&              n_ambiguous    = paired.n_ambiguous;
-            uint32&              n_nonambiguous = paired.n_unambiguous;
-            uint32&              n_multiple     = paired.n_multiple;
+            std::vector<uint32>& mapped         = concordant.mapped_ed_histogram;
+            uint32&              n_mapped       = concordant.n_mapped;
+            uint32&              n_unique       = concordant.n_unique;
+            uint32&              n_ambiguous    = concordant.n_ambiguous;
+            uint32&              n_nonambiguous = concordant.n_unambiguous;
+            uint32&              n_multiple     = concordant.n_multiple;
             {
                 log_stats(stderr, "  concordant reads : %.2f %% - of these:\n", 100.0f * float(n_mapped)/float(n_reads) );
                 log_stats(stderr, "    aligned uniquely      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_unique)/float(n_mapped), 100.0f * float(n_mapped - n_multiple)/float(n_reads) );
@@ -683,6 +685,8 @@ int main(int argc, char* argv[])
                         log_stats(stderr, "    ed %4u : %.1f %%\n", i,
                         100.0f * float(mapped[i])/float(n_reads) );
                 }
+
+                log_stats(stderr, "  discordant reads : %.2f %%\n", 100.0f * float(discordant.n_mapped)/float(n_reads) );
 
                 log_stats(stderr, "  mate1 : %.2f %% - of these:\n", 100.0f * float(mate1.n_mapped)/float(n_reads) );
                 if (mate1.n_mapped)
@@ -704,7 +708,7 @@ int main(int argc, char* argv[])
             }
 
             // generate an html report
-            bowtie2::cuda::generate_report_header( n_reads, params, paired, (uint32)cuda_devices.size(), &device_stats[0], params.report.c_str() );
+            bowtie2::cuda::generate_report_header( n_reads, params, concordant, (uint32)cuda_devices.size(), &device_stats[0], params.report.c_str() );
         }
         else
         {
@@ -736,21 +740,21 @@ int main(int argc, char* argv[])
                                               params.scoring_scheme.ed.m_score_min :
                                               params.scoring_scheme.sw.m_score_min;
                 
-                log_visible(stderr, "  mode           = %s\n", bowtie2::cuda::mapping_mode( params.mode ));
-                log_visible(stderr, "  scoring        = %s\n", bowtie2::cuda::scoring_mode( params.scoring_mode ));
-                log_visible(stderr, "  score-min      = %s:%.2f:%.2f\n", score_min.type_string(), score_min.k, score_min.m);
-                log_visible(stderr, "  alignment type = %s\n", params.alignment_type == bowtie2::cuda::LocalAlignment ? "local" : "end-to-end");
-                log_visible(stderr, "  seed length    = %u\n", params.seed_len);
-                log_visible(stderr, "  seed interval  = (%s, %.3f, %.3f)\n", params.seed_freq.type_symbol(), params.seed_freq.k, params.seed_freq.m);
-                log_visible(stderr, "  seed rounds    = %u\n", params.max_reseed);
-                log_visible(stderr, "  max hits       = %u\n", params.max_hits);
-                log_visible(stderr, "  max edit dist  = %u\n", params.max_dist);
-                log_visible(stderr, "  max effort     = %u\n", params.max_effort);
-                log_visible(stderr, "  substitutions  = %u\n", params.allow_sub);
-                log_visible(stderr, "  mapQ filter    = %u\n", params.mapq_filter);
-                log_visible(stderr, "  randomized     = %s\n", params.randomized ? "yes" : "no");
+                log_verbose(stderr, "  mode           = %s\n", bowtie2::cuda::mapping_mode( params.mode ));
+                log_verbose(stderr, "  scoring        = %s\n", bowtie2::cuda::scoring_mode( params.scoring_mode ));
+                log_verbose(stderr, "  score-min      = %s:%.2f:%.2f\n", score_min.type_string(), score_min.k, score_min.m);
+                log_verbose(stderr, "  alignment type = %s\n", params.alignment_type == bowtie2::cuda::LocalAlignment ? "local" : "end-to-end");
+                log_verbose(stderr, "  seed length    = %u\n", params.seed_len);
+                log_verbose(stderr, "  seed interval  = (%s, %.3f, %.3f)\n", params.seed_freq.type_symbol(), params.seed_freq.k, params.seed_freq.m);
+                log_verbose(stderr, "  seed rounds    = %u\n", params.max_reseed);
+                log_verbose(stderr, "  max hits       = %u\n", params.max_hits);
+                log_verbose(stderr, "  max edit dist  = %u\n", params.max_dist);
+                log_verbose(stderr, "  max effort     = %u\n", params.max_effort);
+                log_verbose(stderr, "  substitutions  = %u\n", params.allow_sub);
+                log_verbose(stderr, "  mapq filter    = %u\n", params.mapq_filter);
+                log_verbose(stderr, "  randomized     = %s\n", params.randomized ? "yes" : "no");
                 if (params.allow_sub)
-                    log_visible(stderr, "  subseed length = %u\n", params.subseed_len);
+                    log_verbose(stderr, "  subseed length = %u\n", params.subseed_len);
             }
 
             //

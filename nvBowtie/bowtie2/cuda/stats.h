@@ -92,9 +92,9 @@ struct AlignmentStats
 
         for (uint32 i = 0; i < mapped_ed_histogram.size(); ++i)
         {
-            mapped_ed_histogram[i]     += mapped_ed_histogram[i];
-            mapped_ed_histogram_fwd[i] += mapped_ed_histogram_fwd[i];
-            mapped_ed_histogram_rev[i] += mapped_ed_histogram_rev[i];
+            mapped_ed_histogram[i]     += stats.mapped_ed_histogram[i];
+            mapped_ed_histogram_fwd[i] += stats.mapped_ed_histogram_fwd[i];
+            mapped_ed_histogram_rev[i] += stats.mapped_ed_histogram_rev[i];
         }
 
         for(uint32 c = 0; c < 64; c++)
@@ -132,7 +132,8 @@ struct Stats
     KernelStats scoring_pipe;
 
     // detailed mapping stats
-    AlignmentStats  paired;
+    AlignmentStats  concordant;
+    AlignmentStats  discordant;
     AlignmentStats  mate1;
     AlignmentStats  mate2;
 

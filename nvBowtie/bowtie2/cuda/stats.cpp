@@ -87,24 +87,24 @@ void Stats::track_alignment_statistics(
 {
     n_reads++;
 
-    if (alignment1.best().is_paired())
+    if (alignment1.best().is_concordant())
     {
         // keep track of mapping quality histogram
-        paired.mapq_bins[mapq]++;
+        concordant.mapq_bins[mapq]++;
 
         // count this read as mapped
-        paired.n_mapped++;
+        concordant.n_mapped++;
 
         if (!alignment1.second_best().is_paired())
         {
             // we only have one score; count as a unique alignment
-            paired.n_unique++;
+            concordant.n_unique++;
         }
         else
         {
             // we have two best scores, which implies two (or more) alignment positions
             // count as multiple alignment
-            paired.n_multiple++;
+            concordant.n_multiple++;
         }
 
         // compute final alignment score
@@ -115,12 +115,12 @@ void Stats::track_alignment_statistics(
 
         // if the two best scores are equal, count as ambiguous
         if (first == second)
-            paired.n_ambiguous++;
+            concordant.n_ambiguous++;
         else {
             // else, the first score must be higher...
             NVBIO_CUDA_ASSERT(first > second);
             /// ... which counts as a nonambiguous alignment
-            paired.n_unambiguous++;
+            concordant.n_unambiguous++;
         }
 
         // compute edit distance scores
@@ -129,22 +129,82 @@ void Stats::track_alignment_statistics(
                                  alignment1.second_best().ed() + alignment2.second_best().ed() : 255u;
 
         // update best edit-distance histograms
-        if (first_ed < paired.mapped_ed_histogram.size())
+        if (first_ed < concordant.mapped_ed_histogram.size())
         {
-            paired.mapped_ed_histogram[first_ed]++;
+            concordant.mapped_ed_histogram[first_ed]++;
             if (alignment1.best().is_rc())
-                paired.mapped_ed_histogram_fwd[first_ed]++;
+                concordant.mapped_ed_histogram_fwd[first_ed]++;
             else
-                paired.mapped_ed_histogram_rev[first_ed]++;
+                concordant.mapped_ed_histogram_rev[first_ed]++;
         }
 
         // track edit-distance correlation
         if (first_ed + 1 < 64)
         {
             if (second_ed + 1 < 64)
-                paired.mapped_ed_correlation[first_ed + 1][second_ed + 1]++;
+                concordant.mapped_ed_correlation[first_ed + 1][second_ed + 1]++;
             else
-                paired.mapped_ed_correlation[first_ed + 1][0]++;
+                concordant.mapped_ed_correlation[first_ed + 1][0]++;
+        }
+    }
+    else if (alignment1.best().is_discordant())
+    {
+        // keep track of mapping quality histogram
+        discordant.mapq_bins[mapq]++;
+
+        // count this read as mapped
+        discordant.n_mapped++;
+
+        if (!alignment1.second_best().is_paired())
+        {
+            // we only have one score; count as a unique alignment
+            discordant.n_unique++;
+        }
+        else
+        {
+            // we have two best scores, which implies two (or more) alignment positions
+            // count as multiple alignment
+            discordant.n_multiple++;
+        }
+
+        // compute final alignment score
+        const int32 first  = alignment1.best().score()        + alignment2.best().score();
+        const int32 second = alignment1.second_best().is_paired() ?
+                             alignment1.second_best().score() + alignment2.second_best().score() :
+                             Field_traits<int32>::min();
+
+        // if the two best scores are equal, count as ambiguous
+        if (first == second)
+            discordant.n_ambiguous++;
+        else {
+            // else, the first score must be higher...
+            NVBIO_CUDA_ASSERT(first > second);
+            /// ... which counts as a nonambiguous alignment
+            discordant.n_unambiguous++;
+        }
+
+        // compute edit distance scores
+        const uint32 first_ed  = alignment1.best().ed()        + alignment2.best().ed();
+        const uint32 second_ed = alignment1.second_best().is_paired() ?
+                                 alignment1.second_best().ed() + alignment2.second_best().ed() : 255u;
+
+        // update best edit-distance histograms
+        if (first_ed < discordant.mapped_ed_histogram.size())
+        {
+            discordant.mapped_ed_histogram[first_ed]++;
+            if (alignment1.best().is_rc())
+                discordant.mapped_ed_histogram_fwd[first_ed]++;
+            else
+                discordant.mapped_ed_histogram_rev[first_ed]++;
+        }
+
+        // track edit-distance correlation
+        if (first_ed + 1 < 64)
+        {
+            if (second_ed + 1 < 64)
+                discordant.mapped_ed_correlation[first_ed + 1][second_ed + 1]++;
+            else
+                discordant.mapped_ed_correlation[first_ed + 1][0]++;
         }
     }
     else

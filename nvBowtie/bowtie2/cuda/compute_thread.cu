@@ -664,7 +664,7 @@ void ComputeThreadPE::do_run()
     global_timer.stop();
     stats.global_time += global_timer.seconds();
 
-    nvbio::bowtie2::cuda::generate_device_report( thread_id, stats, stats.paired, params.report.c_str());
+    nvbio::bowtie2::cuda::generate_device_report( thread_id, stats, stats.concordant, params.report.c_str());
 
     log_visible(stderr, "[%u] nvBowtie cuda driver... done\n", thread_id);
 

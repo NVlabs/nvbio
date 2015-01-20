@@ -224,7 +224,9 @@ struct BestAnchorScoreStream : public AlignmentStreamBase<SCORE_STREAM,AlignerTy
         const  int32 a_optimal_score = base_type::m_pipeline.scoring_scheme.perfect_score( a_read_len );
         const  int32 a_worst_score   = base_type::m_pipeline.scoring_scheme.min_score( a_read_len );
 
-        const  int32 target_pair_score = compute_target_score( best, a_worst_score, o_worst_score );
+        const  int32 target_pair_score = nvbio::min(
+            compute_target_score( best, a_worst_score, o_worst_score ) + 1,
+            a_optimal_score + o_optimal_score );
 
         int32 target_mate_score = target_pair_score - o_optimal_score;
 
@@ -259,7 +261,7 @@ struct BestAnchorScoreStream : public AlignmentStreamBase<SCORE_STREAM,AlignerTy
                           (context->min_score > a_optimal_score);
 
         // setup the minimum score
-        context->min_score = skip ? Field_traits<int32>::max() : nvbio::max( target_mate_score+1, base_type::m_pipeline.score_limit );
+        context->min_score = skip ? Field_traits<int32>::max() : nvbio::max( target_mate_score, base_type::m_pipeline.score_limit );
 
         return !skip;
     }
@@ -349,9 +351,10 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<SCORE_STREAM,Aligner
 
         const uint32 g_pos = hit.loc;
 
-        const uint2  a_read_range   = base_type::m_pipeline.reads.get_range( read_id );
-        const uint32 a_len          = a_read_range.y - a_read_range.x;
-        const  int32 a_worst_score  = base_type::m_pipeline.scoring_scheme.min_score( a_len );
+        const uint2  a_read_range    = base_type::m_pipeline.reads.get_range( read_id );
+        const uint32 a_len           = a_read_range.y - a_read_range.x;
+        const  int32 a_optimal_score = base_type::m_pipeline.scoring_scheme.perfect_score( a_len );
+        const  int32 a_worst_score   = base_type::m_pipeline.scoring_scheme.min_score( a_len );
 
         const uint2  o_read_range    = base_type::m_pipeline.reads_o.get_range( read_id );
         const uint32 o_len           = o_read_range.y - o_read_range.x;
@@ -365,7 +368,9 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<SCORE_STREAM,Aligner
             io::BestAlignments( base_type::m_pipeline.best_alignments[ read_id ], base_type::m_pipeline.best_alignments[ read_id + base_type::m_pipeline.best_stride ] ),
             io::BestAlignments( base_type::m_pipeline.best_alignments_o[ read_id ], base_type::m_pipeline.best_alignments_o[ read_id + base_type::m_pipeline.best_stride ] ) );
 
-        const int32 target_pair_score = compute_target_score( best, a_worst_score, o_worst_score );
+        const int32 target_pair_score = nvbio::min(
+            compute_target_score( best, a_worst_score, o_worst_score ) + 1,
+            a_optimal_score + o_optimal_score );
 
         int32 target_mate_score = target_pair_score - anchor_score;
 
@@ -380,7 +385,7 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<SCORE_STREAM,Aligner
       #endif
 
         // assign the final score threshold
-        context->min_score = nvbio::max( target_mate_score+1, base_type::m_pipeline.score_limit );
+        context->min_score = nvbio::max( target_mate_score, base_type::m_pipeline.score_limit );
 
         // check if it's even possible to reach the score threshold
         if (context->min_score > o_optimal_score)

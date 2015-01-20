@@ -619,7 +619,7 @@ int main(int argc, char* argv[])
 
             bowtie2::cuda::Stats input_stats( params );
 
-            bowtie2::cuda::InputThreadPE input_thread( read_data_file1.get(),  read_data_file2.get(), input_stats, batch_size );
+            bowtie2::cuda::InputThreadPE input_thread( read_data_file1.get(),  read_data_file2.get(), input_stats, batch_size, params.avg_read_length );
             input_thread.create();
 
             for (uint32 i = 0; i < cuda_devices.size(); ++i)
@@ -788,7 +788,7 @@ int main(int argc, char* argv[])
 
             bowtie2::cuda::Stats input_stats( params );
 
-            bowtie2::cuda::InputThreadSE input_thread( read_data_file.get(), input_stats, batch_size );
+            bowtie2::cuda::InputThreadSE input_thread( read_data_file.get(), input_stats, batch_size, params.avg_read_length );
             input_thread.create();
 
             for (uint32 i = 0; i < cuda_devices.size(); ++i)

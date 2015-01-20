@@ -75,7 +75,7 @@ void InputThreadSE::run()
             Timer timer;
             timer.start();
 
-            const int ret = io::next( DNA_N, read_data, m_read_data_stream, m_batch_size, m_batch_size*AVG_READ_LENGTH );
+            const int ret = io::next( DNA_N, read_data, m_read_data_stream, m_batch_size, m_batch_size*m_read_length );
 
             timer.stop();
 
@@ -222,7 +222,7 @@ void InputThreadPE::run()
             Timer timer;
             timer.start();
 
-            const int ret1 = io::next( DNA_N, read_data1, m_read_data_stream1, m_batch_size, m_batch_size*AVG_READ_LENGTH );
+            const int ret1 = io::next( DNA_N, read_data1, m_read_data_stream1, m_batch_size, m_batch_size*m_read_length );
             const int ret2 = io::next( DNA_N, read_data2, m_read_data_stream2, read_data1->size() );
 
             timer.stop();

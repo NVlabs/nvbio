@@ -49,8 +49,8 @@ struct InputThreadSE : public Thread<InputThreadSE>
 {
     static const uint32 BUFFERS = 4;
 
-    InputThreadSE(io::SequenceDataStream* read_data_stream, Stats& _stats, const uint32 batch_size) :
-        m_read_data_stream( read_data_stream ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0), m_reads(0), m_done(false)
+    InputThreadSE(io::SequenceDataStream* read_data_stream, Stats& _stats, const uint32 batch_size, const uint32 read_length) :
+        m_read_data_stream( read_data_stream ), m_stats( _stats ), m_batch_size( batch_size ), m_read_length( read_length ), m_set(0), m_reads(0), m_done(false)
     {}
 
     void run();
@@ -71,6 +71,7 @@ private:
     io::SequenceDataStream* m_read_data_stream;
     Stats&                  m_stats;
     uint32                  m_batch_size;
+    uint32                  m_read_length;
     uint32                  m_set;
     uint32                  m_reads;
 
@@ -96,8 +97,8 @@ struct InputThreadPE : public Thread<InputThreadPE>
 {
     static const uint32 BUFFERS = 4;
 
-    InputThreadPE(io::SequenceDataStream* read_data_stream1, io::SequenceDataStream* read_data_stream2, Stats& _stats, const uint32 batch_size) :
-        m_read_data_stream1( read_data_stream1 ), m_read_data_stream2( read_data_stream2 ), m_stats( _stats ), m_batch_size( batch_size ), m_set(0), m_reads(0), m_done(false)
+    InputThreadPE(io::SequenceDataStream* read_data_stream1, io::SequenceDataStream* read_data_stream2, Stats& _stats, const uint32 batch_size, const uint32 read_length) :
+        m_read_data_stream1( read_data_stream1 ), m_read_data_stream2( read_data_stream2 ), m_stats( _stats ), m_batch_size( batch_size ), m_read_length( read_length ), m_set(0), m_reads(0), m_done(false)
     {}
 
     void run();
@@ -119,6 +120,7 @@ private:
     io::SequenceDataStream* m_read_data_stream2;
     Stats&                  m_stats;
     uint32                  m_batch_size;
+    uint32                  m_read_length;
     uint32                  m_set;
     uint32                  m_reads;
 

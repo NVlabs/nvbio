@@ -81,8 +81,8 @@ namespace cuda {
 
 enum EndType { kSingleEnd = 0u, kPairedEnds = 1u };
 
-// We process reads in batches of up to MAX_BATCH size.
-enum { MAX_BATCH = 512*1024 };
+// We assume reads contain, on average, this many bps
+enum { AVG_READ_LENGTH = 175 };
 // The device will launch blocks of size BLOCKDIM.
 enum { BLOCKDIM  = 96 };
 // The device will launch blocks of size BLOCKDIM.

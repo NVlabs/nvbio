@@ -108,7 +108,7 @@ int32 compute_target_score(const io::BestPairedAlignments& best, const int32 a_w
 
     // reproduce Bowtie2's score bounding behavior (under its default setting 'tighten = 3')
     const int32 delta = best.best_score() - best.second_score();
-    return best.second_score() + delta * 3/4;
+    return best.second_score() + (delta * 3)/4;
 }
 
 enum AlignmentStreamType

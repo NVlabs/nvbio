@@ -85,10 +85,11 @@ struct AlignmentStats
     // merge stats
     void merge(const AlignmentStats& stats)
     {
-        n_mapped    += stats.n_mapped;
-        n_ambiguous += stats.n_unambiguous;
-        n_unique    += stats.n_unique;
-        n_multiple  += stats.n_multiple;
+        n_mapped      += stats.n_mapped;
+        n_ambiguous   += stats.n_ambiguous;
+        n_unambiguous += stats.n_unambiguous;
+        n_unique      += stats.n_unique;
+        n_multiple    += stats.n_multiple;
 
         for (uint32 i = 0; i < mapped_ed_histogram.size(); ++i)
         {

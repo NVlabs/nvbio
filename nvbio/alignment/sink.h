@@ -154,13 +154,14 @@ struct BestColumnSink
 
     /// return the index of the best and second-best alignments
     ///
-    void best2(uint32& i1, uint32& i2) const
+    void best2(uint32& i1, uint32& i2, const uint32 min_dist) const
     {
         ScoreType s1 = Field_traits<ScoreType>::min();
         ScoreType s2 = Field_traits<ScoreType>::min();
         i1 = N+1;
         i2 = N+1;
 
+        // look for the best hit
         for (uint32 i = 0; i < N; ++i)
         {
             if (s1 < scores[i])
@@ -168,7 +169,18 @@ struct BestColumnSink
                 s1 = scores[i];
                 i1 = i;
             }
-            else if (s2 < scores[i])
+        }
+
+        // check whether we found a valid score
+        if (s1 == Field_traits<ScoreType>::min())
+            return;
+
+        // look for the second hit, at a minimum distance from the best
+        for (uint32 i = 0; i < N; ++i)
+        {
+            if ((s2 < scores[i]) &&
+                ((sinks[i].x + min_dist <= sinks[i1].x) ||
+                 (sinks[i].x            >= sinks[i1].x + min_dist)))
             {
                 s2 = scores[i];
                 i2 = i;

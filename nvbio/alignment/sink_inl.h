@@ -98,6 +98,15 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 BestColumnSink<ScoreType,N>::BestColumnSink(const uint32 column_width) :
     m_column_width( column_width )
 {
+    invalidate();
+}
+
+// invalidate
+//
+template <typename ScoreType, uint32 N>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+void BestColumnSink<ScoreType,N>::invalidate()
+{
     for (uint32 i = 0; i <= N; ++i)
     {
         scores[i] = Field_traits<ScoreType>::min();
@@ -120,6 +129,44 @@ void BestColumnSink<ScoreType,N>::report(const ScoreType score, const uint2 sink
     {
         scores[col] = score;
         sinks[col]  = sink;
+    }
+}
+
+// return the index of the best and second-best alignments
+//
+template <typename ScoreType, uint32 N>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+void BestColumnSink<ScoreType,N>::best2(uint32& i1, uint32& i2, const uint32 min_dist) const
+{
+    ScoreType s1 = Field_traits<ScoreType>::min();
+    ScoreType s2 = Field_traits<ScoreType>::min();
+    i1 = N;
+    i2 = N;
+
+    // look for the best hit
+    for (uint32 i = 0; i < N; ++i)
+    {
+        if (s1 < scores[i])
+        {
+            s1 = scores[i];
+            i1 = i;
+        }
+    }
+
+    // check whether we found a valid score
+    if (s1 == Field_traits<ScoreType>::min())
+        return;
+
+    // look for the second hit, at a minimum distance from the best
+    for (uint32 i = 0; i < N; ++i)
+    {
+        if ((s2 < scores[i]) &&
+            ((sinks[i].x + min_dist <= sinks[i1].x) ||
+             (sinks[i].x            >= sinks[i1].x + min_dist)))
+        {
+            s2 = scores[i];
+            i2 = i;
+        }
     }
 }
 

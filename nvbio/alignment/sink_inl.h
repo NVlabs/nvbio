@@ -98,7 +98,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 BestColumnSink<ScoreType,N>::BestColumnSink(const uint32 column_width) :
     m_column_width( column_width )
 {
-    for (uint32 i = 0; i < N; ++i)
+    for (uint32 i = 0; i <= N; ++i)
     {
         scores[i] = Field_traits<ScoreType>::min();
         sinks[i]  = make_uint2( uint32(-1), uint32(-1) );

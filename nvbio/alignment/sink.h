@@ -152,8 +152,32 @@ struct BestColumnSink
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     void report(const ScoreType score, const uint2 sink);
 
-    ScoreType scores[N];
-    uint2     sinks[N];
+    /// return the index of the best and second-best alignments
+    ///
+    void best2(uint32& i1, uint32& i2) const
+    {
+        ScoreType s1 = Field_traits<ScoreType>::min();
+        ScoreType s2 = Field_traits<ScoreType>::min();
+        i1 = N+1;
+        i2 = N+1;
+
+        for (uint32 i = 0; i < N; ++i)
+        {
+            if (s1 < scores[i])
+            {
+                s1 = scores[i];
+                i1 = i;
+            }
+            else if (s2 < scores[i])
+            {
+                s2 = scores[i];
+                i2 = i;
+            }
+        }
+    }
+
+    ScoreType scores[N+1];
+    uint2     sinks[N+1];
 
 private:
     uint32    m_column_width;

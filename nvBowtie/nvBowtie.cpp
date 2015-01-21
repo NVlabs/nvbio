@@ -708,7 +708,8 @@ int main(int argc, char* argv[])
             }
 
             // generate an html report
-            bowtie2::cuda::generate_report_header( n_reads, params, concordant, (uint32)cuda_devices.size(), &device_stats[0], params.report.c_str() );
+            if (params.report.length())
+                bowtie2::cuda::generate_report_header( n_reads, params, concordant, (uint32)cuda_devices.size(), &device_stats[0], params.report.c_str() );
         }
         else
         {
@@ -855,7 +856,8 @@ int main(int argc, char* argv[])
             }
 
             // generate an html report
-            bowtie2::cuda::generate_report_header( n_reads, params, mate1, (uint32)cuda_devices.size(), &device_stats[0], params.report.c_str() );
+            if (params.report.length())
+                bowtie2::cuda::generate_report_header( n_reads, params, mate1, (uint32)cuda_devices.size(), &device_stats[0], params.report.c_str() );
         }
 
         log_info( stderr, "nvBowtie... done\n" );

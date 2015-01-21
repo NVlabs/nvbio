@@ -131,6 +131,34 @@ private:
     uint32    m_distinct_dist;
 };
 
+///
+/// A sink for valid alignments, mantaining the best alignments by "column",
+/// where columns have a specified width
+///
+template <typename ScoreType, uint32 N = 16>
+struct BestColumnSink
+{
+    /// constructor
+    ///
+    /// \param column_width     the width of each column
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    BestColumnSink(const uint32 column_width = 50);
+
+    /// store a valid alignment
+    ///
+    /// \param score    alignment's score
+    /// \param sink     alignment's end
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    void report(const ScoreType score, const uint2 sink);
+
+    ScoreType scores[N];
+    uint2     sinks[N];
+
+private:
+    uint32    m_column_width;
+};
+
 ///@} // end of the AlignmentSink group
 
 ///@} // end Alignment group

@@ -91,5 +91,37 @@ void Best2Sink<ScoreType>::report(const ScoreType score, const uint2 sink)
     }
 }
 
+// A sink for valid alignments, mantaining the best two alignments
+//
+template <typename ScoreType, uint32 N>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+BestColumnSink<ScoreType,N>::BestColumnSink(const uint32 column_width) :
+    m_column_width( column_width )
+{
+    for (uint32 i = 0; i < N; ++i)
+    {
+        scores[i] = Field_traits<ScoreType>::min();
+        sinks[i]  = make_uint2( uint32(-1), uint32(-1) );
+    }
+}
+
+// store a valid alignment
+//
+// \param score    alignment's score
+// \param sink     alignment's end
+//
+template <typename ScoreType, uint32 N>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+void BestColumnSink<ScoreType,N>::report(const ScoreType score, const uint2 sink)
+{
+    const uint32 col = nvbio::min( sink.x / m_column_width, N-1u );
+
+    if (scores[col] <= score)
+    {
+        scores[col] = score;
+        sinks[col]  = sink;
+    }
+}
+
 } // namespace aln
 } // namespace nvbio

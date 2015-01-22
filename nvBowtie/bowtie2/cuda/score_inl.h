@@ -241,9 +241,9 @@ struct BestAnchorScoreStream : public AlignmentStreamBase<SCORE_STREAM,AlignerTy
       #endif
 
         // setup the read info
-        context->mate         = 0;
-        context->read_rc      = read_rc;
-        context->read_id      = read_id;
+        context->mate       = 0;
+        context->read_rc    = read_rc;
+        context->read_id    = read_id;
         context->read_range = a_read_range;
 
         // setup the genome range

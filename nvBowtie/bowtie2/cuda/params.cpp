@@ -124,7 +124,7 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.min_ext          = uint_option(options, "min-ext",               init ? 30u     : params.min_ext);              // min # of extensions
     params.max_ext          = uint_option(options, "max-ext",               init ? 400u    : params.max_ext);              // max # of extensions
     params.max_reseed       = uint_option(options, "max-reseed",    "R",    init ? 2u      : params.max_reseed);           // max # of reseeding rounds
-    params.rep_seeds        = uint_option(options, "rep-seeds",             init ? 1000u   : params.rep_seeds);            // reseeding threshold
+    params.rep_seeds        = uint_option(options, "rep-seeds",             init ? 300u    : params.rep_seeds);            // reseeding threshold
     params.allow_sub        = uint_option(options, "N",                     init ? 0u      : params.allow_sub);            // allow substitution in seed
     params.mapq_filter      = uint_option(options, "mapQ-filter",   "Q",    init ? 0u      : params.mapq_filter);          // filter anything below this
     params.report           = string_option(options, "report",              init ? ""      : params.report.c_str());       // generate a report file

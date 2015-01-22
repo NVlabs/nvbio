@@ -467,8 +467,8 @@ void mark_discordant_kernel(
 
     // A pair of alignments is considered "discordant" if they are unique and
     // they are not concordant.
-    if (anchor_data[ read_id            ].is_aligned()    == true  && // anchor is   : aligned
-        anchor_data[ read_id            ].is_concordant() == false && //               unpaired
+    if (anchor_data[ read_id            ].is_concordant() == false && // anchor is   : unpaired
+        anchor_data[ read_id            ].is_aligned()    == true  && //               aligned
         anchor_data[ read_id + stride   ].is_aligned()    == false && //               unique
         opposite_data[ read_id          ].is_aligned()    == true  && // opposite is : aligned
         opposite_data[ read_id + stride ].is_aligned()    == false)   //               unique

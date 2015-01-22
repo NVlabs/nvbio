@@ -683,33 +683,33 @@ int main(int argc, char* argv[])
                 for (uint32 i = 0; i < mapped.size(); ++i)
                 {
                     if (float(mapped[i])/float(concordant.n_mapped) > 1.0e-3f)
-                        log_stats_cont(stderr, " %5u ", i ? 1u << (i-1) : 0u );
+                        log_stats_cont(stderr, " %5u  ", i ? 1u << (i-1) : 0u );
                 }
                 log_stats_cont(stderr,"\n");
                 log_stats(stderr, "         :");
                 for (uint32 i = 0; i < mapped.size(); ++i)
                 {
                     if (float(mapped[i])/float(concordant.n_mapped) > 1.0e-3f)
-                        log_stats_cont(stderr, " %5.1f%%", 100.0f * float(mapped[i])/float(concordant.n_mapped) );
+                        log_stats_cont(stderr, " %6.2f%%", 100.0f * float(mapped[i])/float(concordant.n_mapped) );
                 }
                 log_stats_cont(stderr,"\n");
                 log_stats(stderr, "    mapq :");
                 for (uint32 i = 0; i < 8; ++i)
-                        log_stats_cont(stderr, " %5u ", i ? 1u << (i-1) : 0u );
+                        log_stats_cont(stderr, " %5u  ", i ? 1u << (i-1) : 0u );
                 log_stats_cont(stderr,"\n");
                 log_stats(stderr, "         :");
                 for (uint32 i = 0; i < 8; ++i)
-                    log_stats_cont(stderr, " %5.1f%%", 100.0f * float(concordant.mapq_log_bins[i])/float(concordant.n_mapped) );
+                    log_stats_cont(stderr, " %6.2f%%", 100.0f * float(concordant.mapq_log_bins[i])/float(concordant.n_mapped) );
                 log_stats_cont(stderr,"\n");
 
                 log_stats(stderr, "  discordant reads : %.2f %%\n", 100.0f * float(discordant.n_mapped)/float(n_reads) );
                 log_stats(stderr, "    mapq :");
                 for (uint32 i = 0; i < 8; ++i)
-                        log_stats_cont(stderr, " %5u ", i ? 1u << (i-1) : 0u );
+                        log_stats_cont(stderr, " %5u  ", i ? 1u << (i-1) : 0u );
                 log_stats_cont(stderr,"\n");
                 log_stats(stderr, "         :");
                 for (uint32 i = 0; i < 8; ++i)
-                    log_stats_cont(stderr, " %5.1f%%", 100.0f * float(discordant.mapq_log_bins[i])/float(discordant.n_mapped) );
+                    log_stats_cont(stderr, " %6.2f%%", 100.0f * float(discordant.mapq_log_bins[i])/float(discordant.n_mapped) );
                 log_stats_cont(stderr,"\n");
 
                 log_stats(stderr, "  mate1 : %.2f %% - of these:\n", 100.0f * float(mate1.n_mapped)/float(n_reads) );
@@ -875,23 +875,23 @@ int main(int argc, char* argv[])
                 for (uint32 i = 0; i < mapped.size(); ++i)
                 {
                     if (float(mapped[i])/float(n_reads) > 1.0e-3f)
-                        log_stats_cont(stderr, " %5u ", i ? 1u << (i-1) : 0u );
+                        log_stats_cont(stderr, " %5u  ", i ? 1u << (i-1) : 0u );
                 }
                 log_stats_cont(stderr,"\n");
                 log_stats(stderr, "         :");
                 for (uint32 i = 0; i < mapped.size(); ++i)
                 {
                     if (float(mapped[i])/float(n_reads) > 1.0e-3f)
-                        log_stats_cont(stderr, " %5.1f%%", 100.0f * float(mapped[i])/float(n_mapped) );
+                        log_stats_cont(stderr, " %6.2f%%", 100.0f * float(mapped[i])/float(n_mapped) );
                 }
                 log_stats_cont(stderr,"\n");
                 log_stats(stderr, "    mapq :");
                 for (uint32 i = 0; i < 8; ++i)
-                        log_stats_cont(stderr, " %5u ", i ? 1u << (i-1) : 0u );
+                        log_stats_cont(stderr, " %5u  ", i ? 1u << (i-1) : 0u );
                 log_stats_cont(stderr,"\n");
                 log_stats(stderr, "         :");
                 for (uint32 i = 0; i < 8; ++i)
-                    log_stats_cont(stderr, " %5.1f%%", 100.0f * float(mate1.mapq_log_bins[i])/float(n_mapped) );
+                    log_stats_cont(stderr, " %6.2f%%", 100.0f * float(mate1.mapq_log_bins[i])/float(n_mapped) );
                 log_stats_cont(stderr,"\n");
             }
 

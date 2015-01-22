@@ -166,7 +166,8 @@ void parse_options(Params& params, const std::map<std::string,std::string>& opti
     params.pe_overlap    = !bool_option(options, "no-overlap",                      !params.pe_overlap);                // paired-end overlap
     params.pe_dovetail   =  bool_option(options, "dovetail",        init ? false   : params.pe_dovetail);               // paired-end dovetail
     params.pe_unpaired   = !bool_option(options, "no-mixed",        init ? false   :!params.pe_unpaired);               // paired-end no-mixed
-    params.pe_discordant = !bool_option(options, "no-discordant",   init ? false   :!params.pe_discordant);             // paired-end no-discordant
+    params.pe_discordant = !bool_option(options, "no-discordant",   init ? true    :!params.pe_discordant);             // paired-end no-discordant
+    params.pe_discordant =  bool_option(options, "discordant",                       params.pe_discordant);             // paired-end discordant
     params.min_frag_len  = uint_option(options, "minins", "I",      init ? 0u      : params.min_frag_len);              // paired-end minimum fragment length
     params.max_frag_len  = uint_option(options, "maxins", "X",      init ? 500u    : params.max_frag_len);              // paired-end maximum fragment length
 

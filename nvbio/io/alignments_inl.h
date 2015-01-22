@@ -32,7 +32,7 @@ namespace io {
 
 // check whether two alignments are distinct
 //
-NVBIO_FORCEINLINE NVBIO_DEVICE bool distinct_alignments(
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool distinct_alignments(
     const uint32 pos1,
     const bool   rc1,
     const uint32 pos2,
@@ -48,7 +48,7 @@ NVBIO_FORCEINLINE NVBIO_DEVICE bool distinct_alignments(
 
 // check whether two paired-end alignments are distinct
 //
-NVBIO_FORCEINLINE NVBIO_DEVICE bool distinct_alignments(
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool distinct_alignments(
     const uint32 apos1,
     const uint32 opos1,
     const bool   arc1,
@@ -63,7 +63,7 @@ NVBIO_FORCEINLINE NVBIO_DEVICE bool distinct_alignments(
 
 // check whether two paired-end alignments are distinct
 //
-NVBIO_FORCEINLINE NVBIO_DEVICE bool distinct_alignments(
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool distinct_alignments(
     const uint32 apos1,
     const uint32 opos1,
     const bool   arc1,
@@ -84,7 +84,7 @@ NVBIO_FORCEINLINE NVBIO_DEVICE bool distinct_alignments(
 
 // check whether two paired-end alignments are distinct
 //
-NVBIO_FORCEINLINE NVBIO_DEVICE bool distinct_alignments(
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool distinct_alignments(
     const PairedAlignments& p1,
     const PairedAlignments& p2)
 {
@@ -100,7 +100,7 @@ NVBIO_FORCEINLINE NVBIO_DEVICE bool distinct_alignments(
 }
 // check whether two paired-end alignments are distinct
 //
-NVBIO_FORCEINLINE NVBIO_DEVICE bool distinct_alignments(
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool distinct_alignments(
     const PairedAlignments& p1,
     const PairedAlignments& p2,
     const uint32            dist)

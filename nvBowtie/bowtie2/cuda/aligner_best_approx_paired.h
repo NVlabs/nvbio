@@ -1098,8 +1098,8 @@ void Aligner::best_approx_score(
         NVBIO_CUDA_DEBUG_STATEMENT( log_debug( stderr, "[%u]       crc: %llu\n", ID, device_checksum( score_queue_iterator, score_queue_iterator + pipeline.hits_queue_size ) ) );
 
         //
-        // compact the list of candidate hits (with an anchor mate score lower than the current second best paired score)
-        // and perform DP alignment on the opposite mates
+        // compact the list of candidate hits (with a valid anchor mate score) and perform DP alignment
+        // on the opposite mates
         //
 
         timer.start();

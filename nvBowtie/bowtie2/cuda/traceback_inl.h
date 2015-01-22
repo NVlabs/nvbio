@@ -122,7 +122,7 @@ struct BestTracebackStream : public AlignmentStreamBase<TRACEBACK_STREAM,Aligner
         const uint32 read_len = context->read_range.y - context->read_range.x;
 
         // setup the genome range
-        const bool paired_opposite_alignment = (m_mate_type == OppositeMate && alignment.is_paired());
+        const bool paired_opposite_alignment = (m_mate_type == OppositeMate && alignment.is_concordant());
         const uint32 g_pos = paired_opposite_alignment ?
             alignment.alignment() :
             alignment.alignment() > m_band_len/2 ? alignment.alignment() - m_band_len/2 : 0u;
@@ -439,7 +439,8 @@ struct AllTracebackStream : public AlignmentStreamBase<TRACEBACK_STREAM,AlignerT
             ed,
             score,
             in_alignment.is_rc(),
-            in_alignment.is_paired() );
+            in_alignment.is_paired(),
+            in_alignment.is_discordant() );
 
         NVBIO_CUDA_DEBUG_PRINT_IF( base_type::m_params.debug.show_traceback( context->read_id ), "finish-alignment:\n  mate[%u],  ed[%u], score[%d], pos[%u], rc[%u]\n", context->mate, out_alignment.ed(), out_alignment.score(), out_alignment.alignment(), uint32( out_alignment.is_rc() ));
     }

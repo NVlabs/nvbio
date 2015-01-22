@@ -50,6 +50,7 @@ template <typename MapqCalculator, typename ReadData>
 struct MapqFunctorPE
 {
     MapqFunctorPE(
+        const uint32         _mate,
         MapqCalculator       _mapq_eval,
         const io::Alignment* _best_data,
         const io::Alignment* _best_data_o,
@@ -61,7 +62,8 @@ struct MapqFunctorPE
         best_data_o( _best_data_o ),
         best_stride( _best_stride ),
         read_data1( _read_data1 ),
-        read_data2( _read_data2 ) {}
+        read_data2( _read_data2 ),
+        mate( _mate ) {}
 
     NVBIO_HOST_DEVICE
     uint8 operator() (const uint32 read_id)
@@ -69,8 +71,8 @@ struct MapqFunctorPE
         io::BestAlignments best( best_data[ read_id ], best_data[ read_id + best_stride ] );
         io::BestAlignments best_o( best_data_o[ read_id ], best_data_o[ read_id + best_stride ] );
         io::BestPairedAlignments best_paired(
-            (best.m_a1.mate() == 0) ? best   : best_o,
-            (best.m_a1.mate() == 0) ? best_o : best );
+            (mate == 0) ? best   : best_o,
+            (mate == 0) ? best_o : best );
 
         const uint32 read_offset1 = read_data1.sequence_index()[ read_id ];
         const uint32 read_len1    = read_data1.sequence_index()[ read_id + 1 ] - read_offset1;
@@ -78,7 +80,10 @@ struct MapqFunctorPE
         const uint32 read_offset2 = read_data2.sequence_index()[ read_id ];
         const uint32 read_len2    = read_data2.sequence_index()[ read_id + 1 ] - read_offset2;
 
-        return uint8( mapq_eval( best_paired, read_len1, read_len2 ) );
+        return uint8( mapq_eval(
+            best_paired,
+            best_paired.anchor_mate<0>() ? read_len2 : read_len1,
+            best_paired.anchor_mate<0>() ? read_len1 : read_len2 ) );
     }
 
     const MapqCalculator  mapq_eval;
@@ -87,6 +92,7 @@ struct MapqFunctorPE
     const uint32          best_stride;
     const ReadData        read_data1;
     const ReadData        read_data2;
+    const uint32          mate;
 };
 
 template <
@@ -281,14 +287,14 @@ void Aligner::best_approx(
             BATCH_SIZE );
     }
 
-    // compute mapq
+    // compute mapq for the first mate
     {
         log_debug(stderr, "[%u]    compute mapq\n", ID);
         typedef BowtieMapq2< SmithWatermanScoringScheme<> > mapq_evaluator_type;
 
         mapq_evaluator_type mapq_eval( input_scoring_scheme.sw );
 
-        MapqFunctorPE<mapq_evaluator_type,read_view_type> mapq_functor( mapq_eval, best_anchor_ptr, best_opposite_ptr, BATCH_SIZE, reads_view1, reads_view2 );
+        MapqFunctorPE<mapq_evaluator_type,read_view_type> mapq_functor( 0u, mapq_eval, best_anchor_ptr, best_opposite_ptr, BATCH_SIZE, reads_view1, reads_view2 );
 
         nvbio::transform<device_tag>(
             count,
@@ -376,6 +382,22 @@ void Aligner::best_approx(
 
         timer.stop();
         stats.alignments_DtoH.add( count, timer.seconds() );
+    }
+
+    // compute mapq for the second mate
+    {
+        log_debug(stderr, "[%u]    compute mapq\n", ID);
+        typedef BowtieMapq2< SmithWatermanScoringScheme<> > mapq_evaluator_type;
+
+        mapq_evaluator_type mapq_eval( input_scoring_scheme.sw );
+
+        MapqFunctorPE<mapq_evaluator_type,read_view_type> mapq_functor( 1u, mapq_eval, best_anchor_ptr, best_opposite_ptr, BATCH_SIZE, reads_view1, reads_view2 );
+
+        nvbio::transform<device_tag>(
+            count,
+            thrust::make_counting_iterator<uint32>(0),
+            mapq_dvec.begin(),
+            mapq_functor );
     }
 
     //

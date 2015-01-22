@@ -51,12 +51,10 @@ void HostOutputBatchPE::readback(const DeviceOutputBatchSE batch, const Alignmen
     batch.readback_scores( alignments[mate] );
     batch.readback_cigars( cigar[mate] );
     batch.readback_mds( mds[mate] );
+    batch.readback_mapq( mapq[mate] );
 
     if (mate == MATE_1)
-    {
-        batch.readback_mapq( mapq );
         batch.readback_ids( read_ids );
-    }
 }
 
 // copy scoring data to host, converting to io::AlignmentResult

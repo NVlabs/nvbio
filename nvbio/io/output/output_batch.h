@@ -117,7 +117,7 @@ public:
     thrust::host_vector<io::Alignment>           alignments[2];
     HostCigarArray                               cigar[2];
     HostMdsArray                                 mds[2];
-    thrust::host_vector<uint8>                   mapq;
+    thrust::host_vector<uint8>                   mapq[2];
     thrust::host_vector<uint32>                  read_ids;
 
     // pointer to the host-side read data for each mate

@@ -440,6 +440,16 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool distinct_alignments(
     const bool   orc2,
     const uint32 dist);
 
+// check whether two alignments are distinct
+//
+//   NOTE: this uses Alignment::sink() which is only valid during alignment,
+//   as sink() is unioned with ed().
+//
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool distinct_alignments(
+    const Alignment& p1,
+    const Alignment& p2,
+    const uint32     dist = 1);
+
 // check whether two paired-end alignments are distinct
 //
 //   NOTE: this uses Alignment::sink() which is only valid during alignment,

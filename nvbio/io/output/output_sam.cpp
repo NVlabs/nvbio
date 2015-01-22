@@ -443,7 +443,7 @@ uint32 SamOutput::process_one_alignment(const AlignmentData& alignment,
 
         sam_align.flags |= SAM_FLAGS_PAIRED;
 
-        if (mate.aln->is_paired()) // FIXME: this should be other_mate.is_concordant()
+        if (mate.aln->is_concordant())
             sam_align.flags |= SAM_FLAGS_PROPER_PAIR;
 
         if (!mate.aln->is_aligned())

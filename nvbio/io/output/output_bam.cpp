@@ -337,7 +337,7 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
     {
         alnh.flag_nc |= BAM_FLAGS_PAIRED;
 
-        if (mate.aln->is_paired()) // FIXME: this should be other_mate.is_concordant()
+        if (mate.aln->is_concordant())
         {
             alnh.flag_nc |= BAM_FLAGS_PROPER_PAIR;
         }

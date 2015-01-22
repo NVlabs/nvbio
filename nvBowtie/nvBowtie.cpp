@@ -667,7 +667,7 @@ int main(int argc, char* argv[])
             log_stats(stderr, "  reads   I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", input_stats.read_io.time, 1.0e-6f * input_stats.read_io.avg_speed(), 1.0e-6f * input_stats.read_io.max_speed);
             log_stats(stderr, "  results I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", io.time, 1.0e-6f * io.avg_speed(), 1.0e-6f * io.max_speed);
 
-            std::vector<uint32>& mapped         = concordant.mapped_ed_histogram;
+            std::vector<uint32>& mapped         = concordant.mapped_log_ed_histogram;
             uint32&              n_mapped       = concordant.n_mapped;
             uint32&              n_unique       = concordant.n_unique;
             uint32&              n_ambiguous    = concordant.n_ambiguous;
@@ -679,14 +679,38 @@ int main(int argc, char* argv[])
                 log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_nonambiguous)/float(n_mapped), 100.0f * float(n_nonambiguous)/float(n_reads) );
                 log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_ambiguous)/float(n_mapped), 100.0f * float(n_ambiguous)/float(n_reads) );
                 log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_multiple)/float(n_mapped), 100.0f * float(n_multiple)/float(n_reads) );
+                log_stats(stderr, "    ed   :");
                 for (uint32 i = 0; i < mapped.size(); ++i)
                 {
-                    if (float(mapped[i])/float(n_reads) > 1.0e-3f)
-                        log_stats(stderr, "    ed %4u : %.1f %%\n", i,
-                        100.0f * float(mapped[i])/float(n_reads) );
+                    if (float(mapped[i])/float(concordant.n_mapped) > 1.0e-3f)
+                        log_stats_cont(stderr, " %5u ", i ? 1u << (i-1) : 0u );
                 }
+                log_stats_cont(stderr,"\n");
+                log_stats(stderr, "          ");
+                for (uint32 i = 0; i < mapped.size(); ++i)
+                {
+                    if (float(mapped[i])/float(concordant.n_mapped) > 1.0e-3f)
+                        log_stats_cont(stderr, " %5.1f%%", 100.0f * float(mapped[i])/float(concordant.n_mapped) );
+                }
+                log_stats_cont(stderr,"\n");
+                log_stats(stderr, "    mapq :");
+                for (uint32 i = 0; i < 8; ++i)
+                        log_stats_cont(stderr, " %5u ", i ? 1u << (i-1) : 0u );
+                log_stats_cont(stderr,"\n");
+                log_stats(stderr, "          ");
+                for (uint32 i = 0; i < 8; ++i)
+                    log_stats_cont(stderr, " %5.1f%%", 100.0f * float(concordant.mapq_log_bins[i])/float(concordant.n_mapped) );
+                log_stats_cont(stderr,"\n");
 
                 log_stats(stderr, "  discordant reads : %.2f %%\n", 100.0f * float(discordant.n_mapped)/float(n_reads) );
+                log_stats(stderr, "    mapq :");
+                for (uint32 i = 0; i < 8; ++i)
+                        log_stats_cont(stderr, " %5u ", i ? 1u << (i-1) : 0u );
+                log_stats_cont(stderr,"\n");
+                log_stats(stderr, "          ");
+                for (uint32 i = 0; i < 8; ++i)
+                    log_stats_cont(stderr, " %5.1f%%", 100.0f * float(discordant.mapq_log_bins[i])/float(discordant.n_mapped) );
+                log_stats_cont(stderr,"\n");
 
                 log_stats(stderr, "  mate1 : %.2f %% - of these:\n", 100.0f * float(mate1.n_mapped)/float(n_reads) );
                 if (mate1.n_mapped)
@@ -835,7 +859,7 @@ int main(int argc, char* argv[])
             log_stats(stderr, "  reads   I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", input_stats.read_io.time, 1.0e-6f * input_stats.read_io.avg_speed(), 1.0e-6f * input_stats.read_io.max_speed);
             log_stats(stderr, "  results I/O   : %.2f sec (avg: %.3fM reads/s, max: %.3fM reads/s).\n", io.time, 1.0e-6f * io.avg_speed(), 1.0e-6f * io.max_speed);
 
-            std::vector<uint32>& mapped         = mate1.mapped_ed_histogram;
+            std::vector<uint32>& mapped         = mate1.mapped_log_ed_histogram;
             uint32&              n_mapped       = mate1.n_mapped;
             uint32&              n_unique       = mate1.n_unique;
             uint32&              n_ambiguous    = mate1.n_ambiguous;
@@ -847,12 +871,28 @@ int main(int argc, char* argv[])
                 log_stats(stderr, "    aligned unambiguously : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_nonambiguous)/float(n_mapped), 100.0f * float(n_nonambiguous)/float(n_reads) );
                 log_stats(stderr, "    aligned ambiguously   : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_ambiguous)/float(n_mapped), 100.0f * float(n_ambiguous)/float(n_reads) );
                 log_stats(stderr, "    aligned multiply      : %4.1f%% (%4.1f%% of total)\n", 100.0f * float(n_multiple)/float(n_mapped), 100.0f * float(n_multiple)/float(n_reads) );
+                log_stats(stderr, "    ed   :");
                 for (uint32 i = 0; i < mapped.size(); ++i)
                 {
                     if (float(mapped[i])/float(n_reads) > 1.0e-3f)
-                        log_stats(stderr, "    ed %4u : %.1f %%\n", i,
-                        100.0f * float(mapped[i])/float(n_reads) );
+                        log_stats_cont(stderr, " %5u ", i ? 1u << (i-1) : 0u );
                 }
+                log_stats_cont(stderr,"\n");
+                log_stats(stderr, "          ");
+                for (uint32 i = 0; i < mapped.size(); ++i)
+                {
+                    if (float(mapped[i])/float(n_reads) > 1.0e-3f)
+                        log_stats_cont(stderr, " %5.1f%%", 100.0f * float(mapped[i])/float(n_mapped) );
+                }
+                log_stats_cont(stderr,"\n");
+                log_stats(stderr, "    mapq :");
+                for (uint32 i = 0; i < 8; ++i)
+                        log_stats_cont(stderr, " %5u ", i ? 1u << (i-1) : 0u );
+                log_stats_cont(stderr,"\n");
+                log_stats(stderr, "          ");
+                for (uint32 i = 0; i < 8; ++i)
+                    log_stats_cont(stderr, " %5.1f%%", 100.0f * float(mate1.mapq_log_bins[i])/float(n_mapped) );
+                log_stats_cont(stderr,"\n");
             }
 
             // generate an html report

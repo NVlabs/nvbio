@@ -87,10 +87,13 @@ void Stats::track_alignment_statistics(
 {
     n_reads++;
 
+    const uint32 log_mapq = mapq ? nvbio::log2(mapq) + 1u : 0u;
+
     if (alignment1.best().is_concordant())
     {
         // keep track of mapping quality histogram
         concordant.mapq_bins[mapq]++;
+        concordant.mapq_log_bins[log_mapq]++;
 
         // count this read as mapped
         concordant.n_mapped++;
@@ -136,6 +139,9 @@ void Stats::track_alignment_statistics(
                 concordant.mapped_ed_histogram_fwd[first_ed]++;
             else
                 concordant.mapped_ed_histogram_rev[first_ed]++;
+
+            const uint32 log_first_ed = first_ed ? nvbio::log2(first_ed) + 1 : 0;
+            concordant.mapped_log_ed_histogram[log_first_ed]++;
         }
 
         // track edit-distance correlation
@@ -151,6 +157,7 @@ void Stats::track_alignment_statistics(
     {
         // keep track of mapping quality histogram
         discordant.mapq_bins[mapq]++;
+        discordant.mapq_log_bins[log_mapq]++;
 
         // count this read as mapped
         discordant.n_mapped++;
@@ -196,6 +203,9 @@ void Stats::track_alignment_statistics(
                 discordant.mapped_ed_histogram_fwd[first_ed]++;
             else
                 discordant.mapped_ed_histogram_rev[first_ed]++;
+
+            const uint32 log_first_ed = first_ed ? nvbio::log2(first_ed) + 1 : 0;
+            discordant.mapped_log_ed_histogram[log_first_ed]++;
         }
 
         // track edit-distance correlation
@@ -236,8 +246,11 @@ void Stats::track_alignment_statistics(
     // count this read as mapped
     mate->n_mapped++;
 
+    const uint32 log_mapq = mapq ? nvbio::log2(mapq) + 1u : 0u;
+
     // keep track of mapping quality histogram
     mate->mapq_bins[mapq]++;
+    mate->mapq_log_bins[log_mapq]++;
 
     if (!alignment.second_best().is_aligned())
     {
@@ -277,6 +290,9 @@ void Stats::track_alignment_statistics(
             mate->mapped_ed_histogram_fwd[first_ed]++;
         else
             mate->mapped_ed_histogram_rev[first_ed]++;
+
+        const uint32 log_first_ed = first_ed ? nvbio::log2(first_ed) + 1 : 0;
+        mate->mapped_log_ed_histogram[log_first_ed]++;
     }
 
     // track edit-distance correlation

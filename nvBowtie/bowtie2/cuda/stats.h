@@ -52,10 +52,14 @@ struct AlignmentStats
           n_multiple(0),
           mapped_ed_histogram(4096, 0),
           mapped_ed_histogram_fwd(4096, 0),
-          mapped_ed_histogram_rev(4096, 0)
+          mapped_ed_histogram_rev(4096, 0),
+          mapped_log_ed_histogram(12, 0)
     {
         for(uint32 c = 0; c < 64; c++)
             mapq_bins[c] = 0;
+
+        for(uint32 c = 0; c < 8; c++)
+            mapq_log_bins[c] = 0;
 
         for(uint32 c = 0; c < 64; c++)
             for(uint32 d = 0; d < 64; d++)
@@ -64,6 +68,7 @@ struct AlignmentStats
 
     // mapping quality stats
     uint64 mapq_bins[64];
+    uint64 mapq_log_bins[8];
 
     // mapping stats
     uint32          n_mapped;       // number of mapped reads
@@ -78,6 +83,8 @@ struct AlignmentStats
     std::vector<uint32> mapped_ed_histogram;        // aggregate histogram of edit-distance scores per read
     std::vector<uint32> mapped_ed_histogram_fwd;    // histogram of edit-distance scores for reads mapped to the forward sequence
     std::vector<uint32> mapped_ed_histogram_rev;    // histogram of edit-distance scores for reads mapped to the reverse-complemented sequence
+    std::vector<uint32> mapped_log_ed_histogram;    // aggregate histogram of log edit-distance scores per read
+    std::vector<uint32> mapped_log_mapq_histogram;  // aggregate histogram of log mapq scores per read
 
     // edit distance correlation (xxxnsubtil: what exactly does this measure?)
     uint32  mapped_ed_correlation[64][64];
@@ -97,9 +104,14 @@ struct AlignmentStats
             mapped_ed_histogram_fwd[i] += stats.mapped_ed_histogram_fwd[i];
             mapped_ed_histogram_rev[i] += stats.mapped_ed_histogram_rev[i];
         }
+        for (uint32 i = 0; i < 12; ++i)
+            mapped_log_ed_histogram[i] += stats.mapped_log_ed_histogram[i];
 
         for(uint32 c = 0; c < 64; c++)
             mapq_bins[c] += stats.mapq_bins[c];
+
+        for(uint32 c = 0; c < 8; c++)
+            mapq_log_bins[c] += stats.mapq_log_bins[c];
 
         for(uint32 c = 0; c < 64; c++)
             for(uint32 d = 0; d < 64; d++)

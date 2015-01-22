@@ -294,9 +294,9 @@ struct BestAnchorScoreStream : public AlignmentStreamBase<SCORE_STREAM,AlignerTy
 /// attributes.
 ///
 template <typename AlignerType, typename PipelineType>
-struct BestOppositeScoreStream : public AlignmentStreamBase<SCORE_STREAM,AlignerType,PipelineType>
+struct BestOppositeScoreStream : public AlignmentStreamBase<OPPOSITE_SCORE_STREAM,AlignerType,PipelineType>
 {
-    typedef AlignmentStreamBase<SCORE_STREAM,AlignerType,PipelineType>  base_type;
+    typedef AlignmentStreamBase<OPPOSITE_SCORE_STREAM,AlignerType,PipelineType>  base_type;
     typedef typename base_type::context_type                            context_type;
     typedef typename base_type::scheme_type                             scheme_type;
 
@@ -340,8 +340,10 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<SCORE_STREAM,Aligner
     {
         context->idx = base_type::m_pipeline.idx_queue[ base_type::m_pipeline.opposite_queue[i] ];
 
-        // initialize the sink
-        context->sink = aln::BestSink<int32>();
+        // initialize score and sink
+        //context->sink = aln::BestSink<int32>();
+        //context->sink.score = PipelineType::scheme_type::worst_score;
+        context->sink.invalidate();
 
         // fetch the hit to process
         HitReference<HitQueuesDeviceView> hit = base_type::m_pipeline.scoring_queues.hits[ context->idx ];
@@ -438,9 +440,6 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<SCORE_STREAM,Aligner
         // bound against genome end
         context->genome_end = nvbio::min( context->genome_end, base_type::m_pipeline.genome_length );
 
-        // initialize score and sink
-        context->sink.score = PipelineType::scheme_type::worst_score;
-
         // skip locations that we have already visited
         const uint32 mate = base_type::m_pipeline.anchor ? 0u : 1u;
         const bool skip = (mate == best.m_a1.m_mate && (context->read_rc == best.m_a1.m_rc && g_pos == best.m_a1.m_align)) ||
@@ -462,12 +461,25 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<SCORE_STREAM,Aligner
         // write the final hit.score and hit.sink attributes
         HitReference<HitQueuesDeviceView> hit = base_type::m_pipeline.scoring_queues.hits[ context->idx ];
 
-        const aln::BestSink<int32> sink = context->sink;
-        const uint32 genome_sink = sink.sink.x != uint32(-1) ? sink.sink.x : 0u;
+        //const aln::BestSink<int32> sink = context->sink;
+        //const uint32 genome_sink = sink.sink.x != uint32(-1) ? sink.sink.x : 0u;
 
-        hit.opposite_score = (sink.score >= context->min_score) ? sink.score : scheme_type::worst_score;
+        //hit.opposite_score = (sink.score >= context->min_score) ? sink.score : scheme_type::worst_score;
+
+        const aln::BestColumnSink<int32,20>& sink = context->sink;
+        uint32 best_idx1, best_idx2;
+
+        sink.best2( best_idx1, best_idx2, (context->read_range.y - context->read_range.x) / 2u );
+
+        const uint32 genome_sink  = sink.sinks[best_idx1].x != uint32(-1) ? sink.sinks[best_idx1].x : 0u;
+        const uint32 genome_sink2 = sink.sinks[best_idx2].x != uint32(-1) ? sink.sinks[best_idx2].x : 0u;
+
+        hit.opposite_score  = (sink.scores[best_idx1] >= context->min_score) ? sink.scores[best_idx1] : scheme_type::worst_score;
+        hit.opposite_score2 = (sink.scores[best_idx2] >= context->min_score) ? sink.scores[best_idx2] : scheme_type::worst_score;
+
         hit.opposite_loc   = context->genome_begin;
         hit.opposite_sink  = context->genome_begin + genome_sink;
+        hit.opposite_sink2 = context->genome_begin + genome_sink2;
         NVBIO_CUDA_DEBUG_PRINT_IF( base_type::m_params.debug.show_score( context->read_id, (sink.score >= context->min_score) ), "score opposite: %d (min[%d], mate[%u], rc[%u], pos[%u:%u], [qid %u])\n", sink.score, context->min_score, base_type::m_pipeline.anchor ? 0u : 1u, context->read_rc, context->genome_begin, context->genome_end, i );
     }
 };

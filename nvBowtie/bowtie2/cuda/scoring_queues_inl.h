@@ -91,6 +91,8 @@ uint64 HitQueues::resize(const uint32 size, const bool do_alloc)
     if (do_alloc) opposite_loc.resize( size );    bytes += size * sizeof(uint32);
     if (do_alloc) opposite_score.resize( size );  bytes += size * sizeof(int32);
     if (do_alloc) opposite_sink.resize( size );   bytes += size * sizeof(uint32);
+    if (do_alloc) opposite_score2.resize( size ); bytes += size * sizeof(int32);
+    if (do_alloc) opposite_sink2.resize( size );  bytes += size * sizeof(uint32);
     return bytes;
 }
 
@@ -108,7 +110,9 @@ HitQueuesDeviceView HitQueues::device_view()
         nvbio::device_view( sink ),
         nvbio::device_view( opposite_loc ),
         nvbio::device_view( opposite_score ),
-        nvbio::device_view( opposite_sink ) );
+        nvbio::device_view( opposite_sink ),
+        nvbio::device_view( opposite_score2 ),
+        nvbio::device_view( opposite_sink2 ) );
 }
 
 // constructor
@@ -123,7 +127,9 @@ HitQueuesDeviceView::HitQueuesDeviceView(
     sink_storage_type      _sink,               // hit sinks
     loc_storage_type       _opposite_loc,       // hit locations, opposite mate
     score_storage_type     _opposite_score,     // hit scores, opposite mate
-    sink_storage_type      _opposite_sink) :    // hit sinks, opposite mate
+    sink_storage_type      _opposite_sink,      // hit sinks, opposite mate
+    score_storage_type     _opposite_score2,    // hit scores, opposite mate
+    sink_storage_type      _opposite_sink2) :   // hit sinks, opposite mate
     read_id( _read_id ),
     seed( _seed ),
     ssa( _ssa ),
@@ -132,7 +138,9 @@ HitQueuesDeviceView::HitQueuesDeviceView(
     sink( _sink ),
     opposite_loc( _opposite_loc ),
     opposite_score( _opposite_score ),
-    opposite_sink( _opposite_sink )
+    opposite_sink( _opposite_sink ),
+    opposite_score2( _opposite_score2 ),
+    opposite_sink2( _opposite_sink2 )
 {}
 
 // resize
@@ -179,7 +187,9 @@ HitReference<HitQueuesType>::HitReference(HitQueuesType& hits, const uint32 hit_
     sink            ( hits.sink[ hit_index ] ),
     opposite_loc    ( hits.opposite_loc[ hit_index ] ),
     opposite_score  ( hits.opposite_score[ hit_index ] ),
-    opposite_sink   ( hits.opposite_sink[ hit_index ] )
+    opposite_sink   ( hits.opposite_sink[ hit_index ] ),
+    opposite_score2 ( hits.opposite_score2[ hit_index ] ),
+    opposite_sink2  ( hits.opposite_sink2[ hit_index ] )
 {}
 
 // return a view of the data structure

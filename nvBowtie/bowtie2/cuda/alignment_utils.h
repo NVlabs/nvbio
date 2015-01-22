@@ -113,8 +113,9 @@ int32 compute_target_score(const io::BestPairedAlignments& best, const int32 a_w
 
 enum AlignmentStreamType
 {
-    SCORE_STREAM      = 0,
-    TRACEBACK_STREAM  = 1,
+    SCORE_STREAM          = 0,
+    OPPOSITE_SCORE_STREAM = 1,
+    TRACEBACK_STREAM      = 2,
 };
 
 ///
@@ -236,6 +237,14 @@ struct AlignmentStreamContext<SCORE_STREAM>
     aln::BestSink<int32>    sink;           ///< output alignment sink
 };
 
+/// Base class for the scoring alignment contexts
+///
+template <>
+struct AlignmentStreamContext<OPPOSITE_SCORE_STREAM>
+{
+    aln::BestColumnSink<int32,20>   sink;   ///< output alignment sink
+};
+
 /// Base class for the traceback alignment contexts
 ///
 template <>
@@ -336,21 +345,6 @@ struct AlignmentStreamBase
 ///@}  // group nvBowtie
 
 } // namespace detail
-
-/// an alignment scoring context
-///
-struct AlignmentScoringContext
-{
-    aln::BestSink<int32>    sink;           ///< output alignment sink
-    uint32                  idx;
-    uint32                  mate;
-    uint2                   read_range;
-    uint32                  read_id;
-    uint32                  read_rc;
-    uint32                  genome_begin;
-    uint32                  genome_end;
-    int32                   min_score;
-};
 
 } // namespace cuda
 } // namespace bowtie2

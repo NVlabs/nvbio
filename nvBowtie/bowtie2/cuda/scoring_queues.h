@@ -246,6 +246,8 @@ struct HitQueues
     loc_storage_type       opposite_loc;       ///< hit locations, opposite mate
     score_storage_type     opposite_score;     ///< hit scores, opposite mate
     sink_storage_type      opposite_sink;      ///< hit sinks, opposite mate
+    score_storage_type     opposite_score2;    ///< hit scores, opposite mate
+    sink_storage_type      opposite_sink2;     ///< hit sinks, opposite mate
 };
 ///
 /// A view of the HitQueues class
@@ -274,7 +276,9 @@ struct HitQueuesDeviceView
         sink_storage_type      _sink            = sink_storage_type(),      // hit sinks
         loc_storage_type       _opposite_loc    = loc_storage_type(),       // hit locations, opposite mate
         score_storage_type     _opposite_score  = score_storage_type(),     // hit scores, opposite mate
-        sink_storage_type      _opposite_sink   = sink_storage_type());     // hit sinks, opposite mate
+        sink_storage_type      _opposite_sink   = sink_storage_type(),      // hit sinks, opposite mate
+        score_storage_type     _opposite_score2 = score_storage_type(),     // hit scores, opposite mate
+        sink_storage_type      _opposite_sink2  = sink_storage_type());     // hit sinks, opposite mate
 
     /// return a reference to a given hit
     ///
@@ -295,6 +299,8 @@ struct HitQueuesDeviceView
     loc_storage_type       opposite_loc;       ///< hit locations, opposite mate
     score_storage_type     opposite_score;     ///< hit scores, opposite mate
     sink_storage_type      opposite_sink;      ///< hit sinks, opposite mate
+    score_storage_type     opposite_score2;    ///< hit scores, opposite mate
+    sink_storage_type      opposite_sink2;     ///< hit sinks, opposite mate
 };
 
 ///
@@ -431,6 +437,8 @@ struct HitReference
     loc_type    opposite_loc;      ///< opposite mate's loc reference
     score_type  opposite_score;    ///< opposite mate's score reference
     sink_type   opposite_sink;     ///< opposite mate's sink reference
+    score_type  opposite_score2;   ///< opposite mate's score reference
+    sink_type   opposite_sink2;    ///< opposite mate's sink reference
 };
 
 ///

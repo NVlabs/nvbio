@@ -442,7 +442,7 @@ void score_reduce_paired_kernel(
 
         bool updated = false;
 
-        const uint32 min_distance = read_len/8;
+        const uint32 min_distance = read_len/4;
 
         if (pair.is_paired())
         {

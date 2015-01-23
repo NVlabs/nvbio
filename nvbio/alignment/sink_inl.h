@@ -39,6 +39,16 @@ template <typename ScoreType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 BestSink<ScoreType>::BestSink() : score( Field_traits<ScoreType>::min() ), sink( make_uint2( uint32(-1), uint32(-1) ) ) {}
 
+// invalidate
+//
+template <typename ScoreType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+void BestSink<ScoreType>::invalidate()
+{
+    score = Field_traits<ScoreType>::min();
+    sink  = make_uint2( uint32(-1), uint32(-1) );
+}
+
 // store a valid alignment
 //
 // \param score    alignment's score
@@ -67,6 +77,18 @@ Best2Sink<ScoreType>::Best2Sink(const uint32 distinct_dist) :
     sink1( make_uint2( uint32(-1), uint32(-1) ) ),
     sink2( make_uint2( uint32(-1), uint32(-1) ) ),
     m_distinct_dist( distinct_dist ) {}
+
+// invalidate
+//
+template <typename ScoreType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+void Best2Sink<ScoreType>::invalidate()
+{
+    score1 = Field_traits<ScoreType>::min();
+    score2 = Field_traits<ScoreType>::min();
+    sink1  = make_uint2( uint32(-1), uint32(-1) );
+    sink2  = make_uint2( uint32(-1), uint32(-1) );
+}
 
 // store a valid alignment
 //

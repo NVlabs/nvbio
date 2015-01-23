@@ -242,7 +242,11 @@ struct AlignmentStreamContext<SCORE_STREAM>
 template <>
 struct AlignmentStreamContext<OPPOSITE_SCORE_STREAM>
 {
+  #if DP_REPORT_MULTIPLE
     aln::BestColumnSink<int32,20>   sink;   ///< output alignment sink
+  #else
+    aln::BestSink<int32>    sink;           ///< output alignment sink
+  #endif
 };
 
 /// Base class for the traceback alignment contexts

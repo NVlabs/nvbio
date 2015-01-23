@@ -71,6 +71,11 @@ struct BestSink
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     BestSink();
 
+    /// invalidate
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    void invalidate();
+
     /// store a valid alignment
     ///
     /// \param _score    alignment's score
@@ -113,6 +118,11 @@ struct Best2Sink
     /// \param distinct_distance   the minimum text distance to consider two alignments distinct
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     Best2Sink(const uint32 distinct_dist = 0);
+
+    /// invalidate
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    void invalidate();
 
     /// store a valid alignment
     ///

@@ -64,6 +64,8 @@
 #define DO_OPTIONAL_SYNCHRONIZE     1
 #define DO_DEVICE_TIMING            0
 
+#define DP_REPORT_MULTIPLE          0
+
 #include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/pod.h>
 #include <nvbio/io/sequence/sequence.h> // FIXME: for PE_POLICY!

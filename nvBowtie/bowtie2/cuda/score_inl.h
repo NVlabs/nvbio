@@ -341,8 +341,6 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<OPPOSITE_SCORE_STREA
         context->idx = base_type::m_pipeline.idx_queue[ base_type::m_pipeline.opposite_queue[i] ];
 
         // initialize score and sink
-        //context->sink = aln::BestSink<int32>();
-        //context->sink.score = PipelineType::scheme_type::worst_score;
         context->sink.invalidate();
 
         // fetch the hit to process
@@ -388,7 +386,10 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<OPPOSITE_SCORE_STREA
 
         // assign the final score threshold
         context->min_score = nvbio::max( target_mate_score, base_type::m_pipeline.score_limit );
+
+      #if DP_REPORT_MULTIPLE
         context->sink.set_min_score( context->min_score );
+      #endif
 
         // check if it's even possible to reach the score threshold
         if (context->min_score > o_optimal_score)
@@ -462,11 +463,7 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<OPPOSITE_SCORE_STREA
         // write the final hit.score and hit.sink attributes
         HitReference<HitQueuesDeviceView> hit = base_type::m_pipeline.scoring_queues.hits[ context->idx ];
 
-        //const aln::BestSink<int32> sink = context->sink;
-        //const uint32 genome_sink = sink.sink.x != uint32(-1) ? sink.sink.x : 0u;
-
-        //hit.opposite_score = (sink.score >= context->min_score) ? sink.score : scheme_type::worst_score;
-
+    #if DP_REPORT_MULTIPLE
         const aln::BestColumnSink<int32,20>& sink = context->sink;
         uint32 best_idx1, best_idx2;
 
@@ -477,6 +474,14 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<OPPOSITE_SCORE_STREA
 
         hit.opposite_score  = (sink.scores[best_idx1] >= context->min_score) ? sink.scores[best_idx1] : scheme_type::worst_score;
         hit.opposite_score2 = (sink.scores[best_idx2] >= context->min_score) ? sink.scores[best_idx2] : scheme_type::worst_score;
+    #else
+        const aln::BestSink<int32> sink = context->sink;
+        const uint32 genome_sink  = sink.sink.x != uint32(-1) ? sink.sink.x : 0u;
+        const uint32 genome_sink2 = 0u;
+
+        hit.opposite_score  = (sink.score >= context->min_score) ? sink.score : scheme_type::worst_score;
+        hit.opposite_score2 = scheme_type::worst_score;
+    #endif
 
         hit.opposite_loc   = context->genome_begin;
         hit.opposite_sink  = context->genome_begin + genome_sink;

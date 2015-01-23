@@ -37,24 +37,18 @@ namespace io {
 DataBuffer::DataBuffer()
     : pos(0)
 {
-    buffer = (char *)malloc(BUFFER_SIZE + BUFFER_EXTRA);
-    NVBIO_CUDA_ASSERT(buffer);
+    buffer.resize( BUFFER_SIZE + BUFFER_EXTRA );
+    NVBIO_CUDA_ASSERT(buffer.size());
 }
 
 DataBuffer::~DataBuffer()
-{
-    if (buffer)
-    {
-        free(buffer);
-        buffer = NULL;
-    }
-}
+{}
 
 void DataBuffer::append_data(const void *data, int size)
 {
     NVBIO_CUDA_ASSERT(pos + size < BUFFER_SIZE + BUFFER_EXTRA);
 
-    memcpy(buffer + pos, data, size);
+    memcpy(&buffer[0] + pos, data, size);
     pos += size;
 }
 
@@ -114,7 +108,7 @@ void DataBuffer::poke_data(int offset, const void *data, int size)
 {
     NVBIO_CUDA_ASSERT(offset + size < BUFFER_SIZE + BUFFER_EXTRA);
 
-    memcpy(buffer + offset, data, size);
+    memcpy(&buffer[0] + offset, data, size);
 }
 
 void DataBuffer::poke_int32(int offset, int32 val)
@@ -144,7 +138,7 @@ void DataBuffer::rewind(void)
 
 void *DataBuffer::get_base_ptr(void)
 {
-    return buffer;
+    return &buffer[0];
 }
 
 void *DataBuffer::get_cur_ptr(void)

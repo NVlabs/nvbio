@@ -28,6 +28,7 @@
 #pragma once
 
 #include <nvbio/io/output/output_types.h>
+#include <vector>
 
 #include <stdio.h>
 
@@ -43,7 +44,7 @@ struct DataBuffer
     static const int BUFFER_SIZE = 60 * 1024;
     static const int BUFFER_EXTRA = 64 * 1024 - BUFFER_SIZE;
 
-    char *buffer;
+    std::vector<char> buffer;
     int pos;
 
     DataBuffer();

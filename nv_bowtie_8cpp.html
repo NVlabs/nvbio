@@ -118,6 +118,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;<a class="el" href="nv_bowtie_2bowtie2_2cuda_2stats_8h_source.html">nvBowtie/bowtie2/cuda/stats.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="nv_bowtie_2bowtie2_2cuda_2input__thread_8h_source.html">nvBowtie/bowtie2/cuda/input_thread.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="compute__thread_8h_source.html">nvBowtie/bowtie2/cuda/compute_thread.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="omp_8h_source.html">nvbio/basic/omp.h</a>&gt;</code><br/>
 </div>
 <p><a href="nv_bowtie_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -141,6 +142,10 @@ Functions</h2></td></tr>
 <tr class="separator:a6f51dac494c776cfb5e20cc7f1ea4949"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb0072b5aaa5d909969ee1ce287ae095"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nv_bowtie_8cpp.html#afb0072b5aaa5d909969ee1ce287ae095">is_number</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *str, <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> len=<a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(-1))</td></tr>
 <tr class="separator:afb0072b5aaa5d909969ee1ce287ae095"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab63e584fa4d7bd3b77c86f5d50803a64"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nv_bowtie_8cpp.html#ab63e584fa4d7bd3b77c86f5d50803a64">log_ed</a> (<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_alignment_stats.html">nvbio::bowtie2::cuda::AlignmentStats</a> &amp;stats)</td></tr>
+<tr class="separator:ab63e584fa4d7bd3b77c86f5d50803a64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7501c95ac4e09a99f93bf4322a59b751"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nv_bowtie_8cpp.html#a7501c95ac4e09a99f93bf4322a59b751">log_mapq</a> (<a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_alignment_stats.html">nvbio::bowtie2::cuda::AlignmentStats</a> &amp;stats)</td></tr>
+<tr class="separator:a7501c95ac4e09a99f93bf4322a59b751"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ddf1224851353fc92bfbff6f499fa97"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nv_bowtie_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a> (int argc, char *argv[])</td></tr>
 <tr class="separator:a0ddf1224851353fc92bfbff6f499fa97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -186,7 +191,43 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_8cpp_source.html#l00063">63</a> of file <a class="el" href="nv_bowtie_8cpp_source.html">nvBowtie.cpp</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_8cpp_source.html#l00064">64</a> of file <a class="el" href="nv_bowtie_8cpp_source.html">nvBowtie.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab63e584fa4d7bd3b77c86f5d50803a64"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void log_ed </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_alignment_stats.html">nvbio::bowtie2::cuda::AlignmentStats</a> &amp;&#160;</td>
+          <td class="paramname"><em>stats</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nv_bowtie_8cpp_source.html#l00079">79</a> of file <a class="el" href="nv_bowtie_8cpp_source.html">nvBowtie.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7501c95ac4e09a99f93bf4322a59b751"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void log_mapq </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_alignment_stats.html">nvbio::bowtie2::cuda::AlignmentStats</a> &amp;&#160;</td>
+          <td class="paramname"><em>stats</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nv_bowtie_8cpp_source.html#l00100">100</a> of file <a class="el" href="nv_bowtie_8cpp_source.html">nvBowtie.cpp</a>.</p>
 
 </div>
 </div>
@@ -214,14 +255,14 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nv_bowtie_8cpp_source.html#l00078">78</a> of file <a class="el" href="nv_bowtie_8cpp_source.html">nvBowtie.cpp</a>.</p>
+<p>Definition at line <a class="el" href="nv_bowtie_8cpp_source.html#l00115">115</a> of file <a class="el" href="nv_bowtie_8cpp_source.html">nvBowtie.cpp</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 13 2015 09:34:29 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:39:49 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

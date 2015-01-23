@@ -104,6 +104,6 @@ var searchData=
   ['vectorarrayview_3c_20nvbio_3a_3amemrange_20_3e',['VectorArrayView&lt; nvbio::MEMRange &gt;',['../structnvbio_1_1_vector_array_view.html',1,'nvbio']]],
   ['vectorarrayview_3c_20uint8_20_3e',['VectorArrayView&lt; uint8 &gt;',['../structnvbio_1_1_vector_array_view.html',1,'nvbio']]],
   ['view',['view',['../structdebruijn__graph_1_1view.html',1,'debruijn_graph']]],
-  ['view_5ferror',['view_error',['../structnvbio_1_1_server_mapped_file_1_1view__error.html',1,'nvbio::ServerMappedFile']]],
-  ['view_5ferror',['view_error',['../structnvbio_1_1_mapped_file_1_1view__error.html',1,'nvbio::MappedFile']]]
+  ['view_5ferror',['view_error',['../structnvbio_1_1_mapped_file_1_1view__error.html',1,'nvbio::MappedFile']]],
+  ['view_5ferror',['view_error',['../structnvbio_1_1_server_mapped_file_1_1view__error.html',1,'nvbio::ServerMappedFile']]]
 ];

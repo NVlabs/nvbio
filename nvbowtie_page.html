@@ -104,6 +104,18 @@ Performance</h1>
 <div class="image">
 <img src="benchmark-nvbowtie-speedup.png"  style="position:relative; bottom:-10px; border:0px;" width="80%" height="80%"/>
 </div>
+<h1><a class="anchor" id="SpecificitySection"></a>
+Specificity and Sensitivity</h1>
+<dl class="section user"><dt></dt><dd>While targeting maximum performance, nvBowtie is designed to match Bowtie2 as closely as possible, with the explicit goal of mantaining the same specificity and sensitivity characteristics. The following ROC curves have been generated using the excellent online testing platform <a href="http://www.bioplanet.com/gcat">GCAT</a>. As can be seen, nvBowtie matches Bowtie2's results to within extreme accuracy for a wide range of read types and error distributions. The only noticeable (and still very tiny) differences are concentrated around very low mapping quality alignments.</dd></dl>
+<div class="image">
+<img src="nvBowtie-ROC-se-100.png"  style="position:relative; bottom:-10px; border:0px;" width="95%" height="95%"/>
+</div>
+ <div class="image">
+<img src="nvBowtie-ROC-pe-100.png"  style="position:relative; bottom:-10px; border:0px;" width="95%" height="95%"/>
+</div>
+ <div class="image">
+<img src="nvBowtie-ROC-pe-250.png"  style="position:relative; bottom:-10px; border:0px;" width="95%" height="95%"/>
+</div>
 <h1><a class="anchor" id="nvBowtieArch"></a>
 Architecture</h1>
 <dl class="section user"><dt></dt><dd>In order to take advantage of the massive parallelism available in modern processor architectures, nvBowtie re-implements the same underlying algorithms as Bowtie2 taking a fundamentally different approach. In fact, while Bowtie2 is essentially designed to operate on a single read at a time (possibly having multiple CPU threads working on a different read), carrying the entire alignment process in what is basically a very complex chain of nested function calls, nvBowtie works at all times with large batches of reads, and treats their alignment as a complex pipeline composed by many relatively simple but deeply parallel stages. In many of these stages parallelism is spread at a much finer granularity than at the reads-level, for example by processing many candidate hits from each read at the same time.</dd></dl>
@@ -219,6 +231,7 @@ Usage</h1>
 *       --overlap                        allow overlapping mates
 *       --no-overlap                     disable overlapping mates
 *       --dovetail                       allow dovetailing mates
+*       --no-discordant                  disable discordant alignments
 *       --no-mixed                       only report paired alignments
 *       --ungapped-mates | -ug           perform ungapped mate alignment
 *     Seeding:
@@ -265,7 +278,8 @@ Usage</h1>
 <pre class="fragment">*  ./nvBWT hg19.fa hg19-index
 * </pre><dl class="section user"><dt></dt><dd>At this point, one can run nvBowtie:</dd></dl>
 <pre class="fragment">*  ./nvBowtie -x hg19 -U my_reads.fastq -S my_reads.bam
-* </pre><dl class="section user"><dt></dt><dd>Another noteworthy option is to let nvBowtie fetch them from a <em>shared memory</em> server which can be run in the background: the <a class="el" href="nvfm_server_page.html">nvFM-server</a>. It be launched with:</dd></dl>
+* </pre><dl class="section user"><dt></dt><dd>Notice that nvBowtie supports direct output of BAM files, which has been carefully optimized and parallelized in order to cope with the superior alignment throughput.</dd></dl>
+<dl class="section user"><dt></dt><dd>Another noteworthy option is to let nvBowtie fetch the reference index from a <em>shared memory</em> server which can be run in the background: the <a class="el" href="nvfm_server_page.html">nvFM-server</a>. It be launched with:</dd></dl>
 <pre class="fragment">*  ./nvFM-server hg19-index hg19 &amp;
 * </pre><dl class="section user"><dt></dt><dd>nvBowtie can then pickup the reference from the server:</dd></dl>
 <pre class="fragment">*  ./nvBowtie -x hg19 -U my_reads.fastq -S my_reads.bam
@@ -290,7 +304,7 @@ scoring schemes</h2>
 * </pre> </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 13 2015 09:34:30 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:39:50 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

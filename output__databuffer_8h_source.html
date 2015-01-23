@@ -130,72 +130,73 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="output__types_8h.html">nvbio/io/output/output_types.h</a>&gt;</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">namespace </span>nvbio {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">namespace </span>io {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">// xxxnsubtil: BAM is little-endian, and so is x86/amd64</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">// we do no endinaness conversion here, though we provide</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">// methods to fill out integers in case we ever need to</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">   40</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">DataBuffer</a></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;{</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="comment">// the maximum size for a BGZF block is 64kb + 1, which seems like a horrible design decision</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#aff5a7e0db1127747789a9132459cc279">   43</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#aff5a7e0db1127747789a9132459cc279">BUFFER_SIZE</a> = 60 * 1024;</div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a16571ab92dbf9093f0df578121e07058">   44</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a16571ab92dbf9093f0df578121e07058">BUFFER_EXTRA</a> = 64 * 1024 - <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#aff5a7e0db1127747789a9132459cc279">BUFFER_SIZE</a>;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a69e6bb86b333ec56bb97bbe3253b56d2">   46</a></span>&#160;    <span class="keywordtype">char</span> *<a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a69e6bb86b333ec56bb97bbe3253b56d2">buffer</a>;</div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#afae33fe8ffc19ccd949829c0dc873c41">   47</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#afae33fe8ffc19ccd949829c0dc873c41">pos</a>;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a0fb711f9a817ff2836f7b6196d122727">DataBuffer</a>();</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a60f3f625342c5f91a7f0f27b8a7d29e8">~DataBuffer</a>();</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="comment">// append raw data to the buffer</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#adeeb53c2dedb6401420f7ae9bb47901e">append_data</a>(<span class="keyword">const</span> <span class="keywordtype">void</span> *data, <span class="keywordtype">int</span> size);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="comment">// apend integral values to the data buffer</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">// we explicitly implement each of these instead of using a template to make sure we always</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">// output the correct types</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#afbf6d13cf47327febf9a3f1bfeb03e18">append_int32</a>(<a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> value);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a5c945cab1d9ab7e5eccad9fe3ff6cb62">append_uint32</a>(<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> value);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a3595a5f38aea5c3fe1769591c0780a2c">append_int8</a>(<a class="code" href="group___basic.html#ga97f8ce4866b563df5139be8708967b21">int8</a> value);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#ab5683d9d83dc6011e409fcbd1fd5363c">append_uint8</a>(<a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> value);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="comment">// append a formatted string to the buffer (note: this can fail if there&#39;s too much data!)</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#ac2940d0709953e8e1376911eb2fee71a">append_formatted_string</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *fmt, ...);</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="comment">// append a plain string to the buffer</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a5b8345da41eae76c38af642d53fc21c8">append_string</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *str);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="comment">// append a linebreak</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#ac5515d3e5c561e5b165560295c40d90e">append_linebreak</a>();</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="comment">// get current offset</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#ae8e64539af96c32c68539cd65f0dc2fc">get_pos</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="comment">// move write pointer forward by num bytes</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a5dd1c665a8d4e8dbb890920d80619835">skip_ahead</a>(<span class="keywordtype">int</span> n);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="comment">// poke data at a given offset</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#ac687d905310a8ba99cd4967a5c0c7b8f">poke_data</a>(<span class="keywordtype">int</span> offset, <span class="keyword">const</span> <span class="keywordtype">void</span> *data, <span class="keywordtype">int</span> size);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a40207dd2d8830675681903a3a1626c56">poke_int32</a>(<span class="keywordtype">int</span> offset, <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> val);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a16ed02ae36da10c458f54ec75da8a82f">poke_uint16</a>(<span class="keywordtype">int</span> offset, <a class="code" href="group___basic.html#ga264650c447b295bd86c6fd980ad7c32f">uint16</a> val);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="comment">// check whether buffer is full</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a958e7a898a3f4d8c0f46924a9a2caf35">is_full</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="comment">// grab the current pointer</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">void</span> *<a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a27a994bf5ed8b9dcf1070a36e959638f">get_cur_ptr</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="comment">// grab the base pointer</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">void</span> *<a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#ae8103650a4b65b7a66f63e18bf326d43">get_base_ptr</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="comment">// get number of bytes remaining in this buffer</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a19a22d32eba3fe74ae345d8217d9523d">get_remaining_size</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="comment">// rewind pos back to 0</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a1498514c3f52d1ee86e4fa8bbc94f0ca">rewind</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;};</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;} <span class="comment">// namespace io</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;} <span class="comment">// namespace nvbio</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">namespace </span>nvbio {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">namespace </span>io {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">// xxxnsubtil: BAM is little-endian, and so is x86/amd64</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">// we do no endinaness conversion here, though we provide</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">// methods to fill out integers in case we ever need to</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">   41</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">DataBuffer</a></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;{</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="comment">// the maximum size for a BGZF block is 64kb + 1, which seems like a horrible design decision</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#aff5a7e0db1127747789a9132459cc279">   44</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#aff5a7e0db1127747789a9132459cc279">BUFFER_SIZE</a> = 60 * 1024;</div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a16571ab92dbf9093f0df578121e07058">   45</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a16571ab92dbf9093f0df578121e07058">BUFFER_EXTRA</a> = 64 * 1024 - <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#aff5a7e0db1127747789a9132459cc279">BUFFER_SIZE</a>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a42737b492260aee2cfdf4eac6e6afb77">   47</a></span>&#160;    std::vector&lt;char&gt; <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a42737b492260aee2cfdf4eac6e6afb77">buffer</a>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#afae33fe8ffc19ccd949829c0dc873c41">   48</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#afae33fe8ffc19ccd949829c0dc873c41">pos</a>;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a0fb711f9a817ff2836f7b6196d122727">DataBuffer</a>();</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a60f3f625342c5f91a7f0f27b8a7d29e8">~DataBuffer</a>();</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="comment">// append raw data to the buffer</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#adeeb53c2dedb6401420f7ae9bb47901e">append_data</a>(<span class="keyword">const</span> <span class="keywordtype">void</span> *data, <span class="keywordtype">int</span> size);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">// apend integral values to the data buffer</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">// we explicitly implement each of these instead of using a template to make sure we always</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="comment">// output the correct types</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#afbf6d13cf47327febf9a3f1bfeb03e18">append_int32</a>(<a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> value);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a5c945cab1d9ab7e5eccad9fe3ff6cb62">append_uint32</a>(<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> value);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a3595a5f38aea5c3fe1769591c0780a2c">append_int8</a>(<a class="code" href="group___basic.html#ga97f8ce4866b563df5139be8708967b21">int8</a> value);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#ab5683d9d83dc6011e409fcbd1fd5363c">append_uint8</a>(<a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> value);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="comment">// append a formatted string to the buffer (note: this can fail if there&#39;s too much data!)</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#ac2940d0709953e8e1376911eb2fee71a">append_formatted_string</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *fmt, ...);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="comment">// append a plain string to the buffer</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a5b8345da41eae76c38af642d53fc21c8">append_string</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *str);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="comment">// append a linebreak</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#ac5515d3e5c561e5b165560295c40d90e">append_linebreak</a>();</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="comment">// get current offset</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#ae8e64539af96c32c68539cd65f0dc2fc">get_pos</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="comment">// move write pointer forward by num bytes</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a5dd1c665a8d4e8dbb890920d80619835">skip_ahead</a>(<span class="keywordtype">int</span> n);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="comment">// poke data at a given offset</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#ac687d905310a8ba99cd4967a5c0c7b8f">poke_data</a>(<span class="keywordtype">int</span> offset, <span class="keyword">const</span> <span class="keywordtype">void</span> *data, <span class="keywordtype">int</span> size);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a40207dd2d8830675681903a3a1626c56">poke_int32</a>(<span class="keywordtype">int</span> offset, <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> val);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a16ed02ae36da10c458f54ec75da8a82f">poke_uint16</a>(<span class="keywordtype">int</span> offset, <a class="code" href="group___basic.html#ga264650c447b295bd86c6fd980ad7c32f">uint16</a> val);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="comment">// check whether buffer is full</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a958e7a898a3f4d8c0f46924a9a2caf35">is_full</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="comment">// grab the current pointer</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordtype">void</span> *<a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a27a994bf5ed8b9dcf1070a36e959638f">get_cur_ptr</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="comment">// grab the base pointer</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordtype">void</span> *<a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#ae8103650a4b65b7a66f63e18bf326d43">get_base_ptr</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="comment">// get number of bytes remaining in this buffer</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a19a22d32eba3fe74ae345d8217d9523d">get_remaining_size</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="comment">// rewind pos back to 0</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html#a1498514c3f52d1ee86e4fa8bbc94f0ca">rewind</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;};</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;} <span class="comment">// namespace io</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;} <span class="comment">// namespace nvbio</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 13 2015 09:34:15 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:39:34 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

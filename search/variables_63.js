@@ -52,6 +52,7 @@ var searchData=
   ['compressed_5fblock',['compressed_block',['../struct_b_g_z_f.html#a0edabaaaa997eaca45e79d8555639f14',1,'BGZF']]],
   ['compressedblock',['CompressedBlock',['../struct_bam_tools_1_1_bgzf_data.html#aeaf7c940732a72eff7c97c10dd157f46',1,'BamTools::BgzfData']]],
   ['compressedblocksize',['CompressedBlockSize',['../struct_bam_tools_1_1_bgzf_data.html#ae250b52e17a107fbdb32bf4bb2f346f6',1,'BamTools::BgzfData']]],
+  ['concordant',['concordant',['../structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a2a99fa48202dbc2bd4745e4ff8e7877c',1,'nvbio::bowtie2::cuda::Stats']]],
   ['conf',['conf',['../structtbx__t.html#a12735a6e0a1c1196b739b8c7c4bbdd9a',1,'tbx_t']]],
   ['configuration_5ftable',['configuration_table',['../deflate_8c.html#a9d8772078a7001d0dc9bd34789631322',1,'deflate.c']]],
   ['constant_5ftime_5fsize',['constant_time_size',['../classboost_1_1container_1_1priority__deque.html#a472c9f8156cc0576c81ea2b26d5155ab',1,'boost::container::priority_deque::constant_time_size()'],['../classnvbio_1_1priority__deque.html#a2e079a83dc581a51e577f9557c31d1aa',1,'nvbio::priority_deque::constant_time_size()']]],

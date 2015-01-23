@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['l',['L',['../struct_bam_tools_1_1_ref_edit.html#afe91f3d85e62717df0c551786a167fe5',1,'BamTools::RefEdit::L()'],['../structnvbio_1_1alndiff_1_1_boolean_stats.html#a4e39698531bdc0a2bc1db055ece9d881',1,'nvbio::alndiff::BooleanStats::L()'],['../struct____kstring__t.html#a79e51a81cb72d75e81bf481ba8ff12c8',1,'__kstring_t::l()'],['../structnvbio_1_1alndiff_1_1_stats.html#a2f991c6676492b4a1db5263f863685dd',1,'nvbio::alndiff::Stats::l()']]],
+  ['l',['l',['../struct____kstring__t.html#a79e51a81cb72d75e81bf481ba8ff12c8',1,'__kstring_t::l()'],['../structnvbio_1_1alndiff_1_1_stats.html#a2f991c6676492b4a1db5263f863685dd',1,'nvbio::alndiff::Stats::l()'],['../struct_bam_tools_1_1_ref_edit.html#afe91f3d85e62717df0c551786a167fe5',1,'BamTools::RefEdit::L()'],['../structnvbio_1_1alndiff_1_1_boolean_stats.html#a4e39698531bdc0a2bc1db055ece9d881',1,'nvbio::alndiff::BooleanStats::L()']]],
   ['l1',['L1',['../structcram__fd.html#acb665aabda24afabec12fb7ff46f71d9',1,'cram_fd']]],
   ['l2',['L2',['../structcram__fd.html#a98142a2d43172b10d3d10865b018a5ac',1,'cram_fd::L2()'],['../structnvbio_1_1io_1_1_f_m_index_data_m_m_a_p_info.html#a939ac3ffb90e63ee1bcf422647bea4d7',1,'nvbio::io::FMIndexDataMMAPInfo::L2()']]],
   ['l_5fand_5fr',['L_and_R',['../structnvbio_1_1alndiff_1_1_boolean_stats.html#a5b4857203b94d3df3de391693731a86f',1,'nvbio::alndiff::BooleanStats']]],

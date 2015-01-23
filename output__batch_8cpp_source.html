@@ -153,55 +153,53 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    batch.<a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a8b9c9a5cfdb9222cd604b9dd57c000a8">readback_scores</a>( <a class="code" href="structnvbio_1_1io_1_1_host_output_batch_p_e.html#ac4cde106c8893c40fac7d20a99847210">alignments</a>[mate] );</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    batch.<a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a194820d2691c27ba0b4527d9b8343f77">readback_cigars</a>( <a class="code" href="structcigar.html">cigar</a>[mate] );</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    batch.<a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a714e027bbfb45339197cd15d41351b50">readback_mds</a>( <a class="code" href="structnvbio_1_1io_1_1_host_output_batch_p_e.html#ae092fd96ad89204d1296ff78bb659740">mds</a>[mate] );</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">if</span> (mate == <a class="code" href="group___output.html#gga33a303d7df8d2b996a60298573bf109ca0a4a367a8a78e508e8f2ade45cb84548">MATE_1</a>)</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        batch.<a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#aaa361dfb0dd6905638fdc2fb036882ed">readback_mapq</a>( <a class="code" href="structnvbio_1_1io_1_1_host_output_batch_p_e.html#a7be056d7e908dc91899afd33a0310550">mapq</a> );</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        batch.<a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#aec088fa769de6dbf396224dc66791645">readback_ids</a>( <a class="code" href="structnvbio_1_1io_1_1_host_output_batch_p_e.html#a2085612878b439d31f9458b776a4c823">read_ids</a> );</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    }</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">// copy scoring data to host, converting to io::AlignmentResult</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a8b9c9a5cfdb9222cd604b9dd57c000a8">   63</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a8b9c9a5cfdb9222cd604b9dd57c000a8">DeviceOutputBatchSE::readback_scores</a>(thrust::host_vector&lt;io::Alignment&gt;&amp; host_alignments)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="comment">// copy alignment data into a staging buffer</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    host_alignments = <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a45acaa1e9d96703b3dee14846e7a85b0">alignments</a>;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">// copy CIGARs into host memory</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a194820d2691c27ba0b4527d9b8343f77">   70</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a194820d2691c27ba0b4527d9b8343f77">DeviceOutputBatchSE::readback_cigars</a>(<a class="code" href="structnvbio_1_1io_1_1_host_cigar_array.html">io::HostCigarArray</a>&amp; host_cigar)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    host_cigar.<a class="code" href="structnvbio_1_1io_1_1_host_cigar_array.html#a15ed717a6f3fcdbefb6fcc502a249f35">array</a> = <a class="code" href="structcigar.html">cigar</a>.array;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    nvbio::cuda::thrust_copy_vector(host_cigar.<a class="code" href="structnvbio_1_1io_1_1_host_cigar_array.html#aa3de1e95ac265e92ecbd545c8097d0ef">coords</a>, <a class="code" href="structcigar.html">cigar</a>.coords);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;}</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment">// copy MD strings back to the host</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a714e027bbfb45339197cd15d41351b50">   77</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a714e027bbfb45339197cd15d41351b50">DeviceOutputBatchSE::readback_mds</a>(<a class="code" href="structnvbio_1_1_host_vector_array.html">nvbio::HostVectorArray&lt;uint8&gt;</a>&amp; host_mds)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    host_mds = <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#ab158225cc4120680520ce94b680b88f4">mds</a>;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;}</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment">// copy mapq back to the host</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#aaa361dfb0dd6905638fdc2fb036882ed">   83</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#aaa361dfb0dd6905638fdc2fb036882ed">DeviceOutputBatchSE::readback_mapq</a>(thrust::host_vector&lt;uint8&gt;&amp; host_mapq)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    host_mapq = <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a6e9cb059b97eab53e178cefe31d9c33e">mapq</a>;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;}</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">// copy mapq back to the host</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#aec088fa769de6dbf396224dc66791645">   89</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#aec088fa769de6dbf396224dc66791645">DeviceOutputBatchSE::readback_ids</a>(thrust::host_vector&lt;uint32&gt;&amp; host_ids)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a5fbb2b48752a885d897e99a2c4add352">read_ids</a>)</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        host_ids = *<a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a5fbb2b48752a885d897e99a2c4add352">read_ids</a>;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        host_ids.resize(0);</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;}</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;} <span class="comment">// namespace io</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;} <span class="comment">// namespace nvbio</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    batch.<a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#aaa361dfb0dd6905638fdc2fb036882ed">readback_mapq</a>( <a class="code" href="structnvbio_1_1io_1_1_host_output_batch_p_e.html#aad7a5af6388354997d1ffae7cf29d16a">mapq</a>[mate] );</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordflow">if</span> (mate == <a class="code" href="group___output.html#gga33a303d7df8d2b996a60298573bf109ca0a4a367a8a78e508e8f2ade45cb84548">MATE_1</a>)</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        batch.<a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#aec088fa769de6dbf396224dc66791645">readback_ids</a>( <a class="code" href="structnvbio_1_1io_1_1_host_output_batch_p_e.html#a2085612878b439d31f9458b776a4c823">read_ids</a> );</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">// copy scoring data to host, converting to io::AlignmentResult</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a8b9c9a5cfdb9222cd604b9dd57c000a8">   61</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a8b9c9a5cfdb9222cd604b9dd57c000a8">DeviceOutputBatchSE::readback_scores</a>(thrust::host_vector&lt;io::Alignment&gt;&amp; host_alignments)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="comment">// copy alignment data into a staging buffer</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    host_alignments = <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a45acaa1e9d96703b3dee14846e7a85b0">alignments</a>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">// copy CIGARs into host memory</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a194820d2691c27ba0b4527d9b8343f77">   68</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a194820d2691c27ba0b4527d9b8343f77">DeviceOutputBatchSE::readback_cigars</a>(<a class="code" href="structnvbio_1_1io_1_1_host_cigar_array.html">io::HostCigarArray</a>&amp; host_cigar)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    host_cigar.<a class="code" href="structnvbio_1_1io_1_1_host_cigar_array.html#a15ed717a6f3fcdbefb6fcc502a249f35">array</a> = <a class="code" href="structcigar.html">cigar</a>.array;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    nvbio::cuda::thrust_copy_vector(host_cigar.<a class="code" href="structnvbio_1_1io_1_1_host_cigar_array.html#aa3de1e95ac265e92ecbd545c8097d0ef">coords</a>, <a class="code" href="structcigar.html">cigar</a>.coords);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment">// copy MD strings back to the host</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a714e027bbfb45339197cd15d41351b50">   75</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a714e027bbfb45339197cd15d41351b50">DeviceOutputBatchSE::readback_mds</a>(<a class="code" href="structnvbio_1_1_host_vector_array.html">nvbio::HostVectorArray&lt;uint8&gt;</a>&amp; host_mds)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    host_mds = <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#ab158225cc4120680520ce94b680b88f4">mds</a>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;}</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment">// copy mapq back to the host</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#aaa361dfb0dd6905638fdc2fb036882ed">   81</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#aaa361dfb0dd6905638fdc2fb036882ed">DeviceOutputBatchSE::readback_mapq</a>(thrust::host_vector&lt;uint8&gt;&amp; host_mapq)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    host_mapq = <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a6e9cb059b97eab53e178cefe31d9c33e">mapq</a>;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;}</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment">// copy mapq back to the host</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno"><a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#aec088fa769de6dbf396224dc66791645">   87</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#aec088fa769de6dbf396224dc66791645">DeviceOutputBatchSE::readback_ids</a>(thrust::host_vector&lt;uint32&gt;&amp; host_ids)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a5fbb2b48752a885d897e99a2c4add352">read_ids</a>)</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        host_ids = *<a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html#a5fbb2b48752a885d897e99a2c4add352">read_ids</a>;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        host_ids.resize(0);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;} <span class="comment">// namespace io</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;} <span class="comment">// namespace nvbio</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 13 2015 09:34:15 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:39:34 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

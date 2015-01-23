@@ -25,6 +25,7 @@ var searchData=
   ['do8',['DO8',['../adler32_8c.html#a9aafc447614bf5c4dc0d484aba9edb89',1,'DO8():&#160;adler32.c'],['../crc32_8c.html#aed1b41414efee0773c67c28e09317455',1,'DO8():&#160;crc32.c']]],
   ['do_5fdevice_5ftiming',['DO_DEVICE_TIMING',['../defs_8h.html#aa7984e7fef36ed763404a03ab79eed92',1,'defs.h']]],
   ['do_5foptional_5fsynchronize',['DO_OPTIONAL_SYNCHRONIZE',['../defs_8h.html#a743f85cb19fb4574078cb5229dedd17f',1,'defs.h']]],
+  ['dp_5freport_5fmultiple',['DP_REPORT_MULTIPLE',['../defs_8h.html#afc8f45c24bda000fd25dc71972b94577',1,'defs.h']]],
   ['dropbits',['DROPBITS',['../infback_8c.html#a65312e68bdf918e606b0deaf69793523',1,'DROPBITS():&#160;infback.c'],['../inflate_8c.html#a65312e68bdf918e606b0deaf69793523',1,'DROPBITS():&#160;inflate.c']]],
   ['dyn_5ftrees',['DYN_TREES',['../zutil_8h.html#a40a71de753262f20a0bcacc2304e7b19',1,'zutil.h']]]
 ];

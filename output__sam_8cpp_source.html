@@ -545,7 +545,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;</div>
 <div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;        sam_align.flags |= SAM_FLAGS_PAIRED;</div>
 <div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;        <span class="keywordflow">if</span> (mate.aln-&gt;is_paired()) <span class="comment">// FIXME: this should be other_mate.is_concordant()</span></div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;        <span class="keywordflow">if</span> (mate.aln-&gt;is_concordant())</div>
 <div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;            sam_align.flags |= SAM_FLAGS_PROPER_PAIR;</div>
 <div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;</div>
 <div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;        <a class="code" href="group__private.html#ga85d958c03886a94278558ccb0d58e95a">if</a> (!mate.aln-&gt;is_aligned())</div>
@@ -684,7 +684,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 13 2015 09:34:15 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:39:34 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

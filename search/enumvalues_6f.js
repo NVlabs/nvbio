@@ -11,6 +11,7 @@ var searchData=
   ['op_5fp',['OP_P',['../structcigar__op.html#abc6fa7caafcd79f10a83da479982e02ea7939d9388f828e93bbd906da06cf0d76',1,'cigar_op']]],
   ['op_5fs',['OP_S',['../structcigar__op.html#abc6fa7caafcd79f10a83da479982e02ea37b5a2bd4862a0262a8ad29232264277',1,'cigar_op']]],
   ['op_5fx',['OP_X',['../structcigar__op.html#abc6fa7caafcd79f10a83da479982e02ea0d9b9fb35d387a74963e98a65b3a1a1a',1,'cigar_op']]],
+  ['opposite_5fscore_5fstream',['OPPOSITE_SCORE_STREAM',['../group___alignment_detail.html#gga9db88865ab2bd7b1f501d885f06434c7a1b5c7a68bc2de2b856f0c490ab8cec62',1,'nvbio::bowtie2::cuda::detail']]],
   ['oppositemate',['OppositeMate',['../group___traceback.html#ggadc7fb90dc1dd526250d72fd81c2ab0d3a89b05bdca942ab14f9aae2c65e9b581a',1,'nvbio::bowtie2::cuda']]],
   ['os',['OS',['../inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa48654532ac8a1eee6c255d77e3e1c406',1,'inflate.h']]]
 ];

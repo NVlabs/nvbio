@@ -57,6 +57,7 @@ var searchData=
   ['bestalignments',['BestAlignments',['../structnvbio_1_1io_1_1_best_alignments.html',1,'nvbio::io']]],
   ['bestanchorscorestream',['BestAnchorScoreStream',['../structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_anchor_score_stream.html',1,'nvbio::bowtie2::cuda::detail']]],
   ['bestapproxscoringpipelinestate',['BestApproxScoringPipelineState',['../structnvbio_1_1bowtie2_1_1cuda_1_1_best_approx_scoring_pipeline_state.html',1,'nvbio::bowtie2::cuda']]],
+  ['bestcolumnsink',['BestColumnSink',['../structnvbio_1_1aln_1_1_best_column_sink.html',1,'nvbio::aln']]],
   ['bestoppositescorestream',['BestOppositeScoreStream',['../structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_opposite_score_stream.html',1,'nvbio::bowtie2::cuda::detail']]],
   ['bestpairedalignments',['BestPairedAlignments',['../structnvbio_1_1io_1_1_best_paired_alignments.html',1,'nvbio::io']]],
   ['bestscorestream',['BestScoreStream',['../structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_score_stream.html',1,'nvbio::bowtie2::cuda::detail']]],

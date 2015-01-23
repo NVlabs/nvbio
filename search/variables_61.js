@@ -60,5 +60,6 @@ var searchData=
   ['aux_5fdata_5fstart',['aux_data_start',['../struct_b_a_m___n_a_u_x__index.html#a3513683b3ea114aa7a69ab1957f2d9fb',1,'BAM_NAUX_index']]],
   ['aux_5fsize',['aux_size',['../structcram__record.html#a9b71507ad77a2e246e1cd75ccd02299c',1,'cram_record']]],
   ['avail_5fin',['avail_in',['../structz__stream__s.html#a0cf177f50dbb49692f27480cbcfde794',1,'z_stream_s']]],
-  ['avail_5fout',['avail_out',['../structz__stream__s.html#a45ad2364307af9d944fd39d4eca3ca3c',1,'z_stream_s']]]
+  ['avail_5fout',['avail_out',['../structz__stream__s.html#a45ad2364307af9d944fd39d4eca3ca3c',1,'z_stream_s']]],
+  ['avg_5fread_5flength',['avg_read_length',['../structnvbio_1_1bowtie2_1_1cuda_1_1_params_p_o_d.html#a2575c47f23478d9bc13f6f08e8e3aa8e',1,'nvbio::bowtie2::cuda::ParamsPOD']]]
 ];

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['v',['v',['../structhts__pair64__t.html#acd13be07b4326fbb222ca26ce483c9b8',1,'hts_pair64_t::v()'],['../structnvbio_1_1_alphabet_traits_3_01_d_n_a___i_u_p_a_c_01_4.html#a0c99051276f51a45914e46d9dd1813cba4861f3a0d6511b781a99bf7d59ceb17d',1,'nvbio::AlphabetTraits&lt; DNA_IUPAC &gt;::V()'],['../structnvbio_1_1_alphabet_traits_3_01_p_r_o_t_e_i_n_01_4.html#a7fe03a1348be532d9d02111642dcbb07ae94a4127f192b97fcee9eb63a50aa427',1,'nvbio::AlphabetTraits&lt; PROTEIN &gt;::V()']]],
+  ['v',['V',['../structnvbio_1_1_alphabet_traits_3_01_d_n_a___i_u_p_a_c_01_4.html#a0c99051276f51a45914e46d9dd1813cba4861f3a0d6511b781a99bf7d59ceb17d',1,'nvbio::AlphabetTraits&lt; DNA_IUPAC &gt;::V()'],['../structnvbio_1_1_alphabet_traits_3_01_p_r_o_t_e_i_n_01_4.html#a7fe03a1348be532d9d02111642dcbb07ae94a4127f192b97fcee9eb63a50aa427',1,'nvbio::AlphabetTraits&lt; PROTEIN &gt;::V()'],['../structhts__pair64__t.html#acd13be07b4326fbb222ca26ce483c9b8',1,'hts_pair64_t::v()']]],
   ['v1',['v1',['../structbcf__info__t.html#a6196599fd64293ea535a93c1f6d81e60',1,'bcf_info_t']]],
   ['v_5fdebug',['V_DEBUG',['../console_8h.html#abf3be10d03894afb391f3a2935e3b313a12f567e052681a76bea3fbb3323fa9eb',1,'console.h']]],
   ['v_5ferror',['V_ERROR',['../console_8h.html#abf3be10d03894afb391f3a2935e3b313aa96a214a1aaf8f85440099c58309bb9e',1,'console.h']]],
@@ -181,10 +181,10 @@ var searchData=
   ['version_2eh',['version.h',['../contrib_2htslib_2version_8h.html',1,'']]],
   ['version_2eh',['version.h',['../nvbio_2basic_2version_8h.html',1,'']]],
   ['vflen',['vflen',['../vlen_8c.html#a215b55b745c09b584870fc5596ccd0a5',1,'vflen(char *fmt, va_list ap):&#160;vlen.c'],['../vlen_8h.html#a215b55b745c09b584870fc5596ccd0a5',1,'vflen(char *fmt, va_list ap):&#160;vlen.c']]],
-  ['view',['View',['../structnvbio_1_1cuda_1_1_work_queue_stats.html#abbb763663608b9c16d4829bb10843bc8',1,'nvbio::cuda::WorkQueueStats::View()'],['../structnvbio_1_1cuda_1_1_work_queue_stats.html#abfa1ca3d399baac843ac68260db306eb',1,'nvbio::cuda::WorkQueueStats::view()'],['../group___work_queue.html#gaf1ec0823296d6961c46c9451456d1186',1,'nvbio::cuda::view()']]],
+  ['view',['view',['../structnvbio_1_1cuda_1_1_work_queue_stats.html#abfa1ca3d399baac843ac68260db306eb',1,'nvbio::cuda::WorkQueueStats::view()'],['../structnvbio_1_1cuda_1_1_work_queue_stats.html#abbb763663608b9c16d4829bb10843bc8',1,'nvbio::cuda::WorkQueueStats::View()'],['../group___work_queue.html#gaf1ec0823296d6961c46c9451456d1186',1,'nvbio::cuda::view()']]],
   ['view',['view',['../structdebruijn__graph_1_1view.html',1,'debruijn_graph']]],
-  ['view_5ferror',['view_error',['../structnvbio_1_1_mapped_file_1_1view__error.html',1,'nvbio::MappedFile']]],
   ['view_5ferror',['view_error',['../structnvbio_1_1_server_mapped_file_1_1view__error.html',1,'nvbio::ServerMappedFile']]],
+  ['view_5ferror',['view_error',['../structnvbio_1_1_mapped_file_1_1view__error.html',1,'nvbio::MappedFile']]],
   ['view_5ferror',['view_error',['../structnvbio_1_1_mapped_file_1_1view__error.html#a83bfcc51fa371418f0001ca1d4e6c1e5',1,'nvbio::MappedFile::view_error::view_error()'],['../structnvbio_1_1_server_mapped_file_1_1view__error.html#a0f53c5c9fb900513fadbac56b7e8c8e3',1,'nvbio::ServerMappedFile::view_error::view_error()']]],
   ['view_5ftype',['view_type',['../structnvbio_1_1_q_group_index_device.html#ad7adecd15bce616961bd7724b947f87c',1,'nvbio::QGroupIndexDevice']]],
   ['visit',['visit',['../structnvbio_1_1_collector.html#a668c0607bf8503d9b326c3254dd5fea8',1,'nvbio::Collector']]],

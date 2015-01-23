@@ -178,41 +178,48 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordtype">void</span> output_header(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> process_one_alignment(<a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">DataBuffer</a>&amp; out, <a class="code" href="structnvbio_1_1io_1_1_alignment_data.html">AlignmentData</a>&amp; alignment, <a class="code" href="structnvbio_1_1io_1_1_alignment_data.html">AlignmentData</a>&amp; mate);</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordtype">void</span> write_block(<a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">DataBuffer</a>&amp; block);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> generate_cigar(<span class="keyword">struct</span> <a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment.html">BAM_alignment</a>&amp; alnh,</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                          <span class="keyword">struct</span> <a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment__data__block.html">BAM_alignment_data_block</a>&amp; alnd,</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                          <span class="keyword">const</span> <a class="code" href="structnvbio_1_1io_1_1_alignment_data.html">AlignmentData</a>&amp; alignment);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> generate_md_string(<a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment.html">BAM_alignment</a>&amp; alnh, <a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment__data__block.html">BAM_alignment_data_block</a>&amp; alnd,</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                              <span class="keyword">const</span> <a class="code" href="structnvbio_1_1io_1_1_alignment_data.html">AlignmentData</a>&amp; alignment);</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordtype">void</span> output_tag_uint32(<a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">DataBuffer</a>&amp; out, <span class="keyword">const</span> <span class="keywordtype">char</span> *tag, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> val);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">void</span> output_tag_uint8(<a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">DataBuffer</a>&amp; out, <span class="keyword">const</span> <span class="keywordtype">char</span> *tag, <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> val);</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordtype">void</span> output_tag_string(<a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">DataBuffer</a>&amp; out, <span class="keyword">const</span> <span class="keywordtype">char</span> *tag, <span class="keyword">const</span> <span class="keywordtype">char</span> *val);</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordtype">void</span> output_alignment(<a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">DataBuffer</a>&amp; out, <a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment.html">BAM_alignment</a>&amp; alnh, <a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment__data__block.html">BAM_alignment_data_block</a>&amp; alnd);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> process_one_alignment(<a class="code" href="structnvbio_1_1io_1_1_alignment_data.html">AlignmentData</a>&amp; alignment, <a class="code" href="structnvbio_1_1io_1_1_alignment_data.html">AlignmentData</a>&amp; mate);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">void</span> write_block();</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordtype">void</span> flush_blocks();</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> generate_cigar(<span class="keyword">struct</span> <a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment.html">BAM_alignment</a>&amp; alnh,</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                          <span class="keyword">struct</span> <a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment__data__block.html">BAM_alignment_data_block</a>&amp; alnd,</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                          <span class="keyword">const</span> <a class="code" href="structnvbio_1_1io_1_1_alignment_data.html">AlignmentData</a>&amp; alignment);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> generate_md_string(<a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment.html">BAM_alignment</a>&amp; alnh, <a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment__data__block.html">BAM_alignment_data_block</a>&amp; alnd,</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                              <span class="keyword">const</span> <a class="code" href="structnvbio_1_1io_1_1_alignment_data.html">AlignmentData</a>&amp; alignment);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordtype">void</span> output_tag_uint32(<a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">DataBuffer</a>&amp; out, <span class="keyword">const</span> <span class="keywordtype">char</span> *tag, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> val);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">void</span> output_tag_uint8(<a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">DataBuffer</a>&amp; out, <span class="keyword">const</span> <span class="keywordtype">char</span> *tag, <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> val);</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordtype">void</span> output_tag_string(<a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">DataBuffer</a>&amp; out, <span class="keyword">const</span> <span class="keywordtype">char</span> *tag, <span class="keyword">const</span> <span class="keywordtype">char</span> *val);</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keyword">static</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> encode_bp(<a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> bp);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">void</span> output_alignment(<a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment.html">BAM_alignment</a>&amp; alnh, <a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment__data__block.html">BAM_alignment_data_block</a>&amp; alnd);</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="comment">// our file pointer</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    FILE *fp;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="comment">// CPU copy of the current alignment batch</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_host_output_batch_p_e.html">HostOutputBatchPE</a> cpu_output;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="comment">// text buffer that we&#39;re filling with data</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">DataBuffer</a> data_buffer;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="comment">// our BGZF compressor</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_b_g_z_f_compressor.html">BGZFCompressor</a> bgzf;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <a class="code" href="classnvbio_1_1_mutex.html">Mutex</a> mutex;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;};</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;} <span class="comment">// namespace io</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;} <span class="comment">// namespace nvbio</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keyword">static</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> encode_bp(<a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> bp);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="comment">// our file pointer</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    FILE *fp;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="comment">// CPU copy of the current alignment batch</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_host_output_batch_p_e.html">HostOutputBatchPE</a> cpu_output;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="comment">// text buffer that we&#39;re filling with data</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>     BUFFERS = 64;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">DataBuffer</a>              data_buffers[BUFFERS];</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_data_buffer.html">DataBuffer</a>              compressed_buffers[BUFFERS];</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>                   buffer_id;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="comment">// our BGZF compressors</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_b_g_z_f_compressor.html">BGZFCompressor</a> bgzf[BUFFERS];</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <a class="code" href="classnvbio_1_1_mutex.html">Mutex</a> mutex;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;};</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;} <span class="comment">// namespace io</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;} <span class="comment">// namespace nvbio</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 13 2015 09:34:15 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:39:34 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

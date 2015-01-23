@@ -477,13 +477,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;    <span class="keyword">const</span> io::Alignment*    best_data,</div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;    <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>*                  reseed);</div>
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;} <span class="comment">// namespace cuda</span></div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;} <span class="comment">// namespace bowtie2</span></div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;} <span class="comment">// namespace nvbio</span></div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;<span class="comment">// mark unique unaligned read pairs as discordant</span></div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacenvbio_1_1bowtie2_1_1cuda.html#a39a7c21ac0bc932255cd3e67be9ce961">mark_discordant</a>(</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            n_reads,</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;          io::Alignment*    anchor_data,</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;          io::Alignment*    opposite_data,</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            <a class="code" href="group__private.html#gad351d7c15f63a32844239c823aefca76">stride</a>);</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;} <span class="comment">// namespace cuda</span></div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;} <span class="comment">// namespace bowtie2</span></div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;} <span class="comment">// namespace nvbio</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 13 2015 09:34:19 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:39:38 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

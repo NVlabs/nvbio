@@ -122,8 +122,8 @@ Inheritance diagram for nvbio::bowtie2::cuda::InputThreadSE:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Methods</h2></td></tr>
-<tr class="memitem:a2127820d1d0fb7d8100709c2a4b1321e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_input_thread_s_e.html#a2127820d1d0fb7d8100709c2a4b1321e">InputThreadSE</a> (<a class="el" href="structnvbio_1_1io_1_1_sequence_data_stream.html">io::SequenceDataStream</a> *read_data_stream, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html">Stats</a> &amp;_stats, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_input_thread_s_e.html#af18f33345e96e4f7689ffce057a9ebb4">batch_size</a>)</td></tr>
-<tr class="separator:a2127820d1d0fb7d8100709c2a4b1321e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad48f50df45b83408a5e31751ebe3f998"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_input_thread_s_e.html#ad48f50df45b83408a5e31751ebe3f998">InputThreadSE</a> (<a class="el" href="structnvbio_1_1io_1_1_sequence_data_stream.html">io::SequenceDataStream</a> *read_data_stream, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html">Stats</a> &amp;_stats, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_input_thread_s_e.html#af18f33345e96e4f7689ffce057a9ebb4">batch_size</a>, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> read_length)</td></tr>
+<tr class="separator:ad48f50df45b83408a5e31751ebe3f998"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13d488335dd815c0e6e2de92308519f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_input_thread_s_e.html#a13d488335dd815c0e6e2de92308519f5">run</a> ()</td></tr>
 <tr class="separator:a13d488335dd815c0e6e2de92308519f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c04ebe3b44eb6a2843406ae32085326"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___sequence_i_o.html#gaeda29063a8a35631e18372d8a6001e27">io::SequenceDataHost</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_input_thread_s_e.html#a6c04ebe3b44eb6a2843406ae32085326">next</a> (<a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> *offset=NULL)</td></tr>
@@ -161,7 +161,7 @@ Static Public Members</h2></td></tr>
 <tr class="separator:a87b81a3f8f70f5bc3bef6f7d570a5ae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a2127820d1d0fb7d8100709c2a4b1321e"></a>
+<a class="anchor" id="ad48f50df45b83408a5e31751ebe3f998"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -184,7 +184,13 @@ Static Public Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
-          <td class="paramname"><em>batch_size</em>&#160;</td>
+          <td class="paramname"><em>batch_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
+          <td class="paramname"><em>read_length</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -312,7 +318,7 @@ Static Public Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 13 2015 09:35:17 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:40:38 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

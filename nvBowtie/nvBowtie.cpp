@@ -43,6 +43,7 @@
 #include <nvBowtie/bowtie2/cuda/stats.h>
 #include <nvBowtie/bowtie2/cuda/input_thread.h>
 #include <nvBowtie/bowtie2/cuda/compute_thread.h>
+#include <nvbio/basic/omp.h>
 
 void crcInit();
 
@@ -202,6 +203,9 @@ int main(int argc, char* argv[])
         fprintf(stderr, "nvBowtie version %s\n", NVBIO_VERSION_STRING);
         exit(0);
     }
+
+    // setup the number of OMP threads
+    omp_set_num_threads( omp_get_num_procs() );
 
     uint32 max_reads    = uint32(-1);
     uint32 max_read_len = uint32(-1);

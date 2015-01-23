@@ -49,6 +49,18 @@
 ///
 /// <img src="benchmark-nvbowtie-speedup.png" style="position:relative; bottom:-10px; border:0px;" width="80%" height="80%"/>
 ///
+/// \section SpecificitySection Specificity and Sensitivity
+///\par
+/// While targeting maximum performance, nvBowtie is designed to match Bowtie2 as closely as possible, with the explicit goal of mantaining
+/// the same specificity and sensitivity characteristics.
+/// The following ROC curves have been generated using the excellent online testing platform <a href="http://www.bioplanet.com/gcat">GCAT</a>.
+/// As can be seen, nvBowtie matches Bowtie2's results to within extreme accuracy for a wide range of read types and error distributions.
+/// The only noticeable (and still very tiny) differences are concentrated around very low mapping quality alignments.
+///
+/// <img src="nvBowtie-ROC-se-100.png" style="position:relative; bottom:-10px; border:0px;" width="95%" height="95%"/>
+/// <img src="nvBowtie-ROC-pe-100.png" style="position:relative; bottom:-10px; border:0px;" width="95%" height="95%"/>
+/// <img src="nvBowtie-ROC-pe-250.png" style="position:relative; bottom:-10px; border:0px;" width="95%" height="95%"/>
+///
 /// \section nvBowtieArch Architecture
 ///
 ///\par
@@ -206,6 +218,7 @@
 ///      --overlap                        allow overlapping mates
 ///      --no-overlap                     disable overlapping mates
 ///      --dovetail                       allow dovetailing mates
+///      --no-discordant                  disable discordant alignments
 ///      --no-mixed                       only report paired alignments
 ///      --ungapped-mates | -ug           perform ungapped mate alignment
 ///    Seeding:
@@ -267,7 +280,11 @@
 ///\endverbatim
 ///
 ///\par
-/// Another noteworthy option is to let nvBowtie fetch them from a <i>shared memory</i> server 
+/// Notice that nvBowtie supports direct output of BAM files, which has been carefully optimized and parallelized
+/// in order to cope with the superior alignment throughput.
+///
+///\par
+/// Another noteworthy option is to let nvBowtie fetch the reference index from a <i>shared memory</i> server 
 /// which can be run in the background: the \subpage nvfm_server_page.
 /// It be launched with:
 ///

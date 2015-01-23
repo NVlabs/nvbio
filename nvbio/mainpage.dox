@@ -68,7 +68,7 @@
 ///
 /// <a href="https://github.com/NVlabs/nvbio"><img src="download-icon.png" style="position:relative; bottom:-10px; border:0px;"/></a>
 /// &nbsp;&nbsp;
-/// <a href="https://github.com/NVlabs/nvbio">Download NVBIO 0.9.99</a>
+/// <a href="https://github.com/NVlabs/nvbio">Download NVBIO 1.0</a>
 /// </div>
 ///\endhtmlonly
 ///
@@ -84,6 +84,16 @@
 /// - \subpage nvsetbwt_page - a tool to perform BWT-based read indexing
 ///
 /// \section RecentNew Recent News
+///\par
+/// <table>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">24/2/2015 \n NVBIO 1.0</td>
+/// <td style="vertical-align:text-top;" width="90%">
+/// - <b>New Features:</b> \n
+///   * Major stability and specificity and sensitivity improvements to \subpage nvbowtie_page
+///   * Added support for finding and reporting discordant alignments
+///   * Improved direct <b>BAM output speed</b> by over an order of magnitude with transparent parallel compression
+/// </td></tr>
+/// </table>
 ///\par
 /// <table>
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">13/1/2015 \n NVBIO 0.9.99</td>

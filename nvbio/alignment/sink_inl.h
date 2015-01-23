@@ -95,8 +95,9 @@ void Best2Sink<ScoreType>::report(const ScoreType score, const uint2 sink)
 //
 template <typename ScoreType, uint32 N>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-BestColumnSink<ScoreType,N>::BestColumnSink(const uint32 column_width) :
-    m_column_width( column_width )
+BestColumnSink<ScoreType,N>::BestColumnSink(const uint32 column_width, const ScoreType min_score) :
+    m_column_width( column_width ),
+    m_min_score( min_score )
 {
     invalidate();
 }
@@ -123,6 +124,9 @@ template <typename ScoreType, uint32 N>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 void BestColumnSink<ScoreType,N>::report(const ScoreType score, const uint2 sink)
 {
+    if (score < m_min_score)
+        return;
+
     const uint32 col = nvbio::min( sink.x / m_column_width, N-1u );
 
     if (scores[col] <= score)

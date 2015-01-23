@@ -388,6 +388,7 @@ struct BestOppositeScoreStream : public AlignmentStreamBase<OPPOSITE_SCORE_STREA
 
         // assign the final score threshold
         context->min_score = nvbio::max( target_mate_score, base_type::m_pipeline.score_limit );
+        context->sink.set_min_score( context->min_score );
 
         // check if it's even possible to reach the score threshold
         if (context->min_score > o_optimal_score)

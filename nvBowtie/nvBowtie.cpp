@@ -77,6 +77,9 @@ bool is_number(const char* str, uint32 len = uint32(-1))
 
 void log_ed(nvbio::bowtie2::cuda::AlignmentStats& stats)
 {
+    if (stats.n_mapped == 0)
+        return;
+
     const std::vector<uint32>& mapped = stats.mapped_log_ed_histogram;
     log_stats(stderr, "    ed   :");
     for (uint32 i = 0; i < mapped.size(); ++i)
@@ -95,6 +98,9 @@ void log_ed(nvbio::bowtie2::cuda::AlignmentStats& stats)
 }
 void log_mapq(nvbio::bowtie2::cuda::AlignmentStats& stats)
 {
+    if (stats.n_mapped == 0)
+        return;
+
     log_stats(stderr, "    mapq :");
     for (uint32 i = 0; i < 8; ++i)
         log_stats_cont(stderr, " %5u  ", i ? 1u << (i-1) : 0u );

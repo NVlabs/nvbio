@@ -28,6 +28,7 @@
 #include <nvbio/io/output/output_bam.h>
 #include <nvbio/io/output/output_sam.h>
 #include <nvbio/basic/numbers.h>
+#include <nvbio/basic/omp.h>
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -49,6 +50,8 @@ BamOutput::BamOutput(const char *file_name, AlignmentType alignment_type, BNT bn
     // this makes sure small fwrites do not land on disk straight away
     // (256kb was chosen based on the default stripe size for Linux mdraid RAID-5 volumes)
     setvbuf(fp, NULL, _IOFBF, 256 * 1024);
+
+    buffer_id = 0;
 }
 
 BamOutput::~BamOutput()
@@ -228,7 +231,7 @@ uint8 BamOutput::encode_bp(uint8 bp)
     }
 }
 
-uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignment, AlignmentData& mate)
+uint32 BamOutput::process_one_alignment(AlignmentData& alignment, AlignmentData& mate)
 {
     // BAM alignment header
     struct BAM_alignment alnh;
@@ -300,11 +303,9 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
         char q;
 
         if (alignment.aln->m_rc)
-        {
             q = alignment.qual[i];
-        } else {
+        else
             q = alignment.qual[alignment.read_len - i - 1];
-        }
 
         alnd.qual[i] = q;
     }
@@ -324,7 +325,7 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
         alnd.md_string[0] = '\0';
 
         // unaligned reads don't need anything else; output and return
-        output_alignment(out, alnh, alnd);
+        output_alignment(alnh, alnd);
         return 0;
     }
 
@@ -338,19 +339,13 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
         alnh.flag_nc |= BAM_FLAGS_PAIRED;
 
         if (mate.aln->is_concordant())
-        {
             alnh.flag_nc |= BAM_FLAGS_PROPER_PAIR;
-        }
 
         if (!mate.aln->is_aligned())
-        {
             alnh.flag_nc |= BAM_FLAGS_MATE_UNMAPPED;
-        }
 
         if (mate.aln->is_rc())
-        {
             alnh.flag_nc |= BAM_FLAGS_MATE_REVERSE;
-        }
     }
 
     if (alignment.cigar_pos + ref_cigar_len > bnt.sequence_index[ seq_index+1 ])
@@ -366,7 +361,7 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
         alnh.next_pos = -1;
         alnd.md_string[0] = '\0';
 
-        output_alignment(out, alnh, alnd);
+        output_alignment(alnh, alnd);
         return 0;
     }
 
@@ -445,7 +440,7 @@ uint32 BamOutput::process_one_alignment(DataBuffer& out, AlignmentData& alignmen
     generate_md_string(alnh, alnd, alignment);
 
     // write out the alignment
-    output_alignment(out, alnh, alnd);
+    output_alignment(alnh, alnd);
 
     return mapq;
 }
@@ -472,8 +467,10 @@ void BamOutput::output_tag_string(DataBuffer& out, const char *tag, const char *
     out.append_uint8('\0');
 }
 
-void BamOutput::output_alignment(DataBuffer& out, BAM_alignment& alnh, BAM_alignment_data_block& alnd)
+void BamOutput::output_alignment(BAM_alignment& alnh, BAM_alignment_data_block& alnd)
 {
+    DataBuffer& out = data_buffers[ buffer_id ];
+
     // keep track of the block size offset so we can compute the block size and update it later
     uint32 off_block_size = out.get_pos();
     out.skip_ahead(sizeof(alnh.block_size));
@@ -518,28 +515,29 @@ void BamOutput::output_alignment(DataBuffer& out, BAM_alignment& alnh, BAM_align
     out.poke_int32(off_block_size, aln_len);
 
     if (out.is_full())
-    {
-        write_block(out);
-    }
+        write_block();
 }
 
 void BamOutput::process(struct HostOutputBatchSE& batch)
 {
+    // protect this section
+    ScopedLock lock( &mutex );
+
     float time = 0.0f;
     {
         ScopedTimer<float> timer( &time );
-        ScopedLock lock( &mutex );
 
         for(uint32 c = 0; c < batch.count; c++)
         {
             AlignmentData alignment = get(batch, c);
             AlignmentData mate = AlignmentData::invalid();
 
-            process_one_alignment(data_buffer, alignment, mate);
+            process_one_alignment(alignment, mate);
         }
 
-        if (data_buffer.get_pos())
-            write_block(data_buffer);
+        // flush at the end of each batch
+        //if (data_buffers[ buffer_id ].get_pos())
+        //    flush_blocks();
     }
     iostats.n_reads += batch.count;
     iostats.output_process_timings.add( batch.count, time );
@@ -547,38 +545,63 @@ void BamOutput::process(struct HostOutputBatchSE& batch)
 
 void BamOutput::process(struct HostOutputBatchPE& batch)
 {
+    // protect this section
+    ScopedLock lock( &mutex );
+
     float time = 0.0f;
     {
         ScopedTimer<float> timer( &time );
-        ScopedLock lock( &mutex );
 
         for(uint32 c = 0; c < batch.count; c++)
         {
             AlignmentData alignment = get_anchor_mate(batch,c);
             AlignmentData mate      = get_opposite_mate(batch,c);
 
-            process_one_alignment(data_buffer, alignment, mate);
-            process_one_alignment(data_buffer, mate, alignment);
+            process_one_alignment(alignment, mate);
+            process_one_alignment(mate, alignment);
         }
 
-        if (data_buffer.get_pos())
-            write_block(data_buffer);
+        // flush at the end of each batch
+        //if (data_buffers[ buffer_id ].get_pos())
+        //    flush_blocks();
     }
     iostats.n_reads += batch.count;
     iostats.output_process_timings.add( batch.count, time );
 }
 
-void BamOutput::write_block(DataBuffer& block)
+void BamOutput::write_block()
 {
-    DataBuffer compressed;
+    ++buffer_id;
 
-    bgzf.start_block(compressed);
-    bgzf.compress(compressed, block);
-    bgzf.end_block(compressed);
+    // check whether we need to flush the blocks
+    if (buffer_id == BUFFERS)
+        flush_blocks();
+}
 
-    fwrite(compressed.get_base_ptr(), compressed.pos, 1, fp);
+void BamOutput::flush_blocks()
+{
+    #pragma omp parallel for
+    for (int32 i = 0; i < buffer_id; ++i)
+    {
+        bgzf[i].start_block( compressed_buffers[i] );
+        bgzf[i].compress( compressed_buffers[i], data_buffers[i] );
+        bgzf[i].end_block( compressed_buffers[i] );
 
-    block.rewind();
+        data_buffers[i].rewind();
+    }
+
+    // write out the compressed buffers, in order
+    for (int32 i = 0; i < buffer_id; ++i)
+    {
+        // write the compressed buffer
+        fwrite( compressed_buffers[i].get_base_ptr(), compressed_buffers[i].get_pos(), 1, fp );
+
+        // and rewind it
+        compressed_buffers[i].rewind();
+    }
+
+    // reset the buffer id and the work-queue counter
+    buffer_id = 0;
 }
 
 void BamOutput::output_header(void)
@@ -586,6 +609,7 @@ void BamOutput::output_header(void)
     int pos_l_text, pos_start_header, header_len;
 
     // names in parenthesis refer to the field names in the BAM spec
+    DataBuffer& data_buffer = data_buffers[ buffer_id ];
 
     // write magic string (magic)
     data_buffer.append_string("BAM\1");
@@ -635,7 +659,7 @@ void BamOutput::output_header(void)
         const char *name = bnt.names + bnt.names_index[i];
 
         // sequence name length including null terminator (l_name)
-        data_buffer.append_int32(strlen(name) + 1);
+        data_buffer.append_int32( int32( strlen(name) + 1 ) );
         // write out sequence name string and null-terminator (name)
         data_buffer.append_string(name);
         data_buffer.append_int8(0);
@@ -645,11 +669,20 @@ void BamOutput::output_header(void)
 
     // compress and write out the header block separately
     // (this yields a slightly smaller file)
-    write_block(data_buffer);
+    write_block();
 }
 
 void BamOutput::close()
 {
+    // protect this section
+    ScopedLock lock( &mutex );
+
+    // flush all non-emtpy blocks
+    if (data_buffers[ buffer_id ].get_pos())
+        write_block();
+
+    flush_blocks();
+
     NVBIO_CUDA_ASSERT(fp);
 
     // write out the BAM EOF marker

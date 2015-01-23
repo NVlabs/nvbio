@@ -84,8 +84,10 @@ public:
 
 private:
     void output_header(void);
-    uint32 process_one_alignment(DataBuffer& out, AlignmentData& alignment, AlignmentData& mate);
-    void write_block(DataBuffer& block);
+    uint32 process_one_alignment(AlignmentData& alignment, AlignmentData& mate);
+
+    void write_block();
+    void flush_blocks();
 
     uint32 generate_cigar(struct BAM_alignment& alnh,
                           struct BAM_alignment_data_block& alnd,
@@ -97,7 +99,7 @@ private:
     void output_tag_uint8(DataBuffer& out, const char *tag, uint8 val);
     void output_tag_string(DataBuffer& out, const char *tag, const char *val);
 
-    void output_alignment(DataBuffer& out, BAM_alignment& alnh, BAM_alignment_data_block& alnd);
+    void output_alignment(BAM_alignment& alnh, BAM_alignment_data_block& alnd);
 
     static uint8 encode_bp(uint8 bp);
 
@@ -105,10 +107,15 @@ private:
     FILE *fp;
     // CPU copy of the current alignment batch
     HostOutputBatchPE cpu_output;
+
     // text buffer that we're filling with data
-    DataBuffer data_buffer;
-    // our BGZF compressor
-    BGZFCompressor bgzf;
+    static const uint32     BUFFERS = 64;
+    DataBuffer              data_buffers[BUFFERS];
+    DataBuffer              compressed_buffers[BUFFERS];
+    int32                   buffer_id;
+
+    // our BGZF compressors
+    BGZFCompressor bgzf[BUFFERS];
 
     Mutex mutex;
 };

@@ -191,7 +191,7 @@ int main(int argc, char* argv[])
         log_visible(stderr, "nvBowtie tests... done\n");
         exit(0);
     }
-    else if (argc == 3 && strcmp( argv[1], "--version" ) == 0)
+    else if (argc == 2 && strcmp( argv[1], "--version" ) == 0)
     {
         fprintf(stderr, "nvBowtie version %s\n", NVBIO_VERSION_STRING);
         exit(0);

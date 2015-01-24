@@ -946,6 +946,7 @@ HTML_EXTRA_FILES      += images/nvBowtie-ROC-se-100.png
 HTML_EXTRA_FILES      += images/nvBowtie-ROC-pe-100.png 
 HTML_EXTRA_FILES      += images/nvBowtie-ROC-pe-100-large-indels.png 
 HTML_EXTRA_FILES      += images/nvBowtie-ROC-pe-250.png 
+HTML_EXTRA_FILES      += images/nvBowtie-ROC-pe-100-zoom.png 
 
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output. 
 # Doxygen will adjust the colors in the stylesheet and background images 

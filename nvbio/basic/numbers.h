@@ -1305,6 +1305,22 @@ struct cast_functor
     R operator() (const T i) const { return R(i); }
 };
 
+/// A unary functor negating an input predicate functor
+///
+template <typename InputFunctor>
+struct negate_functor
+{
+    typedef typename InputFunctor::argument_type    argument_type;
+    typedef typename InputFunctor::result_type      result_type;
+
+    negate_functor(const InputFunctor f = InputFunctor()) : m_f(f) {}
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    result_type operator() (const argument_type op) const { return !m_f(op); }
+
+    const InputFunctor m_f;
+};
+
 ///@} BasicFunctors
 ///@} BasicUtils
 ///@} Basic

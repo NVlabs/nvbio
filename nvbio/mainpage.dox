@@ -89,7 +89,8 @@
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">24/2/2015 \n NVBIO 1.0</td>
 /// <td style="vertical-align:text-top;" width="90%">
 /// - <b>New Features:</b> \n
-///   * Major stability and specificity and sensitivity improvements to \subpage nvbowtie_page
+///   * Major stability and <b>specificity</b> and <b>sensitivity</b> improvements to \subpage nvbowtie_page
+///    <img src="nvBowtie-ROC-pe-100-zoom.png" style="position:relative; bottom:-10px; border:0px;" width="50%" height="50%"/>
 ///   * Added support for finding and reporting discordant alignments
 ///   * Improved direct <b>BAM output speed</b> by over an order of magnitude with transparent parallel compression
 /// </td></tr>

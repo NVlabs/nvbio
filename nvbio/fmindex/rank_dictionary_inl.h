@@ -109,23 +109,23 @@ void unpack_add(uint64_4* op1, const uint32 op2)
 
 namespace occ {
 
-// overload popc_2bit and popc_2bit_all so that they look the same
-template <typename T> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(const uint32 mask, const T c)                      { return nvbio::popc_2bit_all( mask, c ); }
-template <typename T> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(const uint32 mask, const T c,      const uint32 i) { return nvbio::popc_2bit_all( mask, c, i ); }
-template <>           NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(const uint32 mask, const uint32 c)                 { return nvbio::popc_2bit( mask, c ); }
-template <>           NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(const uint32 mask, const uint32 c, const uint32 i) { return nvbio::popc_2bit( mask, c, i ); }
+// overload popc_nbit and popc_nbit_all so that they look the same
+template <uint32 N, typename T> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint32 mask, const T c)                      { return nvbio::popc_2bit_all( mask, c ); }
+template <uint32 N, typename T> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint32 mask, const T c,      const uint32 i) { return nvbio::popc_2bit_all( mask, c, i ); }
+template <uint32 N>             NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint32 mask, const uint32 c)                 { return nvbio::popc_nbit<N>( mask, c ); }
+template <uint32 N>             NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint32 mask, const uint32 c, const uint32 i) { return nvbio::popc_nbit<N>( mask, c, i ); }
 
-// overload popc_2bit and popc_2bit_all so that they look the same
-template <typename T> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(const uint64 mask, const T c)                      { return nvbio::popc_2bit_all( mask, c ); }
-template <typename T> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(const uint64 mask, const T c,      const uint32 i) { return nvbio::popc_2bit_all( mask, c, i ); }
-template <>           NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(const uint64 mask, const uint32 c)                 { return nvbio::popc_2bit( mask, c ); }
-template <>           NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(const uint64 mask, const uint32 c, const uint32 i) { return nvbio::popc_2bit( mask, c, i ); }
+// overload popc_nbit and popc_nbit_all so that they look the same
+template <uint32 N, typename T> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint64 mask, const T c)                      { return nvbio::popc_2bit_all( mask, c ); }
+template <uint32 N, typename T> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint64 mask, const T c,      const uint32 i) { return nvbio::popc_2bit_all( mask, c, i ); }
+template <uint32 N>             NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint64 mask, const uint32 c)                 { return nvbio::popc_nbit<N>( mask, c ); }
+template <uint32 N>             NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint64 mask, const uint32 c, const uint32 i) { return nvbio::popc_nbit<N>( mask, c, i ); }
 
 // pop-count all the occurrences of c in each of the 32-bit masks in text[begin, end],
 // where the last mask is truncated to i.
 //
-template <typename TextString, typename T>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(
+template <uint32 N, typename TextString, typename T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(
     const TextString    text,
     const T             c,
     const uint32        begin,
@@ -133,15 +133,15 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(
 {
     uint32 x = 0;
     for (uint32 j = begin; j < end; ++j)
-        x += occ::popc_2bit( text[j], c );
+        x += occ::popc_nbit<N>( text[j], c );
 
     return x;
 }
 // pop-count all the occurrences of c in each of the 32-bit masks in text[begin, end],
 // where the last mask is truncated to i.
 //
-template <typename TextString, typename T>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(
+template <uint32 N, typename TextString, typename T>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(
     const TextString    text,
     const T             c,
     const uint32        begin,
@@ -150,16 +150,16 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(
 {
     uint32 x = 0;
     for (uint32 j = begin; j < end; ++j)
-        x += occ::popc_2bit( text[j], c );
+        x += occ::popc_nbit<N>( text[j], c );
 
-    return x + occ::popc_2bit( text[ end ], c, i );
+    return x + occ::popc_nbit<N>( text[ end ], c, i );
 }
 
 // pop-count all the occurrences of c in each of the 32-bit masks in text[begin, end],
 // where the last mask is truncated to i.
 //
-template <typename TextString, typename T, typename W>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(
+template <uint32 N, typename TextString, typename T, typename W>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(
     const TextString    text,
     const T             c,
     const uint32        begin,
@@ -169,10 +169,10 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(
 {
     uint32 x = 0;
     for (uint32 j = begin; j < end; ++j)
-        x += occ::popc_2bit( text[j], c );
+        x += occ::popc_nbit<N>( text[j], c );
 
     last_mask = text[ end ];
-    return x + occ::popc_2bit( last_mask, c, i );
+    return x + occ::popc_nbit<N>( last_mask, c, i );
 }
 
 } // namespace occ
@@ -196,40 +196,67 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 text(const rank_dictionary<SYMBOL_SIZE
 template <uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIterator, typename CountTable, typename WordType, typename OccType>
 struct dispatch_rank {};
 
-template <typename T>
+template <uint32 N, typename T>
 struct rank_word_traits {};
 
 template <>
-struct rank_word_traits<uint32>
+struct rank_word_traits<2,uint32>
 {
     static const uint32 LOG_SYMS_PER_WORD = 4;
     static const uint32 SYMS_PER_WORD     = 16;
 };
 template <>
-struct rank_word_traits<uint64>
+struct rank_word_traits<2,uint64>
 {
     static const uint32 LOG_SYMS_PER_WORD = 5;
     static const uint32 SYMS_PER_WORD     = 32;
 };
 
-template <uint32 K, typename TextStorage, typename OccIterator, typename CountTable, typename word_type, typename index_type>
-struct dispatch_rank<2,K,PackedStream<TextStorage,uint8,2u,true,index_type>,OccIterator,CountTable,word_type,index_type>
+template <>
+struct rank_word_traits<4,uint32>
 {
-    typedef PackedStream<TextStorage,uint8,2u,true,index_type>      text_type;
-    typedef rank_dictionary<2,K,text_type,OccIterator,CountTable>   dictionary_type;
+    static const uint32 LOG_SYMS_PER_WORD = 3;
+    static const uint32 SYMS_PER_WORD     = 8;
+};
+template <>
+struct rank_word_traits<4,uint64>
+{
+    static const uint32 LOG_SYMS_PER_WORD = 4;
+    static const uint32 SYMS_PER_WORD     = 16;
+};
+
+template <>
+struct rank_word_traits<8,uint32>
+{
+    static const uint32 LOG_SYMS_PER_WORD = 2;
+    static const uint32 SYMS_PER_WORD     = 4;
+};
+template <>
+struct rank_word_traits<8,uint64>
+{
+    static const uint32 LOG_SYMS_PER_WORD = 3;
+    static const uint32 SYMS_PER_WORD     = 8;
+};
+
+template <uint32 SYMBOL_SIZE, uint32 K, typename TextStorage, typename OccIterator, typename CountTable, typename word_type, typename index_type>
+struct dispatch_rank<SYMBOL_SIZE,K,PackedStream<TextStorage,uint8,SYMBOL_SIZE,true,index_type>,OccIterator,CountTable,word_type,index_type>
+{
+    typedef PackedStream<TextStorage,uint8,SYMBOL_SIZE,true,index_type>       text_type;
+    typedef rank_dictionary<SYMBOL_SIZE,K,text_type,OccIterator,CountTable>   dictionary_type;
 
     typedef typename vector_type<index_type,2>::type                vec2_type;
     typedef typename vector_type<index_type,4>::type                vec4_type;
     typedef vec2_type                                               range_type;
 
-    static const uint32 LOG_SYMS_PER_WORD = rank_word_traits<word_type>::LOG_SYMS_PER_WORD;
-    static const uint32 SYMS_PER_WORD     = rank_word_traits<word_type>::SYMS_PER_WORD;
+    static const uint32 LOG_SYMS_PER_WORD = rank_word_traits<2,word_type>::LOG_SYMS_PER_WORD;
+    static const uint32 SYMS_PER_WORD     = rank_word_traits<2,word_type>::SYMS_PER_WORD;
+    static const uint32 SYMBOL_COUNT      = 1u << SYMBOL_SIZE;
 
     // pop-count the occurrences of symbols in two given text blocks, switching
     // between pop-counting a single symbol if T is a uint32, or all 4 symbols
     // if T is the count-table.
     template <typename T>
-    static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint2 popc2(
+    static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint2 popcN(
         const TextStorage   text,
         const range_type    range,
         const uint32        kl,
@@ -245,24 +272,24 @@ struct dispatch_rank<2,K,PackedStream<TextStorage,uint8,2u,true,index_type>,OccI
         const uint32 offl = kl*(K >> LOG_SYMS_PER_WORD);
 
         // sum up all the pop-counts of the relevant masks, up to ml-1
-        uint32 xl = occ::popc_2bit( text, c, offl, offl + ml );
+        uint32 xl = occ::popc_nbit<SYMBOL_SIZE>( text, c, offl, offl + ml );
 
         // check whether we can share the base value for the entire range
         uint32 xh     = (kl == kh) ? xl   : 0u;
         uint32 startm = (kl == kh) ? ml+1 : 0u;
 
         const word_type mask = text[ offl + ml ];
-        xl += occ::popc_2bit( mask, c, l_mod );
+        xl += occ::popc_nbit<SYMBOL_SIZE>( mask, c, l_mod );
 
         // if the range fits in a single block, add the last mask to xh
         if (kl == kh)
-            xh += occ::popc_2bit( mask, c, (mh == ml) ? h_mod : 0u );
+            xh += occ::popc_nbit<SYMBOL_SIZE>( mask, c, (mh == ml) ? h_mod : 0u );
 
         // finish computing the end of the range
         if (kl != kh || mh > ml)
         {
             const uint32 offh = kh*(K >> LOG_SYMS_PER_WORD);
-            xh += occ::popc_2bit( text, c, offh + startm, offh + mh, h_mod );
+            xh += occ::popc_nbit<SYMBOL_SIZE>( text, c, offh + startm, offh + mh, h_mod );
         }
         return make_uint2( xl, xh );
     }
@@ -278,12 +305,12 @@ struct dispatch_rank<2,K,PackedStream<TextStorage,uint8,2u,true,index_type>,OccI
         const word_type i_mod = ~word_type(i) & (SYMS_PER_WORD-1);
 
         // fetch base occurrence counter
-        const index_type out = dict.occ[ k*4 + c ];
+        const index_type out = dict.occ[ k*SYMBOL_COUNT + c ];
 
         const uint32 off = k*(K >> LOG_SYMS_PER_WORD);
 
         // sum up all the pop-counts of the relevant masks
-        return out + occ::popc_2bit( dict.text.stream(), c, off, off + m, i_mod );
+        return out + occ::popc_nbit<SYMBOL_SIZE>( dict.text.stream(), c, off, off + m, i_mod );
     }
     // fetch the number of occurrences of character c in the substring [0,i]
     static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE vec2_type run(const dictionary_type& dict, const range_type range, const uint32 c)
@@ -303,13 +330,18 @@ struct dispatch_rank<2,K,PackedStream<TextStorage,uint8,2u,true,index_type>,OccI
         const uint32 kh = uint32( range.y / K );
 
         // fetch base occurrence counters for the respective blocks
-        const index_type outl = dict.occ[ kl*4 + c ];
-        const index_type outh = (kl == kh) ? outl : dict.occ[ kh*4 + c ];
+        const index_type outl = dict.occ[ kl*SYMBOL_COUNT + c ];
+        const index_type outh = (kl == kh) ? outl : dict.occ[ kh*SYMBOL_COUNT + c ];
 
-        const uint2 r = popc2( dict.text.stream(), range, kl, kh, c );
+        const uint2 r = popcN( dict.text.stream(), range, kl, kh, c );
 
         return make_vector( outl + r.x, outh + r.y );
     }
+
+    //
+    // NOTICE: the run4 methods are ONLY valid when SYMBOL_SIZE == 2
+    //
+
     // fetch the number of occurrences of character c in the substring [0,i]
     static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE vec4_type run4(const dictionary_type& dict, const index_type i)
     {
@@ -320,7 +352,7 @@ struct dispatch_rank<2,K,PackedStream<TextStorage,uint8,2u,true,index_type>,OccI
         vec4_type r = make_vector( dict.occ[k*4+0], dict.occ[k*4+1], dict.occ[k*4+2], dict.occ[k*4+3] );
 
         const uint32 off = k*(K >> LOG_SYMS_PER_WORD);
-        const uint32 x = occ::popc_2bit( dict.text.stream(), dict.count_table, off, off + m, ~word_type(i) & (SYMS_PER_WORD-1) );
+        const uint32 x = occ::popc_nbit<2>( dict.text.stream(), dict.count_table, off, off + m, ~word_type(i) & (SYMS_PER_WORD-1) );
 
         // add the packed counters to the output result
         unpack_add( &r, x );
@@ -336,7 +368,7 @@ struct dispatch_rank<2,K,PackedStream<TextStorage,uint8,2u,true,index_type>,OccI
         *outl =                      make_vector( dict.occ[kl*4+0], dict.occ[kl*4+1], dict.occ[kl*4+2], dict.occ[kl*4+3] );
         *outh = (kl == kh) ? *outl : make_vector( dict.occ[kh*4+0], dict.occ[kh*4+1], dict.occ[kh*4+2], dict.occ[kh*4+3] );
 
-        const uint2 r = popc2( dict.text.stream(), range, kl, kh, dict.count_table );
+        const uint2 r = popcN( dict.text.stream(), range, kl, kh, dict.count_table );
 
         // add the packed counters to the output result
         unpack_add( outl, r.x );
@@ -369,12 +401,12 @@ struct dispatch_rank<2,64,PackedStream<TextStorage,uint8,2u,true>,OccIterator,Co
         // sum up all the pop-counts of the relevant masks
         const uint4 masks = text[ k ];
         uint32 x = 0;
-        if (m > 0) x += occ::popc_2bit( masks.x, c );
-        if (m > 1) x += occ::popc_2bit( masks.y, c );
-        if (m > 2) x += occ::popc_2bit( masks.z, c );
+        if (m > 0) x += occ::popc_nbit<2>( masks.x, c );
+        if (m > 1) x += occ::popc_nbit<2>( masks.y, c );
+        if (m > 2) x += occ::popc_nbit<2>( masks.z, c );
 
         // fetch the m-th mask and pop-count its nucleotides only up to i_mod_16
-        return x + occ::popc_2bit( comp( masks, m ), c, i_16 );
+        return x + occ::popc_nbit<2>( comp( masks, m ), c, i_16 );
     }
 
     // pop-count the occurrences of symbols in two given text blocks, switching
@@ -400,20 +432,20 @@ struct dispatch_rank<2,64,PackedStream<TextStorage,uint8,2u,true>,OccIterator,Co
 
         // sum up all the pop-counts of the relevant masks
         uint32 xl = 0u;
-        if (ml > 0) xl += occ::popc_2bit( masks_l.x, c );
-        if (ml > 1) xl += occ::popc_2bit( masks_l.y, c );
-        if (ml > 2) xl += occ::popc_2bit( masks_l.z, c );
+        if (ml > 0) xl += occ::popc_nbit<2>( masks_l.x, c );
+        if (ml > 1) xl += occ::popc_nbit<2>( masks_l.y, c );
+        if (ml > 2) xl += occ::popc_nbit<2>( masks_l.z, c );
 
         uint32 xh     = (kl == kh) ? xl : 0u;
         uint32 startm = (kl == kh) ? ml : 0u;
 
         // sum up all the pop-counts of the relevant masks
-        if (mh > 0 && startm == 0) xh += occ::popc_2bit( masks_h.x, c );
-        if (mh > 1 && startm <= 1) xh += occ::popc_2bit( masks_h.y, c );
-        if (mh > 2 && startm <= 2) xh += occ::popc_2bit( masks_h.z, c );
+        if (mh > 0 && startm == 0) xh += occ::popc_nbit<2>( masks_h.x, c );
+        if (mh > 1 && startm <= 1) xh += occ::popc_nbit<2>( masks_h.y, c );
+        if (mh > 2 && startm <= 2) xh += occ::popc_nbit<2>( masks_h.z, c );
 
-        xl += occ::popc_2bit( comp( masks_l, ml ), c, l_16 );
-        xh += occ::popc_2bit( comp( masks_h, mh ), c, h_16 );
+        xl += occ::popc_nbit<2>( comp( masks_l, ml ), c, l_16 );
+        xh += occ::popc_nbit<2>( comp( masks_h, mh ), c, h_16 );
         return make_uint2( xl, xh );
     }
 

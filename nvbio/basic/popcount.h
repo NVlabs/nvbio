@@ -98,6 +98,22 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 hibits_2bit(const uint32 mask, const 
 ///
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(const uint32 mask, int c, const uint32 i);
 
+/// count the number of occurrences of a given N-bit pattern in a given word
+///
+template <uint32 N>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint32 x, int c);
+
+/// given a 32-bit word encoding a set of N-bit symbols, return a submask containing
+/// all but the first 'i' entries.
+///
+template <uint32 N>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 hibits_nbit(const uint32 mask, const uint32 i);
+
+/// count the number of occurrences of a given N-bit pattern in all but the first 'i' symbols
+/// of a 32-bit word mask.
+///
+template <uint32 N>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint32 mask, int c, const uint32 i);
 
 /// count the number of occurrences of all 2-bit patterns in all but the first 'i' symbols
 /// of a given word, using an auxiliary table.

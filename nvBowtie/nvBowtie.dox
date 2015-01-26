@@ -45,7 +45,7 @@
 /// dataset (the first 10M reads of ERR161544) and an IonProton run, using both end-to-end and
 /// local alignment.
 /// The alignment results show 99.98% agreement at high MAPQ.
-/// All bowtie2 tests were run using 12 CPU threads, and default aligment options:
+/// All bowtie2 tests were run using 20 CPU threads, and default aligment options:
 ///
 /// <img src="benchmark-nvbowtie-speedup.png" style="position:relative; bottom:-10px; border:0px;" width="80%" height="80%"/>
 ///

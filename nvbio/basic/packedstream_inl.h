@@ -753,7 +753,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator!= (
 //
 template <typename InputIterator, typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
 NVBIO_HOST_DEVICE
-void assign(
+void serial_assign(
     const IndexType                                                                                 input_len,
     InputIterator                                                                                   input_string,
     PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string)
@@ -836,6 +836,166 @@ void assign(
 
         words[ word_idx ] = word;
     }
+}
+
+#if defined(__CUDACC__)
+template <typename InputIterator, typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+__global__
+void assign_kernel(
+    const IndexType                                                                                 input_len,
+    InputIterator                                                                                   input_string,
+    PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string)
+{
+    typedef PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> packed_stream_type;
+    typedef typename packed_stream_type::storage_type word_type;
+
+    const uint32 WORD_SIZE = uint32( 8u * sizeof(word_type) );
+
+    const bool   BIG_ENDIAN       = BIG_ENDIAN_T;
+    const uint32 SYMBOL_SIZE      = SYMBOL_SIZE_T;
+    const uint32 SYMBOLS_PER_WORD = WORD_SIZE / SYMBOL_SIZE;
+    const uint32 SYMBOL_COUNT     = 1u << SYMBOL_SIZE;
+    const uint32 SYMBOL_MASK      = SYMBOL_COUNT - 1u;
+
+    InputStream words = packed_string.stream();
+
+    const IndexType stream_offset = packed_string.index();                  // stream offset, in symbols
+    const uint32    word_offset   = stream_offset & (SYMBOLS_PER_WORD-1);   // offset within the first word
+    const uint32    word_rem      = SYMBOLS_PER_WORD - word_offset;         // # of remaining symbols to fill the first word
+
+    const uint32 thread_id = threadIdx.x + blockIdx.x * blockDim.x;
+    if (word_rem + thread_id * SYMBOLS_PER_WORD >= input_len)
+        return;
+
+    if (thread_id == 0)
+    {
+        // fetch the word in question
+        word_type word = words[ stream_offset / SYMBOLS_PER_WORD ];
+
+        // loop through the word's bp's
+        for (uint32 i = 0; i < word_rem; ++i)
+        {
+            // fetch the bp
+            const uint8 bp = input_string[i] & SYMBOL_MASK;
+
+            const uint32       bit_idx = (word_offset + i) * SYMBOL_SIZE;
+            const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
+            const word_type     symbol = word_type(bp) << symbol_offset;
+
+            // clear all bits
+            word &= ~(uint64(SYMBOL_MASK) << symbol_offset);
+
+            // set bits
+            word |= symbol;
+        }
+
+        // write out the word
+        words[ stream_offset / SYMBOLS_PER_WORD ] = word;
+    }
+    else
+    {
+        const uint32 i = word_rem + threadIdx.x * SYMBOLS_PER_WORD;
+
+        // encode a word's worth of characters
+        word_type word = 0u;
+
+        const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, uint32( input_len - IndexType(i) ) );
+
+        // loop through the word's bp's
+        for (uint32 j = 0; j < SYMBOLS_PER_WORD; ++j)
+        {
+            if (j < n_symbols)
+            {
+                // fetch the bp
+                const uint8 bp = input_string[IndexType(i) + j] & SYMBOL_MASK;
+
+                const uint32       bit_idx = j * SYMBOL_SIZE;
+                const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
+                const word_type     symbol = word_type(bp) << symbol_offset;
+
+                // set bits
+                word |= symbol;
+            }
+        }
+
+        // write out the word
+        const uint32 word_idx = uint32( (stream_offset + IndexType(i)) / SYMBOLS_PER_WORD );
+
+        words[ word_idx ] = word;
+    }
+}
+
+// assign a sequence to a packed stream
+//
+template <typename InputIterator, typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_HOST_DEVICE
+void assign(
+    const device_tag                                                                                tag,
+    const IndexType                                                                                 input_len,
+    InputIterator                                                                                   input_string,
+    PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string)
+{
+  #if defined(NVBIO_DEVICE_COMPILATION)
+    //
+    // this function is being called on the device: call the serial implementation
+    //
+
+    serial_assign( input_len, input_string, packed_string );
+  #else
+    //
+    // this function is being called on the host: spawn a kernel
+    //
+
+    typedef PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> packed_stream_type;
+    typedef typename packed_stream_type::storage_type word_type;
+
+    const uint32 WORD_SIZE = uint32( 8u * sizeof(word_type) );
+
+    const uint32 SYMBOL_SIZE      = SYMBOL_SIZE_T;
+    const uint32 SYMBOLS_PER_WORD = WORD_SIZE / SYMBOL_SIZE;
+
+    const IndexType stream_offset = packed_string.index();                  // stream offset, in symbols
+    const uint32    word_offset   = stream_offset & (SYMBOLS_PER_WORD-1);   // offset within the first word
+    const uint32    word_rem      = SYMBOLS_PER_WORD - word_offset;         // # of remaining symbols to fill the first word
+
+    const uint32 n_words = 1u + util::divide_ri( input_len - word_rem, SYMBOLS_PER_WORD );
+
+    const uint32 blockdim = 128u;
+    const uint32 n_blocks = util::divide_ri( n_words, blockdim );
+
+    assign_kernel<<<n_blocks,blockdim>>>( input_len, input_string, packed_string );
+  #endif
+}
+
+#endif
+
+// assign a sequence to a packed stream
+//
+template <typename InputIterator, typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_HOST_DEVICE
+void assign(
+    const host_tag                                                                                  tag,
+    const IndexType                                                                                 input_len,
+    InputIterator                                                                                   input_string,
+    PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string)
+{
+    serial_assign( input_len, input_string, packed_string );
+}
+
+// assign a sequence to a packed stream
+//
+template <typename InputIterator, typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_HOST_DEVICE
+void assign(
+    const IndexType                                                                                 input_len,
+    InputIterator                                                                                   input_string,
+    PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string)
+{
+    // find the system tag of the output packed stream
+    typedef typename iterator_system<InputStream>::type    system_tag;
+
+    // and chose which function to call based on it
+    assign( system_tag(), input_len, input_string, packed_string );
 }
 
 //

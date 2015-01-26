@@ -437,7 +437,7 @@ void batch_score_profile(
     const uint32                    n_tests,
     const uint32                    n_tasks)
 {
-    const bool is_supported = aln::supports_scheduler<typename stream_type::aligner_type,scheduler_type>::pred;
+    NVBIO_VAR_UNUSED const bool is_supported = aln::supports_scheduler<typename stream_type::aligner_type,scheduler_type>::pred;
 
     batch_score_profile_dispatch<is_supported,scheduler_type,N,M,stream_type>::run(
         stream,

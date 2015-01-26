@@ -366,7 +366,12 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(const uint64 mask, int c, c
 template <uint32 N>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint32 x, int c)
 {
-    if (N == 2)
+    if (N == 1)
+    {
+        const uint32 r = popc(x);
+        return c ? r : 32u - r;
+    }
+    else if (N == 2)
         return popc_2bit(x,c);
     else if (N == 4)
     {
@@ -396,7 +401,12 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint32 x, int c)
 template <uint32 N>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint64 x, int c)
 {
-    if (N == 2)
+    if (N == 1)
+    {
+        const uint32 r = popc(x);
+        return c ? r : 64u - r;
+    }
+    else if (N == 2)
         return popc_2bit(x,c);
     else
     {
@@ -411,7 +421,8 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint64 x, int c)
 template <uint32 N>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 hibits_nbit(const uint32 mask, const uint32 i)
 {
-    const uint32 LOG_N = (N == 2) ? 1u :
+    const uint32 LOG_N = (N == 1) ? 0u :
+                         (N == 2) ? 1u :
                          (N == 4) ? 2u :
                                     3u;
 
@@ -424,7 +435,8 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 hibits_nbit(const uint32 mask, const 
 template <uint32 N>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint64 hibits_nbit(const uint64 mask, const uint32 i)
 {
-    const uint32 LOG_N = (N == 2) ? 1u :
+    const uint32 LOG_N = (N == 1) ? 1u :
+                         (N == 2) ? 1u :
                          (N == 4) ? 2u :
                                     3u;
 

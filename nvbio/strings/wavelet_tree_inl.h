@@ -378,7 +378,7 @@ IndexType rank(
     uint32    node     = 0u;
     IndexType range_lo = 0u;
 
-    IndexType r = i;
+    IndexType r = i+1;
     
     for (uint32 l = 0; l < symbol_size; ++l)
     {

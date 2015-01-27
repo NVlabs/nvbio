@@ -77,7 +77,13 @@ int wavelet_test(int argc, char* argv[])
 
         nvbio::vector<host_tag,uint8> h_text( text_len );
 
-        for (uint32 i = 0; i < text_len; ++i)
+        h_text[0] = 41;
+        h_text[1] = 59;
+        h_text[2] = 59;
+        h_text[3] = 41;
+        h_text[4] = 59;
+
+        for (uint32 i = 5; i < text_len; ++i)
             h_text[i] = (rand() & 255);
 
         nvbio::vector<device_tag,uint8> d_text( h_text );
@@ -109,7 +115,22 @@ int wavelet_test(int argc, char* argv[])
 
             if (c != r)
             {
-                log_error(stderr, "error at position %u: expected %u, got %u!\n", i, r, c);
+                log_error(stderr, "error in text(%u): expected %u, got %u!\n", i, r, c);
+                return 1;
+            }
+        }
+
+        // do a quick ranking test against a bunch of known results
+        const uint32 p[7] = { 0,   1,  2,  2,  3,  4,  5 };
+        const uint32 c[7] = { 41, 59, 59, 41, 41, 59,  0 };
+        const uint32 r[7] = { 1,   1,  2,  1,  2,  3,  0 };
+
+        for (uint32 i = 0; i < 7; ++i)
+        {
+            const uint32 n = rank( plain_view(wavelet_tree), p[i], c[i] );
+            if (n != r[i])
+            {
+                log_error(stderr, "error in rank(%u,%u): expected %u, got %u!\n", p[i], c[i], r[i], n);
                 return 1;
             }
         }

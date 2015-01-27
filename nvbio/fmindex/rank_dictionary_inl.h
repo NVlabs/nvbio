@@ -182,7 +182,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(
 template <uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIterator, typename CountTable>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 text(const rank_dictionary<SYMBOL_SIZE_T,K,TextString,OccIterator,CountTable>& dict, const uint32 i)
 {
-    return dict.text[i];
+    return dict.m_text[i];
 }
 
 // fetch the text character at position i in the rank dictionary
@@ -190,7 +190,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 text(const rank_dictionary<SYMBOL_SIZE
 template <uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIterator, typename CountTable>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint8 text(const rank_dictionary<SYMBOL_SIZE_T,K,TextString,OccIterator,CountTable>& dict, const uint64 i)
 {
-    return dict.text[i];
+    return dict.m_text[i];
 }
 
 template <uint32 SYMBOL_SIZE_T, uint32 K, typename TextString, typename OccIterator, typename CountTable, typename WordType, typename OccType>
@@ -305,12 +305,12 @@ struct dispatch_rank<SYMBOL_SIZE,K,PackedStream<TextStorage,uint8,SYMBOL_SIZE,tr
         const word_type i_mod = ~word_type(i) & (SYMS_PER_WORD-1);
 
         // fetch base occurrence counter
-        const index_type out = dict.occ[ k*SYMBOL_COUNT + c ];
+        const index_type out = dict.m_occ[ k*SYMBOL_COUNT + c ];
 
         const uint32 off = k*(K >> LOG_SYMS_PER_WORD);
 
         // sum up all the pop-counts of the relevant masks
-        return out + occ::popc_nbit<SYMBOL_SIZE>( dict.text.stream(), c, off, off + m, i_mod );
+        return out + occ::popc_nbit<SYMBOL_SIZE>( dict.m_text.stream(), c, off, off + m, i_mod );
     }
     // fetch the number of occurrences of character c in the substring [0,i]
     static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE vec2_type run(const dictionary_type& dict, const range_type range, const uint32 c)
@@ -330,10 +330,10 @@ struct dispatch_rank<SYMBOL_SIZE,K,PackedStream<TextStorage,uint8,SYMBOL_SIZE,tr
         const uint32 kh = uint32( range.y / K );
 
         // fetch base occurrence counters for the respective blocks
-        const index_type outl = dict.occ[ kl*SYMBOL_COUNT + c ];
-        const index_type outh = (kl == kh) ? outl : dict.occ[ kh*SYMBOL_COUNT + c ];
+        const index_type outl = dict.m_occ[ kl*SYMBOL_COUNT + c ];
+        const index_type outh = (kl == kh) ? outl : dict.m_occ[ kh*SYMBOL_COUNT + c ];
 
-        const uint2 r = popcN( dict.text.stream(), range, kl, kh, c );
+        const uint2 r = popcN( dict.m_text.stream(), range, kl, kh, c );
 
         return make_vector( outl + r.x, outh + r.y );
     }
@@ -349,10 +349,10 @@ struct dispatch_rank<SYMBOL_SIZE,K,PackedStream<TextStorage,uint8,SYMBOL_SIZE,tr
         const uint32 m = (i - k*K) >> LOG_SYMS_PER_WORD;
 
         // fetch base occurrence counters for all symbols in the respective block
-        vec4_type r = make_vector( dict.occ[k*4+0], dict.occ[k*4+1], dict.occ[k*4+2], dict.occ[k*4+3] );
+        vec4_type r = make_vector( dict.m_occ[k*4+0], dict.m_occ[k*4+1], dict.m_occ[k*4+2], dict.m_occ[k*4+3] );
 
         const uint32 off = k*(K >> LOG_SYMS_PER_WORD);
-        const uint32 x = occ::popc_nbit<2>( dict.text.stream(), dict.count_table, off, off + m, ~word_type(i) & (SYMS_PER_WORD-1) );
+        const uint32 x = occ::popc_nbit<2>( dict.m_text.stream(), dict.m_count_table, off, off + m, ~word_type(i) & (SYMS_PER_WORD-1) );
 
         // add the packed counters to the output result
         unpack_add( &r, x );
@@ -365,10 +365,10 @@ struct dispatch_rank<SYMBOL_SIZE,K,PackedStream<TextStorage,uint8,SYMBOL_SIZE,tr
         const uint32 kh = uint32( range.y / K );
 
         // fetch base occurrence counters for for all symbols in the respective blocks
-        *outl =                      make_vector( dict.occ[kl*4+0], dict.occ[kl*4+1], dict.occ[kl*4+2], dict.occ[kl*4+3] );
-        *outh = (kl == kh) ? *outl : make_vector( dict.occ[kh*4+0], dict.occ[kh*4+1], dict.occ[kh*4+2], dict.occ[kh*4+3] );
+        *outl =                      make_vector( dict.m_occ[kl*4+0], dict.m_occ[kl*4+1], dict.m_occ[kl*4+2], dict.m_occ[kl*4+3] );
+        *outh = (kl == kh) ? *outl : make_vector( dict.m_occ[kh*4+0], dict.m_occ[kh*4+1], dict.m_occ[kh*4+2], dict.m_occ[kh*4+3] );
 
-        const uint2 r = popcN( dict.text.stream(), range, kl, kh, dict.count_table );
+        const uint2 r = popcN( dict.m_text.stream(), range, kl, kh, dict.m_count_table );
 
         // add the packed counters to the output result
         unpack_add( outl, r.x );
@@ -458,9 +458,9 @@ struct dispatch_rank<2,64,PackedStream<TextStorage,uint8,2u,true>,OccIterator,Co
         const uint32 k = i >> LOG_K;
 
         // fetch base occurrence counter
-        const uint32 out = comp( dict.occ[ k ], c );
+        const uint32 out = comp( dict.m_occ[ k ], c );
 
-        return out + popc( dict.text.stream(), i, k, c );
+        return out + popc( dict.m_text.stream(), i, k, c );
     }
     // fetch the number of occurrences of character c in the substring [0,i]
     static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint2 run(const dictionary_type& dict, const uint2 range, const uint32 c)
@@ -480,10 +480,10 @@ struct dispatch_rank<2,64,PackedStream<TextStorage,uint8,2u,true>,OccIterator,Co
         const uint32 kh = range.y >> LOG_K;
 
         // fetch the base occurrence counter at the beginning of the low block
-        const uint32 outl = comp( dict.occ[ kl ], c );
-        const uint32 outh = (kl == kh) ? outl : comp( dict.occ[ kh ], c );
+        const uint32 outl = comp( dict.m_occ[ kl ], c );
+        const uint32 outh = (kl == kh) ? outl : comp( dict.m_occ[ kh ], c );
 
-        const uint2 r = popc2( dict.text.stream(), range, kl, kh, c );
+        const uint2 r = popc2( dict.m_text.stream(), range, kl, kh, c );
 
         return make_uint2( outl + r.x, outh + r.y );
     }
@@ -493,9 +493,9 @@ struct dispatch_rank<2,64,PackedStream<TextStorage,uint8,2u,true>,OccIterator,Co
         const uint32 k = i >> LOG_K;
 
         // fetch the base occurrence counter at the beginning of the block
-        uint4 r = dict.occ[k];
+        uint4 r = dict.m_occ[k];
 
-        const uint32 x = popc( dict.text.stream(), i, k, dict.count_table );
+        const uint32 x = popc( dict.m_text.stream(), i, k, dict.m_count_table );
 
         // add the packed counters to the output result
         unpack_add( &r, x );
@@ -508,10 +508,10 @@ struct dispatch_rank<2,64,PackedStream<TextStorage,uint8,2u,true>,OccIterator,Co
         const uint32 kh = range.y >> LOG_K;
 
         // fetch the base occurrence counters at the beginning of the respective blocks
-        *outl = dict.occ[kl];
-        *outh = (kl == kh) ? *outl : dict.occ[kh];
+        *outl = dict.m_occ[kl];
+        *outh = (kl == kh) ? *outl : dict.m_occ[kh];
 
-        const uint2 r = popc2( dict.text.stream(), range, kl, kh, dict.count_table );
+        const uint2 r = popc2( dict.m_text.stream(), range, kl, kh, dict.m_count_table );
 
         // add the packed counters to the output result
         unpack_add( outl, r.x );

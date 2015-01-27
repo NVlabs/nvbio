@@ -89,13 +89,22 @@ struct rank_dictionary
         const TextString   _text,
         const OccIterator  _occ,
         const CountTable   _count_table) :
-        text( _text ),
-        occ( _occ ),
-        count_table( _count_table ) {}
+        m_text( _text ),
+        m_occ( _occ ),
+        m_count_table( _count_table ) {}
 
-    TextString    text;                   ///< the dictionary's text
-    OccIterator   occ;                    ///< the dictionary's occurrence table
-    CountTable    count_table;            ///< a helper lookup table used to efficiently count the number
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE text_type text()       { return m_text; }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE text_type text() const { return m_text; }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE occ_iterator occ()       { return m_occ; }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE occ_iterator occ() const { return m_occ; }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE count_table_type count_table()       { return m_count_table; }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE count_table_type count_table() const { return m_count_table; }
+
+    TextString    m_text;                   ///< the dictionary's text
+    OccIterator   m_occ;                    ///< the dictionary's occurrence table
+    CountTable    m_count_table;            ///< a helper lookup table used to efficiently count the number
                                           ///  of occurrences of all the characters in a given byte
 };
 

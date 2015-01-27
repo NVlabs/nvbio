@@ -124,7 +124,7 @@ struct HostData
 template <typename index_type>
 struct DeviceData
 {
-    uint32                               primary;
+    uint32                              primary;
     thrust::device_vector<index_type>   text;
     thrust::device_vector<index_type>   bwt;
     thrust::device_vector<index_type>   occ;

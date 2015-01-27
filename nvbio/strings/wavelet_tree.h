@@ -61,6 +61,7 @@ struct WaveletTree
     typedef typename stream_traits<BitStreamIterator>::index_type   index_type;
     typedef BitStreamIterator                                       bit_iterator;
     typedef IndexIterator                                           index_iterator;
+    typedef WaveletTree<BitStreamIterator,IndexIterator>            text_type; // the text is the wavelet tree itself
 
     /// constructor
     ///
@@ -79,7 +80,7 @@ struct WaveletTree
 
     /// resize the tree
     ///
-    NVBIO_HOST_DEVICE
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     void resize(const uint32 _size, const uint32 _symbol_size)
     {
         m_size        = _size;
@@ -88,27 +89,27 @@ struct WaveletTree
 
     /// return the number of bits per symbol
     ///
-    NVBIO_HOST_DEVICE
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint32 symbol_size() const { return m_symbol_size; }
 
     /// return the number of symbols
     ///
-    NVBIO_HOST_DEVICE
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     index_type size() const { return m_size; }
 
     /// return the bit string
     ///
-    NVBIO_HOST_DEVICE
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     BitStreamIterator bits() const { return m_bits; }
 
     /// return the node splits
     ///
-    NVBIO_HOST_DEVICE
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     IndexIterator splits() const { return m_nodes; }
 
     /// return the occurrences
     ///
-    NVBIO_HOST_DEVICE
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     IndexIterator occ() const { return m_occ; }
 
     /// return the number of bits set to b in the range [0,r] within node n at level l
@@ -118,8 +119,11 @@ struct WaveletTree
 
     /// return the i-th symbol
     ///
-    NVBIO_HOST_DEVICE
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint8 operator[] (const uint32 i) const;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE       text_type& text()       { return *this; }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE const text_type& text() const { return *this; }
 
     uint32              m_symbol_size;
     index_type          m_size;

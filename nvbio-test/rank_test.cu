@@ -60,7 +60,7 @@ void do_test(const index_type LEN, const rank_dict_type& dict)
     index_type counts[4] = { 0, 0, 0, 0 };
     for (index_type i = 0; i < LEN; ++i)
     {
-        counts[ dict.text[i] ]++;
+        counts[ dict.text()[i] ]++;
 
         for (uint8 c = 0; c < 4; ++c)
         {

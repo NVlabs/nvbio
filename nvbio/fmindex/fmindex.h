@@ -345,7 +345,7 @@ struct fm_index
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE index_type      L2(const uint32 c) const { return m_L2[c]; }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE TRankDictionary rank_dict() const { return m_rank_dict; }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE TSuffixArray    sa() const { return m_sa; }
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bwt_type        bwt() const { return m_rank_dict.text; }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bwt_type        bwt() const { return m_rank_dict.text(); }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE fm_index() {}
 

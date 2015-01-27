@@ -328,6 +328,15 @@ void setup(
     }
 }
 
+// return the i-th symbol
+//
+template <typename BitStreamIterator, typename IndexIterator>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint8 WaveletTree<BitStreamIterator,IndexIterator>::operator[] (const uint32 i) const
+{
+    return text( *this, i );
+}
+
 // return the number of bits set to b in the range [0,r] within node n at level l
 //
 template <typename BitStreamIterator, typename IndexIterator>

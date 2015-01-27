@@ -116,6 +116,11 @@ struct WaveletTree
     NVBIO_HOST_DEVICE
     index_type rank(const uint32 l, const uint32 node, const index_type node_begin, const index_type r, const uint8 b) const;
 
+    /// return the i-th symbol
+    ///
+    NVBIO_HOST_DEVICE
+    uint8 operator[] (const uint32 i) const;
+
     uint32              m_symbol_size;
     index_type          m_size;
     BitStreamIterator   m_bits;

@@ -960,7 +960,6 @@ void device_assign(
     const uint32 word_end   = util::divide_ri( stream_offset + input_len, SYMBOLS_PER_WORD );
 
     const uint32 n_words = word_end - word_begin;
-    fprintf(stderr,"%u\n", n_words);
 
     const uint32 blockdim = 128u;
     const uint32 n_blocks = util::divide_ri( n_words, blockdim );

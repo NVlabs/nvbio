@@ -749,6 +749,8 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator!= (
     return it1.stream() != it2.stream() || it1.index() != it2.index();
 }
 
+namespace priv {
+
 // assign a sequence to a packed stream
 //
 template <typename InputIterator, typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
@@ -838,16 +840,21 @@ void serial_assign(
     }
 }
 
+} // namespace priv
+
 #if defined(__CUDACC__)
+
+namespace priv {
+
 template <typename InputIterator, typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
 __global__
 void assign_kernel(
     const IndexType                                                                                 input_len,
-    InputIterator                                                                                   input_string,
+    const InputIterator                                                                             input_string,
     PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string)
 {
     typedef PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> packed_stream_type;
-    typedef typename packed_stream_type::storage_type word_type;
+    typedef typename packed_stream_type::storage_type                             word_type;
 
     const uint32 WORD_SIZE = uint32( 8u * sizeof(word_type) );
 
@@ -857,8 +864,6 @@ void assign_kernel(
     const uint32 SYMBOL_COUNT     = 1u << SYMBOL_SIZE;
     const uint32 SYMBOL_MASK      = SYMBOL_COUNT - 1u;
 
-    InputStream words = packed_string.stream();
-
     const IndexType stream_offset = packed_string.index();                  // stream offset, in symbols
     const uint32    word_offset   = stream_offset & (SYMBOLS_PER_WORD-1);   // offset within the first word
     const uint32    word_rem      = SYMBOLS_PER_WORD - word_offset;         // # of remaining symbols to fill the first word
@@ -866,6 +871,8 @@ void assign_kernel(
     const uint32 thread_id = threadIdx.x + blockIdx.x * blockDim.x;
     if (word_rem + thread_id * SYMBOLS_PER_WORD >= input_len)
         return;
+
+    InputStream words = packed_string.stream();
 
     if (thread_id == 0)
     {
@@ -894,7 +901,7 @@ void assign_kernel(
     }
     else
     {
-        const uint32 i = word_rem + threadIdx.x * SYMBOLS_PER_WORD;
+        const uint32 i = word_rem + thread_id * SYMBOLS_PER_WORD;
 
         // encode a word's worth of characters
         word_type word = 0u;
@@ -926,28 +933,16 @@ void assign_kernel(
 }
 
 // assign a sequence to a packed stream
+// NOTE: this is a host ONLY function - marking it as host/device would cause compiler misbehaviours
 //
 template <typename InputIterator, typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
-NVBIO_HOST_DEVICE
-void assign(
-    const device_tag                                                                                tag,
+void device_assign(
     const IndexType                                                                                 input_len,
-    InputIterator                                                                                   input_string,
+    const InputIterator                                                                             input_string,
     PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string)
 {
-  #if defined(NVBIO_DEVICE_COMPILATION)
-    //
-    // this function is being called on the device: call the serial implementation
-    //
-
-    serial_assign( input_len, input_string, packed_string );
-  #else
-    //
-    // this function is being called on the host: spawn a kernel
-    //
-
     typedef PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> packed_stream_type;
-    typedef typename packed_stream_type::storage_type word_type;
+    typedef typename packed_stream_type::storage_type                             word_type;
 
     const uint32 WORD_SIZE = uint32( 8u * sizeof(word_type) );
 
@@ -962,12 +957,41 @@ void assign(
 
     const uint32 blockdim = 128u;
     const uint32 n_blocks = util::divide_ri( n_words, blockdim );
+    fprintf(stderr, "assign kernel: %u x %u blocks\n", n_blocks, blockdim);
 
-    assign_kernel<<<n_blocks,blockdim>>>( input_len, input_string, packed_string );
+    priv::assign_kernel<<<n_blocks,blockdim>>>( input_len, input_string, packed_string );
+    cuda::check_error("assign_kernel()");
+    fprintf(stderr, "assign kernel: done\n");
+}
+
+} // namespace priv
+
+// assign a sequence to a packed stream
+//
+template <typename InputIterator, typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_HOST_DEVICE
+void assign(
+    const device_tag                                                                                tag,
+    const IndexType                                                                                 input_len,
+    const InputIterator                                                                             input_string,
+    PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string)
+{
+  #if !defined(NVBIO_DEVICE_COMPILATION)
+    //
+    // this function is being called on the host: spawn a kernel
+    //
+
+    priv::device_assign( input_len, input_string, packed_string );
+  #else
+    //
+    // this function is being called on the device: call the serial implementation
+    //
+
+    priv::serial_assign( input_len, input_string, packed_string );
   #endif
 }
 
-#endif
+#endif // defined(__CUDACC__)
 
 // assign a sequence to a packed stream
 //
@@ -976,10 +1000,10 @@ NVBIO_HOST_DEVICE
 void assign(
     const host_tag                                                                                  tag,
     const IndexType                                                                                 input_len,
-    InputIterator                                                                                   input_string,
+    const InputIterator                                                                             input_string,
     PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string)
 {
-    serial_assign( input_len, input_string, packed_string );
+    priv::serial_assign( input_len, input_string, packed_string );
 }
 
 // assign a sequence to a packed stream
@@ -988,7 +1012,7 @@ template <typename InputIterator, typename InputStream, typename Symbol, uint32 
 NVBIO_HOST_DEVICE
 void assign(
     const IndexType                                                                                 input_len,
-    InputIterator                                                                                   input_string,
+    const InputIterator                                                                             input_string,
     PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string)
 {
     // find the system tag of the output packed stream

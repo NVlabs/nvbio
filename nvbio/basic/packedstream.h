@@ -341,7 +341,7 @@ template <typename InputIterator, typename InputStream, typename Symbol, uint32 
 NVBIO_HOST_DEVICE
 void assign(
     const IndexType                                                                                 input_len,
-    InputIterator                                                                                   input_string,
+    const InputIterator                                                                             input_string,
     PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string);
 
 /// PackedStream specialization of the stream_traits class, providing compile-time information about the

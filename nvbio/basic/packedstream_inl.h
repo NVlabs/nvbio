@@ -900,10 +900,10 @@ void assign_kernel(
     else
     {
         // check whether this thread should do something
-        if (word_rem + thread_id * SYMBOLS_PER_WORD >= input_len)
+        if (word_rem + (thread_id - 1u) * SYMBOLS_PER_WORD >= input_len)
             return;
 
-        const uint32 i = word_rem + thread_id * SYMBOLS_PER_WORD;
+        const uint32 i = word_rem + (thread_id - 1u) * SYMBOLS_PER_WORD;
 
         // encode a word's worth of characters
         word_type word = 0u;
@@ -955,11 +955,12 @@ void device_assign(
     const uint32 SYMBOLS_PER_WORD = WORD_SIZE / SYMBOL_SIZE;
 
     const IndexType stream_offset = packed_string.index();                  // stream offset, in symbols
-    const uint32    word_offset   = stream_offset & (SYMBOLS_PER_WORD-1);   // offset within the first word
-    const uint32    word_rem      = SYMBOLS_PER_WORD - word_offset;         // # of remaining symbols to fill the first word
 
-    const uint32 n_words = 1u +
-        (input_len > word_rem ? util::divide_ri( input_len - word_rem, SYMBOLS_PER_WORD ) : 0u);
+    const uint32 word_begin = util::divide_rz( stream_offset,             SYMBOLS_PER_WORD );
+    const uint32 word_end   = util::divide_ri( stream_offset + input_len, SYMBOLS_PER_WORD );
+
+    const uint32 n_words = word_end - word_begin;
+    fprintf(stderr,"%u\n", n_words);
 
     const uint32 blockdim = 128u;
     const uint32 n_blocks = util::divide_ri( n_words, blockdim );

@@ -868,11 +868,9 @@ void assign_kernel(
     const uint32    word_offset   = stream_offset & (SYMBOLS_PER_WORD-1);   // offset within the first word
     const uint32    word_rem      = SYMBOLS_PER_WORD - word_offset;         // # of remaining symbols to fill the first word
 
-    const uint32 thread_id = threadIdx.x + blockIdx.x * blockDim.x;
-    if (word_rem + thread_id * SYMBOLS_PER_WORD >= input_len)
-        return;
-
     InputStream words = packed_string.stream();
+
+    const uint32 thread_id = threadIdx.x + blockIdx.x * blockDim.x;
 
     if (thread_id == 0)
     {
@@ -901,6 +899,10 @@ void assign_kernel(
     }
     else
     {
+        // check whether this thread should do something
+        if (word_rem + thread_id * SYMBOLS_PER_WORD >= input_len)
+            return;
+
         const uint32 i = word_rem + thread_id * SYMBOLS_PER_WORD;
 
         // encode a word's worth of characters
@@ -941,6 +943,9 @@ void device_assign(
     const InputIterator                                                                             input_string,
     PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>                           packed_string)
 {
+    if (input_len == 0)
+        return;
+
     typedef PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> packed_stream_type;
     typedef typename packed_stream_type::storage_type                             word_type;
 
@@ -953,7 +958,8 @@ void device_assign(
     const uint32    word_offset   = stream_offset & (SYMBOLS_PER_WORD-1);   // offset within the first word
     const uint32    word_rem      = SYMBOLS_PER_WORD - word_offset;         // # of remaining symbols to fill the first word
 
-    const uint32 n_words = 1u + util::divide_ri( input_len - word_rem, SYMBOLS_PER_WORD );
+    const uint32 n_words = 1u +
+        (input_len > word_rem ? util::divide_ri( input_len - word_rem, SYMBOLS_PER_WORD ) : 0u);
 
     const uint32 blockdim = 128u;
     const uint32 n_blocks = util::divide_ri( n_words, blockdim );

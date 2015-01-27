@@ -89,7 +89,7 @@ template <typename SystemTag, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename 
 typename PackedVector<SystemTag,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>::const_iterator
 PackedVector<SystemTag,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>::begin() const
 {
-    stream_type stream( &m_storage.front() );
+    const_stream_type stream( &m_storage.front() );
     return stream.begin();
 }
 
@@ -99,7 +99,7 @@ template <typename SystemTag, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename 
 typename PackedVector<SystemTag,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>::const_iterator
 PackedVector<SystemTag,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>::end() const
 {
-    stream_type stream( &m_storage.front() );
+    const_stream_type stream( &m_storage.front() );
     return stream.begin() + m_size;
 }
 

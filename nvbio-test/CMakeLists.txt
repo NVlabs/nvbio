@@ -19,6 +19,7 @@ syncblocks_test.cu
 utils.h
 work_queue_test.cu
 sequence_test.cu
+wavelet_test.cu
 )
 
 cuda_add_executable(nvbio-test ${nvbio-test_srcs})

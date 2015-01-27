@@ -73,7 +73,7 @@ int wavelet_test(int argc, char* argv[])
 
     try
     {
-        fprintf(stderr, "wavelet test... started\n");
+        log_info(stderr, "wavelet test... started\n");
 
         nvbio::vector<host_tag,uint8> h_text( text_len );
 
@@ -109,16 +109,16 @@ int wavelet_test(int argc, char* argv[])
 
             if (c != r)
             {
-                fprintf(stderr, "error at position %u: expected %u, got %u!\n", i, r, c);
+                log_error(stderr, "error at position %u: expected %u, got %u!\n", i, r, c);
                 return 1;
             }
         }
 
-        fprintf(stderr, "wavelet test... done\n");
+        log_info(stderr, "wavelet test... done\n");
     }
     catch (...)
     {
-        fprintf(stderr, "error: unknown exception caught!\n");
+        log_error(stderr, "error: unknown exception caught!\n");
     }
 
     return 0;

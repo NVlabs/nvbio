@@ -957,11 +957,9 @@ void device_assign(
 
     const uint32 blockdim = 128u;
     const uint32 n_blocks = util::divide_ri( n_words, blockdim );
-    fprintf(stderr, "assign kernel: %u x %u blocks\n", n_blocks, blockdim);
 
     priv::assign_kernel<<<n_blocks,blockdim>>>( input_len, input_string, packed_string );
     cuda::check_error("assign_kernel()");
-    fprintf(stderr, "assign kernel: done\n");
 }
 
 } // namespace priv

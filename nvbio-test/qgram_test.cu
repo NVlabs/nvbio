@@ -410,8 +410,8 @@ int qgram_test(int argc, char* argv[])
     uint32 queries_batch = 10000000;
     bool   device_test   = true;
     bool   host_test     = true;
-    char*  reads = "./data/SRR493095_1.fastq.gz";
-    char*  index = "./data/human.NCBI36/Homo_sapiens.NCBI36.53.dna.toplevel.fa";
+    const char* reads = "./data/SRR493095_1.fastq.gz";
+    const char* index = "./data/human.NCBI36/Homo_sapiens.NCBI36.53.dna.toplevel.fa";
 
     for (int i = 0; i < argc; ++i)
     {

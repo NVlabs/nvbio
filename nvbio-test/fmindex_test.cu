@@ -1008,8 +1008,8 @@ int fmindex_test(int argc, char* argv[])
     uint32 synth_len     = 10000000;
     uint32 synth_queries = 64*1024;
 
-    char*  index_name        = "./data/human.NCBI36/Human.NCBI36";
-    char*  reads_name        = "./data/SRR493095_1.fastq.gz";
+    const char* index_name = "./data/human.NCBI36/Human.NCBI36";
+    const char* reads_name = "./data/SRR493095_1.fastq.gz";
     uint32 backtrack_queries = 64*1024;
     uint32 threads           = omp_get_num_procs();
 

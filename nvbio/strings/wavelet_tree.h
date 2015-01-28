@@ -83,7 +83,10 @@ struct WaveletTree
     typedef SymbolType                                              value_type;
     typedef BitStreamIterator                                       bit_iterator;
     typedef IndexIterator                                           index_iterator;
-    typedef WaveletTree<BitStreamIterator,IndexIterator>            text_type; // the text is the wavelet tree itself
+    typedef WaveletTree<BitStreamIterator,IndexIterator>            text_type;   // the text is the wavelet tree itself
+
+    typedef typename vector_type<index_type,2>::type                range_type;
+    typedef typename null_type                                      vector_type; // unsupported, would require knowing alphabet size
 
     /// constructor
     ///
@@ -108,6 +111,11 @@ struct WaveletTree
         m_size        = _size;
         m_symbol_size = _symbol_size;
     }
+
+    /// return the number of bits per symbol
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    uint32 symbol_count() const { return 1u << m_symbol_size; }
 
     /// return the number of bits per symbol
     ///

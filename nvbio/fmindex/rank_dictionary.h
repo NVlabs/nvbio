@@ -83,6 +83,7 @@ struct rank_dictionary
 {
     static const uint32     BLOCK_INTERVAL  = K;
     static const uint32     SYMBOL_SIZE     = SYMBOL_SIZE_T;
+    static const uint32     SYMBOL_COUNT    = 1u << SYMBOL_SIZE;
 
     typedef TextString      text_type;
     typedef OccIterator     occ_iterator;
@@ -92,9 +93,10 @@ struct rank_dictionary
     typedef typename vector_traits<
         typename std::iterator_traits<occ_iterator>::value_type>::value_type index_type;
 
-    typedef typename vector_type<index_type,2>::type range_type;
-    typedef typename vector_type<index_type,2>::type vec2_type;
-    typedef typename vector_type<index_type,4>::type vec4_type;
+    typedef typename vector_type<index_type,2>::type                range_type;
+    typedef typename vector_type<index_type,2>::type                vec2_type;
+    typedef typename vector_type<index_type,4>::type                vec4_type;
+    typedef typename vector_type<index_type,SYMBOL_COUNT>::type     vector_type;
 
     /// default constructor
     ///
@@ -111,6 +113,9 @@ struct rank_dictionary
         m_text( _text ),
         m_occ( _occ ),
         m_count_table( _count_table ) {}
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 symbol_count() const { return 1u << SYMBOL_SIZE_T; }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 symbol_size()  const { return SYMBOL_SIZE_T; }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE text_type text()       { return m_text; }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE text_type text() const { return m_text; }

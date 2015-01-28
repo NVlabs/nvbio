@@ -344,9 +344,9 @@ struct fm_index
     typedef typename TRankDictionary::text_type  bwt_type;
     typedef TSuffixArray                         suffix_array_type;
 
-    typedef typename TRankDictionary::index_type    index_type;
-    typedef typename TRankDictionary::range_type    range_type;
-    typedef typename TRankDictionary::vec4_type     vec4_type;
+    typedef typename TRankDictionary::index_type    index_type;  // type used for indexing
+    typedef typename TRankDictionary::range_type    range_type;  // type used for range searches
+    typedef typename TRankDictionary::vector_type   vector_type; // type used for character-wide searches
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE index_type      length() const { return m_length; }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE index_type      primary() const { return m_primary; }
@@ -355,6 +355,8 @@ struct fm_index
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE TRankDictionary rank_dict() const { return m_rank_dict; }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE TSuffixArray    sa() const { return m_sa; }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bwt_type        bwt() const { return m_rank_dict.text(); }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32          symbol_count() const { return m_rank_dict.symbol_count(); }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32          symbol_size()  const { return m_rank_dict.symbol_size(); }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE fm_index() {}
 
@@ -422,12 +424,12 @@ template <
     typename TRankDictionary,
     typename TSuffixArray>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::vec4_type rank4(
+typename fm_index<TRankDictionary,TSuffixArray>::vector_type rank4(
     const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
     typename fm_index<TRankDictionary,TSuffixArray>::index_type     k);
 
 /// \relates fm_index
-/// return the number of occurrences of all characters in the range [0,k] of the
+/// return the number of occurrences of all characters in the ranges [0,l] and [0,r] of the
 /// given FM-index.
 ///
 /// \param fmi      FM-index
@@ -441,8 +443,40 @@ template <
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank4(
     const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
     typename fm_index<TRankDictionary,TSuffixArray>::range_type     range,
-    typename fm_index<TRankDictionary,TSuffixArray>::vec4_type*     outl,
-    typename fm_index<TRankDictionary,TSuffixArray>::vec4_type*     outh);
+    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outl,
+    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outh);
+
+/// return the number of occurrences of all characters in the range [0,k] of the
+/// given FM-index.
+///
+/// \param fmi      FM-index
+/// \param k        range search delimiter
+///
+template <
+    typename TRankDictionary,
+    typename TSuffixArray>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+void rank_all(
+    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray>::index_type     k,
+    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   out);
+
+/// return the number of occurrences of all characters in the ranges [0,l] and [0,r] of the
+/// given FM-index.
+///
+/// \param fmi      FM-index
+/// \param range    range query [l,r]
+/// \param outl     first output
+/// \param outh     second output
+///
+template <
+    typename TRankDictionary,
+    typename TSuffixArray>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank_all(
+    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray>::range_type     range,
+    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outl,
+    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outh);
 
 /// \relates fm_index
 /// return the range of occurrences of a pattern in the given FM-index.

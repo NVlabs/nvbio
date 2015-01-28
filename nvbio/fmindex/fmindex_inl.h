@@ -106,7 +106,7 @@ template <
     typename TRankDictionary,
     typename TSuffixArray>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::vec4_type rank4(
+typename fm_index<TRankDictionary,TSuffixArray>::vector_type rank4(
     const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
     typename fm_index<TRankDictionary,TSuffixArray>::index_type     k)
 {
@@ -145,8 +145,8 @@ template <
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank4(
     const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
     typename fm_index<TRankDictionary,TSuffixArray>::range_type     range,
-    typename fm_index<TRankDictionary,TSuffixArray>::vec4_type*     outl,
-    typename fm_index<TRankDictionary,TSuffixArray>::vec4_type*     outh)
+    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outl,
+    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outh)
 {
     typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
 
@@ -179,6 +179,90 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank4(
     if (range.y >= fmi.primary()) --range.y; // because $ is not in bwt
 
     rank4( fmi.rank_dict(), range, outl, outh );
+}
+
+// return the number of occurrences of all characters in the range [0,k] of the
+// given FM-index.
+//
+// \param fmi      FM-index
+// \param k        range search delimiter
+//
+template <
+    typename TRankDictionary,
+    typename TSuffixArray>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+void rank_all(
+    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray>::index_type     k,
+    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   out)
+{
+    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
+
+    const index_type zero = index_type(0);
+
+    if (k == index_type(-1))
+    {
+        for (uint32 i = 0; i < fmi.symbol_count(); ++i)
+            (*out)[i] = zero;
+    }
+    else if (k == fmi.length())
+    {
+        for (uint32 i = 0; i < fmi.symbol_count(); ++i)
+            (*out)[i] = fmi.count(i);
+    } 
+
+    if (k >= fmi.primary()) // because $ is not in bwt
+        --k;
+
+    return rank_all( fmi.rank_dict(), k );
+}
+
+// return the number of occurrences of all characters in the range [0,k] of the
+// given FM-index.
+//
+// \param fmi      FM-index
+// \param range    range query [l,r]
+// \param outl     first output
+// \param outh     second output
+//
+template <
+    typename TRankDictionary,
+    typename TSuffixArray>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank_all(
+    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray>::range_type     range,
+    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outl,
+    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outh)
+{
+    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
+
+    const index_type zero = index_type(0);
+
+    if (range.x == range.y)
+    {
+        rank_all( fmi, range.x, outl );
+        *outh = *outl;
+        return;
+    }
+    else if (range.x == index_type(-1))
+    {
+        for (uint32 i = 0; i < fmi.symbol_count(); ++i)
+            (*outl)[i] = zero;
+        rank_all( fmi, range.y, outh );
+        return;
+    }
+    else if (range.y == fmi.length())
+    {
+        rank_all( fmi, range.x, outl );
+        for (uint32 i = 0; i < fmi.symbol_count(); ++i)
+            (*outh)[i] = fmi.count(i);
+        return;
+    }
+
+    if (range.x >= fmi.primary()) --range.x; // because $ is not in bwt
+    if (range.y >= fmi.primary()) --range.y; // because $ is not in bwt
+
+    rank_all( fmi.rank_dict(), range, outl, outh );
 }
 
 // return the range of occurrences of a pattern in the given FM-index.

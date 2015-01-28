@@ -88,7 +88,7 @@ int wavelet_test(int argc, char* argv[])
 
         nvbio::vector<device_tag,uint8> d_text( h_text );
 
-        typedef WaveletTreeStorage<device_tag>                   wavelet_tree_type;
+        typedef WaveletTreeStorage<device_tag>  wavelet_tree_type;
 
         // build a wavelet tree
         wavelet_tree_type wavelet_tree;

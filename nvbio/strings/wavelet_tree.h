@@ -71,12 +71,14 @@ namespace nvbio {
 ///                             Wavelet Tree's nodes, encoded as a full binary heap; the array must
 ///                             contain at least (2^SYMBOL_SIZE) - 1 entries
 ///
-template <typename BitStreamIterator, typename IndexIterator>
+template <typename BitStreamIterator, typename IndexIterator, typename SymbolType = uint8>
 struct WaveletTree
 {
     // define the system tag
     typedef typename iterator_system<BitStreamIterator>::type       system_tag;
     typedef typename stream_traits<BitStreamIterator>::index_type   index_type;
+    typedef SymbolType                                              symbol_type;
+    typedef SymbolType                                              value_type;
     typedef BitStreamIterator                                       bit_iterator;
     typedef IndexIterator                                           index_iterator;
     typedef WaveletTree<BitStreamIterator,IndexIterator>            text_type; // the text is the wavelet tree itself
@@ -138,7 +140,7 @@ struct WaveletTree
     /// return the i-th symbol
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint8 operator[] (const uint32 i) const;
+    SymbolType operator[] (const uint32 i) const;
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE       text_type& text()       { return *this; }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE const text_type& text() const { return *this; }
@@ -157,12 +159,13 @@ struct WaveletTree
 /// \tparam SystemTag           the system memory space where this object's data is allocated
 /// \tparam IndexType           the type of integers used to index this string
 ///
-template <typename SystemTag, typename IndexType = uint32>
+template <typename SystemTag, typename IndexType = uint32, typename SymbolType = uint8>
 struct WaveletTreeStorage
 {
     // define the system tag
     typedef SystemTag                                       system_tag;
     typedef IndexType                                       index_type;
+    typedef SymbolType                                      symbol_type;
 
     typedef PackedVector<system_tag,1u,true,index_type>     bit_vector_type;
     typedef nvbio::vector<system_tag,index_type>            index_vector_type;
@@ -262,17 +265,17 @@ struct WaveletTreeStorage
 /// the different bit-planes of the output Wavelet Tree, and the tree structure itself,
 /// a binary heap, recording the sequence split of each node.
 ///
-/// \tparam string_type         the string type: must provide a random access iterator
+/// \tparam string_iterator     the string type: must provide a random access iterator
 ///                             interface as well as define a proper stream_traits<StringType>
 ///                             expansion; particularly, stream_traits<StringType>::SYMBOL_SIZE
 ///                             is used to infer the number of bits needed to represent the
 ///                             symbols in the string's alphabet
 ///
-template <typename system_tag, typename string_iterator, typename index_type>
+template <typename system_tag, typename string_iterator, typename index_type, typename symbol_type>
 void setup(
     const index_type                                        string_len,
     const string_iterator&                                  string,
-    WaveletTreeStorage<system_tag,index_type>&              out_tree);
+    WaveletTreeStorage<system_tag,index_type,symbol_type>&  out_tree);
 
 /// \relates WaveletTree
 /// fetch the text character at position i in the wavelet tree
@@ -280,9 +283,9 @@ void setup(
 /// \param tree         the wavelet tree
 /// \param i            the index of the character to extract
 ///
-template <typename BitStreamIterator, typename IndexIterator, typename IndexType>
+template <typename BitStreamIterator, typename IndexIterator, typename IndexType, typename SymbolType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint8 text(const WaveletTree<BitStreamIterator,IndexIterator>& tree, const IndexType i);
+SymbolType text(const WaveletTree<BitStreamIterator,IndexIterator,SymbolType>& tree, const IndexType i);
 
 /// \relates WaveletTree
 /// fetch the number of occurrences of character c in the substring [0,i]
@@ -291,17 +294,17 @@ uint8 text(const WaveletTree<BitStreamIterator,IndexIterator>& tree, const Index
 /// \param i            the end of the query range [0,i]
 /// \param c            the query character
 ///
-template <typename BitStreamIterator, typename IndexIterator, typename IndexType>
+template <typename BitStreamIterator, typename IndexIterator, typename IndexType, typename SymbolType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 IndexType rank(
-    const WaveletTree<BitStreamIterator,IndexIterator>& tree, const IndexType i, const uint32 c);
+    const WaveletTree<BitStreamIterator,IndexIterator,SymbolType>& tree, const IndexType i, const uint32 c);
 
 /// \relates WaveletTreeStorage
 ///
 /// plain_view specialization
 ///
-template <typename SystemTag, typename IndexType>
-typename WaveletTreeStorage<SystemTag,IndexType>::plain_view_type plain_view(WaveletTreeStorage<SystemTag,IndexType>& tree)
+template <typename SystemTag, typename IndexType, typename SymbolType>
+typename WaveletTreeStorage<SystemTag,IndexType,SymbolType>::plain_view_type plain_view(WaveletTreeStorage<SystemTag,IndexType,SymbolType>& tree)
 {
     return tree;
 }
@@ -309,8 +312,8 @@ typename WaveletTreeStorage<SystemTag,IndexType>::plain_view_type plain_view(Wav
 ///
 /// plain_view specialization
 ///
-template <typename SystemTag, typename IndexType>
-typename WaveletTreeStorage<SystemTag,IndexType>::const_plain_view_type plain_view(const WaveletTreeStorage<SystemTag,IndexType>& tree)
+template <typename SystemTag, typename IndexType, typename SymbolType>
+typename WaveletTreeStorage<SystemTag,IndexType,SymbolType>::const_plain_view_type plain_view(const WaveletTreeStorage<SystemTag,IndexType,SymbolType>& tree)
 {
     return tree;
 }

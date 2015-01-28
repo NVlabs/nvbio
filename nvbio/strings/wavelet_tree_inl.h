@@ -29,16 +29,17 @@
 
 namespace nvbio {
 
+template <typename symbol_type>
 struct select_bit_functor
 {
-    typedef uint8   argument_type;
-    typedef uint8   result_type;
+    typedef symbol_type   argument_type;
+    typedef symbol_type   result_type;
 
     NVBIO_HOST_DEVICE
     select_bit_functor(const uint32 _i) : i(_i) {}
 
     NVBIO_HOST_DEVICE
-    uint8 operator() (const uint8 c) const { return (c >> i) & 1u; }
+    symbol_type operator() (const symbol_type c) const { return (c >> i) & 1u; }
 
     const uint32 i;
 };
@@ -124,19 +125,17 @@ struct node_type
 //                             is used to infer the number of bits needed to represent the
 //                             symbols in the string's alphabet
 //
-template <typename system_tag, typename string_iterator, typename index_type>
+template <typename system_tag, typename string_iterator, typename index_type, typename symbol_type>
 void setup(
     const index_type                                        string_len,
     const string_iterator&                                  string,
-    WaveletTreeStorage<system_tag,index_type>&              out_tree)
+    WaveletTreeStorage<system_tag,index_type,symbol_type>&  out_tree)
 {
     typedef typename WaveletTreeStorage<system_tag,index_type>::plain_view_type     wavelet_tree_view_type;
     typedef typename WaveletTreeStorage<system_tag,index_type>::bit_iterator        bit_iterator;
     typedef typename WaveletTreeStorage<system_tag,index_type>::index_iterator      occ_iterator;
 
     const uint32 symbol_size = stream_traits<string_iterator>::SYMBOL_SIZE;
-
-    typedef uint8 symbol_type;
 
     // resize the output tree
     out_tree.resize( string_len, symbol_size );
@@ -167,7 +166,7 @@ void setup(
                 string_len,
                 thrust::make_transform_iterator(
                     thrust::device_ptr<symbol_type>( sort_buffers.current_keys() ),
-                    select_bit_functor(bit) ),
+                    select_bit_functor<symbol_type>(bit) ),
                 out_tree.bits() + string_len * i );
 
             // sort by the leading i+1 bits
@@ -194,7 +193,7 @@ void setup(
                 string_len,
                 thrust::make_transform_iterator(
                     sorted_string.begin(),
-                    select_bit_functor(bit) ),
+                    select_bit_functor<symbol_type>(bit) ),
                 out_tree.bits() + string_len * i );
 
             // extract the leading bits
@@ -330,19 +329,19 @@ void setup(
 
 // return the i-th symbol
 //
-template <typename BitStreamIterator, typename IndexIterator>
+template <typename BitStreamIterator, typename IndexIterator, typename SymbolType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint8 WaveletTree<BitStreamIterator,IndexIterator>::operator[] (const uint32 i) const
+SymbolType WaveletTree<BitStreamIterator,IndexIterator, SymbolType>::operator[] (const uint32 i) const
 {
     return text( *this, i );
 }
 
 // return the number of bits set to b in the range [0,r] within node n at level l
 //
-template <typename BitStreamIterator, typename IndexIterator>
+template <typename BitStreamIterator, typename IndexIterator, typename SymbolType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename WaveletTree<BitStreamIterator,IndexIterator>::index_type
-WaveletTree<BitStreamIterator,IndexIterator>::rank(const uint32 l, const uint32 node, const index_type node_begin, const index_type r, const uint8 b) const
+typename WaveletTree<BitStreamIterator,IndexIterator,SymbolType>::index_type
+WaveletTree<BitStreamIterator,IndexIterator,SymbolType>::rank(const uint32 l, const uint32 node, const index_type node_begin, const index_type r, const uint8 b) const
 {
     const uint32 n_nodes = 1u << symbol_size();
 
@@ -376,10 +375,10 @@ WaveletTree<BitStreamIterator,IndexIterator>::rank(const uint32 l, const uint32 
 // \param i            the end of the query range [0,i]
 // \param c            the query character
 //
-template <typename BitStreamIterator, typename IndexIterator, typename IndexType>
+template <typename BitStreamIterator, typename IndexIterator, typename IndexType, typename SymbolType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 IndexType rank(
-    const WaveletTree<BitStreamIterator,IndexIterator>& tree, const IndexType i, const uint32 c)
+    const WaveletTree<BitStreamIterator,IndexIterator,SymbolType>& tree, const IndexType i, const uint32 c)
 {
     const uint32 symbol_size = tree.symbol_size();
 
@@ -418,9 +417,9 @@ IndexType rank(
 // \relates WaveletTree
 // fetch the text character at position i in the rank dictionary
 //
-template <typename BitStreamIterator, typename IndexIterator, typename IndexType>
+template <typename BitStreamIterator, typename IndexIterator, typename IndexType, typename SymbolType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint8 text(const WaveletTree<BitStreamIterator,IndexIterator>& tree, const IndexType i)
+SymbolType text(const WaveletTree<BitStreamIterator,IndexIterator,SymbolType>& tree, const IndexType i)
 {
     const uint32 symbol_size = tree.symbol_size();
     const uint32 string_len  = tree.size();
@@ -431,7 +430,7 @@ uint8 text(const WaveletTree<BitStreamIterator,IndexIterator>& tree, const Index
 
     IndexType r = i;
 
-    uint8 c = 0;
+    SymbolType c = 0;
 
     for (uint32 l = 0; l < symbol_size; ++l)
     {

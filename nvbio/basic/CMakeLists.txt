@@ -48,7 +48,7 @@ timer.cpp
 timer.h
 transform_iterator.h
 types.h
-vec.h
-vec_inl.h
+static_vector.h
+static_vector_inl.h
 vector_view.h
 )

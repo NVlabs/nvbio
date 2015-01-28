@@ -206,4 +206,4 @@ bool operator!= (const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2)
 
 } // namespace nvbio
 
-#include <nvbio/basic/vec_inl.h>
+#include <nvbio/basic/static_vector_inl.h>

@@ -131,7 +131,7 @@ void synthetic_test(const uint32 LEN)
             uint32 L2[5];
 
             // build the occurrence table
-            build_occurrence_table<OCC_INT>(
+            build_occurrence_table<2u,OCC_INT>(
                 text.begin(),
                 text.begin() + LEN,
                 &occ[0],
@@ -210,7 +210,7 @@ void synthetic_test(const uint32 LEN)
             uint64 L2[5];
 
             // build the occurrence table
-            build_occurrence_table<OCC_INT>(
+            build_occurrence_table<2u,OCC_INT>(
                 text.begin(),
                 text.begin() + LEN,
                 &occ[0],

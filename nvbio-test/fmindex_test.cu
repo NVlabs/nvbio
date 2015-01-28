@@ -493,7 +493,7 @@ void synthetic_test(const uint32 LEN, const uint32 QUERIES)
     fprintf(stderr,"  primary : %d\n", data.primary );
 
     // buld the occurrence table
-    build_occurrence_table<OCC_INT>(
+    build_occurrence_table<2u,OCC_INT>(
         bwt,
         bwt + LEN,
         &data.occ[0],

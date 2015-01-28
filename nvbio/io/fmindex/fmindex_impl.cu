@@ -280,7 +280,7 @@ uint32* build_occurrence_table(
     nvbio::vector<host_tag,uint32> occ_vec( occ_words, 0u );
     uint32 cnt[4];
 
-    nvbio::build_occurrence_table<FMIndexDataCore::OCC_INT>(
+    nvbio::build_occurrence_table<FMIndexDataCore::BWT_BITS,FMIndexDataCore::OCC_INT>(
         bwt,
         bwt + seq_length,
         raw_pointer( occ_vec ),

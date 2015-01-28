@@ -39,14 +39,16 @@ namespace nvbio {
 // \param occ      output occurrence map
 // \param cnt      optional table of the global counters
 //
-template <uint32 K, typename SymbolIterator, typename IndexType>
+template <uint32 SYMBOL_SIZE, uint32 K, typename SymbolIterator, typename IndexType>
 void build_occurrence_table(
     SymbolIterator begin,
     SymbolIterator end,
     IndexType*     occ,
     IndexType*     cnt)
 {
-    IndexType counters[4] = { 0u, 0u, 0u, 0u };
+    const uint32 N_SYMBOLS = 1u << SYMBOL_SIZE;
+
+    IndexType counters[N_SYMBOLS] = { 0u };
 
     const IndexType n = end - begin;
 
@@ -58,8 +60,8 @@ void build_occurrence_table(
         {
             // save the counters
             const uint32 k = i / K;
-            for (uint32 c = 0; c < 4; ++c)
-                occ[ k*4 + c ] = counters[c];
+            for (uint32 c = 0; c < N_SYMBOLS; ++c)
+                occ[ k*N_SYMBOLS + c ] = counters[c];
         }
 
         // update counters
@@ -69,7 +71,7 @@ void build_occurrence_table(
     if (cnt)
     {
         // build a cumulative table of the final counters
-        for (uint32 i = 0; i < 4; ++i)
+        for (uint32 i = 0; i < N_SYMBOLS; ++i)
             cnt[i] = counters[i];
     }
 }

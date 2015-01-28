@@ -109,9 +109,16 @@ struct rank_dictionary
 };
 
 ///
-/// Build the occurrence table for a given string, packing a set of counters
-/// every K elements.
-/// The table must contain ((n+K-1)/K)*4 entries.
+/// \relates rank_dictionary
+///
+/// Build a sampled occurrence table for a given string, storing a set of symbol counters
+/// every K elements of the original string.
+/// The table must contain ((n+K-1)/K)*N_SYMBOLS entries, where N_SYMBOLS = 2 ^ SYMBOL_SIZE.
+///
+/// \tparam SYMBOL_SIZE         symbol size, in bits
+/// \tparam K                   sampling frequency
+/// \tparam SymbolIterator      the input string iterator
+/// \tparam IndexType           the integer type used to store indices
 ///
 /// Optionally save the table of the global counters as well.
 ///
@@ -120,7 +127,7 @@ struct rank_dictionary
 /// \param occ      output occurrence map
 /// \param cnt      optional table of the global counters
 ///
-template <uint32 K, typename SymbolIterator, typename IndexType>
+template <uint32 SYMBOL_SIZE, uint32 K, typename SymbolIterator, typename IndexType>
 void build_occurrence_table(
     SymbolIterator begin,
     SymbolIterator end,

@@ -115,7 +115,7 @@ int sufsort_test(int argc, char* argv[])
 #endif
     bool   store_output = true;
 
-    char*  index_name = "data/human.NCBI36/Homo_sapiens.NCBI36.53.dna.toplevel.fa";
+    const char* index_name = "data/human.NCBI36/Homo_sapiens.NCBI36.53.dna.toplevel.fa";
 
     BWTParams params;
 

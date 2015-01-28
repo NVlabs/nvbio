@@ -71,8 +71,8 @@ int main(int argc, char* argv[])
     // perform some basic option parsing
     //
 
-    uint32 n_bps = 10000000;
-    char*  reads = "./data/SRR493095_1.fastq.gz";
+    uint32      n_bps = 10000000;
+    const char* reads = "./data/SRR493095_1.fastq.gz";
 
     for (int i = 0; i < argc; ++i)
     {

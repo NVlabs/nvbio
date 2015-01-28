@@ -139,8 +139,8 @@ namespace nvbio {
 ///
 /// \section WaveletTreeSection Wavelet Trees
 ///\par
-/// A <i>Wavelet Tree</i> is a data structure that can be used to encode a string T of <i>n</i> symbols from an alphabet of <i>s</i> characters
-/// in space O(n log(s)), that allows both symbol access and ranking in O(log(s)) time, i.e:
+/// A <i>Wavelet Tree</i> is a data structure that can be used to encode a string T of <i>n</i> symbols from an alphabet of <i>s</i>
+/// characters in space O(n log(s)), allowing both symbol access and ranking in O(log(s)) time, i.e:
 ///\par
 /// * each character T[i] can be recovered in O(log(s)) time
 /// * the number of occurrences of a character c in the substring T[0,i] can be counted in O(log(s)) time
@@ -148,7 +148,8 @@ namespace nvbio {
 /// In other words, a Wavelet Tree is both an alternative string representation (often more amenable to compression),
 /// <i>and</i> a storage-efficient \ref RankDictionarySection "rank dictionary".
 /// For the sake of comparison, notice that the \ref rank_dictionary class, which is based on a standard sampled occurrence
-/// table built directly on top of the original string T, needs O(s) storage - exponentially more.
+/// table built directly on top of the original string T, needs O(s) storage - exponentially more in the number of bits
+/// per symbol <i>b = log(s)</i>.
 ///\par
 /// NVBIO provides two classes:
 ///\par

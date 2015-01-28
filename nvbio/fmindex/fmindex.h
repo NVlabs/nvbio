@@ -92,6 +92,15 @@ namespace nvbio {
 /// return the number of occurrences of all characters of a 4-letter alphabet in the prefixes [0,range.x] and [0,range.y]
 /// </td></tr>
 /// </table>
+///\par
+/// <i>NOTE:</i>  the O(1) time refers to the complexity in the length <i>n</i> of the text; more properly, if the
+/// alphabet contains <i>s</i> characters (i.e. if the number of bits per symbol is b = log(s)), the complexity
+/// is O(log(s)).
+/// Similarly, the amount of space needed for a sparse occurrence table is O(n s).
+/// In other words, the amount of space is exponential in the number of bits per character.
+///\par
+/// For a more compact data structure requiring O(n log(s)) storage, useful with larger alphabets, please
+/// refer to \ref WaveletTreeSection.
 ///
 /// \section SSASection Sampled Suffix Arrays
 ///\par
@@ -137,7 +146,7 @@ namespace nvbio {
 /// An fm_index is a self-compressed text index as described by Ferragina & Manzini.
 /// It is built on top of the following ingredients:
 ///     - the BWT of a text T
-///     - a rank dictionary (\ref rank_dictionary) of the given BWT
+///     - a rank dictionary (\ref rank_dictionary or \ref WaveletTree) of the given BWT
 ///     - a sampled suffix array of T
 ///\par
 /// Given the above, it allows to count and locate all the occurrences in T of arbitrary patterns

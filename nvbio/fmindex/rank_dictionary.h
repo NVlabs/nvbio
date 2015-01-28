@@ -44,6 +44,16 @@ namespace nvbio {
 ///
 /// A rank dictionary is a data-structure which, given a text and a sparse occurrence table, can answer,
 /// in O(1) time, queries of the kind "how many times does character c occurr in the substring text[0:i] ?"
+///\par
+/// <i>NOTE:</i>  the O(1) time refers to the complexity in the length <i>n</i> of the text; more properly, if the
+/// alphabet contains <i>s</i> characters (i.e. if the number of bits per symbol is b = log(s)), the complexity
+/// is O(log(s)).
+/// Similarly, the amount of space needed for a sparse occurrence table is O(n s).
+/// In other words, the amount of space is exponential in the number of bits per character.
+///\par
+/// For a more compact data structure requiring O(n log(s)) storage, useful with larger alphabets, please
+/// refer to \ref WaveletTreeSection.
+///
 
 ///@addtogroup RankDictionaryModule
 ///@{
@@ -51,6 +61,15 @@ namespace nvbio {
 ///
 /// A rank dictionary data-structure which, given a text and a sparse occurrence table, can answer,
 /// in O(1) time, queries of the kind "how many times does character c occurr in the substring text[0:i] ?"
+///\par
+/// <i>NOTE:</i>  the O(1) time refers to the complexity in the length of the text; more properly, if the
+/// alphabet contains <i>s</i> characters (i.e. if the number of bits per symbol is b = log(s)), the complexity
+/// is O(log(s)).
+/// Similarly, the amount of space needed for a sparse occurrence table is O(n s).
+/// In other words, the amount of space needed is exponential in the number of bits per character.
+///\par
+/// For a more compact data structure requiring O(n log(s)) storage, useful with larger alphabets, please
+/// refer to \ref WaveletTreeSection.
 ///
 /// \tparam SYMBOL_SIZE_T       the size of the alphabet, in bits
 /// \tparam K                   the sparsity of the occurrence table

@@ -32,7 +32,7 @@
 #include <nvbio/basic/popcount.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/iterator.h>
-#include <nvbio/basic/vec.h>
+#include <nvbio/basic/static_vector.h>
 #include <vector_types.h>
 #include <vector_functions.h>
 

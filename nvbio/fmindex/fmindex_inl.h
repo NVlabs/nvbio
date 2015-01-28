@@ -106,7 +106,7 @@ template <
     typename TRankDictionary,
     typename TSuffixArray>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::vector_type rank4(
+typename TRankDictionary::vec4_type rank4(
     const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
     typename fm_index<TRankDictionary,TSuffixArray>::index_type     k)
 {
@@ -145,8 +145,8 @@ template <
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank4(
     const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
     typename fm_index<TRankDictionary,TSuffixArray>::range_type     range,
-    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outl,
-    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outh)
+    typename TRankDictionary::vec4_type*                            outl,
+    typename TRankDictionary::vec4_type*                            outh)
 {
     typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
 

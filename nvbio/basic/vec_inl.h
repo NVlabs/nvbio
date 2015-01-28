@@ -29,139 +29,173 @@
 
 namespace nvbio {
 
-template <uint32 DIM, typename T>
+#if 0
+template <typename T, uint32 DIM>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T>::Vec(const T* v)
+StaticVector<T,DIM>::StaticVector(const T* v)
 {
     #pragma unroll
     for (uint32 d = 0; d < DIM; ++d)
-        data[d] = v[d];
+        this->operator[](d) = v[d];
+}
+#endif
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+StaticVector<T,DIM>::StaticVector(const T v)
+{
+    #pragma unroll
+    for (uint32 d = 0; d < DIM; ++d)
+        this->operator[](d) = v;
 }
 
-template <uint32 DIM, typename T>
+template <typename T, uint32 DIM>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T>::Vec(const T v)
+StaticVector<T,DIM>& StaticVector<T,DIM>::operator= (const StaticVectorBase<T,DIM>& op)
 {
     #pragma unroll
     for (uint32 d = 0; d < DIM; ++d)
-        data[d] = v;
-}
-
-template <uint32 DIM, typename T>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T>& Vec<DIM,T>::operator= (const Vec<DIM,T>& op2)
-{
-    #pragma unroll
-    for (uint32 d = 0; d < DIM; ++d)
-        data[d] = op2.data[d];
+        this->operator[](d) = op[d];
 
     return *this;
 }
 
-template <uint32 DIM, typename T>
+template <typename T, uint32 DIM>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T> operator+ (const Vec<DIM,T>& op1, const Vec<DIM,T>& op2)
+StaticVector<T,DIM> operator+ (const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2)
 {
-    Vec<DIM,T> r;
+    StaticVector<T,DIM> r;
     #pragma unroll
     for (uint32 d = 0; d < DIM; ++d)
-        r.data[d] = op1.data[d] + op2.data[d];
+        r[d] = op1[d] + op2[d];
     return r;
 }
-template <uint32 DIM, typename T>
+template <typename T, uint32 DIM>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T>& operator+= (Vec<DIM,T>& op1, const Vec<DIM,T>& op2)
+StaticVector<T,DIM>& operator+= (StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2)
 {
     #pragma unroll
     for (uint32 d = 0; d < DIM; ++d)
-        op1.data[d] = op1.data[d] + op2.data[d];
+        op1[d] = op1[d] + op2[d];
     return op1;
 }
-template <uint32 DIM, typename T>
+template <typename T, uint32 DIM>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T> operator- (const Vec<DIM,T>& op1, const Vec<DIM,T>& op2)
+StaticVector<T,DIM> operator- (const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2)
 {
-    Vec<DIM,T> r;
+    StaticVector<T,DIM> r;
     #pragma unroll
     for (uint32 d = 0; d < DIM; ++d)
-        r.data[d] = op1.data[d] - op2.data[d];
+        r[d] = op1[d] - op2[d];
     return r;
 }
-template <uint32 DIM, typename T>
+template <typename T, uint32 DIM>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T>& operator-= (Vec<DIM,T>& op1, const Vec<DIM,T>& op2)
+StaticVector<T,DIM>& operator-= (StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2)
 {
     #pragma unroll
     for (uint32 d = 0; d < DIM; ++d)
-        op1.data[d] = op1.data[d] - op2.data[d];
+        op1[d] = op1[d] - op2[d];
     return op1;
 }
-template <uint32 DIM, typename T>
+template <typename T, uint32 DIM>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T> operator* (const Vec<DIM,T>& op1, const Vec<DIM,T>& op2)
+StaticVector<T,DIM> operator* (const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2)
 {
-    Vec<DIM,T> r;
+    StaticVector<T,DIM> r;
     #pragma unroll
     for (uint32 d = 0; d < DIM; ++d)
-        r.data[d] = op1.data[d] - op2.data[d];
+        r[d] = op1[d] - op2[d];
     return r;
 }
-template <uint32 DIM, typename T>
+template <typename T, uint32 DIM>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T>& operator*= (Vec<DIM,T>& op1, const Vec<DIM,T>& op2)
+StaticVector<T,DIM>& operator*= (StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2)
 {
     #pragma unroll
     for (uint32 d = 0; d < DIM; ++d)
-        op1.data[d] = op1.data[d] * op2.data[d];
+        op1[d] = op1[d] * op2[d];
     return op1;
 }
-template <uint32 DIM, typename T>
+template <typename T, uint32 DIM>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T> operator/ (const Vec<DIM,T>& op1, const Vec<DIM,T>& op2)
+StaticVector<T,DIM> operator/ (const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2)
 {
-    Vec<DIM,T> r;
+    StaticVector<T,DIM> r;
     #pragma unroll
     for (uint32 d = 0; d < DIM; ++d)
-        r.data[d] = op1.data[d] / op2.data[d];
+        r[d] = op1[d] / op2[d];
     return r;
 }
-template <uint32 DIM, typename T>
+template <typename T, uint32 DIM>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T>& operator/= (Vec<DIM,T>& op1, const Vec<DIM,T>& op2)
+StaticVector<T,DIM>& operator/= (StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2)
 {
     #pragma unroll
     for (uint32 d = 0; d < DIM; ++d)
-        op1.data[d] = op1.data[d] / op2.data[d];
+        op1[d] = op1[d] / op2[d];
     return op1;
 }
-template <uint32 DIM, typename T>
+template <typename T, uint32 DIM>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T> min(const Vec<DIM,T>& op1, const Vec<DIM,T>& op2)
+StaticVector<T,DIM> min(const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2)
 {
-    Vec<DIM,T> r;
+    StaticVector<T,DIM> r;
     #pragma unroll
     for (uint32 d = 0; d < DIM; ++d)
-        r.data[d] = nvbio::min( op1.data[d], op2.data[d] );
+        r[d] = nvbio::min( op1[d], op2[d] );
     return r;
 }
-template <uint32 DIM, typename T>
+template <typename T, uint32 DIM>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T> max(const Vec<DIM,T>& op1, const Vec<DIM,T>& op2)
+StaticVector<T,DIM> max(const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2)
 {
-    Vec<DIM,T> r;
+    StaticVector<T,DIM> r;
     #pragma unroll
     for (uint32 d = 0; d < DIM; ++d)
-        r.data[d] = nvbio::max( op1.data[d], op2.data[d] );
+        r[d] = nvbio::max( op1[d], op2[d] );
     return r;
 }
-template <uint32 DIM, typename T>
+template <typename T, uint32 DIM>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-bool any(const Vec<DIM,T>& op)
+bool any(const StaticVector<T,DIM>& op)
 {
     bool r = false;
     #pragma unroll
     for (uint32 d = 0; d < DIM; ++d)
-        r = r && (op.data[d] != 0);
+        r = r || (op[d] != 0);
+    return r;
+}
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool all(const StaticVector<T,DIM>& op)
+{
+    bool r = true;
+    #pragma unroll
+    for (uint32 d = 0; d < DIM; ++d)
+        r = r && (op[d] != 0);
+    return r;
+}
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator== (const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2)
+{
+    bool r = true;
+    #pragma unroll
+    for (uint32 d = 0; d < DIM; ++d)
+        r = r && (op1[d] == op2[d]);
+    return r;
+}
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!= (const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2)
+{
+    bool r = false;
+    #pragma unroll
+    for (uint32 d = 0; d < DIM; ++d)
+        r = r || (op1[d] != op2[d]);
     return r;
 }
 

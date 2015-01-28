@@ -55,9 +55,9 @@ namespace { // anonymous namespace
 template <typename rank_dict_type, typename index_type>
 void do_test(const index_type LEN, const rank_dict_type& dict)
 {
-    typedef typename vector_type<index_type,4>::type vec4;
+    typedef StaticVector<index_type,4> vec4;
 
-    index_type counts[4] = { 0, 0, 0, 0 };
+    vec4 counts(0u);
     for (index_type i = 0; i < LEN; ++i)
     {
         counts[ dict.text()[i] ]++;
@@ -73,15 +73,13 @@ void do_test(const index_type LEN, const rank_dict_type& dict)
             }
         }
 
-        const vec4 r4 = rank4( dict, i );
-        if (r4.x != counts[0] ||
-            r4.y != counts[1] ||
-            r4.z != counts[2] ||
-            r4.w != counts[3])
+        vec4 r4 = rank_all( dict, i );
+
+        if (r4 != counts)
         {
             log_error(stderr, "  rank mismatch at [%u]: expected (%u,%u,%u,%u), got (%u,%u,%u,%u)\n", uint32(i),
                 (uint32)counts[0], (uint32)counts[1], (uint32)counts[2], (uint32)counts[3],
-                (uint32)r4.x, (uint32)r4.y, (uint32)r4.z, (uint32)r4.w);
+                (uint32)r4[0], (uint32)r4[1], (uint32)r4[2], (uint32)r4[3]);
             exit(1);
         }
     }

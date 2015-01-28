@@ -253,7 +253,7 @@ struct dispatch_rank<SYMBOL_SIZE,K,PackedStream<TextStorage,uint8,SYMBOL_SIZE,tr
     typedef typename vector_type<index_type,2>::type                vec2_type;
     typedef typename vector_type<index_type,4>::type                vec4_type;
     typedef vec2_type                                               range_type;
-    typedef typename vector_type<index_type,SYMBOL_COUNT>::type     vector_type;
+    typedef StaticVector<index_type,SYMBOL_COUNT>                   vector_type;
 
     // pop-count the occurrences of symbols in two given text blocks, switching
     // between pop-counting a single symbol if T is a uint32, or all 4 symbols
@@ -346,7 +346,7 @@ struct dispatch_rank<SYMBOL_SIZE,K,PackedStream<TextStorage,uint8,SYMBOL_SIZE,tr
     //
 
     // fetch the number of occurrences of character c in the substring [0,i]
-    static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE vector_type run4(const dictionary_type& dict, const index_type i)
+    static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE vec4_type run4(const dictionary_type& dict, const index_type i)
     {
         const uint32 k = uint32( i / K );
         const uint32 m = (i - k*K) >> LOG_SYMS_PER_WORD;
@@ -362,12 +362,12 @@ struct dispatch_rank<SYMBOL_SIZE,K,PackedStream<TextStorage,uint8,SYMBOL_SIZE,tr
         return r;
     }
     // fetch the number of occurrences of character c in the substring [0,i]
-    static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void run4(const dictionary_type& dict, const index_type i, vector_type* out)
+    static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void run4(const dictionary_type& dict, const index_type i, vec4_type* out)
     {
         *out = run4( dict, i );
     }
     // fetch the number of occurrences of character c in the substring [0,i]
-    static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void run4(const dictionary_type& dict, const range_type range, vector_type* outl, vector_type* outh)
+    static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void run4(const dictionary_type& dict, const range_type range, vec4_type* outl, vec4_type* outh)
     {
         const uint32 kl = uint32( range.x / K );
         const uint32 kh = uint32( range.y / K );
@@ -387,7 +387,10 @@ struct dispatch_rank<SYMBOL_SIZE,K,PackedStream<TextStorage,uint8,SYMBOL_SIZE,tr
     static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void run_all(const dictionary_type& dict, const index_type i, vector_type* out)
     {
         if (SYMBOL_SIZE == 4)
-            run4( dict, i, out );
+        {
+            const vec4_type r = run4( dict, i );
+            (*out)[0] = r.x; (*out)[1] = r.y; (*out)[2] = r.z; (*out)[3] = r.w;
+        }
         else
         {
             for (uint32 s = 0; s < SYMBOL_COUNT; ++s)
@@ -398,7 +401,14 @@ struct dispatch_rank<SYMBOL_SIZE,K,PackedStream<TextStorage,uint8,SYMBOL_SIZE,tr
     static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void run_all(const dictionary_type& dict, const range_type range, vector_type* outl, vector_type* outh)
     {
         if (SYMBOL_SIZE == 4)
-            run4( dict, range, outl, outh );
+        {
+            vec4_type l, r;
+
+            run4( dict, range, &l, &h );
+
+            (*outl)[0] = l.x; (*outl)[1] = l.y; (*outl)[2] = l.z; (*outl)[3] = l.w;
+            (*outh)[0] = r.x; (*outh)[1] = r.y; (*outh)[2] = r.z; (*outh)[3] = r.w;
+        }
         else
         {
             for (uint32 s = 0; s < SYMBOL_COUNT; ++s)
@@ -419,6 +429,10 @@ struct dispatch_rank<2,64,PackedStream<TextStorage,uint8,2u,true>,OccIterator,Co
 
     typedef PackedStream<TextStorage,uint8,2u,true>               text_type;
     typedef rank_dictionary<2,K,text_type,OccIterator,CountTable> dictionary_type;
+
+    typedef uint32                  index_type;
+    typedef uint2                   range_type;
+    typedef StaticVector<uint32,4>  vector_type;
 
     // pop-count the occurrences of symbols in a given text block, switching
     // between pop-counting a single symbol if T is a uint32, or all 4 symbols
@@ -557,15 +571,16 @@ struct dispatch_rank<2,64,PackedStream<TextStorage,uint8,2u,true>,OccIterator,Co
         unpack_add( outl, r.x );
         unpack_add( outh, r.y );
     }
+
     // fetch the number of occurrences of character c in the substring [0,i]
-    static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void run_all(const dictionary_type& dict, const uint32 i, uint4* out)
+    static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void run_all(const dictionary_type& dict, const index_type i, vector_type* out)
     {
-        run4( dict, i, out );
+        *out = run4( dict, i );
     }
     // fetch the number of occurrences of character c in the substring [0,i]
-    static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void run_all(const dictionary_type& dict, const uint2 range, uint4* outl, uint4* outh)
+    static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void run_all(const dictionary_type& dict, const range_type range, vector_type* outl, vector_type* outh)
     {
-        run4( dict, range, outl, outh );
+        run4( dict, range, &outl->data, &outh->data );
     }
 };
 
@@ -633,55 +648,54 @@ void rank4(
 }
 
 // fetch the number of occurrences of character c in the substring [0,i]
-template <uint32 K, typename TextString, typename OccIterator, typename CountTable>
+template <uint32 SYMBOL_SIZE, uint32 K, typename TextString, typename OccIterator, typename CountTable>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-void rank_all(
-    const rank_dictionary<2,K,TextString,OccIterator,CountTable>& dict, const uint32 i, uint4* out)
+typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::vector_type
+rank_all(
+    const rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>&                         dict,
+    const typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::index_type     i)
 {
     typedef typename TextString::storage_type                      word_type;
     typedef typename std::iterator_traits<OccIterator>::value_type occ_type;
 
-    dispatch_rank<2,K,TextString,OccIterator,CountTable,word_type,occ_type>::run_all(
+    typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::vector_type out;
+
+    dispatch_rank<SYMBOL_SIZE,K,TextString,OccIterator,CountTable,word_type,occ_type>::run_all(
+        dict, i, &out );
+
+    return out;
+}
+
+// fetch the number of occurrences of character c in the substring [0,i]
+template <uint32 SYMBOL_SIZE, uint32 K, typename TextString, typename OccIterator, typename CountTable>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+void rank_all(
+    const rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>&                         dict,
+    const typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::index_type     i,
+          typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::vector_type*   out)
+{
+    typedef typename TextString::storage_type                      word_type;
+    typedef typename std::iterator_traits<OccIterator>::value_type occ_type;
+
+    dispatch_rank<SYMBOL_SIZE,K,TextString,OccIterator,CountTable,word_type,occ_type>::run_all(
         dict, i, out );
 }
 
 // fetch the number of occurrences of character c in the substring [0,i]
-template <uint32 K, typename TextString, typename OccIterator, typename CountTable>
+template <uint32 SYMBOL_SIZE, uint32 K, typename TextString, typename OccIterator, typename CountTable>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 void rank_all(
-    const rank_dictionary<2,K,TextString,OccIterator,CountTable>& dict, const uint64 i, uint64_4* out)
+    const rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>&                         dict,
+    const typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::range_type     range,
+          typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::vector_type*   outl,
+          typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::vector_type*   outh)
 {
     typedef typename TextString::storage_type                      word_type;
     typedef typename std::iterator_traits<OccIterator>::value_type occ_type;
 
-    dispatch_rank<2,K,TextString,OccIterator,CountTable,word_type,occ_type>::run_all(
-        dict, i, out );
-}
-
-// fetch the number of occurrences of character c in the substring [0,i]
-template <uint32 K, typename TextString, typename OccIterator, typename CountTable>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-void rank_all(
-    const rank_dictionary<2,K,TextString,OccIterator,CountTable>& dict, const uint2 range, uint4* outl, uint4* outh)
-{
-    typedef typename TextString::storage_type                      word_type;
-    typedef typename std::iterator_traits<OccIterator>::value_type occ_type;
-
-    dispatch_rank<2,K,TextString,OccIterator,CountTable,word_type,occ_type>::run_all(
+    dispatch_rank<SYMBOL_SIZE,K,TextString,OccIterator,CountTable,word_type,occ_type>::run_all(
         dict, range, outl, outh );
 }
 
-// fetch the number of occurrences of character c in the substring [0,i]
-template <uint32 K, typename TextString, typename OccIterator, typename CountTable>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-void rank_all(
-    const rank_dictionary<2,K,TextString,OccIterator,CountTable>& dict, const uint64_2 range, uint64_4* outl, uint64_4* outh)
-{
-    typedef typename TextString::storage_type                      word_type;
-    typedef typename std::iterator_traits<OccIterator>::value_type occ_type;
-
-    dispatch_rank<2,K,TextString,OccIterator,CountTable,word_type,occ_type>::run_all(
-        dict, range, outl, outh );
-}
 
 } // namespace nvbio

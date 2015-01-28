@@ -78,18 +78,18 @@ namespace nvbio {
 /// return the number of occurrences of a given character c in the prefixes [0,range.x] and [0,range.y]
 /// </td></tr>
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">
-/// rank4()<br>
+/// rank_all()<br>
 /// </td><td style="vertical-align:text-top;">
 /// dict, i
 /// </td><td style="vertical-align:text-top;">
-/// return the number of occurrences of all characters of a 4-letter alphabet in the prefix [0,i]
+/// return the number of occurrences of all characters of the alphabet in the prefix [0,i]
 /// </td></tr>
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">
-/// rank4()<br>
+/// rank_all()<br>
 /// </td><td style="vertical-align:text-top;">
 /// dict, range
 /// </td><td style="vertical-align:text-top;">
-/// return the number of occurrences of all characters of a 4-letter alphabet in the prefixes [0,range.x] and [0,range.y]
+/// return the number of occurrences of all characters of the alphabet in the prefixes [0,range.x] and [0,range.y]
 /// </td></tr>
 /// </table>
 ///\par
@@ -177,11 +177,11 @@ namespace nvbio {
 /// return the number of occurrences of a given character c in the prefix [0,i]
 /// </td></tr>
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">
-/// rank4()<br>
+/// rank_all()<br>
 /// </td><td style="vertical-align:text-top;">
 /// fmi, i
 /// </td><td style="vertical-align:text-top;">
-/// return the number of occurrences of all characters of a 4-letter alphabet in the prefix [0,i]
+/// return the number of occurrences of all characters of the alphabet in the prefix [0,i]
 /// </td></tr>
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">
 /// match()<br>
@@ -420,11 +420,13 @@ typename fm_index<TRankDictionary,TSuffixArray>::range_type rank(
 /// \param fmi      FM-index
 /// \param k        range search delimiter
 ///
+/// this function is <b>deprecated</b>: please use rank_all()
+///
 template <
     typename TRankDictionary,
     typename TSuffixArray>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::vector_type rank4(
+typename TRankDictionary::vec4_type rank4(
     const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
     typename fm_index<TRankDictionary,TSuffixArray>::index_type     k);
 
@@ -437,14 +439,16 @@ typename fm_index<TRankDictionary,TSuffixArray>::vector_type rank4(
 /// \param outl     first output
 /// \param outh     second output
 ///
+/// this function is <b>deprecated</b>: please use rank_all()
+///
 template <
     typename TRankDictionary,
     typename TSuffixArray>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank4(
     const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
     typename fm_index<TRankDictionary,TSuffixArray>::range_type     range,
-    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outl,
-    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outh);
+    typename TRankDictionary::vec4_type*                            outl,
+    typename TRankDictionary::vec4_type*                            outh);
 
 /// return the number of occurrences of all characters in the range [0,k] of the
 /// given FM-index.

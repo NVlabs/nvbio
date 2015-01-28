@@ -37,21 +37,9 @@ namespace nvbio {
 ///
 /// A generic small vector class with the dimension set at compile-time
 ///
-template <uint32 DIM, typename T>
-struct Vec
+template <typename T, uint32 DIM>
+struct StaticVectorBase
 {
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    Vec() {}
-
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    Vec(const T* v);
-
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    explicit Vec(const T v);
-
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    Vec<DIM,T>& operator= (const Vec<DIM,T>& op2);
-
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     const T& operator[] (const uint32 i) const { return data[i]; }
 
@@ -61,49 +49,160 @@ struct Vec
     T data[DIM];
 };
 
-template <uint32 DIM, typename T>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T> operator+ (const Vec<DIM,T>& op1, const Vec<DIM,T>& op2);
+///
+/// A generic small vector class with the dimension set at compile-time
+///
+template <typename T>
+struct StaticVectorBase<T,2>
+{
+    typedef typename vector_type<T,2>::type    base_type;
 
-template <uint32 DIM, typename T>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T>& operator+= (Vec<DIM,T>& op1, const Vec<DIM,T>& op2);
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    StaticVectorBase<T,2>() {}
 
-template <uint32 DIM, typename T>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T> operator- (const Vec<DIM,T>& op1, const Vec<DIM,T>& op2);
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    StaticVectorBase<T,2>(const base_type v) : data(v) {}
 
-template <uint32 DIM, typename T>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T>& operator-= (Vec<DIM,T>& op1, const Vec<DIM,T>& op2);
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    const T& operator[] (const uint32 i) const { return (&data.x)[i]; }
 
-template <uint32 DIM, typename T>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T> operator* (const Vec<DIM,T>& op1, const Vec<DIM,T>& op2);
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+          T& operator[] (const uint32 i)       { return (&data.x)[i]; }
 
-template <uint32 DIM, typename T>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T>& operator*= (Vec<DIM,T>& op1, const Vec<DIM,T>& op2);
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    operator base_type() const { return data; }
 
-template <uint32 DIM, typename T>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T> operator/ (const Vec<DIM,T>& op1, const Vec<DIM,T>& op2);
+    base_type data;
+};
 
-template <uint32 DIM, typename T>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T>& operator/= (Vec<DIM,T>& op1, const Vec<DIM,T>& op2);
+///
+/// A generic small vector class with the dimension set at compile-time
+///
+template <typename T>
+struct StaticVectorBase<T,3>
+{
+    typedef typename vector_type<T,3>::type    base_type;
 
-template <uint32 DIM, typename T>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T> min(const Vec<DIM,T>& op1, const Vec<DIM,T>& op2);
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    StaticVectorBase<T,3>() {}
 
-template <uint32 DIM, typename T>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-Vec<DIM,T> max(const Vec<DIM,T>& op1, const Vec<DIM,T>& op2);
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    StaticVectorBase<T,3>(const base_type v) : data(v) {}
 
-template <uint32 DIM, typename T>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    const T& operator[] (const uint32 i) const { return (&data.x)[i]; }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+          T& operator[] (const uint32 i)       { return (&data.x)[i]; }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    operator base_type() const { return data; }
+
+    base_type data;
+};
+
+///
+/// A generic small vector class with the dimension set at compile-time
+///
+template <typename T>
+struct StaticVectorBase<T,4>
+{
+    typedef typename vector_type<T,4>::type    base_type;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    StaticVectorBase<T,4>() {}
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    StaticVectorBase<T,4>(const base_type v) : data(v) {}
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    const T& operator[] (const uint32 i) const { return (&data.x)[i]; }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+          T& operator[] (const uint32 i)       { return (&data.x)[i]; }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    operator base_type() const { return data; }
+
+    base_type data;
+};
+
+///
+/// A generic small vector class with the dimension set at compile-time
+///
+template <typename T, uint32 DIM>
+struct StaticVector : public StaticVectorBase<T,DIM>
+{
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    StaticVector() {}
+
+    //NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    //StaticVector(const T* v);
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    explicit StaticVector(const T v);
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    StaticVector<T,DIM>& operator= (const StaticVectorBase<T,DIM>& op);
+};
+
+template <typename T,uint32 DIM_T> struct vector_traits< StaticVectorBase<T,DIM_T> > { typedef T value_type; const static uint32 DIM = DIM_T; };
+
+template <typename T, uint32 DIM>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-bool any(const Vec<DIM,T>& op);
+StaticVector<T,DIM> operator+ (const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2);
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+StaticVector<T,DIM>& operator+= (StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2);
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+StaticVector<T,DIM> operator- (const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2);
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+StaticVector<T,DIM>& operator-= (StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2);
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+StaticVector<T,DIM> operator* (const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2);
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+StaticVector<T,DIM>& operator*= (StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2);
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+StaticVector<T,DIM> operator/ (const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2);
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+StaticVector<T,DIM>& operator/= (StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2);
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+StaticVector<T,DIM> min(const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2);
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+StaticVector<T,DIM> max(const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2);
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool any(const StaticVector<T,DIM>& op);
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool all(const StaticVector<T,DIM>& op);
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator== (const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2);
+
+template <typename T, uint32 DIM>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+bool operator!= (const StaticVector<T,DIM>& op1, const StaticVector<T,DIM>& op2);
 
 } // namespace nvbio
 

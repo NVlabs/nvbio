@@ -32,6 +32,7 @@
 #include <nvbio/basic/popcount.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/iterator.h>
+#include <nvbio/basic/vec.h>
 #include <vector_types.h>
 #include <vector_functions.h>
 
@@ -96,7 +97,7 @@ struct rank_dictionary
     typedef typename vector_type<index_type,2>::type                range_type;
     typedef typename vector_type<index_type,2>::type                vec2_type;
     typedef typename vector_type<index_type,4>::type                vec4_type;
-    typedef typename vector_type<index_type,SYMBOL_COUNT>::type     vector_type;
+    typedef StaticVector<index_type,SYMBOL_COUNT>                   vector_type;
 
     /// default constructor
     ///
@@ -198,6 +199,8 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE typename vector_type<IndexType,2>::type rank
 /// \param dict         the rank dictionary
 /// \param i            the end of the query range [0,i]
 ///
+/// this function is <b>deprecated</b>: please use rank_all()
+///
 template <uint32 K, typename TextString, typename OccIterator, typename CountTable, typename IndexType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE typename vector_type<IndexType,4>::type rank4(
     const rank_dictionary<2,K,TextString,OccIterator,CountTable>& dict, const IndexType i);
@@ -209,6 +212,8 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE typename vector_type<IndexType,4>::type rank
 /// \param range        the ends of the query ranges [0,range.x] and [0,range.y]
 /// \param outl         the output count of all characters in the first range
 /// \param outl         the output count of all characters in the second range
+///
+/// this function is <b>deprecated</b>: please use rank_all()
 ///
 template <uint32 K, typename TextString, typename OccIterator, typename CountTable>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank4(
@@ -222,9 +227,54 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank4(
 /// \param outl         the output count of all characters in the first range
 /// \param outl         the output count of all characters in the second range
 ///
+/// this function is <b>deprecated</b>: please use rank_all()
+///
 template <uint32 K, typename TextString, typename OccIterator, typename CountTable>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank4(
     const rank_dictionary<2,K,TextString,OccIterator,CountTable>& dict, const uint64_2 range, uint64_4* outl, uint64_4* outh);
+
+/// \relates rank_dictionary
+/// fetch the number of occurrences of all characters c in the substring [0,i]
+///
+/// \param dict         the rank dictionary
+/// \param i            the end of the query range [0,i]
+///
+template <uint32 SYMBOL_SIZE, uint32 K, typename TextString, typename OccIterator, typename CountTable>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::vector_type
+rank_all(
+    const rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>&                         dict,
+    const typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::index_type     i);
+
+/// \relates rank_dictionary
+/// fetch the number of occurrences of all characters c in the substring [0,i]
+///
+/// \param dict         the rank dictionary
+/// \param i            the end of the query range [0,i]
+/// \param out          the output count of all characters
+///
+template <uint32 SYMBOL_SIZE, uint32 K, typename TextString, typename OccIterator, typename CountTable>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+void rank_all(
+    const rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>&                         dict,
+    const typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::index_type     i,
+          typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::vector_type*   out);
+
+/// \relates rank_dictionary
+/// fetch the number of occurrences of all characters in the substrings [0,l] and [0,r]
+///
+/// \param dict         the rank dictionary
+/// \param range        the ends of the query ranges [0,range.x] and [0,range.y]
+/// \param outl         the output count of all characters in the first range
+/// \param outl         the output count of all characters in the second range
+///
+template <uint32 SYMBOL_SIZE, uint32 K, typename TextString, typename OccIterator, typename CountTable>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+void rank_all(
+    const rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>&                         dict,
+    const typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::range_type     range,
+          typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::vector_type*   outl,
+          typename rank_dictionary<SYMBOL_SIZE,K,TextString,OccIterator,CountTable>::vector_type*   outh);
 
 ///@} RankDictionaryModule
 ///@} FMIndex

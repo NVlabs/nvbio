@@ -194,10 +194,10 @@ namespace nvbio {
 ///     // check we extracted the right string...
 ///     printf("extracted \"%s\"", (const char*)raw_pointer( h_extracted_text ));
 ///
-///     // check that, in position 0, there should be one 'T'
+///     // check that in position 0 there should be exactly one 'T'
 ///     printf("rank(0,T) = %u\n", rank( plain_view( wavelet_tree ), 0, (uint8)'T' ));
 ///
-///     // check that, in position 6, there should be two 's'
+///     // check that the range [0,6] contains exactly two 's'
 ///     printf("rank(6,s) = %u\n", rank( plain_view( wavelet_tree ), 6, (uint8)'s' ));
 /// }
 ///\endcode

@@ -470,8 +470,8 @@ void PrefixDoublingSufSort::sort(
     const uint32 SYMBOL_SIZE = stream_traits<string_type>::SYMBOL_SIZE;
 
     typedef uint32 word_type;
-    const uint32   WORD_BITS = uint32( 8u * sizeof(word_type) );
-    const uint32 DOLLAR_BITS =
+    NVBIO_VAR_UNUSED const uint32   WORD_BITS = uint32( 8u * sizeof(word_type) );
+    NVBIO_VAR_UNUSED const uint32 DOLLAR_BITS =
         SYMBOL_SIZE*4 <= WORD_BITS-4 ? 4 :          // more than three symbols per word
         SYMBOL_SIZE*3 <= WORD_BITS-2 ? 2 :          // up to three symbols per word
         SYMBOL_SIZE*2 <= WORD_BITS-2 ? 2 :          // up to two symbols per word
@@ -556,7 +556,7 @@ void PrefixDoublingSufSort::sort(
         //   pos  :  1  2  3  4  5  6  7  8  9
         //   keys : (1, 1, 2, 3, 3, 3, 4, 4, 4) ->
         //   out  : (1, 1, 3, 4, 4, 4, 7, 7, 7)
-        const uint32 n_segments = extract_segments(
+        NVBIO_VAR_UNUSED const uint32 n_segments = extract_segments(
             n_suffixes,
             nvbio::raw_pointer( d_sort_keys ),
             nvbio::raw_pointer( d_segment_flags ),

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['r',['r',['../structnvbio_1_1alndiff_1_1_stats.html#a19e12a1723b8b77db82ce75fff6757ef',1,'nvbio::alndiff::Stats::r()'],['../structnvbio_1_1alndiff_1_1_boolean_stats.html#a584945b44049666c714de2497acb90aa',1,'nvbio::alndiff::BooleanStats::R()']]],
+  ['r',['R',['../structnvbio_1_1alndiff_1_1_boolean_stats.html#a584945b44049666c714de2497acb90aa',1,'nvbio::alndiff::BooleanStats::R()'],['../structnvbio_1_1alndiff_1_1_stats.html#a19e12a1723b8b77db82ce75fff6757ef',1,'nvbio::alndiff::Stats::r()']]],
   ['r_5findex',['r_index',['../structnvbio_1_1mem_1_1mem__functor.html#ae55b0aafd4b7e4a03f0d63d2de4c37f5',1,'nvbio::mem::mem_functor::r_index()'],['../structnvbio_1_1mem_1_1right__mem__functor.html#aa5ef3378597c66b13e4a918a697f14c1',1,'nvbio::mem::right_mem_functor::r_index()'],['../structnvbio_1_1mem_1_1split__mem__functor.html#aa77e5d09172d0609da44a00bb5f8dd9e',1,'nvbio::mem::split_mem_functor::r_index()'],['../structnvbio_1_1mem_1_1left__mem__functor.html#a4a53a1cb556f1bfd80291e21a2306516',1,'nvbio::mem::left_mem_functor::r_index()']]],
   ['r_5fnot_5fl',['R_not_L',['../structnvbio_1_1alndiff_1_1_boolean_stats.html#a529b330b0b851ddbc5b382b2c2a711d3',1,'nvbio::alndiff::BooleanStats']]],
   ['radix_5fslice',['radix_slice',['../group___sufsort.html#ga4b13c63ee457fc65a76c5b675e41d508',1,'nvbio::BWTParams']]],
@@ -67,7 +67,7 @@ var searchData=
   ['reference_5fstart',['reference_start',['../structnvbio_1_1io_1_1_s_n_p__sequence__index.html#a1959e3789edcdc1ed3021a0464f4f6cb',1,'nvbio::io::SNP_sequence_index']]],
   ['references',['References',['../struct_bam_reader_1_1_bam_reader_private.html#a75d53888661d6bce7800d988a1bb4896',1,'BamReader::BamReaderPrivate']]],
   ['refhasalignments',['RefHasAlignments',['../struct_bam_tools_1_1_ref_data.html#a07b656704aadb4df0e1d8c04e78dc19c',1,'BamTools::RefData']]],
-  ['refid',['RefID',['../struct_bam_tools_1_1_bam_alignment.html#a75e553ad2c2bdf155f12e4f6e432787c',1,'BamTools::BamAlignment::RefID()'],['../structcram__index.html#a5af90f008f565eb6a0bcd74eb945a921',1,'cram_index::refid()'],['../structcram__range.html#a20a4b0a2b0d2189bce931cc3c3f456d3',1,'cram_range::refid()'],['../structnvbio_1_1io_1_1_b_a_m__alignment.html#aaa9200dde443c9ac1119fcf1523cbd06',1,'nvbio::io::BAM_alignment::refID()'],['../struct_b_a_m__alignment__header.html#a2a38f456b48b624c60cfa163c83bcdd4',1,'BAM_alignment_header::refID()']]],
+  ['refid',['RefID',['../struct_bam_tools_1_1_bam_alignment.html#a75e553ad2c2bdf155f12e4f6e432787c',1,'BamTools::BamAlignment::RefID()'],['../structnvbio_1_1io_1_1_b_a_m__alignment.html#aaa9200dde443c9ac1119fcf1523cbd06',1,'nvbio::io::BAM_alignment::refID()'],['../struct_b_a_m__alignment__header.html#a2a38f456b48b624c60cfa163c83bcdd4',1,'BAM_alignment_header::refID()'],['../structcram__index.html#a5af90f008f565eb6a0bcd74eb945a921',1,'cram_index::refid()'],['../structcram__range.html#a20a4b0a2b0d2189bce931cc3c3f456d3',1,'cram_range::refid()']]],
   ['refids',['refIDs',['../struct_b_a_m__alignment__batch___so_a.html#afad4d548912c86ddbda0e58b961ce23f',1,'BAM_alignment_batch_SoA']]],
   ['reflength',['RefLength',['../struct_bam_tools_1_1_ref_data.html#a1306a0e07253a45420faf823fabffbd2',1,'BamTools::RefData']]],
   ['refname',['RefName',['../struct_bam_tools_1_1_ref_data.html#a06dc4dd6f05bed1531234d49180a8402',1,'BamTools::RefData']]],

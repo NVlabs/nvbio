@@ -19,7 +19,6 @@ var searchData=
   ['thread_3c_20computethreadse_20_3e',['Thread&lt; ComputeThreadSE &gt;',['../classnvbio_1_1_thread.html',1,'nvbio']]],
   ['thread_3c_20inputthreadpe_20_3e',['Thread&lt; InputThreadPE &gt;',['../classnvbio_1_1_thread.html',1,'nvbio']]],
   ['thread_3c_20inputthreadse_20_3e',['Thread&lt; InputThreadSE &gt;',['../classnvbio_1_1_thread.html',1,'nvbio']]],
-  ['thread_3c_20outputthread_20_3e',['Thread&lt; OutputThread &gt;',['../classnvbio_1_1_thread.html',1,'nvbio']]],
   ['thread_3c_20pipelinethreadbase_20_3e',['Thread&lt; PipelineThreadBase &gt;',['../classnvbio_1_1_thread.html',1,'nvbio']]],
   ['threadbase',['ThreadBase',['../classnvbio_1_1_thread_base.html',1,'nvbio']]],
   ['timer',['Timer',['../structnvbio_1_1_timer.html',1,'nvbio']]],

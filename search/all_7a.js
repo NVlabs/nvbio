@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['z',['z',['../struct____hts__idx__t.html#af29b870776b69464b60859561f052107',1,'__hts_idx_t::z()'],['../structnvbio_1_1_alphabet_traits_3_01_p_r_o_t_e_i_n_01_4.html#a7fe03a1348be532d9d02111642dcbb07a799f8b17eb649ca45f8c1579e3d85256',1,'nvbio::AlphabetTraits&lt; PROTEIN &gt;::Z()']]],
+  ['z',['Z',['../structnvbio_1_1_alphabet_traits_3_01_p_r_o_t_e_i_n_01_4.html#a7fe03a1348be532d9d02111642dcbb07a799f8b17eb649ca45f8c1579e3d85256',1,'nvbio::AlphabetTraits&lt; PROTEIN &gt;::Z()'],['../struct____hts__idx__t.html#af29b870776b69464b60859561f052107',1,'__hts_idx_t::z()']]],
   ['z_5farg',['Z_ARG',['../build_2contrib_2zlib-1_82_87_2zconf_8h.html#ab0abc8d4892a1419aa9f869975b3059a',1,'Z_ARG():&#160;zconf.h'],['../contrib_2zlib-1_82_87_2zlib_8h.html#add2ee03340fa2cb5f9146e0ebe52367c',1,'Z_ARG((gzFile file, const char *format,...)):&#160;zlib.h']]],
   ['z_5fascii',['Z_ASCII',['../contrib_2zlib_2zlib_8h.html#a9a852d9163cdb10687403d4e79dda06e',1,'Z_ASCII():&#160;zlib.h'],['../contrib_2zlib-1_82_87_2zlib_8h.html#a9a852d9163cdb10687403d4e79dda06e',1,'Z_ASCII():&#160;zlib.h'],['../vs_2zlib_2zlib_8h.html#a9a852d9163cdb10687403d4e79dda06e',1,'Z_ASCII():&#160;zlib.h']]],
   ['z_5fbest_5fcompression',['Z_BEST_COMPRESSION',['../contrib_2zlib_2zlib_8h.html#a8db83edd9dea51f8cf0afd1727838b95',1,'Z_BEST_COMPRESSION():&#160;zlib.h'],['../contrib_2zlib-1_82_87_2zlib_8h.html#a8db83edd9dea51f8cf0afd1727838b95',1,'Z_BEST_COMPRESSION():&#160;zlib.h'],['../vs_2zlib_2zlib_8h.html#a8db83edd9dea51f8cf0afd1727838b95',1,'Z_BEST_COMPRESSION():&#160;zlib.h']]],

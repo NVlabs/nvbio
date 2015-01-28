@@ -3,7 +3,7 @@ var searchData=
   ['ubyte_5ft',['ubyte_t',['../kstring_8c.html#ad40767aaeb0833664755ddfb1628be6c',1,'kstring.c']]],
   ['uch',['uch',['../zutil_8h.html#af3307af5922c72924a837559c801a8a4',1,'zutil.h']]],
   ['uchf',['uchf',['../zutil_8h.html#aaa6fdf02a2fdaf3731f17a19920ddb0b',1,'zutil.h']]],
-  ['uint',['uInt',['../build_2contrib_2zlib-1_82_87_2zconf_8h.html#a87d141052bcd5ec8a80812a565c70369',1,'uInt():&#160;zconf.h'],['../contrib_2zlib_2zconf_8h.html#a87d141052bcd5ec8a80812a565c70369',1,'uInt():&#160;zconf.h'],['../vs_2zlib_2zconf_8h.html#a87d141052bcd5ec8a80812a565c70369',1,'uInt():&#160;zconf.h'],['../namespacemgpu.html#ac90bcac3e8bb393fdb2594b903e7cda5',1,'mgpu::uint()']]],
+  ['uint',['uint',['../namespacemgpu.html#ac90bcac3e8bb393fdb2594b903e7cda5',1,'mgpu::uint()'],['../build_2contrib_2zlib-1_82_87_2zconf_8h.html#a87d141052bcd5ec8a80812a565c70369',1,'uInt():&#160;zconf.h'],['../contrib_2zlib_2zconf_8h.html#a87d141052bcd5ec8a80812a565c70369',1,'uInt():&#160;zconf.h'],['../vs_2zlib_2zconf_8h.html#a87d141052bcd5ec8a80812a565c70369',1,'uInt():&#160;zconf.h']]],
   ['uint16',['uint16',['../namespacemgpu.html#a32463800e67ce839d163a6183e8797c3',1,'mgpu::uint16()'],['../group___basic.html#ga264650c447b295bd86c6fd980ad7c32f',1,'nvbio::uint16()']]],
   ['uint16_5f2',['uint16_2',['../group___vector_types.html#ga4340f37889dafe5a9b53aafa9a1d47b0',1,'nvbio']]],
   ['uint16_5f3',['uint16_3',['../group___vector_types.html#ga3012406bf3511aafe41dc097b9ed0e56',1,'nvbio']]],

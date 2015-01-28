@@ -23,5 +23,6 @@ var searchData=
   ['qgram',['qgram',['../namespacenvbio_1_1qgram.html',1,'nvbio']]],
   ['qgroup',['qgroup',['../namespacenvbio_1_1qgroup.html',1,'nvbio']]],
   ['util',['util',['../namespacenvbio_1_1util.html',1,'nvbio']]],
-  ['wq',['wq',['../namespacenvbio_1_1cuda_1_1wq.html',1,'nvbio::cuda']]]
+  ['wq',['wq',['../namespacenvbio_1_1cuda_1_1wq.html',1,'nvbio::cuda']]],
+  ['wtree',['wtree',['../namespacenvbio_1_1priv_1_1wtree.html',1,'nvbio::priv']]]
 ];

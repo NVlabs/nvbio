@@ -1,7 +1,7 @@
 var searchData=
 [
   ['utilities',['Utilities',['../group___basic_utils.html',1,'']]],
-  ['u',['u',['../structhts__pair64__t.html#acdcfcc6aac597041331b91da093d5026',1,'hts_pair64_t::u()'],['../structnvbio_1_1_alphabet_traits_3_01_r_n_a_01_4.html#a6c95d4f87cd497bb7e4776f7251ef148a0504c32d2bf266bd1a9056d48de882f0',1,'nvbio::AlphabetTraits&lt; RNA &gt;::U()'],['../structnvbio_1_1_alphabet_traits_3_01_r_n_a___n_01_4.html#a9b87433e61850177fa1c400efe5f1deca2aae08b0aecac48d74712826fb6a9e63',1,'nvbio::AlphabetTraits&lt; RNA_N &gt;::U()']]],
+  ['u',['U',['../structnvbio_1_1_alphabet_traits_3_01_r_n_a_01_4.html#a6c95d4f87cd497bb7e4776f7251ef148a0504c32d2bf266bd1a9056d48de882f0',1,'nvbio::AlphabetTraits&lt; RNA &gt;::U()'],['../structnvbio_1_1_alphabet_traits_3_01_r_n_a___n_01_4.html#a9b87433e61850177fa1c400efe5f1deca2aae08b0aecac48d74712826fb6a9e63',1,'nvbio::AlphabetTraits&lt; RNA_N &gt;::U()'],['../structhts__pair64__t.html#acdcfcc6aac597041331b91da093d5026',1,'hts_pair64_t::u()']]],
   ['uaddr',['uaddr',['../structbgzidx1__t.html#abd17b03e98aa56ea1fc80af661ca59ee',1,'bgzidx1_t']]],
   ['uberscoringscheme',['UberScoringScheme',['../structnvbio_1_1bowtie2_1_1cuda_1_1_uber_scoring_scheme.html',1,'nvbio::bowtie2::cuda']]],
   ['ublock_5faddr',['ublock_addr',['../struct____bgzidx__t.html#a3f794581142d9eda54210643bf5bb4e6',1,'__bgzidx_t']]],
@@ -10,7 +10,7 @@ var searchData=
   ['uchf',['uchf',['../zutil_8h.html#aaa6fdf02a2fdaf3731f17a19920ddb0b',1,'zutil.h']]],
   ['uid_5fmap',['uid_map',['../structglobal__to__uid.html#aa1062fe4d2f070ef94fef26670686950',1,'global_to_uid']]],
   ['uid_5foffset',['uid_offset',['../structextract__non__overlapped__repeats.html#ae9fbeed3d8cfb575b1d21ffff94d1a2b',1,'extract_non_overlapped_repeats']]],
-  ['uint',['uInt',['../build_2contrib_2zlib-1_82_87_2zconf_8h.html#a87d141052bcd5ec8a80812a565c70369',1,'uInt():&#160;zconf.h'],['../contrib_2zlib_2zconf_8h.html#a87d141052bcd5ec8a80812a565c70369',1,'uInt():&#160;zconf.h'],['../vs_2zlib_2zconf_8h.html#a87d141052bcd5ec8a80812a565c70369',1,'uInt():&#160;zconf.h'],['../namespacemgpu.html#ac90bcac3e8bb393fdb2594b903e7cda5',1,'mgpu::uint()']]],
+  ['uint',['uint',['../namespacemgpu.html#ac90bcac3e8bb393fdb2594b903e7cda5',1,'mgpu::uint()'],['../build_2contrib_2zlib-1_82_87_2zconf_8h.html#a87d141052bcd5ec8a80812a565c70369',1,'uInt():&#160;zconf.h'],['../contrib_2zlib_2zconf_8h.html#a87d141052bcd5ec8a80812a565c70369',1,'uInt():&#160;zconf.h'],['../vs_2zlib_2zconf_8h.html#a87d141052bcd5ec8a80812a565c70369',1,'uInt():&#160;zconf.h']]],
   ['uint16',['uint16',['../namespacemgpu.html#a32463800e67ce839d163a6183e8797c3',1,'mgpu::uint16()'],['../group___basic.html#ga264650c447b295bd86c6fd980ad7c32f',1,'nvbio::uint16()']]],
   ['uint16_5f2',['uint16_2',['../group___vector_types.html#ga4340f37889dafe5a9b53aafa9a1d47b0',1,'nvbio']]],
   ['uint16_5f3',['uint16_3',['../group___vector_types.html#ga3012406bf3511aafe41dc097b9ed0e56',1,'nvbio']]],

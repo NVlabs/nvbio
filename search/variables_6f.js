@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['occ',['occ',['../structnvbio_1_1rank__dictionary.html#a3e394b9bbca813c543fd0400e0e0f2ff',1,'nvbio::rank_dictionary']]],
+  ['occ',['occ',['../structnvbio_1_1wavelet__ranker.html#adaea2e324c03c932158415bc9104186e',1,'nvbio::wavelet_ranker']]],
   ['occ_5fint',['OCC_INT',['../structnvbio_1_1io_1_1_f_m_index_data_core.html#ad99cac067eb52d5ad54b3183680b2faf',1,'nvbio::io::FMIndexDataCore']]],
   ['off',['off',['../structhts__itr__t.html#a830bcb49c38cd9c94be70fca97a05396',1,'hts_itr_t']]],
   ['off_5fbeg',['off_beg',['../struct____hts__idx__t.html#a3a01da1cb1bd1ce0c66641387207e38f',1,'__hts_idx_t']]],

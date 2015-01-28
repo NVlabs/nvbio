@@ -97,6 +97,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
@@ -106,6 +107,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespacenvbio_1_1priv_1_1wtree"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1priv_1_1wtree.html">wtree</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1priv_1_1_pipeline_thread_base.html">PipelineThreadBase</a></td></tr>
@@ -279,6 +285,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a1690597cae7ef32f5a805ab6281341f0"><td class="memTemplParams" colspan="2">template&lt;typename InputIterator , typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
+<tr class="memitem:a1690597cae7ef32f5a805ab6281341f0"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1priv.html#a1690597cae7ef32f5a805ab6281341f0">serial_assign</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> IndexType input_len, InputIterator input_string, <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; packed_string)</td></tr>
+<tr class="separator:a1690597cae7ef32f5a805ab6281341f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57bfc597009dcdc8197b120c1e7dbb2f"><td class="memTemplParams" colspan="2">template&lt;typename StreamType , typename SymbolType , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename W &gt; </td></tr>
 <tr class="memitem:a57bfc597009dcdc8197b120c1e7dbb2f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a><br class="typebreak"/>
@@ -1274,6 +1283,42 @@ template&lt;typename input_iterator , typename storage_type , uint32 SYMBOL_SIZE
 
 </div>
 </div>
+<a class="anchor" id="a1690597cae7ef32f5a805ab6281341f0"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator , typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void nvbio::priv::serial_assign </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> IndexType&#160;</td>
+          <td class="paramname"><em>input_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>input_string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;&#160;</td>
+          <td class="paramname"><em>packed_string</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l00758">758</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a3f40c5cf052aaa96500c4c9c87ad2e46"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1340,7 +1385,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 WORD_BITS, uint32 DOLLAR_BITS&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 23 2015 23:41:04 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 28 2015 12:57:29 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

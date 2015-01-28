@@ -23,7 +23,6 @@ var searchData=
   ['output_5fsam_2eh',['output_sam.h',['../output__sam_8h.html',1,'']]],
   ['output_5fstats_2ecpp',['output_stats.cpp',['../output__stats_8cpp.html',1,'']]],
   ['output_5fstats_2eh',['output_stats.h',['../output__stats_8h.html',1,'']]],
-  ['output_5fthread_2eh',['output_thread.h',['../output__thread_8h.html',1,'']]],
   ['output_5ftypes_2eh',['output_types.h',['../output__types_8h.html',1,'']]],
   ['output_5futils_2eh',['output_utils.h',['../output__utils_8h.html',1,'']]]
 ];

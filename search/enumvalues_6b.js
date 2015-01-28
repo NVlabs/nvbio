@@ -19,5 +19,6 @@ var searchData=
   ['kstringset',['kStringSet',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0a3e03d4636bb5044ae4b8463c1629b4d3',1,'nvbio-test.cpp']]],
   ['ksumtree',['kSumTree',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0a82e89c9a5a0ab2fbbf2da287fa1324aa',1,'nvbio-test.cpp']]],
   ['ksyncblocks',['kSyncblocks',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0a522b7495e3a484e7401eace6e96aace9',1,'nvbio-test.cpp']]],
+  ['kwavelettree',['kWaveletTree',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0a16b505d61135637f5361ab1a32295d86',1,'nvbio-test.cpp']]],
   ['kworkqueue',['kWorkQueue',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0a61d43f8fb9bbb272897a7e5af9e0926b',1,'nvbio-test.cpp']]]
 ];

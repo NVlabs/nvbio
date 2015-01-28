@@ -1,6 +1,7 @@
 var searchData=
 [
   ['negate_5ffunctor',['negate_functor',['../structnvbio_1_1negate__functor.html',1,'nvbio']]],
+  ['node_5ftype',['node_type',['../structnvbio_1_1priv_1_1wtree_1_1node__type.html',1,'nvbio::priv::wtree']]],
   ['noncopyable',['noncopyable',['../classmgpu_1_1noncopyable.html',1,'mgpu']]],
   ['not_5fequal_5ffunctor',['not_equal_functor',['../structnvbio_1_1not__equal__functor.html',1,'nvbio']]],
   ['not_5fequal_5fto_5ffunctor',['not_equal_to_functor',['../structnvbio_1_1not__equal__to__functor.html',1,'nvbio']]],

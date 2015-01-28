@@ -1,5 +1,8 @@
 var searchData=
 [
+  ['wavelet_5franker',['wavelet_ranker',['../structnvbio_1_1wavelet__ranker.html',1,'nvbio']]],
+  ['wavelettree',['WaveletTree',['../structnvbio_1_1_wavelet_tree.html',1,'nvbio']]],
+  ['wavelettreestorage',['WaveletTreeStorage',['../structnvbio_1_1_wavelet_tree_storage.html',1,'nvbio']]],
   ['weakcount',['WeakCount',['../classnvbio_1_1internals_1_1_weak_count.html',1,'nvbio::internals']]],
   ['weakpointer',['WeakPointer',['../classnvbio_1_1_weak_pointer.html',1,'nvbio']]],
   ['word_5fselector',['word_selector',['../structnvbio_1_1priv_1_1word__selector.html',1,'nvbio::priv']]],
@@ -21,8 +24,8 @@ var searchData=
   ['word_5fselector_3c_2064_20_3e',['word_selector&lt; 64 &gt;',['../structnvbio_1_1priv_1_1word__selector_3_0164_01_4.html',1,'nvbio::priv']]],
   ['word_5fselector_3c_208_20_3e',['word_selector&lt; 8 &gt;',['../structnvbio_1_1priv_1_1word__selector_3_018_01_4.html',1,'nvbio::priv']]],
   ['worker_5ft',['worker_t',['../structworker__t.html',1,'']]],
-  ['workqueue',['WorkQueue',['../classnvbio_1_1_work_queue.html',1,'nvbio']]],
   ['workqueue',['WorkQueue',['../structnvbio_1_1cuda_1_1_work_queue.html',1,'nvbio::cuda']]],
+  ['workqueue',['WorkQueue',['../classnvbio_1_1_work_queue.html',1,'nvbio']]],
   ['workqueue_3c_20cuda_3a_3apersistentthreadsqueuetag_2c_20nvbio_3a_3aaln_3a_3abandedscoreunit_3c_20band_5flen_2c_20stream_5ftype_20_3e_2c_20blockdim_20_3e',['WorkQueue&lt; cuda::PersistentThreadsQueueTag, nvbio::aln::BandedScoreUnit&lt; BAND_LEN, stream_type &gt;, BLOCKDIM &gt;',['../structnvbio_1_1cuda_1_1_work_queue.html',1,'nvbio::cuda']]],
   ['workqueue_3c_20cuda_3a_3apersistentthreadsqueuetag_2c_20nvbio_3a_3aaln_3a_3astagedscoreunit_3c_20stream_5ftype_20_3e_2c_20blockdim_20_3e',['WorkQueue&lt; cuda::PersistentThreadsQueueTag, nvbio::aln::StagedScoreUnit&lt; stream_type &gt;, BLOCKDIM &gt;',['../structnvbio_1_1cuda_1_1_work_queue.html',1,'nvbio::cuda']]],
   ['workqueue_3c_20multipassqueuetag_2c_20workunitt_2c_20blockdim_20_3e',['WorkQueue&lt; MultiPassQueueTag, WorkUnitT, BLOCKDIM &gt;',['../structnvbio_1_1cuda_1_1_work_queue_3_01_multi_pass_queue_tag_00_01_work_unit_t_00_01_b_l_o_c_k_d_i_m_01_4.html',1,'nvbio::cuda']]],

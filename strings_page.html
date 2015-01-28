@@ -165,13 +165,67 @@ Seeding</h1>
 <div class="line">        <a class="code" href="group___packed_streams.html#gaa8a57b67f0319432f01a849df6699bfe">nvbio::plain_view</a>( seed_coords ) );</div>
 <div class="line">}</div>
 </div><!-- fragment --> See examples/seeding/seeding.cu for more details.</dd></dl>
+<h1><a class="anchor" id="WaveletTreeSection"></a>
+Wavelet Trees</h1>
+<dl class="section user"><dt></dt><dd>A <em>Wavelet Tree</em> is a data structure that can be used to encode a string T of <em>n</em> symbols from an alphabet of <em>s</em> characters in space O(n log(s)), allowing both symbol access and ranking in O(log(s)) time, i.e: </dd></dl>
+<dl class="section user"><dt></dt><dd><ul>
+<li>each character T[i] can be recovered in O(log(s)) time</li>
+<li>the number of occurrences of a character c in the substring T[0,i] can be counted in O(log(s)) time </li>
+</ul>
+</dd></dl>
+<dl class="section user"><dt></dt><dd>In other words, a Wavelet Tree is both an alternative string representation (often more amenable to compression), <em>and</em> a storage-efficient <a class="el" href="fmindex_page.html#RankDictionarySection">rank dictionary</a>. For the sake of comparison, notice that the <a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a> class, which is based on a standard sampled occurrence table built directly on top of the original string T, needs O(s) storage - exponentially more in the number of bits per symbol <em>b = log(s)</em>. </dd></dl>
+<dl class="section user"><dt></dt><dd>NVBIO provides two classes: </dd></dl>
+<dl class="section user"><dt></dt><dd><ul>
+<li><a class="el" href="structnvbio_1_1_wavelet_tree_storage.html">WaveletTreeStorage</a> : a proper wavelet tree implementation, which can instanced using either <em>host</em> or <em>device</em> memory</li>
+<li><a class="el" href="structnvbio_1_1_wavelet_tree.html">WaveletTree</a> : a shallow, <em>storage-less</em> representation, which can be instanced on arbitrary user supplied iterators to the actual data containers </li>
+</ul>
+</dd></dl>
+<dl class="section user"><dt></dt><dd>as well as parallel host and device construction and lookup functions. See the <a class="el" href="group___wavelet_tree_module.html">Wavelet Trees</a> module for further documentation. </dd></dl>
+<dl class="section user"><dt></dt><dd>The following is a sample showing how to build a <a class="el" href="structnvbio_1_1_wavelet_tree.html">WaveletTree</a> and query it: <div class="fragment"><div class="line"><span class="keywordtype">void</span> test_wavelet_tree()</div>
+<div class="line">{</div>
+<div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span>* text = <span class="stringliteral">&quot;This is a test String&quot;</span>;</div>
+<div class="line">    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> text_len = <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( <a class="code" href="group___basic.html#gae962be09940c267ce467e74a160a542a">nvbio::length</a>( text ) );</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// copy the text string onto the device, reinterpreting as uint8 as the WaveletTree</span></div>
+<div class="line">    <span class="comment">// expects symbols to be encoded using unsigned integral types</span></div>
+<div class="line">    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;device_tag,uint8&gt;</a> d_text( text_len );</div>
+<div class="line">    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>( (<span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>*)text, (<span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>*)text + text_len, d_text );</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// instantiate a wavelet tree</span></div>
+<div class="line">    WaveletTreeStorage&lt;device_tag&gt; wavelet_tree;</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// setup the wavelet tree</span></div>
+<div class="line">    <a class="code" href="namespacenvbio.html#a38ab43e80dd4fcdad0cff15c96f25037">setup</a>( text_len, d_text.begin(), wavelet_tree );</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// extract the text in parallel using the WaveletTree&#39;s unary functor operator()</span></div>
+<div class="line">    <span class="comment">// to transform the sequence of indices [0,text_len) into the sequence of</span></div>
+<div class="line">    <span class="comment">// corresponding characters</span></div>
+<div class="line">    nvbio::transform&lt;device_tag&gt;(</div>
+<div class="line">        text_len,                                       <span class="comment">// number of characters to extract</span></div>
+<div class="line">        thrust::make_counting_iterator&lt;uint32&gt;(0),      <span class="comment">// list of character indices</span></div>
+<div class="line">        d_text.begin(),                                 <span class="comment">// output sequence</span></div>
+<div class="line">        <a class="code" href="group___packed_streams.html#gaa8a57b67f0319432f01a849df6699bfe">plain_view</a>( wavelet_tree ) );                   <span class="comment">// plain_view of the WaveletTreeStorage class</span></div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// copy the results back to the host</span></div>
+<div class="line">    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;device_tag,uint8&gt;</a> h_extracted_text( d_text );</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// check we extracted the right string...</span></div>
+<div class="line">    printf(<span class="stringliteral">&quot;extracted \&quot;%s\&quot;&quot;</span>, (<span class="keyword">const</span> <span class="keywordtype">char</span>*)<a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( h_extracted_text ));</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// check that in position 0 there should be exactly one &#39;T&#39;</span></div>
+<div class="line">    printf(<span class="stringliteral">&quot;rank(0,T) = %u\n&quot;</span>, <a class="code" href="namespacenvbio.html#af17edf0fa9c5891cc1a6117a7fa9fe5b">rank</a>( <a class="code" href="group___packed_streams.html#gaa8a57b67f0319432f01a849df6699bfe">plain_view</a>( wavelet_tree ), 0, (<a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>)<span class="charliteral">&#39;T&#39;</span> ));</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// check that the range [0,6] contains exactly two &#39;s&#39;</span></div>
+<div class="line">    printf(<span class="stringliteral">&quot;rank(6,s) = %u\n&quot;</span>, <a class="code" href="namespacenvbio.html#af17edf0fa9c5891cc1a6117a7fa9fe5b">rank</a>( <a class="code" href="group___packed_streams.html#gaa8a57b67f0319432f01a849df6699bfe">plain_view</a>( wavelet_tree ), 6, (<a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>)<span class="charliteral">&#39;s&#39;</span> ));</div>
+<div class="line">}</div>
+</div><!-- fragment --></dd></dl>
 <h1><a class="anchor" id="TechnicalOverviewSection"></a>
 Technical Overview</h1>
 <dl class="section user"><dt></dt><dd>For a detailed description of all classes and functions see the <a class="el" href="group___strings.html">Strings Module</a> documentation. </dd></dl>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 23 2015 23:39:50 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 28 2015 12:56:16 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

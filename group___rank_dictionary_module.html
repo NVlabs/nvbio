@@ -95,6 +95,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>A rank dictionary is a data-structure which, given a text and a sparse occurrence table, can answer, in O(1) time, queries of the kind "how many times does character c occurr in the substring text[0:i] ?" </p>
+<dl class="section user"><dt></dt><dd><em>NOTE:</em> the O(1) time refers to the complexity in the length <em>n</em> of the text; more properly, if the alphabet contains <em>s</em> characters (i.e. if the number of bits per symbol is b = log(s)), the complexity is O(log(s)). Similarly, the amount of space needed for a sparse occurrence table is O(n s). In other words, the amount of space is exponential in the number of bits per character. </dd></dl>
+<dl class="section user"><dt></dt><dd>For a more compact data structure requiring O(n log(s)) storage, useful with larger alphabets, please refer to <a class="el" href="strings_page.html#WaveletTreeSection">Wavelet Trees</a>. </dd></dl>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -103,9 +105,9 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga52c7e8c91ebafca99c58127f1c234158"><td class="memTemplParams" colspan="2">template&lt;uint32 K, typename SymbolIterator , typename IndexType &gt; </td></tr>
-<tr class="memitem:ga52c7e8c91ebafca99c58127f1c234158"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#ga52c7e8c91ebafca99c58127f1c234158">nvbio::build_occurrence_table</a> (SymbolIterator begin, SymbolIterator end, IndexType *occ, IndexType *cnt=NULL)</td></tr>
-<tr class="separator:ga52c7e8c91ebafca99c58127f1c234158"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga65f7c7f74c0e04d527840994228dcf1a"><td class="memTemplParams" colspan="2">template&lt;uint32 SYMBOL_SIZE, uint32 K, typename SymbolIterator , typename IndexType &gt; </td></tr>
+<tr class="memitem:ga65f7c7f74c0e04d527840994228dcf1a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#ga65f7c7f74c0e04d527840994228dcf1a">build_occurrence_table</a> (SymbolIterator begin, SymbolIterator end, IndexType *occ, IndexType *cnt=NULL)</td></tr>
+<tr class="separator:ga65f7c7f74c0e04d527840994228dcf1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga71a2197ba0cf4fd168a7c8f60865d0a6"><td class="memTemplParams" colspan="2">template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString , typename OccIterator , typename CountTable &gt; </td></tr>
 <tr class="memitem:ga71a2197ba0cf4fd168a7c8f60865d0a6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> uint8&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___rank_dictionary_module.html#ga71a2197ba0cf4fd168a7c8f60865d0a6">text</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> rank_dictionary&lt; SYMBOL_SIZE_T, <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, TextString, OccIterator, CountTable &gt; &amp;dict, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 i)</td></tr>
@@ -138,14 +140,17 @@ Functions</h2></td></tr>
 <tr class="separator:ga67084f2812f84bb8acac18fc9e6ab82a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ga52c7e8c91ebafca99c58127f1c234158"></a>
+<a class="anchor" id="ga65f7c7f74c0e04d527840994228dcf1a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;uint32 K, typename SymbolIterator , typename IndexType &gt; </div>
+template&lt;uint32 SYMBOL_SIZE, uint32 K, typename SymbolIterator , typename IndexType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void nvbio::build_occurrence_table </td>
+          <td class="memname">void build_occurrence_table </td>
           <td>(</td>
           <td class="paramtype">SymbolIterator&#160;</td>
           <td class="paramname"><em>begin</em>, </td>
@@ -174,8 +179,22 @@ template&lt;uint32 K, typename SymbolIterator , typename IndexType &gt; </div>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>Build the occurrence table for a given string, packing a set of counters every K elements. The table must contain ((n+K-1)/K)*4 entries.</p>
+<p>Build a sampled occurrence table for a given string, storing a set of symbol counters every K elements of the original string. The table must contain ((n+K-1)/K)*N_SYMBOLS entries, where N_SYMBOLS = 2 ^ SYMBOL_SIZE.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">SYMBOL_SIZE</td><td>symbol size, in bits </td></tr>
+    <tr><td class="paramname">K</td><td>sampling frequency </td></tr>
+    <tr><td class="paramname">SymbolIterator</td><td>the input string iterator </td></tr>
+    <tr><td class="paramname">IndexType</td><td>the integer type used to store indices</td></tr>
+  </table>
+  </dd>
+</dl>
 <p>Optionally save the table of the global counters as well.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -240,7 +259,7 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString , typename OccIt
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00492">492</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00526">526</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -293,7 +312,7 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString , typename OccIt
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00504">504</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00538">538</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -339,7 +358,7 @@ template&lt;uint32 K, typename TextString , typename OccIterator , typename Coun
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00516">516</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00550">550</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -399,7 +418,7 @@ template&lt;uint32 K, typename TextString , typename OccIterator , typename Coun
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00528">528</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00562">562</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -459,7 +478,7 @@ template&lt;uint32 K, typename TextString , typename OccIterator , typename Coun
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00540">540</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00574">574</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -498,7 +517,7 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString , typename OccIt
 </div><div class="memdoc">
 <p>fetch the text character at position i in the rank dictionary </p>
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00183">183</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00185">185</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
@@ -537,14 +556,14 @@ template&lt;uint32 SYMBOL_SIZE_T, uint32 K, typename TextString , typename OccIt
 </div><div class="memdoc">
 <p>fetch the text character at position i in the rank dictionary </p>
 
-<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00191">191</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="rank__dictionary__inl_8h_source.html#l00193">193</a> of file <a class="el" href="rank__dictionary__inl_8h_source.html">rank_dictionary_inl.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 23 2015 23:39:51 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 28 2015 12:56:17 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -120,6 +120,8 @@ Rank Dictionaries</h1>
  </td><td style="vertical-align:text-top;">dict, range </td><td style="vertical-align:text-top;">return the number of occurrences of all characters of a 4-letter alphabet in the prefixes [0,range.x] and [0,range.y]  </td></tr>
 </table>
 </dd></dl>
+<dl class="section user"><dt></dt><dd><em>NOTE:</em> the O(1) time refers to the complexity in the length <em>n</em> of the text; more properly, if the alphabet contains <em>s</em> characters (i.e. if the number of bits per symbol is b = log(s)), the complexity is O(log(s)). Similarly, the amount of space needed for a sparse occurrence table is O(n s). In other words, the amount of space is exponential in the number of bits per character. </dd></dl>
+<dl class="section user"><dt></dt><dd>For a more compact data structure requiring O(n log(s)) storage, useful with larger alphabets, please refer to <a class="el" href="strings_page.html#WaveletTreeSection">Wavelet Trees</a>.</dd></dl>
 <h1><a class="anchor" id="SSASection"></a>
 Sampled Suffix Arrays</h1>
 <dl class="section user"><dt></dt><dd>A <em>Sampled <a class="el" href="structnvbio_1_1_suffix.html">Suffix</a> Array</em> is a succint suffix array which has been sampled at a subset of its indices. Ferragina &amp; Manzini showed that given such a data structure and the BWT of the original text it is possible to reconstruct the missing locations. Two such data structures have been proposed, with different tradeoffs:<ul>
@@ -154,7 +156,7 @@ Sampled Suffix Arrays</h1>
 FM-Indices</h1>
 <dl class="section user"><dt></dt><dd>An <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a> is a self-compressed text index as described by Ferragina &amp; Manzini. It is built on top of the following ingredients:<ul>
 <li>the BWT of a text T</li>
-<li>a rank dictionary (<a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a>) of the given BWT</li>
+<li>a rank dictionary (<a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a> or <a class="el" href="structnvbio_1_1_wavelet_tree.html">WaveletTree</a>) of the given BWT</li>
 <li>a sampled suffix array of T </li>
 </ul>
 </dd></dl>
@@ -272,7 +274,7 @@ Technical Overview</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 23 2015 23:39:49 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 28 2015 12:56:15 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

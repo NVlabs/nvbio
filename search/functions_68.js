@@ -30,6 +30,7 @@ var searchData=
   ['hgetc2',['hgetc2',['../hfile_8c.html#a6aa657403055a92681ce3cdcc215c295',1,'hfile.c']]],
   ['hi_5fbits',['hi_bits',['../group___basic_utils.html#ga36ad0a3b55a1f0654c4c85c3812f4024',1,'nvbio::util']]],
   ['hibits_5f2bit',['hibits_2bit',['../group___basic_utils.html#gacf96ef3bf82884f318daf1f21e6a6fe4',1,'nvbio::hibits_2bit(const uint32 mask, const uint32 i)'],['../namespacenvbio.html#a12fc8812a957a15bddd2b38b758b4228',1,'nvbio::hibits_2bit(const uint64 mask, const uint32 i)']]],
+  ['hibits_5fnbit',['hibits_nbit',['../group___basic_utils.html#gaf0127c96c96eb65c51b8743d80289c37',1,'nvbio::hibits_nbit(const uint32 mask, const uint32 i)'],['../namespacenvbio.html#ab8a2728c31af0109b0b60cc5f0022c3e',1,'nvbio::hibits_nbit(const uint64 mask, const uint32 i)']]],
   ['histogram',['Histogram',['../structnvbio_1_1alndiff_1_1_histogram.html#a0261fe1e653140d73901b3100f80dfca',1,'nvbio::alndiff::Histogram']]],
   ['histogram2d',['Histogram2d',['../structnvbio_1_1alndiff_1_1_histogram2d.html#ade6ac292453381991d118a41e4b76a39',1,'nvbio::alndiff::Histogram2d']]],
   ['hit_5fcount',['hit_count',['../structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_index_device_view.html#a407f343701972dee82b6f33f8765e1a0',1,'nvbio::bowtie2::cuda::ReadHitsIndexDeviceView::hit_count()'],['../structcufmi_1_1bowtie2_1_1cuda_1_1_read_hits_index_device_view.html#a359ea255f61d3d96cca0103319b53223',1,'cufmi::bowtie2::cuda::ReadHitsIndexDeviceView::hit_count()']]],

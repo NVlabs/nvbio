@@ -331,7 +331,7 @@ void setup(
 //
 template <typename BitStreamIterator, typename IndexIterator, typename SymbolType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-SymbolType WaveletTree<BitStreamIterator,IndexIterator, SymbolType>::operator[] (const uint32 i) const
+SymbolType WaveletTree<BitStreamIterator,IndexIterator,SymbolType>::operator[] (const index_type i) const
 {
     return text( *this, i );
 }

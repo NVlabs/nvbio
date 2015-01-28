@@ -142,7 +142,7 @@ namespace nvbio {
 /// A <i>Wavelet Tree</i> is a data structure that can be used to encode a string T of <i>n</i> symbols from an alphabet of <i>s</i> characters
 /// in space O(n log(s)), that allows both symbol access and ranking in O(log(s)) time, i.e:
 ///\par
-/// * each character T[i] can be recovered in O(log(\sigma)) time
+/// * each character T[i] can be recovered in O(log(s)) time
 /// * the number of occurrences of a character c in the substring T[0,i] can be counted in O(log(s)) time
 ///\par
 /// In other words, a Wavelet Tree is both an alternative string representation (often more amenable to compression),

@@ -71,6 +71,8 @@ namespace nvbio {
 ///                             Wavelet Tree's nodes, encoded as a full binary heap; the array must
 ///                             contain at least (2^SYMBOL_SIZE) - 1 entries
 ///
+/// \tparam SymbolType          the unsigned integer type used to encode symbols (e.g. uint8, uint16, uint32...)
+///
 template <typename BitStreamIterator, typename IndexIterator, typename SymbolType = uint8>
 struct WaveletTree
 {
@@ -140,7 +142,12 @@ struct WaveletTree
     /// return the i-th symbol
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    SymbolType operator[] (const uint32 i) const;
+    SymbolType operator[] (const index_type i) const;
+
+    /// return the i-th symbol - unary functor form
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    SymbolType operator() (const index_type i) const { return this->operator[](i); }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE       text_type& text()       { return *this; }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE const text_type& text() const { return *this; }
@@ -158,6 +165,7 @@ struct WaveletTree
 ///
 /// \tparam SystemTag           the system memory space where this object's data is allocated
 /// \tparam IndexType           the type of integers used to index this string
+/// \tparam SymbolType          the unsigned integer type used to encode symbols (e.g. uint8, uint16, uint32...)
 ///
 template <typename SystemTag, typename IndexType = uint32, typename SymbolType = uint8>
 struct WaveletTreeStorage

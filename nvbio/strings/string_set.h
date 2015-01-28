@@ -160,6 +160,47 @@ namespace nvbio {
 ///\par
 /// as well as parallel host and device construction and lookup functions.
 /// See the \ref WaveletTreeModule module for further documentation.
+///\par
+/// The following is a sample showing how to build a WaveletTree and query it:
+///\code
+/// test_wavelet_tree()
+/// {
+///     const char* text = "This is a test String";
+///     const uint32 text_len = 21;
+///
+///     // copy the text string onto the device, reinterpreting as uint8 as the WaveletTree
+///     // expects symbols to be encoded using unsigned integral types
+///     nvbio::vector<device_tag,uint8> d_text( text_len );
+///     thrust::copy( (const uint8*)text, (const uint8*)text + text_len, d_text );
+///
+///     // instantiate a wavelet tree
+///     WaveletTreeStorage<device_tag> wavelet_tree;
+///
+///     // setup the wavelet tree
+///     setup( text_len, d_text.begin(), wavelet_tree );
+///
+///     // extract the text in parallel using the WaveletTree's unary functor operator()
+///     // to transform the sequence of indices [0,text_len) into the sequence of
+///     // corresponding characters
+///     nvbio::transform<device_tag>(
+///         text_len,                                       // number of characters to extract
+///         thrust::make_counting_iterator<uint32>(0),      // list of character indices
+///         d_text.begin(),                                 // output sequence
+///         plain_view( wavelet_tree ) );                   // plain_view of the WaveletTreeStorage class
+///
+///     // copy the results back to the host
+///     nvbio::vector<device_tag,uint8> h_extracted_text( d_text );
+///
+///     // check we extracted the right string...
+///     printf("extracted \"%s\"", (const char*)raw_pointer( h_extracted_text ));
+///
+///     // check that, in position 0, there should be one 'T'
+///     printf("rank(0,T) = %u\n", rank( plain_view( wavelet_tree ), 0, (uint8)'T' ));
+///
+///     // check that, in position 6, there should be two 's'
+///     printf("rank(6,s) = %u\n", rank( plain_view( wavelet_tree ), 6, (uint8)'s' ));
+/// }
+///\endcode
 ///
 /// \section TechnicalOverviewSection Technical Overview
 ///\par

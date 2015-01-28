@@ -402,12 +402,12 @@ struct dispatch_rank<SYMBOL_SIZE,K,PackedStream<TextStorage,uint8,SYMBOL_SIZE,tr
     {
         if (SYMBOL_SIZE == 4)
         {
-            vec4_type l, r;
+            vec4_type l, h;
 
             run4( dict, range, &l, &h );
 
             (*outl)[0] = l.x; (*outl)[1] = l.y; (*outl)[2] = l.z; (*outl)[3] = l.w;
-            (*outh)[0] = r.x; (*outh)[1] = r.y; (*outh)[2] = r.z; (*outh)[3] = r.w;
+            (*outh)[0] = h.x; (*outh)[1] = h.y; (*outh)[2] = h.z; (*outh)[3] = h.w;
         }
         else
         {

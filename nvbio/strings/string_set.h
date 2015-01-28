@@ -163,10 +163,10 @@ namespace nvbio {
 ///\par
 /// The following is a sample showing how to build a WaveletTree and query it:
 ///\code
-/// test_wavelet_tree()
+/// void test_wavelet_tree()
 /// {
 ///     const char* text = "This is a test String";
-///     const uint32 text_len = 21;
+///     const uint32 text_len = uint32( nvbio::length( text ) );
 ///
 ///     // copy the text string onto the device, reinterpreting as uint8 as the WaveletTree
 ///     // expects symbols to be encoded using unsigned integral types
@@ -189,7 +189,7 @@ namespace nvbio {
 ///         plain_view( wavelet_tree ) );                   // plain_view of the WaveletTreeStorage class
 ///
 ///     // copy the results back to the host
-///     nvbio::vector<device_tag,uint8> h_extracted_text( d_text );
+///     nvbio::vector<host_tag,uint8> h_extracted_text( d_text );
 ///
 ///     // check we extracted the right string...
 ///     printf("extracted \"%s\"", (const char*)raw_pointer( h_extracted_text ));

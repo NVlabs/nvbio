@@ -137,6 +137,29 @@ namespace nvbio {
 ///\endcode
 /// See examples/seeding/seeding.cu for more details.
 ///
+/// \section WaveletTreeSection Wavelet Trees
+///\par
+/// A <i>Wavelet Tree</i> is a data structure that can be used to encode a string S of n symbols from an alphabet of \sigma characters
+/// in space O(n log(\sigma)), that allows both symbol access and ranking in O(log(\sigma)) time, i.e:
+///\par
+/// * each character S[i] can be recovered in O(log(\sigma)) time
+/// * the number of occurrences of a character c in the substring S[0,i] can be counted in O(log(\sigma)) time
+///\par
+/// In other words, a Wavelet Tree is both an alternative string representation (often more amenable to compression),
+/// <i>and</i> a storage-efficient \ref RankDictionarySection "rank dictionary".
+/// For the sake of comparison, notice that the \ref rank_dictionary class, which is based on a standard sampled occurrence
+/// table built directly on top of the original string S, needs O(\sigma) storage - exponentially more.
+///\par
+/// NVBIO provides two classes:
+///\par
+/// - WaveletTreeStorage : a proper wavelet tree implementation, which can instanced using either <i>host</i> or <i>device</i>
+///   memory
+/// - WaveletTree : a shallow, <i>storage-less</i> representation, which can be instanced on arbitrary user supplied iterators
+///   to the actual data containers
+///\par
+/// as well as parallel host and device construction and lookup functions.
+/// See the \ref WaveletTreeModule module for further documentation.
+///
 /// \section TechnicalOverviewSection Technical Overview
 ///\par
 /// For a detailed description of all classes and functions see the \ref Strings documentation.

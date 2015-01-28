@@ -40,6 +40,23 @@ namespace nvbio {
 ///@addtogroup Strings
 ///@{
 
+///\defgroup WaveletTreeModule Wavelet Trees
+///\par
+/// A Wavelet Tree is a data structure that can be used to encode a string S of n symbols from an alphabet of \sigma characters
+/// in space O(n log(\sigma)), that allows both symbol access and ranking in O(log(\sigma)) time, i.e:
+///\par
+/// * each character S[i] can be recovered in O(log(\sigma)) time
+/// * the number of occurrences of a character c in the substring S[0,i] can be counted in O(log(\sigma)) time
+///\par
+/// In other words, a Wavelet Tree is both an alternative string representation (often more amenable to compression),
+/// <i>and</i> a storage-efficient \ref RankDictionarySection "rank dictionary".
+/// For the sake of comparison, notice that the \ref rank_dictionary class, which is based on a standard sampled occurrence
+/// table built directly on top of the original string S, needs O(\sigma) storage - exponentially more.
+///
+
+///@addtogroup WaveletTreeModule
+///@{
+
 ///
 /// A shallow Wavelet Tree class, holding iterators to a bit-string representing the different bit-planes of the
 /// output Wavelet Tree, and the tree structure itself, a binary heap, recording the sequence split of each node.
@@ -257,7 +274,10 @@ void setup(
     WaveletTreeStorage<system_tag,index_type>&              out_tree);
 
 /// \relates WaveletTree
-/// fetch the text character at position i in the rank dictionary
+/// fetch the text character at position i in the wavelet tree
+///
+/// \param tree         the wavelet tree
+/// \param i            the index of the character to extract
 ///
 template <typename BitStreamIterator, typename IndexIterator, typename IndexType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
@@ -266,7 +286,7 @@ uint8 text(const WaveletTree<BitStreamIterator,IndexIterator>& tree, const Index
 /// \relates WaveletTree
 /// fetch the number of occurrences of character c in the substring [0,i]
 ///
-/// \param dict         the rank dictionary
+/// \param tree         the wavelet tree
 /// \param i            the end of the query range [0,i]
 /// \param c            the query character
 ///
@@ -294,6 +314,7 @@ typename WaveletTreeStorage<SystemTag,IndexType>::const_plain_view_type plain_vi
     return tree;
 }
 
+///@} WaveletTreeModule
 ///@} Strings
 
 } // namespace nvbio

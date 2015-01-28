@@ -214,7 +214,7 @@ void rank_all(
     if (k >= fmi.primary()) // because $ is not in bwt
         --k;
 
-    return rank_all( fmi.rank_dict(), k );
+    rank_all( fmi.rank_dict(), k, out );
 }
 
 // return the number of occurrences of all characters in the range [0,k] of the

@@ -148,6 +148,11 @@ Public Types</h2></td></tr>
 &lt; BitStreamIterator, <br class="typebreak"/>
 IndexIterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_wavelet_tree.html#a1d472609335f7cc45e8c681fcd31ae6c">text_type</a></td></tr>
 <tr class="separator:a1d472609335f7cc45e8c681fcd31ae6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1083203fceb3f772826ce7c87a824a18"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1_wavelet_tree.html#af406f7f43f4f19e2ce92710da718fdfa">vector_type</a><br class="typebreak"/>
+&lt; <a class="el" href="structnvbio_1_1_wavelet_tree.html#adfa2d293d0e7ffd49c64d3f12cbae6dc">index_type</a>, 2 &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_wavelet_tree.html#a1083203fceb3f772826ce7c87a824a18">range_type</a></td></tr>
+<tr class="separator:a1083203fceb3f772826ce7c87a824a18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af406f7f43f4f19e2ce92710da718fdfa"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1null__type.html">null_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_wavelet_tree.html#af406f7f43f4f19e2ce92710da718fdfa">vector_type</a></td></tr>
+<tr class="separator:af406f7f43f4f19e2ce92710da718fdfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Methods</h2></td></tr>
@@ -156,6 +161,9 @@ Public Methods</h2></td></tr>
 <tr class="memitem:ac64fa10d9c29a4fd1948a875e3ffeb4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_wavelet_tree.html#ac64fa10d9c29a4fd1948a875e3ffeb4c">resize</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> _size, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> _symbol_size)</td></tr>
 <tr class="separator:ac64fa10d9c29a4fd1948a875e3ffeb4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9310c89e52ebe5538669f5cbd96e07ed"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_wavelet_tree.html#a9310c89e52ebe5538669f5cbd96e07ed">symbol_count</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:a9310c89e52ebe5538669f5cbd96e07ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6be30a8560cc6c02dccdaa563588fc3a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_wavelet_tree.html#a6be30a8560cc6c02dccdaa563588fc3a">symbol_size</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
 <tr class="separator:a6be30a8560cc6c02dccdaa563588fc3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -265,6 +273,22 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 
 </div>
 </div>
+<a class="anchor" id="a1083203fceb3f772826ce7c87a824a18"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolType = uint8&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1_wavelet_tree.html#af406f7f43f4f19e2ce92710da718fdfa">vector_type</a>&lt;<a class="el" href="structnvbio_1_1_wavelet_tree.html#adfa2d293d0e7ffd49c64d3f12cbae6dc">index_type</a>,2&gt;::type <a class="el" href="structnvbio_1_1_wavelet_tree.html">nvbio::WaveletTree</a>&lt; BitStreamIterator, IndexIterator, SymbolType &gt;::<a class="el" href="structnvbio_1_1_wavelet_tree.html#a1083203fceb3f772826ce7c87a824a18">range_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00088">88</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="aa3f5f8de9fa9be74da539704e95a8be2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -329,6 +353,22 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 
 </div>
 </div>
+<a class="anchor" id="af406f7f43f4f19e2ce92710da718fdfa"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolType = uint8&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1null__type.html">null_type</a> <a class="el" href="structnvbio_1_1_wavelet_tree.html">nvbio::WaveletTree</a>&lt; BitStreamIterator, IndexIterator, SymbolType &gt;::<a class="el" href="structnvbio_1_1_wavelet_tree.html#af406f7f43f4f19e2ce92710da718fdfa">vector_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00089">89</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a0a8a8febe401805d7b449c16f9b91b47"></a>
 <div class="memitem">
@@ -383,7 +423,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00091">91</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00094">94</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -412,7 +452,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 </div><div class="memdoc">
 <p>return the bit string </p>
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00125">125</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00133">133</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -440,7 +480,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 </div><div class="memdoc">
 <p>return the occurrences </p>
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00135">135</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00143">143</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -469,7 +509,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 </div><div class="memdoc">
 <p>return the i-th symbol - unary functor form </p>
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00150">150</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00158">158</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -477,7 +517,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolType = uint8&gt; </div>
+template&lt;typename BitStreamIterator , typename IndexIterator , typename SymbolType &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> SymbolType <a class="el" href="structnvbio_1_1_wavelet_tree.html">nvbio::WaveletTree</a>&lt; BitStreamIterator, IndexIterator, SymbolType &gt;::operator[] </td>
@@ -578,7 +618,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 </div><div class="memdoc">
 <p>resize the tree </p>
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00106">106</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00109">109</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -607,7 +647,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 </div><div class="memdoc">
 <p>return the number of symbols </p>
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00120">120</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00128">128</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -635,7 +675,35 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 </div><div class="memdoc">
 <p>return the node splits </p>
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00130">130</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00138">138</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9310c89e52ebe5538669f5cbd96e07ed"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolType = uint8&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1_wavelet_tree.html">nvbio::WaveletTree</a>&lt; BitStreamIterator, IndexIterator, SymbolType &gt;::symbol_count </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>return the number of bits per symbol </p>
+
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00118">118</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -663,7 +731,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 </div><div class="memdoc">
 <p>return the number of bits per symbol </p>
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00115">115</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00123">123</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -690,7 +758,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00152">152</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00160">160</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -717,7 +785,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00153">153</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00161">161</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -734,7 +802,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00157">157</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00165">165</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -750,7 +818,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00158">158</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00166">166</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -766,7 +834,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00159">159</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00167">167</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -782,7 +850,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00156">156</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00164">164</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -798,7 +866,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00155">155</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
+<p>Definition at line <a class="el" href="wavelet__tree_8h_source.html#l00163">163</a> of file <a class="el" href="wavelet__tree_8h_source.html">wavelet_tree.h</a>.</p>
 
 </div>
 </div>
@@ -809,7 +877,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 28 2015 12:56:52 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 28 2015 17:17:55 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['range_5fsize',['range_size',['../structnvbio_1_1mem_1_1range__size.html',1,'nvbio::mem']]],
   ['range_5fsize',['range_size',['../structnvbio_1_1fmindex_1_1range__size.html',1,'nvbio::fmindex']]],
+  ['range_5fsize',['range_size',['../structnvbio_1_1mem_1_1range__size.html',1,'nvbio::mem']]],
   ['range_5fsize',['range_size',['../structnvbio_1_1qgram_1_1range__size.html',1,'nvbio::qgram']]],
   ['rank_5fdictionary',['rank_dictionary',['../structnvbio_1_1rank__dictionary.html',1,'nvbio']]],
   ['rank_5ffunctor',['rank_functor',['../structnvbio_1_1fmindex_1_1rank__functor.html',1,'nvbio::fmindex']]],
@@ -33,8 +33,8 @@ var searchData=
   ['readhitsbinder',['ReadHitsBinder',['../structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_binder.html',1,'nvbio::bowtie2::cuda']]],
   ['readhitsindex',['ReadHitsIndex',['../structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_index.html',1,'nvbio::bowtie2::cuda']]],
   ['readhitsindex',['ReadHitsIndex',['../structcufmi_1_1bowtie2_1_1cuda_1_1_read_hits_index.html',1,'cufmi::bowtie2::cuda']]],
-  ['readhitsindexdeviceview',['ReadHitsIndexDeviceView',['../structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_index_device_view.html',1,'nvbio::bowtie2::cuda']]],
   ['readhitsindexdeviceview',['ReadHitsIndexDeviceView',['../structcufmi_1_1bowtie2_1_1cuda_1_1_read_hits_index_device_view.html',1,'cufmi::bowtie2::cuda']]],
+  ['readhitsindexdeviceview',['ReadHitsIndexDeviceView',['../structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_index_device_view.html',1,'nvbio::bowtie2::cuda']]],
   ['readhitsreference',['ReadHitsReference',['../structcufmi_1_1bowtie2_1_1cuda_1_1_read_hits_reference.html',1,'cufmi::bowtie2::cuda']]],
   ['readhitsreference',['ReadHitsReference',['../structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_reference.html',1,'nvbio::bowtie2::cuda']]],
   ['readhitsreference_3c_20read_5fhits_5findex_5ftype_2c_20hits_5fstorage_5ftype_20_3e',['ReadHitsReference&lt; read_hits_index_type, hits_storage_type &gt;',['../structcufmi_1_1bowtie2_1_1cuda_1_1_read_hits_reference.html',1,'cufmi::bowtie2::cuda']]],

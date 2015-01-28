@@ -8,8 +8,6 @@ var searchData=
   ['vcf_5fsweep_2eh',['vcf_sweep.h',['../vcf__sweep_8h.html',1,'']]],
   ['vcfutils_2ec',['vcfutils.c',['../vcfutils_8c.html',1,'']]],
   ['vcfutils_2eh',['vcfutils.h',['../vcfutils_8h.html',1,'']]],
-  ['vec_2eh',['vec.h',['../vec_8h.html',1,'']]],
-  ['vec_5finl_2eh',['vec_inl.h',['../vec__inl_8h.html',1,'']]],
   ['vector_2eh',['vector.h',['../vector_8h.html',1,'']]],
   ['vector_5farray_2eh',['vector_array.h',['../vector__array_8h.html',1,'']]],
   ['vector_5fview_2eh',['vector_view.h',['../vector__view_8h.html',1,'']]],

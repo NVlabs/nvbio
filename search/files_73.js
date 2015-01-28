@@ -64,6 +64,8 @@ var searchData=
   ['ssw_2ecpp',['ssw.cpp',['../ssw_8cpp.html',1,'']]],
   ['ssw_2eh',['ssw.h',['../ssw_8h.html',1,'']]],
   ['static_2eh',['static.h',['../static_8h.html',1,'']]],
+  ['static_5fvector_2eh',['static_vector.h',['../static__vector_8h.html',1,'']]],
+  ['static_5fvector_5finl_2eh',['static_vector_inl.h',['../static__vector__inl_8h.html',1,'']]],
   ['stats_2ecpp',['stats.cpp',['../stats_8cpp.html',1,'']]],
   ['stats_2eh',['stats.h',['../nvbio-aln-diff_2stats_8h.html',1,'']]],
   ['stats_2eh',['stats.h',['../nv_bowtie_2bowtie2_2cuda_2stats_8h.html',1,'']]],

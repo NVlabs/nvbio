@@ -113,11 +113,11 @@ Rank Dictionaries</h1>
 <td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#af17edf0fa9c5891cc1a6117a7fa9fe5b">rank()</a><br/>
  </td><td style="vertical-align:text-top;">dict, range, c </td><td style="vertical-align:text-top;">return the number of occurrences of a given character c in the prefixes [0,range.x] and [0,range.y]  </td></tr>
 <tr>
-<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#a5543e3fdd7f430ca369f8be1eb9e384e">rank4()</a><br/>
- </td><td style="vertical-align:text-top;">dict, i </td><td style="vertical-align:text-top;">return the number of occurrences of all characters of a 4-letter alphabet in the prefix [0,i]  </td></tr>
+<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="group___f_m_index.html#ga9b6246b30088d846b75d98d015509345">rank_all()</a><br/>
+ </td><td style="vertical-align:text-top;">dict, i </td><td style="vertical-align:text-top;">return the number of occurrences of all characters of the alphabet in the prefix [0,i]  </td></tr>
 <tr>
-<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#a5543e3fdd7f430ca369f8be1eb9e384e">rank4()</a><br/>
- </td><td style="vertical-align:text-top;">dict, range </td><td style="vertical-align:text-top;">return the number of occurrences of all characters of a 4-letter alphabet in the prefixes [0,range.x] and [0,range.y]  </td></tr>
+<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="group___f_m_index.html#ga9b6246b30088d846b75d98d015509345">rank_all()</a><br/>
+ </td><td style="vertical-align:text-top;">dict, range </td><td style="vertical-align:text-top;">return the number of occurrences of all characters of the alphabet in the prefixes [0,range.x] and [0,range.y]  </td></tr>
 </table>
 </dd></dl>
 <dl class="section user"><dt></dt><dd><em>NOTE:</em> the O(1) time refers to the complexity in the length <em>n</em> of the text; more properly, if the alphabet contains <em>s</em> characters (i.e. if the number of bits per symbol is b = log(s)), the complexity is O(log(s)). Similarly, the amount of space needed for a sparse occurrence table is O(n s). In other words, the amount of space is exponential in the number of bits per character. </dd></dl>
@@ -169,8 +169,8 @@ FM-Indices</h1>
 <td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#af17edf0fa9c5891cc1a6117a7fa9fe5b">rank()</a><br/>
  </td><td style="vertical-align:text-top;">fmi, i, c </td><td style="vertical-align:text-top;">return the number of occurrences of a given character c in the prefix [0,i]  </td></tr>
 <tr>
-<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#a5543e3fdd7f430ca369f8be1eb9e384e">rank4()</a><br/>
- </td><td style="vertical-align:text-top;">fmi, i </td><td style="vertical-align:text-top;">return the number of occurrences of all characters of a 4-letter alphabet in the prefix [0,i]  </td></tr>
+<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="group___f_m_index.html#ga9b6246b30088d846b75d98d015509345">rank_all()</a><br/>
+ </td><td style="vertical-align:text-top;">fmi, i </td><td style="vertical-align:text-top;">return the number of occurrences of all characters of the alphabet in the prefix [0,i]  </td></tr>
 <tr>
 <td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#aa0a7fece4db974208c05cee885b7da00">match()</a><br/>
  </td><td style="vertical-align:text-top;">fmi, pattern </td><td style="vertical-align:text-top;">return the SA range of occurrences of a given pattern  </td></tr>
@@ -274,7 +274,7 @@ Technical Overview</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 28 2015 12:56:15 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 28 2015 17:17:16 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

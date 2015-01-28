@@ -1,7 +1,6 @@
 var searchData=
 [
   ['variant_5ft',['variant_t',['../structvariant__t.html',1,'']]],
-  ['vec',['Vec',['../structnvbio_1_1_vec.html',1,'nvbio']]],
   ['vector',['vector',['../structnvbio_1_1vector.html',1,'nvbio']]],
   ['vector_3c_20device_5ftag_2c_20sequencesetkmercoord_20_3e',['vector&lt; device_tag, SequenceSetKmerCoord &gt;',['../structnvbio_1_1vector.html',1,'nvbio']]],
   ['vector_3c_20device_5ftag_2c_20t_20_3e',['vector&lt; device_tag, T &gt;',['../structnvbio_1_1vector_3_01device__tag_00_01_t_01_4.html',1,'nvbio']]],
@@ -52,6 +51,7 @@ var searchData=
   ['vector_5ftraits_3c_20short2_20_3e',['vector_traits&lt; short2 &gt;',['../structnvbio_1_1vector__traits_3_01short2_01_4.html',1,'nvbio']]],
   ['vector_5ftraits_3c_20short3_20_3e',['vector_traits&lt; short3 &gt;',['../structnvbio_1_1vector__traits_3_01short3_01_4.html',1,'nvbio']]],
   ['vector_5ftraits_3c_20short4_20_3e',['vector_traits&lt; short4 &gt;',['../structnvbio_1_1vector__traits_3_01short4_01_4.html',1,'nvbio']]],
+  ['vector_5ftraits_3c_20staticvectorbase_3c_20t_2c_20dim_5ft_20_3e_20_3e',['vector_traits&lt; StaticVectorBase&lt; T, DIM_T &gt; &gt;',['../structnvbio_1_1vector__traits_3_01_static_vector_base_3_01_t_00_01_d_i_m___t_01_4_01_4.html',1,'nvbio']]],
   ['vector_5ftraits_3c_20uchar2_20_3e',['vector_traits&lt; uchar2 &gt;',['../structnvbio_1_1vector__traits_3_01uchar2_01_4.html',1,'nvbio']]],
   ['vector_5ftraits_3c_20uchar3_20_3e',['vector_traits&lt; uchar3 &gt;',['../structnvbio_1_1vector__traits_3_01uchar3_01_4.html',1,'nvbio']]],
   ['vector_5ftraits_3c_20uchar4_20_3e',['vector_traits&lt; uchar4 &gt;',['../structnvbio_1_1vector__traits_3_01uchar4_01_4.html',1,'nvbio']]],
@@ -85,6 +85,9 @@ var searchData=
   ['vector_5ftype_3c_20short_2c_202_20_3e',['vector_type&lt; short, 2 &gt;',['../structnvbio_1_1vector__type_3_01short_00_012_01_4.html',1,'nvbio']]],
   ['vector_5ftype_3c_20short_2c_203_20_3e',['vector_type&lt; short, 3 &gt;',['../structnvbio_1_1vector__type_3_01short_00_013_01_4.html',1,'nvbio']]],
   ['vector_5ftype_3c_20short_2c_204_20_3e',['vector_type&lt; short, 4 &gt;',['../structnvbio_1_1vector__type_3_01short_00_014_01_4.html',1,'nvbio']]],
+  ['vector_5ftype_3c_20t_2c_202_20_3e',['vector_type&lt; T, 2 &gt;',['../structnvbio_1_1vector__type.html',1,'nvbio']]],
+  ['vector_5ftype_3c_20t_2c_203_20_3e',['vector_type&lt; T, 3 &gt;',['../structnvbio_1_1vector__type.html',1,'nvbio']]],
+  ['vector_5ftype_3c_20t_2c_204_20_3e',['vector_type&lt; T, 4 &gt;',['../structnvbio_1_1vector__type.html',1,'nvbio']]],
   ['vector_5ftype_3c_20uint64_2c_202_20_3e',['vector_type&lt; uint64, 2 &gt;',['../structnvbio_1_1vector__type_3_01uint64_00_012_01_4.html',1,'nvbio']]],
   ['vector_5ftype_3c_20uint64_2c_203_20_3e',['vector_type&lt; uint64, 3 &gt;',['../structnvbio_1_1vector__type_3_01uint64_00_013_01_4.html',1,'nvbio']]],
   ['vector_5ftype_3c_20uint64_2c_204_20_3e',['vector_type&lt; uint64, 4 &gt;',['../structnvbio_1_1vector__type_3_01uint64_00_014_01_4.html',1,'nvbio']]],
@@ -104,6 +107,6 @@ var searchData=
   ['vectorarrayview_3c_20nvbio_3a_3amemrange_20_3e',['VectorArrayView&lt; nvbio::MEMRange &gt;',['../structnvbio_1_1_vector_array_view.html',1,'nvbio']]],
   ['vectorarrayview_3c_20uint8_20_3e',['VectorArrayView&lt; uint8 &gt;',['../structnvbio_1_1_vector_array_view.html',1,'nvbio']]],
   ['view',['view',['../structdebruijn__graph_1_1view.html',1,'debruijn_graph']]],
-  ['view_5ferror',['view_error',['../structnvbio_1_1_server_mapped_file_1_1view__error.html',1,'nvbio::ServerMappedFile']]],
-  ['view_5ferror',['view_error',['../structnvbio_1_1_mapped_file_1_1view__error.html',1,'nvbio::MappedFile']]]
+  ['view_5ferror',['view_error',['../structnvbio_1_1_mapped_file_1_1view__error.html',1,'nvbio::MappedFile']]],
+  ['view_5ferror',['view_error',['../structnvbio_1_1_server_mapped_file_1_1view__error.html',1,'nvbio::ServerMappedFile']]]
 ];

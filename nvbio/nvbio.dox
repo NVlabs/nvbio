@@ -824,7 +824,7 @@
 /// Hopefully, you are now set to read through the rest of the documentation and discover how
 /// many other useful tools might come to your help!
 ///
-/// Next: \ref hello_dna_2_page
+/// Next: \ref waveletfm_page
 /// Top: \ref nvbio_page
 
 /// \page waveletfm_page Protein Search using Wavelet Trees and an FM-index
@@ -918,12 +918,13 @@
 ///     setup( text_len, d_bwt.begin(), wavelet_bwt );
 ///     ...
 ///\endcode
-///
-/// Et voila. At this point, we could even throw away the original bwt (<i>d_bwt</i>), as the
-/// wavelet bwt encodes all information we need.
+///\par
+/// Et voila. At this point, we could even throw away the original bwt (the vector <i>d_bwt</i>), as the
+/// wavelet bwt encodes all the information we need.
 ///
 /// \section FMIndexSection Building and querying the FM-index
 ///
+///\par
 /// We now need to setup an FM-index on top of the wavelet bwt. Remember the basic \ref fm_index
 /// class has three template parameters, a TRankDictionary type, a TSuffixArray type, and a TL2
 /// type.
@@ -931,11 +932,13 @@
 /// the bwt (in our case the wavelet tree), the sampled suffix array (if needed), and an iterator
 /// to the L2 table (a table containing the sum of all character frequencies).
 /// In our case, we want to specialize this cass to use:
+///\par
 /// - the WaveletTreeStorage::const_plain_view_type class
 /// - a null_type suffix array (as the sampled suffix array is only needed for locating, which
 ///   we won't do here - though it might be needed in a real app)
 /// - an L2 iterator to an device nvbio::vector of integers, i.e. nvbio::vector<device_tag,uint32>::const_iterator
 ///
+///\par
 /// Notice that the default value for the TL2 iterator is null_type, in which case a raw pointer will be used.
 /// However, in this example we want to show that all of NVBIO's data structures, even when instanced on the device,
 /// can be accessed and used for computing also from the host - albeit potentially paying a very long latency tax
@@ -979,7 +982,10 @@
 ///         // match the i-th suffix of the text
 ///         const uint32 pattern_len = text_len - i;
 /// 
+///         // compute the SA range containing the occurrences of the pattern we are after
 ///         const uint2 range = match( fmi, d_text.begin() + i, pattern_len );
+///
+///         // print the number of occurrences of our pattern, equal to the SA range size
 ///         log_info(stderr, "    rank(%s): %u\n", proteins + i, 1u + range.y - range.x);
 ///     }
 /// 
@@ -987,7 +993,41 @@
 ///     return 0;
 /// }
 ///\endcode
+///\par
+/// Compile, and run. With a bit of luck, you should see the following output:
+///\verbatim
+/// info    : waveletfm... started
+/// info    :   text: ACDEFGHIKLMNOPQRSTVWYBZX
+/// info    :   bwt: XACDEFGHIKLMNOPQRSTVWYBZ (primary 1)
+/// info    :   string matching:
+/// info    :     rank(ACDEFGHIKLMNOPQRSTVWYBZX): 1
+/// info    :     rank(CDEFGHIKLMNOPQRSTVWYBZX): 1
+/// info    :     rank(DEFGHIKLMNOPQRSTVWYBZX): 1
+/// info    :     rank(EFGHIKLMNOPQRSTVWYBZX): 1
+/// info    :     rank(FGHIKLMNOPQRSTVWYBZX): 1
+/// info    :     rank(GHIKLMNOPQRSTVWYBZX): 1
+/// info    :     rank(HIKLMNOPQRSTVWYBZX): 1
+/// info    :     rank(IKLMNOPQRSTVWYBZX): 1
+/// info    :     rank(KLMNOPQRSTVWYBZX): 1
+/// info    :     rank(LMNOPQRSTVWYBZX): 1
+/// info    :     rank(MNOPQRSTVWYBZX): 1
+/// info    :     rank(NOPQRSTVWYBZX): 1
+/// info    :     rank(OPQRSTVWYBZX): 1
+/// info    :     rank(PQRSTVWYBZX): 1
+/// info    :     rank(QRSTVWYBZX): 1
+/// info    :     rank(RSTVWYBZX): 1
+/// info    :     rank(STVWYBZX): 1
+/// info    :     rank(TVWYBZX): 1
+/// info    :     rank(VWYBZX): 1
+/// info    :     rank(WYBZX): 1
+/// info    :     rank(YBZX): 1
+/// info    :     rank(BZX): 1
+/// info    :     rank(ZX): 1
+/// info    :     rank(X): 1
+/// info    : waveletfm... done
+///\endverbatim
 ///
-/// Compile, and run. You'll see the
+///\par
+/// Showing that, indeed, there's one match for each suffix of the original string.
 ///
 /// Top: \ref nvbio_page

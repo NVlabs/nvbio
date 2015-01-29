@@ -125,7 +125,10 @@ int main(int argc, char* argv[])
         // match the i-th suffix of the text
         const uint32 pattern_len = text_len - i;
 
+        // compute the SA range containing the occurrences of the pattern we are after
         const uint2 range = match( fmi, d_text.begin() + i, pattern_len );
+
+        // print the number of occurrences of our pattern, equal to the SA range size
         log_info(stderr, "    rank(%s): %u\n", proteins + i, 1u + range.y - range.x);
     }
 

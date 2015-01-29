@@ -87,16 +87,16 @@ int main(int argc, char* argv[])
     typedef WaveletTreeStorage<device_tag>::const_plain_view_type   wavelet_tree_view_type;
 
     // build a wavelet tree
-    wavelet_tree_type wavelet_tree;
+    wavelet_tree_type wavelet_bwt;
 
     // setup the wavelet tree
-    setup( text_len, d_bwt.begin(), wavelet_tree );
+    setup( text_len, d_bwt.begin(), wavelet_bwt );
 
     typedef nvbio::vector<device_tag,uint32>::const_iterator            l2_iterator;
     typedef fm_index<wavelet_tree_view_type, null_type, l2_iterator>    fm_index_type;
 
     // take the const view of the wavelet tree
-    const wavelet_tree_view_type wavelet_tree_view = plain_view( (const wavelet_tree_type&)wavelet_tree );
+    const wavelet_tree_view_type wavelet_bwt_view = plain_view( (const wavelet_tree_type&)wavelet_bwt );
 
     // build the L2 vector
     nvbio::vector<device_tag,uint32> L2(257);
@@ -106,14 +106,14 @@ int main(int argc, char* argv[])
     // and we just want to show that NVBIO is designed to make everything work!
     L2[0] = 0;
     for (uint32 i = 1; i <= 256; ++i)
-        L2[i] = L2[i-1] + rank( wavelet_tree_view, text_len, i-1u );
+        L2[i] = L2[i-1] + rank( wavelet_bwt_view, text_len, i-1u );
 
     // build the FM-index
     const fm_index_type fmi(
         text_len,
         primary,
         L2.begin(),
-        wavelet_tree_view,
+        wavelet_bwt_view,
         null_type() );
 
     // do some string matching using our newly built FM-index - once again

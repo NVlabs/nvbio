@@ -334,6 +334,8 @@ namespace nvbio {
 ///
 /// \tparam TRankDictionary     a rank dictionary (see \ref RankDictionaryModule)
 /// \tparam TSuffixArray        a sampled suffix array context implementing the \ref SSAInterface (see \ref SSAModule)
+/// \tparam TL2                 an iterator to the L2 table, containing the exclusive sum of all character frequencies;
+///                             if TL2 == null_type, a plain pointer will be used.
 ///
 template <
     typename TRankDictionary,

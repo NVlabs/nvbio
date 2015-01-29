@@ -1,8 +1,8 @@
-nvbio_module(seeding)
+nvbio_module(waveletfm)
 
 addsources(
-seeding.cu
+waveletfm.cu
 )
 
-cuda_add_executable(seeding ${seeding_srcs})
-target_link_libraries(seeding nvbio zlibstatic crcstatic ${SYSTEM_LINK_LIBRARIES})
+cuda_add_executable(waveletfm ${waveletfm_srcs})
+target_link_libraries(waveletfm nvbio zlibstatic crcstatic ${SYSTEM_LINK_LIBRARIES})

@@ -45,6 +45,7 @@
 /// - \subpage hello_dna_page
 /// - \subpage hello_dna_2_page
 /// - \subpage fmmap_page
+/// - \subpage waveletfm_page
 ///
 /// \section ModulesSection Modules
 ///\par
@@ -215,6 +216,7 @@
 /// And obviously, the same story goes for FM-indices, Bloom filters, and so on and so on...
 ///
 /// Next: \ref host_device_page
+/// Top: \ref nvbio_page
 
 /// \page hello_dna_page Hello DNA!
 ///\par
@@ -249,6 +251,7 @@
 ///\endcode
 ///
 /// Next: \ref hello_dna_2_page
+/// Top: \ref nvbio_page
 
 /// \page hello_dna_2_page Hello DNA! - Part 2
 ///\par
@@ -363,6 +366,7 @@
 /// run on the host.
 ///
 /// Next: \ref fmmap_page
+/// Top: \ref nvbio_page
 
 /// \page hello_dna_3_page Hello DNA! - Part 3
 ///\par
@@ -442,6 +446,9 @@
 ///            nvbio::plain_view( h_mers ) ) );
 /// }
 ///\endcode
+///
+/// Next: \ref fmmap_page
+/// Top: \ref nvbio_page
 
 /// \page fmmap_page All-Mapping using an FM-index
 ///\par
@@ -816,5 +823,171 @@
 /// parallel constructs, from FM-index filters to DP alignment.
 /// Hopefully, you are now set to read through the rest of the documentation and discover how
 /// many other useful tools might come to your help!
+///
+/// Next: \ref hello_dna_2_page
+/// Top: \ref nvbio_page
+
+/// \page waveletfm_page Protein Search using Wavelet Trees and an FM-index
+///\par
+/// In this example, we want to show NVBIO's support for larger alphabets, particularly showing the composability
+/// of compact string representations like Wavelet Trees, and self-compressed indices like the FM-index.
+/// We are hence going to build a small app performing pattern matching on a protein string.
+///
+/// \section BWTBuildingSection Building the BWT
+///
+///\par
+/// If we want to build an FM-index, the first thing is computing the BWT of the database string we want
+/// to index.
+/// In this example, we'll use a very naive string containing all proteins in a row - but in a real app
+/// this string might contain millions of entries, hence we'll do this using NVBIO's very fast parallel
+/// construction algorithm running on a CUDA device.
+///
+///\par
+///\code
+/// int main(int argc, char* argv[])
+/// {
+///     log_info(stderr, "waveletfm... started\n");
+/// 
+///     // this string will be our protein database we want to search in - just a short string with
+///     // all proteins in sequence
+///     const char* proteins = "ACDEFGHIKLMNOPQRSTVWYBZX";
+///     const uint32 text_len = 24;
+/// 
+///     // print the text
+///     log_info(stderr, "  text: %s\n", proteins);
+/// 
+///     // allocate a host packed vector
+///     PackedVector<host_tag,8u,true> h_text( text_len );
+/// 
+///     // pack the string
+///     from_string<PROTEIN>( proteins, proteins + text_len, h_text.begin() );
+/// 
+///     // copy it to the device
+///     PackedVector<device_tag,8u,true> d_text( h_text );
+/// 
+///     // allocate a vector for the BWT
+///     PackedVector<device_tag,8u,true> d_bwt( text_len + 1 );
+/// 
+///     BWTParams bwt_params;
+/// 
+///     // build the BWT
+///     const uint32 primary = cuda::bwt( text_len, d_text.begin(), d_bwt.begin(), &bwt_params );
+/// 
+///     // print the BWT
+///     {
+///         char proteins_bwt[ 25 ];
+/// 
+///         to_string<PROTEIN>( d_bwt.begin(), d_bwt.begin() + text_len, proteins_bwt );
+/// 
+///         proteins_bwt[24] = '\0';
+/// 
+///         log_info(stderr, "  bwt: %s (primary %u)\n", proteins_bwt, primary);
+///     }
+///     ...
+///\endcode
+///
+/// Done: if everything works correctly, this should print the string "bwt: XACDEFGHIKLMNOPQRSTVWYBZ (primary 1)".
+///
+/// \section WaveletTreeSection It's a large alphabet, let's use a Wavelet Tree
+///
+///\par
+/// Proteins have a largish alphabet, with 24 letters. If we were to use a plain BWT encoding
+/// and a standard \ref rank_dictionary to build an FM-index on top of it, we would need storage
+/// proportional to the number of characters. The thing is made even worse by the fact that,
+/// for the purpose of efficient string packing, NVBIO treats proteins as 8-bit characters, as
+/// 5-bit packing would need cumbersome, slow bit-manipulation logic (because individual characters
+/// would stride word boundaries).
+/// This means an FM-index would require 128 times more storage than for the 2-bit DNA alphabet!
+///
+///\par
+/// No worries: we can encode our BWT using \ref WaveletTreeSection, a wonderful succint data structure
+/// designed to encode large alphabet strings in small space while allowing O(1) ranking.
+/// Let's build a wavelet tree, then...
+///
+///\par
+///\code
+///     ...
+///     // define our wavelet tree storage type and its plain view
+///     typedef WaveletTreeStorage<device_tag>                          wavelet_tree_type;
+///     typedef WaveletTreeStorage<device_tag>::const_plain_view_type   wavelet_tree_view_type;
+/// 
+///     // build a wavelet tree
+///     wavelet_tree_type wavelet_bwt;
+/// 
+///     // setup the wavelet tree
+///     setup( text_len, d_bwt.begin(), wavelet_bwt );
+///     ...
+///\endcode
+///
+/// Et voila. At this point, we could even throw away the original bwt (<i>d_bwt</i>), as the
+/// wavelet bwt encodes all information we need.
+///
+/// \section FMIndexSection Building and querying the FM-index
+///
+/// We now need to setup an FM-index on top of the wavelet bwt. Remember the basic \ref fm_index
+/// class has three template parameters, a TRankDictionary type, a TSuffixArray type, and a TL2
+/// type.
+/// These represent the kind of \ref RankDictionarySection "rank dictionary" used to encode
+/// the bwt (in our case the wavelet tree), the sampled suffix array (if needed), and an iterator
+/// to the L2 table (a table containing the sum of all character frequencies).
+/// In our case, we want to specialize this cass to use:
+/// - the WaveletTreeStorage::const_plain_view_type class
+/// - a null_type suffix array (as the sampled suffix array is only needed for locating, which
+///   we won't do here - though it might be needed in a real app)
+/// - an L2 iterator to an device nvbio::vector of integers, i.e. nvbio::vector<device_tag,uint32>::const_iterator
+///
+/// Notice that the default value for the TL2 iterator is null_type, in which case a raw pointer will be used.
+/// However, in this example we want to show that all of NVBIO's data structures, even when instanced on the device,
+/// can be accessed and used for computing also from the host - albeit potentially paying a very long latency tax
+/// when unified memory is not present.
+/// This can be achieved using proper iterators, which know the memory space they are pointing to, and issue
+/// cuda mem-copies when dereferenced.
+///
+///\par
+///\code
+///     ...
+///     typedef nvbio::vector<device_tag,uint32>::const_iterator            l2_iterator;
+///     typedef fm_index<wavelet_tree_view_type, null_type, l2_iterator>    fm_index_type;
+/// 
+///     // take the const view of the wavelet tree
+///     const wavelet_tree_view_type wavelet_tree_view = plain_view( (const wavelet_tree_type&)wavelet_tree );
+///
+///     // build the L2 vector
+///     nvbio::vector<device_tag,uint32> L2(257);
+/// 
+///     // note we perform this on the host, even though the wavelet tree is on the device -
+///     // gonna be slow, but it's not much stuff, and this is just an example anyway...
+///     // and we just want to show that NVBIO is designed to make everything work!
+///     L2[0] = 0;
+///     for (uint32 i = 1; i <= 256; ++i)
+///         L2[i] = L2[i-1] + rank( wavelet_tree_view, text_len, i-1u );
+/// 
+///     // build the FM-index
+///     const fm_index_type fmi(
+///         text_len,
+///         primary,
+///         L2.begin(),
+///         wavelet_tree_view,
+///         null_type() );
+/// 
+///     // do some string matching using our newly built FM-index - once again
+///     // we are doing it on the host, though all data is on the device: the entire
+///     // loop would be better moved to the device in a real app.
+///     log_info(stderr, "  string matching:\n");
+///     for (uint32 i = 0; i < text_len; ++i)
+///     {
+///         // match the i-th suffix of the text
+///         const uint32 pattern_len = text_len - i;
+/// 
+///         const uint2 range = match( fmi, d_text.begin() + i, pattern_len );
+///         log_info(stderr, "    rank(%s): %u\n", proteins + i, 1u + range.y - range.x);
+///     }
+/// 
+///     log_info(stderr, "waveletfm... done\n");
+///     return 0;
+/// }
+///\endcode
+///
+/// Compile, and run. You'll see the
 ///
 /// Top: \ref nvbio_page

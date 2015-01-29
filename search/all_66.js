@@ -164,7 +164,7 @@ var searchData=
   ['flush_5fpending',['flush_pending',['../deflate_8c.html#ae9a3263767d40c4f7443bf07c31e0119',1,'deflate.c']]],
   ['flush_5fpos',['flush_pos',['../structm_f_i_l_e.html#a2c3a33495f8b23ffa6b8a520eeeef6f0',1,'mFILE']]],
   ['flushblocks',['FlushBlocks',['../struct_bam_tools_1_1_bgzf_data.html#aac21388a97f46c5a0c9cdba47bac1304',1,'BamTools::BgzfData']]],
-  ['fm_5findex',['fm_index',['../structnvbio_1_1fm__index.html#aeed546a0d3821d99c42a301a1a9e8982',1,'nvbio::fm_index::fm_index()'],['../structnvbio_1_1fm__index.html#a01698715eac65da56962f4b3ea8865c6',1,'nvbio::fm_index::fm_index(const index_type length, const index_type primary, const index_type *L2, const TRankDictionary rank_dict, const TSuffixArray sa)']]],
+  ['fm_5findex',['fm_index',['../structnvbio_1_1fm__index.html#a8514eff59b6461764a5d5c480cd678b0',1,'nvbio::fm_index::fm_index()'],['../structnvbio_1_1fm__index.html#aa3c89351444fa25ac549fa99163853c7',1,'nvbio::fm_index::fm_index(const index_type length, const index_type primary, const L2_iterator L2, const TRankDictionary rank_dict, const TSuffixArray sa)']]],
   ['fm_5findex',['fm_index',['../structnvbio_1_1fm__index.html',1,'nvbio']]],
   ['fm_5findex_5fdevice_5fdata',['fm_index_device_data',['../structnvbio_1_1fm__index__device__data.html#a53c4cc769520258df72534d45d25c78a',1,'nvbio::fm_index_device_data']]],
   ['fm_5findex_5fdevice_5fdata',['fm_index_device_data',['../structnvbio_1_1fm__index__device__data.html',1,'nvbio']]],

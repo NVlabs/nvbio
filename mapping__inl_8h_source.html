@@ -184,7 +184,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> c = query[i];</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordflow">if</span> (c &gt; 3)  <span class="keywordflow">return</span> make_uint2(1, 0);</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keyword">const</span> uint2 bwt_cnts = <a class="code" href="namespacenvbio.html#af17edf0fa9c5891cc1a6117a7fa9fe5b">rank</a>(index, make_uint2(range.x-1, range.y), c);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keyword">const</span> uint2 bwt_cnts = <a class="code" href="namespacenvbio.html#a8cac81743120b36275cee02d66137fdd">rank</a>(index, make_uint2(range.x-1, range.y), c);</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        range.x = index.L2(c) + bwt_cnts.x + 1;</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        range.y = index.L2(c) + bwt_cnts.y;</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    }</div>
@@ -267,7 +267,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;</div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="comment">// Get ranges for all chars at pos i</span></div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        uint4 occ_lo, occ_hi;</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <a class="code" href="namespacenvbio.html#a078eab0ca484c85f85dcb0704f2bb748">rank4</a>(index, make_uint2(base_range.x-1, base_range.y), &amp;occ_lo, &amp;occ_hi);</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <a class="code" href="namespacenvbio.html#aeeba0d4a30fc75e53731a9a180b211ad">rank4</a>(index, make_uint2(base_range.x-1, base_range.y), &amp;occ_lo, &amp;occ_hi);</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="comment">// Try each character</span></div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> sub = 0; sub &lt; 4; ++sub)</div>
@@ -1037,7 +1037,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 28 2015 17:17:06 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 29 2015 09:02:35 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

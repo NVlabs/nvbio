@@ -1,7 +1,7 @@
 var searchData=
 [
   ['utilities',['Utilities',['../group___basic_utils.html',1,'']]],
-  ['u',['u',['../structhts__pair64__t.html#acdcfcc6aac597041331b91da093d5026',1,'hts_pair64_t::u()'],['../structnvbio_1_1_alphabet_traits_3_01_r_n_a_01_4.html#a6c95d4f87cd497bb7e4776f7251ef148a0504c32d2bf266bd1a9056d48de882f0',1,'nvbio::AlphabetTraits&lt; RNA &gt;::U()'],['../structnvbio_1_1_alphabet_traits_3_01_r_n_a___n_01_4.html#a9b87433e61850177fa1c400efe5f1deca2aae08b0aecac48d74712826fb6a9e63',1,'nvbio::AlphabetTraits&lt; RNA_N &gt;::U()']]],
+  ['u',['U',['../structnvbio_1_1_alphabet_traits_3_01_r_n_a_01_4.html#a6c95d4f87cd497bb7e4776f7251ef148a0504c32d2bf266bd1a9056d48de882f0',1,'nvbio::AlphabetTraits&lt; RNA &gt;::U()'],['../structnvbio_1_1_alphabet_traits_3_01_r_n_a___n_01_4.html#a9b87433e61850177fa1c400efe5f1deca2aae08b0aecac48d74712826fb6a9e63',1,'nvbio::AlphabetTraits&lt; RNA_N &gt;::U()'],['../structhts__pair64__t.html#acdcfcc6aac597041331b91da093d5026',1,'hts_pair64_t::u()']]],
   ['uaddr',['uaddr',['../structbgzidx1__t.html#abd17b03e98aa56ea1fc80af661ca59ee',1,'bgzidx1_t']]],
   ['uberscoringscheme',['UberScoringScheme',['../structnvbio_1_1bowtie2_1_1cuda_1_1_uber_scoring_scheme.html',1,'nvbio::bowtie2::cuda']]],
   ['ublock_5faddr',['ublock_addr',['../struct____bgzidx__t.html#a3f794581142d9eda54210643bf5bb4e6',1,'__bgzidx_t']]],

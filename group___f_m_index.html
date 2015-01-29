@@ -115,7 +115,7 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_f_m_index_filter_device.html">nvbio::FMIndexFilterDevice&lt; fm_index_type &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1fm__index.html">nvbio::fm_index&lt; TRankDictionary, TSuffixArray &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1fm__index.html">nvbio::fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_m_e_m_filter.html">nvbio::MEMFilter&lt; system_tag, fm_index_type &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,20 +145,21 @@ Functions</h2></td></tr>
 <tr class="memitem:ga32fd67cdd5de3541c0dd0e3499c51bd5"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga32fd67cdd5de3541c0dd0e3499c51bd5">nvbio::extend_backwards</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary1, TSuffixArray1 &gt; &amp;f_fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary2, TSuffixArray2 &gt; &amp;r_fmi, typename fm_index&lt; TRankDictionary1, TSuffixArray1 &gt;::range_type &amp;f_range, typename fm_index&lt; TRankDictionary2, TSuffixArray2 &gt;::range_type &amp;r_range, uint8 c)</td></tr>
 <tr class="separator:ga32fd67cdd5de3541c0dd0e3499c51bd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9b6246b30088d846b75d98d015509345"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray &gt; </td></tr>
-<tr class="memitem:ga9b6246b30088d846b75d98d015509345"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga9b6246b30088d846b75d98d015509345">nvbio::rank_all</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;fmi, typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::index_type k, typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::vector_type *out)</td></tr>
-<tr class="separator:ga9b6246b30088d846b75d98d015509345"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga6a0e08047a7046c2b65c47e86eb739b6"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray &gt; </td></tr>
-<tr class="memitem:ga6a0e08047a7046c2b65c47e86eb739b6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga6a0e08047a7046c2b65c47e86eb739b6">nvbio::rank_all</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;fmi, typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::range_type range, typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::vector_type *outl, typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::vector_type *outh)</td></tr>
-<tr class="separator:ga6a0e08047a7046c2b65c47e86eb739b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga7083bf5f77ae1a87ac18572432b79ef7"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray &gt; </td></tr>
-<tr class="memitem:ga7083bf5f77ae1a87ac18572432b79ef7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<tr class="memitem:ga0955aff9559ea69a5f51fb26faed11d5"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </td></tr>
+<tr class="memitem:ga0955aff9559ea69a5f51fb26faed11d5"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga0955aff9559ea69a5f51fb26faed11d5">nvbio::rank_all</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;fmi, typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::index_type k, typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::vector_type *out)</td></tr>
+<tr class="separator:ga0955aff9559ea69a5f51fb26faed11d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3bb9aca4e7c2bf4b711eebb035add52e"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </td></tr>
+<tr class="memitem:ga3bb9aca4e7c2bf4b711eebb035add52e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga3bb9aca4e7c2bf4b711eebb035add52e">nvbio::rank_all</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;fmi, typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::range_type range, typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::vector_type *outl, typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::vector_type *outh)</td></tr>
+<tr class="separator:ga3bb9aca4e7c2bf4b711eebb035add52e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0f0fbdcfc3f75e41351756e292185cc9"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </td></tr>
+<tr class="memitem:ga0f0fbdcfc3f75e41351756e292185cc9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index<br class="typebreak"/>
 &lt; TRankDictionary, <br class="typebreak"/>
-TSuffixArray &gt;::index_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga7083bf5f77ae1a87ac18572432b79ef7">nvbio::basic_inv_psi</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::range_type i)</td></tr>
-<tr class="separator:ga7083bf5f77ae1a87ac18572432b79ef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+TSuffixArray, TL2 &gt;<br class="typebreak"/>
+::index_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga0f0fbdcfc3f75e41351756e292185cc9">nvbio::basic_inv_psi</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::range_type i)</td></tr>
+<tr class="separator:ga0f0fbdcfc3f75e41351756e292185cc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2883ef425905e8458473355f73119af2"><td class="memTemplParams" colspan="2">template&lt;typename pattern_type , typename fm_index_type , typename delegate_type &gt; </td></tr>
 <tr class="memitem:ga2883ef425905e8458473355f73119af2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> uint32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga2883ef425905e8458473355f73119af2">nvbio::find_kmems</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 pattern_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> pattern_type pattern, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 x, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index_type f_index, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index_type r_index, delegate_type &amp;handler, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 min_intv=1u, const uint32 min_span=1u)</td></tr>
@@ -170,87 +171,96 @@ TSuffixArray &gt;::index_type&#160;</td><td class="memTemplItemRight" valign="bo
 <tr class="memitem:ga385612b5dc723d5f8a699eb92e0a6c25"><td class="memTemplParams" colspan="2">template&lt;typename system_tag , typename fm_index_type &gt; </td></tr>
 <tr class="memitem:ga385612b5dc723d5f8a699eb92e0a6c25"><td class="memTemplItemLeft" align="right" valign="top">uint32&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga385612b5dc723d5f8a699eb92e0a6c25">nvbio::string_batch_bound</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> MEMFilter&lt; system_tag, fm_index_type &gt; &amp;filter, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 mem_count)</td></tr>
 <tr class="separator:ga385612b5dc723d5f8a699eb92e0a6c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae57afb0ec35470cd30b6d97cc346da1b"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray &gt; </td></tr>
-<tr class="memitem:gae57afb0ec35470cd30b6d97cc346da1b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<tr class="memitem:ga3626bf327979888cf1df84910c2847cb"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </td></tr>
+<tr class="memitem:ga3626bf327979888cf1df84910c2847cb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index<br class="typebreak"/>
 &lt; TRankDictionary, <br class="typebreak"/>
-TSuffixArray &gt;::index_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#gae57afb0ec35470cd30b6d97cc346da1b">rank</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;fmi, typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::index_type k, uint8 c)</td></tr>
-<tr class="separator:gae57afb0ec35470cd30b6d97cc346da1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga219b4957f9f566d164fb1709716dea7b"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray &gt; </td></tr>
-<tr class="memitem:ga219b4957f9f566d164fb1709716dea7b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+TSuffixArray, TL2 &gt;<br class="typebreak"/>
+::index_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga3626bf327979888cf1df84910c2847cb">rank</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;fmi, typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::index_type k, uint8 c)</td></tr>
+<tr class="separator:ga3626bf327979888cf1df84910c2847cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga54482ca571693d2019442456964430e6"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </td></tr>
+<tr class="memitem:ga54482ca571693d2019442456964430e6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index<br class="typebreak"/>
 &lt; TRankDictionary, <br class="typebreak"/>
-TSuffixArray &gt;::range_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga219b4957f9f566d164fb1709716dea7b">rank</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;fmi, typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::range_type range, uint8 c)</td></tr>
-<tr class="separator:ga219b4957f9f566d164fb1709716dea7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0590547a8b1b4abff5c63a46360b81d9"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray &gt; </td></tr>
-<tr class="memitem:ga0590547a8b1b4abff5c63a46360b81d9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+TSuffixArray, TL2 &gt;<br class="typebreak"/>
+::range_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga54482ca571693d2019442456964430e6">rank</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;fmi, typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::range_type range, uint8 c)</td></tr>
+<tr class="separator:ga54482ca571693d2019442456964430e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7ecf505e5cafd75f6ca2e577c2187f40"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </td></tr>
+<tr class="memitem:ga7ecf505e5cafd75f6ca2e577c2187f40"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
-TRankDictionary::vec4_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga0590547a8b1b4abff5c63a46360b81d9">rank4</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;fmi, typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::index_type k)</td></tr>
-<tr class="separator:ga0590547a8b1b4abff5c63a46360b81d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gabacccdb1989508ce5557493723570416"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray &gt; </td></tr>
-<tr class="memitem:gabacccdb1989508ce5557493723570416"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#gabacccdb1989508ce5557493723570416">rank4</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;fmi, typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::range_type range, typename TRankDictionary::vec4_type *outl, typename TRankDictionary::vec4_type *outh)</td></tr>
-<tr class="separator:gabacccdb1989508ce5557493723570416"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga6bd073dd2ab22f3ac945181646d9c190"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename Iterator &gt; </td></tr>
-<tr class="memitem:ga6bd073dd2ab22f3ac945181646d9c190"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+TRankDictionary::vec4_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga7ecf505e5cafd75f6ca2e577c2187f40">rank4</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;fmi, typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::index_type k)</td></tr>
+<tr class="separator:ga7ecf505e5cafd75f6ca2e577c2187f40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab18f7b84fbc7e2efea4ae28cf1212603"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </td></tr>
+<tr class="memitem:gab18f7b84fbc7e2efea4ae28cf1212603"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#gab18f7b84fbc7e2efea4ae28cf1212603">rank4</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;fmi, typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::range_type range, typename TRankDictionary::vec4_type *outl, typename TRankDictionary::vec4_type *outh)</td></tr>
+<tr class="separator:gab18f7b84fbc7e2efea4ae28cf1212603"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac4ed217af75673d34c35eaddbf80d11a"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 , typename Iterator &gt; </td></tr>
+<tr class="memitem:gac4ed217af75673d34c35eaddbf80d11a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index<br class="typebreak"/>
 &lt; TRankDictionary, <br class="typebreak"/>
-TSuffixArray &gt;::range_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga6bd073dd2ab22f3ac945181646d9c190">match</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Iterator pattern, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 pattern_len)</td></tr>
-<tr class="separator:ga6bd073dd2ab22f3ac945181646d9c190"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae47098f722d44957473346f7e6e5b12b"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename Iterator &gt; </td></tr>
-<tr class="memitem:gae47098f722d44957473346f7e6e5b12b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+TSuffixArray, TL2 &gt;<br class="typebreak"/>
+::range_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#gac4ed217af75673d34c35eaddbf80d11a">match</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Iterator pattern, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 pattern_len)</td></tr>
+<tr class="separator:gac4ed217af75673d34c35eaddbf80d11a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5df385e8b6a8b1436b252586b46f404c"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 , typename Iterator &gt; </td></tr>
+<tr class="memitem:ga5df385e8b6a8b1436b252586b46f404c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index<br class="typebreak"/>
 &lt; TRankDictionary, <br class="typebreak"/>
-TSuffixArray &gt;::range_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#gae47098f722d44957473346f7e6e5b12b">match</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Iterator pattern, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 pattern_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::range_type range)</td></tr>
-<tr class="separator:gae47098f722d44957473346f7e6e5b12b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8f163ba8ee9bf613cf7ccffc2ca100db"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename Iterator &gt; </td></tr>
-<tr class="memitem:ga8f163ba8ee9bf613cf7ccffc2ca100db"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+TSuffixArray, TL2 &gt;<br class="typebreak"/>
+::range_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga5df385e8b6a8b1436b252586b46f404c">match</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Iterator pattern, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 pattern_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::range_type range)</td></tr>
+<tr class="separator:ga5df385e8b6a8b1436b252586b46f404c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac3a6cb0c88d7cdbce8dc86e8959f7e94"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 , typename Iterator &gt; </td></tr>
+<tr class="memitem:gac3a6cb0c88d7cdbce8dc86e8959f7e94"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index<br class="typebreak"/>
 &lt; TRankDictionary, <br class="typebreak"/>
-TSuffixArray &gt;::range_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga8f163ba8ee9bf613cf7ccffc2ca100db">match_reverse</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Iterator pattern, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 pattern_len)</td></tr>
-<tr class="separator:ga8f163ba8ee9bf613cf7ccffc2ca100db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga075c2815204f541667a86145668438d7"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray &gt; </td></tr>
-<tr class="memitem:ga075c2815204f541667a86145668438d7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+TSuffixArray, TL2 &gt;<br class="typebreak"/>
+::range_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#gac3a6cb0c88d7cdbce8dc86e8959f7e94">match_reverse</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Iterator pattern, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 pattern_len)</td></tr>
+<tr class="separator:gac3a6cb0c88d7cdbce8dc86e8959f7e94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad2c60ba329d9ba8d9ec5b5a2528952f1"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </td></tr>
+<tr class="memitem:gad2c60ba329d9ba8d9ec5b5a2528952f1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index<br class="typebreak"/>
 &lt; TRankDictionary, <br class="typebreak"/>
-TSuffixArray &gt;::range_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga075c2815204f541667a86145668438d7">inv_psi</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::index_type i)</td></tr>
-<tr class="separator:ga075c2815204f541667a86145668438d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga036b0d1d5e131f9ae61bf9fc37e4949f"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray &gt; </td></tr>
-<tr class="memitem:ga036b0d1d5e131f9ae61bf9fc37e4949f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+TSuffixArray, TL2 &gt;<br class="typebreak"/>
+::range_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#gad2c60ba329d9ba8d9ec5b5a2528952f1">inv_psi</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::index_type i)</td></tr>
+<tr class="separator:gad2c60ba329d9ba8d9ec5b5a2528952f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga699b6fe1a1b846cd27c4e870fbaa38bf"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </td></tr>
+<tr class="memitem:ga699b6fe1a1b846cd27c4e870fbaa38bf"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index<br class="typebreak"/>
 &lt; TRankDictionary, <br class="typebreak"/>
-TSuffixArray &gt;::index_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga036b0d1d5e131f9ae61bf9fc37e4949f">locate</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::index_type i)</td></tr>
-<tr class="separator:ga036b0d1d5e131f9ae61bf9fc37e4949f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2c08bf5054bedcca2d14a2cc1bc44ed4"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray &gt; </td></tr>
-<tr class="memitem:ga2c08bf5054bedcca2d14a2cc1bc44ed4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+TSuffixArray, TL2 &gt;<br class="typebreak"/>
+::index_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga699b6fe1a1b846cd27c4e870fbaa38bf">locate</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::index_type i)</td></tr>
+<tr class="separator:ga699b6fe1a1b846cd27c4e870fbaa38bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0e30fccc10cad9657bcc2e4a8b1f71b7"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </td></tr>
+<tr class="memitem:ga0e30fccc10cad9657bcc2e4a8b1f71b7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index<br class="typebreak"/>
 &lt; TRankDictionary, <br class="typebreak"/>
-TSuffixArray &gt;::range_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga2c08bf5054bedcca2d14a2cc1bc44ed4">locate_ssa_iterator</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::index_type i)</td></tr>
-<tr class="separator:ga2c08bf5054bedcca2d14a2cc1bc44ed4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gacd87539ceebc5a908c7da99a013cfbc2"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray &gt; </td></tr>
-<tr class="memitem:gacd87539ceebc5a908c7da99a013cfbc2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+TSuffixArray, TL2 &gt;<br class="typebreak"/>
+::range_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#ga0e30fccc10cad9657bcc2e4a8b1f71b7">locate_ssa_iterator</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::index_type i)</td></tr>
+<tr class="separator:ga0e30fccc10cad9657bcc2e4a8b1f71b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadbdfae0553273fd66cbaa6983551eac7"><td class="memTemplParams" colspan="2">template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </td></tr>
+<tr class="memitem:gadbdfae0553273fd66cbaa6983551eac7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index<br class="typebreak"/>
 &lt; TRankDictionary, <br class="typebreak"/>
-TSuffixArray &gt;::index_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#gacd87539ceebc5a908c7da99a013cfbc2">lookup_ssa_iterator</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::range_type it)</td></tr>
-<tr class="separator:gacd87539ceebc5a908c7da99a013cfbc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+TSuffixArray, TL2 &gt;<br class="typebreak"/>
+::index_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___f_m_index.html#gadbdfae0553273fd66cbaa6983551eac7">lookup_ssa_iterator</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;fmi, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::range_type it)</td></tr>
+<tr class="separator:gadbdfae0553273fd66cbaa6983551eac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ga7083bf5f77ae1a87ac18572432b79ef7"></a>
+<a class="anchor" id="ga0f0fbdcfc3f75e41351756e292185cc9"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
+template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt;TRankDictionary,TSuffixArray&gt;::index_type nvbio::basic_inv_psi </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt;TRankDictionary,TSuffixArray,TL2&gt;::index_type nvbio::basic_inv_psi </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;&#160;</td>
           <td class="paramname"><em>fmi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::range_type&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::range_type&#160;</td>
           <td class="paramname"><em>i</em>&#160;</td>
         </tr>
         <tr>
@@ -665,25 +675,25 @@ template&lt;typename FMIndex , typename String , typename Stack , typename Deleg
 
 </div>
 </div>
-<a class="anchor" id="ga075c2815204f541667a86145668438d7"></a>
+<a class="anchor" id="gad2c60ba329d9ba8d9ec5b5a2528952f1"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
+template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray &gt;::range_type inv_psi </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::range_type inv_psi </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;&#160;</td>
           <td class="paramname"><em>fmi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt;::<a class="el" href="structnvbio_1_1fm__index.html#a6787f1a9ce8e4abd5fed2216a7276c87">index_type</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt;::<a class="el" href="structnvbio_1_1fm__index.html#a659a2e486c18caad9766b260346c53d3">index_type</a>&#160;</td>
           <td class="paramname"><em>i</em>&#160;</td>
         </tr>
         <tr>
@@ -710,25 +720,25 @@ template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ga036b0d1d5e131f9ae61bf9fc37e4949f"></a>
+<a class="anchor" id="ga699b6fe1a1b846cd27c4e870fbaa38bf"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
+template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray &gt;::index_type locate </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::index_type locate </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;&#160;</td>
           <td class="paramname"><em>fmi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt;::<a class="el" href="structnvbio_1_1fm__index.html#a6787f1a9ce8e4abd5fed2216a7276c87">index_type</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt;::<a class="el" href="structnvbio_1_1fm__index.html#a659a2e486c18caad9766b260346c53d3">index_type</a>&#160;</td>
           <td class="paramname"><em>i</em>&#160;</td>
         </tr>
         <tr>
@@ -755,25 +765,25 @@ template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ga2c08bf5054bedcca2d14a2cc1bc44ed4"></a>
+<a class="anchor" id="ga0e30fccc10cad9657bcc2e4a8b1f71b7"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
+template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray &gt;::range_type locate_ssa_iterator </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::range_type locate_ssa_iterator </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;&#160;</td>
           <td class="paramname"><em>fmi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt;::<a class="el" href="structnvbio_1_1fm__index.html#a6787f1a9ce8e4abd5fed2216a7276c87">index_type</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt;::<a class="el" href="structnvbio_1_1fm__index.html#a659a2e486c18caad9766b260346c53d3">index_type</a>&#160;</td>
           <td class="paramname"><em>i</em>&#160;</td>
         </tr>
         <tr>
@@ -800,25 +810,25 @@ template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="gacd87539ceebc5a908c7da99a013cfbc2"></a>
+<a class="anchor" id="gadbdfae0553273fd66cbaa6983551eac7"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
+template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray &gt;::index_type lookup_ssa_iterator </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::index_type lookup_ssa_iterator </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;&#160;</td>
           <td class="paramname"><em>fmi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt;::<a class="el" href="structnvbio_1_1fm__index.html#a41b326748d7c153f970de06a851c64c0">range_type</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt;::<a class="el" href="structnvbio_1_1fm__index.html#ac3ec8ae5770382d25a2ed9f9e31b4643">range_type</a>&#160;</td>
           <td class="paramname"><em>it</em>&#160;</td>
         </tr>
         <tr>
@@ -845,19 +855,19 @@ template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ga6bd073dd2ab22f3ac945181646d9c190"></a>
+<a class="anchor" id="gac4ed217af75673d34c35eaddbf80d11a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TRankDictionary , typename TSuffixArray , typename Iterator &gt; </div>
+template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 , typename Iterator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray &gt;::range_type match </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::range_type match </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;&#160;</td>
           <td class="paramname"><em>fmi</em>, </td>
         </tr>
         <tr>
@@ -894,23 +904,23 @@ template&lt;typename TRankDictionary , typename TSuffixArray , typename Iterator
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="fmindex__inl_8h_source.html#l00279">279</a> of file <a class="el" href="fmindex__inl_8h_source.html">fmindex_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="fmindex__inl_8h_source.html#l00286">286</a> of file <a class="el" href="fmindex__inl_8h_source.html">fmindex_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="gae47098f722d44957473346f7e6e5b12b"></a>
+<a class="anchor" id="ga5df385e8b6a8b1436b252586b46f404c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TRankDictionary , typename TSuffixArray , typename Iterator &gt; </div>
+template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 , typename Iterator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray &gt;::range_type match </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::range_type match </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;&#160;</td>
           <td class="paramname"><em>fmi</em>, </td>
         </tr>
         <tr>
@@ -928,7 +938,7 @@ template&lt;typename TRankDictionary , typename TSuffixArray , typename Iterator
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt;::<a class="el" href="structnvbio_1_1fm__index.html#a41b326748d7c153f970de06a851c64c0">range_type</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt;::<a class="el" href="structnvbio_1_1fm__index.html#ac3ec8ae5770382d25a2ed9f9e31b4643">range_type</a>&#160;</td>
           <td class="paramname"><em>range</em>&#160;</td>
         </tr>
         <tr>
@@ -956,19 +966,19 @@ template&lt;typename TRankDictionary , typename TSuffixArray , typename Iterator
 
 </div>
 </div>
-<a class="anchor" id="ga8f163ba8ee9bf613cf7ccffc2ca100db"></a>
+<a class="anchor" id="gac3a6cb0c88d7cdbce8dc86e8959f7e94"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TRankDictionary , typename TSuffixArray , typename Iterator &gt; </div>
+template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 , typename Iterator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray &gt;::range_type match_reverse </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::range_type match_reverse </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;&#160;</td>
           <td class="paramname"><em>fmi</em>, </td>
         </tr>
         <tr>
@@ -1005,29 +1015,29 @@ template&lt;typename TRankDictionary , typename TSuffixArray , typename Iterator
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="fmindex__inl_8h_source.html#l00345">345</a> of file <a class="el" href="fmindex__inl_8h_source.html">fmindex_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="fmindex__inl_8h_source.html#l00355">355</a> of file <a class="el" href="fmindex__inl_8h_source.html">fmindex_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="gae57afb0ec35470cd30b6d97cc346da1b"></a>
+<a class="anchor" id="ga3626bf327979888cf1df84910c2847cb"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
+template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray &gt;::index_type rank </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::index_type rank </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;&#160;</td>
           <td class="paramname"><em>fmi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt;::<a class="el" href="structnvbio_1_1fm__index.html#a6787f1a9ce8e4abd5fed2216a7276c87">index_type</a>&#160;</td>
+          <td class="paramtype">typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt;::<a class="el" href="structnvbio_1_1fm__index.html#a659a2e486c18caad9766b260346c53d3">index_type</a>&#160;</td>
           <td class="paramname"><em>k</em>, </td>
         </tr>
         <tr>
@@ -1060,25 +1070,25 @@ template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ga219b4957f9f566d164fb1709716dea7b"></a>
+<a class="anchor" id="ga54482ca571693d2019442456964430e6"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
+template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray &gt;::range_type rank </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::range_type rank </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;&#160;</td>
           <td class="paramname"><em>fmi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt;::<a class="el" href="structnvbio_1_1fm__index.html#a41b326748d7c153f970de06a851c64c0">range_type</a>&#160;</td>
+          <td class="paramtype">typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt;::<a class="el" href="structnvbio_1_1fm__index.html#ac3ec8ae5770382d25a2ed9f9e31b4643">range_type</a>&#160;</td>
           <td class="paramname"><em>range</em>, </td>
         </tr>
         <tr>
@@ -1111,11 +1121,11 @@ template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ga0590547a8b1b4abff5c63a46360b81d9"></a>
+<a class="anchor" id="ga7ecf505e5cafd75f6ca2e577c2187f40"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
+template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1123,13 +1133,13 @@ template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
         <tr>
           <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> TRankDictionary::vec4_type rank4 </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;&#160;</td>
           <td class="paramname"><em>fmi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt;::<a class="el" href="structnvbio_1_1fm__index.html#a6787f1a9ce8e4abd5fed2216a7276c87">index_type</a>&#160;</td>
+          <td class="paramtype">typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt;::<a class="el" href="structnvbio_1_1fm__index.html#a659a2e486c18caad9766b260346c53d3">index_type</a>&#160;</td>
           <td class="paramname"><em>k</em>&#160;</td>
         </tr>
         <tr>
@@ -1152,15 +1162,15 @@ template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
   </table>
   </dd>
 </dl>
-<p>this function is <b>deprecated</b>: please use <a class="el" href="group___f_m_index.html#ga9b6246b30088d846b75d98d015509345">rank_all()</a> </p>
+<p>this function is <b>deprecated</b>: please use <a class="el" href="group___f_m_index.html#ga0955aff9559ea69a5f51fb26faed11d5">rank_all()</a> </p>
 
 </div>
 </div>
-<a class="anchor" id="gabacccdb1989508ce5557493723570416"></a>
+<a class="anchor" id="gab18f7b84fbc7e2efea4ae28cf1212603"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
+template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1168,13 +1178,13 @@ template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
         <tr>
           <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void rank4 </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;&#160;</td>
           <td class="paramname"><em>fmi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray &gt;::<a class="el" href="structnvbio_1_1fm__index.html#a41b326748d7c153f970de06a851c64c0">range_type</a>&#160;</td>
+          <td class="paramtype">typename <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a>&lt; TRankDictionary, TSuffixArray, TL2 &gt;::<a class="el" href="structnvbio_1_1fm__index.html#ac3ec8ae5770382d25a2ed9f9e31b4643">range_type</a>&#160;</td>
           <td class="paramname"><em>range</em>, </td>
         </tr>
         <tr>
@@ -1211,32 +1221,32 @@ template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
   </table>
   </dd>
 </dl>
-<p>this function is <b>deprecated</b>: please use <a class="el" href="group___f_m_index.html#ga9b6246b30088d846b75d98d015509345">rank_all()</a> </p>
+<p>this function is <b>deprecated</b>: please use <a class="el" href="group___f_m_index.html#ga0955aff9559ea69a5f51fb26faed11d5">rank_all()</a> </p>
 
 </div>
 </div>
-<a class="anchor" id="ga9b6246b30088d846b75d98d015509345"></a>
+<a class="anchor" id="ga0955aff9559ea69a5f51fb26faed11d5"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
+template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void nvbio::rank_all </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;&#160;</td>
           <td class="paramname"><em>fmi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::index_type&#160;</td>
+          <td class="paramtype">typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::index_type&#160;</td>
           <td class="paramname"><em>k</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::vector_type *&#160;</td>
+          <td class="paramtype">typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::vector_type *&#160;</td>
           <td class="paramname"><em>out</em>&#160;</td>
         </tr>
         <tr>
@@ -1255,38 +1265,38 @@ template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="fmindex__inl_8h_source.html#l00194">194</a> of file <a class="el" href="fmindex__inl_8h_source.html">fmindex_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="fmindex__inl_8h_source.html#l00199">199</a> of file <a class="el" href="fmindex__inl_8h_source.html">fmindex_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga6a0e08047a7046c2b65c47e86eb739b6"></a>
+<a class="anchor" id="ga3bb9aca4e7c2bf4b711eebb035add52e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
+template&lt;typename TRankDictionary , typename TSuffixArray , typename TL2 &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void nvbio::rank_all </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt; &amp;&#160;</td>
           <td class="paramname"><em>fmi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::range_type&#160;</td>
+          <td class="paramtype">typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::range_type&#160;</td>
           <td class="paramname"><em>range</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::vector_type *&#160;</td>
+          <td class="paramtype">typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::vector_type *&#160;</td>
           <td class="paramname"><em>outl</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">typename fm_index&lt; TRankDictionary, TSuffixArray &gt;::vector_type *&#160;</td>
+          <td class="paramtype">typename fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;::vector_type *&#160;</td>
           <td class="paramname"><em>outh</em>&#160;</td>
         </tr>
         <tr>
@@ -1307,7 +1317,7 @@ template&lt;typename TRankDictionary , typename TSuffixArray &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="fmindex__inl_8h_source.html#l00231">231</a> of file <a class="el" href="fmindex__inl_8h_source.html">fmindex_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="fmindex__inl_8h_source.html#l00237">237</a> of file <a class="el" href="fmindex__inl_8h_source.html">fmindex_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1345,7 +1355,7 @@ template&lt;typename system_tag , typename fm_index_type &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 28 2015 17:17:19 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 29 2015 09:02:48 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

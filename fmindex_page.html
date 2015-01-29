@@ -107,16 +107,16 @@ Rank Dictionaries</h1>
 <tr>
 <td style="white-space: nowrap; vertical-align:text-top;"><b>Function</b> </td><td style="vertical-align:text-top;"><b>Inputs</b> </td><td style="vertical-align:text-top;"><b>Description</b>  </td></tr>
 <tr>
-<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#af17edf0fa9c5891cc1a6117a7fa9fe5b">rank()</a><br/>
+<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#a8cac81743120b36275cee02d66137fdd">rank()</a><br/>
  </td><td style="vertical-align:text-top;">dict, i, c </td><td style="vertical-align:text-top;">return the number of occurrences of a given character c in the prefix [0,i]  </td></tr>
 <tr>
-<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#af17edf0fa9c5891cc1a6117a7fa9fe5b">rank()</a><br/>
+<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#a8cac81743120b36275cee02d66137fdd">rank()</a><br/>
  </td><td style="vertical-align:text-top;">dict, range, c </td><td style="vertical-align:text-top;">return the number of occurrences of a given character c in the prefixes [0,range.x] and [0,range.y]  </td></tr>
 <tr>
-<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="group___f_m_index.html#ga9b6246b30088d846b75d98d015509345">rank_all()</a><br/>
+<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="group___f_m_index.html#ga0955aff9559ea69a5f51fb26faed11d5">rank_all()</a><br/>
  </td><td style="vertical-align:text-top;">dict, i </td><td style="vertical-align:text-top;">return the number of occurrences of all characters of the alphabet in the prefix [0,i]  </td></tr>
 <tr>
-<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="group___f_m_index.html#ga9b6246b30088d846b75d98d015509345">rank_all()</a><br/>
+<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="group___f_m_index.html#ga0955aff9559ea69a5f51fb26faed11d5">rank_all()</a><br/>
  </td><td style="vertical-align:text-top;">dict, range </td><td style="vertical-align:text-top;">return the number of occurrences of all characters of the alphabet in the prefixes [0,range.x] and [0,range.y]  </td></tr>
 </table>
 </dd></dl>
@@ -153,7 +153,7 @@ Sampled Suffix Arrays</h1>
 </div><!-- fragment --> </dd></dl>
 <dl class="section user"><dt></dt><dd>Detailed documentation can be found in the <a class="el" href="group___s_s_a_module.html">Sampled Suffix Arrays</a> module documentation.</dd></dl>
 <h1><a class="anchor" id="FMIndexSection"></a>
-FM-Indices</h1>
+Building and querying the FM-index</h1>
 <dl class="section user"><dt></dt><dd>An <a class="el" href="structnvbio_1_1fm__index.html">fm_index</a> is a self-compressed text index as described by Ferragina &amp; Manzini. It is built on top of the following ingredients:<ul>
 <li>the BWT of a text T</li>
 <li>a rank dictionary (<a class="el" href="structnvbio_1_1rank__dictionary.html">rank_dictionary</a> or <a class="el" href="structnvbio_1_1_wavelet_tree.html">WaveletTree</a>) of the given BWT</li>
@@ -166,19 +166,19 @@ FM-Indices</h1>
 <tr>
 <td style="white-space: nowrap; vertical-align:text-top;"><b>Function</b> </td><td style="vertical-align:text-top;"><b>Inputs</b> </td><td style="vertical-align:text-top;"><b>Description</b>  </td></tr>
 <tr>
-<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#af17edf0fa9c5891cc1a6117a7fa9fe5b">rank()</a><br/>
+<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#a8cac81743120b36275cee02d66137fdd">rank()</a><br/>
  </td><td style="vertical-align:text-top;">fmi, i, c </td><td style="vertical-align:text-top;">return the number of occurrences of a given character c in the prefix [0,i]  </td></tr>
 <tr>
-<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="group___f_m_index.html#ga9b6246b30088d846b75d98d015509345">rank_all()</a><br/>
+<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="group___f_m_index.html#ga0955aff9559ea69a5f51fb26faed11d5">rank_all()</a><br/>
  </td><td style="vertical-align:text-top;">fmi, i </td><td style="vertical-align:text-top;">return the number of occurrences of all characters of the alphabet in the prefix [0,i]  </td></tr>
 <tr>
-<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#aa0a7fece4db974208c05cee885b7da00">match()</a><br/>
+<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#a10edbd2a2ecb580dcffbcf19898f80ea">match()</a><br/>
  </td><td style="vertical-align:text-top;">fmi, pattern </td><td style="vertical-align:text-top;">return the SA range of occurrences of a given pattern  </td></tr>
 <tr>
-<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#a6f25390a7e4b6e31041ff4ee45bcc513">match_reverse()</a><br/>
+<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#a2514d704a5fd71cac1c2fb8fe0d34db0">match_reverse()</a><br/>
  </td><td style="vertical-align:text-top;">fmi, pattern </td><td style="vertical-align:text-top;">return the SA range of occurrences of a given reversed pattern   </td></tr>
 <tr>
-<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#a52450fbcc337fd8025dae2d88fb89584">locate()</a><br/>
+<td style="white-space: nowrap; vertical-align:text-top;"><a class="el" href="namespacenvbio.html#a94e8718b69ac72d7e76159a586ef64a6">locate()</a><br/>
  </td><td style="vertical-align:text-top;">fmi, i </td><td style="vertical-align:text-top;">given a suffix array coordinate i, return its linear coordinate SA[i]  </td></tr>
 </table>
 </dd></dl>
@@ -274,7 +274,7 @@ Technical Overview</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 28 2015 17:17:16 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 29 2015 09:02:45 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

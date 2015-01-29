@@ -170,14 +170,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="structnvbio_1_1same__type.html">same_type&lt;FMType, rFMType&gt;::pred</a>)</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    {</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keyword">const</span> FMType fmi_ref = dir == <a class="code" href="group___utils.html#ggaa03f30a78feb0e92d0b688b333867510a59b1f15dbac1d8a695446a2e4482e589">FORWARD</a> ? fmi : rfmi;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="namespacenvbio.html#af1dcada79a62a111bbd4aec127bc64fd">locate_ssa_iterator</a>( fmi_ref, r );</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="namespacenvbio.html#aa74123b73695e19131db4a5765925aaa">locate_ssa_iterator</a>( fmi_ref, r );</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    }</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    {</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keywordflow">if</span> (dir == <a class="code" href="group___utils.html#ggaa03f30a78feb0e92d0b688b333867510a59b1f15dbac1d8a695446a2e4482e589">FORWARD</a>)</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacenvbio.html#af1dcada79a62a111bbd4aec127bc64fd">locate_ssa_iterator</a>( fmi, r );</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacenvbio.html#aa74123b73695e19131db4a5765925aaa">locate_ssa_iterator</a>( fmi, r );</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacenvbio.html#af1dcada79a62a111bbd4aec127bc64fd">locate_ssa_iterator</a>( rfmi, r );</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacenvbio.html#aa74123b73695e19131db4a5765925aaa">locate_ssa_iterator</a>( rfmi, r );</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    }</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;}</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
@@ -188,16 +188,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="structnvbio_1_1same__type.html">same_type&lt;FMType, rFMType&gt;::pred</a>)</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    {</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keyword">const</span> FMType fmi_ref = dir == <a class="code" href="group___utils.html#ggaa03f30a78feb0e92d0b688b333867510a59b1f15dbac1d8a695446a2e4482e589">FORWARD</a> ? fmi : rfmi;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> g_pos = <a class="code" href="namespacenvbio.html#a354d403d6a963931b64b881b86053fa8">lookup_ssa_iterator</a>( fmi_ref, it );</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> g_pos = <a class="code" href="namespacenvbio.html#a24ad450a7adc11e551b8873b45e30b68">lookup_ssa_iterator</a>( fmi_ref, it );</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordflow">return</span> (dir == <a class="code" href="group___utils.html#ggaa03f30a78feb0e92d0b688b333867510af21fb4979d21bbde40f1bafc3cec05db">REVERSE</a>) ?</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            rfmi.length()-1 - g_pos : g_pos;</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    }</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    {</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordflow">if</span> (dir == <a class="code" href="group___utils.html#ggaa03f30a78feb0e92d0b688b333867510a59b1f15dbac1d8a695446a2e4482e589">FORWARD</a>)</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacenvbio.html#a354d403d6a963931b64b881b86053fa8">lookup_ssa_iterator</a>( fmi, it );</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacenvbio.html#a24ad450a7adc11e551b8873b45e30b68">lookup_ssa_iterator</a>( fmi, it );</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            <span class="keywordflow">return</span> rfmi.length()-1 - <a class="code" href="namespacenvbio.html#a354d403d6a963931b64b881b86053fa8">lookup_ssa_iterator</a>( rfmi, it );</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            <span class="keywordflow">return</span> rfmi.length()-1 - <a class="code" href="namespacenvbio.html#a24ad450a7adc11e551b8873b45e30b68">lookup_ssa_iterator</a>( rfmi, it );</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    }</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;}</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
@@ -458,7 +458,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 28 2015 17:17:06 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 29 2015 09:02:35 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

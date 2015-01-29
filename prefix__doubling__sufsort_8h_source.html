@@ -523,8 +523,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> SYMBOL_SIZE = <a class="code" href="structnvbio_1_1stream__traits.html">stream_traits&lt;string_type&gt;::SYMBOL_SIZE</a>;</div>
 <div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;</div>
 <div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;    <span class="keyword">typedef</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> word_type;</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>   WORD_BITS = <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( 8u * <span class="keyword">sizeof</span>(word_type) );</div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> DOLLAR_BITS =</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;    <a class="code" href="types_8h.html#a629635675171b07305d7d44a8c51deff">NVBIO_VAR_UNUSED</a> <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>   WORD_BITS = <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( 8u * <span class="keyword">sizeof</span>(word_type) );</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;    <a class="code" href="types_8h.html#a629635675171b07305d7d44a8c51deff">NVBIO_VAR_UNUSED</a> <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> DOLLAR_BITS =</div>
 <div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;        SYMBOL_SIZE*4 &lt;= WORD_BITS-4 ? 4 :          <span class="comment">// more than three symbols per word</span></div>
 <div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;        SYMBOL_SIZE*3 &lt;= WORD_BITS-2 ? 2 :          <span class="comment">// up to three symbols per word</span></div>
 <div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;        SYMBOL_SIZE*2 &lt;= WORD_BITS-2 ? 2 :          <span class="comment">// up to two symbols per word</span></div>
@@ -609,7 +609,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;        <span class="comment">//   pos  :  1  2  3  4  5  6  7  8  9</span></div>
 <div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;        <span class="comment">//   keys : (1, 1, 2, 3, 3, 3, 4, 4, 4) -&gt;</span></div>
 <div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;        <span class="comment">//   out  : (1, 1, 3, 4, 4, 4, 7, 7, 7)</span></div>
-<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_segments = <a class="code" href="namespacenvbio_1_1cuda.html#aa85fe31bf790180ac58580eb493b5d53">extract_segments</a>(</div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;        <a class="code" href="types_8h.html#a629635675171b07305d7d44a8c51deff">NVBIO_VAR_UNUSED</a> <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_segments = <a class="code" href="namespacenvbio_1_1cuda.html#aa85fe31bf790180ac58580eb493b5d53">extract_segments</a>(</div>
 <div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;            n_suffixes,</div>
 <div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;            <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">nvbio::raw_pointer</a>( d_sort_keys ),</div>
 <div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;            <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">nvbio::raw_pointer</a>( d_segment_flags ),</div>
@@ -821,7 +821,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 28 2015 17:17:04 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 29 2015 09:02:33 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

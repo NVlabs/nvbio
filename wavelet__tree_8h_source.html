@@ -303,30 +303,41 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;SymbolType <a class="code" href="namespacenvbio.html#a2db934dbdaabc7811bd9fb1fb4b730af">text</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1_wavelet_tree.html">WaveletTree&lt;BitStreamIterator,IndexIterator,SymbolType&gt;</a>&amp; tree, <span class="keyword">const</span> IndexType i);</div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> BitStreamIterator, <span class="keyword">typename</span> IndexIterator, <span class="keyword">typename</span> IndexType, <span class="keyword">typename</span> SymbolType&gt;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> BitStreamIterator, <span class="keyword">typename</span> IndexIterator, <span class="keyword">typename</span> SymbolType&gt;</div>
 <div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;IndexType <a class="code" href="namespacenvbio.html#af17edf0fa9c5891cc1a6117a7fa9fe5b">rank</a>(</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1_wavelet_tree.html">WaveletTree&lt;BitStreamIterator,IndexIterator,SymbolType&gt;</a>&amp; tree, <span class="keyword">const</span> IndexType i, <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> c);</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> SystemTag, <span class="keyword">typename</span> IndexType, <span class="keyword">typename</span> SymbolType&gt;</div>
-<div class="line"><a name="l00323"></a><span class="lineno"><a class="code" href="group___wavelet_tree_module.html#ga856c2c26a3b56b1b78bb3abf6a54242e">  323</a></span>&#160;<span class="keyword">typename</span> <a class="code" href="structnvbio_1_1_wavelet_tree.html">WaveletTreeStorage&lt;SystemTag,IndexType,SymbolType&gt;::plain_view_type</a> <a class="code" href="group___wavelet_tree_module.html#ga856c2c26a3b56b1b78bb3abf6a54242e">plain_view</a>(<a class="code" href="structnvbio_1_1_wavelet_tree_storage.html">WaveletTreeStorage&lt;SystemTag,IndexType,SymbolType&gt;</a>&amp; tree)</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;{</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    <span class="keywordflow">return</span> tree;</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;}</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> SystemTag, <span class="keyword">typename</span> IndexType, <span class="keyword">typename</span> SymbolType&gt;</div>
-<div class="line"><a name="l00332"></a><span class="lineno"><a class="code" href="group___wavelet_tree_module.html#ga9585515147fbbc50e56de57d11148563">  332</a></span>&#160;<span class="keyword">typename</span> <a class="code" href="structnvbio_1_1_wavelet_tree.html">WaveletTreeStorage&lt;SystemTag,IndexType,SymbolType&gt;::const_plain_view_type</a> <a class="code" href="group___wavelet_tree_module.html#ga9585515147fbbc50e56de57d11148563">plain_view</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1_wavelet_tree_storage.html">WaveletTreeStorage&lt;SystemTag,IndexType,SymbolType&gt;</a>&amp; tree)</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;{</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    <span class="keywordflow">return</span> tree;</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;}</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;} <span class="comment">// namespace nvbio</span></div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="wavelet__tree__inl_8h.html">nvbio/strings/wavelet_tree_inl.h</a>&gt;</span></div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;<span class="keyword">typename</span> <a class="code" href="structnvbio_1_1_wavelet_tree.html#adfa2d293d0e7ffd49c64d3f12cbae6dc">WaveletTree&lt;BitStreamIterator,IndexIterator,SymbolType&gt;::index_type</a></div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;<a class="code" href="namespacenvbio.html#a8cac81743120b36275cee02d66137fdd">rank</a>(</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    <span class="keyword">const</span>          <a class="code" href="structnvbio_1_1_wavelet_tree.html">WaveletTree&lt;BitStreamIterator,IndexIterator,SymbolType&gt;</a>&amp;             tree,</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="keyword">const</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1_wavelet_tree.html#adfa2d293d0e7ffd49c64d3f12cbae6dc">WaveletTree&lt;BitStreamIterator,IndexIterator,SymbolType&gt;::index_type</a>  i,</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                                                                        c);</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> BitStreamIterator, <span class="keyword">typename</span> IndexIterator, <span class="keyword">typename</span> SymbolType&gt;</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="keyword">typename</span> <a class="code" href="structnvbio_1_1_wavelet_tree.html#a1083203fceb3f772826ce7c87a824a18">WaveletTree&lt;BitStreamIterator,IndexIterator,SymbolType&gt;::range_type</a></div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<a class="code" href="namespacenvbio.html#a8cac81743120b36275cee02d66137fdd">rank</a>(</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <span class="keyword">const</span>          <a class="code" href="structnvbio_1_1_wavelet_tree.html">WaveletTree&lt;BitStreamIterator,IndexIterator,SymbolType&gt;</a>&amp;             tree,</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    <span class="keyword">const</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1_wavelet_tree.html#a1083203fceb3f772826ce7c87a824a18">WaveletTree&lt;BitStreamIterator,IndexIterator,SymbolType&gt;::range_type</a>  range,</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                                                                        c);</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> SystemTag, <span class="keyword">typename</span> IndexType, <span class="keyword">typename</span> SymbolType&gt;</div>
+<div class="line"><a name="l00341"></a><span class="lineno"><a class="code" href="group___wavelet_tree_module.html#ga856c2c26a3b56b1b78bb3abf6a54242e">  341</a></span>&#160;<span class="keyword">typename</span> <a class="code" href="structnvbio_1_1_wavelet_tree.html">WaveletTreeStorage&lt;SystemTag,IndexType,SymbolType&gt;::plain_view_type</a> <a class="code" href="group___wavelet_tree_module.html#ga856c2c26a3b56b1b78bb3abf6a54242e">plain_view</a>(<a class="code" href="structnvbio_1_1_wavelet_tree_storage.html">WaveletTreeStorage&lt;SystemTag,IndexType,SymbolType&gt;</a>&amp; tree)</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;{</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    <span class="keywordflow">return</span> tree;</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;}</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> SystemTag, <span class="keyword">typename</span> IndexType, <span class="keyword">typename</span> SymbolType&gt;</div>
+<div class="line"><a name="l00350"></a><span class="lineno"><a class="code" href="group___wavelet_tree_module.html#ga9585515147fbbc50e56de57d11148563">  350</a></span>&#160;<span class="keyword">typename</span> <a class="code" href="structnvbio_1_1_wavelet_tree.html">WaveletTreeStorage&lt;SystemTag,IndexType,SymbolType&gt;::const_plain_view_type</a> <a class="code" href="group___wavelet_tree_module.html#ga9585515147fbbc50e56de57d11148563">plain_view</a>(<span class="keyword">const</span> <a class="code" href="structnvbio_1_1_wavelet_tree_storage.html">WaveletTreeStorage&lt;SystemTag,IndexType,SymbolType&gt;</a>&amp; tree)</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;{</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="keywordflow">return</span> tree;</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;}</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;} <span class="comment">// namespace nvbio</span></div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="wavelet__tree__inl_8h.html">nvbio/strings/wavelet_tree_inl.h</a>&gt;</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 28 2015 17:17:03 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 29 2015 09:02:33 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

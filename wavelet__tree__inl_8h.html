@@ -139,10 +139,20 @@ Functions</h2></td></tr>
 <tr class="memitem:a38ab43e80dd4fcdad0cff15c96f25037"><td class="memTemplParams" colspan="2">template&lt;typename system_tag , typename string_iterator , typename index_type , typename symbol_type &gt; </td></tr>
 <tr class="memitem:a38ab43e80dd4fcdad0cff15c96f25037"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#a38ab43e80dd4fcdad0cff15c96f25037">nvbio::setup</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> index_type string_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator &amp;string, WaveletTreeStorage&lt; system_tag, index_type, symbol_type &gt; &amp;out_tree)</td></tr>
 <tr class="separator:a38ab43e80dd4fcdad0cff15c96f25037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35b223f2eec24805153eb51d71c0d75e"><td class="memTemplParams" colspan="2">template&lt;typename BitStreamIterator , typename IndexIterator , typename IndexType , typename SymbolType &gt; </td></tr>
-<tr class="memitem:a35b223f2eec24805153eb51d71c0d75e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> IndexType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#a35b223f2eec24805153eb51d71c0d75e">nvbio::rank</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> WaveletTree&lt; BitStreamIterator, IndexIterator, SymbolType &gt; &amp;tree, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> IndexType i, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 c)</td></tr>
-<tr class="separator:a35b223f2eec24805153eb51d71c0d75e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51e5805eae4673d5b6b98b5e13ccc84a"><td class="memTemplParams" colspan="2">template&lt;typename BitStreamIterator , typename IndexIterator , typename SymbolType &gt; </td></tr>
+<tr class="memitem:a51e5805eae4673d5b6b98b5e13ccc84a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> WaveletTree<br class="typebreak"/>
+&lt; BitStreamIterator, <br class="typebreak"/>
+IndexIterator, SymbolType &gt;<br class="typebreak"/>
+::index_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#a51e5805eae4673d5b6b98b5e13ccc84a">nvbio::rank</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> WaveletTree&lt; BitStreamIterator, IndexIterator, SymbolType &gt; &amp;tree, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename WaveletTree&lt; BitStreamIterator, IndexIterator, SymbolType &gt;::index_type i, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 c)</td></tr>
+<tr class="separator:a51e5805eae4673d5b6b98b5e13ccc84a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaf52435d88b6c8b021791e97a709a11"><td class="memTemplParams" colspan="2">template&lt;typename BitStreamIterator , typename IndexIterator , typename SymbolType &gt; </td></tr>
+<tr class="memitem:aeaf52435d88b6c8b021791e97a709a11"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> WaveletTree<br class="typebreak"/>
+&lt; BitStreamIterator, <br class="typebreak"/>
+IndexIterator, SymbolType &gt;<br class="typebreak"/>
+::range_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#aeaf52435d88b6c8b021791e97a709a11">nvbio::rank</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> WaveletTree&lt; BitStreamIterator, IndexIterator, SymbolType &gt; &amp;tree, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename WaveletTree&lt; BitStreamIterator, IndexIterator, SymbolType &gt;::range_type range, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 c)</td></tr>
+<tr class="separator:aeaf52435d88b6c8b021791e97a709a11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93f4f2e16b2732add753602bbbeab8d8"><td class="memTemplParams" colspan="2">template&lt;typename BitStreamIterator , typename IndexIterator , typename IndexType , typename SymbolType &gt; </td></tr>
 <tr class="memitem:a93f4f2e16b2732add753602bbbeab8d8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> SymbolType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#a93f4f2e16b2732add753602bbbeab8d8">nvbio::text</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> WaveletTree&lt; BitStreamIterator, IndexIterator, SymbolType &gt; &amp;tree, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> IndexType i)</td></tr>
@@ -151,7 +161,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 28 2015 17:17:15 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 29 2015 09:02:43 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

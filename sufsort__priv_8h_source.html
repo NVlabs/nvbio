@@ -777,7 +777,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;    <a class="code" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
 <div class="line"><a name="l00754"></a><span class="lineno"><a class="code" href="structnvbio_1_1priv_1_1string__suffix__word__functor_3_01_s_y_m_b_o_l___s_i_z_e_00_01_w_o_r_d___af1d7fb42ac84d721634051864dc80bd.html#acca5ff76b797ee7e1ca9b29bf835247d">  754</a></span>&#160;    <a class="code" href="structnvbio_1_1priv_1_1string__suffix__word__functor_3_01_s_y_m_b_o_l___s_i_z_e_00_01_w_o_r_d___af1d7fb42ac84d721634051864dc80bd.html#ab3bd35616d507ebaa18610855d142902">result_type</a> <a class="code" href="structnvbio_1_1priv_1_1string__suffix__word__functor.html#a00f17f230599b7f33581b471f899f45a">operator() </a>(<span class="keyword">const</span> index_type suffix_idx)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>* base_words = <span class="keywordtype">string</span>.stream();</div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;        <span class="keyword">const</span> storage_type base_words = <span class="keywordtype">string</span>.stream();</div>
 <div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;</div>
 <div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="structnvbio_1_1priv_1_1string__suffix__word__functor.html#a1b84349c0977e58360558eefec4ad21e">result_type</a>( extract_word_packed&lt;WORD_BITS,DOLLAR_BITS,SYMBOL_SIZE&gt;(</div>
 <div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;            base_words,</div>
@@ -2143,7 +2143,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 28 2015 17:17:05 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 29 2015 09:02:34 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

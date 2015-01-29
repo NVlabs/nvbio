@@ -27,6 +27,8 @@
 
 // waveletfm.cu
 //
+// Protein Search using a Wavelet Tree and an FM-index
+//
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,7 +41,6 @@
 #include <nvbio/fmindex/fmindex.h>
 
 using namespace nvbio;
-
 
 // main test entry point
 //

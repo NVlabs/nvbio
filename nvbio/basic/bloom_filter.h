@@ -57,14 +57,14 @@ namespace nvbio {
 /// {
 ///     // build a set of 1M random integers
 ///     const uint32 N = 1000000;
-///     thrust::host_vector<uint32> h_vector( N );
+///     nvbio::vector<host_tag,uint32> h_vector( N );
 ///
 ///     // fill it up
 ///     for (uint32 i = 0; i < N; ++i)
 ///         h_vector[i] = rand();
 ///
 ///     // copy it to the device
-///     thrust::device_vector<uint32> d_vector = h_vector;
+///     nvbio::vector<device_tag,uint32> d_vector = h_vector;
 ///
 ///     // construct an empty Bloom filter
 ///     typedef bloom_filter<2,hash_functor1,hash_functor2,uint32*> bloom_filter_type;
@@ -73,7 +73,7 @@ namespace nvbio {
 ///                                     // NOTE: this is still a lot less than 1-bit for each
 ///                                     // of the 4+ billion integers out there...
 ///
-///     thrust::device_vector<uint32> d_filter_storage( filter_words, 0u );
+///     nvbio::vector<device_tag,uint32> d_filter_storage( filter_words, 0u );
 ///     bloom_filter_type d_filter(
 ///        filter_words * 32,
 ///        plain_view( d_filter_storage ) );
@@ -82,7 +82,7 @@ namespace nvbio {
 ///     populate_kernel<<<util::divide_ri(N,128),128>>>( N, plain_view( d_vector ), d_filter );
 ///
 ///     // copy the filter back on the host
-///     thrust::host_vector<uint32> h_filter_storage = filter_storage;
+///     nvbio::vector<host_tag,uint32> h_filter_storage = filter_storage;
 ///     bloom_filter_type h_filter(
 ///        filter_words * 32,
 ///        plain_view( h_filter_storage ) );

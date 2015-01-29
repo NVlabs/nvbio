@@ -138,12 +138,12 @@ Building the BWT</h1>
 <div class="line">        <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;  bwt: %s (primary %u)\n&quot;</span>, proteins_bwt, primary);</div>
 <div class="line">    }</div>
 <div class="line">    ...</div>
-</div><!-- fragment --></dd></dl>
-<p>Done: if everything works correctly, this should print the string "bwt: XACDEFGHIKLMNOPQRSTVWYBZ (primary 1)".</p>
+</div><!-- fragment --> </dd></dl>
+<dl class="section user"><dt></dt><dd>Done: if everything works correctly, this should print the string "bwt: XACDEFGHIKLMNOPQRSTVWYBZ (primary 1)".</dd></dl>
 <h1><a class="anchor" id="WaveletTreeSection"></a>
 Wavelet Trees</h1>
 <dl class="section user"><dt></dt><dd>Proteins have a largish alphabet, with 24 letters. If we were to use a plain BWT encoding and a standard rank_dictionary to build an FM-index on top of it, we would need storage proportional to the number of characters. The thing is made even worse by the fact that, for the purpose of efficient string packing, NVBIO treats proteins as 8-bit characters, as 5-bit packing would need cumbersome, slow bit-manipulation logic (because individual characters would stride word boundaries). This means an FM-index would require 128 times more storage than for the 2-bit DNA alphabet!</dd></dl>
-<dl class="section user"><dt></dt><dd>No worries: we can encode our BWT using <a class="el" href="strings_page.html#WaveletTreeSection">Wavelet Trees</a>, a wonderful succint data structure designed to encode large alphabet strings in small space while allowing O(1) ranking. Let's build a wavelet tree, then...</dd></dl>
+<dl class="section user"><dt></dt><dd>But no worries: we can encode our BWT using <a class="el" href="strings_page.html#WaveletTreeSection">Wavelet Trees</a>, a wonderful succint data structure designed to encode large alphabet strings in small space while allowing O(1) ranking. Let's build a wavelet tree, then...</dd></dl>
 <dl class="section user"><dt></dt><dd><div class="fragment"><div class="line">...</div>
 <div class="line"><span class="comment">// define our wavelet tree storage type and its plain view</span></div>
 <div class="line">typedef WaveletTreeStorage&lt;device_tag&gt;                          wavelet_tree_type;</div>
@@ -247,7 +247,7 @@ Building and querying the FM-index</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 29 2015 17:55:15 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 29 2015 18:06:47 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

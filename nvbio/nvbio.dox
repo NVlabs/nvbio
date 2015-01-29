@@ -830,10 +830,11 @@
 /// \page waveletfm_page Protein Search using Wavelet Trees and an FM-index
 ///\par
 /// In this example, we want to show NVBIO's support for larger alphabets, particularly showing the composability
-/// of compact string representations like Wavelet Trees, and self-compressed indices like the FM-index.
+/// of compact string representations like \ref WaveletTreeSection "Wavelet Trees", and self-compressed indices like
+/// the \ref FMIndexSection "FM-index".
 /// We are hence going to build a small app performing pattern matching on a protein string.
 ///
-/// \section BWTBuildingSection Building the BWT
+/// \section WaveletFM_BWTBuildingSection Building the BWT
 ///
 ///\par
 /// If we want to build an FM-index, the first thing is computing the BWT of the database string we want
@@ -848,8 +849,8 @@
 /// {
 ///     log_info(stderr, "waveletfm... started\n");
 /// 
-///     // this string will be our protein database we want to search in - just a short string with
-///     // all proteins in sequence
+///     // this string will be our protein database we want to search in - just a short string
+///     // with all proteins in sequence
 ///     const char* proteins = "ACDEFGHIKLMNOPQRSTVWYBZX";
 ///     const uint32 text_len = 24;
 /// 
@@ -885,23 +886,26 @@
 ///     }
 ///     ...
 ///\endcode
-///
+///\par
 /// Done: if everything works correctly, this should print the string "bwt: XACDEFGHIKLMNOPQRSTVWYBZ (primary 1)".
 ///
-/// \section WaveletTreeSection It's a large alphabet, let's use a Wavelet Tree
+/// \section WaveletFM_WaveletTreeSection It's a large alphabet, let's use a Wavelet Tree
 ///
 ///\par
-/// Proteins have a largish alphabet, with 24 letters. If we were to use a plain BWT encoding
-/// and a standard \ref rank_dictionary to build an FM-index on top of it, we would need storage
-/// proportional to the number of characters. The thing is made even worse by the fact that,
-/// for the purpose of efficient string packing, NVBIO treats proteins as 8-bit characters, as
-/// 5-bit packing would need cumbersome, slow bit-manipulation logic (because individual characters
-/// would stride word boundaries).
+/// Compared to DNA, the protein alphabet is a largish one, with 24 letters. If we were to use a plain
+/// BWT encoding and a standard \ref RankDictionarySection "rank dictionary" based on sparse occurrence
+/// tables to build an FM-index, we would need storage proportional to the string length times the size
+/// of the alphabet.
+/// The thing is made even worse by the fact that, for the purpose of efficient string packing,
+/// NVBIO treats proteins as 8-bit characters, as 5-bit packing would need cumbersome, slow bit-manipulation
+/// logic (because individual characters would stride word boundaries).
 /// This means an FM-index would require 128 times more storage than for the 2-bit DNA alphabet!
 ///
 ///\par
-/// No worries: we can encode our BWT using \ref WaveletTreeSection, a wonderful succint data structure
-/// designed to encode large alphabet strings in small space while allowing O(1) ranking.
+/// But no worries: we can encode our BWT using \ref WaveletTreeSection, a wonderful succint data structure
+/// designed to encode large alphabet strings in small space (proportional to the string length times the
+/// number of <i>bits</i> required to represent each symbol, i.e. the <i>logarithm</i> of the alphabet size) while
+/// allowing O(1) ranking.
 /// Let's build a wavelet tree, then...
 ///
 ///\par
@@ -921,11 +925,13 @@
 ///\par
 /// Et voila. At this point, we could even throw away the original bwt (the vector <i>d_bwt</i>), as the
 /// wavelet bwt encodes all the information we need.
+/// Notice that, behind the curtains, the wavelet tree construction is parallelized, in this case on
+/// the device.
 ///
-/// \section FMIndexSection Building and querying the FM-index
+/// \section WaveletFM_FMIndexSection Building and querying the FM-index
 ///
 ///\par
-/// We now need to setup an FM-index on top of the wavelet bwt. Remember the basic \ref fm_index
+/// We now need to setup an FM-index on top of the wavelet bwt. Remember the basic \ref FMIndexSection "fm_index"
 /// class has three template parameters, a TRankDictionary type, a TSuffixArray type, and a TL2
 /// type.
 /// These represent the kind of \ref RankDictionarySection "rank dictionary" used to encode
@@ -936,12 +942,12 @@
 /// - the WaveletTreeStorage::const_plain_view_type class
 /// - a null_type suffix array (as the sampled suffix array is only needed for locating, which
 ///   we won't do here - though it might be needed in a real app)
-/// - an L2 iterator to an device nvbio::vector of integers, i.e. nvbio::vector<device_tag,uint32>::const_iterator
+/// - an L2 iterator to a device nvbio::vector of integers, i.e. nvbio::vector<device_tag,uint32>::const_iterator
 ///
 ///\par
 /// Notice that the default value for the TL2 iterator is null_type, in which case a raw pointer will be used.
 /// However, in this example we want to show that all of NVBIO's data structures, even when instanced on the device,
-/// can be accessed and used for computing also from the host - albeit potentially paying a very long latency tax
+/// can be accessed and used for computing from the host just as well - albeit potentially paying a very long latency tax
 /// when unified memory is not present.
 /// This can be achieved using proper iterators, which know the memory space they are pointing to, and issue
 /// cuda mem-copies when dereferenced.
@@ -953,7 +959,7 @@
 ///     typedef fm_index<wavelet_tree_view_type, null_type, l2_iterator>    fm_index_type;
 /// 
 ///     // take the const view of the wavelet tree
-///     const wavelet_tree_view_type wavelet_tree_view = plain_view( (const wavelet_tree_type&)wavelet_tree );
+///     const wavelet_tree_view_type wavelet_bwt_view = plain_view( (const wavelet_tree_type&)wavelet_bwt );
 ///
 ///     // build the L2 vector
 ///     nvbio::vector<device_tag,uint32> L2(257);
@@ -963,14 +969,14 @@
 ///     // and we just want to show that NVBIO is designed to make everything work!
 ///     L2[0] = 0;
 ///     for (uint32 i = 1; i <= 256; ++i)
-///         L2[i] = L2[i-1] + rank( wavelet_tree_view, text_len, i-1u );
+///         L2[i] = L2[i-1] + rank( wavelet_bwt_view, text_len, i-1u );
 /// 
 ///     // build the FM-index
 ///     const fm_index_type fmi(
 ///         text_len,
 ///         primary,
 ///         L2.begin(),
-///         wavelet_tree_view,
+///         wavelet_bwt_view,
 ///         null_type() );
 /// 
 ///     // do some string matching using our newly built FM-index - once again

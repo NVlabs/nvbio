@@ -753,7 +753,7 @@ struct string_suffix_word_functor<
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     result_type operator() (const index_type suffix_idx) const
     {
-        const uint32* base_words = string.stream();
+        const storage_type base_words = string.stream();
 
         return result_type( extract_word_packed<WORD_BITS,DOLLAR_BITS,SYMBOL_SIZE>(
             base_words,

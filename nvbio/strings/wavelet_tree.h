@@ -310,10 +310,28 @@ SymbolType text(const WaveletTree<BitStreamIterator,IndexIterator,SymbolType>& t
 /// \param i            the end of the query range [0,i]
 /// \param c            the query character
 ///
-template <typename BitStreamIterator, typename IndexIterator, typename IndexType, typename SymbolType>
+template <typename BitStreamIterator, typename IndexIterator, typename SymbolType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-IndexType rank(
-    const WaveletTree<BitStreamIterator,IndexIterator,SymbolType>& tree, const IndexType i, const uint32 c);
+typename WaveletTree<BitStreamIterator,IndexIterator,SymbolType>::index_type
+rank(
+    const          WaveletTree<BitStreamIterator,IndexIterator,SymbolType>&             tree,
+    const typename WaveletTree<BitStreamIterator,IndexIterator,SymbolType>::index_type  i,
+    const uint32                                                                        c);
+
+/// \relates WaveletTree
+/// fetch the number of occurrences of character c in the substring [0,i]
+///
+/// \param tree         the wavelet tree
+/// \param i            the end of the query range [0,i]
+/// \param c            the query character
+///
+template <typename BitStreamIterator, typename IndexIterator, typename SymbolType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+typename WaveletTree<BitStreamIterator,IndexIterator,SymbolType>::range_type
+rank(
+    const          WaveletTree<BitStreamIterator,IndexIterator,SymbolType>&             tree,
+    const typename WaveletTree<BitStreamIterator,IndexIterator,SymbolType>::range_type  range,
+    const uint32                                                                        c);
 
 /// \relates WaveletTreeStorage
 ///

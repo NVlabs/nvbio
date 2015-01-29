@@ -337,7 +337,8 @@ namespace nvbio {
 ///
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2 = null_type>
 struct fm_index
 {
     typedef TRankDictionary                      rank_dictionary_type;
@@ -348,6 +349,8 @@ struct fm_index
     typedef typename TRankDictionary::range_type    range_type;  // type used for range searches
     typedef typename TRankDictionary::vector_type   vector_type; // type used for character-wide searches
 
+    typedef typename if_equal<TL2,null_type,const index_type*,TL2>::type    L2_iterator;
+            
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE index_type      length() const { return m_length; }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE index_type      primary() const { return m_primary; }
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE index_type      count(const uint32 c) const { return m_L2[c+1] - m_L2[c]; }
@@ -363,7 +366,7 @@ struct fm_index
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE fm_index(
         const index_type      length,
         const index_type      primary,
-        const index_type*     L2,
+        const L2_iterator     L2,
         const TRankDictionary rank_dict,
         const TSuffixArray    sa) :
         m_length( length ),
@@ -375,7 +378,7 @@ struct fm_index
 
     index_type          m_length;
     index_type          m_primary;
-    const index_type*   m_L2;
+    L2_iterator         m_L2;
     TRankDictionary     m_rank_dict;
     TSuffixArray        m_sa;
 };
@@ -389,12 +392,13 @@ struct fm_index
 ///
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::index_type rank(
-    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
-    typename fm_index<TRankDictionary,TSuffixArray>::index_type     k,
-    uint8                                                           c);
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type rank(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type     k,
+    uint8                                                               c);
 
 /// \relates fm_index
 /// return the number of occurrences of c in the ranges [0,l] and [0,r] of the
@@ -406,12 +410,13 @@ typename fm_index<TRankDictionary,TSuffixArray>::index_type rank(
 ///
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::range_type rank(
-    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
-    typename fm_index<TRankDictionary,TSuffixArray>::range_type     range,
-    uint8                                                           c);
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type rank(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type     range,
+    uint8                                                               c);
 
 /// \relates fm_index
 /// return the number of occurrences of all characters in the range [0,k] of the
@@ -424,11 +429,12 @@ typename fm_index<TRankDictionary,TSuffixArray>::range_type rank(
 ///
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 typename TRankDictionary::vec4_type rank4(
-    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
-    typename fm_index<TRankDictionary,TSuffixArray>::index_type     k);
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type     k);
 
 /// \relates fm_index
 /// return the number of occurrences of all characters in the ranges [0,l] and [0,r] of the
@@ -443,12 +449,13 @@ typename TRankDictionary::vec4_type rank4(
 ///
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank4(
-    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
-    typename fm_index<TRankDictionary,TSuffixArray>::range_type     range,
-    typename TRankDictionary::vec4_type*                            outl,
-    typename TRankDictionary::vec4_type*                            outh);
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type     range,
+    typename TRankDictionary::vec4_type*                                outl,
+    typename TRankDictionary::vec4_type*                                outh);
 
 /// return the number of occurrences of all characters in the range [0,k] of the
 /// given FM-index.
@@ -458,12 +465,13 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank4(
 ///
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 void rank_all(
-    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
-    typename fm_index<TRankDictionary,TSuffixArray>::index_type     k,
-    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   out);
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type     k,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::vector_type*   out);
 
 /// return the number of occurrences of all characters in the ranges [0,l] and [0,r] of the
 /// given FM-index.
@@ -475,12 +483,13 @@ void rank_all(
 ///
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank_all(
-    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
-    typename fm_index<TRankDictionary,TSuffixArray>::range_type     range,
-    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outl,
-    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outh);
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type     range,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::vector_type*   outl,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::vector_type*   outh);
 
 /// \relates fm_index
 /// return the range of occurrences of a pattern in the given FM-index.
@@ -492,12 +501,13 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank_all(
 template <
     typename TRankDictionary,
     typename TSuffixArray,
+    typename TL2,
     typename Iterator>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::range_type match(
-    const fm_index<TRankDictionary,TSuffixArray>&                       fmi,
-    const Iterator                                                      pattern,
-    const uint32                                                        pattern_len);
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type match(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                       fmi,
+    const Iterator                                                          pattern,
+    const uint32                                                            pattern_len);
 
 /// \relates fm_index
 /// return the range of occurrences of a pattern in the given FM-index.
@@ -510,13 +520,14 @@ typename fm_index<TRankDictionary,TSuffixArray>::range_type match(
 template <
     typename TRankDictionary,
     typename TSuffixArray,
+    typename TL2,
     typename Iterator>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::range_type match(
-    const fm_index<TRankDictionary,TSuffixArray>&                       fmi,
-    const Iterator                                                      pattern,
-    const uint32                                                        pattern_len,
-    const typename fm_index<TRankDictionary,TSuffixArray>::range_type   range);
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type match(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                       fmi,
+    const Iterator                                                          pattern,
+    const uint32                                                            pattern_len,
+    const typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type   range);
 
 /// \relates fm_index
 /// return the range of occurrences of a reversed pattern in the given FM-index.
@@ -528,12 +539,13 @@ typename fm_index<TRankDictionary,TSuffixArray>::range_type match(
 template <
     typename TRankDictionary,
     typename TSuffixArray,
+    typename TL2,
     typename Iterator>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::range_type match_reverse(
-    const fm_index<TRankDictionary,TSuffixArray>&                       fmi,
-    const Iterator                                                      pattern,
-    const uint32                                                        pattern_len);
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type match_reverse(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                       fmi,
+    const Iterator                                                          pattern,
+    const uint32                                                            pattern_len);
 
 // \relates fm_index
 // computes the inverse psi function at a given index, without using the reduced SA
@@ -544,11 +556,12 @@ typename fm_index<TRankDictionary,TSuffixArray>::range_type match_reverse(
 //
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::index_type basic_inv_psi(
-    const fm_index<TRankDictionary,TSuffixArray>&                       fmi,
-    const typename fm_index<TRankDictionary,TSuffixArray>::range_type   i);
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type basic_inv_psi(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                       fmi,
+    const typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type   i);
 
 /// \relates fm_index
 /// computes the inverse psi function at a given index
@@ -559,11 +572,12 @@ typename fm_index<TRankDictionary,TSuffixArray>::index_type basic_inv_psi(
 ///
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::range_type inv_psi(
-    const fm_index<TRankDictionary,TSuffixArray>&                       fmi,
-    const typename fm_index<TRankDictionary,TSuffixArray>::index_type   i);
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type inv_psi(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                       fmi,
+    const typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type   i);
 
 /// \relates fm_index
 /// return the linear coordinate of the suffix that prefixes the i-th row of the BWT matrix.
@@ -574,11 +588,12 @@ typename fm_index<TRankDictionary,TSuffixArray>::range_type inv_psi(
 ///
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::index_type locate(
-    const fm_index<TRankDictionary,TSuffixArray>&                       fmi,
-    const typename fm_index<TRankDictionary,TSuffixArray>::index_type   i);
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type locate(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                       fmi,
+    const typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type   i);
 
 /// \relates fm_index
 /// return the position of the suffix that prefixes the i-th row of the BWT matrix in the sampled SA,
@@ -591,11 +606,12 @@ typename fm_index<TRankDictionary,TSuffixArray>::index_type locate(
 ///
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::range_type locate_ssa_iterator(
-    const fm_index<TRankDictionary,TSuffixArray>&                       fmi,
-    const typename fm_index<TRankDictionary,TSuffixArray>::index_type   i);
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type locate_ssa_iterator(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                       fmi,
+    const typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type   i);
 
 /// \relates fm_index
 /// return the position of the suffix that prefixes the i-th row of the BWT matrix.
@@ -606,11 +622,12 @@ typename fm_index<TRankDictionary,TSuffixArray>::range_type locate_ssa_iterator(
 ///
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::index_type lookup_ssa_iterator(
-    const fm_index<TRankDictionary,TSuffixArray>&                       fmi,
-    const typename fm_index<TRankDictionary,TSuffixArray>::range_type   it);
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type lookup_ssa_iterator(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                       fmi,
+    const typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type   it);
 
 #ifdef __CUDACC__
 #if defined(MOD_NAMESPACE)

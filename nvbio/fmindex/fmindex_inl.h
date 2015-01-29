@@ -35,14 +35,15 @@ namespace nvbio {
 //
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::index_type rank(
-    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
-    typename fm_index<TRankDictionary,TSuffixArray>::index_type     k,
-    uint8                                                           c)
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type rank(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type     k,
+    uint8                                                               c)
 {
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
 
     if (k == index_type(-1))
         return 0;
@@ -64,14 +65,15 @@ typename fm_index<TRankDictionary,TSuffixArray>::index_type rank(
 //
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::range_type rank(
-    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
-    typename fm_index<TRankDictionary,TSuffixArray>::range_type     range,
-    uint8                                                           c)
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type rank(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type     range,
+    uint8                                                               c)
 {
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
 
     if (range.x == range.y)
     {
@@ -104,13 +106,14 @@ typename fm_index<TRankDictionary,TSuffixArray>::range_type rank(
 //
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 typename TRankDictionary::vec4_type rank4(
-    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
-    typename fm_index<TRankDictionary,TSuffixArray>::index_type     k)
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type     k)
 {
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
 
     const index_type zero = index_type(0);
 
@@ -141,14 +144,15 @@ typename TRankDictionary::vec4_type rank4(
 //
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank4(
-    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
-    typename fm_index<TRankDictionary,TSuffixArray>::range_type     range,
-    typename TRankDictionary::vec4_type*                            outl,
-    typename TRankDictionary::vec4_type*                            outh)
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type     range,
+    typename TRankDictionary::vec4_type*                                outl,
+    typename TRankDictionary::vec4_type*                                outh)
 {
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
 
     const index_type zero = index_type(0);
 
@@ -189,14 +193,15 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank4(
 //
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 void rank_all(
-    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
-    typename fm_index<TRankDictionary,TSuffixArray>::index_type     k,
-    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   out)
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type     k,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::vector_type*   out)
 {
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
 
     const index_type zero = index_type(0);
 
@@ -227,14 +232,15 @@ void rank_all(
 //
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank_all(
-    const fm_index<TRankDictionary,TSuffixArray>&                   fmi,
-    typename fm_index<TRankDictionary,TSuffixArray>::range_type     range,
-    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outl,
-    typename fm_index<TRankDictionary,TSuffixArray>::vector_type*   outh)
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                   fmi,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type     range,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::vector_type*   outl,
+    typename fm_index<TRankDictionary,TSuffixArray,TL2>::vector_type*   outh)
 {
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
 
     const index_type zero = index_type(0);
 
@@ -274,15 +280,16 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rank_all(
 template <
     typename TRankDictionary,
     typename TSuffixArray,
+    typename TL2,
     typename Iterator>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::range_type match(
-    const fm_index<TRankDictionary,TSuffixArray>&   fmi,
-    const Iterator                                  pattern,
-    const uint32                                    pattern_len)
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type match(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&   fmi,
+    const Iterator                                      pattern,
+    const uint32                                        pattern_len)
 {
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::range_type range_type;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type range_type;
 
     // backward search
     const range_type range = make_vector( index_type(0), fmi.length() );
@@ -300,24 +307,26 @@ typename fm_index<TRankDictionary,TSuffixArray>::range_type match(
 template <
     typename TRankDictionary,
     typename TSuffixArray,
+    typename TL2,
     typename Iterator>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::range_type  match(
-    const fm_index<TRankDictionary,TSuffixArray>&                       fmi,
-    const Iterator                                                      pattern,
-    const uint32                                                        pattern_len,
-    const typename fm_index<TRankDictionary,TSuffixArray>::range_type   in_range)
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type  match(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                       fmi,
+    const Iterator                                                          pattern,
+    const uint32                                                            pattern_len,
+    const typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type   in_range)
 {
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::range_type range_type;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type range_type;
+    typedef typename std::iterator_traits<Iterator>::value_type             symbol_type;
 
     // backward search
     range_type range = in_range;
 
     for (int32 i = pattern_len-1; i >= 0 && range.x <= range.y; --i)
     {
-        const uint8 c = pattern[i];
-        if (c > 3) // there is an N here. no match 
+        const symbol_type c = pattern[i];
+        if (c > fmi.symbol_count()) // there is an N here. no match 
             return make_vector(index_type(1),index_type(0));
 
         const range_type c_rank = rank(
@@ -340,23 +349,25 @@ typename fm_index<TRankDictionary,TSuffixArray>::range_type  match(
 template <
     typename TRankDictionary,
     typename TSuffixArray,
+    typename TL2,
     typename Iterator>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::range_type match_reverse(
-    const fm_index<TRankDictionary,TSuffixArray>&   fmi,
-    const Iterator                                  pattern,
-    const uint32                                    pattern_len)
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type match_reverse(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&   fmi,
+    const Iterator                                      pattern,
+    const uint32                                        pattern_len)
 {
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::range_type range_type;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type range_type;
+    typedef typename std::iterator_traits<Iterator>::value_type             symbol_type;
 
     // forward search
     range_type range = make_vector( index_type(0), fmi.length() );
 
     for (uint32 i = 0; i < pattern_len && range.x <= range.y; ++i)
     {
-        const uint8 c = pattern[i];
-        if (c > 3) // there is an N here. no match 
+        const symbol_type c = pattern[i];
+        if (c > fmi.symbol_count()) // there is an N here. no match 
             return make_vector(index_type(1),index_type(0));
 
         const range_type c_rank = rank(
@@ -378,15 +389,16 @@ typename fm_index<TRankDictionary,TSuffixArray>::range_type match_reverse(
 //
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::index_type basic_inv_psi(
-    const fm_index<TRankDictionary,TSuffixArray>&                       fmi,
-    const typename fm_index<TRankDictionary,TSuffixArray>::index_type   i)
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type basic_inv_psi(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                       fmi,
+    const typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type   i)
 {
-    typedef fm_index<TRankDictionary,TSuffixArray> FMIndexType;
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
-//    typedef typename fm_index<TRankDictionary,TSuffixArray>::range_type range_type;
+    typedef fm_index<TRankDictionary,TSuffixArray,TL2> FMIndexType;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
+//    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type range_type;
 
     NVBIO_CUDA_ASSERT( i <= fmi.length() );
     typename FMIndexType::bwt_type bwt = fmi.bwt();
@@ -409,15 +421,16 @@ typename fm_index<TRankDictionary,TSuffixArray>::index_type basic_inv_psi(
 //
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::range_type inv_psi(
-    const fm_index<TRankDictionary,TSuffixArray>&                       fmi,
-    const typename fm_index<TRankDictionary,TSuffixArray>::index_type   i)
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type inv_psi(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                       fmi,
+    const typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type   i)
 {
-    typedef fm_index<TRankDictionary,TSuffixArray> FMIndexType;
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
-//    typedef typename fm_index<TRankDictionary,TSuffixArray>::range_type range_type;
+    typedef fm_index<TRankDictionary,TSuffixArray,TL2> FMIndexType;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
+//    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type range_type;
 
     NVBIO_CUDA_ASSERT( i <= fmi.length() );
     index_type j = i;
@@ -452,15 +465,16 @@ typename fm_index<TRankDictionary,TSuffixArray>::range_type inv_psi(
 //
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::index_type locate(
-    const fm_index<TRankDictionary,TSuffixArray>&                       fmi,
-    const typename fm_index<TRankDictionary,TSuffixArray>::index_type   i)
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type locate(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                       fmi,
+    const typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type   i)
 {
-    typedef fm_index<TRankDictionary,TSuffixArray> FMIndexType;
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
-//    typedef typename fm_index<TRankDictionary,TSuffixArray>::range_type range_type;
+    typedef fm_index<TRankDictionary,TSuffixArray,TL2> FMIndexType;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
+//    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type range_type;
 
     NVBIO_CUDA_ASSERT( i <= fmi.length() );
     index_type j = i;
@@ -496,15 +510,16 @@ typename fm_index<TRankDictionary,TSuffixArray>::index_type locate(
 //
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::range_type locate_ssa_iterator(
-    const fm_index<TRankDictionary,TSuffixArray>&                       fmi,
-    const typename fm_index<TRankDictionary,TSuffixArray>::index_type   i)
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type locate_ssa_iterator(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                       fmi,
+    const typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type   i)
 {
-    typedef fm_index<TRankDictionary,TSuffixArray> FMIndexType;
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
-//    typedef typename fm_index<TRankDictionary,TSuffixArray>::range_type range_type;
+    typedef fm_index<TRankDictionary,TSuffixArray,TL2> FMIndexType;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
+//    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type range_type;
 
     NVBIO_CUDA_ASSERT( i <= fmi.length() );
     index_type j = i;
@@ -537,15 +552,16 @@ typename fm_index<TRankDictionary,TSuffixArray>::range_type locate_ssa_iterator(
 //
 template <
     typename TRankDictionary,
-    typename TSuffixArray>
+    typename TSuffixArray,
+    typename TL2>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename fm_index<TRankDictionary,TSuffixArray>::index_type lookup_ssa_iterator(
-    const fm_index<TRankDictionary,TSuffixArray>&                       fmi,
-    const typename fm_index<TRankDictionary,TSuffixArray>::range_type   it)
+typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type lookup_ssa_iterator(
+    const fm_index<TRankDictionary,TSuffixArray,TL2>&                       fmi,
+    const typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type   it)
 {
-    typedef fm_index<TRankDictionary,TSuffixArray> FMIndexType;
-    typedef typename fm_index<TRankDictionary,TSuffixArray>::index_type index_type;
-//    typedef typename fm_index<TRankDictionary,TSuffixArray>::range_type range_type;
+    typedef fm_index<TRankDictionary,TSuffixArray,TL2> FMIndexType;
+    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
+//    typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type range_type;
 
     typename FMIndexType::suffix_array_type sa = fmi.sa();
     index_type suffix; sa.fetch( it.x, suffix );

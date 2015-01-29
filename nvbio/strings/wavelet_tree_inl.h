@@ -355,7 +355,9 @@ WaveletTree<BitStreamIterator,IndexIterator,SymbolType>::rank(const uint32 l, co
     const index_type offset = b ? ones : zeros;                     // number of occurrences of b at the node's beginning
 
 
-    const index_type global_index = global_node_begin + r;          // the global position of r in the bit-string
+    const index_type global_index = nvbio::min(
+        global_node_begin + r,                                      // the global position of r in the bit-string
+        size() * (l+1u) - 1u );                                     // maximum index for this level
     const index_type global_index_mod = ~global_index & 31u;
 
     const index_type base_index = global_index / 32u;               // the index of this occurrence counter block
@@ -375,21 +377,31 @@ WaveletTree<BitStreamIterator,IndexIterator,SymbolType>::rank(const uint32 l, co
 // \param i            the end of the query range [0,i]
 // \param c            the query character
 //
-template <typename BitStreamIterator, typename IndexIterator, typename IndexType, typename SymbolType>
+template <typename BitStreamIterator, typename IndexIterator, typename SymbolType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-IndexType rank(
-    const WaveletTree<BitStreamIterator,IndexIterator,SymbolType>& tree, const IndexType i, const uint32 c)
+typename WaveletTree<BitStreamIterator,IndexIterator,SymbolType>::index_type
+rank(
+    const          WaveletTree<BitStreamIterator,IndexIterator,SymbolType>&             tree,
+    const typename WaveletTree<BitStreamIterator,IndexIterator,SymbolType>::index_type  i,
+    const uint32                                                                        c)
 {
+    typedef typename WaveletTree<BitStreamIterator,IndexIterator,SymbolType>::index_type index_type;
+
     const uint32 symbol_size = tree.symbol_size();
 
     // traverse the tree from the root node down to the leaf containing c
-    uint32    node     = 0u;
-    IndexType range_lo = 0u;
+    uint32     node     = 0u;
+    index_type range_lo = 0u;
+    index_type range_hi = tree.size();
 
-    IndexType r = i+1;
+    index_type r = i+1;
     
     for (uint32 l = 0; l < symbol_size; ++l)
     {
+        // we got to an empty node, the rank must be zero
+        if (range_lo == range_hi)
+            return 0u;
+
         // select the l-th level bit of c
         const uint32 b = (c >> (symbol_size - l - 1u)) & 1u;
 
@@ -399,19 +411,42 @@ IndexType rank(
         // compute the base (i.e. left) child node
         const uint32 child = node*2u + 1u;
 
+        const uint32 split = tree.splits()[ node ];
+
         if (b == 1)
         {
             // descend into the right node
-            range_lo = tree.splits()[ node ];
+            range_lo = split;
             node = child + 1u;
         }
         else
         {
             //  descend into the left node
-            node = child;
+            range_hi = split;
+            node     = child;
         }
     }
     return r;
+}
+
+// \relates WaveletTree
+// fetch the number of occurrences of character c in the substring [0,i]
+//
+// \param dict         the rank dictionary
+// \param i            the end of the query range [0,i]
+// \param c            the query character
+//
+template <typename BitStreamIterator, typename IndexIterator, typename SymbolType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+typename WaveletTree<BitStreamIterator,IndexIterator,SymbolType>::range_type
+rank(
+    const          WaveletTree<BitStreamIterator,IndexIterator,SymbolType>&             tree,
+    const typename WaveletTree<BitStreamIterator,IndexIterator,SymbolType>::range_type  range,
+    const uint32                                                                        c)
+{
+    return make_vector(
+        rank( tree, range.x, c ),
+        rank( tree, range.y, c ) );
 }
 
 // \relates WaveletTree

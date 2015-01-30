@@ -111,6 +111,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;thrust/reduce.h&gt;</code><br/>
 <code>#include &lt;thrust/scan.h&gt;</code><br/>
 <code>#include &lt;thrust/copy.h&gt;</code><br/>
+<code>#include &lt;thrust/sort.h&gt;</code><br/>
 <code>#include &lt;thrust/binary_search.h&gt;</code><br/>
 <code>#include &lt;thrust/merge.h&gt;</code><br/>
 <code>#include &lt;thrust/iterator/constant_iterator.h&gt;</code><br/>
@@ -175,6 +176,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ga1e90c9f0163fd9ca68a3666e79114d56"><td class="memTemplParams" colspan="2">template&lt;typename system_tag , typename KeyIterator , typename ValueIterator , typename OutputIterator &gt; </td></tr>
 <tr class="memitem:ga1e90c9f0163fd9ca68a3666e79114d56"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___primitives.html#ga1e90c9f0163fd9ca68a3666e79114d56">nvbio::upper_bound</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 n, ValueIterator values, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 n_keys, KeyIterator keys, OutputIterator indices)</td></tr>
 <tr class="separator:ga1e90c9f0163fd9ca68a3666e79114d56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8daae6c2c4358a4aea556ae44559edb6"><td class="memTemplParams" colspan="2">template&lt;typename system_tag , typename KeyIterator &gt; </td></tr>
+<tr class="memitem:ga8daae6c2c4358a4aea556ae44559edb6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">nvbio::radix_sort</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 n, KeyIterator keys, <a class="el" href="structnvbio_1_1vector.html">nvbio::vector</a>&lt; system_tag, uint8 &gt; &amp;temp_storage)</td></tr>
+<tr class="separator:ga8daae6c2c4358a4aea556ae44559edb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga163658788606ce34fec246c11491563a"><td class="memTemplParams" colspan="2">template&lt;typename system_tag , typename KeyIterator , typename ValueIterator &gt; </td></tr>
+<tr class="memitem:ga163658788606ce34fec246c11491563a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___primitives.html#ga163658788606ce34fec246c11491563a">nvbio::radix_sort</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 n, KeyIterator keys, ValueIterator values, <a class="el" href="structnvbio_1_1vector.html">nvbio::vector</a>&lt; system_tag, uint8 &gt; &amp;temp_storage)</td></tr>
+<tr class="separator:ga163658788606ce34fec246c11491563a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2568e774eeaa7d2a994038ae4cb61d6b"><td class="memTemplParams" colspan="2">template&lt;typename system_tag , typename key_iterator1 , typename key_iterator2 , typename value_iterator1 , typename value_iterator2 , typename key_output , typename value_output &gt; </td></tr>
 <tr class="memitem:ga2568e774eeaa7d2a994038ae4cb61d6b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___primitives.html#ga2568e774eeaa7d2a994038ae4cb61d6b">nvbio::merge_by_key</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 A_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 B_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> key_iterator1 A_keys, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> key_iterator2 B_keys, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> value_iterator1 A_values, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> value_iterator2 B_values, key_output C_keys, value_output C_values, <a class="el" href="structnvbio_1_1vector.html">nvbio::vector</a>&lt; system_tag, uint8 &gt; &amp;temp_storage)</td></tr>
 <tr class="separator:ga2568e774eeaa7d2a994038ae4cb61d6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,7 +189,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 10:24:41 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 30 2015 16:43:04 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

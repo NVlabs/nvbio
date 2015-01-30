@@ -1858,6 +1858,12 @@ IndexType &gt;<br class="typebreak"/>
 <tr class="memitem:ga1e90c9f0163fd9ca68a3666e79114d56"><td class="memTemplParams" colspan="2">template&lt;typename system_tag , typename KeyIterator , typename ValueIterator , typename OutputIterator &gt; </td></tr>
 <tr class="memitem:ga1e90c9f0163fd9ca68a3666e79114d56"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___primitives.html#ga1e90c9f0163fd9ca68a3666e79114d56">upper_bound</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n, ValueIterator values, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_keys, KeyIterator keys, OutputIterator indices)</td></tr>
 <tr class="separator:ga1e90c9f0163fd9ca68a3666e79114d56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8daae6c2c4358a4aea556ae44559edb6"><td class="memTemplParams" colspan="2">template&lt;typename system_tag , typename KeyIterator &gt; </td></tr>
+<tr class="memitem:ga8daae6c2c4358a4aea556ae44559edb6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n, KeyIterator keys, <a class="el" href="structnvbio_1_1vector.html">nvbio::vector</a>&lt; system_tag, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> &gt; &amp;temp_storage)</td></tr>
+<tr class="separator:ga8daae6c2c4358a4aea556ae44559edb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga163658788606ce34fec246c11491563a"><td class="memTemplParams" colspan="2">template&lt;typename system_tag , typename KeyIterator , typename ValueIterator &gt; </td></tr>
+<tr class="memitem:ga163658788606ce34fec246c11491563a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___primitives.html#ga163658788606ce34fec246c11491563a">radix_sort</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n, KeyIterator keys, ValueIterator values, <a class="el" href="structnvbio_1_1vector.html">nvbio::vector</a>&lt; system_tag, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> &gt; &amp;temp_storage)</td></tr>
+<tr class="separator:ga163658788606ce34fec246c11491563a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2568e774eeaa7d2a994038ae4cb61d6b"><td class="memTemplParams" colspan="2">template&lt;typename system_tag , typename key_iterator1 , typename key_iterator2 , typename value_iterator1 , typename value_iterator2 , typename key_output , typename value_output &gt; </td></tr>
 <tr class="memitem:ga2568e774eeaa7d2a994038ae4cb61d6b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___primitives.html#ga2568e774eeaa7d2a994038ae4cb61d6b">merge_by_key</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> A_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> B_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> key_iterator1 A_keys, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> key_iterator2 B_keys, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> value_iterator1 A_values, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> value_iterator2 B_values, key_output C_keys, value_output C_values, <a class="el" href="structnvbio_1_1vector.html">nvbio::vector</a>&lt; system_tag, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> &gt; &amp;temp_storage)</td></tr>
 <tr class="separator:ga2568e774eeaa7d2a994038ae4cb61d6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1954,6 +1960,18 @@ T2, <a class="el" href="md5_8c.html#ae42219072d798876e6b08e6b78614ff6">H</a> &gt
 <tr class="memitem:a7645700d3f15a727da0b9ddabf4c5479"><td class="memTemplParams" colspan="2">template&lt;typename KeyIterator , typename ValueIterator , typename OutputIterator &gt; </td></tr>
 <tr class="memitem:a7645700d3f15a727da0b9ddabf4c5479"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#a7645700d3f15a727da0b9ddabf4c5479">upper_bound</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1host__tag.html">host_tag</a> tag, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n, ValueIterator values, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_keys, KeyIterator keys, OutputIterator indices)</td></tr>
 <tr class="separator:a7645700d3f15a727da0b9ddabf4c5479"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9410a79ceb6561d49fea12a3833d6536"><td class="memTemplParams" colspan="2">template&lt;typename KeyIterator &gt; </td></tr>
+<tr class="memitem:a9410a79ceb6561d49fea12a3833d6536"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#a9410a79ceb6561d49fea12a3833d6536">radix_sort</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1device__tag.html">device_tag</a> tag, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n, KeyIterator keys, <a class="el" href="structnvbio_1_1vector.html">nvbio::vector</a>&lt; <a class="el" href="structnvbio_1_1device__tag.html">device_tag</a>, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> &gt; &amp;temp_storage)</td></tr>
+<tr class="separator:a9410a79ceb6561d49fea12a3833d6536"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8d5349a1f85575cc392468971000808"><td class="memTemplParams" colspan="2">template&lt;typename KeyIterator &gt; </td></tr>
+<tr class="memitem:aa8d5349a1f85575cc392468971000808"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#aa8d5349a1f85575cc392468971000808">radix_sort</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1host__tag.html">host_tag</a> tag, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n, KeyIterator keys, <a class="el" href="structnvbio_1_1vector.html">nvbio::vector</a>&lt; <a class="el" href="structnvbio_1_1host__tag.html">host_tag</a>, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> &gt; &amp;temp_storage)</td></tr>
+<tr class="separator:aa8d5349a1f85575cc392468971000808"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafcf6424757b1297a1ec4ed13a714289"><td class="memTemplParams" colspan="2">template&lt;typename KeyIterator , typename ValueIterator &gt; </td></tr>
+<tr class="memitem:aafcf6424757b1297a1ec4ed13a714289"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#aafcf6424757b1297a1ec4ed13a714289">radix_sort</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1device__tag.html">device_tag</a> tag, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n, KeyIterator keys, ValueIterator values, <a class="el" href="structnvbio_1_1vector.html">nvbio::vector</a>&lt; <a class="el" href="structnvbio_1_1device__tag.html">device_tag</a>, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> &gt; &amp;temp_storage)</td></tr>
+<tr class="separator:aafcf6424757b1297a1ec4ed13a714289"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72615506cabe4e397a9ad9bc8b085cd2"><td class="memTemplParams" colspan="2">template&lt;typename KeyIterator , typename ValueIterator &gt; </td></tr>
+<tr class="memitem:a72615506cabe4e397a9ad9bc8b085cd2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#a72615506cabe4e397a9ad9bc8b085cd2">radix_sort</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1host__tag.html">host_tag</a> tag, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n, KeyIterator keys, ValueIterator values, <a class="el" href="structnvbio_1_1vector.html">nvbio::vector</a>&lt; <a class="el" href="structnvbio_1_1host__tag.html">host_tag</a>, <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> &gt; &amp;temp_storage)</td></tr>
+<tr class="separator:a72615506cabe4e397a9ad9bc8b085cd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cf9ea93493e6740736e8bd008199f5b"><td class="memTemplParams" colspan="2">template&lt;typename key_iterator1 , typename key_iterator2 &gt; </td></tr>
 <tr class="memitem:a7cf9ea93493e6740736e8bd008199f5b"><td class="memTemplItemLeft" align="right" valign="top">uint2&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio.html#a7cf9ea93493e6740736e8bd008199f5b">corank</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> i, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> key_iterator1 A, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> m, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> key_iterator2 B, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> n)</td></tr>
 <tr class="separator:a7cf9ea93493e6740736e8bd008199f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -4038,7 +4056,7 @@ template&lt;typename key_iterator1 , typename key_iterator2 &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="primitives__inl_8h_source.html#l01040">1040</a> of file <a class="el" href="primitives__inl_8h_source.html">primitives_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="primitives__inl_8h_source.html#l01186">1186</a> of file <a class="el" href="primitives__inl_8h_source.html">primitives_inl.h</a>.</p>
 
 </div>
 </div>
@@ -6197,7 +6215,7 @@ template&lt;typename key_iterator1 , typename key_iterator2 , typename value_ite
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="primitives__inl_8h_source.html#l01086">1086</a> of file <a class="el" href="primitives__inl_8h_source.html">primitives_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="primitives__inl_8h_source.html#l01232">1232</a> of file <a class="el" href="primitives__inl_8h_source.html">primitives_inl.h</a>.</p>
 
 </div>
 </div>
@@ -6269,7 +6287,7 @@ template&lt;typename key_iterator1 , typename key_iterator2 , typename value_ite
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="primitives__inl_8h_source.html#l01171">1171</a> of file <a class="el" href="primitives__inl_8h_source.html">primitives_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="primitives__inl_8h_source.html#l01317">1317</a> of file <a class="el" href="primitives__inl_8h_source.html">primitives_inl.h</a>.</p>
 
 </div>
 </div>
@@ -7947,6 +7965,186 @@ template&lt;typename out_coord_type , typename in_coord_type &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9410a79ceb6561d49fea12a3833d6536"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename KeyIterator &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::radix_sort </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> device_tag&#160;</td>
+          <td class="paramname"><em>tag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">KeyIterator&#160;</td>
+          <td class="paramname"><em>keys</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1vector.html">nvbio::vector</a>&lt; device_tag, uint8 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>temp_storage</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="primitives__inl_8h_source.html#l01042">1042</a> of file <a class="el" href="primitives__inl_8h_source.html">primitives_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa8d5349a1f85575cc392468971000808"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename KeyIterator &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::radix_sort </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> host_tag&#160;</td>
+          <td class="paramname"><em>tag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">KeyIterator&#160;</td>
+          <td class="paramname"><em>keys</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1vector.html">nvbio::vector</a>&lt; host_tag, uint8 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>temp_storage</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="primitives__inl_8h_source.html#l01077">1077</a> of file <a class="el" href="primitives__inl_8h_source.html">primitives_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aafcf6424757b1297a1ec4ed13a714289"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename KeyIterator , typename ValueIterator &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::radix_sort </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> device_tag&#160;</td>
+          <td class="paramname"><em>tag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">KeyIterator&#160;</td>
+          <td class="paramname"><em>keys</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ValueIterator&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1vector.html">nvbio::vector</a>&lt; device_tag, uint8 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>temp_storage</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="primitives__inl_8h_source.html#l01107">1107</a> of file <a class="el" href="primitives__inl_8h_source.html">primitives_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a72615506cabe4e397a9ad9bc8b085cd2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename KeyIterator , typename ValueIterator &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::radix_sort </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> host_tag&#160;</td>
+          <td class="paramname"><em>tag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">KeyIterator&#160;</td>
+          <td class="paramname"><em>keys</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ValueIterator&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1vector.html">nvbio::vector</a>&lt; host_tag, uint8 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>temp_storage</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="primitives__inl_8h_source.html#l01157">1157</a> of file <a class="el" href="primitives__inl_8h_source.html">primitives_inl.h</a>.</p>
 
 </div>
 </div>
@@ -10186,7 +10384,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 10:25:03 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 30 2015 16:43:27 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

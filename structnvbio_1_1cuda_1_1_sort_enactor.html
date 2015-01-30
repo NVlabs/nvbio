@@ -104,9 +104,36 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed description</h2>
-<div class="textblock"><p>A simple class to enact sorts of various kinds </p>
-
-<p>Definition at line <a class="el" href="sort_8h_source.html#l00087">87</a> of file <a class="el" href="sort_8h_source.html">sort.h</a>.</p>
+<div class="textblock"><dl class="section user"><dt></dt><dd>A simple class to enact sorts of various kinds </dd></dl>
+<dl class="section user"><dt></dt><dd>The way most parallel sorting algorithms work require having a set of ping-pong buffers that are exchanged at every pass through the data. In order to do this, and communicate where the sorted data lies after its work, <a class="el" href="structnvbio_1_1cuda_1_1_sort_enactor.html">SortEnactor</a> employs an auxiliary class, <a class="el" href="structnvbio_1_1cuda_1_1_sort_buffers.html">SortBuffers</a>. The following example shows their combined usage.</dd></dl>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> sort_test(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>* h_keys, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>* h_data)</div>
+<div class="line">{</div>
+<div class="line">    <span class="comment">// allocate twice as much storage as the input to accomodate for ping-pong buffers</span></div>
+<div class="line">    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;device_tag,uint32&gt;</a> d_keys( n * 2 );</div>
+<div class="line">    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;device_tag,uint32&gt;</a> d_data( n * 2 );</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// copy the test data to the host</span></div>
+<div class="line">    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>( h_keys, h_keys + n, d_keys.begin() );</div>
+<div class="line">    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>( h_data, h_data + n, d_data.begin() );</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// prepare the sorting buffers</span></div>
+<div class="line">    cuda::SortBuffers&lt;uint32*,uint32*&gt; sort_buffers;</div>
+<div class="line">    sort_buffers.keys[0] = <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( d_keys );</div>
+<div class="line">    sort_buffers.keys[1] = <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( d_keys ) + n;</div>
+<div class="line">    sort_buffers.data[0] = <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( d_data );</div>
+<div class="line">    sort_buffers.data[1] = <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( d_data ) + n;</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// and sort the data</span></div>
+<div class="line">    cuda::SortEnactor sort_enactor;</div>
+<div class="line">    sort_enactor.sort( n, sort_buffers );</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// the sorted device data is now in here:</span></div>
+<div class="line">    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>* d_sorted_keys = sort_buffers.current_keys();</div>
+<div class="line">    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>* d_sorted_data = sort_buffers.current_values();</div>
+<div class="line">    ...</div>
+<div class="line">}</div>
+</div><!-- fragment --> 
+<p>Definition at line <a class="el" href="sort_8h_source.html#l00157">157</a> of file <a class="el" href="sort_8h_source.html">sort.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="sort_8h_source.html">sort.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -517,7 +544,7 @@ Public Methods</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 10:25:42 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 30 2015 16:44:06 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

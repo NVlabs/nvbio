@@ -1094,7 +1094,7 @@ void radix_sort(
     KeyIterator                         keys,
     nvbio::vector<system_tag,uint8>&    temp_storage)
 {
-    radix_sort( system_tag(), n, keys );
+    radix_sort( system_tag(), n, keys, temp_storage );
 }
 
 // device-wide sort by key
@@ -1159,7 +1159,7 @@ void radix_sort(
     ValueIterator                       values,
     nvbio::vector<host_tag,uint8>&      temp_storage)
 {
-    thrust::sort_by_key( keys, keys + n, values );
+    thrust::sort_by_key( keys, keys + n, values, temp_storage );
 }
 
 // system-wide sort by key

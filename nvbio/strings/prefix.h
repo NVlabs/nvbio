@@ -38,11 +38,21 @@ namespace nvbio {
 ///@addtogroup StringSetsModule
 ///@{
 
-typedef uint32      string_prefix_coord_type;
-typedef uint64      long_string_prefix_coord_type;
+/// 32-bit string prefix coordinates type
+///
+typedef uint32 string_prefix_coord_type;
 
-typedef uint32_2    string_set_prefix_coord_type;
-typedef uint64_2    long_string_set_prefix_coord_type;
+/// 64-bit string prefix coordinates type
+///
+typedef uint64 long_string_prefix_coord_type;
+
+/// 32-bit string-set prefix coordinates type
+///
+typedef uint32_2 string_set_prefix_coord_type;
+
+/// 64-bit string-set prefix coordinates type
+///
+typedef uint64_2 long_string_set_prefix_coord_type;
 
 ///@addtogroup Private
 ///@{
@@ -360,7 +370,17 @@ template <typename StringType, typename CoordType, uint32 CoordDim>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 uint32 length(const PrefixCore<StringType,CoordType,CoordDim>& prefix) { return prefix.length(); }
 
+///\anchor PrefixSets
+///\par
 /// Represent a set of prefixes of a string or string-set. An PrefixSet is a \ref StringSetAnchor "String Set".
+///\par
+/// For a string T[0,...,n-1], a prefix is a substring T[0,j). An PrefixSet is hence defined
+/// by a string and a collection of indices { i_0, ..., i_m }.
+/// These coordinates must be of type \ref string_suffix_coord_type or \ref long_string_suffix_coord_type.
+///\par
+/// For a string-set, an prefix is instead defined as a pair (k,i), where k denotes the string index in
+/// the set and i denotes the prefix ending coordinate.
+/// These coordinates must be of type \ref string_set_prefix_coord_type or \ref long_string_set_prefix_coord_type.
 ///
 /// \tparam SequenceType        the string or string-set type
 /// \tparam PrefixIterator      the prefix iterator type - value_type can be string_prefix_coord_type for strings, string_set_prefix_coord_type for string-sets

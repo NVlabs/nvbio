@@ -38,11 +38,21 @@ namespace nvbio {
 ///@addtogroup StringSetsModule
 ///@{
 
-typedef uint32      string_suffix_coord_type;
-typedef uint64      long_string_suffix_coord_type;
+/// 32-bit string suffix coordinates type
+///
+typedef uint32 string_suffix_coord_type;
 
-typedef uint32_2    string_set_suffix_coord_type;
-typedef uint64_2    long_string_set_suffix_coord_type;
+/// 64-bit string suffix coordinates type
+///
+typedef uint64 long_string_suffix_coord_type;
+
+/// 32-bit string-set suffix coordinates type
+///
+typedef uint32_2 string_set_suffix_coord_type;
+
+/// 64-bit string-set suffix coordinates type
+///
+typedef uint64_2 long_string_set_suffix_coord_type;
 
 ///@addtogroup Private
 ///@{
@@ -361,7 +371,17 @@ template <typename StringType, typename CoordType, uint32 CoordDim>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 uint32 length(const SuffixCore<StringType,CoordType,CoordDim>& suffix) { return suffix.length(); }
 
-/// Represent a set of suffixes of a string or string-set. An SuffixSet is a \ref StringSetAnchor "String Set".
+///\anchor SuffixSets
+///\par
+/// Represent a set of suffixes of a string or string-set. A SuffixSet is a \ref StringSetAnchor "String Set".
+///\par
+/// For a string T[0,...,n-1], a suffix is a substring T[i,n). A SuffixSet is hence defined
+/// by a string and a collection of indices { i_0, ..., i_m }.
+/// These coordinates must be of type \ref string_suffix_coord_type or \ref long_string_suffix_coord_type.
+///\par
+/// For a string-set, an prefix is instead defined as a pair (k,i), where k denotes the string index in
+/// the set and i denotes the suffix starting coordinate.
+/// These coordinates must be of type \ref string_set_suffix_coord_type or \ref long_string_set_suffix_coord_type.
 ///
 /// \tparam SequenceType        the string or string-set type
 /// \tparam SuffixIterator      the suffix iterator type - value_type can be string_suffix_coord_type for strings, string_set_suffix_coord_type

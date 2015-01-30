@@ -38,11 +38,21 @@ namespace nvbio {
 ///@addtogroup StringSetsModule
 ///@{
 
-typedef uint32_2    string_infix_coord_type;
-typedef uint64_2    long_string_infix_coord_type;
+/// 32-bit string infix coordinates type
+///
+typedef uint32_2 string_infix_coord_type;
 
-typedef uint32_4    string_set_infix_coord_type;
-typedef uint64_4    long_string_set_infix_coord_type;
+/// 64-bit string infix coordinates type
+///
+typedef uint64_2 long_string_infix_coord_type;
+
+/// 32-bit string-set infix coordinates type
+///
+typedef uint32_4 string_set_infix_coord_type;
+
+/// 64-bit string-set infix coordinates type
+///
+typedef uint64_4 long_string_set_infix_coord_type;
 
 ///@addtogroup Private
 ///@{
@@ -462,10 +472,22 @@ template <typename StringType, typename CoordType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 uint32 length(const Infix<StringType,CoordType>& infix) { return infix.length(); }
 
+///\anchor InfixSets
+///\par
 /// Represent a set of infixes of a string or string-set. An InfixSet is a \ref StringSetAnchor "String Set".
+///\par
+/// For a string T[0,...,n-1], an infix is a substring T[i,j), with i < j. An InfixSet is hence defined
+/// by a string and a collection of ranges { (i_0,j_0), ..., (i_m,j_m) }.
+/// These coordinates must be of type \ref string_infix_coord_type or \ref long_string_infix_coord_type.
+///\par
+/// For a string-set, an infix is instead defined as a tuple (k,i,j), where k denotes the string index in
+/// the set and (i,j) denotes the infix range within the selected string.
+/// These coordinates must be of type \ref string_set_infix_coord_type (which for efficiency purposes is
+/// a 16-byte aligned uint4) or \ref long_string_set_infix_coord_type.
 ///
 /// \tparam SequenceType        the string or string-set type
-/// \tparam InfixIterator       the infix iterator type - value_type can be string_infix_coord_type for strings, string_set_infix_coord_type for string-sets
+/// \tparam InfixIterator       the infix iterator type - value_type can be \ref string_infix_coord_type for strings,
+///                             \ref string_set_infix_coord_type for string-sets
 ///
 template <
     typename SequenceType,

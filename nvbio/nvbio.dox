@@ -260,7 +260,7 @@
 /// Assume you have the string from the previous example, but now want to extract all of its 3-mers,
 /// for example to use them in a seed & extend aligner.
 /// The collection of all 3-mers can be thought of as a set of substrings, or <i>infixes</i> of your original string;
-/// NVBIO represents such an object as an InfixSet.
+/// NVBIO represents such an object as an \ref InfixSets "InfixSet".
 /// Moreover, it provides a function to extract the coordinates of such seeds in <i>parallel</i>.
 ///
 ///\code

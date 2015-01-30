@@ -116,6 +116,7 @@ struct SortBuffers
     Values  values[2];
 };
 
+///\par
 /// A simple class to enact sorts of various kinds
 ///\par
 /// The way most parallel sorting algorithms work require having a set of ping-pong buffers

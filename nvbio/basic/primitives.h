@@ -35,12 +35,14 @@
 #include <thrust/reduce.h>
 #include <thrust/scan.h>
 #include <thrust/copy.h>
+#include <thrust/sort.h>
 #include <thrust/binary_search.h>
 #include <thrust/merge.h>
 #include <thrust/iterator/constant_iterator.h>
 
 #if defined(__CUDACC__)
 #include <nvbio/basic/cuda/primitives.h>
+#include <nvbio/basic/cuda/sort.h>
 #endif
 
 #if defined (_OPENMP)
@@ -294,6 +296,33 @@ void upper_bound(
     KeyIterator                         keys,
     OutputIterator                      indices);
 
+/// system-wide radix-sort
+///
+/// \param n                    number of input items
+/// \param keys                 a system input iterator of keys to be sorted
+///
+template <typename system_tag, typename KeyIterator>
+void radix_sort(
+    const uint32                        n,
+    KeyIterator                         keys,
+    nvbio::vector<system_tag,uint8>&    temp_storage);
+
+/// system-wide radix-sort by key
+///
+/// \param n                    number of input items
+/// \param keys                 a system input iterator of keys to be sorted
+/// \param values               a system input iterator of values to be sorted
+///
+template <typename system_tag, typename KeyIterator, typename ValueIterator>
+void radix_sort(
+    const uint32                        n,
+    KeyIterator                         keys,
+    ValueIterator                       values,
+    nvbio::vector<system_tag,uint8>&    temp_storage);
+
+/// merge two sequences by key
+///
+///
 template <
     typename system_tag,
     typename key_iterator1,

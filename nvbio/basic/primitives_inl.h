@@ -1033,6 +1033,150 @@ void upper_bound(
         indices );
 }
 
+// device-wide sort
+//
+// \param n                    number of input items
+// \param keys                 a system input iterator of keys to be sorted
+//
+template <typename KeyIterator>
+void radix_sort(
+    const device_tag                    tag,
+    const uint32                        n,
+    KeyIterator                         keys,
+    nvbio::vector<device_tag,uint8>&    temp_storage)
+{
+    typedef typename std::iterator_traits<KeyIterator>::value_type key_type;
+
+    cuda::alloc_temp_storage( temp_storage, 2 * n * sizeof(key_type) );
+
+    key_type* keys_ptr = reinterpret_cast<key_type*>( raw_pointer( temp_storage ) );
+
+    thrust::device_ptr<key_type> keys_buf( keys_ptr );
+
+    thrust::copy( keys, keys + n, keys_buf );
+
+    cuda::SortBuffers<key_type*> sort_buffers;
+    sort_buffers.keys[0] = keys_buf;
+    sort_buffers.keys[1] = keys_buf + n;
+
+    cuda::SortEnactor sort_enactor;
+    sort_enactor.sort( n, sort_buffers );
+
+    thrust::copy(
+        keys_buf + sort_buffers.selector() * n,
+        keys_buf + sort_buffers.selector() * n + n,
+        keys );
+}
+
+// host-wide sort
+//
+// \param n                    number of input items
+// \param keys                 a system input iterator of keys to be sorted
+//
+template <typename KeyIterator>
+void radix_sort(
+    const host_tag                      tag,
+    const uint32                        n,
+    KeyIterator                         keys,
+    nvbio::vector<host_tag,uint8>&      temp_storage)
+{
+    thrust::sort( keys, keys + n );
+}
+
+// system-wide sort
+//
+// \param n                    number of input items
+// \param keys                 a system input iterator of keys to be sorted
+//
+template <typename system_tag, typename KeyIterator>
+void radix_sort(
+    const uint32                        n,
+    KeyIterator                         keys,
+    nvbio::vector<system_tag,uint8>&    temp_storage)
+{
+    radix_sort( system_tag(), n, keys );
+}
+
+// device-wide sort by key
+//
+// \param n                    number of input items
+// \param keys                 a system input iterator of keys to be sorted
+// \param values               a system input iterator of values to be sorted
+//
+template <typename KeyIterator, typename ValueIterator>
+void radix_sort(
+    const device_tag                    tag,
+    const uint32                        n,
+    KeyIterator                         keys,
+    ValueIterator                       values,
+    nvbio::vector<device_tag,uint8>&    temp_storage)
+{
+    typedef typename std::iterator_traits<KeyIterator>::value_type   key_type;
+    typedef typename std::iterator_traits<ValueIterator>::value_type value_type;
+
+    cuda::alloc_temp_storage( temp_storage, 2 * n * (sizeof(key_type) + sizeof(value_type)) );
+
+    key_type*     keys_ptr = reinterpret_cast<key_type*>( raw_pointer( temp_storage ) );
+    value_type* values_ptr = reinterpret_cast<value_type*>( keys_ptr + 2 * n );
+
+    thrust::device_ptr<key_type> keys_buf( keys_ptr );
+    thrust::device_ptr<key_type> values_buf( values_ptr );
+
+    thrust::copy( keys,     keys + n,   keys_buf );
+    thrust::copy( values,   values + n, values_buf );
+
+    cuda::SortBuffers<key_type*, value_type*> sort_buffers;
+    sort_buffers.keys[0]   = keys_buf;
+    sort_buffers.keys[1]   = keys_buf + n;
+    sort_buffers.values[0] = values_buf;
+    sort_buffers.values[1] = values_buf + n;
+
+    cuda::SortEnactor sort_enactor;
+    sort_enactor.sort( n, sort_buffers );
+
+    thrust::copy(
+        keys_buf + sort_buffers.selector() * n,
+        keys_buf + sort_buffers.selector() * n + n,
+        keys );
+
+    thrust::copy(
+        values_buf + sort_buffers.selector() * n,
+        values_buf + sort_buffers.selector() * n + n,
+        values );
+}
+
+// host-wide sort by key
+//
+// \param n                    number of input items
+// \param keys                 a system input iterator of keys to be sorted
+// \param values               a system input iterator of values to be sorted
+//
+template <typename KeyIterator, typename ValueIterator>
+void radix_sort(
+    const host_tag                      tag,
+    const uint32                        n,
+    KeyIterator                         keys,
+    ValueIterator                       values,
+    nvbio::vector<host_tag,uint8>&      temp_storage)
+{
+    thrust::sort_by_key( keys, keys + n, values );
+}
+
+// system-wide sort by key
+//
+// \param n                    number of input items
+// \param keys                 a system input iterator of keys to be sorted
+// \param values               a system input iterator of values to be sorted
+//
+template <typename system_tag, typename KeyIterator, typename ValueIterator>
+void radix_sort(
+    const uint32                        n,
+    KeyIterator                         keys,
+    ValueIterator                       values,
+    nvbio::vector<system_tag,uint8>&    temp_storage)
+{
+    radix_sort( system_tag(), n, keys, values, temp_storage );
+}
 
 template <
     typename key_iterator1,

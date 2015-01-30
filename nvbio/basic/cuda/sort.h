@@ -50,7 +50,41 @@ namespace cuda {
 /// - (uint16,uint32)
 /// - (uint32,uint32)
 /// - (uint64,uint32)
+///\par
+/// The way most parallel sorting algorithms work require having a set of ping-pong buffers
+/// that are exchanged at every pass through the data.
+/// In order to do this, and communicate where the sorted data lies after its work, SortEnactor 
+/// employs an auxiliary class, SortBuffers.
+/// The following example shows their combined usage.
 ///
+///\code
+/// void sort_test(const uint32 n, uint32* h_keys, uint32* h_data)
+/// {
+///     // allocate twice as much storage as the input to accomodate for ping-pong buffers
+///     nvbio::vector<device_tag,uint32> d_keys( n * 2 );
+///     nvbio::vector<device_tag,uint32> d_data( n * 2 );
+///
+///     // copy the test data to the host
+///     thrust::copy( h_keys, h_keys + n, d_keys.begin() );
+///     thrust::copy( h_data, h_data + n, d_data.begin() );
+///
+///     // prepare the sorting buffers
+///     cuda::SortBuffers<uint32*,uint32*> sort_buffers;
+///     sort_buffers.keys[0] = raw_pointer( d_keys );
+///     sort_buffers.keys[1] = raw_pointer( d_keys ) + n;
+///     sort_buffers.data[0] = raw_pointer( d_data );
+///     sort_buffers.data[1] = raw_pointer( d_data ) + n;
+///
+///     // and sort the data
+///     cuda::SortEnactor sort_enactor;
+///     sort_enactor.sort( n, sort_buffers );
+///
+///     // the sorted device data is now in here:
+///     uint32* d_sorted_keys = sort_buffers.current_keys();
+///     uint32* d_sorted_data = sort_buffers.current_values();
+///     ...
+/// }
+///\endcode
 ///
 
 ///@addtogroup Basic
@@ -83,6 +117,41 @@ struct SortBuffers
 };
 
 /// A simple class to enact sorts of various kinds
+///\par
+/// The way most parallel sorting algorithms work require having a set of ping-pong buffers
+/// that are exchanged at every pass through the data.
+/// In order to do this, and communicate where the sorted data lies after its work, SortEnactor 
+/// employs an auxiliary class, SortBuffers.
+/// The following example shows their combined usage.
+///
+///\code
+/// void sort_test(const uint32 n, uint32* h_keys, uint32* h_data)
+/// {
+///     // allocate twice as much storage as the input to accomodate for ping-pong buffers
+///     nvbio::vector<device_tag,uint32> d_keys( n * 2 );
+///     nvbio::vector<device_tag,uint32> d_data( n * 2 );
+///
+///     // copy the test data to the host
+///     thrust::copy( h_keys, h_keys + n, d_keys.begin() );
+///     thrust::copy( h_data, h_data + n, d_data.begin() );
+///
+///     // prepare the sorting buffers
+///     cuda::SortBuffers<uint32*,uint32*> sort_buffers;
+///     sort_buffers.keys[0] = raw_pointer( d_keys );
+///     sort_buffers.keys[1] = raw_pointer( d_keys ) + n;
+///     sort_buffers.data[0] = raw_pointer( d_data );
+///     sort_buffers.data[1] = raw_pointer( d_data ) + n;
+///
+///     // and sort the data
+///     cuda::SortEnactor sort_enactor;
+///     sort_enactor.sort( n, sort_buffers );
+///
+///     // the sorted device data is now in here:
+///     uint32* d_sorted_keys = sort_buffers.current_keys();
+///     uint32* d_sorted_data = sort_buffers.current_values();
+///     ...
+/// }
+///\endcode
 ///
 struct SortEnactor
 {

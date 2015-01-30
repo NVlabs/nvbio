@@ -73,6 +73,9 @@
 /// - nvbio::radix_sort()
 /// - nvbio::merge_by_key()
 ///
+///\par
+/// The complete list can be found in the \ref Primitives module documentation.
+///
 
 namespace nvbio {
 

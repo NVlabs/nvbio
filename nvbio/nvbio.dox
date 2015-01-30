@@ -839,7 +839,7 @@
 ///\par
 /// If we want to build an FM-index, the first thing is computing the BWT of the database string we want
 /// to index.
-/// In this example, we'll use a very naive string containing all proteins in a row - but in a real app
+/// In this example, we'll use a very naive string containing all protein characters in a row - but in a real app
 /// this string might contain millions of entries, hence we'll do this using NVBIO's very fast parallel
 /// construction algorithm running on a CUDA device.
 ///
@@ -897,7 +897,7 @@
 /// tables to build an FM-index, we would need storage proportional to the string length times the size
 /// of the alphabet.
 /// The thing is made even worse by the fact that, for the purpose of efficient string packing,
-/// NVBIO treats proteins as 8-bit characters, as 5-bit packing would need cumbersome, slow bit-manipulation
+/// NVBIO treats protein characters as 8-bit characters, as 5-bit packing would need cumbersome, slow bit-manipulation
 /// logic (because individual characters would stride word boundaries).
 /// This means an FM-index would require 128 times more storage than for the 2-bit DNA alphabet!
 ///

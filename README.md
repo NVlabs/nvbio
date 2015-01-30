@@ -19,16 +19,15 @@ original features as well as adding a few more, such as efficient support for di
 
 NVBIO is hosted on GitHub at:
 
-
   http://nvlabs.github.io/nvbio/
 
 
 To compile, you can perform the following easy steps from within the installation directory:
 
-  > mkdir build
-  > cd build
-  > cmake ..
-  > make -j8
+mkdir build;
+cd build;
+cmake ..;
+make -j8;
   
 By default, NVBIO will be compiled for sm_35. For newer architectures, please use the cmake option -DGPU_ARCHITECTURE=sm_XX.
 

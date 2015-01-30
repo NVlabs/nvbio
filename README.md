@@ -24,7 +24,7 @@ NVBIO is hosted on GitHub at:
 
 To compile, you can perform the following easy steps from within the installation directory:
 
-  1, mkdir build;
+  1. mkdir build;
   2. cd build;
   3. cmake ..;
   4. make -j8;

@@ -97,7 +97,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><dl class="section user"><dt></dt><dd>In this example, we want to show NVBIO's support for larger alphabets, particularly showing the composability of compact string representations like <a class="el" href="strings_page.html#WaveletTreeSection">Wavelet Trees</a>, and self-compressed indices like the <a class="el" href="fmindex_page.html#FMIndexSection">FM-index</a>. We are hence going to build a small app performing pattern matching on a protein string.</dd></dl>
 <h1><a class="anchor" id="WaveletFM_BWTBuildingSection"></a>
 Building the BWT</h1>
-<dl class="section user"><dt></dt><dd>If we want to build an FM-index, the first thing is computing the BWT of the database string we want to index. In this example, we'll use a very naive string containing all proteins in a row - but in a real app this string might contain millions of entries, hence we'll do this using NVBIO's very fast parallel construction algorithm running on a CUDA device.</dd></dl>
+<dl class="section user"><dt></dt><dd>If we want to build an FM-index, the first thing is computing the BWT of the database string we want to index. In this example, we'll use a very naive string containing all protein characters in a row - but in a real app this string might contain millions of entries, hence we'll do this using NVBIO's very fast parallel construction algorithm running on a CUDA device.</dd></dl>
 <dl class="section user"><dt></dt><dd><div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code" href="bgzip_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[])</div>
 <div class="line">{</div>
 <div class="line">    <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;waveletfm... started\n&quot;</span>);</div>
@@ -142,7 +142,7 @@ Building the BWT</h1>
 <dl class="section user"><dt></dt><dd>Done: if everything works correctly, this should print the string "bwt: XACDEFGHIKLMNOPQRSTVWYBZ (primary 1)".</dd></dl>
 <h1><a class="anchor" id="WaveletFM_WaveletTreeSection"></a>
 It's a large alphabet, let's use a Wavelet Tree</h1>
-<dl class="section user"><dt></dt><dd>Compared to DNA, the protein alphabet is a largish one, with 24 letters. If we were to use a plain BWT encoding and a standard <a class="el" href="fmindex_page.html#RankDictionarySection">rank dictionary</a> based on sparse occurrence tables to build an FM-index, we would need storage proportional to the string length times the size of the alphabet. The thing is made even worse by the fact that, for the purpose of efficient string packing, NVBIO treats proteins as 8-bit characters, as 5-bit packing would need cumbersome, slow bit-manipulation logic (because individual characters would stride word boundaries). This means an FM-index would require 128 times more storage than for the 2-bit DNA alphabet!</dd></dl>
+<dl class="section user"><dt></dt><dd>Compared to DNA, the protein alphabet is a largish one, with 24 letters. If we were to use a plain BWT encoding and a standard <a class="el" href="fmindex_page.html#RankDictionarySection">rank dictionary</a> based on sparse occurrence tables to build an FM-index, we would need storage proportional to the string length times the size of the alphabet. The thing is made even worse by the fact that, for the purpose of efficient string packing, NVBIO treats protein characters as 8-bit characters, as 5-bit packing would need cumbersome, slow bit-manipulation logic (because individual characters would stride word boundaries). This means an FM-index would require 128 times more storage than for the 2-bit DNA alphabet!</dd></dl>
 <dl class="section user"><dt></dt><dd>But no worries: we can encode our BWT using <a class="el" href="strings_page.html#WaveletTreeSection">Wavelet Trees</a>, a wonderful succint data structure designed to encode large alphabet strings in small space (proportional to the string length times the number of <em>bits</em> required to represent each symbol, i.e. the <em>logarithm</em> of the alphabet size) while allowing O(1) ranking. Let's build a wavelet tree, then...</dd></dl>
 <dl class="section user"><dt></dt><dd><div class="fragment"><div class="line">...</div>
 <div class="line"><span class="comment">// define our wavelet tree storage type and its plain view</span></div>
@@ -247,7 +247,7 @@ Building and querying the FM-index</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:43:08 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 30 2015 18:52:51 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -110,7 +110,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     typename PrefixIterator&gt;<br/>
 struct nvbio::PrefixSet&lt; SequenceType, PrefixIterator &gt;</h3>
 
-<p>Represent a set of prefixes of a string or string-set. An <a class="el" href="structnvbio_1_1_prefix_set.html">PrefixSet</a> is a <a class="el" href="strings_page.html#StringSetAnchor">String Set</a>.</p>
+<p><a class="anchor" id="PrefixSets"></a></p>
+<dl class="section user"><dt></dt><dd>Represent a set of prefixes of a string or string-set. An <a class="el" href="structnvbio_1_1_prefix_set.html">PrefixSet</a> is a <a class="el" href="strings_page.html#StringSetAnchor">String Set</a>. </dd></dl>
+<dl class="section user"><dt></dt><dd>For a string T[0,...,n-1], a prefix is a substring T[0,j). An <a class="el" href="structnvbio_1_1_prefix_set.html">PrefixSet</a> is hence defined by a string and a collection of indices { i_0, ..., i_m }. These coordinates must be of type <a class="el" href="group___string_sets_module.html#ga08d64eb90d454b0f21f5c1c337ba880e">string_suffix_coord_type</a> or <a class="el" href="group___string_sets_module.html#ga6bd02e722b087da1156334a27debbf7f">long_string_suffix_coord_type</a>. </dd></dl>
+<dl class="section user"><dt></dt><dd>For a string-set, an prefix is instead defined as a pair (k,i), where k denotes the string index in the set and i denotes the prefix ending coordinate. These coordinates must be of type <a class="el" href="group___string_sets_module.html#gab0428692fc597009c12e6ba2df9eb30d">string_set_prefix_coord_type</a> or <a class="el" href="group___string_sets_module.html#ga2e9f5009b08db93e5ccb84eeb172ed94">long_string_set_prefix_coord_type</a>.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">SequenceType</td><td>the string or string-set type </td></tr>
@@ -119,7 +122,7 @@ struct nvbio::PrefixSet&lt; SequenceType, PrefixIterator &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00371">371</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00391">391</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="prefix_8h_source.html">prefix.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -196,7 +199,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00379">379</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00399">399</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 
 </div>
 </div>
@@ -214,7 +217,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
 
 <p>the const_iterator type </p>
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00389">389</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00409">409</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 
 </div>
 </div>
@@ -232,7 +235,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
 
 <p>the prefix coordinates type </p>
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00385">385</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00405">405</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 
 </div>
 </div>
@@ -250,7 +253,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
 
 <p>the iterator type </p>
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00388">388</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00408">408</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 
 </div>
 </div>
@@ -268,7 +271,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
 
 <p>the underlingy prefix iterator type </p>
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00382">382</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00402">402</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 
 </div>
 </div>
@@ -286,7 +289,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
 
 <p>the underlying sequence type </p>
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00381">381</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00401">401</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 
 </div>
 </div>
@@ -304,7 +307,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
 
 <p>the prefix string type </p>
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00386">386</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00406">406</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 
 </div>
 </div>
@@ -322,7 +325,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
 
 <p>the system tag </p>
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00383">383</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00403">403</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 
 </div>
 </div>
@@ -351,7 +354,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00394">394</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00414">414</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 
 </div>
 </div>
@@ -396,7 +399,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00399">399</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00419">419</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 
 </div>
 </div>
@@ -426,7 +429,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
 </div><div class="memdoc">
 <p>begin iterator </p>
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00407">407</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00427">427</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 
 </div>
 </div>
@@ -455,7 +458,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
 </div><div class="memdoc">
 <p>begin iterator </p>
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00415">415</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00435">435</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 
 </div>
 </div>
@@ -484,7 +487,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
 </div><div class="memdoc">
 <p>begin iterator </p>
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00411">411</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00431">431</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 
 </div>
 </div>
@@ -513,7 +516,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
 </div><div class="memdoc">
 <p>begin iterator </p>
 
-<p>Definition at line <a class="el" href="prefix_8h_source.html#l00419">419</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
+<p>Definition at line <a class="el" href="prefix_8h_source.html#l00439">439</a> of file <a class="el" href="prefix_8h_source.html">prefix.h</a>.</p>
 
 </div>
 </div>
@@ -523,7 +526,7 @@ template&lt;typename SequenceType , typename PrefixIterator &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 29 2015 09:03:21 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 30 2015 10:25:21 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

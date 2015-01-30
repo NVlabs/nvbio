@@ -110,16 +110,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     typename InfixIterator&gt;<br/>
 struct nvbio::InfixSet&lt; SequenceType, InfixIterator &gt;</h3>
 
-<p>Represent a set of infixes of a string or string-set. An <a class="el" href="structnvbio_1_1_infix_set.html">InfixSet</a> is a <a class="el" href="strings_page.html#StringSetAnchor">String Set</a>.</p>
+<p><a class="anchor" id="InfixSets"></a></p>
+<dl class="section user"><dt></dt><dd>Represent a set of infixes of a string or string-set. An <a class="el" href="structnvbio_1_1_infix_set.html">InfixSet</a> is a <a class="el" href="strings_page.html#StringSetAnchor">String Set</a>. </dd></dl>
+<dl class="section user"><dt></dt><dd>For a string T[0,...,n-1], an infix is a substring T[i,j), with i &lt; j. An <a class="el" href="structnvbio_1_1_infix_set.html">InfixSet</a> is hence defined by a string and a collection of ranges { (i_0,j_0), ..., (i_m,j_m) }. These coordinates must be of type <a class="el" href="group___string_sets_module.html#ga43f43aa26e577e9d4c7f859227e11464">string_infix_coord_type</a> or <a class="el" href="group___string_sets_module.html#gae6618a73f3efa5fb9e401bee7e289d82">long_string_infix_coord_type</a>. </dd></dl>
+<dl class="section user"><dt></dt><dd>For a string-set, an infix is instead defined as a tuple (k,i,j), where k denotes the string index in the set and (i,j) denotes the infix range within the selected string. These coordinates must be of type <a class="el" href="group___string_sets_module.html#ga71ecfc758a63a4bcf233ea33ed801f42">string_set_infix_coord_type</a> (which for efficiency purposes is a 16-byte aligned uint4) or <a class="el" href="group___string_sets_module.html#ga9cb2cd73ee2bb184b5508cfa5b8600c0">long_string_set_infix_coord_type</a>.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">SequenceType</td><td>the string or string-set type </td></tr>
-    <tr><td class="paramname">InfixIterator</td><td>the infix iterator type - value_type can be string_infix_coord_type for strings, string_set_infix_coord_type for string-sets </td></tr>
+    <tr><td class="paramname">InfixIterator</td><td>the infix iterator type - value_type can be <a class="el" href="group___string_sets_module.html#ga43f43aa26e577e9d4c7f859227e11464">string_infix_coord_type</a> for strings, <a class="el" href="group___string_sets_module.html#ga71ecfc758a63a4bcf233ea33ed801f42">string_set_infix_coord_type</a> for string-sets </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00473">473</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00495">495</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="infix_8h_source.html">infix.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -196,7 +199,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00481">481</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00503">503</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -214,7 +217,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
 
 <p>the const_iterator type </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00491">491</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00513">513</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -232,7 +235,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
 
 <p>the infix coordinates type </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00487">487</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00509">509</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -250,7 +253,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
 
 <p>the underlingy infix iterator type </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00484">484</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00506">506</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -268,7 +271,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
 
 <p>the iterator type </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00490">490</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00512">512</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -286,7 +289,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
 
 <p>the underlying sequence type </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00483">483</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00505">505</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -304,7 +307,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
 
 <p>the infix string type </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00488">488</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00510">510</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -322,7 +325,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
 
 <p>the system tag </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00485">485</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00507">507</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -351,7 +354,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00496">496</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00518">518</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -396,7 +399,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00501">501</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00523">523</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -426,7 +429,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
 </div><div class="memdoc">
 <p>begin iterator </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00509">509</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00531">531</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -455,7 +458,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
 </div><div class="memdoc">
 <p>begin iterator </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00517">517</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00539">539</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -484,7 +487,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
 </div><div class="memdoc">
 <p>begin iterator </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00513">513</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00535">535</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -513,7 +516,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
 </div><div class="memdoc">
 <p>begin iterator </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00521">521</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00543">543</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -523,7 +526,7 @@ template&lt;typename SequenceType , typename InfixIterator &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 29 2015 09:03:20 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 30 2015 10:25:20 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

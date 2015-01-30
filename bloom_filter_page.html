@@ -86,7 +86,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="index.html">NVBIO</a></li><li class="navelem"><a class="el" href="nvbio_page.html">NVBIO</a></li><li class="navelem"><a class="el" href="basic_page.html">Basic Module</a></li>  </ul>
+<li class="navelem"><a class="el" href="index.html">NVBIO</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -114,14 +114,14 @@ Example</h1>
 <div class="line">{</div>
 <div class="line">    <span class="comment">// build a set of 1M random integers</span></div>
 <div class="line">    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> N = 1000000;</div>
-<div class="line">    thrust::host_vector&lt;uint32&gt; h_vector( N );</div>
+<div class="line">    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;host_tag,uint32&gt;</a> h_vector( N );</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// fill it up</span></div>
 <div class="line">    <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i = 0; i &lt; N; ++i)</div>
 <div class="line">        h_vector[i] = rand();</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// copy it to the device</span></div>
-<div class="line">    thrust::device_vector&lt;uint32&gt; d_vector = h_vector;</div>
+<div class="line">    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;device_tag,uint32&gt;</a> d_vector = h_vector;</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// construct an empty Bloom filter</span></div>
 <div class="line">    <span class="keyword">typedef</span> bloom_filter&lt;2,hash_functor1,hash_functor2,uint32*&gt; bloom_filter_type;</div>
@@ -130,7 +130,7 @@ Example</h1>
 <div class="line">                                    <span class="comment">// NOTE: this is still a lot less than 1-bit for each</span></div>
 <div class="line">                                    <span class="comment">// of the 4+ billion integers out there...</span></div>
 <div class="line"></div>
-<div class="line">    thrust::device_vector&lt;uint32&gt; d_filter_storage( filter_words, 0u );</div>
+<div class="line">    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;device_tag,uint32&gt;</a> d_filter_storage( filter_words, 0u );</div>
 <div class="line">    bloom_filter_type d_filter(</div>
 <div class="line">       filter_words * 32,</div>
 <div class="line">       <a class="code" href="group___packed_streams.html#gaa8a57b67f0319432f01a849df6699bfe">plain_view</a>( d_filter_storage ) );</div>
@@ -139,7 +139,7 @@ Example</h1>
 <div class="line">    populate_kernel&lt;&lt;&lt;util::divide_ri(N,128),128&gt;&gt;&gt;( N, <a class="code" href="group___packed_streams.html#gaa8a57b67f0319432f01a849df6699bfe">plain_view</a>( d_vector ), d_filter );</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// copy the filter back on the host</span></div>
-<div class="line">    thrust::host_vector&lt;uint32&gt; h_filter_storage = filter_storage;</div>
+<div class="line">    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;host_tag,uint32&gt;</a> h_filter_storage = filter_storage;</div>
 <div class="line">    bloom_filter_type h_filter(</div>
 <div class="line">       filter_words * 32,</div>
 <div class="line">       <a class="code" href="group___packed_streams.html#gaa8a57b67f0319432f01a849df6699bfe">plain_view</a>( h_filter_storage ) );</div>
@@ -150,7 +150,7 @@ Example</h1>
 </div><!-- fragment --> </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 29 2015 09:02:45 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 30 2015 10:24:45 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

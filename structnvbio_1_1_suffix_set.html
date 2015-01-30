@@ -110,7 +110,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     typename SuffixIterator&gt;<br/>
 struct nvbio::SuffixSet&lt; SequenceType, SuffixIterator &gt;</h3>
 
-<p>Represent a set of suffixes of a string or string-set. An <a class="el" href="structnvbio_1_1_suffix_set.html">SuffixSet</a> is a <a class="el" href="strings_page.html#StringSetAnchor">String Set</a>.</p>
+<p><a class="anchor" id="SuffixSets"></a></p>
+<dl class="section user"><dt></dt><dd>Represent a set of suffixes of a string or string-set. A <a class="el" href="structnvbio_1_1_suffix_set.html">SuffixSet</a> is a <a class="el" href="strings_page.html#StringSetAnchor">String Set</a>. </dd></dl>
+<dl class="section user"><dt></dt><dd>For a string T[0,...,n-1], a suffix is a substring T[i,n). A <a class="el" href="structnvbio_1_1_suffix_set.html">SuffixSet</a> is hence defined by a string and a collection of indices { i_0, ..., i_m }. These coordinates must be of type <a class="el" href="group___string_sets_module.html#ga08d64eb90d454b0f21f5c1c337ba880e">string_suffix_coord_type</a> or <a class="el" href="group___string_sets_module.html#ga6bd02e722b087da1156334a27debbf7f">long_string_suffix_coord_type</a>. </dd></dl>
+<dl class="section user"><dt></dt><dd>For a string-set, an prefix is instead defined as a pair (k,i), where k denotes the string index in the set and i denotes the suffix starting coordinate. These coordinates must be of type <a class="el" href="group___string_sets_module.html#ga61ee486f827d767c26f5f35f7a4dc2e9">string_set_suffix_coord_type</a> or <a class="el" href="group___string_sets_module.html#gaaa6b4d5a0d97f7a74e153e23ef77286f">long_string_set_suffix_coord_type</a>.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">SequenceType</td><td>the string or string-set type </td></tr>
@@ -119,7 +122,7 @@ struct nvbio::SuffixSet&lt; SequenceType, SuffixIterator &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00372">372</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00392">392</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="suffix_8h_source.html">suffix.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -196,7 +199,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00380">380</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00400">400</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 
 </div>
 </div>
@@ -214,7 +217,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
 
 <p>the const_iterator type </p>
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00390">390</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00410">410</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 
 </div>
 </div>
@@ -232,7 +235,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
 
 <p>the suffix coordinates type </p>
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00386">386</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00406">406</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 
 </div>
 </div>
@@ -250,7 +253,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
 
 <p>the iterator type </p>
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00389">389</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00409">409</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 
 </div>
 </div>
@@ -268,7 +271,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
 
 <p>the underlying sequence type </p>
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00382">382</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00402">402</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 
 </div>
 </div>
@@ -286,7 +289,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
 
 <p>the suffix string type </p>
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00387">387</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00407">407</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 
 </div>
 </div>
@@ -304,7 +307,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
 
 <p>the underlingy suffix iterator type </p>
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00383">383</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00403">403</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 
 </div>
 </div>
@@ -322,7 +325,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
 
 <p>the system tag </p>
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00384">384</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00404">404</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 
 </div>
 </div>
@@ -351,7 +354,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00395">395</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00415">415</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 
 </div>
 </div>
@@ -396,7 +399,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00400">400</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00420">420</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 
 </div>
 </div>
@@ -426,7 +429,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
 </div><div class="memdoc">
 <p>begin iterator </p>
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00408">408</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00428">428</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 
 </div>
 </div>
@@ -455,7 +458,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
 </div><div class="memdoc">
 <p>begin iterator </p>
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00416">416</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00436">436</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 
 </div>
 </div>
@@ -484,7 +487,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
 </div><div class="memdoc">
 <p>begin iterator </p>
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00412">412</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00432">432</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 
 </div>
 </div>
@@ -513,7 +516,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
 </div><div class="memdoc">
 <p>begin iterator </p>
 
-<p>Definition at line <a class="el" href="suffix_8h_source.html#l00420">420</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
+<p>Definition at line <a class="el" href="suffix_8h_source.html#l00440">440</a> of file <a class="el" href="suffix_8h_source.html">suffix.h</a>.</p>
 
 </div>
 </div>
@@ -523,7 +526,7 @@ template&lt;typename SequenceType , typename SuffixIterator &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 29 2015 09:03:22 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 30 2015 10:25:22 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -312,7 +312,7 @@ var searchData=
   ['primitives_2eh',['primitives.h',['../cuda_2primitives_8h.html',1,'']]],
   ['primitives_5finl_2eh',['primitives_inl.h',['../primitives__inl_8h.html',1,'']]],
   ['primitives_5finl_2eh',['primitives_inl.h',['../cuda_2primitives__inl_8h.html',1,'']]],
-  ['parallel_20primitives',['Parallel Primitives',['../primitives_page.html',1,'basic_page']]],
+  ['parallel_20primitives',['Parallel Primitives',['../primitives_page.html',1,'index']]],
   ['print',['print',['../structnvbio_1_1aln_1_1_score_matrices_3_01_n_00_01_m_00_01aln_1_1_edit_distance_tag_01_4.html#ad9d61841dcf8bb0ac0b4898a89f15b5f',1,'nvbio::aln::ScoreMatrices&lt; N, M, aln::EditDistanceTag &gt;::print()'],['../structnvbio_1_1aln_1_1_score_matrices_3_01_n_00_01_m_00_01aln_1_1_smith_waterman_tag_01_4.html#ad0bd8c4e4ca7ff80808419c310e5e85b',1,'nvbio::aln::ScoreMatrices&lt; N, M, aln::SmithWatermanTag &gt;::print()'],['../structnvbio_1_1aln_1_1_score_matrices_3_01_n_00_01_m_00_01aln_1_1_gotoh_tag_01_4.html#aaf8eca9b30e64c783019b202bbd41a8f',1,'nvbio::aln::ScoreMatrices&lt; N, M, aln::GotohTag &gt;::print()']]],
   ['print_5fdot_5fgraph',['print_dot_graph',['../structdebruijn__graph.html#a369b31e17c5e3d7563f2026095a5ee42',1,'debruijn_graph']]],
   ['print_5fheader',['PRINT_HEADER',['../tabix_8c.html#aaedcebcc011a5a75aea1e107ad435268',1,'tabix.c']]],

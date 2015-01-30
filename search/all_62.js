@@ -681,7 +681,7 @@ var searchData=
   ['bloom_5ffilter',['bloom_filter',['../structnvbio_1_1bloom__filter.html',1,'nvbio']]],
   ['bloom_5ffilter_2eh',['bloom_filter.h',['../bloom__filter_8h.html',1,'']]],
   ['bloom_5ffilter_5finl_2eh',['bloom_filter_inl.h',['../bloom__filter__inl_8h.html',1,'']]],
-  ['bloom_20filters',['Bloom Filters',['../bloom_filter_page.html',1,'basic_page']]],
+  ['bloom_20filters',['Bloom Filters',['../bloom_filter_page.html',1,'index']]],
   ['bloom_20filters',['Bloom Filters',['../group___bloom_filter_module.html',1,'']]],
   ['bm_5ferror',['BM_ERROR',['../cram__structs_8h.html#aaba757c9ea23fabb284dc002713c30a5a88101b6cb7e050019872d39148eaaba9',1,'cram_structs.h']]],
   ['bns_5ffiles_5fmismatch',['bns_files_mismatch',['../structnvbio_1_1bns__files__mismatch.html',1,'nvbio']]],

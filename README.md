@@ -24,13 +24,10 @@ NVBIO is hosted on GitHub at:
 
 To compile, you can perform the following easy steps from within the installation directory:
 
-  mkdir build;
-  
-  cd build;
-  
-  cmake ..;
-  
-  make -j8;
+  1, mkdir build;
+  2. cd build;
+  3. cmake ..;
+  4. make -j8;
   
 By default, NVBIO will be compiled for sm_35. For newer architectures, please use the cmake option -DGPU_ARCHITECTURE=sm_XX.
 

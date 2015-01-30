@@ -1056,15 +1056,15 @@ void radix_sort(
     thrust::copy( keys, keys + n, keys_buf );
 
     cuda::SortBuffers<key_type*> sort_buffers;
-    sort_buffers.keys[0] = keys_buf;
-    sort_buffers.keys[1] = keys_buf + n;
+    sort_buffers.keys[0] = keys_ptr;
+    sort_buffers.keys[1] = keys_ptr + n;
 
     cuda::SortEnactor sort_enactor;
     sort_enactor.sort( n, sort_buffers );
 
     thrust::copy(
-        keys_buf + sort_buffers.selector() * n,
-        keys_buf + sort_buffers.selector() * n + n,
+        keys_buf + sort_buffers.selector * n,
+        keys_buf + sort_buffers.selector * n + n,
         keys );
 }
 
@@ -1114,10 +1114,12 @@ void radix_sort(
     typedef typename std::iterator_traits<KeyIterator>::value_type   key_type;
     typedef typename std::iterator_traits<ValueIterator>::value_type value_type;
 
-    cuda::alloc_temp_storage( temp_storage, 2 * n * (sizeof(key_type) + sizeof(value_type)) );
+    const uint32 aligned_key_bytes = align<16>( 2 * n * sizeof(key_type) );
+    const uint32 aligned_val_bytes =            2 * n * sizeof(value_type);
+    cuda::alloc_temp_storage( temp_storage, aligned_key_bytes + aligned_val_bytes );
 
     key_type*     keys_ptr = reinterpret_cast<key_type*>( raw_pointer( temp_storage ) );
-    value_type* values_ptr = reinterpret_cast<value_type*>( keys_ptr + 2 * n );
+    value_type* values_ptr = reinterpret_cast<value_type*>( raw_pointer( temp_storage ) + aligned_key_bytes );
 
     thrust::device_ptr<key_type> keys_buf( keys_ptr );
     thrust::device_ptr<key_type> values_buf( values_ptr );
@@ -1126,22 +1128,22 @@ void radix_sort(
     thrust::copy( values,   values + n, values_buf );
 
     cuda::SortBuffers<key_type*, value_type*> sort_buffers;
-    sort_buffers.keys[0]   = keys_buf;
-    sort_buffers.keys[1]   = keys_buf + n;
-    sort_buffers.values[0] = values_buf;
-    sort_buffers.values[1] = values_buf + n;
+    sort_buffers.keys[0]   = keys_ptr;
+    sort_buffers.keys[1]   = keys_ptr + n;
+    sort_buffers.values[0] = values_ptr;
+    sort_buffers.values[1] = values_ptr + n;
 
     cuda::SortEnactor sort_enactor;
     sort_enactor.sort( n, sort_buffers );
 
     thrust::copy(
-        keys_buf + sort_buffers.selector() * n,
-        keys_buf + sort_buffers.selector() * n + n,
+        keys_buf + sort_buffers.selector * n,
+        keys_buf + sort_buffers.selector * n + n,
         keys );
 
     thrust::copy(
-        values_buf + sort_buffers.selector() * n,
-        values_buf + sort_buffers.selector() * n + n,
+        values_buf + sort_buffers.selector * n,
+        values_buf + sort_buffers.selector * n + n,
         values );
 }
 

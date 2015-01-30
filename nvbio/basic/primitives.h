@@ -68,6 +68,10 @@
 /// - nvbio::copy_flagged()
 /// - nvbio::copy_if()
 /// - nvbio::runlength_encode()
+/// - nvbio::upper_bound()
+/// - nvbio::lower_bound()
+/// - nvbio::radix_sort()
+/// - nvbio::merge_by_key()
 ///
 
 namespace nvbio {
@@ -300,6 +304,7 @@ void upper_bound(
 ///
 /// \param n                    number of input items
 /// \param keys                 a system input iterator of keys to be sorted
+/// \param temp_storage         some temporary storage
 ///
 template <typename system_tag, typename KeyIterator>
 void radix_sort(
@@ -312,6 +317,7 @@ void radix_sort(
 /// \param n                    number of input items
 /// \param keys                 a system input iterator of keys to be sorted
 /// \param values               a system input iterator of values to be sorted
+/// \param temp_storage         some temporary storage
 ///
 template <typename system_tag, typename KeyIterator, typename ValueIterator>
 void radix_sort(
@@ -322,6 +328,15 @@ void radix_sort(
 
 /// merge two sequences by key
 ///
+/// \param A_len                number of input items in the first sequence
+/// \param B_len                number of input items in the second sequence
+/// \param A_keys               a system input iterator of keys to be merged from the first sequence
+/// \param B_keys               a system input iterator of keys to be merged from the second sequence
+/// \param A_values             a system input iterator of values to be merged from the first sequence
+/// \param B_values             a system input iterator of values to be merged from the second sequence
+/// \param C_keys               a system output iterator to the final merged keys
+/// \param C_values             a system output iterator of the final merged values
+/// \param temp_storage         some temporary storage
 ///
 template <
     typename system_tag,

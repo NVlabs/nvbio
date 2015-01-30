@@ -37,11 +37,11 @@ namespace nvbio {
 namespace cuda {
 
 /// \page sorting_page Sorting
-///
+///\par
 /// The SortEnactor provides a convenient wrapper around the fastest CUDA sorting library available,
 /// allowing to perform both key-only and key-value pair sorting of arrays with the following
 /// data-types:
-///
+///\par
 /// - uint8
 /// - uint16
 /// - uint32

@@ -45,12 +45,37 @@
 ///\par
 /// Additionally, NVBIO contains a suite of applications built on top of it, including a re-engineered
 /// implementation of the famous <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a> short read aligner.
-/// Unlike many prototypes, nvBowtie is an attempt to build an industrial strength aligner, reproducing most of Bowtie2's
+/// Unlike many prototypes, \subpage nvbowtie_page "nvBowtie" is an attempt to build an industrial strength aligner, reproducing most of Bowtie2's
 /// original features as well as adding a few more, such as efficient support for direct BAM (and soon CRAM) output.
 ///\par
 /// Similarly, it contains the fastest BWT builders for strings and string-sets available to date.
 /// NVBIO can in fact perform the BWT of individual strings containing several billion characters or string-sets containing
 /// up to ~100 billion symbols at an unprecedented speed of roughly <i>80M symbols/s</i>, on a single Tesla K40.
+///
+/// \section Features
+///\par
+/// Here's a short list of some of the most noteworthy features of NVBIO:
+///\par
+/// - many \subpage strings_page "strings" and \ref StringSetInterface "string-sets" representations,
+///   including \subpage hello_dna_page "packed string" encodings for arbitrary \ref AlphabetsSection "alphabets"
+/// - \subpage fmindex_page "FM-index" and \ref BidirectionalFMIndex "Bidirectional FM-index" construction and lookup algorithms
+///   on arbitrary strings, and compile-time alphabets.
+/// - novel, state-of-the-art parallel \subpage sufsort_page "suffix sorting" and \subpage sufsort_page "BWT" construction
+///   algorithms for very large strings and string sets, on arbitrary alphabets
+/// - \subpage waveletfm_page "Wavelet Trees" and other succint data structures for large alphabet strings
+/// - efficient parallel \ref MEMFiltersSection "k-Maximal Extension Match" filters
+/// - novel, state-of-the-art parallel \subpage qgram_page "Q-Gram" (or k-mer) \subpage qgram_page "Index" construction and lookup
+/// - \subpage alignment_page "Dynamic Programming Alignment" with parallel implementations of most scoring algorithms
+///   (e.g. Edit-Distance, Smith-Waterman, Gotoh,...) with support for global, semi-global or local alignment,
+///   in both banded and full-matrix modes, on arbitrary string types
+/// - parallel \subpage bloom_filter_page "Bloom Filter" construction and lookup
+/// - state-of-the-art support for many \subpage primitives_page "parallel primitives", like sorting, reduction, prefix-sum,
+///   stream compaction, run-length encoding, etc
+/// - state-of-the-art \subpage io_page "I/O" of common sequencing formats (e.g. FASTA, FASTQ, BAM), with transparent,
+///   parallel compression/decompression
+///\par
+/// importantly, all of the above algorithms and data-structures have both CPU and GPU implementations,
+/// easily selected through template specialization.
 ///
 /// \section Links
 ///

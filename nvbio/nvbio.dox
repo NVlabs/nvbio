@@ -850,7 +850,7 @@
 ///     log_info(stderr, "waveletfm... started\n");
 /// 
 ///     // this string will be our protein database we want to search in - just a short string
-///     // with all proteins in sequence
+///     // with all protein characters in sequence
 ///     const char* proteins = "ACDEFGHIKLMNOPQRSTVWYBZX";
 ///     const uint32 text_len = 24;
 /// 

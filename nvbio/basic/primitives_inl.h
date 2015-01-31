@@ -1033,6 +1033,8 @@ void upper_bound(
         indices );
 }
 
+#if defined(__CUDACC__)
+
 // device-wide sort
 //
 // \param n                    number of input items
@@ -1066,35 +1068,6 @@ void radix_sort(
         keys_buf + sort_buffers.selector * n,
         keys_buf + sort_buffers.selector * n + n,
         keys );
-}
-
-// host-wide sort
-//
-// \param n                    number of input items
-// \param keys                 a system input iterator of keys to be sorted
-//
-template <typename KeyIterator>
-void radix_sort(
-    const host_tag                      tag,
-    const uint32                        n,
-    KeyIterator                         keys,
-    nvbio::vector<host_tag,uint8>&      temp_storage)
-{
-    thrust::sort( keys, keys + n );
-}
-
-// system-wide sort
-//
-// \param n                    number of input items
-// \param keys                 a system input iterator of keys to be sorted
-//
-template <typename system_tag, typename KeyIterator>
-void radix_sort(
-    const uint32                        n,
-    KeyIterator                         keys,
-    nvbio::vector<system_tag,uint8>&    temp_storage)
-{
-    radix_sort( system_tag(), n, keys, temp_storage );
 }
 
 // device-wide sort by key
@@ -1145,6 +1118,37 @@ void radix_sort(
         values_buf + sort_buffers.selector * n,
         values_buf + sort_buffers.selector * n + n,
         values );
+}
+
+#endif
+
+// host-wide sort
+//
+// \param n                    number of input items
+// \param keys                 a system input iterator of keys to be sorted
+//
+template <typename KeyIterator>
+void radix_sort(
+    const host_tag                      tag,
+    const uint32                        n,
+    KeyIterator                         keys,
+    nvbio::vector<host_tag,uint8>&      temp_storage)
+{
+    thrust::sort( keys, keys + n );
+}
+
+// system-wide sort
+//
+// \param n                    number of input items
+// \param keys                 a system input iterator of keys to be sorted
+//
+template <typename system_tag, typename KeyIterator>
+void radix_sort(
+    const uint32                        n,
+    KeyIterator                         keys,
+    nvbio::vector<system_tag,uint8>&    temp_storage)
+{
+    radix_sort( system_tag(), n, keys, temp_storage );
 }
 
 // host-wide sort by key

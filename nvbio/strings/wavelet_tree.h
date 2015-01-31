@@ -86,7 +86,7 @@ struct WaveletTree
     typedef WaveletTree<BitStreamIterator,IndexIterator>            text_type;   // the text is the wavelet tree itself
 
     typedef typename vector_type<index_type,2>::type                range_type;
-    typedef typename null_type                                      vector_type; // unsupported, would require knowing alphabet size
+    typedef null_type                                               vector_type; // unsupported, would require knowing alphabet size
 
     /// constructor
     ///

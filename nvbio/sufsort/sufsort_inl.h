@@ -60,7 +60,7 @@ typename string_type::index_type find_primary(
     const typename string_type::index_type  string_len,
     const string_type                       string)
 {
-    const uint32 SYMBOL_SIZE = string_type::SYMBOL_SIZE;
+    NVBIO_VAR_UNUSED const uint32 SYMBOL_SIZE = string_type::SYMBOL_SIZE;
 
     // compute the primary by simply counting how many of the suffixes between 1 and N
     // are lexicographically less than the primary suffix
@@ -83,11 +83,11 @@ void suffix_sort(
           BWTParams*         params)
 {
     typedef uint32 word_type;
-    const uint32 WORD_BITS   = uint32( 8u * sizeof(word_type) );
-    const uint32 DOLLAR_BITS = 4;
+    NVBIO_VAR_UNUSED const uint32 WORD_BITS   = uint32( 8u * sizeof(word_type) );
+    NVBIO_VAR_UNUSED const uint32 DOLLAR_BITS = 4;
 
-    const uint32 SYMBOL_SIZE      = 2u;
-    const uint32 SYMBOLS_PER_WORD = priv::symbols_per_word<SYMBOL_SIZE,WORD_BITS,DOLLAR_BITS>();
+    NVBIO_VAR_UNUSED const uint32 SYMBOL_SIZE      = 2u;
+    NVBIO_VAR_UNUSED const uint32 SYMBOLS_PER_WORD = priv::symbols_per_word<SYMBOL_SIZE,WORD_BITS,DOLLAR_BITS>();
 
     int current_device;
     cudaGetDevice( &current_device );

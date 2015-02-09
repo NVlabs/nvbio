@@ -47,6 +47,16 @@ namespace cuda {
 ///@{
 
 ///
+///@defgroup CompressionSortModule Compression Sort
+/// This module classes implementing a novel, efficient device-side string and suffix sorting
+/// algorithm based on a large-radix MSD radix sort, inspired by Tero Karras and Timo Aila's
+/// <i>Flexible Parallel Sorting through Iterative Key Compression</i>
+///
+
+///@addtogroup CompressionSortModule
+///@{
+
+///
 /// A delay list keeping track of delayed sorting indices
 ///
 template <typename OutputIterator>
@@ -275,6 +285,7 @@ private:
     mgpu::ContextPtr                m_mgpu;
 };
 
+///@} CompressionSortModule
 ///@} Sufsort
 
 

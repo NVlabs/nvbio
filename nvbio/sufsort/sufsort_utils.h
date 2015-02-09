@@ -39,7 +39,20 @@ namespace nvbio {
 ///@addtogroup Sufsort
 ///@{
 
-/// base virtual interface used by all string-set BWT handlers
+///
+///@defgroup SetBWTHandlersModule Set-BWT Handlers
+/// This module contains a series of \ref SetBWTOutputHandler "SetBWTOutputHandlers"
+///
+
+///
+///@defgroup StringSuffixHandlersModule String Suffix Handlers
+/// This module contains a series of \ref StringSuffixHandler "StringSuffixHandlers"
+///
+
+///@addtogroup SetBWTHandlersModule
+///@{
+
+/// base virtual interface used by all string-set BWT handlers (a model of \ref SetBWTOutputHandler)
 ///
 struct SetBWTHandler
 {
@@ -67,7 +80,7 @@ struct SetBWTHandler
         const uint64* dollar_ids) {}
 };
 
-/// A class to output the BWT to a (potentially packed) device string
+/// A \ref SetBWTOutputHandler class to output a string-set BWT to a (potentially packed) device string
 ///
 template <typename OutputIterator>
 struct DeviceBWTHandler : public SetBWTHandler
@@ -117,7 +130,7 @@ struct DeviceBWTHandler : public SetBWTHandler
     nvbio::vector<device_tag,uint8> d_bwt;
 };
 
-/// A class to output the BWT to a host string
+/// A \ref SetBWTOutputHandler class to output a string-set BWT to a (potentially packed) host string
 ///
 template <typename OutputIterator>
 struct HostBWTHandler : public SetBWTHandler
@@ -170,7 +183,7 @@ struct HostBWTHandler : public SetBWTHandler
     OutputIterator output;
 };
 
-/// A class to output the BWT to a packed host string
+/// A \ref SetBWTOutputHandler class to output a string-set BWT to a (potentially packed) host string
 ///
 template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename word_type>
 struct HostBWTHandler< PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint64> > : public SetBWTHandler
@@ -282,13 +295,18 @@ struct HostBWTHandler< PackedStream<word_type*,uint8,SYMBOL_SIZE,BIG_ENDIAN,uint
     uint64         offset;
 };
 
-/// A class to output the BWT to a packed host string
+/// A \ref SetBWTOutputHandler class to discard a string-set BWT
 ///
 struct DiscardBWTHandler : public SetBWTHandler
 {
 };
 
-/// a utility StringSuffixHandler to compute the BWT of the sorted suffixes
+///@} SetBWTHandlersModule
+
+///@addtogroup StringSuffixHandlersModule
+///@{
+
+/// a utility \ref StringSuffixHandler to compute the BWT of the sorted suffixes
 ///
 template <typename string_type, typename output_iterator>
 struct StringBWTHandler
@@ -426,7 +444,7 @@ struct StringBWTHandler
     thrust::device_vector<uint8>    d_block_bwt;
 };
 
-/// a utility StringSuffixHandler to retain a Sampled Suffix Array
+/// a utility \ref StringSuffixHandler to retain a Sampled Suffix Array
 ///
 template <typename output_iterator>
 struct StringSSAHandler
@@ -512,7 +530,7 @@ struct StringSSAHandler
     thrust::host_vector<uint32>     h_suffixes;
 };
 
-/// a utility StringSuffixHandler to retain the BWT and a Sampled Suffix Array
+/// a utility \ref StringSuffixHandler to retain the BWT and a Sampled Suffix Array
 ///
 template <typename string_type, typename output_bwt_iterator, typename output_ssa_iterator>
 struct StringBWTSSAHandler
@@ -562,6 +580,8 @@ struct StringBWTSSAHandler
     StringSSAHandler<output_ssa_iterator>             ssa_handler;
 };
 
-///@}
+///@} StringSuffixHandlersModule
+
+///@} Sufsort
 
 } // namespace nvbio

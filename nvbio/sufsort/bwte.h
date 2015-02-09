@@ -52,6 +52,15 @@ namespace nvbio {
 ///@{
 
 ///
+///@defgroup SetBWTEModule Set-BWTE
+/// This module contains functions and classes implementing the set-bwte algorithm described in:
+/// http://arxiv.org/abs/1410.0562
+///
+
+///@addtogroup SetBWTEModule
+///@{
+
+///
 /// Helper structure to hold a sorted block during BWTE
 ///
 struct BWTEBlock
@@ -226,6 +235,7 @@ void bwte(
         SparseSymbolSet&                    BWT_ext_dollars,
         BWTParams*                          params = NULL);
 
+///@} SetBWTEModule
 ///@} Sufsort
 
 } // namespace nvbio

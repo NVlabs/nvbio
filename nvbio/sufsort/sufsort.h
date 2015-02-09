@@ -142,6 +142,7 @@ void suffix_sort(
     output_iterator                                         output,
     BWTParams*                                              params);
 
+///\anchor StringSuffixHandler
 /// Sort all the suffixes of a given string using an adaptation of the Blockwise Suffix Sorting
 /// algorithm by J.Kärkkäinen, and can hence work in a confined amount of host and device memory
 /// (as specified by \ref BWTParams).
@@ -203,7 +204,23 @@ typename string_type::index_type bwt(
     output_iterator                         output,
     BWTParams*                              params);
 
+/// \anchor SetSuffixOutputHandler
 /// Sort the suffixes of all the strings in the given string set
+///
+/// \tparam string_set_type         string-set type
+/// \tparam output_handler          an output handler, exposing the following interface:
+///
+/// \code
+/// struct SetSuffixOutputHandler
+/// {
+///     // process a batch of BWT symbols
+///     void process(
+///        const uint32  n_suffixes,        // number of sorted suffixes emitted
+///        const uint32* d_suffixes,        // device-side array of sorted global suffix indices
+///        const uint32* d_string_ids,      // device-side array of the string ids bound to each suffix
+///        const uint32* d_cum_lengths);    // device-side array of cumulative string lengths
+/// };
+/// \endcode
 ///
 /// \param string_set               a device-side packed-concatenated string-set
 /// \param output                   output handler
@@ -215,6 +232,7 @@ void suffix_sort(
           output_handler&    output,
     BWTParams*               params = NULL);
 
+/// \anchor SetBWTOutputHandler
 /// Build the bwt of a device-side string set
 ///
 /// \tparam SYMBOL_SIZE             alphabet size, in bits per symbol
@@ -222,7 +240,7 @@ void suffix_sort(
 /// \tparam output_handler          an output handler, exposing the following interface:
 ///
 /// \code
-/// struct BWTOutputHandler
+/// struct SetBWTOutputHandler
 /// {
 ///     // process a batch of BWT symbols
 ///     void process(

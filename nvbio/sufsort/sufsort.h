@@ -288,7 +288,7 @@ void large_bwt(
         output_handler&             output,
         BWTParams*                  params = NULL);
 
-///@}
+///@} Sufsort
 
 } // namespace nvbio
 

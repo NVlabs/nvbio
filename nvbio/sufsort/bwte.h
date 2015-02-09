@@ -48,6 +48,9 @@ namespace nvbio {
   #define HOST_STRING_IDS
 #endif
 
+///@addtogroup Sufsort
+///@{
+
 ///
 /// Helper structure to hold a sorted block during BWTE
 ///
@@ -222,6 +225,8 @@ void bwte(
         PagedText<SYMBOL_SIZE,BIG_ENDIAN>&  BWT_ext,
         SparseSymbolSet&                    BWT_ext_dollars,
         BWTParams*                          params = NULL);
+
+///@} Sufsort
 
 } // namespace nvbio
 

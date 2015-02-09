@@ -48,6 +48,9 @@
 namespace nvbio {
 namespace cuda {
 
+///@addtogroup Sufsort
+///@{
+
 /// Sort a list of suffixes of a given string
 ///
 /// \return         position of the primary suffix / $ symbol

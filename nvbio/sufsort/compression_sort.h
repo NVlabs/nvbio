@@ -43,6 +43,9 @@
 namespace nvbio {
 namespace cuda {
 
+///@addtogroup Sufsort
+///@{
+
 ///
 /// A delay list keeping track of delayed sorting indices
 ///
@@ -126,12 +129,21 @@ struct CompressionSort
 
     /// Sort a given batch of suffixes using Iterative Compression Sorting - an algorithm inspired by
     /// Tero Karras and Timo Aila's "Flexible Parallel Sorting through Iterative Key Compression".
+    /// The sorter will attempt to sort all suffixes based on at least d and at most D "words" (each
+    /// formed by packing as many characters as possible in a 32-bit word).
+    /// If after d words there are ties which need to be solved, and the suffixes forming ties are less than
+    /// 1/1000 of the input, those suffixes will be saved in a "delay list".
+    /// Analogously, any ties will be saved to the delay list after D words have been explored, no matter
+    /// how many there are.
     ///
     /// \param string_len           string length
     /// \param string               string iterator
     /// \param n_suffixes           number of suffixes to sort
     /// \param d_indices            device vector of input suffixes
     /// \param d_suffixes           device vector of output suffixes
+    /// \param delay_min_threshold  minimum number of words d used for sorting, before delaying is enabled
+    /// \param delay_max_threshold  maximum number of words D used for sorting
+    /// \param delay_list           the output delay list
     ///
     /// All the other parameters are temporary device buffers
     ///
@@ -150,7 +162,26 @@ struct CompressionSort
     ///
     /// \tparam set_type            a set of "word" strings, needs to provide the following
     ///                             interface:
-    ///                             TODO
+    ///\code                             
+    /// interface WordStringSet
+    /// {
+    ///     // prepare to extract a "slice" of words from a given subset of the strings
+    ///     void init_slice(
+    ///         const uint32  n_strings,            // number of strings in the slice
+    ///         const uint32* strings,              // a device pointer to the subset of strings in the slice (if NULL, the range [0,n_strings) is implied)
+    ///         const uint32  word_range_begin,     // the beginning of the range of words that will be required
+    ///         const uint32  word_range_end);      // the end of the range of words that will be required
+    ///
+    ///     // extract the given word from the given subset of strings
+    ///     void extract(
+    ///         const uint32  n_strings,            // number of strings in the slice
+    ///         const uint32* strings,              // a device pointer to the subset of strings in the slice (if NULL, the range [0,n_strings) is implied)
+    ///         const uint32  word_idx,             // the index of the word to be extraced from each string
+    ///         const uint32  word_range_begin,     // the beginning of the range of words defining the slice we are operating on
+    ///         const uint32  word_range_end,       // the end of the range of words defining the slice we are operating on
+    ///               uint32* out_words);           // the output set of words extracted from the given strings
+    /// };
+    ///\endcode
     ///
     /// \param set                  the set of items to sort
     /// \param n_strings            the number of items to sort
@@ -239,6 +270,9 @@ private:
     thrust::device_vector<uint8>    d_temp_flags;       ///< temp flags
     mgpu::ContextPtr                m_mgpu;
 };
+
+///@} Sufsort
+
 
 // Sort a given batch of suffixes using Iterative Compression Sorting - an algorithm inspired by
 // Tero Karras and Timo Aila's "Flexible Parallel Sorting through Iterative Key Compression".

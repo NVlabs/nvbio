@@ -109,9 +109,14 @@ struct DiscardDelayList
     {}
 };
 
-///
-/// A sorting enactor for sorting strings using Iterative Compression Sorting - an algorithm inspired by
-/// Tero Karras and Timo Aila's "Flexible Parallel Sorting through Iterative Key Compression".
+///\par
+/// A sorting enactor for sorting strings or string suffixes using Iterative Compression Sorting - an
+/// algorithm inspired by Tero Karras and Timo Aila's <i>Flexible Parallel Sorting through Iterative Key Compression</i>.
+///\par
+/// The algorithm is essentially a parallel MSD radix sort, where the digits are words obtained packing as many symbols
+/// as possible into a 32-bit word.
+/// At each radix pass, the sorter prunes completely sorted strings, and keeps sorting ties using Sean Baxter's fast
+/// segmented sort algorithm available inside his Modern-GPU library.
 ///
 struct CompressionSort
 {
@@ -128,12 +133,12 @@ struct CompressionSort
         m_mgpu( _mgpu ) {}
 
     /// Sort a given batch of suffixes using Iterative Compression Sorting - an algorithm inspired by
-    /// Tero Karras and Timo Aila's "Flexible Parallel Sorting through Iterative Key Compression".
-    /// The sorter will attempt to sort all suffixes based on at least d and at most D "words" (each
+    /// Tero Karras and Timo Aila's <i>Flexible Parallel Sorting through Iterative Key Compression</i>.
+    /// The sorter will attempt to sort all suffixes based on at least <i>d</i> and at most <i>D</i> <i>words</i> (each
     /// formed by packing as many characters as possible in a 32-bit word).
-    /// If after d words there are ties which need to be solved, and the suffixes forming ties are less than
-    /// 1/1000 of the input, those suffixes will be saved in a "delay list".
-    /// Analogously, any ties will be saved to the delay list after D words have been explored, no matter
+    /// If after <i>d</i> words there are ties which need to be solved, and the suffixes forming ties are less than
+    /// 1/1000 of the input, those suffixes will be saved in a <i>delay list</i>.
+    /// Analogously, any ties will be saved to the delay list after <i>D</i> words have been explored, no matter
     /// how many there are.
     ///
     /// \param string_len           string length

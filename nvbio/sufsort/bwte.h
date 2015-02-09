@@ -53,7 +53,8 @@ namespace nvbio {
 
 ///
 ///@defgroup SetBWTEModule Set-BWTE
-/// This module contains functions and classes implementing the set-bwte algorithm described in:
+/// This module contains functions and classes implementing the <a href="http://arxiv.org/abs/1410.0562">set-bwte</a> algorithm described in: \n
+/// "A massively parallel algorithm for constructing the BWT of large string sets" \n
 /// http://arxiv.org/abs/1410.0562
 ///
 
@@ -83,7 +84,7 @@ struct BWTEBlock
 };
 
 ///
-/// Parallel BWTE algorithm for computing the BWT of a string-set.
+/// A context for the incremental parallel <a href="http://arxiv.org/abs/1410.0562">set-bwte</a> algorithm for computing the BWT of a string-set.
 ///
 /// \tparam SYMBOL_SIZE         the size of the symbols, in bits
 /// \tparam BIG_ENDIAN          whether the input/output packed streams are big endian
@@ -220,10 +221,11 @@ private:
 };
 
 ///
-/// Parallel BWTE algorithm for computing the BWT of a string-set.
+/// Parallel <a href="http://arxiv.org/abs/1410.0562">set-bwte</a> algorithm for computing the BWT of a string-set.
 ///
 /// \param string_set           the input set of strings
-/// \param output               the output handler for the resulting BWT
+/// \param BWT_ext              the output <i>external</i> BWT, stored into a PagedText
+/// \param BWT_ext_dollars      the output <i>external</i> BWT dollar symbols, stored as a SparseSymbolSet
 /// \param params               the BWT construction parameters
 ///
 template <uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type, typename offsets_iterator>

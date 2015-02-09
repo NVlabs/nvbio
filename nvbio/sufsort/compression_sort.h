@@ -138,8 +138,7 @@ struct CompressionSort
     /// formed by packing as many characters as possible in a 32-bit word).
     /// If after <i>d</i> words there are ties which need to be solved, and the suffixes forming ties are less than
     /// 1/1000 of the input, those suffixes will be saved in a <i>delay list</i>.
-    /// Analogously, any ties will be saved to the delay list after <i>D</i> words have been explored, no matter
-    /// how many there are.
+    /// Analogously, after <i>D</i> words have been sorted, any ties, no matter how many, will be saved to the delay list.
     ///
     /// \param string_len           string length
     /// \param string               string iterator

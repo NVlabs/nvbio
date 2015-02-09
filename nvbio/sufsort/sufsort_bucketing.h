@@ -45,6 +45,11 @@ namespace priv {
 
 /// A context class to perform suffix bucketing for all suffixes of a string-set
 ///
+///\tparam SYMBOL_SIZE          the size of the symbols, in bits
+///\tparam N_BITS               the number of bits used for bucketing
+///\tparam DOLLAR_BITS          the number of bits used for encoding whether and where a dollar occurrs in the first N_BITS
+///\tparam bucket_type          the word type used to encode buckets, i.e the first N_BITS of each suffix
+///
 template <uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename bucket_type = uint32>
 struct DeviceCoreSetSuffixBucketer
 {
@@ -350,6 +355,14 @@ public:
 
 /// A context class to perform suffix bucketing for all suffixes of a string-set
 ///
+///\tparam SYMBOL_SIZE          the size of the symbols, in bits
+///\tparam BIG_ENDIAN           the endianness of the symbols in each word of the packed string set
+///\tparam storage_type         the storage iterator type of the input packed string
+///\tparam N_BITS               the number of bits used for bucketing
+///\tparam DOLLAR_BITS          the number of bits used for encoding whether and where a dollar occurrs in the first N_BITS
+///\tparam bucket_type          the word type used to encode buckets, i.e the first N_BITS of each suffix
+///\tparam system_tag           the system tag identifying the memory-space where the input string-set resides in
+///
 template <
     uint32   SYMBOL_SIZE,
     bool     BIG_ENDIAN,
@@ -610,7 +623,7 @@ public:
     float bin_time;
 };
 
-/// A context class to perform suffix bucketing for all suffixes of a string-set
+/// A context class to perform suffix bucketing for all suffixes of a string-set, using a host core
 ///
 template <uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename bucket_type = uint32>
 struct HostCoreSetSuffixBucketer
@@ -765,7 +778,14 @@ public:
     uint32                           max_suffix_len;
 };
 
-/// A context class to perform suffix bucketing for all suffixes of a string-set
+/// A context class to perform suffix bucketing for all suffixes of a string-set on the host
+///
+///\tparam SYMBOL_SIZE          the size of the symbols, in bits
+///\tparam BIG_ENDIAN           the endianness of the symbols in each word of the packed string set
+///\tparam storage_type         the storage iterator type of the input packed string
+///\tparam N_BITS               the number of bits used for bucketing
+///\tparam DOLLAR_BITS          the number of bits used for encoding whether and where a dollar occurrs in the first N_BITS
+///\tparam bucket_type          the word type used to encode buckets, i.e the first N_BITS of each suffix
 ///
 template <
     uint32   SYMBOL_SIZE,

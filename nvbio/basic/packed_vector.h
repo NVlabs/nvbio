@@ -152,7 +152,6 @@ struct PackedVector
     index_type                       m_size;
 };
 
-
 /// return a plain view of a PackedVector object
 ///
 template <typename SystemTag, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>

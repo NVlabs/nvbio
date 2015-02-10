@@ -318,7 +318,7 @@ typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type  match(
 {
     typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
     typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type range_type;
-    typedef typename std::iterator_traits<Iterator>::value_type             symbol_type;
+    typedef typename string_traits<Iterator>::value_type                    symbol_type;
 
     // backward search
     range_type range = in_range;
@@ -359,7 +359,7 @@ typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type match_reverse(
 {
     typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::index_type index_type;
     typedef typename fm_index<TRankDictionary,TSuffixArray,TL2>::range_type range_type;
-    typedef typename std::iterator_traits<Iterator>::value_type             symbol_type;
+    typedef typename string_traits<Iterator>::value_type                    symbol_type;
 
     // forward search
     range_type range = make_vector( index_type(0), fmi.length() );

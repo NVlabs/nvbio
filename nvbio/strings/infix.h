@@ -221,6 +221,8 @@ template <
     typename CoordType>
 struct Infix : public InfixCore< StringType, CoordType, vector_traits<CoordType>::DIM >
 {
+    static const uint32 SYMBOL_SIZE = string_traits<StringType>::SYMBOL_SIZE;
+
     typedef InfixCore< StringType, CoordType, vector_traits<CoordType>::DIM >   core_type;
     typedef StringType                                                          string_type;
     typedef CoordType                                                           coord_type;

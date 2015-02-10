@@ -28,20 +28,38 @@
 #pragma once
 
 #include <nvbio/basic/types.h>
-#include <nvbio/basic/vector_view.h>
-#include <nvbio/strings/string_traits.h>
-#include <string.h>
-
 
 namespace nvbio {
 
 ///@addtogroup Strings
 ///@{
 
-/// length of an ASCII string
-///
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint64 length(const char* str) { return strlen( str ); }
+template <typename T>
+struct string_traits
+{
+    static const uint32 SYMBOL_SIZE = T::SYMBOL_SIZE;
+
+    typedef typename T::value_type  value_type;
+    typedef typename T::reference   reference;
+};
+
+template <>
+struct string_traits<char*>
+{
+    static const uint32 SYMBOL_SIZE = 8u;
+
+    typedef char  value_type;
+    typedef char& reference;
+};
+
+template <>
+struct string_traits<const char*>
+{
+    static const uint32 SYMBOL_SIZE = 8u;
+
+    typedef char  value_type;
+    typedef char& reference;
+};
 
 ///@} Strings
 

@@ -32,7 +32,7 @@
 #pragma once
 
 #include <nvbio/basic/types.h>
-#include <nvbio/basic/vector_view.h>
+#include <nvbio/strings/string_traits.h>
 #include <iterator>
 #include <vector>
 
@@ -218,6 +218,18 @@ struct vector_view
 
     IndexType   m_size;
     Iterator    m_vec;
+};
+
+///\relates vector_view
+/// string_traits specialization for vector_view
+///
+template <typename Iterator, typename IndexType>
+struct string_traits< vector_view<Iterator,IndexType> >
+{
+    static const uint32 SYMBOL_SIZE = string_traits<Iterator>::SYMBOL_SIZE;
+
+    typedef typename vector_view<Iterator,IndexType>::value_type  value_type;
+    typedef typename vector_view<Iterator,IndexType>::reference   reference;
 };
 
 /// return length of a vector_view

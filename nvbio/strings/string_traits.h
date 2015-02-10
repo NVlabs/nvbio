@@ -34,6 +34,8 @@ namespace nvbio {
 ///@addtogroup Strings
 ///@{
 
+/// a string-traits class needed to reason about proper strings
+///
 template <typename T>
 struct string_traits
 {
@@ -43,22 +45,26 @@ struct string_traits
     typedef typename T::reference   reference;
 };
 
-template <>
-struct string_traits<char*>
+/// a string-traits specialization for plain arrays (like C strings)
+///
+template <typename T>
+struct string_traits<T*>
 {
-    static const uint32 SYMBOL_SIZE = 8u;
+    static const uint32 SYMBOL_SIZE = 8u * uint32( sizeof(T) );
 
-    typedef char  value_type;
-    typedef char& reference;
+    typedef T  value_type;
+    typedef T& reference;
 };
 
-template <>
-struct string_traits<const char*>
+/// a string-traits specialization for plain arrays (like C strings)
+///
+template <typename T>
+struct string_traits<const T*>
 {
-    static const uint32 SYMBOL_SIZE = 8u;
+    static const uint32 SYMBOL_SIZE = 8u * uint32( sizeof(T) );
 
-    typedef char  value_type;
-    typedef char& reference;
+    typedef T  value_type;
+    typedef T& reference;
 };
 
 ///@} Strings

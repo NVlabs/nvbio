@@ -121,6 +121,7 @@ struct SimpleGotohScheme
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 match(const uint8 q = 0)      const { return m_match; };
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 mismatch(const uint8 q = 0)   const { return m_mismatch; };
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 mismatch(const uint8 a, const uint8 b, const uint8 q = 0)   const { return m_mismatch; };
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 substitution(const uint32 r_i, const uint32 q_j, const uint8 r, const uint8 q, const uint8 qq = 0) const { return q == r ? m_match : m_mismatch; };
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 pattern_gap_open()            const { return m_gap_open; };
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 pattern_gap_extension()       const { return m_gap_ext; };
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 text_gap_open()               const { return m_gap_open; };

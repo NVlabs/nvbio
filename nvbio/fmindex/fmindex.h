@@ -30,7 +30,7 @@
 #include <nvbio/basic/types.h>
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/fmindex/rank_dictionary.h>
-#include <nvbio/strings/string.h>
+#include <nvbio/strings/string_traits.h>
 
 namespace nvbio {
 

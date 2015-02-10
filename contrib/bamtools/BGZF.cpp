@@ -83,7 +83,7 @@ BgzfData::BgzfData(const uint32_t threads)
         // poll until all background threads are ready
         while (BackgroundThreads < ThreadCount) {}
     }
-    catch( std::bad_alloc& ba ) {
+    catch( std::bad_alloc& ) {
         printf("ERROR: Unable to allocate memory for our BGZF object.\n");
         exit(1);
     }

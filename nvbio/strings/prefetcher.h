@@ -245,6 +245,122 @@ struct StringPrefetcher<
     loader_type loader;
 };
 
+///
+/// A class to prefetch a plain string using a local-memory cache
+///
+/// \tparam T                   the string symbol type
+/// \tparam CACHE_SIZE          the local-memory cache size, in words
+///
+template <typename T, uint32 CACHE_SIZE>
+struct StringPrefetcher<
+    vector_view<const T*>,
+    lmem_cache_tag<CACHE_SIZE> >
+{
+    typedef vector_view<const T*>   input_string_type;
+    typedef vector_view<const T*>   string_type;
+
+    /// given a string, prefetch all its content and return a new string object
+    /// wrapping the cached version
+    ///
+    /// \param string       input string
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    string_type load(const input_string_type& string)
+    {
+        const uint32 L = string.size();
+
+        // check whether the cache is too small
+        if (L > CACHE_SIZE)
+            return string;
+
+        for (uint32 i = 0; i < L; ++i)
+            cache[i] = string[i];
+
+        return string_type( L, cache );
+    }
+
+    /// given a string, prefetch the contents of a substring and return a new string object
+    /// wrapping the cached version
+    ///
+    /// \param string           input string
+    /// \param range            range of the substring to load
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    string_type load(
+        const input_string_type& string,
+        const uint2              range)
+    {
+        // check whether the cache is too small, to prevent overflows
+        if (range.y - range.x > CACHE_SIZE)
+            return string;
+
+        for (uint32 i = range.x; i < range.y; ++i)
+            cache[i - range.x] = string[i];
+
+        return string_type( string.size(), cache - range.x );
+    }
+
+    T cache[CACHE_SIZE];
+};
+
+///
+/// A class to prefetch a plain string using a local-memory cache
+///
+/// \tparam T                   the string symbol type
+/// \tparam CACHE_SIZE          the local-memory cache size, in words
+///
+template <typename T, uint32 CACHE_SIZE>
+struct StringPrefetcher<
+    vector_view<T*>,
+    lmem_cache_tag<CACHE_SIZE> >
+{
+    typedef vector_view<T*>         input_string_type;
+    typedef vector_view<const T*>   string_type;
+
+    /// given a string, prefetch all its content and return a new string object
+    /// wrapping the cached version
+    ///
+    /// \param string       input string
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    string_type load(const input_string_type& string)
+    {
+        const uint32 L = string.size();
+
+        // check whether the cache is too small
+        if (L > CACHE_SIZE)
+            return string_type( L, string.base() );
+
+        for (uint32 i = 0; i < L; ++i)
+            cache[i] = string[i];
+
+        return string_type( L, cache );
+    }
+
+    /// given a string, prefetch the contents of a substring and return a new string object
+    /// wrapping the cached version
+    ///
+    /// \param string           input string
+    /// \param range            range of the substring to load
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    string_type load(
+        const input_string_type& string,
+        const uint2              range)
+    {
+        // check whether the cache is too small, to prevent overflows
+        if (range.y - range.x > CACHE_SIZE)
+            return string_type( L, string.base() );
+
+        for (uint32 i = range.x; i < range.y; ++i)
+            cache[i - range.x] = string[i];
+
+        return string_type( string.size(), cache - range.x );
+    }
+
+    T cache[CACHE_SIZE];
+};
+
 ///@} StringPrefetchers
 ///@} Strings
 

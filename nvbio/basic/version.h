@@ -27,9 +27,9 @@
 
 #pragma once
 
-#define NVBIO_VERSION           100090                       // 1.0.90
+#define NVBIO_VERSION           100091                       // 1.0.91
 #define NVBIO_MAJOR_VERSION     (NVBIO_VERSION / 100000)
 #define NVBIO_MINOR_VERSION     (NVBIO_VERSION / 100 % 1000)
 #define NVBIO_SUBMINOR_VERSION  (NVBIO_VERSION % 100)
 
-#define NVBIO_VERSION_STRING    "1.0.90"
+#define NVBIO_VERSION_STRING    "1.0.91"

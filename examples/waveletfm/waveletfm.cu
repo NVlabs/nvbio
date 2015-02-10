@@ -50,21 +50,23 @@ int main(int argc, char* argv[])
 
     const char* proteins = "ACDEFGHIKLMNOPQRSTVWYBZX";
     const uint32 text_len = 24;
+    const uint32 alphabet_bits = AlphabetTraits<PROTEIN>::SYMBOL_SIZE;
+    const uint32 alphabet_size = 1u << alphabet_bits;
 
     // print the text
     log_info(stderr, "  text: %s\n", proteins);
 
     // allocate a host packed vector
-    PackedVector<host_tag,8u,true> h_text( text_len );
+    PackedVector<host_tag,alphabet_bits,true> h_text( text_len );
 
     // pack the string
     from_string<PROTEIN>( proteins, proteins + text_len, h_text.begin() );
 
     // copy it to the device
-    PackedVector<device_tag,8u,true> d_text( h_text );
+    PackedVector<device_tag,alphabet_bits,true> d_text( h_text );
 
     // allocate a vector for the BWT
-    PackedVector<device_tag,8u,true> d_bwt( text_len + 1 );
+    PackedVector<device_tag,alphabet_bits,true> d_bwt( text_len + 1 );
 
     BWTParams bwt_params;
 
@@ -76,8 +78,6 @@ int main(int argc, char* argv[])
         char proteins_bwt[ 25 ];
 
         to_string<PROTEIN>( d_bwt.begin(), d_bwt.begin() + text_len, proteins_bwt );
-
-        proteins_bwt[24] = '\0';
 
         log_info(stderr, "  bwt: %s (primary %u)\n", proteins_bwt, primary);
     }
@@ -99,13 +99,13 @@ int main(int argc, char* argv[])
     const wavelet_tree_view_type wavelet_bwt_view = plain_view( (const wavelet_tree_type&)wavelet_bwt );
 
     // build the L2 vector
-    nvbio::vector<device_tag,uint32> L2(257);
+    nvbio::vector<device_tag,uint32> L2(alphabet_size+1);
 
     // note we perform this on the host, even though the wavelet tree is on the device -
     // gonna be slow, but it's not much stuff, and this is just an example anyway...
     // and we just want to show that NVBIO is designed to make everything work!
     L2[0] = 0;
-    for (uint32 i = 1; i <= 256; ++i)
+    for (uint32 i = 1; i <= alphabet_size; ++i)
         L2[i] = L2[i-1] + rank( wavelet_bwt_view, text_len, i-1u );
 
     // build the FM-index

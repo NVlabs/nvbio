@@ -63,8 +63,8 @@ struct string_traits<const T*>
 {
     static const uint32 SYMBOL_SIZE = 8u * uint32( sizeof(T) );
 
-    typedef T  value_type;
-    typedef T& reference;
+    typedef T        value_type;
+    typedef const T& reference;
 };
 
 ///@} Strings

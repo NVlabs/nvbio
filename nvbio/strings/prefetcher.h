@@ -256,6 +256,9 @@ struct StringPrefetcher<
     vector_view<const T*>,
     lmem_cache_tag<CACHE_SIZE> >
 {
+    static const uint32 CACHE_BYTES = CACHE_SIZE * sizeof(uint32);
+    static const uint32 CACHE_ITEMS = CACHE_BYTES / sizeof(T);
+
     typedef vector_view<const T*>   input_string_type;
     typedef vector_view<const T*>   string_type;
 
@@ -270,7 +273,7 @@ struct StringPrefetcher<
         const uint32 L = string.size();
 
         // check whether the cache is too small
-        if (L > CACHE_SIZE)
+        if (L > CACHE_ITEMS)
             return string;
 
         for (uint32 i = 0; i < L; ++i)
@@ -291,7 +294,7 @@ struct StringPrefetcher<
         const uint2              range)
     {
         // check whether the cache is too small, to prevent overflows
-        if (range.y - range.x > CACHE_SIZE)
+        if (range.y - range.x > CACHE_ITEMS)
             return string;
 
         for (uint32 i = range.x; i < range.y; ++i)
@@ -300,7 +303,7 @@ struct StringPrefetcher<
         return string_type( string.size(), cache - range.x );
     }
 
-    T cache[CACHE_SIZE];
+    T cache[CACHE_ITEMS];
 };
 
 ///
@@ -314,6 +317,9 @@ struct StringPrefetcher<
     vector_view<T*>,
     lmem_cache_tag<CACHE_SIZE> >
 {
+    static const uint32 CACHE_BYTES = CACHE_SIZE * sizeof(uint32);
+    static const uint32 CACHE_ITEMS = CACHE_BYTES / sizeof(T);
+
     typedef vector_view<T*>         input_string_type;
     typedef vector_view<const T*>   string_type;
 
@@ -328,7 +334,7 @@ struct StringPrefetcher<
         const uint32 L = string.size();
 
         // check whether the cache is too small
-        if (L > CACHE_SIZE)
+        if (L > CACHE_ITEMS)
             return string_type( L, string.base() );
 
         for (uint32 i = 0; i < L; ++i)
@@ -349,7 +355,7 @@ struct StringPrefetcher<
         const uint2              range)
     {
         // check whether the cache is too small, to prevent overflows
-        if (range.y - range.x > CACHE_SIZE)
+        if (range.y - range.x > CACHE_ITEMS)
             return string_type( L, string.base() );
 
         for (uint32 i = range.x; i < range.y; ++i)
@@ -358,7 +364,7 @@ struct StringPrefetcher<
         return string_type( string.size(), cache - range.x );
     }
 
-    T cache[CACHE_SIZE];
+    T cache[CACHE_ITEMS];
 };
 
 ///@} StringPrefetchers

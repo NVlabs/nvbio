@@ -356,7 +356,7 @@ struct StringPrefetcher<
     {
         // check whether the cache is too small, to prevent overflows
         if (range.y - range.x > CACHE_ITEMS)
-            return string_type( L, string.base() );
+            return string_type( string.size(), string.base() );
 
         for (uint32 i = range.x; i < range.y; ++i)
             cache[i - range.x] = string[i];

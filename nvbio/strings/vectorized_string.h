@@ -160,11 +160,11 @@ struct vectorized_string< vector_view<const T*,IndexType> >
     {
         const uint64 offset = (uint64(string.base()) / sizeof(T)) % VECTOR_WIDTH_T;
 
-        const uint64 aligned_begin = util::round_i( offset,                 VECTOR_WIDTH ) - offset;
-        const uint64 aligned_end   = util::round_z( offset + string.size(), VECTOR_WIDTH ) - offset;
+        const uint64 aligned_begin = util::round_i( offset,                 VECTOR_WIDTH );
+        const uint64 aligned_end   = util::round_z( offset + string.size(), VECTOR_WIDTH );
 
         return aligned_begin < aligned_end ?
-            make_uint2( aligned_begin, aligned_end ) :
+            make_uint2( aligned_begin - offset, aligned_end - offset ) :
             make_uint2( string.size(), string.size() );
     }
 
@@ -224,11 +224,12 @@ struct vectorized_string< vector_view< PackedStream<InputStream,Symbol,SYMBOL_SI
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     static uint2 range(const string_type& string)
     {
-        const index_type aligned_begin = util::round_i( string.base().index(),                 VECTOR_WIDTH ) - string.base().index();
-        const index_type aligned_end   = util::round_z( string.base().index() + string.size(), VECTOR_WIDTH ) - string.base().index();
+        const index_type offset        = string.base().index();
+        const index_type aligned_begin = util::round_i( offset,                 VECTOR_WIDTH );
+        const index_type aligned_end   = util::round_z( offset + string.size(), VECTOR_WIDTH );
 
         return aligned_begin < aligned_end ?
-            make_uint2( aligned_begin, aligned_end ) :
+            make_uint2( aligned_begin - offset, aligned_end - offset ) :
             make_uint2( string.size(), string.size() );
     }
 

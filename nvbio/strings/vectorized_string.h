@@ -74,7 +74,7 @@ struct vectorized_string
 {
     typedef typename string_traits<string_type>::value_type value_type;
     
-    static const uint32 VECTOR_WIDTH = 8u;  ///< the intrinsic vector width - this is somewhat arbitrarily defined, as for generic types we just manually load the blocks
+    static const uint32 VECTOR_WIDTH = 1u;  ///< the intrinsic vector width - this is somewhat arbitrarily defined, as for generic types we just manually load the blocks
 
     /// determine the vectorized range of a string with a specified vector width
     ///
@@ -82,7 +82,8 @@ struct vectorized_string
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     static uint2 range(const string_type& string)
     {
-        return make_uint2( 0, length( string ) );
+        const uint32 rounded_length = (uint32)util::round_z( length( string ), VECTOR_WIDTH_T );
+        return make_uint2( 0, rounded_length ) );
     }
 
     /// load a vector with a specified vector width
@@ -162,7 +163,7 @@ struct vectorized_string< vector_view<const T*,IndexType> >
         const uint64 offset = (uint64(string.base()) / sizeof(T)) % alignment;
 
         const uint64 aligned_begin = offset ? alignment - offset : 0u;
-        const uint64 aligned_end   = aligned_begin + VECTOR_WIDTH * ((string.size() - aligned_begin) / VECTOR_WIDTH);
+        const uint64 aligned_end   = aligned_begin + util::round_z( (string.size() - aligned_begin), VECTOR_WIDTH );
 
         return aligned_begin < string.size() ?
             make_uint2( aligned_begin, aligned_end ) :

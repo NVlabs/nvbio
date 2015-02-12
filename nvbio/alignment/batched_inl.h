@@ -378,8 +378,8 @@ template <uint32 BLOCKDIM, uint32 MINBLOCKS, typename stream_type>
 void BatchedAlignmentScore<stream_type,DeviceThreadBlockScheduler<BLOCKDIM,MINBLOCKS> >::enact(stream_type stream, uint64 temp_size, uint8* temp)
 {
     const uint32 column_size = equal<typename aligner_type::algorithm_tag,PatternBlockingTag>() ?
-        uint32( stream.max_pattern_length() ) :
-        uint32( stream.max_text_length() );
+        uint32( stream.max_text_length() ) :
+        uint32( stream.max_pattern_length() );
 
     // if the column is small, let's just use statically allocated local memory
     if (column_size <= 1024)

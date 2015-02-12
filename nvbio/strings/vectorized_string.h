@@ -163,7 +163,7 @@ struct vectorized_string< vector_view<const T*,IndexType> >
         const uint64 aligned_begin = util::round_i( offset,                 VECTOR_WIDTH ) - offset;
         const uint64 aligned_end   = util::round_z( offset + string.size(), VECTOR_WIDTH ) - offset;
 
-        return aligned_begin < string.size() ?
+        return aligned_begin < aligned_end ?
             make_uint2( aligned_begin, aligned_end ) :
             make_uint2( string.size(), string.size() );
     }
@@ -227,7 +227,7 @@ struct vectorized_string< vector_view< PackedStream<InputStream,Symbol,SYMBOL_SI
         const index_type aligned_begin = util::round_i( string.base().index(),                 VECTOR_WIDTH ) - string.base().index();
         const index_type aligned_end   = util::round_z( string.base().index() + string.size(), VECTOR_WIDTH ) - string.base().index();
 
-        return aligned_begin < string.size() ?
+        return aligned_begin < aligned_end ?
             make_uint2( aligned_begin, aligned_end ) :
             make_uint2( string.size(), string.size() );
     }

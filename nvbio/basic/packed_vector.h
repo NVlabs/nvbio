@@ -56,6 +56,7 @@ struct PackedVector
     static const uint32 BIG_ENDIAN  = BIG_ENDIAN_T;
 
     static const uint32 SYMBOLS_PER_WORD = 32 / SYMBOL_SIZE;
+    static const uint32 VECTOR_WIDTH     = SYMBOLS_PER_WORD;
 
     typedef SystemTag   system_tag;
     typedef IndexType   index_type;

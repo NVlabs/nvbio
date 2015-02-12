@@ -226,7 +226,7 @@ struct vector_view
 template <typename Iterator, typename IndexType>
 struct string_traits< vector_view<Iterator,IndexType> >
 {
-    static const uint32 SYMBOL_SIZE = string_traits<Iterator>::SYMBOL_SIZE;
+    static const uint32 SYMBOL_SIZE  = string_traits<Iterator>::SYMBOL_SIZE;
 
     typedef typename vector_view<Iterator,IndexType>::value_type  value_type;
     typedef typename vector_view<Iterator,IndexType>::reference   reference;

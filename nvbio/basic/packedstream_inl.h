@@ -488,6 +488,46 @@ struct packer<BIG_ENDIAN_T,4u,Symbol,InputStream,IndexType,uint4>
         stream[ word_idx ] = word;
     }
 };
+template <bool BIG_ENDIAN_T, typename Symbol, typename InputStream, typename IndexType>
+struct packer<BIG_ENDIAN_T,8u,Symbol,InputStream,IndexType,uint4>
+{
+    static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Symbol get_symbol(InputStream stream, const IndexType sym_idx)
+    {
+        const uint32 SYMBOL_MASK = 255u;
+
+        typedef typename unsigned_type<IndexType>::type index_type;
+
+        const index_type word_idx = sym_idx >> 4u;
+
+        const uint4 word = stream[ word_idx ];
+        const uint32 symbol_comp   = (sym_idx & 15u) >> 2u;
+        const uint32 symbol_offset = BIG_ENDIAN_T ? (24u - (uint32(sym_idx & 3u) << 3)) : uint32((sym_idx & 3u) << 3);
+        const uint32 symbol = (comp( word, symbol_comp ) >> symbol_offset) & SYMBOL_MASK;
+
+        return Symbol( symbol );
+    }
+
+    static NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void set_symbol(InputStream stream, const IndexType sym_idx, Symbol sym)
+    {
+        const uint32 SYMBOL_MASK = 255u;
+
+        typedef typename unsigned_type<IndexType>::type index_type;
+
+        const index_type word_idx = sym_idx >> 4u;
+
+              uint4  word = stream[ word_idx ];
+        const uint32 symbol_comp   = (sym_idx & 15u) >> 2u;
+        const uint32 symbol_offset = BIG_ENDIAN_T ? (24u - (uint32(sym_idx & 3u) << 3)) : uint32((sym_idx & 3u) << 3);
+        const uint32 symbol = uint32(sym & SYMBOL_MASK) << symbol_offset;
+
+        // clear all bits
+        select( word, symbol_comp ) &= ~(SYMBOL_MASK << symbol_offset);
+        select( word, symbol_comp ) |= symbol;
+
+        // set bits
+        stream[ word_idx ] = word;
+    }
+};
 
 template <bool BIG_ENDIAN_T, typename Symbol, typename InputStream, typename IndexType>
 struct packer<BIG_ENDIAN_T,2u,Symbol,InputStream,IndexType,uint64>

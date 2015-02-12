@@ -186,15 +186,19 @@ struct PackedStream
 {
     typedef PackedStream<InputStream,Symbol,SYMBOL_SIZE_T, BIG_ENDIAN_T,IndexType> This;
 
-    static const uint32 SYMBOL_SIZE  = SYMBOL_SIZE_T;
-    static const uint32 SYMBOL_COUNT = 1u << SYMBOL_SIZE;
-    static const uint32 SYMBOL_MASK  = SYMBOL_COUNT - 1u;
-    static const uint32 BIG_ENDIAN   = BIG_ENDIAN_T;
+    static const uint32 SYMBOL_SIZE   = SYMBOL_SIZE_T;
+    static const uint32 SYMBOL_COUNT  = 1u << SYMBOL_SIZE;
+    static const uint32 SYMBOL_MASK   = SYMBOL_COUNT - 1u;
+    static const uint32 BIG_ENDIAN    = BIG_ENDIAN_T;
     static const uint32 ALPHABET_SIZE = SYMBOL_COUNT;
 
     typedef typename unsigned_type<IndexType>::type                  index_type;
     typedef typename   signed_type<IndexType>::type                 sindex_type;
     typedef typename std::iterator_traits<InputStream>::value_type  storage_type;
+
+    static const uint32 WORD_SIZE        = uint32( sizeof(storage_type) );
+    static const uint32 SYMBOLS_PER_WORD = (8u * WORD_SIZE) / SYMBOL_SIZE;
+    static const uint32 VECTOR_WIDTH     = SYMBOLS_PER_WORD;
 
     typedef InputStream                                                     stream_type;
     typedef InputStream                                                     storage_iterator;

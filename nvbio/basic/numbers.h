@@ -136,7 +136,7 @@ inline NVBIO_HOST_DEVICE L divide_ri(const L x, const R y)
 template<typename L, typename R>
 inline NVBIO_HOST_DEVICE L divide_rz(const L x, const R y)
 {
-    return x ? L( x / y ) : L(0);
+    return L( x / y );
 }
 
 /// \ingroup BasicUtils

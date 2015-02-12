@@ -252,9 +252,11 @@ struct vectorized_string< vector_view< PackedStream<InputStream,Symbol,SYMBOL_SI
         // unpack the entire word
         if (BIG_ENDIAN_T)
         {
+            const uint32 SYMBOL_OFFSET = (VECTOR_WIDTH-1) * SYMBOL_SIZE;
+
             #pragma unroll
             for (uint32 j = 0; j < VECTOR_WIDTH; ++j)
-                vector[j] = (word >> ((VECTOR_WIDTH-1) * SYMBOL_SIZE - SYMBOL_SIZE * j)) & (SYMBOL_COUNT-1);
+                vector[j] = (word >> (SYMBOL_OFFSET - SYMBOL_SIZE * j)) & (SYMBOL_COUNT-1);
         }
         else
         {

@@ -95,6 +95,7 @@ struct vectorized_string
         value_type*         vector)
     {
         // fill the vector with a simple loop
+        #pragma unroll
         for (uint32 j = 0; j < VECTOR_WIDTH_T; ++j)
             vector[j] = string[offset + j];
     }
@@ -252,6 +253,7 @@ struct vectorized_string< vector_view< PackedStream<InputStream,Symbol,SYMBOL_SI
         const storage_type word = storage[ word_idx ];
 
         // unpack the entire word
+        #pragma unroll
         for (uint32 j = 0; j < VECTOR_WIDTH; ++j)
             vector[j] = (word >> (SYMBOL_SIZE * j)) & SYMBOL_COUNT;
     }

@@ -83,7 +83,7 @@ struct vectorized_string
     static uint2 range(const string_type& string)
     {
         const uint32 rounded_length = (uint32)util::round_z( length( string ), VECTOR_WIDTH_T );
-        return make_uint2( 0, rounded_length ) );
+        return make_uint2( 0, rounded_length );
     }
 
     /// load a vector with a specified vector width
@@ -256,7 +256,7 @@ struct vectorized_string< vector_view< PackedStream<InputStream,Symbol,SYMBOL_SI
         // unpack the entire word
         #pragma unroll
         for (uint32 j = 0; j < VECTOR_WIDTH; ++j)
-            vector[j] = (word >> (SYMBOL_SIZE * j)) & SYMBOL_COUNT;
+            vector[j] = (word >> (SYMBOL_SIZE * j)) & (SYMBOL_COUNT-1);
     }
 };
 

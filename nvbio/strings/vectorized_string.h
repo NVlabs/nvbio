@@ -54,7 +54,7 @@ namespace nvbio {
 ///\par
 ///\code
 ///  // the size of the vector which can be used to load many symbols at once
-///  string_traits<string_type>::VECTOR_WIDTH;
+///  vectorized_string<string_type>::VECTOR_WIDTH;
 ///
 ///  // the range of the string which is amenable to vectorized loading
 ///  uint2 vectorized_string_range(const string_type& string);

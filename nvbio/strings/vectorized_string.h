@@ -224,7 +224,8 @@ struct vectorized_string< vector_view< PackedStream<InputStream,Symbol,SYMBOL_SI
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     static uint2 range(const string_type& string)
     {
-        const index_type offset        = string.base().index();
+        const index_type offset = string.base().index();
+
         const index_type aligned_begin = util::round_i( offset,                 VECTOR_WIDTH );
         const index_type aligned_end   = util::round_z( offset + string.size(), VECTOR_WIDTH );
 
@@ -249,9 +250,18 @@ struct vectorized_string< vector_view< PackedStream<InputStream,Symbol,SYMBOL_SI
         const storage_type word = storage[ word_idx ];
 
         // unpack the entire word
-        #pragma unroll
-        for (uint32 j = 0; j < VECTOR_WIDTH; ++j)
-            vector[j] = (word >> (SYMBOL_SIZE * j)) & (SYMBOL_COUNT-1);
+        if (BIG_ENDIAN_T)
+        {
+            #pragma unroll
+            for (uint32 j = 0; j < VECTOR_WIDTH; ++j)
+                vector[j] = (word >> ((VECTOR_WIDTH-1) * SYMBOL_SIZE - SYMBOL_SIZE * j)) & (SYMBOL_COUNT-1);
+        }
+        else
+        {
+            #pragma unroll
+            for (uint32 j = 0; j < VECTOR_WIDTH; ++j)
+                vector[j] = (word >> (SYMBOL_SIZE * j)) & (SYMBOL_COUNT-1);
+        }
     }
 };
 

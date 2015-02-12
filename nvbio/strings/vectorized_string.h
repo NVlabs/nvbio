@@ -41,7 +41,7 @@ namespace nvbio {
 ///@{
 
 ///
-///@defgroup VectorLoadingModule String Vector Loading
+///@defgroup VectorLoadingModule Vectorized String Loading
 ///\par
 /// The functions in this module define a vector loading API for strings:
 /// strings, are usually made up of tiny characters, often a byte each, or
@@ -106,7 +106,7 @@ struct vectorized_string
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     static uint2 range(const string_type& string)
     {
-        return make_uint2( 0, length( string ) );
+        return range<VECTOR_WIDTH>( string );
     }
 
     /// load a vector using the maximum vector width

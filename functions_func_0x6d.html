@@ -176,6 +176,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>make_sparse_string_set()
 : <a class="el" href="group___string_sets_module.html#ga47cf6092aba0d8aa8c5c3d6336e1c228">nvbio::SparseStringSet&lt; StringIterator, RangeIterator &gt;</a>
 </li>
+<li>make_string_iterator()
+: <a class="el" href="group___strings.html#ga845698bf022d43feefaa43ba5028b9c8">nvbio::string_iterator&lt; StringType &gt;</a>
+</li>
 <li>make_transform_string_set()
 : <a class="el" href="structnvbio_1_1_transform_string_set.html#a2976aa230a4559080f1d21bc4c936a83">nvbio::TransformStringSet&lt; StringSet, StringTransform &gt;</a>
 </li>
@@ -235,9 +238,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="group___f_m_index.html#gac3a6cb0c88d7cdbce8dc86e8959f7e94">nvbio::fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;</a>
 </li>
 <li>mate()
-: <a class="el" href="structnvbio_1_1io_1_1_paired_alignments.html#a717f941ce67bba99a0972295764cea3f">nvbio::io::PairedAlignments</a>
+: <a class="el" href="structnvbio_1_1io_1_1_alignment.html#a389d13726d5e34c2a36cb04630f7ca7f">nvbio::io::Alignment</a>
+, <a class="el" href="structnvbio_1_1io_1_1_paired_alignments.html#a717f941ce67bba99a0972295764cea3f">nvbio::io::PairedAlignments</a>
 , <a class="el" href="structnvbio_1_1io_1_1_best_paired_alignments.html#a85f53338000ac9343a3aaf05de7b58c9">nvbio::io::BestPairedAlignments</a>
-, <a class="el" href="structnvbio_1_1io_1_1_alignment.html#a389d13726d5e34c2a36cb04630f7ca7f">nvbio::io::Alignment</a>
 </li>
 <li>mate_type()
 : <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_traceback_stream.html#aad418a4df4fb6e9941f743d7aedab8eb">nvbio::bowtie2::cuda::detail::BestTracebackStream&lt; ALN_IDX, AlignerType, PipelineType &gt;</a>
@@ -261,10 +264,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>max_pattern_length()
 : <a class="el" href="structnvbio_1_1aln_1_1priv_1_1_alignment_stream.html#af34937080fdbe5901691c943c40c1adc">nvbio::aln::priv::AlignmentStream&lt; t_aligner_type, pattern_set_type, qualities_set_type, text_set_type, sink_iterator &gt;</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_score_stream.html#a6f01aaffc49db61b046b0d509fa9b771">nvbio::bowtie2::cuda::detail::BestScoreStream&lt; AlignerType, PipelineType &gt;</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_anchor_score_stream.html#ab1f098f96d2ec8b49d515746a1f73a70">nvbio::bowtie2::cuda::detail::BestAnchorScoreStream&lt; AlignerType, PipelineType &gt;</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_opposite_score_stream.html#a54c7fdf244f0bfa87b1bdb2abf36a25e">nvbio::bowtie2::cuda::detail::BestOppositeScoreStream&lt; AlignerType, PipelineType &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_all_score_stream.html#ad5c58b66b42b118cb95b5a57cb8729b5">nvbio::bowtie2::cuda::detail::AllScoreStream&lt; AlignerType, PipelineType &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_score_stream.html#a6f01aaffc49db61b046b0d509fa9b771">nvbio::bowtie2::cuda::detail::BestScoreStream&lt; AlignerType, PipelineType &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_opposite_score_stream.html#a54c7fdf244f0bfa87b1bdb2abf36a25e">nvbio::bowtie2::cuda::detail::BestOppositeScoreStream&lt; AlignerType, PipelineType &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_anchor_score_stream.html#ab1f098f96d2ec8b49d515746a1f73a70">nvbio::bowtie2::cuda::detail::BestAnchorScoreStream&lt; AlignerType, PipelineType &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_traceback_stream.html#a3f494ff965cc5b243ed1eb61f2707836">nvbio::bowtie2::cuda::detail::BestTracebackStream&lt; ALN_IDX, AlignerType, PipelineType &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_all_traceback_stream.html#aba2d0bff9fbcc0cee0ccdcae68e0e2c0">nvbio::bowtie2::cuda::detail::AllTracebackStream&lt; AlignerType, PipelineType &gt;</a>
 </li>
@@ -287,7 +290,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1cuda_1_1_large_b_w_t_skeleton.html#a682a6825ce6974060c2c292d0ca8518d">nvbio::cuda::LargeBWTSkeleton&lt; ConfigType, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
 </li>
 <li>max_temp_storage()
-: <a class="el" href="group___batch_alignment.html#gab3912710dc9d82e816662261d9173f7e">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceWarpScheduler &gt;</a>
+: <a class="el" href="group___batch_alignment.html#ga2d4dd64ba211e489f3097d39cdafbbb7">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score.html#a7508eee3478d1bb868bed99ab70aeb99">nvbio::aln::BatchedAlignmentScore&lt; stream_type, algorithm_type &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_score.html#a09cd2b3d436dec430de73046435aafa7">nvbio::aln::BatchedBandedAlignmentScore&lt; BAND_LEN, stream_type, algorithm_type &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback.html#a0b966d12de1e9233d11dfbae77e7c142">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, algorithm_type &gt;</a>
@@ -297,17 +300,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_score_3_01_b_a_n_d___l_e_n_00_01stream__type_00_eeba9ca5ffeeeeb87c6cb1ef40282f90.html#a543a3948f562207d380635938eb8b546">nvbio::aln::BatchedBandedAlignmentScore&lt; BAND_LEN, stream_type, DeviceStagedThreadScheduler &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_traceback_3_01_b_a_n_d___l_e_n_00_01_c_h_e_c_k_pdd42a2f4700aad7eacd1d840a49ae8fc.html#a7db9b19b99dc59c8f6a6e36c27920c5e">nvbio::aln::BatchedBandedAlignmentTraceback&lt; BAND_LEN, CHECKPOINTS, stream_type, DeviceThreadScheduler &gt;</a>
 , <a class="el" href="group___batch_alignment.html#gaff160ca4a683daa6881fa93076b81533">nvbio::aln::BatchedAlignmentScore&lt; stream_type, HostThreadScheduler &gt;</a>
-, <a class="el" href="group___batch_alignment.html#ga2d4dd64ba211e489f3097d39cdafbbb7">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a>
+, <a class="el" href="group___batch_alignment.html#gab3912710dc9d82e816662261d9173f7e">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceWarpScheduler &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score_3_01stream__type_00_01_device_staged_thread_scheduler_01_4.html#ad8bb0d02d1449241331dcc45d3c74040">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceStagedThreadScheduler &gt;</a>
 , <a class="el" href="group___batch_alignment.html#ga056dfe87850540d4fddcaf1a9f8b7d3e">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a>
 </li>
 <li>max_text_length()
-: <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_traceback_stream.html#a489e24cb6a72225d0c7a1febf93c9045">nvbio::bowtie2::cuda::detail::BestTracebackStream&lt; ALN_IDX, AlignerType, PipelineType &gt;</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_score_stream.html#a191b71e4bf30e64f7f294b2e9a856074">nvbio::bowtie2::cuda::detail::BestScoreStream&lt; AlignerType, PipelineType &gt;</a>
+: <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_anchor_score_stream.html#ac234116f69b24b8842bc5c5a0bc67376">nvbio::bowtie2::cuda::detail::BestAnchorScoreStream&lt; AlignerType, PipelineType &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1priv_1_1_alignment_stream.html#a474d3a8a43c28a5759f2defd6944e7d8">nvbio::aln::priv::AlignmentStream&lt; t_aligner_type, pattern_set_type, qualities_set_type, text_set_type, sink_iterator &gt;</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_anchor_score_stream.html#ac234116f69b24b8842bc5c5a0bc67376">nvbio::bowtie2::cuda::detail::BestAnchorScoreStream&lt; AlignerType, PipelineType &gt;</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_opposite_score_stream.html#a1973197e248831f2f242de05725cd7d7">nvbio::bowtie2::cuda::detail::BestOppositeScoreStream&lt; AlignerType, PipelineType &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_all_score_stream.html#a4d5f1e506c259a3311a0c786cf0fba41">nvbio::bowtie2::cuda::detail::AllScoreStream&lt; AlignerType, PipelineType &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_score_stream.html#a191b71e4bf30e64f7f294b2e9a856074">nvbio::bowtie2::cuda::detail::BestScoreStream&lt; AlignerType, PipelineType &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_opposite_score_stream.html#a1973197e248831f2f242de05725cd7d7">nvbio::bowtie2::cuda::detail::BestOppositeScoreStream&lt; AlignerType, PipelineType &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_traceback_stream.html#a489e24cb6a72225d0c7a1febf93c9045">nvbio::bowtie2::cuda::detail::BestTracebackStream&lt; ALN_IDX, AlignerType, PipelineType &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_all_traceback_stream.html#a4a1d5c529fa0bd0d56009c25a1660ee9">nvbio::bowtie2::cuda::detail::AllTracebackStream&lt; AlignerType, PipelineType &gt;</a>
 </li>
 <li>maximum()
@@ -321,18 +324,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1mem_1_1mem__handler.html#acd6ba73a686360c1116ce66b0e95b66e">nvbio::mem::mem_handler&lt; coord_type &gt;</a>
 </li>
 <li>MEMHit()
-: <a class="el" href="structnvbio_1_1_m_e_m_hit.html#aca3966992b05d63ca4a4c2fd083eac93">nvbio::MEMHit&lt; coord_type &gt;</a>
+: <a class="el" href="structnvbio_1_1_m_e_m_hit.html#a00adc4bf8d23f65b336c4be3058fd07b">nvbio::MEMHit&lt; coord_type &gt;</a>
 </li>
 <li>MEMRange()
-: <a class="el" href="structnvbio_1_1_m_e_m_range.html#a01ecdca73b1c191cf1faebf0ac4a3589">nvbio::MEMRange&lt; coord_type &gt;</a>
+: <a class="el" href="structnvbio_1_1_m_e_m_range.html#a17fe9eba93ad697e063fcdd71542602a">nvbio::MEMRange&lt; coord_type &gt;</a>
 </li>
 <li>merge()
-: <a class="el" href="classnvbio_1_1priority__deque.html#affa732db0f421c36ce2abb56c7b92315">nvbio::priority_deque&lt; Type, Sequence, Compare &gt;</a>
+: <a class="el" href="classnvbio_1_1priority__deque.html#af5e5b343b97da8ad7bbea10bb4773b8c">nvbio::priority_deque&lt; Type, Sequence, Compare &gt;</a>
 , <a class="el" href="structnvbio_1_1_q_gram_filter_3_01host__tag_00_01qgram__index__type_00_01query__iterator_00_01index__iterator_01_4.html#a23624b04dfdef84f6fce8d200abd172a">nvbio::QGramFilter&lt; host_tag, qgram_index_type, query_iterator, index_iterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_q_gram_filter_3_01device__tag_00_01qgram__index__type_00_01query__iterator_00_01index__iterator_01_4.html#aad390593adcb0df7e1f87c4711a144aa">nvbio::QGramFilter&lt; device_tag, qgram_index_type, query_iterator, index_iterator &gt;</a>
-, <a class="el" href="group___priority_deques.html#gac7e7be49d542a57fba27d633ff2d6e7a">boost::container::priority_deque&lt; Type, Sequence, Compare &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_alignment_stats.html#a91528bc332ba47db06168db4aaa53eb0">nvbio::bowtie2::cuda::AlignmentStats</a>
-, <a class="el" href="classnvbio_1_1priority__deque.html#af5e5b343b97da8ad7bbea10bb4773b8c">nvbio::priority_deque&lt; Type, Sequence, Compare &gt;</a>
+, <a class="el" href="group___priority_deques.html#gac7e7be49d542a57fba27d633ff2d6e7a">boost::container::priority_deque&lt; Type, Sequence, Compare &gt;</a>
+, <a class="el" href="structnvbio_1_1_q_gram_filter_3_01device__tag_00_01qgram__index__type_00_01query__iterator_00_01index__iterator_01_4.html#aad390593adcb0df7e1f87c4711a144aa">nvbio::QGramFilter&lt; device_tag, qgram_index_type, query_iterator, index_iterator &gt;</a>
 , <a class="el" href="classboost_1_1container_1_1priority__deque.html#a9f0aa04c135b175904bb34a8925fcb05">boost::container::priority_deque&lt; Type, Sequence, Compare &gt;</a>
 </li>
 <li>merge_block()
@@ -342,65 +344,66 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="struct_bam_reader_1_1_bam_reader_private.html#af94ae18a855f54e75b036f1c4e0308d2">BamTools::BamReader::BamReaderPrivate</a>
 </li>
 <li>MGPU_MEM()
-: <a class="el" href="classmgpu_1_1_cuda_mem_support.html#a3c861517aed325b5d7d92a4526401d83">mgpu::CudaMemSupport</a>
+: <a class="el" href="classmgpu_1_1_cuda_mem_support.html#a7290b720fd2ffef13302dacf27e9a1c8">mgpu::CudaMemSupport</a>
 </li>
 <li>min()
-: <a class="el" href="structnvbio_1_1_field__traits_3_01int32_01_4.html#aed10ff19949a1534636df75132843296">nvbio::Field_traits&lt; int32 &gt;</a>
-, <a class="el" href="structnvbio_1_1_field__traits_3_01int64_01_4.html#a0a23a266711aff3dae3fafe20cbcaa83">nvbio::Field_traits&lt; int64 &gt;</a>
+: <a class="el" href="structnvbio_1_1_field__traits_3_01int16_01_4.html#a5c4f0f7749f2be09140afa3c467746b2">nvbio::Field_traits&lt; int16 &gt;</a>
+, <a class="el" href="structnvbio_1_1_field__traits_3_01int32_01_4.html#aed10ff19949a1534636df75132843296">nvbio::Field_traits&lt; int32 &gt;</a>
 , <a class="el" href="structnvbio_1_1_field__traits.html#a1d186dd9f5410a7c8b20295a72928cf5">nvbio::Field_traits&lt; T &gt;</a>
 , <a class="el" href="structnvbio_1_1_field__traits_3_01int8_01_4.html#ad0b96696f6b70b12280c2150bd7870e6">nvbio::Field_traits&lt; int8 &gt;</a>
-, <a class="el" href="structnvbio_1_1_field__traits_3_01int16_01_4.html#a5c4f0f7749f2be09140afa3c467746b2">nvbio::Field_traits&lt; int16 &gt;</a>
+, <a class="el" href="structnvbio_1_1_field__traits_3_01int64_01_4.html#a0a23a266711aff3dae3fafe20cbcaa83">nvbio::Field_traits&lt; int64 &gt;</a>
 </li>
 <li>min_read_len()
 : <a class="el" href="structnvbio_1_1io_1_1_read_data_view.html#abcd083fb5557cddc7d9155c97365f042">nvbio::io::ReadDataView&lt; IndexIterator, ReadStorageIterator, QualStorageIterator, NameStorageIterator &gt;</a>
 </li>
 <li>min_score()
-: <a class="el" href="structnvbio_1_1io_1_1_alignment.html#ae71dfd0674844c538f2d63caa9f3a55c">nvbio::io::Alignment</a>
+: <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#abef33cc81dc20a135c6987b5a5eeca1f">nvbio::bowtie2::cuda::EditDistanceScoringScheme</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_smith_waterman_scoring_scheme.html#a887e21dcda40d2061f8f23278c0f9aa5">nvbio::bowtie2::cuda::SmithWatermanScoringScheme&lt; MMCost, NCost &gt;</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#abef33cc81dc20a135c6987b5a5eeca1f">nvbio::bowtie2::cuda::EditDistanceScoringScheme</a>
+, <a class="el" href="structnvbio_1_1io_1_1_alignment.html#ae71dfd0674844c538f2d63caa9f3a55c">nvbio::io::Alignment</a>
 </li>
 <li>min_sequence_len()
-: <a class="el" href="structnvbio_1_1io_1_1_sequence_data_edit.html#aa1e481f5c021761faa3adcd2a6502412">nvbio::io::SequenceDataEdit&lt; SEQUENCE_ALPHABET_T, SequenceDataT &gt;</a>
+: <a class="el" href="structnvbio_1_1io_1_1_sequence_data_info.html#a0b2bc4ff80a63bf67b49dcac96076527">nvbio::io::SequenceDataInfo</a>
 , <a class="el" href="structnvbio_1_1io_1_1_sequence_data_access.html#a808094e6e8829d5f61b7ad119b07fc70">nvbio::io::SequenceDataAccess&lt; SEQUENCE_ALPHABET_T, SequenceDataT &gt;</a>
-, <a class="el" href="structnvbio_1_1io_1_1_sequence_data_info.html#a0b2bc4ff80a63bf67b49dcac96076527">nvbio::io::SequenceDataInfo</a>
+, <a class="el" href="structnvbio_1_1io_1_1_sequence_data_edit.html#aa1e481f5c021761faa3adcd2a6502412">nvbio::io::SequenceDataEdit&lt; SEQUENCE_ALPHABET_T, SequenceDataT &gt;</a>
 </li>
 <li>min_temp_storage()
-: <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_score_3_01_b_a_n_d___l_e_n_00_01stream__type_00_92a6a56ac1e8212dc58c3b10191e5fd1.html#a8f27466a1e7c09a9fec8a81917e5e5b3">nvbio::aln::BatchedBandedAlignmentScore&lt; BAND_LEN, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a>
-, <a class="el" href="group___batch_alignment.html#ga3dd20230f88ae49df6f10fd6d2a11bfe">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_score_3_01_b_a_n_d___l_e_n_00_01stream__type_00_eeba9ca5ffeeeeb87c6cb1ef40282f90.html#a5dabc5d8bc5b7953c1c19ff47eed18b3">nvbio::aln::BatchedBandedAlignmentScore&lt; BAND_LEN, stream_type, DeviceStagedThreadScheduler &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_score_3_01_b_a_n_d___l_e_n_00_01stream__type_00_01_host_thread_scheduler_01_4.html#a841ddaa805e587822bd0b019e66a381f">nvbio::aln::BatchedBandedAlignmentScore&lt; BAND_LEN, stream_type, HostThreadScheduler &gt;</a>
+: <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_score_3_01_b_a_n_d___l_e_n_00_01stream__type_00_01_host_thread_scheduler_01_4.html#a841ddaa805e587822bd0b019e66a381f">nvbio::aln::BatchedBandedAlignmentScore&lt; BAND_LEN, stream_type, HostThreadScheduler &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_traceback.html#ac8312175228bc011dfbaceede979a7df">nvbio::aln::BatchedBandedAlignmentTraceback&lt; BAND_LEN, CHECKPOINTS, stream_type, algorithm_type &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score_3_01stream__type_00_01_device_staged_thread_scheduler_01_4.html#a0a1725caa69662de190715641d50514b">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceStagedThreadScheduler &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_traceback_3_01_b_a_n_d___l_e_n_00_01_c_h_e_c_k_pdd42a2f4700aad7eacd1d840a49ae8fc.html#aa93ef120fa866ae6187bf58d04a3de8b">nvbio::aln::BatchedBandedAlignmentTraceback&lt; BAND_LEN, CHECKPOINTS, stream_type, DeviceThreadScheduler &gt;</a>
 , <a class="el" href="group___batch_alignment.html#ga778b5cea887d55ecc99f90e8c5379754">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceWarpScheduler &gt;</a>
-, <a class="el" href="group___batch_alignment.html#gac10b57bc8f0f4236ca77f39413f141c5">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_score.html#a2c48b132dcef9c09b0e4d80874eb7d93">nvbio::aln::BatchedBandedAlignmentScore&lt; BAND_LEN, stream_type, algorithm_type &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback.html#a9b5844deb44cb007d8ae800b7998aec8">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, algorithm_type &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score.html#aa248b6090863032eea18e2940f012a80">nvbio::aln::BatchedAlignmentScore&lt; stream_type, algorithm_type &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_score_3_01_b_a_n_d___l_e_n_00_01stream__type_00_eeba9ca5ffeeeeb87c6cb1ef40282f90.html#a5dabc5d8bc5b7953c1c19ff47eed18b3">nvbio::aln::BatchedBandedAlignmentScore&lt; BAND_LEN, stream_type, DeviceStagedThreadScheduler &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_score_3_01_b_a_n_d___l_e_n_00_01stream__type_00_92a6a56ac1e8212dc58c3b10191e5fd1.html#a8f27466a1e7c09a9fec8a81917e5e5b3">nvbio::aln::BatchedBandedAlignmentScore&lt; BAND_LEN, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a>
 , <a class="el" href="group___batch_alignment.html#ga90e29e253953bd348e1a4706021df1be">nvbio::aln::BatchedAlignmentScore&lt; stream_type, HostThreadScheduler &gt;</a>
+, <a class="el" href="group___batch_alignment.html#gac10b57bc8f0f4236ca77f39413f141c5">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback.html#a9b5844deb44cb007d8ae800b7998aec8">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, algorithm_type &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_score.html#a2c48b132dcef9c09b0e4d80874eb7d93">nvbio::aln::BatchedBandedAlignmentScore&lt; BAND_LEN, stream_type, algorithm_type &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_traceback_3_01_b_a_n_d___l_e_n_00_01_c_h_e_c_k_pdd42a2f4700aad7eacd1d840a49ae8fc.html#aa93ef120fa866ae6187bf58d04a3de8b">nvbio::aln::BatchedBandedAlignmentTraceback&lt; BAND_LEN, CHECKPOINTS, stream_type, DeviceThreadScheduler &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score_3_01stream__type_00_01_device_staged_thread_scheduler_01_4.html#a0a1725caa69662de190715641d50514b">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceStagedThreadScheduler &gt;</a>
+, <a class="el" href="group___batch_alignment.html#ga3dd20230f88ae49df6f10fd6d2a11bfe">nvbio::aln::BatchedAlignmentScore&lt; stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_score.html#aa248b6090863032eea18e2940f012a80">nvbio::aln::BatchedAlignmentScore&lt; stream_type, algorithm_type &gt;</a>
 </li>
 <li>minimum()
-: <a class="el" href="group___priority_deques.html#ga462c849c7a95b276e906391fda1c9d1e">nvbio::priority_deque&lt; Type, Sequence, Compare &gt;</a>
-, <a class="el" href="classboost_1_1container_1_1priority__deque.html#ad3b285b8b43766c22c6627b04a8970e6">boost::container::priority_deque&lt; Type, Sequence, Compare &gt;</a>
+: <a class="el" href="classboost_1_1container_1_1priority__deque.html#ad3b285b8b43766c22c6627b04a8970e6">boost::container::priority_deque&lt; Type, Sequence, Compare &gt;</a>
+, <a class="el" href="group___priority_deques.html#ga462c849c7a95b276e906391fda1c9d1e">nvbio::priority_deque&lt; Type, Sequence, Compare &gt;</a>
 </li>
 <li>minimum_value()
 : <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__result.html#a8ca859cc2658488be59c9a13f060e5b3">nvbio::aln::priv::alignment_result&lt; score_type &gt;</a>
 </li>
 <li>mismatch()
-: <a class="el" href="structnvbio_1_1aln_1_1_simple_gotoh_scheme.html#a0e54a34802ea7d77c02c949965711aae">nvbio::aln::SimpleGotohScheme</a>
-, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1_edit_distance_s_w_scheme.html#a1084bc4d1f080e0b71f2589ac58988f6">nvbio::aln::priv::EditDistanceSWScheme</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_smith_waterman_scoring_scheme.html#a39815182b827ddc5099095261a3503a6">nvbio::bowtie2::cuda::SmithWatermanScoringScheme&lt; MMCost, NCost &gt;</a>
+: <a class="el" href="structnvbio_1_1aln_1_1_simple_smith_waterman_scheme.html#a458727549ab3cecd7f75914c31d052d6">nvbio::aln::SimpleSmithWatermanScheme</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_smith_waterman_scoring_scheme.html#a0efd07ec55511bdef8a22e02a98ec1d3">nvbio::bowtie2::cuda::SmithWatermanScoringScheme&lt; MMCost, NCost &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1_simple_smith_waterman_scheme.html#a5e4b08e146af629b86b8f76410fbbbc2">nvbio::aln::SimpleSmithWatermanScheme</a>
 , <a class="el" href="structnvbio_1_1aln_1_1priv_1_1_edit_distance_s_w_scheme.html#a7cb53b06c210d2b95ca9fbfafbfa2e4d">nvbio::aln::priv::EditDistanceSWScheme</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_smith_waterman_scoring_scheme.html#a0efd07ec55511bdef8a22e02a98ec1d3">nvbio::bowtie2::cuda::SmithWatermanScoringScheme&lt; MMCost, NCost &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_smith_waterman_scoring_scheme.html#a3eb7b6df29e2a32222dee8436a46d7e7">nvbio::bowtie2::cuda::SmithWatermanScoringScheme&lt; MMCost, NCost &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1_edit_distance_s_w_scheme.html#a1084bc4d1f080e0b71f2589ac58988f6">nvbio::aln::priv::EditDistanceSWScheme</a>
+, <a class="el" href="structnvbio_1_1aln_1_1_simple_gotoh_scheme.html#a0e54a34802ea7d77c02c949965711aae">nvbio::aln::SimpleGotohScheme</a>
 </li>
 <li>mismatched()
-: <a class="el" href="structnvbio_1_1alndiff_1_1_s_e_analyzer.html#a0ceeae9dd84ac8a4c71cb726a4e2022f">nvbio::alndiff::SEAnalyzer</a>
-, <a class="el" href="structnvbio_1_1alndiff_1_1_p_e_analyzer.html#ac5edfda57bed30dec5e41b3ccbc7d71e">nvbio::alndiff::PEAnalyzer</a>
+: <a class="el" href="structnvbio_1_1alndiff_1_1_p_e_analyzer.html#ac5edfda57bed30dec5e41b3ccbc7d71e">nvbio::alndiff::PEAnalyzer</a>
+, <a class="el" href="structnvbio_1_1alndiff_1_1_s_e_analyzer.html#a0ceeae9dd84ac8a4c71cb726a4e2022f">nvbio::alndiff::SEAnalyzer</a>
 </li>
 <li>mode()
-: <a class="el" href="structcufmi_1_1bowtie2_1_1cuda_1_1_read_hits_index.html#adc2e2b90370198420c27c6cdc2bc4919">cufmi::bowtie2::cuda::ReadHitsIndex</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_index.html#a33c1a1b945c635e125e610918fe6fd7e">nvbio::bowtie2::cuda::ReadHitsIndex</a>
+: <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_index.html#a33c1a1b945c635e125e610918fe6fd7e">nvbio::bowtie2::cuda::ReadHitsIndex</a>
+, <a class="el" href="structcufmi_1_1bowtie2_1_1cuda_1_1_read_hits_index.html#adc2e2b90370198420c27c6cdc2bc4919">cufmi::bowtie2::cuda::ReadHitsIndex</a>
 </li>
 <li>move()
 : <a class="el" href="structnvbio_1_1cuda_1_1_default_mover.html#a3722753c3abdbd73c6fb73a8a5dee1df">nvbio::cuda::DefaultMover</a>
@@ -410,15 +413,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>MyersBitVectors()
 : <a class="el" href="structnvbio_1_1aln_1_1priv_1_1_myers_bit_vectors.html#a3c25042b2ed8dd3a4dcdfcdcc77ba5e4">nvbio::aln::priv::MyersBitVectors&lt; ALPHABET_SIZE &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1_myers_bit_vectors_3_014_01_4.html#af95ebc101d92942b80d61db04e1a5875">nvbio::aln::priv::MyersBitVectors&lt; 4 &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1priv_1_1_myers_bit_vectors_3_015_01_4.html#a572030ff72fd3580c7de652d10041f18">nvbio::aln::priv::MyersBitVectors&lt; 5 &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1_myers_bit_vectors_3_014_01_4.html#af95ebc101d92942b80d61db04e1a5875">nvbio::aln::priv::MyersBitVectors&lt; 4 &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1priv_1_1_myers_bit_vectors_3_012_01_4.html#ad4fb8f39e8276caf4f58ba7accb2ebf7">nvbio::aln::priv::MyersBitVectors&lt; 2 &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:44:28 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:36:25 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -119,7 +119,7 @@ struct nvbio::bloom_filter&lt; K, Hash1, Hash2, Iterator, OrOperator &gt;</h3>
     <tr><td class="paramname">K</td><td>the number of hash functions, obtained as { Hash1 + i * Hash2 | i : 0, ..., K-1 } </td></tr>
     <tr><td class="paramname">Hash1</td><td>the first hash function </td></tr>
     <tr><td class="paramname">Hash2</td><td>the second hash function </td></tr>
-    <tr><td class="paramname">Iterator</td><td>the iterator to the internal filter storage, iterator_traits&lt;iterator&gt;::value_type must be a uint32 </td></tr>
+    <tr><td class="paramname">Iterator</td><td>the iterator to the internal filter storage, <a class="el" href="structnvbio_1_1iterator__traits.html#a739918a4c2217b6cc3fff5f17cc25bca">iterator_traits&lt;iterator&gt;::value_type</a> must be a uint32 </td></tr>
     <tr><td class="paramname">OrOperator</td><td>the binary functor used to OR the filter's words with the inserted keys; NOTE: this operation must be performed atomically if the filter is constructed in parallel </td></tr>
   </table>
   </dd>
@@ -391,7 +391,7 @@ template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , type
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:43:27 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:35:22 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

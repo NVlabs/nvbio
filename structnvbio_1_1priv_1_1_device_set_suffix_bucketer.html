@@ -116,9 +116,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     typename system_tag&gt;<br/>
 struct nvbio::priv::DeviceSetSuffixBucketer&lt; SYMBOL_SIZE, BIG_ENDIAN, storage_type, N_BITS, DOLLAR_BITS, bucket_type, system_tag &gt;</h3>
 
-<p>A context class to perform suffix bucketing for all suffixes of a string-set </p>
+<p>A context class to perform suffix bucketing for all suffixes of a string-set</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">SYMBOL_SIZE</td><td>the size of the symbols, in bits </td></tr>
+    <tr><td class="paramname">BIG_ENDIAN</td><td>the endianness of the symbols in each word of the packed string set </td></tr>
+    <tr><td class="paramname">storage_type</td><td>the storage iterator type of the input packed string </td></tr>
+    <tr><td class="paramname">N_BITS</td><td>the number of bits used for bucketing </td></tr>
+    <tr><td class="paramname">DOLLAR_BITS</td><td>the number of bits used for encoding whether and where a dollar occurrs in the first N_BITS </td></tr>
+    <tr><td class="paramname">bucket_type</td><td>the word type used to encode buckets, i.e the first N_BITS of each suffix </td></tr>
+    <tr><td class="paramname">system_tag</td><td>the system tag identifying the memory-space where the input string-set resides in </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00361">361</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00374">374</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -192,7 +204,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00363">363</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00376">376</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -208,7 +220,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00364">364</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00377">377</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -238,7 +250,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00368">368</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00381">381</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -267,7 +279,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
 </div><div class="memdoc">
 <p>return the amount of used device memory </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00558">558</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00571">571</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -295,7 +307,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
 </div><div class="memdoc">
 <p>return the amount of used device memory </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00562">562</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00575">575</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -323,7 +335,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
 </div><div class="memdoc">
 <p>clear internal timers </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00372">372</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00385">385</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -388,7 +400,7 @@ template&lt;typename string_set_type &gt; </div>
 </div><div class="memdoc">
 <p>collect the suffixes falling in a given set of buckets, where the buckets are defined by the first n_bits of the suffix </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00467">467</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00480">480</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -429,7 +441,7 @@ template&lt;typename string_set_type &gt; </div>
 </div><div class="memdoc">
 <p>count the number of suffixes falling in each bucket, where the buckets are defined by the first n_bits of the suffix </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00386">386</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00399">399</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -457,7 +469,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
 </div><div class="memdoc">
 <p>print some stats </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00582">582</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00595">595</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -485,7 +497,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
 </div><div class="memdoc">
 <p>print some stats </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00566">566</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00579">579</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -502,7 +514,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00610">610</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00623">623</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -518,7 +530,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00609">609</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00622">622</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -534,7 +546,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00606">606</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00619">619</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -550,7 +562,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00600">600</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00613">613</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -566,7 +578,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00601">601</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00614">614</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -582,7 +594,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00602">602</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00615">615</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -598,7 +610,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00605">605</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00618">618</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -614,7 +626,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00599">599</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00612">612</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -630,7 +642,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00603">603</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00616">616</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -646,7 +658,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00607">607</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00620">620</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -656,7 +668,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , uint32 
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:44:24 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:36:21 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

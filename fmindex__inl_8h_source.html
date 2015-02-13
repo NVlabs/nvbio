@@ -420,7 +420,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;{</div>
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1fm__index.html#a659a2e486c18caad9766b260346c53d3">fm_index&lt;TRankDictionary,TSuffixArray,TL2&gt;::index_type</a> index_type;</div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1fm__index.html#ac3ec8ae5770382d25a2ed9f9e31b4643">fm_index&lt;TRankDictionary,TSuffixArray,TL2&gt;::range_type</a> range_type;</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> std::iterator_traits&lt;Iterator&gt;::value_type             symbol_type;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1string__traits.html#a4089c47774630fdb7174b1802eb16a33">string_traits&lt;Iterator&gt;::value_type</a>                    symbol_type;</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;</div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    <span class="comment">// backward search</span></div>
 <div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    range_type range = in_range;</div>
@@ -461,7 +461,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;{</div>
 <div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1fm__index.html#a659a2e486c18caad9766b260346c53d3">fm_index&lt;TRankDictionary,TSuffixArray,TL2&gt;::index_type</a> index_type;</div>
 <div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1fm__index.html#ac3ec8ae5770382d25a2ed9f9e31b4643">fm_index&lt;TRankDictionary,TSuffixArray,TL2&gt;::range_type</a> range_type;</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> std::iterator_traits&lt;Iterator&gt;::value_type             symbol_type;</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1string__traits.html#a4089c47774630fdb7174b1802eb16a33">string_traits&lt;Iterator&gt;::value_type</a>                    symbol_type;</div>
 <div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;</div>
 <div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    <span class="comment">// forward search</span></div>
 <div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;    range_type range = <a class="code" href="group___vector_types.html#ga1a0210be5322d9bf37f09f9afdb0cddd">make_vector</a>( index_type(0), fmi.<a class="code" href="structnvbio_1_1fm__index.html#a9e54a36ff8480427081d1f6877e223f7">length</a>() );</div>
@@ -712,7 +712,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:42:51 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:34:48 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

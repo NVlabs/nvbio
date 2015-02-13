@@ -155,7 +155,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00086"></a><span class="lineno"><a class="code" href="structnvbio_1_1_wavelet_tree.html#a1d472609335f7cc45e8c681fcd31ae6c">   86</a></span>&#160;    <span class="keyword">typedef</span> <a class="code" href="structnvbio_1_1_wavelet_tree.html">WaveletTree&lt;BitStreamIterator,IndexIterator&gt;</a>            <a class="code" href="structnvbio_1_1_wavelet_tree.html#a1d472609335f7cc45e8c681fcd31ae6c">text_type</a>;   <span class="comment">// the text is the wavelet tree itself</span></div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
 <div class="line"><a name="l00088"></a><span class="lineno"><a class="code" href="structnvbio_1_1_wavelet_tree.html#a1083203fceb3f772826ce7c87a824a18">   88</a></span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1null__type.html">vector_type&lt;index_type,2&gt;::type</a>                <a class="code" href="structnvbio_1_1_wavelet_tree.html#a1083203fceb3f772826ce7c87a824a18">range_type</a>;</div>
-<div class="line"><a name="l00089"></a><span class="lineno"><a class="code" href="structnvbio_1_1_wavelet_tree.html#af406f7f43f4f19e2ce92710da718fdfa">   89</a></span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1null__type.html">null_type</a>                                      <a class="code" href="structnvbio_1_1_wavelet_tree.html#af406f7f43f4f19e2ce92710da718fdfa">vector_type</a>; <span class="comment">// unsupported, would require knowing alphabet size</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno"><a class="code" href="structnvbio_1_1_wavelet_tree.html#af406f7f43f4f19e2ce92710da718fdfa">   89</a></span>&#160;    <span class="keyword">typedef</span> <a class="code" href="structnvbio_1_1null__type.html">null_type</a>                                               <a class="code" href="structnvbio_1_1_wavelet_tree.html#af406f7f43f4f19e2ce92710da718fdfa">vector_type</a>; <span class="comment">// unsupported, would require knowing alphabet size</span></div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <a class="code" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a></div>
 <div class="line"><a name="l00094"></a><span class="lineno"><a class="code" href="structnvbio_1_1_wavelet_tree.html#a0a8a8febe401805d7b449c16f9b91b47">   94</a></span>&#160;    <a class="code" href="structnvbio_1_1_wavelet_tree.html#a0a8a8febe401805d7b449c16f9b91b47">WaveletTree</a>(</div>
@@ -296,7 +296,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> system_tag, <span class="keyword">typename</span> <span class="keywordtype">string</span>_iterator, <span class="keyword">typename</span> index_type, <span class="keyword">typename</span> symbol_type&gt;</div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacenvbio.html#a38ab43e80dd4fcdad0cff15c96f25037">setup</a>(</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    <span class="keyword">const</span> index_type                                        string_len,</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <span class="keyword">const</span> string_iterator&amp;                                  <span class="keywordtype">string</span>,</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1string__iterator.html">string_iterator</a>&amp;                                  <span class="keywordtype">string</span>,</div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    <a class="code" href="structnvbio_1_1_wavelet_tree_storage.html">WaveletTreeStorage&lt;system_tag,index_type,symbol_type&gt;</a>&amp;  out_tree);</div>
 <div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;</div>
 <div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> BitStreamIterator, <span class="keyword">typename</span> IndexIterator, <span class="keyword">typename</span> IndexType, <span class="keyword">typename</span> SymbolType&gt;</div>
@@ -337,7 +337,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:42:55 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:34:52 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

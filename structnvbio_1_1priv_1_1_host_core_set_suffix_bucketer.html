@@ -112,9 +112,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     typename bucket_type = uint32&gt;<br/>
 struct nvbio::priv::HostCoreSetSuffixBucketer&lt; SYMBOL_SIZE, N_BITS, DOLLAR_BITS, bucket_type &gt;</h3>
 
-<p>A context class to perform suffix bucketing for all suffixes of a string-set </p>
+<p>A context class to perform suffix bucketing for all suffixes of a string-set, using a host core </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00616">616</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00629">629</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -177,7 +177,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00620">620</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00633">633</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -206,7 +206,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
 </div><div class="memdoc">
 <p>return the amount of used device memory </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00747">747</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00760">760</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -234,7 +234,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
 </div><div class="memdoc">
 <p>return the amount of used device memory </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00751">751</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00764">764</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -262,7 +262,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
 </div><div class="memdoc">
 <p>clear internal timers </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00624">624</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00637">637</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -321,7 +321,7 @@ template&lt;typename string_set_type , typename bucketmap_iterator &gt; </div>
 </div><div class="memdoc">
 <p>collect the suffixes falling in a given set of buckets, where the buckets are defined by the first n_bits of the suffix </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00689">689</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00702">702</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -352,7 +352,7 @@ template&lt;typename string_set_type &gt; </div>
 </div><div class="memdoc">
 <p>count the number of suffixes falling in each bucket, where the buckets are defined by the first n_bits of the suffix </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00648">648</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00661">661</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -380,7 +380,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
 </div><div class="memdoc">
 <p>count the number of suffixes falling in each bucket, where the buckets are defined by the first n_bits of the suffix </p>
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00629">629</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00642">642</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -397,7 +397,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00760">760</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00773">773</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -413,7 +413,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00761">761</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00774">774</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -429,7 +429,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00762">762</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00775">775</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -445,7 +445,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00765">765</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00778">778</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -461,7 +461,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00764">764</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00777">777</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -477,7 +477,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00763">763</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
+<p>Definition at line <a class="el" href="sufsort__bucketing_8h_source.html#l00776">776</a> of file <a class="el" href="sufsort__bucketing_8h_source.html">sufsort_bucketing.h</a>.</p>
 
 </div>
 </div>
@@ -487,7 +487,7 @@ template&lt;uint32 SYMBOL_SIZE, uint32 N_BITS, uint32 DOLLAR_BITS, typename buck
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:44:24 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:36:21 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

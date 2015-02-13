@@ -97,27 +97,364 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Methods</a> &#124;
+<a href="#pub-static-attribs">Static Public Members</a> &#124;
 <a href="structnvbio_1_1aln_1_1trivial__quality__string-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">nvbio::aln::trivial_quality_string Struct Reference<div class="ingroups"><a class="el" href="group___utilities.html">Utilities</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed description</h2>
-<div class="textblock"><p>A trivial implementation of a quality string, constantly zero </p>
+<div class="textblock"><p>A trivial implementation of a quality string, constantly zero; This class has both a string and an iterator interface, as it is used as its own iterator. </p>
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00226">226</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00228">228</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a32e432edf7f98b17c67eaec2e85f0b62"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+<a class="el" href="namespacenvbio.html#ad8043fd5a7d29f45516e0bb3609924ca">random_access_universal_iterator_tag</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a32e432edf7f98b17c67eaec2e85f0b62">iterator_category</a></td></tr>
+<tr class="separator:a32e432edf7f98b17c67eaec2e85f0b62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e14db660a9780ce52d12fd8f19f09cf"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a7e14db660a9780ce52d12fd8f19f09cf">value_type</a></td></tr>
+<tr class="separator:a7e14db660a9780ce52d12fd8f19f09cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec583b4c79d32ef216fb94346549a6e0"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#aec583b4c79d32ef216fb94346549a6e0">reference</a></td></tr>
+<tr class="separator:aec583b4c79d32ef216fb94346549a6e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab062631410133bbbb113990e5360ccaa"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#ab062631410133bbbb113990e5360ccaa">pointer</a></td></tr>
+<tr class="separator:ab062631410133bbbb113990e5360ccaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83feb2cc0b1c0616a9f00fdb78011b8a"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a83feb2cc0b1c0616a9f00fdb78011b8a">difference_type</a></td></tr>
+<tr class="separator:a83feb2cc0b1c0616a9f00fdb78011b8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad44a68aded4f9990664b9e3e48f61004"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#ad44a68aded4f9990664b9e3e48f61004">index_type</a></td></tr>
+<tr class="separator:ad44a68aded4f9990664b9e3e48f61004"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a643542c282214f2f012f98fb77ff0828"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html">trivial_quality_string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a643542c282214f2f012f98fb77ff0828">iterator</a></td></tr>
+<tr class="separator:a643542c282214f2f012f98fb77ff0828"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec0eea99040c8019da74d8d24f730554"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html">trivial_quality_string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#aec0eea99040c8019da74d8d24f730554">const_iterator</a></td></tr>
+<tr class="separator:aec0eea99040c8019da74d8d24f730554"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d7365c2f060f9165d0227e2726a2191"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html">trivial_quality_string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a8d7365c2f060f9165d0227e2726a2191">forward_iterator</a></td></tr>
+<tr class="separator:a8d7365c2f060f9165d0227e2726a2191"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Methods</h2></td></tr>
-<tr class="memitem:a7aaac562a1c77550e889520801baf8fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a7aaac562a1c77550e889520801baf8fa">operator[]</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
-<tr class="separator:a7aaac562a1c77550e889520801baf8fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77f935cae52cce86cfa939f3a6af84c9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a77f935cae52cce86cfa939f3a6af84c9">operator[]</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#ad44a68aded4f9990664b9e3e48f61004">index_type</a> i) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:a77f935cae52cce86cfa939f3a6af84c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64267ac14f61c341c3efc3ef083e1765"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a64267ac14f61c341c3efc3ef083e1765">operator*</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:a64267ac14f61c341c3efc3ef083e1765"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c484708742c639a30677a6b540fd619"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+<a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html">trivial_quality_string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a0c484708742c639a30677a6b540fd619">operator++</a> ()</td></tr>
+<tr class="separator:a0c484708742c639a30677a6b540fd619"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab799eac896ac61e679c6d7636f71e996"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+<a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html">trivial_quality_string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#ab799eac896ac61e679c6d7636f71e996">operator++</a> (int dummy)</td></tr>
+<tr class="separator:ab799eac896ac61e679c6d7636f71e996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae677ff47f2984758e8297547449abd4d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+<a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html">trivial_quality_string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#ae677ff47f2984758e8297547449abd4d">operator--</a> ()</td></tr>
+<tr class="separator:ae677ff47f2984758e8297547449abd4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56411d18997f792f601ac3420961d0bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+<a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html">trivial_quality_string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a56411d18997f792f601ac3420961d0bb">operator--</a> (int dummy)</td></tr>
+<tr class="separator:a56411d18997f792f601ac3420961d0bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ae6264bd1440573d1dff34e4ad4476e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a643542c282214f2f012f98fb77ff0828">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a5ae6264bd1440573d1dff34e4ad4476e">begin</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:a5ae6264bd1440573d1dff34e4ad4476e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Members</h2></td></tr>
+<tr class="memitem:a89cae3354a1e2304f4000e53d2ef23c6"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a89cae3354a1e2304f4000e53d2ef23c6">SYMBOL_SIZE</a> = 8u</td></tr>
+<tr class="separator:a89cae3354a1e2304f4000e53d2ef23c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="aec0eea99040c8019da74d8d24f730554"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html">trivial_quality_string</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#aec0eea99040c8019da74d8d24f730554">nvbio::aln::trivial_quality_string::const_iterator</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00239">239</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a83feb2cc0b1c0616a9f00fdb78011b8a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a83feb2cc0b1c0616a9f00fdb78011b8a">nvbio::aln::trivial_quality_string::difference_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00236">236</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8d7365c2f060f9165d0227e2726a2191"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html">trivial_quality_string</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a8d7365c2f060f9165d0227e2726a2191">nvbio::aln::trivial_quality_string::forward_iterator</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00240">240</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad44a68aded4f9990664b9e3e48f61004"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#ad44a68aded4f9990664b9e3e48f61004">nvbio::aln::trivial_quality_string::index_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00237">237</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a643542c282214f2f012f98fb77ff0828"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html">trivial_quality_string</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a643542c282214f2f012f98fb77ff0828">nvbio::aln::trivial_quality_string::iterator</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00238">238</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a32e432edf7f98b17c67eaec2e85f0b62"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="namespacenvbio.html#ad8043fd5a7d29f45516e0bb3609924ca">random_access_universal_iterator_tag</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a32e432edf7f98b17c67eaec2e85f0b62">nvbio::aln::trivial_quality_string::iterator_category</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00232">232</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab062631410133bbbb113990e5360ccaa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>* <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#ab062631410133bbbb113990e5360ccaa">nvbio::aln::trivial_quality_string::pointer</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00235">235</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aec583b4c79d32ef216fb94346549a6e0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#aec583b4c79d32ef216fb94346549a6e0">nvbio::aln::trivial_quality_string::reference</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00234">234</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7e14db660a9780ce52d12fd8f19f09cf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a7e14db660a9780ce52d12fd8f19f09cf">nvbio::aln::trivial_quality_string::value_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00233">233</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a7aaac562a1c77550e889520801baf8fa"></a>
+<a class="anchor" id="a5ae6264bd1440573d1dff34e4ad4476e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a643542c282214f2f012f98fb77ff0828">iterator</a> nvbio::aln::trivial_quality_string::begin </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>return beginning iterator </p>
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00275">275</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a64267ac14f61c341c3efc3ef083e1765"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> nvbio::aln::trivial_quality_string::operator* </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>dereference operator </p>
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00250">250</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0c484708742c639a30677a6b540fd619"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html">trivial_quality_string</a>&amp; nvbio::aln::trivial_quality_string::operator++ </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>pre-decrement </p>
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00255">255</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab799eac896ac61e679c6d7636f71e996"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html">trivial_quality_string</a> nvbio::aln::trivial_quality_string::operator++ </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dummy</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>pre-increment </p>
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00260">260</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae677ff47f2984758e8297547449abd4d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html">trivial_quality_string</a>&amp; nvbio::aln::trivial_quality_string::operator-- </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>pre-decrement </p>
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00265">265</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a56411d18997f792f601ac3420961d0bb"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html">trivial_quality_string</a> nvbio::aln::trivial_quality_string::operator-- </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dummy</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>post-decrement </p>
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00270">270</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a77f935cae52cce86cfa939f3a6af84c9"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -127,7 +464,7 @@ Public Methods</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> nvbio::aln::trivial_quality_string::operator[] </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#ad44a68aded4f9990664b9e3e48f61004">index_type</a>&#160;</td>
           <td class="paramname"><em>i</em>)</td><td></td>
           <td> const</td>
         </tr>
@@ -138,8 +475,32 @@ Public Methods</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>indexing operator </p>
 
-<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00229">229</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00245">245</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a89cae3354a1e2304f4000e53d2ef23c6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> nvbio::aln::trivial_quality_string::SYMBOL_SIZE = 8u</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2alignment_2utils_8h_source.html#l00230">230</a> of file <a class="el" href="nvbio_2alignment_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -149,7 +510,7 @@ Public Methods</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:43:52 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:35:49 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

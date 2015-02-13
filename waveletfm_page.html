@@ -94,7 +94,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">Protein Search using Wavelet Trees and an FM-index </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><dl class="section user"><dt></dt><dd>In this example, we want to show NVBIO's support for larger alphabets, particularly showing the composability of compact string representations like <a class="el" href="strings_page.html#WaveletTreeSection">Wavelet Trees</a>, and self-compressed indices like the <a class="el" href="fmindex_page.html#FMIndexSection">FM-index</a>. We are hence going to build a small app performing pattern matching on a protein string.</dd></dl>
+<div class="textblock"><dl class="section user"><dt></dt><dd>In <a href="https://github.com/NVlabs/nvbio/blob/master/examples/waveletfm/waveletfm.cu">this example</a>, we want to show NVBIO's support for larger alphabets, particularly showing the composability of compact string representations like <a class="el" href="strings_page.html#WaveletTreeSection">Wavelet Trees</a>, and self-compressed indices like the <a class="el" href="fmindex_page.html#FMIndexSection">FM-index</a>. We are hence going to build a small app performing pattern matching on a protein string.</dd></dl>
 <h1><a class="anchor" id="WaveletFM_BWTBuildingSection"></a>
 Building the BWT</h1>
 <dl class="section user"><dt></dt><dd>If we want to build an FM-index, the first thing is computing the BWT of the database string we want to index. In this example, we'll use a very naive string containing all protein characters in a row - but in a real app this string might contain millions of entries, hence we'll do this using NVBIO's very fast parallel construction algorithm running on a CUDA device.</dd></dl>
@@ -243,11 +243,11 @@ Building and querying the FM-index</h1>
 *  info    : waveletfm... done
 * </pre></dd></dl>
 <dl class="section user"><dt></dt><dd>Showing that, indeed, there's one match for each suffix of the original string.</dd></dl>
-<p>Top: <a class="el" href="nvbio_page.html">NVBIO</a> </p>
+<p>Next: <a class="el" href="proteinsw_page.html">Smith-Waterman Alignment of Protein Strings</a> Top: <a class="el" href="nvbio_page.html">NVBIO</a> </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 18:56:34 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:35:05 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

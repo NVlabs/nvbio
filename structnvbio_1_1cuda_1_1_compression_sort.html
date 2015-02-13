@@ -102,13 +102,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-attribs">Public Members</a> &#124;
 <a href="structnvbio_1_1cuda_1_1_compression_sort-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">nvbio::cuda::CompressionSort Struct Reference</div>  </div>
+<div class="title">nvbio::cuda::CompressionSort Struct Reference<div class="ingroups"><a class="el" href="group___compression_sort_module.html">Compression Sort</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed description</h2>
-<div class="textblock"><p>A sorting enactor for sorting strings using Iterative Compression Sorting - an algorithm inspired by Tero Karras and Timo Aila's "Flexible Parallel Sorting through Iterative Key Compression". </p>
+<div class="textblock"><dl class="section user"><dt></dt><dd>A sorting enactor for sorting strings or string suffixes using Iterative Compression Sorting - an algorithm inspired by Tero Karras and Timo Aila's <em>Flexible Parallel Sorting through Iterative Key Compression</em>. </dd></dl>
+<dl class="section user"><dt></dt><dd>The algorithm is essentially a parallel MSD radix sort, where the digits are words obtained packing as many symbols as possible into a 32-bit word. At each radix pass, the sorter prunes completely sorted strings, and keeps sorting ties using Sean Baxter's fast segmented sort algorithm available inside his Modern-GPU library. </dd></dl>
 
-<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00113">113</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
+<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00131">131</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -180,7 +181,7 @@ Public Members</h2></td></tr>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00117">117</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
+<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00135">135</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
 
 </div>
 </div>
@@ -207,7 +208,7 @@ Public Members</h2></td></tr>
 </div><div class="memdoc">
 <p>return the amount of used device memory </p>
 
-<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00210">210</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
+<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00255">255</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
 
 </div>
 </div>
@@ -234,7 +235,7 @@ Public Members</h2></td></tr>
 </div><div class="memdoc">
 <p>return the amount of needed device memory </p>
 
-<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00196">196</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
+<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00241">241</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
 
 </div>
 </div>
@@ -261,7 +262,7 @@ Public Members</h2></td></tr>
 </div><div class="memdoc">
 <p>reserve enough storage for sorting n strings/suffixes </p>
 
-<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00175">175</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
+<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00220">220</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
 
 </div>
 </div>
@@ -320,20 +321,24 @@ template&lt;typename string_type , typename output_iterator , typename delay_lis
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sort a given batch of suffixes using Iterative Compression Sorting - an algorithm inspired by Tero Karras and Timo Aila's "Flexible Parallel Sorting through Iterative Key Compression".</p>
+<p>Sort a given batch of suffixes using Iterative Compression Sorting - an algorithm inspired by Tero Karras and Timo Aila's <em>Flexible Parallel Sorting through Iterative Key Compression</em>. The sorter will attempt to sort all suffixes based on at least <em>d</em> and at most <em>D</em> <em>words</em> (each formed by packing as many characters as possible in a 32-bit word). If after <em>d</em> words there are ties which need to be solved, and the suffixes forming ties are less than 1/1000 of the input, those suffixes will be saved in a <em>delay list</em>. Analogously, after <em>D</em> words have been sorted, any ties, no matter how many, will be saved to the delay list.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">string_len</td><td>string length </td></tr>
     <tr><td class="paramname">string</td><td>string iterator </td></tr>
     <tr><td class="paramname">n_suffixes</td><td>number of suffixes to sort </td></tr>
     <tr><td class="paramname">d_indices</td><td>device vector of input suffixes </td></tr>
-    <tr><td class="paramname">d_suffixes</td><td>device vector of output suffixes</td></tr>
+    <tr><td class="paramname">d_suffixes</td><td>device vector of output suffixes </td></tr>
+    <tr><td class="paramname">delay_min_threshold</td><td>minimum number of words d used for sorting, before delaying is enabled </td></tr>
+    <tr><td class="paramname">delay_max_threshold</td><td>maximum number of words D used for sorting </td></tr>
+    <tr><td class="paramname">delay_list</td><td>the output delay list</td></tr>
   </table>
   </dd>
 </dl>
-<p>All the other parameters are temporary device buffers </p>
+<p>All the other parameters are temporary device buffers</p>
+<p>Sufsort </p>
 
-<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00252">252</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
+<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00301">301</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
 
 </div>
 </div>
@@ -401,7 +406,25 @@ template&lt;typename set_type , typename input_iterator , typename output_iterat
 <p>Sort a given batch of strings using Iterative Compression Sorting - an algorithm inspired by Tero Karras and Timo Aila's "Flexible Parallel Sorting through Iterative Key Compression".</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">set_type</td><td>a set of "word" strings, needs to provide the following interface: TODO</td></tr>
+    <tr><td class="paramname">set_type</td><td>a set of "word" strings, needs to provide the following interface: <div class="fragment"><div class="line"><span class="keyword">interface </span>WordStringSet</div>
+<div class="line">{</div>
+<div class="line">    <span class="comment">// prepare to extract a &quot;slice&quot; of words from a given subset of the strings</span></div>
+<div class="line">    <span class="keywordtype">void</span> init_slice(</div>
+<div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>  n_strings,            <span class="comment">// number of strings in the slice</span></div>
+<div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>* strings,              <span class="comment">// a device pointer to the subset of strings in the slice (if NULL, the range [0,n_strings) is implied)</span></div>
+<div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>  word_range_begin,     <span class="comment">// the beginning of the range of words that will be required</span></div>
+<div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>  word_range_end);      <span class="comment">// the end of the range of words that will be required</span></div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// extract the given word from the given subset of strings</span></div>
+<div class="line">    <span class="keywordtype">void</span> extract(</div>
+<div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>  n_strings,            <span class="comment">// number of strings in the slice</span></div>
+<div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>* strings,              <span class="comment">// a device pointer to the subset of strings in the slice (if NULL, the range [0,n_strings) is implied)</span></div>
+<div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>  word_idx,             <span class="comment">// the index of the word to be extraced from each string</span></div>
+<div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>  word_range_begin,     <span class="comment">// the beginning of the range of words defining the slice we are operating on</span></div>
+<div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>  word_range_end,       <span class="comment">// the end of the range of words defining the slice we are operating on</span></div>
+<div class="line">              <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>* out_words);           <span class="comment">// the output set of words extracted from the given strings</span></div>
+<div class="line">};</div>
+</div><!-- fragment --></td></tr>
   </table>
   </dd>
 </dl>
@@ -416,7 +439,7 @@ template&lt;typename set_type , typename input_iterator , typename output_iterat
 </dl>
 <p>All the other parameters are temporary device buffers </p>
 
-<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00537">537</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
+<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00586">586</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
 
 </div>
 </div>
@@ -433,7 +456,7 @@ template&lt;typename set_type , typename input_iterator , typename output_iterat
 
 <p>timing stats </p>
 
-<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00227">227</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
+<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00272">272</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
 
 </div>
 </div>
@@ -449,7 +472,7 @@ template&lt;typename set_type , typename input_iterator , typename output_iterat
 
 <p>timing stats </p>
 
-<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00226">226</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
+<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00271">271</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
 
 </div>
 </div>
@@ -465,7 +488,7 @@ template&lt;typename set_type , typename input_iterator , typename output_iterat
 
 <p>timing stats </p>
 
-<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00228">228</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
+<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00273">273</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
 
 </div>
 </div>
@@ -481,7 +504,7 @@ template&lt;typename set_type , typename input_iterator , typename output_iterat
 
 <p>timing stats </p>
 
-<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00223">223</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
+<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00268">268</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
 
 </div>
 </div>
@@ -497,7 +520,7 @@ template&lt;typename set_type , typename input_iterator , typename output_iterat
 
 <p>timing stats </p>
 
-<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00224">224</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
+<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00269">269</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
 
 </div>
 </div>
@@ -513,7 +536,7 @@ template&lt;typename set_type , typename input_iterator , typename output_iterat
 
 <p>timing stats </p>
 
-<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00229">229</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
+<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00274">274</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
 
 </div>
 </div>
@@ -529,7 +552,7 @@ template&lt;typename set_type , typename input_iterator , typename output_iterat
 
 <p>timing stats </p>
 
-<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00225">225</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
+<p>Definition at line <a class="el" href="compression__sort_8h_source.html#l00270">270</a> of file <a class="el" href="compression__sort_8h_source.html">compression_sort.h</a>.</p>
 
 </div>
 </div>
@@ -539,7 +562,7 @@ template&lt;typename set_type , typename input_iterator , typename output_iterat
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:44:06 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:36:03 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

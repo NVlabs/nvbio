@@ -230,7 +230,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> system_tag, <span class="keyword">typename</span> <span class="keywordtype">string</span>_iterator, <span class="keyword">typename</span> index_type, <span class="keyword">typename</span> symbol_type&gt;</div>
 <div class="line"><a name="l00129"></a><span class="lineno"><a class="code" href="namespacenvbio.html#a38ab43e80dd4fcdad0cff15c96f25037">  129</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacenvbio.html#a38ab43e80dd4fcdad0cff15c96f25037">setup</a>(</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keyword">const</span> index_type                                        string_len,</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keyword">const</span> string_iterator&amp;                                  <span class="keywordtype">string</span>,</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1string__iterator.html">string_iterator</a>&amp;                                  <span class="keywordtype">string</span>,</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <a class="code" href="structnvbio_1_1_wavelet_tree_storage.html">WaveletTreeStorage&lt;system_tag,index_type,symbol_type&gt;</a>&amp;  out_tree)</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;{</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1_wavelet_tree.html">WaveletTreeStorage&lt;system_tag,index_type&gt;::plain_view_type</a>     wavelet_tree_view_type;</div>
@@ -291,7 +291,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> bit = symbol_size - i - 1u;</div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;            <span class="comment">// copy the i-th bit-plane to the output</span></div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;            <a class="code" href="group___packed_streams.html#ga147c1e11fff8cdf59730cc169c40f31a">nvbio::assign</a>(</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;            <a class="code" href="namespacenvbio.html#acd291710ba8b8521d178b76dfe5c965e">nvbio::assign</a>(</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                string_len,</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                <a class="code" href="group___iterators.html#gac20c4f47ef134b249d6e60fca64aa196">thrust::make_transform_iterator</a>(</div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                    sorted_string.begin(),</div>
@@ -602,7 +602,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:42:55 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:34:52 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

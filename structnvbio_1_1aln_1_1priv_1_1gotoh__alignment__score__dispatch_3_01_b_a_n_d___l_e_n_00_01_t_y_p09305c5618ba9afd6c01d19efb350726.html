@@ -111,7 +111,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 struct nvbio::aln::priv::gotoh_alignment_score_dispatch&lt; BAND_LEN, TYPE, PatternBlockingTag, symbol_type &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="gotoh__inl_8h_source.html#l00454">454</a> of file <a class="el" href="gotoh__inl_8h_source.html">gotoh_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="gotoh__inl_8h_source.html#l00460">460</a> of file <a class="el" href="gotoh__inl_8h_source.html">gotoh_inl.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="gotoh__inl_8h_source.html">gotoh_inl.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -121,23 +121,23 @@ Static Public Methods</h2></td></tr>
 <tr class="memitem:ab3d0f73dc32e7d37ae9cfdba58f03e06"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1gotoh__alignment__score__dispatch_3_01_b_a_n_d___l_e_n_00_01_t_y_p09305c5618ba9afd6c01d19efb350726.html#ab3d0f73dc32e7d37ae9cfdba58f03e06">update_row</a> (context_type &amp;context, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> block, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> M, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> N, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> symbol_type r_i, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> query_cache q_cache, temp_iterator temp, score_type &amp;temp_i, score_type *H_band, score_type *F_band, sink_type &amp;sink, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> score_type min_score, score_type &amp;max_score, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> score_type G_o, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> score_type G_e, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> score_type zero, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scoring_type scoring)</td></tr>
 <tr class="separator:ab3d0f73dc32e7d37ae9cfdba58f03e06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb055c934e365710850a943031992f0c"><td class="memTemplParams" colspan="2">template&lt;typename context_type , typename string_type , typename qual_type , typename ref_type , typename scoring_type , typename sink_type , typename column_type &gt; </td></tr>
-<tr class="memitem:afb055c934e365710850a943031992f0c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1gotoh__alignment__score__dispatch_3_01_b_a_n_d___l_e_n_00_01_t_y_p09305c5618ba9afd6c01d19efb350726.html#afb055c934e365710850a943031992f0c">run</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scoring_type &amp;scoring, context_type &amp;context, string_type query, qual_type quals, ref_type ref, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> min_score, sink_type &amp;sink, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_begin, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_end, <a class="el" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a> temp)</td></tr>
-<tr class="separator:afb055c934e365710850a943031992f0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0c2336fa7bfc222e15cd58ab0c31a3a"><td class="memTemplParams" colspan="2">template&lt;uint32 MAX_REF_LEN, typename context_type , typename string_type , typename qual_type , typename ref_type , typename scoring_type , typename sink_type &gt; </td></tr>
-<tr class="memitem:ae0c2336fa7bfc222e15cd58ab0c31a3a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1gotoh__alignment__score__dispatch_3_01_b_a_n_d___l_e_n_00_01_t_y_p09305c5618ba9afd6c01d19efb350726.html#ae0c2336fa7bfc222e15cd58ab0c31a3a">run</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scoring_type &amp;scoring, context_type &amp;context, string_type query, qual_type quals, ref_type ref, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> min_score, sink_type &amp;sink, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_begin, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_end)</td></tr>
-<tr class="separator:ae0c2336fa7bfc222e15cd58ab0c31a3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a509d4bc90ecbef8ebe5f8b982f1bd93c"><td class="memTemplParams" colspan="2">template&lt;typename context_type , typename query_type , typename qual_type , typename ref_type , typename scoring_type , typename sink_type , typename column_type &gt; </td></tr>
+<tr class="memitem:a509d4bc90ecbef8ebe5f8b982f1bd93c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1gotoh__alignment__score__dispatch_3_01_b_a_n_d___l_e_n_00_01_t_y_p09305c5618ba9afd6c01d19efb350726.html#a509d4bc90ecbef8ebe5f8b982f1bd93c">run</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scoring_type &amp;scoring, context_type &amp;context, query_type query, qual_type quals, ref_type ref, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> min_score, sink_type &amp;sink, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_begin, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_end, <a class="el" href="group__private.html#ga4a207ead3e758931387c3c6d116c1e62">column_type</a> temp)</td></tr>
+<tr class="separator:a509d4bc90ecbef8ebe5f8b982f1bd93c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64dadd40cb867ca711d38e3fea07818f"><td class="memTemplParams" colspan="2">template&lt;uint32 MAX_REF_LEN, typename context_type , typename query_type , typename qual_type , typename ref_type , typename scoring_type , typename sink_type &gt; </td></tr>
+<tr class="memitem:a64dadd40cb867ca711d38e3fea07818f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> static <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1gotoh__alignment__score__dispatch_3_01_b_a_n_d___l_e_n_00_01_t_y_p09305c5618ba9afd6c01d19efb350726.html#a64dadd40cb867ca711d38e3fea07818f">run</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> scoring_type &amp;scoring, context_type &amp;context, query_type query, qual_type quals, ref_type ref, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> min_score, sink_type &amp;sink, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_begin, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> window_end)</td></tr>
+<tr class="separator:a64dadd40cb867ca711d38e3fea07818f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="afb055c934e365710850a943031992f0c"></a>
+<a class="anchor" id="a509d4bc90ecbef8ebe5f8b982f1bd93c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;uint32 BAND_LEN, AlignmentType TYPE, typename symbol_type &gt; </div>
 <div class="memtemplate">
-template&lt;typename context_type , typename string_type , typename qual_type , typename ref_type , typename scoring_type , typename sink_type , typename column_type &gt; </div>
+template&lt;typename context_type , typename query_type , typename qual_type , typename ref_type , typename scoring_type , typename sink_type , typename column_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -157,7 +157,7 @@ template&lt;typename context_type , typename string_type , typename qual_type , 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">string_type&#160;</td>
+          <td class="paramtype">query_type&#160;</td>
           <td class="paramname"><em>query</em>, </td>
         </tr>
         <tr>
@@ -215,17 +215,17 @@ template&lt;typename context_type , typename string_type , typename qual_type , 
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="gotoh__inl_8h_source.html#l00621">621</a> of file <a class="el" href="gotoh__inl_8h_source.html">gotoh_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="gotoh__inl_8h_source.html#l00629">629</a> of file <a class="el" href="gotoh__inl_8h_source.html">gotoh_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ae0c2336fa7bfc222e15cd58ab0c31a3a"></a>
+<a class="anchor" id="a64dadd40cb867ca711d38e3fea07818f"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;uint32 BAND_LEN, AlignmentType TYPE, typename symbol_type &gt; </div>
 <div class="memtemplate">
-template&lt;uint32 MAX_REF_LEN, typename context_type , typename string_type , typename qual_type , typename ref_type , typename scoring_type , typename sink_type &gt; </div>
+template&lt;uint32 MAX_REF_LEN, typename context_type , typename query_type , typename qual_type , typename ref_type , typename scoring_type , typename sink_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -245,7 +245,7 @@ template&lt;uint32 MAX_REF_LEN, typename context_type , typename string_type , t
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">string_type&#160;</td>
+          <td class="paramtype">query_type&#160;</td>
           <td class="paramname"><em>query</em>, </td>
         </tr>
         <tr>
@@ -297,7 +297,7 @@ template&lt;uint32 MAX_REF_LEN, typename context_type , typename string_type , t
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="gotoh__inl_8h_source.html#l00826">826</a> of file <a class="el" href="gotoh__inl_8h_source.html">gotoh_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="gotoh__inl_8h_source.html#l00936">936</a> of file <a class="el" href="gotoh__inl_8h_source.html">gotoh_inl.h</a>.</p>
 
 </div>
 </div>
@@ -433,7 +433,7 @@ template&lt;bool CHECK_M, typename context_type , typename query_cache , typenam
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="gotoh__inl_8h_source.html#l00467">467</a> of file <a class="el" href="gotoh__inl_8h_source.html">gotoh_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="gotoh__inl_8h_source.html#l00473">473</a> of file <a class="el" href="gotoh__inl_8h_source.html">gotoh_inl.h</a>.</p>
 
 </div>
 </div>
@@ -443,7 +443,7 @@ template&lt;bool CHECK_M, typename context_type , typename query_cache , typenam
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:43:53 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:35:50 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

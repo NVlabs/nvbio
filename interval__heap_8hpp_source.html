@@ -180,7 +180,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;{</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;  <span class="keyword">using namespace </span>std;</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;  <span class="keyword">using</span> <a class="code" href="namespaceboost_1_1heap_1_1interval__heap__internal.html#a5abf7e3d70ea987abc4be42a555fafb4" title="Restores the interval-heap property if one element violates it. ">interval_heap_internal::sift_down</a>;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> iterator_traits&lt;Iterator&gt;::difference_type Offset;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1iterator__traits.html#a0e0ec676830ea49e92b754be695b4071">iterator_traits&lt;Iterator&gt;::difference_type</a> Offset;</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;  <span class="keywordflow">if</span> (index &amp; 1)</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    sift_down&lt;false, Iterator, Offset, Compare&gt;(first, last, index, <a class="code" href="namespacedivsufsortxx_1_1substring.html#a245a1be9e0e54b3c762cb65000b137f3">compare</a>,2);</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;  <span class="keywordflow">else</span></div>
@@ -214,7 +214,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00201"></a><span class="lineno"><a class="code" href="namespacenvbio_1_1heap.html#aa7df8bd734f0902ff28ab3b2e11b70e2">  201</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceboost_1_1heap.html#aca35603374f06483f16e9beb6145316d" title="Moves a minimal element to the back of the range for popping. ">pop_interval_heap_min</a> (Iterator first, Iterator last, Compare compare) {</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;  <span class="keyword">using namespace </span>std;</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;  <span class="keyword">using</span> <a class="code" href="namespaceboost_1_1heap_1_1interval__heap__internal.html#a5abf7e3d70ea987abc4be42a555fafb4" title="Restores the interval-heap property if one element violates it. ">interval_heap_internal::sift_down</a>;</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> iterator_traits&lt;Iterator&gt;::difference_type Offset;</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1iterator__traits.html#a0e0ec676830ea49e92b754be695b4071">iterator_traits&lt;Iterator&gt;::difference_type</a> Offset;</div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;  --last;</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;  <a class="code" href="namespaceboost_1_1container.html#a632b521f178dcd9dad1f76389669dd27" title="Swaps the elements of two priority deques. ">swap</a>(*first, *last);</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;  <span class="keywordflow">try</span> {</div>
@@ -230,7 +230,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00230"></a><span class="lineno"><a class="code" href="namespacenvbio_1_1heap.html#a20802ce460cc747aca6d97cac9789c3e">  230</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceboost_1_1heap.html#a5f3246b3df213971b1b3fa0954373b8f" title="Moves a maximal element to the back of the range for popping. ">pop_interval_heap_max</a> (Iterator first, Iterator last, Compare compare) {</div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;  <span class="keyword">using namespace </span>std;</div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;  <span class="keyword">using</span> <a class="code" href="namespaceboost_1_1heap_1_1interval__heap__internal.html#a5abf7e3d70ea987abc4be42a555fafb4" title="Restores the interval-heap property if one element violates it. ">interval_heap_internal::sift_down</a>;</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> iterator_traits&lt;Iterator&gt;::difference_type Offset;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1iterator__traits.html#a0e0ec676830ea49e92b754be695b4071">iterator_traits&lt;Iterator&gt;::difference_type</a> Offset;</div>
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="comment">//  Nothing to be done.</span></div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;  <span class="keywordflow">if</span> (last - first &lt;= 2)</div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <span class="keywordflow">return</span>;</div>
@@ -259,7 +259,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00271"></a><span class="lineno"><a class="code" href="namespacenvbio_1_1heap.html#a7e3d270f302eea5a3b89be76331ea30c">  271</a></span>&#160;Iterator <a class="code" href="namespaceboost_1_1heap.html#a5a66e99677be9e1fd54853b5e16cd36a" title="Finds the largest subrange that qualifies as an interval heap. ">is_interval_heap_until</a> (Iterator first, Iterator last, Compare compare)</div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;{</div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;  <span class="keyword">using namespace </span>std;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> iterator_traits&lt;Iterator&gt;::difference_type Offset;</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1iterator__traits.html#a0e0ec676830ea49e92b754be695b4071">iterator_traits&lt;Iterator&gt;::difference_type</a> Offset;</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;</div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;  Offset index = <span class="keyword">static_cast&lt;</span>Offset<span class="keyword">&gt;</span>(0);</div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;</div>
@@ -306,7 +306,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00327"></a><span class="lineno"><a class="code" href="namespacenvbio_1_1heap.html#aca322a2a9a00c8875c6be0b6581dd9f4">  327</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceboost_1_1heap.html#ac2f1a8dc6c7add6d06557cce98840ca6" title="Moves elements in [first,last) to form an interval heap. ">make_interval_heap</a> (Iterator first, Iterator last, Compare compare) {</div>
 <div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;  <span class="keyword">using namespace </span>std;</div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;  <span class="keyword">using</span> <a class="code" href="namespaceboost_1_1heap_1_1interval__heap__internal.html#a5abf7e3d70ea987abc4be42a555fafb4" title="Restores the interval-heap property if one element violates it. ">interval_heap_internal::sift_down</a>;</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> iterator_traits&lt;Iterator&gt;::difference_type Offset;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1iterator__traits.html#a0e0ec676830ea49e92b754be695b4071">iterator_traits&lt;Iterator&gt;::difference_type</a> Offset;</div>
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;</div>
 <div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;  Offset index_end = last - first;</div>
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="comment">//  Double-heap property holds vacuously.</span></div>
@@ -338,7 +338,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;{</div>
 <div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;<span class="comment">//  Use the most specialized available functions.</span></div>
 <div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;  <span class="keyword">using namespace </span>std;</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> iterator_traits&lt;Iterator&gt;::value_type Value;</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1iterator__traits.html#a739918a4c2217b6cc3fff5f17cc25bca">iterator_traits&lt;Iterator&gt;::value_type</a> Value;</div>
 <div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;<span class="comment">//  Keeping the information about the origin permits strong exception guarantee.</span></div>
 <div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;  Offset index = origin;</div>
 <div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;<span class="preprocessor">#if (__cplusplus &gt;= 201103L)  //  C++11</span></div>
@@ -440,7 +440,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;{</div>
 <div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;<span class="comment">//  Use the most specialized available functions.</span></div>
 <div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;  <span class="keyword">using namespace </span>std;</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> iterator_traits&lt;Iterator&gt;::value_type Value;</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1iterator__traits.html#a739918a4c2217b6cc3fff5f17cc25bca">iterator_traits&lt;Iterator&gt;::value_type</a> Value;</div>
 <div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;<span class="comment">//  By keeping track of where I started, I can roll back all changes.</span></div>
 <div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;  Offset index = origin;</div>
 <div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;<span class="preprocessor">#if (__cplusplus &gt;= 201103L)  //  C++11</span></div>
@@ -540,7 +540,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;                Compare compare)</div>
 <div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;{</div>
 <div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;  <span class="keyword">using namespace </span>std;</div>
-<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> iterator_traits&lt;Iterator&gt;::difference_type Offset;</div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> <a class="code" href="structnvbio_1_1iterator__traits.html#a0e0ec676830ea49e92b754be695b4071">iterator_traits&lt;Iterator&gt;::difference_type</a> Offset;</div>
 <div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;  <span class="keywordflow">if</span> (index &amp; 1)</div>
 <div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;    sift_leaf_max&lt;Iterator, Offset, Compare&gt;(first, last, index, <a class="code" href="namespacedivsufsortxx_1_1substring.html#a245a1be9e0e54b3c762cb65000b137f3">compare</a>, 2);</div>
 <div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;  <span class="keywordflow">else</span></div>
@@ -554,7 +554,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:42:43 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:34:40 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

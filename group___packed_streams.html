@@ -106,6 +106,8 @@ Modules</h2></td></tr>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_packed_vector.html">nvbio::PackedVector&lt; SystemTag, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_forward_packed_stream.html">nvbio::ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1stream__traits.html">nvbio::stream_traits&lt; T &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1stream__traits_3_01_t_01_5_01_4.html">nvbio::stream_traits&lt; T * &gt;</a></td></tr>
@@ -119,6 +121,10 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_packed_stream.html">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1stream__traits_3_01_packed_stream_3_01_input_stream_00_01_symbol_type_00_01_s_y_mb1bcf1f1d667a89cd075d832bf5de604.html">nvbio::stream_traits&lt; PackedStream&lt; InputStream, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1iterator__traits_3_01_packed_stream_3_01_input_stream_00_01_symbol_type_00_01_s_y4b07a4d1c11e5a68a71e5c6fa6e22866.html">nvbio::iterator_traits&lt; PackedStream&lt; InputStream, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1stream__traits_3_01_forward_packed_stream_3_01_input_stream_00_01_symbol_type_00_bc503e3c1c2c9a60f83226bbf65bbb4c.html">nvbio::stream_traits&lt; ForwardPackedStream&lt; InputStream, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1uint4__as__uint32__iterator.html">nvbio::uint4_as_uint32_iterator&lt; IteratorType &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -136,38 +142,57 @@ SYMBOL_SIZE_T, BIG_ENDIAN_T, <br class="typebreak"/>
 IndexType &gt;<br class="typebreak"/>
 ::const_plain_view_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#ga292e8368cc40f23ce0990f834b973a17">nvbio::plain_view</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedVector&lt; SystemTag, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;vec)</td></tr>
 <tr class="separator:ga292e8368cc40f23ce0990f834b973a17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4f21044503235c2a47f69fb4bcd6d9c6"><td class="memTemplParams" colspan="2">template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
-<tr class="memitem:ga4f21044503235c2a47f69fb4bcd6d9c6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#ga4f21044503235c2a47f69fb4bcd6d9c6">nvbio::operator&lt;</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it2)</td></tr>
-<tr class="separator:ga4f21044503235c2a47f69fb4bcd6d9c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2524c2cda40e4df22c957125991b2c17"><td class="memTemplParams" colspan="2">template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
-<tr class="memitem:ga2524c2cda40e4df22c957125991b2c17"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#ga2524c2cda40e4df22c957125991b2c17">nvbio::operator&gt;</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it2)</td></tr>
-<tr class="separator:ga2524c2cda40e4df22c957125991b2c17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4b82afc86bf7588b559f72d22d40dfa1"><td class="memTemplParams" colspan="2">template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
-<tr class="memitem:ga4b82afc86bf7588b559f72d22d40dfa1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#ga4b82afc86bf7588b559f72d22d40dfa1">nvbio::operator==</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it2)</td></tr>
-<tr class="separator:ga4b82afc86bf7588b559f72d22d40dfa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4556dffb1d30ca50889eea07de525e52"><td class="memTemplParams" colspan="2">template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
-<tr class="memitem:ga4556dffb1d30ca50889eea07de525e52"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#ga4556dffb1d30ca50889eea07de525e52">nvbio::operator!=</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it2)</td></tr>
-<tr class="separator:ga4556dffb1d30ca50889eea07de525e52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga147c1e11fff8cdf59730cc169c40f31a"><td class="memTemplParams" colspan="2">template&lt;typename InputIterator , typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
-<tr class="memitem:ga147c1e11fff8cdf59730cc169c40f31a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#ga147c1e11fff8cdf59730cc169c40f31a">nvbio::assign</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> IndexType input_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> InputIterator input_string, PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; packed_string)</td></tr>
-<tr class="separator:ga147c1e11fff8cdf59730cc169c40f31a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad66375016eb0bad4114f35a2b5370e29"><td class="memTemplParams" colspan="2">template&lt;uint32 BLOCKDIM, uint32 BITS, bool BIG_ENDIAN, typename InStreamIterator , typename OutStreamIterator &gt; </td></tr>
 <tr class="memitem:gad66375016eb0bad4114f35a2b5370e29"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#gad66375016eb0bad4114f35a2b5370e29">nvbio::transpose_packed_streams</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 stride, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 N, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 in_offset, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> InStreamIterator in_stream, OutStreamIterator out_stream)</td></tr>
 <tr class="separator:gad66375016eb0bad4114f35a2b5370e29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga327db82d8c34b4767787a573abf474ee"><td class="memTemplParams" colspan="2">template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
+<tr class="memitem:ga327db82d8c34b4767787a573abf474ee"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#ga327db82d8c34b4767787a573abf474ee">operator&lt;</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it2)</td></tr>
+<tr class="separator:ga327db82d8c34b4767787a573abf474ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4abc91c89b227d762cca79129f9ea4b3"><td class="memTemplParams" colspan="2">template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
+<tr class="memitem:ga4abc91c89b227d762cca79129f9ea4b3"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#ga4abc91c89b227d762cca79129f9ea4b3">operator&gt;</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it2)</td></tr>
+<tr class="separator:ga4abc91c89b227d762cca79129f9ea4b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabc8b46a39d07c36e2cd14c1d95af0f2a"><td class="memTemplParams" colspan="2">template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
+<tr class="memitem:gabc8b46a39d07c36e2cd14c1d95af0f2a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#gabc8b46a39d07c36e2cd14c1d95af0f2a">operator==</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it2)</td></tr>
+<tr class="separator:gabc8b46a39d07c36e2cd14c1d95af0f2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga897c42d02b4aed260f5e5798eb1923ff"><td class="memTemplParams" colspan="2">template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
+<tr class="memitem:ga897c42d02b4aed260f5e5798eb1923ff"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#ga897c42d02b4aed260f5e5798eb1923ff">operator!=</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it2)</td></tr>
+<tr class="separator:ga897c42d02b4aed260f5e5798eb1923ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2427a37ed0e2c5af1c0eaf025019c3a4"><td class="memTemplParams" colspan="2">template&lt;typename InputIterator , typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
+<tr class="memitem:ga2427a37ed0e2c5af1c0eaf025019c3a4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#ga2427a37ed0e2c5af1c0eaf025019c3a4">assign</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> IndexType input_len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> InputIterator input_string, PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; packed_string)</td></tr>
+<tr class="separator:ga2427a37ed0e2c5af1c0eaf025019c3a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab253e1010a96b046ee52b19c247ba83a"><td class="memTemplParams" colspan="2">template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
+<tr class="memitem:gab253e1010a96b046ee52b19c247ba83a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#gab253e1010a96b046ee52b19c247ba83a">operator&lt;</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it2)</td></tr>
+<tr class="separator:gab253e1010a96b046ee52b19c247ba83a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga20ec74a0c453c40b84d7d68e33479bf2"><td class="memTemplParams" colspan="2">template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
+<tr class="memitem:ga20ec74a0c453c40b84d7d68e33479bf2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#ga20ec74a0c453c40b84d7d68e33479bf2">operator&gt;</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it2)</td></tr>
+<tr class="separator:ga20ec74a0c453c40b84d7d68e33479bf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaec516a3acbd1a6998b729e3a3d779d43"><td class="memTemplParams" colspan="2">template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
+<tr class="memitem:gaec516a3acbd1a6998b729e3a3d779d43"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#gaec516a3acbd1a6998b729e3a3d779d43">operator==</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it2)</td></tr>
+<tr class="separator:gaec516a3acbd1a6998b729e3a3d779d43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga673b712e91441375bc6e8307da1d8baa"><td class="memTemplParams" colspan="2">template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </td></tr>
+<tr class="memitem:ga673b712e91441375bc6e8307da1d8baa"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___packed_streams.html#ga673b712e91441375bc6e8307da1d8baa">operator!=</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;it2)</td></tr>
+<tr class="separator:ga673b712e91441375bc6e8307da1d8baa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ga147c1e11fff8cdf59730cc169c40f31a"></a>
+<a class="anchor" id="ga2427a37ed0e2c5af1c0eaf025019c3a4"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename InputIterator , typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void nvbio::assign </td>
+          <td class="memname"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void assign </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> IndexType&#160;</td>
           <td class="paramname"><em>input_len</em>, </td>
@@ -181,7 +206,7 @@ template&lt;typename InputIterator , typename InputStream , typename Symbol , ui
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;&#160;</td>
           <td class="paramname"><em>packed_string</em>&#160;</td>
         </tr>
         <tr>
@@ -190,29 +215,37 @@ template&lt;typename InputIterator , typename InputStream , typename Symbol , ui
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>assign a sequence to a packed stream </p>
 
-<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l01017">1017</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l01364">1364</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga4556dffb1d30ca50889eea07de525e52"></a>
+<a class="anchor" id="ga897c42d02b4aed260f5e5798eb1923ff"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool nvbio::operator!= </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool operator!= </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
           <td class="paramname"><em>it1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
           <td class="paramname"><em>it2</em>&#160;</td>
         </tr>
         <tr>
@@ -221,29 +254,115 @@ template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool 
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>inequality test </p>
+
+<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l00775">775</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga673b712e91441375bc6e8307da1d8baa"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool operator!= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_forward_packed_stream.html">ForwardPackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_forward_packed_stream.html">ForwardPackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>inequality test </p>
+
+<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l01092">1092</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga327db82d8c34b4767787a573abf474ee"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool operator&lt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>less than </p>
 
 <p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l00745">745</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga4f21044503235c2a47f69fb4bcd6d9c6"></a>
+<a class="anchor" id="gab253e1010a96b046ee52b19c247ba83a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool nvbio::operator&lt; </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool operator&lt; </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_forward_packed_stream.html">ForwardPackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
           <td class="paramname"><em>it1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_forward_packed_stream.html">ForwardPackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
           <td class="paramname"><em>it2</em>&#160;</td>
         </tr>
         <tr>
@@ -252,29 +371,37 @@ template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool 
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>less than </p>
 
-<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l00715">715</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l01062">1062</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga4b82afc86bf7588b559f72d22d40dfa1"></a>
+<a class="anchor" id="gabc8b46a39d07c36e2cd14c1d95af0f2a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool nvbio::operator== </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool operator== </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
           <td class="paramname"><em>it1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
           <td class="paramname"><em>it2</em>&#160;</td>
         </tr>
         <tr>
@@ -283,29 +410,37 @@ template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool 
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>equality test </p>
 
-<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l00735">735</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l00765">765</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ga2524c2cda40e4df22c957125991b2c17"></a>
+<a class="anchor" id="gaec516a3acbd1a6998b729e3a3d779d43"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool nvbio::operator&gt; </td>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool operator== </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_forward_packed_stream.html">ForwardPackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
           <td class="paramname"><em>it1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_forward_packed_stream.html">ForwardPackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
           <td class="paramname"><em>it2</em>&#160;</td>
         </tr>
         <tr>
@@ -314,10 +449,93 @@ template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool 
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>equality test </p>
+
+<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l01082">1082</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga4abc91c89b227d762cca79129f9ea4b3"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool operator&gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_packed_stream.html">PackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>greater than </p>
 
-<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l00725">725</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l00755">755</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga20ec74a0c453c40b84d7d68e33479bf2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputStream , typename Symbol , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool operator&gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_forward_packed_stream.html">ForwardPackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_forward_packed_stream.html">ForwardPackedStream</a>&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>greater than </p>
+
+<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l01072">1072</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
 
 </div>
 </div>
@@ -346,7 +564,7 @@ template&lt;typename SystemTag , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typena
 </div><div class="memdoc">
 <p>return a plain view of a <a class="el" href="structnvbio_1_1_packed_vector.html">PackedVector</a> object </p>
 
-<p>Definition at line <a class="el" href="packed__vector_8h_source.html#l00161">161</a> of file <a class="el" href="packed__vector_8h_source.html">packed_vector.h</a>.</p>
+<p>Definition at line <a class="el" href="packed__vector_8h_source.html#l00162">162</a> of file <a class="el" href="packed__vector_8h_source.html">packed_vector.h</a>.</p>
 
 </div>
 </div>
@@ -375,7 +593,7 @@ template&lt;typename SystemTag , uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typena
 </div><div class="memdoc">
 <p>return a plain view of a const <a class="el" href="structnvbio_1_1_packed_vector.html">PackedVector</a> object </p>
 
-<p>Definition at line <a class="el" href="packed__vector_8h_source.html#l00172">172</a> of file <a class="el" href="packed__vector_8h_source.html">packed_vector.h</a>.</p>
+<p>Definition at line <a class="el" href="packed__vector_8h_source.html#l00173">173</a> of file <a class="el" href="packed__vector_8h_source.html">packed_vector.h</a>.</p>
 
 </div>
 </div>
@@ -434,14 +652,14 @@ template&lt;uint32 BLOCKDIM, uint32 BITS, bool BIG_ENDIAN, typename InStreamIter
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l01042">1042</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="packedstream__inl_8h_source.html#l01389">1389</a> of file <a class="el" href="packedstream__inl_8h_source.html">packedstream_inl.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:43:09 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:35:05 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

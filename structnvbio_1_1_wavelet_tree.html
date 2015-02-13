@@ -116,7 +116,7 @@ struct nvbio::WaveletTree&lt; BitStreamIterator, IndexIterator, SymbolType &gt;<
 <p>A shallow Wavelet Tree class, holding iterators to a bit-string representing the different bit-planes of the output Wavelet Tree, and the tree structure itself, a binary heap, recording the sequence split of each node.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">BitStreamIterator</td><td>the output bit-string type: must possess an iterator interface, and define a valid implementation of <a class="el" href="group___packed_streams.html#ga147c1e11fff8cdf59730cc169c40f31a">nvbio::assign()</a>; <a class="el" href="structnvbio_1_1iterator__system.html#aa4062cefc0e6df63422dbf2e3073474e">iterator_system&lt;BitStreamIterator&gt;::type</a> is used to determine whether to apply host or device algorithms</td></tr>
+    <tr><td class="paramname">BitStreamIterator</td><td>the output bit-string type: must possess an iterator interface, and define a valid implementation of <a class="el" href="namespacenvbio.html#acd291710ba8b8521d178b76dfe5c965e">nvbio::assign()</a>; <a class="el" href="structnvbio_1_1iterator__system.html#aa4062cefc0e6df63422dbf2e3073474e">iterator_system&lt;BitStreamIterator&gt;::type</a> is used to determine whether to apply host or device algorithms</td></tr>
     <tr><td class="paramname">IndexIterator</td><td>an iterator to an integer array representing the sequence splits of the Wavelet Tree's nodes, encoded as a full binary heap; the array must contain at least (2^SYMBOL_SIZE) - 1 entries</td></tr>
     <tr><td class="paramname">SymbolType</td><td>the unsigned integer type used to encode symbols (e.g. uint8, uint16, uint32...) </td></tr>
   </table>
@@ -887,7 +887,7 @@ template&lt;typename BitStreamIterator, typename IndexIterator, typename SymbolT
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:43:45 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:35:43 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

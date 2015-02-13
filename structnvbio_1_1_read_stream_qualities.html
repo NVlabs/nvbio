@@ -97,8 +97,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Methods</a> &#124;
 <a href="#pub-attribs">Public Members</a> &#124;
+<a href="#pub-static-attribs">Static Public Members</a> &#124;
 <a href="structnvbio_1_1_read_stream_qualities-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">nvbio::ReadStreamQualities&lt; ReadStreamType &gt; Struct Template Reference<div class="ingroups"><a class="el" href="group___utils.html">Utils</a></div></div>  </div>
@@ -109,12 +111,41 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     typename ReadStreamType&gt;<br/>
 struct nvbio::ReadStreamQualities&lt; ReadStreamType &gt;</h3>
 
-<p>Helper class to extract qualities from a read </p>
+<p>Helper class to extract qualities from a read. This class has a string interface. </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00109">109</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00111">111</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a356c96e6c65c09227ea55d0218d7cc61"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1_read_stream_qualities.html">ReadStreamQualities</a><br class="typebreak"/>
+&lt; ReadStreamType &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#a356c96e6c65c09227ea55d0218d7cc61">this_type</a></td></tr>
+<tr class="separator:a356c96e6c65c09227ea55d0218d7cc61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ac9da4ebd719fcef51ba87ac8a07735"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+<a class="el" href="namespacenvbio.html#ad8043fd5a7d29f45516e0bb3609924ca">random_access_universal_iterator_tag</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#a4ac9da4ebd719fcef51ba87ac8a07735">iterator_category</a></td></tr>
+<tr class="separator:a4ac9da4ebd719fcef51ba87ac8a07735"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afac25d47d62f80961c95848d16343be5"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#afac25d47d62f80961c95848d16343be5">value_type</a></td></tr>
+<tr class="separator:afac25d47d62f80961c95848d16343be5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64ea2e6405457d4d8f69d9ad3895c463"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1_read_stream_qualities.html#afac25d47d62f80961c95848d16343be5">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#a64ea2e6405457d4d8f69d9ad3895c463">reference</a></td></tr>
+<tr class="separator:a64ea2e6405457d4d8f69d9ad3895c463"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfcc034ab53c7b5bbf113cec2d9c9350"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html#afac25d47d62f80961c95848d16343be5">value_type</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#acfcc034ab53c7b5bbf113cec2d9c9350">pointer</a></td></tr>
+<tr class="separator:acfcc034ab53c7b5bbf113cec2d9c9350"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae877d98a1db4461afdc009edc7ad0fa5"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+ReadStreamType::difference_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#ae877d98a1db4461afdc009edc7ad0fa5">difference_type</a></td></tr>
+<tr class="separator:ae877d98a1db4461afdc009edc7ad0fa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeea53bc82f4e241b48b156ff94037d61"><td class="memItemLeft" align="right" valign="top">typedef ReadStreamType::index_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#aeea53bc82f4e241b48b156ff94037d61">index_type</a></td></tr>
+<tr class="separator:aeea53bc82f4e241b48b156ff94037d61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2853bb4f14243a6bc542331da3bb0c48"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a><br class="typebreak"/>
+&lt; <a class="el" href="structnvbio_1_1_read_stream_qualities.html#a356c96e6c65c09227ea55d0218d7cc61">this_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#a2853bb4f14243a6bc542331da3bb0c48">iterator</a></td></tr>
+<tr class="separator:a2853bb4f14243a6bc542331da3bb0c48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6a4029d26c7550bfb5b9a86b4dea382"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a><br class="typebreak"/>
+&lt; <a class="el" href="structnvbio_1_1_read_stream_qualities.html#a356c96e6c65c09227ea55d0218d7cc61">this_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#ae6a4029d26c7550bfb5b9a86b4dea382">const_iterator</a></td></tr>
+<tr class="separator:ae6a4029d26c7550bfb5b9a86b4dea382"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9915d4b99e885c3f5b4ffa1970cb3472"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a><br class="typebreak"/>
+&lt; <a class="el" href="structnvbio_1_1_read_stream_qualities.html#a356c96e6c65c09227ea55d0218d7cc61">this_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#a9915d4b99e885c3f5b4ffa1970cb3472">forward_iterator</a></td></tr>
+<tr class="separator:a9915d4b99e885c3f5b4ffa1970cb3472"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Methods</h2></td></tr>
 <tr class="memitem:aaf1e417507bfe2c8d36ed25bcfe3e9ed"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#aaf1e417507bfe2c8d36ed25bcfe3e9ed">ReadStreamQualities</a> ()</td></tr>
@@ -124,12 +155,192 @@ Public Methods</h2></td></tr>
 <tr class="memitem:afb68c6f589a93e12ea03456e6d0c376c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#afb68c6f589a93e12ea03456e6d0c376c">operator[]</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> pos) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
 <tr class="separator:afb68c6f589a93e12ea03456e6d0c376c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03debc7fe0a70f3d59a4cb116197b695"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html#a2853bb4f14243a6bc542331da3bb0c48">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#a03debc7fe0a70f3d59a4cb116197b695">begin</a> ()</td></tr>
+<tr class="separator:a03debc7fe0a70f3d59a4cb116197b695"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f3d367f1f08cd57fb527926ac37c234"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html#a2853bb4f14243a6bc542331da3bb0c48">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#a3f3d367f1f08cd57fb527926ac37c234">end</a> ()</td></tr>
+<tr class="separator:a3f3d367f1f08cd57fb527926ac37c234"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc8ceab253cd677fb2034889d11661e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="structnvbio_1_1_read_stream_qualities.html#ae6a4029d26c7550bfb5b9a86b4dea382">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#afc8ceab253cd677fb2034889d11661e0">begin</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:afc8ceab253cd677fb2034889d11661e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cf5cdd375e2fb47b684cfdd4b2ea79e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="structnvbio_1_1_read_stream_qualities.html#ae6a4029d26c7550bfb5b9a86b4dea382">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#a6cf5cdd375e2fb47b684cfdd4b2ea79e">end</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:a6cf5cdd375e2fb47b684cfdd4b2ea79e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Members</h2></td></tr>
 <tr class="memitem:aa33d20e97a6cd240a682bcdea0d14e7e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> ReadStreamType *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#aa33d20e97a6cd240a682bcdea0d14e7e">m_read</a></td></tr>
 <tr class="separator:aa33d20e97a6cd240a682bcdea0d14e7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Members</h2></td></tr>
+<tr class="memitem:a2f11db67fddfb1194b25d54489e45c7e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_read_stream_qualities.html#a2f11db67fddfb1194b25d54489e45c7e">SYMBOL_SIZE</a> = 8u</td></tr>
+<tr class="separator:a2f11db67fddfb1194b25d54489e45c7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="ae6a4029d26c7550bfb5b9a86b4dea382"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt;<a class="el" href="structnvbio_1_1_read_stream_qualities.html#a356c96e6c65c09227ea55d0218d7cc61">this_type</a>&gt; <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::<a class="el" href="structnvbio_1_1_read_stream_qualities.html#ae6a4029d26c7550bfb5b9a86b4dea382">const_iterator</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00123">123</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae877d98a1db4461afdc009edc7ad0fa5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef ReadStreamType::difference_type <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::<a class="el" href="structnvbio_1_1_read_stream_qualities.html#ae877d98a1db4461afdc009edc7ad0fa5">difference_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00120">120</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9915d4b99e885c3f5b4ffa1970cb3472"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt;<a class="el" href="structnvbio_1_1_read_stream_qualities.html#a356c96e6c65c09227ea55d0218d7cc61">this_type</a>&gt; <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::<a class="el" href="structnvbio_1_1_read_stream_qualities.html#a9915d4b99e885c3f5b4ffa1970cb3472">forward_iterator</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00124">124</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aeea53bc82f4e241b48b156ff94037d61"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef ReadStreamType::index_type <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::<a class="el" href="structnvbio_1_1_read_stream_qualities.html#aeea53bc82f4e241b48b156ff94037d61">index_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00121">121</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2853bb4f14243a6bc542331da3bb0c48"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt;<a class="el" href="structnvbio_1_1_read_stream_qualities.html#a356c96e6c65c09227ea55d0218d7cc61">this_type</a>&gt; <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::<a class="el" href="structnvbio_1_1_read_stream_qualities.html#a2853bb4f14243a6bc542331da3bb0c48">iterator</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00122">122</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4ac9da4ebd719fcef51ba87ac8a07735"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="namespacenvbio.html#ad8043fd5a7d29f45516e0bb3609924ca">random_access_universal_iterator_tag</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::<a class="el" href="structnvbio_1_1_read_stream_qualities.html#a4ac9da4ebd719fcef51ba87ac8a07735">iterator_category</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00116">116</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acfcc034ab53c7b5bbf113cec2d9c9350"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html#afac25d47d62f80961c95848d16343be5">value_type</a>* <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::<a class="el" href="structnvbio_1_1_read_stream_qualities.html#acfcc034ab53c7b5bbf113cec2d9c9350">pointer</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00119">119</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a64ea2e6405457d4d8f69d9ad3895c463"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1_read_stream_qualities.html#afac25d47d62f80961c95848d16343be5">value_type</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::<a class="el" href="structnvbio_1_1_read_stream_qualities.html#a64ea2e6405457d4d8f69d9ad3895c463">reference</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00118">118</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a356c96e6c65c09227ea55d0218d7cc61"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1_read_stream_qualities.html">ReadStreamQualities</a>&lt;ReadStreamType&gt; <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::<a class="el" href="structnvbio_1_1_read_stream_qualities.html#a356c96e6c65c09227ea55d0218d7cc61">this_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00115">115</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afac25d47d62f80961c95848d16343be5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::<a class="el" href="structnvbio_1_1_read_stream_qualities.html#afac25d47d62f80961c95848d16343be5">value_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00117">117</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aaf1e417507bfe2c8d36ed25bcfe3e9ed"></a>
 <div class="memitem">
@@ -153,8 +364,9 @@ template&lt;typename ReadStreamType &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>default constructor </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00112">112</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00129">129</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -181,12 +393,129 @@ template&lt;typename ReadStreamType &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>constructor </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00115">115</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00134">134</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a03debc7fe0a70f3d59a4cb116197b695"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html#a2853bb4f14243a6bc542331da3bb0c48">iterator</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::begin </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname">)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>return a begin iterator </p>
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00144">144</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afc8ceab253cd677fb2034889d11661e0"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html#ae6a4029d26c7550bfb5b9a86b4dea382">const_iterator</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::begin </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>return a begin iterator </p>
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00154">154</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3f3d367f1f08cd57fb527926ac37c234"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html#a2853bb4f14243a6bc542331da3bb0c48">iterator</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::end </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname">)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>return an end iterator </p>
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00149">149</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6cf5cdd375e2fb47b684cfdd4b2ea79e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html#ae6a4029d26c7550bfb5b9a86b4dea382">const_iterator</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::end </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>return an end iterator </p>
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00159">159</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="afb68c6f589a93e12ea03456e6d0c376c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -210,8 +539,9 @@ template&lt;typename ReadStreamType &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>indexing operator </p>
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00118">118</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00139">139</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -228,7 +558,31 @@ template&lt;typename ReadStreamType &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00120">120</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00161">161</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2f11db67fddfb1194b25d54489e45c7e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReadStreamType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1_read_stream_qualities.html">nvbio::ReadStreamQualities</a>&lt; ReadStreamType &gt;::SYMBOL_SIZE = 8u</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="nvbio_2io_2utils_8h_source.html#l00113">113</a> of file <a class="el" href="nvbio_2io_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -238,7 +592,7 @@ template&lt;typename ReadStreamType &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:43:39 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:35:36 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

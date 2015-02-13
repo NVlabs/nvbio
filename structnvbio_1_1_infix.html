@@ -99,6 +99,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Methods</a> &#124;
+<a href="#pub-static-attribs">Static Public Members</a> &#124;
 <a href="structnvbio_1_1_infix-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">nvbio::Infix&lt; StringType, CoordType &gt; Struct Template Reference<div class="ingroups"><a class="el" href="group___string_sets_module.html">String Sets</a></div></div>  </div>
@@ -120,7 +121,7 @@ struct nvbio::Infix&lt; StringType, CoordType &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00222">222</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00262">262</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="infix_8h_source.html">infix.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -155,6 +156,16 @@ CoordType, <a class="el" href="structnvbio_1_1vector__traits.html">vector_traits
 <tr class="memitem:ac32e30a83e347e572e4bd54e604fbe42"><td class="memItemLeft" align="right" valign="top">typedef std::iterator_traits<br class="typebreak"/>
 &lt; <a class="el" href="structnvbio_1_1_infix.html#a314a9d51842158ba397cb222431d6c29">string_type</a> &gt;::<a class="el" href="structnvbio_1_1_infix.html#ac32e30a83e347e572e4bd54e604fbe42">reference</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_infix.html#ac32e30a83e347e572e4bd54e604fbe42">reference</a></td></tr>
 <tr class="separator:ac32e30a83e347e572e4bd54e604fbe42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a483c2a1e8b6a7e03a2eb9272e9158eca"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1string__traits.html">string_traits</a><br class="typebreak"/>
+&lt; StringType &gt;::<a class="el" href="structnvbio_1_1_infix.html#a483c2a1e8b6a7e03a2eb9272e9158eca">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_infix.html#a483c2a1e8b6a7e03a2eb9272e9158eca">iterator</a></td></tr>
+<tr class="separator:a483c2a1e8b6a7e03a2eb9272e9158eca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28d9891d3697cc269475182d9bd50d66"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1string__traits.html">string_traits</a><br class="typebreak"/>
+&lt; StringType &gt;::<a class="el" href="structnvbio_1_1_infix.html#a28d9891d3697cc269475182d9bd50d66">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_infix.html#a28d9891d3697cc269475182d9bd50d66">const_iterator</a></td></tr>
+<tr class="separator:a28d9891d3697cc269475182d9bd50d66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b7dc7c2b1e04059fddda80d3c6c4a29"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structnvbio_1_1string__traits.html">string_traits</a><br class="typebreak"/>
+&lt; StringType &gt;<br class="typebreak"/>
+::<a class="el" href="structnvbio_1_1_infix.html#a7b7dc7c2b1e04059fddda80d3c6c4a29">forward_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_infix.html#a7b7dc7c2b1e04059fddda80d3c6c4a29">forward_iterator</a></td></tr>
+<tr class="separator:a7b7dc7c2b1e04059fddda80d3c6c4a29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Methods</h2></td></tr>
@@ -162,8 +173,29 @@ Public Methods</h2></td></tr>
 <tr class="separator:ad024b856cdaadf85983aa7c279e6dda1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae41093b6f6d058c3a381e45c8f46b434"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_infix.html#ae41093b6f6d058c3a381e45c8f46b434">Infix</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_infix.html#a314a9d51842158ba397cb222431d6c29">string_type</a> string, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1_infix.html#ac96684f45f2f0656762a254e46ddf593">coord_type</a> infix)</td></tr>
 <tr class="separator:ae41093b6f6d058c3a381e45c8f46b434"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Members</h2></td></tr>
+<tr class="memitem:a574a1904e4f12b9d602baf1f590ba6b1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_infix.html#a574a1904e4f12b9d602baf1f590ba6b1">SYMBOL_SIZE</a> = <a class="el" href="structnvbio_1_1string__traits.html">string_traits</a>&lt;StringType&gt;::SYMBOL_SIZE</td></tr>
+<tr class="separator:a574a1904e4f12b9d602baf1f590ba6b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a28d9891d3697cc269475182d9bd50d66"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType, typename CoordType&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1string__traits.html">string_traits</a>&lt;StringType&gt;::<a class="el" href="structnvbio_1_1_infix.html#a28d9891d3697cc269475182d9bd50d66">const_iterator</a> <a class="el" href="structnvbio_1_1_infix.html">nvbio::Infix</a>&lt; StringType, CoordType &gt;::<a class="el" href="structnvbio_1_1_infix.html#a28d9891d3697cc269475182d9bd50d66">const_iterator</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00276">276</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ac96684f45f2f0656762a254e46ddf593"></a>
 <div class="memitem">
 <div class="memproto">
@@ -176,7 +208,7 @@ template&lt;typename StringType, typename CoordType&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00226">226</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00268">268</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -192,7 +224,23 @@ template&lt;typename StringType, typename CoordType&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00224">224</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00266">266</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7b7dc7c2b1e04059fddda80d3c6c4a29"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType, typename CoordType&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1string__traits.html">string_traits</a>&lt;StringType&gt;::<a class="el" href="structnvbio_1_1_infix.html#a7b7dc7c2b1e04059fddda80d3c6c4a29">forward_iterator</a> <a class="el" href="structnvbio_1_1_infix.html">nvbio::Infix</a>&lt; StringType, CoordType &gt;::<a class="el" href="structnvbio_1_1_infix.html#a7b7dc7c2b1e04059fddda80d3c6c4a29">forward_iterator</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00277">277</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -208,7 +256,23 @@ template&lt;typename StringType, typename CoordType&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00227">227</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00269">269</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a483c2a1e8b6a7e03a2eb9272e9158eca"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType, typename CoordType&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structnvbio_1_1string__traits.html">string_traits</a>&lt;StringType&gt;::<a class="el" href="structnvbio_1_1_infix.html#a483c2a1e8b6a7e03a2eb9272e9158eca">iterator</a> <a class="el" href="structnvbio_1_1_infix.html">nvbio::Infix</a>&lt; StringType, CoordType &gt;::<a class="el" href="structnvbio_1_1_infix.html#a483c2a1e8b6a7e03a2eb9272e9158eca">iterator</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00275">275</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -224,7 +288,7 @@ template&lt;typename StringType, typename CoordType&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00231">231</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00273">273</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -240,7 +304,7 @@ template&lt;typename StringType, typename CoordType&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00225">225</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00267">267</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -256,7 +320,7 @@ template&lt;typename StringType, typename CoordType&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00229">229</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00271">271</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -272,7 +336,7 @@ template&lt;typename StringType, typename CoordType&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00230">230</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00272">272</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -301,7 +365,7 @@ template&lt;typename StringType, typename CoordType&gt; </div>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00236">236</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00282">282</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -340,7 +404,32 @@ template&lt;typename StringType, typename CoordType&gt; </div>
 </div><div class="memdoc">
 <p>constructor </p>
 
-<p>Definition at line <a class="el" href="infix_8h_source.html#l00241">241</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00287">287</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a574a1904e4f12b9d602baf1f590ba6b1"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType, typename CoordType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1_infix.html">nvbio::Infix</a>&lt; StringType, CoordType &gt;::SYMBOL_SIZE = <a class="el" href="structnvbio_1_1string__traits.html">string_traits</a>&lt;StringType&gt;::SYMBOL_SIZE</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="infix_8h_source.html#l00264">264</a> of file <a class="el" href="infix_8h_source.html">infix.h</a>.</p>
 
 </div>
 </div>
@@ -350,7 +439,7 @@ template&lt;typename StringType, typename CoordType&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:43:43 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:35:40 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

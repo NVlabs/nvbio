@@ -446,8 +446,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00378"></a><span class="lineno"><a class="code" href="group___batch_alignment.html#ga9941db53358b80ff6e8e327b87a170df">  378</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1aln_1_1_batched_alignment_score.html">BatchedAlignmentScore&lt;stream_type,DeviceThreadBlockScheduler&lt;BLOCKDIM,MINBLOCKS&gt;</a> &gt;::enact(stream_type stream, <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> temp_size, <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>* temp)</div>
 <div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;{</div>
 <div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> column_size = equal&lt;typename aligner_type::algorithm_tag,PatternBlockingTag&gt;() ?</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( stream.max_pattern_length() ) :</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( stream.max_text_length() );</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( stream.max_text_length() ) :</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( stream.max_pattern_length() );</div>
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;</div>
 <div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    <span class="comment">// if the column is small, let&#39;s just use statically allocated local memory</span></div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    <span class="keywordflow">if</span> (column_size &lt;= 1024)</div>
@@ -1129,7 +1129,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:42:46 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:34:42 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

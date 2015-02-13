@@ -87,6 +87,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div class="header">
   <div class="summary">
+<a href="#groups">Modules</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#func-members">Functions</a> &#124;
@@ -98,6 +99,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>This module contains a series of functions to perform suffix-sorting and for BWT construction of very large texts and text collections. </p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="groups"></a>
+Modules</h2></td></tr>
+<tr class="memitem:group___set_b_w_t_e_module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___set_b_w_t_e_module.html">Set-BWTE</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:group___compression_sort_module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___compression_sort_module.html">Compression Sort</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:group___set_b_w_t_handlers_module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___set_b_w_t_handlers_module.html">Set-BWT Handlers</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:group___string_suffix_handlers_module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___string_suffix_handlers_module.html">String Suffix Handlers</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacenvbio_1_1cuda"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html">nvbio::cuda</a></td></tr>
@@ -107,25 +119,15 @@ Namespaces</h2></td></tr>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_b_w_t_params.html">nvbio::BWTParams</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_set_b_w_t_handler.html">nvbio::SetBWTHandler</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_device_b_w_t_handler.html">nvbio::DeviceBWTHandler&lt; OutputIterator &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_host_b_w_t_handler.html">nvbio::HostBWTHandler&lt; OutputIterator &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_host_b_w_t_handler_3_01_packed_stream_3_01word__type_01_5_00_01uint8_00_01_s_y_mece7f5f021aa7d905197083a5b114cf2.html">nvbio::HostBWTHandler&lt; PackedStream&lt; word_type *, uint8, SYMBOL_SIZE, BIG_ENDIAN, uint64 &gt; &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_discard_b_w_t_handler.html">nvbio::DiscardBWTHandler</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_string_b_w_t_handler.html">nvbio::StringBWTHandler&lt; string_type, output_iterator &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_string_s_s_a_handler.html">nvbio::StringSSAHandler&lt; output_iterator &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_string_b_w_t_s_s_a_handler.html">nvbio::StringBWTSSAHandler&lt; string_type, output_bwt_iterator, output_ssa_iterator &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ga2fdb926a0dc1fe9a444b3ab24d84d589"><td class="memTemplParams" colspan="2">template&lt;typename string_type , typename suffix_iterator , typename output_handler &gt; </td></tr>
+<tr class="memitem:ga2fdb926a0dc1fe9a444b3ab24d84d589"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___sufsort.html#ga2fdb926a0dc1fe9a444b3ab24d84d589">nvbio::cuda::blockwise_suffix_sort</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename string_type::index_type string_len, string_type string, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename string_type::index_type n_suffixes, suffix_iterator suffixes, output_handler &amp;output, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> DCS *dcs, BWTParams *params)</td></tr>
+<tr class="separator:ga2fdb926a0dc1fe9a444b3ab24d84d589"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafc10424bd02f8ad24a7d28a6d23eee9c"><td class="memTemplParams" colspan="2">template&lt;typename string_type &gt; </td></tr>
+<tr class="memitem:gafc10424bd02f8ad24a7d28a6d23eee9c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___sufsort.html#gafc10424bd02f8ad24a7d28a6d23eee9c">nvbio::cuda::blockwise_build</a> (DCS &amp;dcs, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename string_type::index_type string_len, string_type string, BWTParams *params)</td></tr>
+<tr class="separator:gafc10424bd02f8ad24a7d28a6d23eee9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5437f6561b8cbab8a046af9e296ca577"><td class="memItemLeft" align="right" valign="top">SetBWTHandler *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___sufsort.html#ga5437f6561b8cbab8a046af9e296ca577">nvbio::open_bwt_file</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *output_name, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *params)</td></tr>
 <tr class="separator:ga5437f6561b8cbab8a046af9e296ca577"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga389194e3ecd322d894143ef1ac8cf028"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___sufsort.html#ga389194e3ecd322d894143ef1ac8cf028">nvbio::BWTParams::BWTParams</a> ()</td></tr>
@@ -166,6 +168,111 @@ Variables</h2></td></tr>
 <tr class="separator:ga592938ffe3a174983e59687adcdc23c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="gafc10424bd02f8ad24a7d28a6d23eee9c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename string_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::cuda::blockwise_build </td>
+          <td>(</td>
+          <td class="paramtype">DCS &amp;&#160;</td>
+          <td class="paramname"><em>dcs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename string_type::index_type&#160;</td>
+          <td class="paramname"><em>string_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string_type&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">BWTParams *&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>build the difference cover sample of a given string </p>
+
+<p>Definition at line <a class="el" href="blockwise__sufsort_8h_source.html#l00455">455</a> of file <a class="el" href="blockwise__sufsort_8h_source.html">blockwise_sufsort.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga2fdb926a0dc1fe9a444b3ab24d84d589"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename string_type , typename suffix_iterator , typename output_handler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void nvbio::cuda::blockwise_suffix_sort </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename string_type::index_type&#160;</td>
+          <td class="paramname"><em>string_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string_type&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename string_type::index_type&#160;</td>
+          <td class="paramname"><em>n_suffixes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">suffix_iterator&#160;</td>
+          <td class="paramname"><em>suffixes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">output_handler &amp;&#160;</td>
+          <td class="paramname"><em>output</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> DCS *&#160;</td>
+          <td class="paramname"><em>dcs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">BWTParams *&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sort a list of suffixes of a given string</p>
+<dl class="section return"><dt>Returns</dt><dd>position of the primary suffix / $ symbol </dd></dl>
+
+<p>Definition at line <a class="el" href="blockwise__sufsort_8h_source.html#l00059">59</a> of file <a class="el" href="blockwise__sufsort_8h_source.html">blockwise_sufsort.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="gab83f38cdfda6e1d1d846246ea6c95ad6"></a>
 <div class="memitem">
 <div class="memproto">
@@ -203,7 +310,7 @@ template&lt;typename string_type , typename output_handler &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sort all the suffixes of a given string using an adaptation of the Blockwise <a class="el" href="structnvbio_1_1_suffix.html">Suffix</a> Sorting algorithm by J.Kärkkäinen, and can hence work in a confined amount of host and device memory (as specified by <a class="el" href="structnvbio_1_1_b_w_t_params.html">BWTParams</a>).</p>
+<p><a class="anchor" id="StringSuffixHandler"></a> Sort all the suffixes of a given string using an adaptation of the Blockwise <a class="el" href="structnvbio_1_1_suffix.html">Suffix</a> Sorting algorithm by J.Kärkkäinen, and can hence work in a confined amount of host and device memory (as specified by <a class="el" href="structnvbio_1_1_b_w_t_params.html">BWTParams</a>).</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">string_type</td><td>an iterator to the string </td></tr>
@@ -334,7 +441,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Build the bwt of a device-side string set</p>
+<p><a class="anchor" id="SetBWTOutputHandler"></a>Build the bwt of a device-side string set</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">SYMBOL_SIZE</td><td>alphabet size, in bits per symbol </td></tr>
@@ -343,7 +450,7 @@ template&lt;uint32 SYMBOL_SIZE, bool BIG_ENDIAN, typename storage_type , typenam
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><span class="keyword">struct </span>BWTOutputHandler</div>
+<div class="fragment"><div class="line"><span class="keyword">struct </span>SetBWTOutputHandler</div>
 <div class="line">{</div>
 <div class="line">    <span class="comment">// process a batch of BWT symbols</span></div>
 <div class="line">    <span class="keywordtype">void</span> process(</div>
@@ -641,8 +748,24 @@ template&lt;typename string_set_type , typename output_handler &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sort the suffixes of all the strings in the given string set</p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p><a class="anchor" id="SetSuffixOutputHandler"></a>Sort the suffixes of all the strings in the given string set</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">string_set_type</td><td>string-set type </td></tr>
+    <tr><td class="paramname">output_handler</td><td>an output handler, exposing the following interface:</td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="fragment"><div class="line"><span class="keyword">struct </span>SetSuffixOutputHandler</div>
+<div class="line">{</div>
+<div class="line">    <span class="comment">// process a batch of BWT symbols</span></div>
+<div class="line">    <span class="keywordtype">void</span> process(</div>
+<div class="line">       <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>  n_suffixes,        <span class="comment">// number of sorted suffixes emitted</span></div>
+<div class="line">       <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>* d_suffixes,        <span class="comment">// device-side array of sorted global suffix indices</span></div>
+<div class="line">       <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>* d_string_ids,      <span class="comment">// device-side array of the string ids bound to each suffix</span></div>
+<div class="line">       <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>* d_cum_lengths);    <span class="comment">// device-side array of cumulative string lengths</span></div>
+<div class="line">};</div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">string_set</td><td>a device-side packed-concatenated string-set </td></tr>
     <tr><td class="paramname">output</td><td>output handler </td></tr>
@@ -729,7 +852,7 @@ template&lt;typename string_set_type , typename output_handler &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:43:10 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:35:06 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

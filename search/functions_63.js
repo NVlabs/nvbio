@@ -12,6 +12,7 @@ var searchData=
   ['char_5fto_5fprotein',['char_to_protein',['../namespacenvbio.html#a89730a2ea12af184bc2914d169210106',1,'nvbio']]],
   ['char_5fto_5frna',['char_to_rna',['../namespacenvbio.html#a5ed7186aca986e9cce98745afe67f17f',1,'nvbio']]],
   ['check_5ferror',['check_error',['../namespacenvbio_1_1cuda.html#ae47791b87823645325b131f7c83f3291',1,'nvbio::cuda']]],
+  ['check_5fforward_5fstream',['check_forward_stream',['../packedstream__test_8cpp.html#af7c913a8fe9eaa580406883ac6a90860',1,'packedstream_test.cpp']]],
   ['check_5fn',['check_N',['../group___mapping_detail.html#ga06053c47cccc35e415b0405aec82b4e2',1,'nvbio::bowtie2::cuda::detail']]],
   ['check_5fstream',['check_stream',['../packedstream__test_8cpp.html#a3d2623c21aebbf50ba7103aab73e1f99',1,'packedstream_test.cpp']]],
   ['checkblockheader',['CheckBlockHeader',['../struct_bam_tools_1_1_bgzf_data.html#af8102917657d932648d5a3789e07afac',1,'BamTools::BgzfData']]],

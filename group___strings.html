@@ -88,6 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#groups">Modules</a> &#124;
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Strings Module</div>  </div>
@@ -104,7 +105,20 @@ Modules</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:group___string_sets_module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___string_sets_module.html">String Sets</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:group___vectorized_string_loading_module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___vectorized_string_loading_module.html">Vectorized String Loading</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:group___wavelet_tree_module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___wavelet_tree_module.html">Wavelet Trees</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1string__iterator.html">nvbio::string_iterator&lt; StringType &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1string__traits.html">nvbio::string_traits&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1string__traits_3_01_t_01_5_01_4.html">nvbio::string_traits&lt; T * &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1string__traits_3_01const_01_t_01_5_01_4.html">nvbio::string_traits&lt; const T * &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -112,6 +126,81 @@ Functions</h2></td></tr>
 <tr class="memitem:ga0c470170b1762be40482afa869ee3cc2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___strings.html#ga0c470170b1762be40482afa869ee3cc2">nvbio::length</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *str)</td></tr>
 <tr class="separator:ga0c470170b1762be40482afa869ee3cc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga845698bf022d43feefaa43ba5028b9c8"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:ga845698bf022d43feefaa43ba5028b9c8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+string_iterator&lt; StringType &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#ga845698bf022d43feefaa43ba5028b9c8">make_string_iterator</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> StringType &amp;string)</td></tr>
+<tr class="separator:ga845698bf022d43feefaa43ba5028b9c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad44b4d7df10b3e82c9f1d76da791277f"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:gad44b4d7df10b3e82c9f1d76da791277f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#gad44b4d7df10b3e82c9f1d76da791277f">operator&lt;</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; &amp;it2)</td></tr>
+<tr class="separator:gad44b4d7df10b3e82c9f1d76da791277f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0f1ed2b3185edaaea3740654dfacc1d3"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:ga0f1ed2b3185edaaea3740654dfacc1d3"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#ga0f1ed2b3185edaaea3740654dfacc1d3">operator&gt;</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; &amp;it2)</td></tr>
+<tr class="separator:ga0f1ed2b3185edaaea3740654dfacc1d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga71f56852395b7ea71700b1c658a092ca"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:ga71f56852395b7ea71700b1c658a092ca"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#ga71f56852395b7ea71700b1c658a092ca">operator&lt;=</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; &amp;it2)</td></tr>
+<tr class="separator:ga71f56852395b7ea71700b1c658a092ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac5dbbf20cc202416e675f4b0abaf17c6"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:gac5dbbf20cc202416e675f4b0abaf17c6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#gac5dbbf20cc202416e675f4b0abaf17c6">operator&gt;=</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; &amp;it2)</td></tr>
+<tr class="separator:gac5dbbf20cc202416e675f4b0abaf17c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga87acc810a42933eadfa73576e835246b"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:ga87acc810a42933eadfa73576e835246b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#ga87acc810a42933eadfa73576e835246b">operator==</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; &amp;it2)</td></tr>
+<tr class="separator:ga87acc810a42933eadfa73576e835246b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga006804b167e487941ed3bb2a3af9fa80"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:ga006804b167e487941ed3bb2a3af9fa80"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#ga006804b167e487941ed3bb2a3af9fa80">operator!=</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; &amp;it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; &amp;it2)</td></tr>
+<tr class="separator:ga006804b167e487941ed3bb2a3af9fa80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga97e28af59abd6444fae4f36098d68d2f"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:ga97e28af59abd6444fae4f36098d68d2f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+string_iterator&lt; StringType &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#ga97e28af59abd6444fae4f36098d68d2f">operator++</a> (string_iterator&lt; StringType &gt; &amp;it)</td></tr>
+<tr class="separator:ga97e28af59abd6444fae4f36098d68d2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga11e0a26ff369c2f8dfa458c6d51017d1"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:ga11e0a26ff369c2f8dfa458c6d51017d1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+string_iterator&lt; StringType &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#ga11e0a26ff369c2f8dfa458c6d51017d1">operator++</a> (string_iterator&lt; StringType &gt; &amp;it, int dummy)</td></tr>
+<tr class="separator:ga11e0a26ff369c2f8dfa458c6d51017d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0c4c42104b87af5e2b223af367f4eeb1"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:ga0c4c42104b87af5e2b223af367f4eeb1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+string_iterator&lt; StringType &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#ga0c4c42104b87af5e2b223af367f4eeb1">operator--</a> (string_iterator&lt; StringType &gt; &amp;it)</td></tr>
+<tr class="separator:ga0c4c42104b87af5e2b223af367f4eeb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga013eca9e4379e9794f93216d65198a82"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:ga013eca9e4379e9794f93216d65198a82"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+string_iterator&lt; StringType &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#ga013eca9e4379e9794f93216d65198a82">operator--</a> (string_iterator&lt; StringType &gt; &amp;it, int dummy)</td></tr>
+<tr class="separator:ga013eca9e4379e9794f93216d65198a82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae4b44f081a1792333c1d276fad9786c7"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:gae4b44f081a1792333c1d276fad9786c7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+string_iterator&lt; StringType &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#gae4b44f081a1792333c1d276fad9786c7">operator+=</a> (string_iterator&lt; StringType &gt; &amp;it, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename string_iterator&lt; StringType &gt;::difference_type distance)</td></tr>
+<tr class="separator:gae4b44f081a1792333c1d276fad9786c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga067bb6ce2f3c44a196b68d88290167e6"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:ga067bb6ce2f3c44a196b68d88290167e6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+string_iterator&lt; StringType &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#ga067bb6ce2f3c44a196b68d88290167e6">operator-=</a> (string_iterator&lt; StringType &gt; &amp;it, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename string_iterator&lt; StringType &gt;::difference_type distance)</td></tr>
+<tr class="separator:ga067bb6ce2f3c44a196b68d88290167e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3229df52e58d7f8af768b62deec0bbf6"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:ga3229df52e58d7f8af768b62deec0bbf6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+string_iterator&lt; StringType &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#ga3229df52e58d7f8af768b62deec0bbf6">operator+</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; it, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename string_iterator&lt; StringType &gt;::difference_type distance)</td></tr>
+<tr class="separator:ga3229df52e58d7f8af768b62deec0bbf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae07e9df6cf046d909af88aae34356ef1"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:gae07e9df6cf046d909af88aae34356ef1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+string_iterator&lt; StringType &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#gae07e9df6cf046d909af88aae34356ef1">operator-</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; it, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename string_iterator&lt; StringType &gt;::difference_type distance)</td></tr>
+<tr class="separator:gae07e9df6cf046d909af88aae34356ef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga63d9394cc745adbb45cd657bbbf0ea94"><td class="memTemplParams" colspan="2">template&lt;typename StringType &gt; </td></tr>
+<tr class="memitem:ga63d9394cc745adbb45cd657bbbf0ea94"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> <br class="typebreak"/>
+string_iterator&lt; StringType &gt;<br class="typebreak"/>
+::difference_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___strings.html#ga63d9394cc745adbb45cd657bbbf0ea94">operator-</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; it1, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> string_iterator&lt; StringType &gt; it2)</td></tr>
+<tr class="separator:ga63d9394cc745adbb45cd657bbbf0ea94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ga0c470170b1762be40482afa869ee3cc2"></a>
@@ -129,14 +218,600 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>length of an ASCII string </p>
 
-<p>Definition at line <a class="el" href="string_8h_source.html#l00043">43</a> of file <a class="el" href="string_8h_source.html">string.h</a>.</p>
+<p>Definition at line <a class="el" href="string_8h_source.html#l00044">44</a> of file <a class="el" href="string_8h_source.html">string.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga845698bf022d43feefaa43ba5028b9c8"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> string_iterator&lt; StringType &gt; make_string_iterator </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> StringType &amp;&#160;</td>
+          <td class="paramname"><em>string</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>make a string iterator </p>
+
+<p>Definition at line <a class="el" href="string__iterator_8h_source.html#l00098">98</a> of file <a class="el" href="string__iterator_8h_source.html">string_iterator.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga006804b167e487941ed3bb2a3af9fa80"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool operator!= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>inequality test </p>
+
+<p>Definition at line <a class="el" href="string__iterator__inl_8h_source.html#l00090">90</a> of file <a class="el" href="string__iterator__inl_8h_source.html">string_iterator_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga3229df52e58d7f8af768b62deec0bbf6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> string_iterator&lt; StringType &gt; operator+ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt;&#160;</td>
+          <td class="paramname"><em>it</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt;::<a class="el" href="structnvbio_1_1string__iterator.html#a38fa62f6caaa8232edf97f1b04b4e6fa">difference_type</a>&#160;</td>
+          <td class="paramname"><em>distance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>add offset </p>
+
+</div>
+</div>
+<a class="anchor" id="ga97e28af59abd6444fae4f36098d68d2f"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> string_iterator&lt; StringType &gt; &amp; operator++ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>pre-increment operator </p>
+
+<p>Definition at line <a class="el" href="string__iterator__inl_8h_source.html#l00101">101</a> of file <a class="el" href="string__iterator__inl_8h_source.html">string_iterator_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga11e0a26ff369c2f8dfa458c6d51017d1"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> string_iterator&lt; StringType &gt; operator++ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dummy</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>post-increment operator </p>
+
+<p>Definition at line <a class="el" href="string__iterator__inl_8h_source.html#l00111">111</a> of file <a class="el" href="string__iterator__inl_8h_source.html">string_iterator_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="gae4b44f081a1792333c1d276fad9786c7"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> string_iterator&lt; StringType &gt; &amp; operator+= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt;::<a class="el" href="structnvbio_1_1string__iterator.html#a38fa62f6caaa8232edf97f1b04b4e6fa">difference_type</a>&#160;</td>
+          <td class="paramname"><em>distance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>add offset </p>
+
+</div>
+</div>
+<a class="anchor" id="gae07e9df6cf046d909af88aae34356ef1"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> string_iterator&lt; StringType &gt; operator- </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt;&#160;</td>
+          <td class="paramname"><em>it</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt;::<a class="el" href="structnvbio_1_1string__iterator.html#a38fa62f6caaa8232edf97f1b04b4e6fa">difference_type</a>&#160;</td>
+          <td class="paramname"><em>distance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>subtract offset </p>
+
+</div>
+</div>
+<a class="anchor" id="ga63d9394cc745adbb45cd657bbbf0ea94"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> string_iterator&lt; StringType &gt;::difference_type operator- </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt;&#160;</td>
+          <td class="paramname"><em>it1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt;&#160;</td>
+          <td class="paramname"><em>it2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>difference </p>
+
+<p>Definition at line <a class="el" href="string__iterator__inl_8h_source.html#l00181">181</a> of file <a class="el" href="string__iterator__inl_8h_source.html">string_iterator_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga0c4c42104b87af5e2b223af367f4eeb1"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> string_iterator&lt; StringType &gt; &amp; operator-- </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>pre-decrement operator </p>
+
+<p>Definition at line <a class="el" href="string__iterator__inl_8h_source.html#l00122">122</a> of file <a class="el" href="string__iterator__inl_8h_source.html">string_iterator_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga013eca9e4379e9794f93216d65198a82"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> string_iterator&lt; StringType &gt; operator-- </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dummy</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>post-decrement operator </p>
+
+<p>Definition at line <a class="el" href="string__iterator__inl_8h_source.html#l00132">132</a> of file <a class="el" href="string__iterator__inl_8h_source.html">string_iterator_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga067bb6ce2f3c44a196b68d88290167e6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> string_iterator&lt; StringType &gt; &amp; operator-= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> typename <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt;::<a class="el" href="structnvbio_1_1string__iterator.html#a38fa62f6caaa8232edf97f1b04b4e6fa">difference_type</a>&#160;</td>
+          <td class="paramname"><em>distance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>subtract offset </p>
+
+</div>
+</div>
+<a class="anchor" id="gad44b4d7df10b3e82c9f1d76da791277f"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool operator&lt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>less than </p>
+
+<p>Definition at line <a class="el" href="string__iterator__inl_8h_source.html#l00040">40</a> of file <a class="el" href="string__iterator__inl_8h_source.html">string_iterator_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga71f56852395b7ea71700b1c658a092ca"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool operator&lt;= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>less than </p>
+
+<p>Definition at line <a class="el" href="string__iterator__inl_8h_source.html#l00050">50</a> of file <a class="el" href="string__iterator__inl_8h_source.html">string_iterator_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga87acc810a42933eadfa73576e835246b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool operator== </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>equality test </p>
+
+<p>Definition at line <a class="el" href="string__iterator__inl_8h_source.html#l00080">80</a> of file <a class="el" href="string__iterator__inl_8h_source.html">string_iterator_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga0f1ed2b3185edaaea3740654dfacc1d3"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool operator&gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>greater than </p>
+
+<p>Definition at line <a class="el" href="string__iterator__inl_8h_source.html#l00060">60</a> of file <a class="el" href="string__iterator__inl_8h_source.html">string_iterator_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="gac5dbbf20cc202416e675f4b0abaf17c6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StringType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool operator&gt;= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1string__iterator.html">string_iterator</a>&lt; StringType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>it2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">related</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>greater than </p>
+
+<p>Definition at line <a class="el" href="string__iterator__inl_8h_source.html#l00070">70</a> of file <a class="el" href="string__iterator__inl_8h_source.html">string_iterator_inl.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:43:10 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:35:06 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

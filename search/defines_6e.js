@@ -32,6 +32,7 @@ var searchData=
   ['nvbio_5fstats_5fadd',['NVBIO_STATS_ADD',['../profiling_8h.html#adb3d25b4b708681010a3b164e475679c',1,'profiling.h']]],
   ['nvbio_5fstats_5fset',['NVBIO_STATS_SET',['../profiling_8h.html#a7562c988ba4286cfdd937fbf89895bc6',1,'profiling.h']]],
   ['nvbio_5fsubminor_5fversion',['NVBIO_SUBMINOR_VERSION',['../nvbio_2basic_2version_8h.html#a95ff2b66b66d48db4df17064d18ceea6',1,'version.h']]],
+  ['nvbio_5fsw_5fvector_5floading',['NVBIO_SW_VECTOR_LOADING',['../gotoh__inl_8h.html#a99d59dc111412024f54fbc6dd8aa6794',1,'gotoh_inl.h']]],
   ['nvbio_5fvar_5funused',['NVBIO_VAR_UNUSED',['../types_8h.html#a629635675171b07305d7d44a8c51deff',1,'types.h']]],
   ['nvbio_5fversion',['NVBIO_VERSION',['../nvbio_2basic_2version_8h.html#adda73f207e537e24b4e731fa4f1f0669',1,'version.h']]],
   ['nvbio_5fversion_5fstring',['NVBIO_VERSION_STRING',['../nvbio_2basic_2version_8h.html#a072a17dda5b9a7a70a2b398d1cb37f38',1,'version.h']]]

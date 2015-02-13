@@ -1135,345 +1135,349 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01033"></a><span class="lineno"> 1033</span>&#160;        indices );</div>
 <div class="line"><a name="l01034"></a><span class="lineno"> 1034</span>&#160;}</div>
 <div class="line"><a name="l01035"></a><span class="lineno"> 1035</span>&#160;</div>
-<div class="line"><a name="l01036"></a><span class="lineno"> 1036</span>&#160;<span class="comment">// device-wide sort</span></div>
-<div class="line"><a name="l01037"></a><span class="lineno"> 1037</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l01038"></a><span class="lineno"> 1038</span>&#160;<span class="comment">// \param n                    number of input items</span></div>
-<div class="line"><a name="l01039"></a><span class="lineno"> 1039</span>&#160;<span class="comment">// \param keys                 a system input iterator of keys to be sorted</span></div>
-<div class="line"><a name="l01040"></a><span class="lineno"> 1040</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l01041"></a><span class="lineno"> 1041</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> KeyIterator&gt;</div>
-<div class="line"><a name="l01042"></a><span class="lineno"><a class="code" href="namespacenvbio.html#a9410a79ceb6561d49fea12a3833d6536"> 1042</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>(</div>
-<div class="line"><a name="l01043"></a><span class="lineno"> 1043</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1device__tag.html">device_tag</a>                    tag,</div>
-<div class="line"><a name="l01044"></a><span class="lineno"> 1044</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        n,</div>
-<div class="line"><a name="l01045"></a><span class="lineno"> 1045</span>&#160;    KeyIterator                         keys,</div>
-<div class="line"><a name="l01046"></a><span class="lineno"> 1046</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;device_tag,uint8&gt;</a>&amp;    temp_storage)</div>
-<div class="line"><a name="l01047"></a><span class="lineno"> 1047</span>&#160;{</div>
-<div class="line"><a name="l01048"></a><span class="lineno"> 1048</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> std::iterator_traits&lt;KeyIterator&gt;::value_type key_type;</div>
-<div class="line"><a name="l01049"></a><span class="lineno"> 1049</span>&#160;</div>
-<div class="line"><a name="l01050"></a><span class="lineno"> 1050</span>&#160;    <a class="code" href="group___c_u_d_a_primitives.html#gaa9b984a7db3a63b5a095daa7e0acfbb2">cuda::alloc_temp_storage</a>( temp_storage, 2 * n * <span class="keyword">sizeof</span>(key_type) );</div>
+<div class="line"><a name="l01036"></a><span class="lineno"> 1036</span>&#160;<span class="preprocessor">#if defined(__CUDACC__)</span></div>
+<div class="line"><a name="l01037"></a><span class="lineno"> 1037</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l01038"></a><span class="lineno"> 1038</span>&#160;<span class="comment">// device-wide sort</span></div>
+<div class="line"><a name="l01039"></a><span class="lineno"> 1039</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l01040"></a><span class="lineno"> 1040</span>&#160;<span class="comment">// \param n                    number of input items</span></div>
+<div class="line"><a name="l01041"></a><span class="lineno"> 1041</span>&#160;<span class="comment">// \param keys                 a system input iterator of keys to be sorted</span></div>
+<div class="line"><a name="l01042"></a><span class="lineno"> 1042</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l01043"></a><span class="lineno"> 1043</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> KeyIterator&gt;</div>
+<div class="line"><a name="l01044"></a><span class="lineno"> 1044</span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>(</div>
+<div class="line"><a name="l01045"></a><span class="lineno"> 1045</span>&#160;    <span class="keyword">const</span> device_tag                    tag,</div>
+<div class="line"><a name="l01046"></a><span class="lineno"> 1046</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        n,</div>
+<div class="line"><a name="l01047"></a><span class="lineno"> 1047</span>&#160;    KeyIterator                         keys,</div>
+<div class="line"><a name="l01048"></a><span class="lineno"> 1048</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;device_tag,uint8&gt;</a>&amp;    temp_storage)</div>
+<div class="line"><a name="l01049"></a><span class="lineno"> 1049</span>&#160;{</div>
+<div class="line"><a name="l01050"></a><span class="lineno"> 1050</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> std::iterator_traits&lt;KeyIterator&gt;::value_type key_type;</div>
 <div class="line"><a name="l01051"></a><span class="lineno"> 1051</span>&#160;</div>
-<div class="line"><a name="l01052"></a><span class="lineno"> 1052</span>&#160;    key_type* keys_ptr = <span class="keyword">reinterpret_cast&lt;</span>key_type*<span class="keyword">&gt;</span>( <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( temp_storage ) );</div>
+<div class="line"><a name="l01052"></a><span class="lineno"> 1052</span>&#160;    <a class="code" href="group___c_u_d_a_primitives.html#gaa9b984a7db3a63b5a095daa7e0acfbb2">cuda::alloc_temp_storage</a>( temp_storage, 2 * n * <span class="keyword">sizeof</span>(key_type) );</div>
 <div class="line"><a name="l01053"></a><span class="lineno"> 1053</span>&#160;</div>
-<div class="line"><a name="l01054"></a><span class="lineno"> 1054</span>&#160;    thrust::device_ptr&lt;key_type&gt; keys_buf( keys_ptr );</div>
+<div class="line"><a name="l01054"></a><span class="lineno"> 1054</span>&#160;    key_type* keys_ptr = <span class="keyword">reinterpret_cast&lt;</span>key_type*<span class="keyword">&gt;</span>( <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( temp_storage ) );</div>
 <div class="line"><a name="l01055"></a><span class="lineno"> 1055</span>&#160;</div>
-<div class="line"><a name="l01056"></a><span class="lineno"> 1056</span>&#160;    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>( keys, keys + n, keys_buf );</div>
+<div class="line"><a name="l01056"></a><span class="lineno"> 1056</span>&#160;    thrust::device_ptr&lt;key_type&gt; keys_buf( keys_ptr );</div>
 <div class="line"><a name="l01057"></a><span class="lineno"> 1057</span>&#160;</div>
-<div class="line"><a name="l01058"></a><span class="lineno"> 1058</span>&#160;    <a class="code" href="structnvbio_1_1cuda_1_1_sort_buffers.html">cuda::SortBuffers&lt;key_type*&gt;</a> sort_buffers;</div>
-<div class="line"><a name="l01059"></a><span class="lineno"> 1059</span>&#160;    sort_buffers.<a class="code" href="structnvbio_1_1cuda_1_1_sort_buffers.html#a0282973f670c67c71dba0fd7b8c6ed12">keys</a>[0] = keys_ptr;</div>
-<div class="line"><a name="l01060"></a><span class="lineno"> 1060</span>&#160;    sort_buffers.<a class="code" href="structnvbio_1_1cuda_1_1_sort_buffers.html#a0282973f670c67c71dba0fd7b8c6ed12">keys</a>[1] = keys_ptr + n;</div>
-<div class="line"><a name="l01061"></a><span class="lineno"> 1061</span>&#160;</div>
-<div class="line"><a name="l01062"></a><span class="lineno"> 1062</span>&#160;    <a class="code" href="structnvbio_1_1cuda_1_1_sort_enactor.html">cuda::SortEnactor</a> sort_enactor;</div>
-<div class="line"><a name="l01063"></a><span class="lineno"> 1063</span>&#160;    sort_enactor.<a class="code" href="structnvbio_1_1cuda_1_1_sort_enactor.html#a915ba44b7fe0f1c4deef794d7f26d123">sort</a>( n, sort_buffers );</div>
-<div class="line"><a name="l01064"></a><span class="lineno"> 1064</span>&#160;</div>
-<div class="line"><a name="l01065"></a><span class="lineno"> 1065</span>&#160;    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>(</div>
-<div class="line"><a name="l01066"></a><span class="lineno"> 1066</span>&#160;        keys_buf + sort_buffers.<a class="code" href="structnvbio_1_1cuda_1_1_sort_buffers.html#a39088b1d4b7a5ba474b19cd6437e4bd5">selector</a> * n,</div>
-<div class="line"><a name="l01067"></a><span class="lineno"> 1067</span>&#160;        keys_buf + sort_buffers.<a class="code" href="structnvbio_1_1cuda_1_1_sort_buffers.html#a39088b1d4b7a5ba474b19cd6437e4bd5">selector</a> * n + n,</div>
-<div class="line"><a name="l01068"></a><span class="lineno"> 1068</span>&#160;        keys );</div>
-<div class="line"><a name="l01069"></a><span class="lineno"> 1069</span>&#160;}</div>
-<div class="line"><a name="l01070"></a><span class="lineno"> 1070</span>&#160;</div>
-<div class="line"><a name="l01071"></a><span class="lineno"> 1071</span>&#160;<span class="comment">// host-wide sort</span></div>
-<div class="line"><a name="l01072"></a><span class="lineno"> 1072</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l01073"></a><span class="lineno"> 1073</span>&#160;<span class="comment">// \param n                    number of input items</span></div>
-<div class="line"><a name="l01074"></a><span class="lineno"> 1074</span>&#160;<span class="comment">// \param keys                 a system input iterator of keys to be sorted</span></div>
-<div class="line"><a name="l01075"></a><span class="lineno"> 1075</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l01076"></a><span class="lineno"> 1076</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> KeyIterator&gt;</div>
-<div class="line"><a name="l01077"></a><span class="lineno"><a class="code" href="namespacenvbio.html#aa8d5349a1f85575cc392468971000808"> 1077</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>(</div>
-<div class="line"><a name="l01078"></a><span class="lineno"> 1078</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1host__tag.html">host_tag</a>                      tag,</div>
-<div class="line"><a name="l01079"></a><span class="lineno"> 1079</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        n,</div>
-<div class="line"><a name="l01080"></a><span class="lineno"> 1080</span>&#160;    KeyIterator                         keys,</div>
-<div class="line"><a name="l01081"></a><span class="lineno"> 1081</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;host_tag,uint8&gt;</a>&amp;      temp_storage)</div>
-<div class="line"><a name="l01082"></a><span class="lineno"> 1082</span>&#160;{</div>
-<div class="line"><a name="l01083"></a><span class="lineno"> 1083</span>&#160;    <a class="code" href="namespacedivsufsortxx_1_1substring.html#acbb12ad743e9d8ca4ad0908a2c1eb9d5">thrust::sort</a>( keys, keys + n );</div>
-<div class="line"><a name="l01084"></a><span class="lineno"> 1084</span>&#160;}</div>
-<div class="line"><a name="l01085"></a><span class="lineno"> 1085</span>&#160;</div>
-<div class="line"><a name="l01086"></a><span class="lineno"> 1086</span>&#160;<span class="comment">// system-wide sort</span></div>
-<div class="line"><a name="l01087"></a><span class="lineno"> 1087</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l01088"></a><span class="lineno"> 1088</span>&#160;<span class="comment">// \param n                    number of input items</span></div>
-<div class="line"><a name="l01089"></a><span class="lineno"> 1089</span>&#160;<span class="comment">// \param keys                 a system input iterator of keys to be sorted</span></div>
-<div class="line"><a name="l01090"></a><span class="lineno"> 1090</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l01091"></a><span class="lineno"> 1091</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> system_tag, <span class="keyword">typename</span> KeyIterator&gt;</div>
-<div class="line"><a name="l01092"></a><span class="lineno"><a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6"> 1092</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>(</div>
-<div class="line"><a name="l01093"></a><span class="lineno"> 1093</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        n,</div>
-<div class="line"><a name="l01094"></a><span class="lineno"> 1094</span>&#160;    KeyIterator                         keys,</div>
-<div class="line"><a name="l01095"></a><span class="lineno"> 1095</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;system_tag,uint8&gt;</a>&amp;    temp_storage)</div>
-<div class="line"><a name="l01096"></a><span class="lineno"> 1096</span>&#160;{</div>
-<div class="line"><a name="l01097"></a><span class="lineno"> 1097</span>&#160;    <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>( system_tag(), n, keys, temp_storage );</div>
-<div class="line"><a name="l01098"></a><span class="lineno"> 1098</span>&#160;}</div>
+<div class="line"><a name="l01058"></a><span class="lineno"> 1058</span>&#160;    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>( keys, keys + n, keys_buf );</div>
+<div class="line"><a name="l01059"></a><span class="lineno"> 1059</span>&#160;</div>
+<div class="line"><a name="l01060"></a><span class="lineno"> 1060</span>&#160;    cuda::SortBuffers&lt;key_type*&gt; sort_buffers;</div>
+<div class="line"><a name="l01061"></a><span class="lineno"> 1061</span>&#160;    sort_buffers.keys[0] = keys_ptr;</div>
+<div class="line"><a name="l01062"></a><span class="lineno"> 1062</span>&#160;    sort_buffers.keys[1] = keys_ptr + n;</div>
+<div class="line"><a name="l01063"></a><span class="lineno"> 1063</span>&#160;</div>
+<div class="line"><a name="l01064"></a><span class="lineno"> 1064</span>&#160;    cuda::SortEnactor sort_enactor;</div>
+<div class="line"><a name="l01065"></a><span class="lineno"> 1065</span>&#160;    sort_enactor.sort( n, sort_buffers );</div>
+<div class="line"><a name="l01066"></a><span class="lineno"> 1066</span>&#160;</div>
+<div class="line"><a name="l01067"></a><span class="lineno"> 1067</span>&#160;    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>(</div>
+<div class="line"><a name="l01068"></a><span class="lineno"> 1068</span>&#160;        keys_buf + sort_buffers.selector * n,</div>
+<div class="line"><a name="l01069"></a><span class="lineno"> 1069</span>&#160;        keys_buf + sort_buffers.selector * n + n,</div>
+<div class="line"><a name="l01070"></a><span class="lineno"> 1070</span>&#160;        keys );</div>
+<div class="line"><a name="l01071"></a><span class="lineno"> 1071</span>&#160;}</div>
+<div class="line"><a name="l01072"></a><span class="lineno"> 1072</span>&#160;</div>
+<div class="line"><a name="l01073"></a><span class="lineno"> 1073</span>&#160;<span class="comment">// device-wide sort by key</span></div>
+<div class="line"><a name="l01074"></a><span class="lineno"> 1074</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l01075"></a><span class="lineno"> 1075</span>&#160;<span class="comment">// \param n                    number of input items</span></div>
+<div class="line"><a name="l01076"></a><span class="lineno"> 1076</span>&#160;<span class="comment">// \param keys                 a system input iterator of keys to be sorted</span></div>
+<div class="line"><a name="l01077"></a><span class="lineno"> 1077</span>&#160;<span class="comment">// \param values               a system input iterator of values to be sorted</span></div>
+<div class="line"><a name="l01078"></a><span class="lineno"> 1078</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l01079"></a><span class="lineno"> 1079</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> KeyIterator, <span class="keyword">typename</span> ValueIterator&gt;</div>
+<div class="line"><a name="l01080"></a><span class="lineno"> 1080</span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>(</div>
+<div class="line"><a name="l01081"></a><span class="lineno"> 1081</span>&#160;    <span class="keyword">const</span> device_tag                    tag,</div>
+<div class="line"><a name="l01082"></a><span class="lineno"> 1082</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        n,</div>
+<div class="line"><a name="l01083"></a><span class="lineno"> 1083</span>&#160;    KeyIterator                         keys,</div>
+<div class="line"><a name="l01084"></a><span class="lineno"> 1084</span>&#160;    ValueIterator                       values,</div>
+<div class="line"><a name="l01085"></a><span class="lineno"> 1085</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;device_tag,uint8&gt;</a>&amp;    temp_storage)</div>
+<div class="line"><a name="l01086"></a><span class="lineno"> 1086</span>&#160;{</div>
+<div class="line"><a name="l01087"></a><span class="lineno"> 1087</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> std::iterator_traits&lt;KeyIterator&gt;::value_type   key_type;</div>
+<div class="line"><a name="l01088"></a><span class="lineno"> 1088</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> std::iterator_traits&lt;ValueIterator&gt;::value_type value_type;</div>
+<div class="line"><a name="l01089"></a><span class="lineno"> 1089</span>&#160;</div>
+<div class="line"><a name="l01090"></a><span class="lineno"> 1090</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> aligned_key_bytes = align&lt;16&gt;( 2 * n * <span class="keyword">sizeof</span>(key_type) );</div>
+<div class="line"><a name="l01091"></a><span class="lineno"> 1091</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> aligned_val_bytes =            2 * n * <span class="keyword">sizeof</span>(value_type);</div>
+<div class="line"><a name="l01092"></a><span class="lineno"> 1092</span>&#160;    <a class="code" href="group___c_u_d_a_primitives.html#gaa9b984a7db3a63b5a095daa7e0acfbb2">cuda::alloc_temp_storage</a>( temp_storage, aligned_key_bytes + aligned_val_bytes );</div>
+<div class="line"><a name="l01093"></a><span class="lineno"> 1093</span>&#160;</div>
+<div class="line"><a name="l01094"></a><span class="lineno"> 1094</span>&#160;    key_type*     keys_ptr = <span class="keyword">reinterpret_cast&lt;</span>key_type*<span class="keyword">&gt;</span>( <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( temp_storage ) );</div>
+<div class="line"><a name="l01095"></a><span class="lineno"> 1095</span>&#160;    value_type* values_ptr = <span class="keyword">reinterpret_cast&lt;</span>value_type*<span class="keyword">&gt;</span>( <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( temp_storage ) + aligned_key_bytes );</div>
+<div class="line"><a name="l01096"></a><span class="lineno"> 1096</span>&#160;</div>
+<div class="line"><a name="l01097"></a><span class="lineno"> 1097</span>&#160;    thrust::device_ptr&lt;key_type&gt; keys_buf( keys_ptr );</div>
+<div class="line"><a name="l01098"></a><span class="lineno"> 1098</span>&#160;    thrust::device_ptr&lt;key_type&gt; values_buf( values_ptr );</div>
 <div class="line"><a name="l01099"></a><span class="lineno"> 1099</span>&#160;</div>
-<div class="line"><a name="l01100"></a><span class="lineno"> 1100</span>&#160;<span class="comment">// device-wide sort by key</span></div>
-<div class="line"><a name="l01101"></a><span class="lineno"> 1101</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l01102"></a><span class="lineno"> 1102</span>&#160;<span class="comment">// \param n                    number of input items</span></div>
-<div class="line"><a name="l01103"></a><span class="lineno"> 1103</span>&#160;<span class="comment">// \param keys                 a system input iterator of keys to be sorted</span></div>
-<div class="line"><a name="l01104"></a><span class="lineno"> 1104</span>&#160;<span class="comment">// \param values               a system input iterator of values to be sorted</span></div>
-<div class="line"><a name="l01105"></a><span class="lineno"> 1105</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l01106"></a><span class="lineno"> 1106</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> KeyIterator, <span class="keyword">typename</span> ValueIterator&gt;</div>
-<div class="line"><a name="l01107"></a><span class="lineno"><a class="code" href="namespacenvbio.html#aafcf6424757b1297a1ec4ed13a714289"> 1107</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>(</div>
-<div class="line"><a name="l01108"></a><span class="lineno"> 1108</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1device__tag.html">device_tag</a>                    tag,</div>
-<div class="line"><a name="l01109"></a><span class="lineno"> 1109</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        n,</div>
-<div class="line"><a name="l01110"></a><span class="lineno"> 1110</span>&#160;    KeyIterator                         keys,</div>
-<div class="line"><a name="l01111"></a><span class="lineno"> 1111</span>&#160;    ValueIterator                       values,</div>
-<div class="line"><a name="l01112"></a><span class="lineno"> 1112</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;device_tag,uint8&gt;</a>&amp;    temp_storage)</div>
-<div class="line"><a name="l01113"></a><span class="lineno"> 1113</span>&#160;{</div>
-<div class="line"><a name="l01114"></a><span class="lineno"> 1114</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> std::iterator_traits&lt;KeyIterator&gt;::value_type   key_type;</div>
-<div class="line"><a name="l01115"></a><span class="lineno"> 1115</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> std::iterator_traits&lt;ValueIterator&gt;::value_type value_type;</div>
+<div class="line"><a name="l01100"></a><span class="lineno"> 1100</span>&#160;    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>( keys,     keys + n,   keys_buf );</div>
+<div class="line"><a name="l01101"></a><span class="lineno"> 1101</span>&#160;    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>( values,   values + n, values_buf );</div>
+<div class="line"><a name="l01102"></a><span class="lineno"> 1102</span>&#160;</div>
+<div class="line"><a name="l01103"></a><span class="lineno"> 1103</span>&#160;    cuda::SortBuffers&lt;key_type*, value_type*&gt; sort_buffers;</div>
+<div class="line"><a name="l01104"></a><span class="lineno"> 1104</span>&#160;    sort_buffers.keys[0]   = keys_ptr;</div>
+<div class="line"><a name="l01105"></a><span class="lineno"> 1105</span>&#160;    sort_buffers.keys[1]   = keys_ptr + n;</div>
+<div class="line"><a name="l01106"></a><span class="lineno"> 1106</span>&#160;    sort_buffers.values[0] = values_ptr;</div>
+<div class="line"><a name="l01107"></a><span class="lineno"> 1107</span>&#160;    sort_buffers.values[1] = values_ptr + n;</div>
+<div class="line"><a name="l01108"></a><span class="lineno"> 1108</span>&#160;</div>
+<div class="line"><a name="l01109"></a><span class="lineno"> 1109</span>&#160;    cuda::SortEnactor sort_enactor;</div>
+<div class="line"><a name="l01110"></a><span class="lineno"> 1110</span>&#160;    sort_enactor.sort( n, sort_buffers );</div>
+<div class="line"><a name="l01111"></a><span class="lineno"> 1111</span>&#160;</div>
+<div class="line"><a name="l01112"></a><span class="lineno"> 1112</span>&#160;    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>(</div>
+<div class="line"><a name="l01113"></a><span class="lineno"> 1113</span>&#160;        keys_buf + sort_buffers.selector * n,</div>
+<div class="line"><a name="l01114"></a><span class="lineno"> 1114</span>&#160;        keys_buf + sort_buffers.selector * n + n,</div>
+<div class="line"><a name="l01115"></a><span class="lineno"> 1115</span>&#160;        keys );</div>
 <div class="line"><a name="l01116"></a><span class="lineno"> 1116</span>&#160;</div>
-<div class="line"><a name="l01117"></a><span class="lineno"> 1117</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> aligned_key_bytes = align&lt;16&gt;( 2 * n * <span class="keyword">sizeof</span>(key_type) );</div>
-<div class="line"><a name="l01118"></a><span class="lineno"> 1118</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> aligned_val_bytes =            2 * n * <span class="keyword">sizeof</span>(value_type);</div>
-<div class="line"><a name="l01119"></a><span class="lineno"> 1119</span>&#160;    <a class="code" href="group___c_u_d_a_primitives.html#gaa9b984a7db3a63b5a095daa7e0acfbb2">cuda::alloc_temp_storage</a>( temp_storage, aligned_key_bytes + aligned_val_bytes );</div>
-<div class="line"><a name="l01120"></a><span class="lineno"> 1120</span>&#160;</div>
-<div class="line"><a name="l01121"></a><span class="lineno"> 1121</span>&#160;    key_type*     keys_ptr = <span class="keyword">reinterpret_cast&lt;</span>key_type*<span class="keyword">&gt;</span>( <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( temp_storage ) );</div>
-<div class="line"><a name="l01122"></a><span class="lineno"> 1122</span>&#160;    value_type* values_ptr = <span class="keyword">reinterpret_cast&lt;</span>value_type*<span class="keyword">&gt;</span>( <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( temp_storage ) + aligned_key_bytes );</div>
-<div class="line"><a name="l01123"></a><span class="lineno"> 1123</span>&#160;</div>
-<div class="line"><a name="l01124"></a><span class="lineno"> 1124</span>&#160;    thrust::device_ptr&lt;key_type&gt; keys_buf( keys_ptr );</div>
-<div class="line"><a name="l01125"></a><span class="lineno"> 1125</span>&#160;    thrust::device_ptr&lt;key_type&gt; values_buf( values_ptr );</div>
-<div class="line"><a name="l01126"></a><span class="lineno"> 1126</span>&#160;</div>
-<div class="line"><a name="l01127"></a><span class="lineno"> 1127</span>&#160;    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>( keys,     keys + n,   keys_buf );</div>
-<div class="line"><a name="l01128"></a><span class="lineno"> 1128</span>&#160;    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>( values,   values + n, values_buf );</div>
-<div class="line"><a name="l01129"></a><span class="lineno"> 1129</span>&#160;</div>
-<div class="line"><a name="l01130"></a><span class="lineno"> 1130</span>&#160;    <a class="code" href="structnvbio_1_1cuda_1_1_sort_buffers.html">cuda::SortBuffers&lt;key_type*, value_type*&gt;</a> sort_buffers;</div>
-<div class="line"><a name="l01131"></a><span class="lineno"> 1131</span>&#160;    sort_buffers.<a class="code" href="structnvbio_1_1cuda_1_1_sort_buffers.html#a0282973f670c67c71dba0fd7b8c6ed12">keys</a>[0]   = keys_ptr;</div>
-<div class="line"><a name="l01132"></a><span class="lineno"> 1132</span>&#160;    sort_buffers.<a class="code" href="structnvbio_1_1cuda_1_1_sort_buffers.html#a0282973f670c67c71dba0fd7b8c6ed12">keys</a>[1]   = keys_ptr + n;</div>
-<div class="line"><a name="l01133"></a><span class="lineno"> 1133</span>&#160;    sort_buffers.<a class="code" href="structnvbio_1_1cuda_1_1_sort_buffers.html#a5104889618bb8d29374a65b8dba30775">values</a>[0] = values_ptr;</div>
-<div class="line"><a name="l01134"></a><span class="lineno"> 1134</span>&#160;    sort_buffers.<a class="code" href="structnvbio_1_1cuda_1_1_sort_buffers.html#a5104889618bb8d29374a65b8dba30775">values</a>[1] = values_ptr + n;</div>
-<div class="line"><a name="l01135"></a><span class="lineno"> 1135</span>&#160;</div>
-<div class="line"><a name="l01136"></a><span class="lineno"> 1136</span>&#160;    <a class="code" href="structnvbio_1_1cuda_1_1_sort_enactor.html">cuda::SortEnactor</a> sort_enactor;</div>
-<div class="line"><a name="l01137"></a><span class="lineno"> 1137</span>&#160;    sort_enactor.<a class="code" href="structnvbio_1_1cuda_1_1_sort_enactor.html#a915ba44b7fe0f1c4deef794d7f26d123">sort</a>( n, sort_buffers );</div>
-<div class="line"><a name="l01138"></a><span class="lineno"> 1138</span>&#160;</div>
-<div class="line"><a name="l01139"></a><span class="lineno"> 1139</span>&#160;    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>(</div>
-<div class="line"><a name="l01140"></a><span class="lineno"> 1140</span>&#160;        keys_buf + sort_buffers.<a class="code" href="structnvbio_1_1cuda_1_1_sort_buffers.html#a39088b1d4b7a5ba474b19cd6437e4bd5">selector</a> * n,</div>
-<div class="line"><a name="l01141"></a><span class="lineno"> 1141</span>&#160;        keys_buf + sort_buffers.<a class="code" href="structnvbio_1_1cuda_1_1_sort_buffers.html#a39088b1d4b7a5ba474b19cd6437e4bd5">selector</a> * n + n,</div>
-<div class="line"><a name="l01142"></a><span class="lineno"> 1142</span>&#160;        keys );</div>
-<div class="line"><a name="l01143"></a><span class="lineno"> 1143</span>&#160;</div>
-<div class="line"><a name="l01144"></a><span class="lineno"> 1144</span>&#160;    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>(</div>
-<div class="line"><a name="l01145"></a><span class="lineno"> 1145</span>&#160;        values_buf + sort_buffers.<a class="code" href="structnvbio_1_1cuda_1_1_sort_buffers.html#a39088b1d4b7a5ba474b19cd6437e4bd5">selector</a> * n,</div>
-<div class="line"><a name="l01146"></a><span class="lineno"> 1146</span>&#160;        values_buf + sort_buffers.<a class="code" href="structnvbio_1_1cuda_1_1_sort_buffers.html#a39088b1d4b7a5ba474b19cd6437e4bd5">selector</a> * n + n,</div>
-<div class="line"><a name="l01147"></a><span class="lineno"> 1147</span>&#160;        values );</div>
-<div class="line"><a name="l01148"></a><span class="lineno"> 1148</span>&#160;}</div>
-<div class="line"><a name="l01149"></a><span class="lineno"> 1149</span>&#160;</div>
-<div class="line"><a name="l01150"></a><span class="lineno"> 1150</span>&#160;<span class="comment">// host-wide sort by key</span></div>
-<div class="line"><a name="l01151"></a><span class="lineno"> 1151</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l01152"></a><span class="lineno"> 1152</span>&#160;<span class="comment">// \param n                    number of input items</span></div>
-<div class="line"><a name="l01153"></a><span class="lineno"> 1153</span>&#160;<span class="comment">// \param keys                 a system input iterator of keys to be sorted</span></div>
-<div class="line"><a name="l01154"></a><span class="lineno"> 1154</span>&#160;<span class="comment">// \param values               a system input iterator of values to be sorted</span></div>
+<div class="line"><a name="l01117"></a><span class="lineno"> 1117</span>&#160;    <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>(</div>
+<div class="line"><a name="l01118"></a><span class="lineno"> 1118</span>&#160;        values_buf + sort_buffers.selector * n,</div>
+<div class="line"><a name="l01119"></a><span class="lineno"> 1119</span>&#160;        values_buf + sort_buffers.selector * n + n,</div>
+<div class="line"><a name="l01120"></a><span class="lineno"> 1120</span>&#160;        values );</div>
+<div class="line"><a name="l01121"></a><span class="lineno"> 1121</span>&#160;}</div>
+<div class="line"><a name="l01122"></a><span class="lineno"> 1122</span>&#160;</div>
+<div class="line"><a name="l01123"></a><span class="lineno"> 1123</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l01124"></a><span class="lineno"> 1124</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l01125"></a><span class="lineno"> 1125</span>&#160;<span class="comment">// host-wide sort</span></div>
+<div class="line"><a name="l01126"></a><span class="lineno"> 1126</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l01127"></a><span class="lineno"> 1127</span>&#160;<span class="comment">// \param n                    number of input items</span></div>
+<div class="line"><a name="l01128"></a><span class="lineno"> 1128</span>&#160;<span class="comment">// \param keys                 a system input iterator of keys to be sorted</span></div>
+<div class="line"><a name="l01129"></a><span class="lineno"> 1129</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l01130"></a><span class="lineno"> 1130</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> KeyIterator&gt;</div>
+<div class="line"><a name="l01131"></a><span class="lineno"><a class="code" href="namespacenvbio.html#aa8d5349a1f85575cc392468971000808"> 1131</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>(</div>
+<div class="line"><a name="l01132"></a><span class="lineno"> 1132</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1host__tag.html">host_tag</a>                      tag,</div>
+<div class="line"><a name="l01133"></a><span class="lineno"> 1133</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        n,</div>
+<div class="line"><a name="l01134"></a><span class="lineno"> 1134</span>&#160;    KeyIterator                         keys,</div>
+<div class="line"><a name="l01135"></a><span class="lineno"> 1135</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;host_tag,uint8&gt;</a>&amp;      temp_storage)</div>
+<div class="line"><a name="l01136"></a><span class="lineno"> 1136</span>&#160;{</div>
+<div class="line"><a name="l01137"></a><span class="lineno"> 1137</span>&#160;    <a class="code" href="namespacedivsufsortxx_1_1substring.html#acbb12ad743e9d8ca4ad0908a2c1eb9d5">thrust::sort</a>( keys, keys + n );</div>
+<div class="line"><a name="l01138"></a><span class="lineno"> 1138</span>&#160;}</div>
+<div class="line"><a name="l01139"></a><span class="lineno"> 1139</span>&#160;</div>
+<div class="line"><a name="l01140"></a><span class="lineno"> 1140</span>&#160;<span class="comment">// system-wide sort</span></div>
+<div class="line"><a name="l01141"></a><span class="lineno"> 1141</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l01142"></a><span class="lineno"> 1142</span>&#160;<span class="comment">// \param n                    number of input items</span></div>
+<div class="line"><a name="l01143"></a><span class="lineno"> 1143</span>&#160;<span class="comment">// \param keys                 a system input iterator of keys to be sorted</span></div>
+<div class="line"><a name="l01144"></a><span class="lineno"> 1144</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l01145"></a><span class="lineno"> 1145</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> system_tag, <span class="keyword">typename</span> KeyIterator&gt;</div>
+<div class="line"><a name="l01146"></a><span class="lineno"><a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6"> 1146</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>(</div>
+<div class="line"><a name="l01147"></a><span class="lineno"> 1147</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        n,</div>
+<div class="line"><a name="l01148"></a><span class="lineno"> 1148</span>&#160;    KeyIterator                         keys,</div>
+<div class="line"><a name="l01149"></a><span class="lineno"> 1149</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;system_tag,uint8&gt;</a>&amp;    temp_storage)</div>
+<div class="line"><a name="l01150"></a><span class="lineno"> 1150</span>&#160;{</div>
+<div class="line"><a name="l01151"></a><span class="lineno"> 1151</span>&#160;    <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>( system_tag(), n, keys, temp_storage );</div>
+<div class="line"><a name="l01152"></a><span class="lineno"> 1152</span>&#160;}</div>
+<div class="line"><a name="l01153"></a><span class="lineno"> 1153</span>&#160;</div>
+<div class="line"><a name="l01154"></a><span class="lineno"> 1154</span>&#160;<span class="comment">// host-wide sort by key</span></div>
 <div class="line"><a name="l01155"></a><span class="lineno"> 1155</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l01156"></a><span class="lineno"> 1156</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> KeyIterator, <span class="keyword">typename</span> ValueIterator&gt;</div>
-<div class="line"><a name="l01157"></a><span class="lineno"><a class="code" href="namespacenvbio.html#a72615506cabe4e397a9ad9bc8b085cd2"> 1157</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>(</div>
-<div class="line"><a name="l01158"></a><span class="lineno"> 1158</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1host__tag.html">host_tag</a>                      tag,</div>
-<div class="line"><a name="l01159"></a><span class="lineno"> 1159</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        n,</div>
-<div class="line"><a name="l01160"></a><span class="lineno"> 1160</span>&#160;    KeyIterator                         keys,</div>
-<div class="line"><a name="l01161"></a><span class="lineno"> 1161</span>&#160;    ValueIterator                       values,</div>
-<div class="line"><a name="l01162"></a><span class="lineno"> 1162</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;host_tag,uint8&gt;</a>&amp;      temp_storage)</div>
-<div class="line"><a name="l01163"></a><span class="lineno"> 1163</span>&#160;{</div>
-<div class="line"><a name="l01164"></a><span class="lineno"> 1164</span>&#160;    thrust::sort_by_key( keys, keys + n, values, temp_storage );</div>
-<div class="line"><a name="l01165"></a><span class="lineno"> 1165</span>&#160;}</div>
-<div class="line"><a name="l01166"></a><span class="lineno"> 1166</span>&#160;</div>
-<div class="line"><a name="l01167"></a><span class="lineno"> 1167</span>&#160;<span class="comment">// system-wide sort by key</span></div>
-<div class="line"><a name="l01168"></a><span class="lineno"> 1168</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l01169"></a><span class="lineno"> 1169</span>&#160;<span class="comment">// \param n                    number of input items</span></div>
-<div class="line"><a name="l01170"></a><span class="lineno"> 1170</span>&#160;<span class="comment">// \param keys                 a system input iterator of keys to be sorted</span></div>
-<div class="line"><a name="l01171"></a><span class="lineno"> 1171</span>&#160;<span class="comment">// \param values               a system input iterator of values to be sorted</span></div>
+<div class="line"><a name="l01156"></a><span class="lineno"> 1156</span>&#160;<span class="comment">// \param n                    number of input items</span></div>
+<div class="line"><a name="l01157"></a><span class="lineno"> 1157</span>&#160;<span class="comment">// \param keys                 a system input iterator of keys to be sorted</span></div>
+<div class="line"><a name="l01158"></a><span class="lineno"> 1158</span>&#160;<span class="comment">// \param values               a system input iterator of values to be sorted</span></div>
+<div class="line"><a name="l01159"></a><span class="lineno"> 1159</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l01160"></a><span class="lineno"> 1160</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> KeyIterator, <span class="keyword">typename</span> ValueIterator&gt;</div>
+<div class="line"><a name="l01161"></a><span class="lineno"><a class="code" href="namespacenvbio.html#a72615506cabe4e397a9ad9bc8b085cd2"> 1161</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>(</div>
+<div class="line"><a name="l01162"></a><span class="lineno"> 1162</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1host__tag.html">host_tag</a>                      tag,</div>
+<div class="line"><a name="l01163"></a><span class="lineno"> 1163</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        n,</div>
+<div class="line"><a name="l01164"></a><span class="lineno"> 1164</span>&#160;    KeyIterator                         keys,</div>
+<div class="line"><a name="l01165"></a><span class="lineno"> 1165</span>&#160;    ValueIterator                       values,</div>
+<div class="line"><a name="l01166"></a><span class="lineno"> 1166</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;host_tag,uint8&gt;</a>&amp;      temp_storage)</div>
+<div class="line"><a name="l01167"></a><span class="lineno"> 1167</span>&#160;{</div>
+<div class="line"><a name="l01168"></a><span class="lineno"> 1168</span>&#160;    thrust::sort_by_key( keys, keys + n, values, temp_storage );</div>
+<div class="line"><a name="l01169"></a><span class="lineno"> 1169</span>&#160;}</div>
+<div class="line"><a name="l01170"></a><span class="lineno"> 1170</span>&#160;</div>
+<div class="line"><a name="l01171"></a><span class="lineno"> 1171</span>&#160;<span class="comment">// system-wide sort by key</span></div>
 <div class="line"><a name="l01172"></a><span class="lineno"> 1172</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l01173"></a><span class="lineno"> 1173</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> system_tag, <span class="keyword">typename</span> KeyIterator, <span class="keyword">typename</span> ValueIterator&gt;</div>
-<div class="line"><a name="l01174"></a><span class="lineno"><a class="code" href="group___primitives.html#ga163658788606ce34fec246c11491563a"> 1174</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>(</div>
-<div class="line"><a name="l01175"></a><span class="lineno"> 1175</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        n,</div>
-<div class="line"><a name="l01176"></a><span class="lineno"> 1176</span>&#160;    KeyIterator                         keys,</div>
-<div class="line"><a name="l01177"></a><span class="lineno"> 1177</span>&#160;    ValueIterator                       values,</div>
-<div class="line"><a name="l01178"></a><span class="lineno"> 1178</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;system_tag,uint8&gt;</a>&amp;    temp_storage)</div>
-<div class="line"><a name="l01179"></a><span class="lineno"> 1179</span>&#160;{</div>
-<div class="line"><a name="l01180"></a><span class="lineno"> 1180</span>&#160;    <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>( system_tag(), n, keys, values, temp_storage );</div>
-<div class="line"><a name="l01181"></a><span class="lineno"> 1181</span>&#160;}</div>
-<div class="line"><a name="l01182"></a><span class="lineno"> 1182</span>&#160;</div>
-<div class="line"><a name="l01183"></a><span class="lineno"> 1183</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l01184"></a><span class="lineno"> 1184</span>&#160;    <span class="keyword">typename</span> key_iterator1,</div>
-<div class="line"><a name="l01185"></a><span class="lineno"> 1185</span>&#160;    <span class="keyword">typename</span> key_iterator2&gt;</div>
-<div class="line"><a name="l01186"></a><span class="lineno"><a class="code" href="namespacenvbio.html#a7cf9ea93493e6740736e8bd008199f5b"> 1186</a></span>&#160;uint2 <a class="code" href="namespacenvbio.html#a7cf9ea93493e6740736e8bd008199f5b">corank</a>(</div>
-<div class="line"><a name="l01187"></a><span class="lineno"> 1187</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>         i,</div>
-<div class="line"><a name="l01188"></a><span class="lineno"> 1188</span>&#160;    <span class="keyword">const</span> key_iterator1 A,</div>
-<div class="line"><a name="l01189"></a><span class="lineno"> 1189</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>         m,</div>
-<div class="line"><a name="l01190"></a><span class="lineno"> 1190</span>&#160;    <span class="keyword">const</span> key_iterator2 B,</div>
-<div class="line"><a name="l01191"></a><span class="lineno"> 1191</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>         n)</div>
-<div class="line"><a name="l01192"></a><span class="lineno"> 1192</span>&#160;{</div>
-<div class="line"><a name="l01193"></a><span class="lineno"> 1193</span>&#160;    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> j = <a class="code" href="group___basic_utils.html#gaeeb2406339f4edfcee3f007aaccd478e">min</a>( i, m );</div>
-<div class="line"><a name="l01194"></a><span class="lineno"> 1194</span>&#160;    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> k = i - j;</div>
-<div class="line"><a name="l01195"></a><span class="lineno"> 1195</span>&#160;</div>
-<div class="line"><a name="l01196"></a><span class="lineno"> 1196</span>&#160;    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> j_lo = i &gt;= n ? i - n : 0;</div>
-<div class="line"><a name="l01197"></a><span class="lineno"> 1197</span>&#160;    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> k_lo = 0;</div>
-<div class="line"><a name="l01198"></a><span class="lineno"> 1198</span>&#160;</div>
-<div class="line"><a name="l01199"></a><span class="lineno"> 1199</span>&#160;    <span class="keywordflow">while</span> (1)</div>
-<div class="line"><a name="l01200"></a><span class="lineno"> 1200</span>&#160;    {</div>
-<div class="line"><a name="l01201"></a><span class="lineno"> 1201</span>&#160;        <span class="keywordflow">if</span> ((j &gt; 0 || k &lt; n) &amp;&amp; A[j-1] &gt; B[k])</div>
-<div class="line"><a name="l01202"></a><span class="lineno"> 1202</span>&#160;        {</div>
-<div class="line"><a name="l01203"></a><span class="lineno"> 1203</span>&#160;            <span class="comment">// decrease j</span></div>
-<div class="line"><a name="l01204"></a><span class="lineno"> 1204</span>&#160;            <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> delta = <a class="code" href="group___basic_utils.html#gabf731ec687bc1c5397b265d41d76da50">util::divide_ri</a>( j - j_lo, 2 );</div>
-<div class="line"><a name="l01205"></a><span class="lineno"> 1205</span>&#160;            k_lo = k;</div>
-<div class="line"><a name="l01206"></a><span class="lineno"> 1206</span>&#160;            j -= delta;</div>
-<div class="line"><a name="l01207"></a><span class="lineno"> 1207</span>&#160;            k += delta;</div>
-<div class="line"><a name="l01208"></a><span class="lineno"> 1208</span>&#160;            assert( j + k == i );</div>
-<div class="line"><a name="l01209"></a><span class="lineno"> 1209</span>&#160;        }</div>
-<div class="line"><a name="l01210"></a><span class="lineno"> 1210</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> ((k &gt; 0 || j &lt; m) &amp;&amp; B[k-1] &gt;= A[j])</div>
-<div class="line"><a name="l01211"></a><span class="lineno"> 1211</span>&#160;        {</div>
-<div class="line"><a name="l01212"></a><span class="lineno"> 1212</span>&#160;            <span class="comment">// decrease k</span></div>
-<div class="line"><a name="l01213"></a><span class="lineno"> 1213</span>&#160;            <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> delta = <a class="code" href="group___basic_utils.html#gabf731ec687bc1c5397b265d41d76da50">util::divide_ri</a>( k - k_lo, 2 );</div>
-<div class="line"><a name="l01214"></a><span class="lineno"> 1214</span>&#160;            j_lo = j;</div>
-<div class="line"><a name="l01215"></a><span class="lineno"> 1215</span>&#160;            j += delta;</div>
-<div class="line"><a name="l01216"></a><span class="lineno"> 1216</span>&#160;            k -= delta;</div>
-<div class="line"><a name="l01217"></a><span class="lineno"> 1217</span>&#160;            assert( j + k == i );</div>
-<div class="line"><a name="l01218"></a><span class="lineno"> 1218</span>&#160;        }</div>
-<div class="line"><a name="l01219"></a><span class="lineno"> 1219</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01220"></a><span class="lineno"> 1220</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l01221"></a><span class="lineno"> 1221</span>&#160;    }</div>
-<div class="line"><a name="l01222"></a><span class="lineno"> 1222</span>&#160;    <span class="keywordflow">return</span> make_uint2( <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(j), <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(k) );</div>
-<div class="line"><a name="l01223"></a><span class="lineno"> 1223</span>&#160;}</div>
-<div class="line"><a name="l01224"></a><span class="lineno"> 1224</span>&#160;</div>
-<div class="line"><a name="l01225"></a><span class="lineno"> 1225</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l01226"></a><span class="lineno"> 1226</span>&#160;    <span class="keyword">typename</span> key_iterator1,</div>
-<div class="line"><a name="l01227"></a><span class="lineno"> 1227</span>&#160;    <span class="keyword">typename</span> key_iterator2,</div>
-<div class="line"><a name="l01228"></a><span class="lineno"> 1228</span>&#160;    <span class="keyword">typename</span> value_iterator1,</div>
-<div class="line"><a name="l01229"></a><span class="lineno"> 1229</span>&#160;    <span class="keyword">typename</span> value_iterator2,</div>
-<div class="line"><a name="l01230"></a><span class="lineno"> 1230</span>&#160;    <span class="keyword">typename</span> key_output,</div>
-<div class="line"><a name="l01231"></a><span class="lineno"> 1231</span>&#160;    <span class="keyword">typename</span> value_output&gt;</div>
-<div class="line"><a name="l01232"></a><span class="lineno"><a class="code" href="namespacenvbio.html#a577748f84116bbef3548c839b66b5dab"> 1232</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacenvbio.html#a0b63c7bb7267a493b42771fea3126fd6">merge_by_key</a>(</div>
-<div class="line"><a name="l01233"></a><span class="lineno"> 1233</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1host__tag.html">host_tag</a>          tag,</div>
-<div class="line"><a name="l01234"></a><span class="lineno"> 1234</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            A_len,</div>
-<div class="line"><a name="l01235"></a><span class="lineno"> 1235</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            B_len,</div>
-<div class="line"><a name="l01236"></a><span class="lineno"> 1236</span>&#160;    <span class="keyword">const</span> key_iterator1     A_keys,</div>
-<div class="line"><a name="l01237"></a><span class="lineno"> 1237</span>&#160;    <span class="keyword">const</span> key_iterator2     B_keys,</div>
-<div class="line"><a name="l01238"></a><span class="lineno"> 1238</span>&#160;    <span class="keyword">const</span> value_iterator1   A_values,</div>
-<div class="line"><a name="l01239"></a><span class="lineno"> 1239</span>&#160;    <span class="keyword">const</span> value_iterator2   B_values,</div>
-<div class="line"><a name="l01240"></a><span class="lineno"> 1240</span>&#160;          key_output        C_keys,</div>
-<div class="line"><a name="l01241"></a><span class="lineno"> 1241</span>&#160;          value_output      C_values)</div>
-<div class="line"><a name="l01242"></a><span class="lineno"> 1242</span>&#160;{</div>
-<div class="line"><a name="l01243"></a><span class="lineno"> 1243</span>&#160;    <span class="keywordflow">if</span> (A_len == 0)</div>
-<div class="line"><a name="l01244"></a><span class="lineno"> 1244</span>&#160;    {</div>
-<div class="line"><a name="l01245"></a><span class="lineno"> 1245</span>&#160;<span class="preprocessor">        #pragma omp parallel for</span></div>
-<div class="line"><a name="l01246"></a><span class="lineno"> 1246</span>&#160;<span class="preprocessor"></span>        <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> i = 0; i &lt; <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>( B_len ); ++i)</div>
-<div class="line"><a name="l01247"></a><span class="lineno"> 1247</span>&#160;        {</div>
-<div class="line"><a name="l01248"></a><span class="lineno"> 1248</span>&#160;            C_keys[i]   = A_keys[i];</div>
-<div class="line"><a name="l01249"></a><span class="lineno"> 1249</span>&#160;            C_values[i] = A_values[i];</div>
-<div class="line"><a name="l01250"></a><span class="lineno"> 1250</span>&#160;        }</div>
-<div class="line"><a name="l01251"></a><span class="lineno"> 1251</span>&#160;    }</div>
-<div class="line"><a name="l01252"></a><span class="lineno"> 1252</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (B_len == 0)</div>
-<div class="line"><a name="l01253"></a><span class="lineno"> 1253</span>&#160;    {</div>
-<div class="line"><a name="l01254"></a><span class="lineno"> 1254</span>&#160;<span class="preprocessor">        #pragma omp parallel for</span></div>
-<div class="line"><a name="l01255"></a><span class="lineno"> 1255</span>&#160;<span class="preprocessor"></span>        <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> i = 0; i &lt; <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>( A_len ); ++i)</div>
-<div class="line"><a name="l01256"></a><span class="lineno"> 1256</span>&#160;        {</div>
-<div class="line"><a name="l01257"></a><span class="lineno"> 1257</span>&#160;            C_keys[i]   = A_keys[i];</div>
-<div class="line"><a name="l01258"></a><span class="lineno"> 1258</span>&#160;            C_values[i] = A_values[i];</div>
-<div class="line"><a name="l01259"></a><span class="lineno"> 1259</span>&#160;        }</div>
-<div class="line"><a name="l01260"></a><span class="lineno"> 1260</span>&#160;    }</div>
-<div class="line"><a name="l01261"></a><span class="lineno"> 1261</span>&#160;</div>
-<div class="line"><a name="l01262"></a><span class="lineno"> 1262</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_threads = (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>)<a class="code" href="omp_8h.html#a331275eb6e07e693f9b81a0ab5595f5e">omp_get_num_procs</a>();</div>
-<div class="line"><a name="l01263"></a><span class="lineno"> 1263</span>&#160;</div>
-<div class="line"><a name="l01264"></a><span class="lineno"> 1264</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;host_tag,uint32&gt;</a> A_diag( n_threads+1 );</div>
-<div class="line"><a name="l01265"></a><span class="lineno"> 1265</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;host_tag,uint32&gt;</a> B_diag( n_threads+1 );</div>
-<div class="line"><a name="l01266"></a><span class="lineno"> 1266</span>&#160;</div>
-<div class="line"><a name="l01267"></a><span class="lineno"> 1267</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> C_len = A_len + B_len;</div>
-<div class="line"><a name="l01268"></a><span class="lineno"> 1268</span>&#160;</div>
-<div class="line"><a name="l01269"></a><span class="lineno"> 1269</span>&#160;    A_diag[ n_threads ] = 0;</div>
-<div class="line"><a name="l01270"></a><span class="lineno"> 1270</span>&#160;    B_diag[ n_threads ] = 0;</div>
-<div class="line"><a name="l01271"></a><span class="lineno"> 1271</span>&#160;    A_diag[ n_threads ] = A_len;</div>
-<div class="line"><a name="l01272"></a><span class="lineno"> 1272</span>&#160;    B_diag[ n_threads ] = B_len;</div>
-<div class="line"><a name="l01273"></a><span class="lineno"> 1273</span>&#160;</div>
-<div class="line"><a name="l01274"></a><span class="lineno"> 1274</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_partition = <a class="code" href="group___basic_utils.html#gabf731ec687bc1c5397b265d41d76da50">util::divide_ri</a>( C_len, n_threads );</div>
-<div class="line"><a name="l01275"></a><span class="lineno"> 1275</span>&#160;</div>
-<div class="line"><a name="l01276"></a><span class="lineno"> 1276</span>&#160;<span class="preprocessor">    #pragma omp parallel for num_threads(n_threads)</span></div>
-<div class="line"><a name="l01277"></a><span class="lineno"> 1277</span>&#160;<span class="preprocessor"></span>    <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> i = 1; i &lt; <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>( n_threads ); ++i)</div>
-<div class="line"><a name="l01278"></a><span class="lineno"> 1278</span>&#160;    {</div>
-<div class="line"><a name="l01279"></a><span class="lineno"> 1279</span>&#160;        <span class="keyword">const</span> int32 index = i * n_partition;</div>
-<div class="line"><a name="l01280"></a><span class="lineno"> 1280</span>&#160;</div>
-<div class="line"><a name="l01281"></a><span class="lineno"> 1281</span>&#160;        <span class="keyword">const</span> uint2 jk = <a class="code" href="namespacenvbio.html#a7cf9ea93493e6740736e8bd008199f5b">corank</a>( index, A_keys, A_len, B_keys, B_len );</div>
-<div class="line"><a name="l01282"></a><span class="lineno"> 1282</span>&#160;</div>
-<div class="line"><a name="l01283"></a><span class="lineno"> 1283</span>&#160;        A_diag[i] = jk.x;</div>
-<div class="line"><a name="l01284"></a><span class="lineno"> 1284</span>&#160;        B_diag[i] = jk.y;</div>
-<div class="line"><a name="l01285"></a><span class="lineno"> 1285</span>&#160;    }</div>
+<div class="line"><a name="l01173"></a><span class="lineno"> 1173</span>&#160;<span class="comment">// \param n                    number of input items</span></div>
+<div class="line"><a name="l01174"></a><span class="lineno"> 1174</span>&#160;<span class="comment">// \param keys                 a system input iterator of keys to be sorted</span></div>
+<div class="line"><a name="l01175"></a><span class="lineno"> 1175</span>&#160;<span class="comment">// \param values               a system input iterator of values to be sorted</span></div>
+<div class="line"><a name="l01176"></a><span class="lineno"> 1176</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l01177"></a><span class="lineno"> 1177</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> system_tag, <span class="keyword">typename</span> KeyIterator, <span class="keyword">typename</span> ValueIterator&gt;</div>
+<div class="line"><a name="l01178"></a><span class="lineno"><a class="code" href="group___primitives.html#ga163658788606ce34fec246c11491563a"> 1178</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>(</div>
+<div class="line"><a name="l01179"></a><span class="lineno"> 1179</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        n,</div>
+<div class="line"><a name="l01180"></a><span class="lineno"> 1180</span>&#160;    KeyIterator                         keys,</div>
+<div class="line"><a name="l01181"></a><span class="lineno"> 1181</span>&#160;    ValueIterator                       values,</div>
+<div class="line"><a name="l01182"></a><span class="lineno"> 1182</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;system_tag,uint8&gt;</a>&amp;    temp_storage)</div>
+<div class="line"><a name="l01183"></a><span class="lineno"> 1183</span>&#160;{</div>
+<div class="line"><a name="l01184"></a><span class="lineno"> 1184</span>&#160;    <a class="code" href="group___primitives.html#ga8daae6c2c4358a4aea556ae44559edb6">radix_sort</a>( system_tag(), n, keys, values, temp_storage );</div>
+<div class="line"><a name="l01185"></a><span class="lineno"> 1185</span>&#160;}</div>
+<div class="line"><a name="l01186"></a><span class="lineno"> 1186</span>&#160;</div>
+<div class="line"><a name="l01187"></a><span class="lineno"> 1187</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l01188"></a><span class="lineno"> 1188</span>&#160;    <span class="keyword">typename</span> key_iterator1,</div>
+<div class="line"><a name="l01189"></a><span class="lineno"> 1189</span>&#160;    <span class="keyword">typename</span> key_iterator2&gt;</div>
+<div class="line"><a name="l01190"></a><span class="lineno"><a class="code" href="namespacenvbio.html#a7cf9ea93493e6740736e8bd008199f5b"> 1190</a></span>&#160;uint2 <a class="code" href="namespacenvbio.html#a7cf9ea93493e6740736e8bd008199f5b">corank</a>(</div>
+<div class="line"><a name="l01191"></a><span class="lineno"> 1191</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>         i,</div>
+<div class="line"><a name="l01192"></a><span class="lineno"> 1192</span>&#160;    <span class="keyword">const</span> key_iterator1 A,</div>
+<div class="line"><a name="l01193"></a><span class="lineno"> 1193</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>         m,</div>
+<div class="line"><a name="l01194"></a><span class="lineno"> 1194</span>&#160;    <span class="keyword">const</span> key_iterator2 B,</div>
+<div class="line"><a name="l01195"></a><span class="lineno"> 1195</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>         n)</div>
+<div class="line"><a name="l01196"></a><span class="lineno"> 1196</span>&#160;{</div>
+<div class="line"><a name="l01197"></a><span class="lineno"> 1197</span>&#160;    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> j = <a class="code" href="group___basic_utils.html#gaeeb2406339f4edfcee3f007aaccd478e">min</a>( i, m );</div>
+<div class="line"><a name="l01198"></a><span class="lineno"> 1198</span>&#160;    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> k = i - j;</div>
+<div class="line"><a name="l01199"></a><span class="lineno"> 1199</span>&#160;</div>
+<div class="line"><a name="l01200"></a><span class="lineno"> 1200</span>&#160;    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> j_lo = i &gt;= n ? i - n : 0;</div>
+<div class="line"><a name="l01201"></a><span class="lineno"> 1201</span>&#160;    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> k_lo = 0;</div>
+<div class="line"><a name="l01202"></a><span class="lineno"> 1202</span>&#160;</div>
+<div class="line"><a name="l01203"></a><span class="lineno"> 1203</span>&#160;    <span class="keywordflow">while</span> (1)</div>
+<div class="line"><a name="l01204"></a><span class="lineno"> 1204</span>&#160;    {</div>
+<div class="line"><a name="l01205"></a><span class="lineno"> 1205</span>&#160;        <span class="keywordflow">if</span> ((j &gt; 0 || k &lt; n) &amp;&amp; A[j-1] &gt; B[k])</div>
+<div class="line"><a name="l01206"></a><span class="lineno"> 1206</span>&#160;        {</div>
+<div class="line"><a name="l01207"></a><span class="lineno"> 1207</span>&#160;            <span class="comment">// decrease j</span></div>
+<div class="line"><a name="l01208"></a><span class="lineno"> 1208</span>&#160;            <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> delta = <a class="code" href="group___basic_utils.html#gabf731ec687bc1c5397b265d41d76da50">util::divide_ri</a>( j - j_lo, 2 );</div>
+<div class="line"><a name="l01209"></a><span class="lineno"> 1209</span>&#160;            k_lo = k;</div>
+<div class="line"><a name="l01210"></a><span class="lineno"> 1210</span>&#160;            j -= delta;</div>
+<div class="line"><a name="l01211"></a><span class="lineno"> 1211</span>&#160;            k += delta;</div>
+<div class="line"><a name="l01212"></a><span class="lineno"> 1212</span>&#160;            assert( j + k == i );</div>
+<div class="line"><a name="l01213"></a><span class="lineno"> 1213</span>&#160;        }</div>
+<div class="line"><a name="l01214"></a><span class="lineno"> 1214</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> ((k &gt; 0 || j &lt; m) &amp;&amp; B[k-1] &gt;= A[j])</div>
+<div class="line"><a name="l01215"></a><span class="lineno"> 1215</span>&#160;        {</div>
+<div class="line"><a name="l01216"></a><span class="lineno"> 1216</span>&#160;            <span class="comment">// decrease k</span></div>
+<div class="line"><a name="l01217"></a><span class="lineno"> 1217</span>&#160;            <span class="keyword">const</span> <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> delta = <a class="code" href="group___basic_utils.html#gabf731ec687bc1c5397b265d41d76da50">util::divide_ri</a>( k - k_lo, 2 );</div>
+<div class="line"><a name="l01218"></a><span class="lineno"> 1218</span>&#160;            j_lo = j;</div>
+<div class="line"><a name="l01219"></a><span class="lineno"> 1219</span>&#160;            j += delta;</div>
+<div class="line"><a name="l01220"></a><span class="lineno"> 1220</span>&#160;            k -= delta;</div>
+<div class="line"><a name="l01221"></a><span class="lineno"> 1221</span>&#160;            assert( j + k == i );</div>
+<div class="line"><a name="l01222"></a><span class="lineno"> 1222</span>&#160;        }</div>
+<div class="line"><a name="l01223"></a><span class="lineno"> 1223</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01224"></a><span class="lineno"> 1224</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l01225"></a><span class="lineno"> 1225</span>&#160;    }</div>
+<div class="line"><a name="l01226"></a><span class="lineno"> 1226</span>&#160;    <span class="keywordflow">return</span> make_uint2( <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(j), <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(k) );</div>
+<div class="line"><a name="l01227"></a><span class="lineno"> 1227</span>&#160;}</div>
+<div class="line"><a name="l01228"></a><span class="lineno"> 1228</span>&#160;</div>
+<div class="line"><a name="l01229"></a><span class="lineno"> 1229</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l01230"></a><span class="lineno"> 1230</span>&#160;    <span class="keyword">typename</span> key_iterator1,</div>
+<div class="line"><a name="l01231"></a><span class="lineno"> 1231</span>&#160;    <span class="keyword">typename</span> key_iterator2,</div>
+<div class="line"><a name="l01232"></a><span class="lineno"> 1232</span>&#160;    <span class="keyword">typename</span> value_iterator1,</div>
+<div class="line"><a name="l01233"></a><span class="lineno"> 1233</span>&#160;    <span class="keyword">typename</span> value_iterator2,</div>
+<div class="line"><a name="l01234"></a><span class="lineno"> 1234</span>&#160;    <span class="keyword">typename</span> key_output,</div>
+<div class="line"><a name="l01235"></a><span class="lineno"> 1235</span>&#160;    <span class="keyword">typename</span> value_output&gt;</div>
+<div class="line"><a name="l01236"></a><span class="lineno"><a class="code" href="namespacenvbio.html#a577748f84116bbef3548c839b66b5dab"> 1236</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacenvbio.html#a0b63c7bb7267a493b42771fea3126fd6">merge_by_key</a>(</div>
+<div class="line"><a name="l01237"></a><span class="lineno"> 1237</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1host__tag.html">host_tag</a>          tag,</div>
+<div class="line"><a name="l01238"></a><span class="lineno"> 1238</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            A_len,</div>
+<div class="line"><a name="l01239"></a><span class="lineno"> 1239</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            B_len,</div>
+<div class="line"><a name="l01240"></a><span class="lineno"> 1240</span>&#160;    <span class="keyword">const</span> key_iterator1     A_keys,</div>
+<div class="line"><a name="l01241"></a><span class="lineno"> 1241</span>&#160;    <span class="keyword">const</span> key_iterator2     B_keys,</div>
+<div class="line"><a name="l01242"></a><span class="lineno"> 1242</span>&#160;    <span class="keyword">const</span> value_iterator1   A_values,</div>
+<div class="line"><a name="l01243"></a><span class="lineno"> 1243</span>&#160;    <span class="keyword">const</span> value_iterator2   B_values,</div>
+<div class="line"><a name="l01244"></a><span class="lineno"> 1244</span>&#160;          key_output        C_keys,</div>
+<div class="line"><a name="l01245"></a><span class="lineno"> 1245</span>&#160;          value_output      C_values)</div>
+<div class="line"><a name="l01246"></a><span class="lineno"> 1246</span>&#160;{</div>
+<div class="line"><a name="l01247"></a><span class="lineno"> 1247</span>&#160;    <span class="keywordflow">if</span> (A_len == 0)</div>
+<div class="line"><a name="l01248"></a><span class="lineno"> 1248</span>&#160;    {</div>
+<div class="line"><a name="l01249"></a><span class="lineno"> 1249</span>&#160;<span class="preprocessor">        #pragma omp parallel for</span></div>
+<div class="line"><a name="l01250"></a><span class="lineno"> 1250</span>&#160;<span class="preprocessor"></span>        <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> i = 0; i &lt; <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>( B_len ); ++i)</div>
+<div class="line"><a name="l01251"></a><span class="lineno"> 1251</span>&#160;        {</div>
+<div class="line"><a name="l01252"></a><span class="lineno"> 1252</span>&#160;            C_keys[i]   = A_keys[i];</div>
+<div class="line"><a name="l01253"></a><span class="lineno"> 1253</span>&#160;            C_values[i] = A_values[i];</div>
+<div class="line"><a name="l01254"></a><span class="lineno"> 1254</span>&#160;        }</div>
+<div class="line"><a name="l01255"></a><span class="lineno"> 1255</span>&#160;    }</div>
+<div class="line"><a name="l01256"></a><span class="lineno"> 1256</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (B_len == 0)</div>
+<div class="line"><a name="l01257"></a><span class="lineno"> 1257</span>&#160;    {</div>
+<div class="line"><a name="l01258"></a><span class="lineno"> 1258</span>&#160;<span class="preprocessor">        #pragma omp parallel for</span></div>
+<div class="line"><a name="l01259"></a><span class="lineno"> 1259</span>&#160;<span class="preprocessor"></span>        <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> i = 0; i &lt; <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>( A_len ); ++i)</div>
+<div class="line"><a name="l01260"></a><span class="lineno"> 1260</span>&#160;        {</div>
+<div class="line"><a name="l01261"></a><span class="lineno"> 1261</span>&#160;            C_keys[i]   = A_keys[i];</div>
+<div class="line"><a name="l01262"></a><span class="lineno"> 1262</span>&#160;            C_values[i] = A_values[i];</div>
+<div class="line"><a name="l01263"></a><span class="lineno"> 1263</span>&#160;        }</div>
+<div class="line"><a name="l01264"></a><span class="lineno"> 1264</span>&#160;    }</div>
+<div class="line"><a name="l01265"></a><span class="lineno"> 1265</span>&#160;</div>
+<div class="line"><a name="l01266"></a><span class="lineno"> 1266</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_threads = (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>)<a class="code" href="omp_8h.html#a331275eb6e07e693f9b81a0ab5595f5e">omp_get_num_procs</a>();</div>
+<div class="line"><a name="l01267"></a><span class="lineno"> 1267</span>&#160;</div>
+<div class="line"><a name="l01268"></a><span class="lineno"> 1268</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;host_tag,uint32&gt;</a> A_diag( n_threads+1 );</div>
+<div class="line"><a name="l01269"></a><span class="lineno"> 1269</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;host_tag,uint32&gt;</a> B_diag( n_threads+1 );</div>
+<div class="line"><a name="l01270"></a><span class="lineno"> 1270</span>&#160;</div>
+<div class="line"><a name="l01271"></a><span class="lineno"> 1271</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> C_len = A_len + B_len;</div>
+<div class="line"><a name="l01272"></a><span class="lineno"> 1272</span>&#160;</div>
+<div class="line"><a name="l01273"></a><span class="lineno"> 1273</span>&#160;    A_diag[ n_threads ] = 0;</div>
+<div class="line"><a name="l01274"></a><span class="lineno"> 1274</span>&#160;    B_diag[ n_threads ] = 0;</div>
+<div class="line"><a name="l01275"></a><span class="lineno"> 1275</span>&#160;    A_diag[ n_threads ] = A_len;</div>
+<div class="line"><a name="l01276"></a><span class="lineno"> 1276</span>&#160;    B_diag[ n_threads ] = B_len;</div>
+<div class="line"><a name="l01277"></a><span class="lineno"> 1277</span>&#160;</div>
+<div class="line"><a name="l01278"></a><span class="lineno"> 1278</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_partition = <a class="code" href="group___basic_utils.html#gabf731ec687bc1c5397b265d41d76da50">util::divide_ri</a>( C_len, n_threads );</div>
+<div class="line"><a name="l01279"></a><span class="lineno"> 1279</span>&#160;</div>
+<div class="line"><a name="l01280"></a><span class="lineno"> 1280</span>&#160;<span class="preprocessor">    #pragma omp parallel for num_threads(n_threads)</span></div>
+<div class="line"><a name="l01281"></a><span class="lineno"> 1281</span>&#160;<span class="preprocessor"></span>    <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> i = 1; i &lt; <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>( n_threads ); ++i)</div>
+<div class="line"><a name="l01282"></a><span class="lineno"> 1282</span>&#160;    {</div>
+<div class="line"><a name="l01283"></a><span class="lineno"> 1283</span>&#160;        <span class="keyword">const</span> int32 index = i * n_partition;</div>
+<div class="line"><a name="l01284"></a><span class="lineno"> 1284</span>&#160;</div>
+<div class="line"><a name="l01285"></a><span class="lineno"> 1285</span>&#160;        <span class="keyword">const</span> uint2 jk = <a class="code" href="namespacenvbio.html#a7cf9ea93493e6740736e8bd008199f5b">corank</a>( index, A_keys, A_len, B_keys, B_len );</div>
 <div class="line"><a name="l01286"></a><span class="lineno"> 1286</span>&#160;</div>
-<div class="line"><a name="l01287"></a><span class="lineno"> 1287</span>&#160;<span class="preprocessor">    #pragma omp parallel for num_threads(n_threads)</span></div>
-<div class="line"><a name="l01288"></a><span class="lineno"> 1288</span>&#160;<span class="preprocessor"></span>    <span class="keywordflow">for</span> (int32 i = 0; i &lt; <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>( n_threads ); ++i)</div>
-<div class="line"><a name="l01289"></a><span class="lineno"> 1289</span>&#160;    {</div>
-<div class="line"><a name="l01290"></a><span class="lineno"> 1290</span>&#160;        <a class="code" href="namespacenvbio.html#a0b63c7bb7267a493b42771fea3126fd6">nvbio::merge_by_key</a>(</div>
-<div class="line"><a name="l01291"></a><span class="lineno"> 1291</span>&#160;            A_keys   + A_diag[i],</div>
-<div class="line"><a name="l01292"></a><span class="lineno"> 1292</span>&#160;            A_keys   + A_diag[i+1],</div>
-<div class="line"><a name="l01293"></a><span class="lineno"> 1293</span>&#160;            B_keys   + B_diag[i],</div>
-<div class="line"><a name="l01294"></a><span class="lineno"> 1294</span>&#160;            B_keys   + B_diag[i+1],</div>
-<div class="line"><a name="l01295"></a><span class="lineno"> 1295</span>&#160;            A_values + A_diag[i],</div>
-<div class="line"><a name="l01296"></a><span class="lineno"> 1296</span>&#160;            B_values + B_diag[i],</div>
-<div class="line"><a name="l01297"></a><span class="lineno"> 1297</span>&#160;            C_keys   + i * n_partition,</div>
-<div class="line"><a name="l01298"></a><span class="lineno"> 1298</span>&#160;            C_values + i * n_partition );</div>
-<div class="line"><a name="l01299"></a><span class="lineno"> 1299</span>&#160;    }</div>
-<div class="line"><a name="l01300"></a><span class="lineno"> 1300</span>&#160;<span class="comment">/*  for (uint32 i = 1; i &lt; C_len; ++i)</span></div>
-<div class="line"><a name="l01301"></a><span class="lineno"> 1301</span>&#160;<span class="comment">    {</span></div>
-<div class="line"><a name="l01302"></a><span class="lineno"> 1302</span>&#160;<span class="comment">        if (C_keys[i-1] &gt; C_keys[i])</span></div>
-<div class="line"><a name="l01303"></a><span class="lineno"> 1303</span>&#160;<span class="comment">        {</span></div>
-<div class="line"><a name="l01304"></a><span class="lineno"> 1304</span>&#160;<span class="comment">            fprintf(stderr, &quot;merging error at %u: %llu, %llu\n&quot;, i, C_keys[i-1], C_keys[i] );</span></div>
-<div class="line"><a name="l01305"></a><span class="lineno"> 1305</span>&#160;<span class="comment">            exit(1);</span></div>
-<div class="line"><a name="l01306"></a><span class="lineno"> 1306</span>&#160;<span class="comment">        }</span></div>
-<div class="line"><a name="l01307"></a><span class="lineno"> 1307</span>&#160;<span class="comment">    }*/</span></div>
-<div class="line"><a name="l01308"></a><span class="lineno"> 1308</span>&#160;}</div>
-<div class="line"><a name="l01309"></a><span class="lineno"> 1309</span>&#160;</div>
-<div class="line"><a name="l01310"></a><span class="lineno"> 1310</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l01311"></a><span class="lineno"> 1311</span>&#160;    <span class="keyword">typename</span> key_iterator1,</div>
-<div class="line"><a name="l01312"></a><span class="lineno"> 1312</span>&#160;    <span class="keyword">typename</span> key_iterator2,</div>
-<div class="line"><a name="l01313"></a><span class="lineno"> 1313</span>&#160;    <span class="keyword">typename</span> value_iterator1,</div>
-<div class="line"><a name="l01314"></a><span class="lineno"> 1314</span>&#160;    <span class="keyword">typename</span> value_iterator2,</div>
-<div class="line"><a name="l01315"></a><span class="lineno"> 1315</span>&#160;    <span class="keyword">typename</span> key_output,</div>
-<div class="line"><a name="l01316"></a><span class="lineno"> 1316</span>&#160;    <span class="keyword">typename</span> value_output&gt;</div>
-<div class="line"><a name="l01317"></a><span class="lineno"><a class="code" href="namespacenvbio.html#ab4872e41cf38d949e5bff76d123017a8"> 1317</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacenvbio.html#a0b63c7bb7267a493b42771fea3126fd6">merge_by_key</a>(</div>
-<div class="line"><a name="l01318"></a><span class="lineno"> 1318</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1device__tag.html">device_tag</a>        tag,</div>
-<div class="line"><a name="l01319"></a><span class="lineno"> 1319</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            A_len,</div>
-<div class="line"><a name="l01320"></a><span class="lineno"> 1320</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            B_len,</div>
-<div class="line"><a name="l01321"></a><span class="lineno"> 1321</span>&#160;    <span class="keyword">const</span> key_iterator1     A_keys,</div>
-<div class="line"><a name="l01322"></a><span class="lineno"> 1322</span>&#160;    <span class="keyword">const</span> key_iterator2     B_keys,</div>
-<div class="line"><a name="l01323"></a><span class="lineno"> 1323</span>&#160;    <span class="keyword">const</span> value_iterator1   A_values,</div>
-<div class="line"><a name="l01324"></a><span class="lineno"> 1324</span>&#160;    <span class="keyword">const</span> value_iterator2   B_values,</div>
-<div class="line"><a name="l01325"></a><span class="lineno"> 1325</span>&#160;          key_output        C_keys,</div>
-<div class="line"><a name="l01326"></a><span class="lineno"> 1326</span>&#160;          value_output      C_values)</div>
-<div class="line"><a name="l01327"></a><span class="lineno"> 1327</span>&#160;{</div>
-<div class="line"><a name="l01328"></a><span class="lineno"> 1328</span>&#160;    <a class="code" href="namespacenvbio.html#a0b63c7bb7267a493b42771fea3126fd6">thrust::merge_by_key</a>(</div>
-<div class="line"><a name="l01329"></a><span class="lineno"> 1329</span>&#160;        A_keys,</div>
-<div class="line"><a name="l01330"></a><span class="lineno"> 1330</span>&#160;        A_keys + A_len,</div>
-<div class="line"><a name="l01331"></a><span class="lineno"> 1331</span>&#160;        B_keys,</div>
-<div class="line"><a name="l01332"></a><span class="lineno"> 1332</span>&#160;        B_keys + A_len,</div>
-<div class="line"><a name="l01333"></a><span class="lineno"> 1333</span>&#160;        A_values,</div>
-<div class="line"><a name="l01334"></a><span class="lineno"> 1334</span>&#160;        B_values,</div>
-<div class="line"><a name="l01335"></a><span class="lineno"> 1335</span>&#160;        C_keys,</div>
-<div class="line"><a name="l01336"></a><span class="lineno"> 1336</span>&#160;        C_values );</div>
-<div class="line"><a name="l01337"></a><span class="lineno"> 1337</span>&#160;}</div>
-<div class="line"><a name="l01338"></a><span class="lineno"> 1338</span>&#160;</div>
-<div class="line"><a name="l01339"></a><span class="lineno"> 1339</span>&#160;<span class="keyword">template</span> &lt;</div>
-<div class="line"><a name="l01340"></a><span class="lineno"> 1340</span>&#160;    <span class="keyword">typename</span> system_tag,</div>
-<div class="line"><a name="l01341"></a><span class="lineno"> 1341</span>&#160;    <span class="keyword">typename</span> key_iterator1,</div>
-<div class="line"><a name="l01342"></a><span class="lineno"> 1342</span>&#160;    <span class="keyword">typename</span> key_iterator2,</div>
-<div class="line"><a name="l01343"></a><span class="lineno"> 1343</span>&#160;    <span class="keyword">typename</span> value_iterator1,</div>
-<div class="line"><a name="l01344"></a><span class="lineno"> 1344</span>&#160;    <span class="keyword">typename</span> value_iterator2,</div>
-<div class="line"><a name="l01345"></a><span class="lineno"> 1345</span>&#160;    <span class="keyword">typename</span> key_output,</div>
-<div class="line"><a name="l01346"></a><span class="lineno"> 1346</span>&#160;    <span class="keyword">typename</span> value_output&gt;</div>
-<div class="line"><a name="l01347"></a><span class="lineno"><a class="code" href="group___primitives.html#ga2568e774eeaa7d2a994038ae4cb61d6b"> 1347</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacenvbio.html#a0b63c7bb7267a493b42771fea3126fd6">merge_by_key</a>(</div>
-<div class="line"><a name="l01348"></a><span class="lineno"> 1348</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        A_len,</div>
-<div class="line"><a name="l01349"></a><span class="lineno"> 1349</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        B_len,</div>
-<div class="line"><a name="l01350"></a><span class="lineno"> 1350</span>&#160;    <span class="keyword">const</span> key_iterator1                 A_keys,</div>
-<div class="line"><a name="l01351"></a><span class="lineno"> 1351</span>&#160;    <span class="keyword">const</span> key_iterator2                 B_keys,</div>
-<div class="line"><a name="l01352"></a><span class="lineno"> 1352</span>&#160;    <span class="keyword">const</span> value_iterator1               A_values,</div>
-<div class="line"><a name="l01353"></a><span class="lineno"> 1353</span>&#160;    <span class="keyword">const</span> value_iterator2               B_values,</div>
-<div class="line"><a name="l01354"></a><span class="lineno"> 1354</span>&#160;          key_output                    C_keys,</div>
-<div class="line"><a name="l01355"></a><span class="lineno"> 1355</span>&#160;          value_output                  C_values,</div>
-<div class="line"><a name="l01356"></a><span class="lineno"> 1356</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;system_tag,uint8&gt;</a>&amp;    temp_storage)</div>
-<div class="line"><a name="l01357"></a><span class="lineno"> 1357</span>&#160;{</div>
-<div class="line"><a name="l01358"></a><span class="lineno"> 1358</span>&#160;    <a class="code" href="namespacenvbio.html#a0b63c7bb7267a493b42771fea3126fd6">merge_by_key</a>(</div>
-<div class="line"><a name="l01359"></a><span class="lineno"> 1359</span>&#160;        system_tag(),</div>
-<div class="line"><a name="l01360"></a><span class="lineno"> 1360</span>&#160;        A_len,</div>
-<div class="line"><a name="l01361"></a><span class="lineno"> 1361</span>&#160;        B_len,</div>
-<div class="line"><a name="l01362"></a><span class="lineno"> 1362</span>&#160;        A_keys,</div>
-<div class="line"><a name="l01363"></a><span class="lineno"> 1363</span>&#160;        B_keys,</div>
-<div class="line"><a name="l01364"></a><span class="lineno"> 1364</span>&#160;        A_values,</div>
-<div class="line"><a name="l01365"></a><span class="lineno"> 1365</span>&#160;        B_values,</div>
-<div class="line"><a name="l01366"></a><span class="lineno"> 1366</span>&#160;        C_keys,</div>
-<div class="line"><a name="l01367"></a><span class="lineno"> 1367</span>&#160;        C_values );</div>
-<div class="line"><a name="l01368"></a><span class="lineno"> 1368</span>&#160;}</div>
-<div class="line"><a name="l01369"></a><span class="lineno"> 1369</span>&#160;</div>
-<div class="line"><a name="l01370"></a><span class="lineno"> 1370</span>&#160;} <span class="comment">// namespace nvbio</span></div>
+<div class="line"><a name="l01287"></a><span class="lineno"> 1287</span>&#160;        A_diag[i] = jk.x;</div>
+<div class="line"><a name="l01288"></a><span class="lineno"> 1288</span>&#160;        B_diag[i] = jk.y;</div>
+<div class="line"><a name="l01289"></a><span class="lineno"> 1289</span>&#160;    }</div>
+<div class="line"><a name="l01290"></a><span class="lineno"> 1290</span>&#160;</div>
+<div class="line"><a name="l01291"></a><span class="lineno"> 1291</span>&#160;<span class="preprocessor">    #pragma omp parallel for num_threads(n_threads)</span></div>
+<div class="line"><a name="l01292"></a><span class="lineno"> 1292</span>&#160;<span class="preprocessor"></span>    <span class="keywordflow">for</span> (int32 i = 0; i &lt; <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a>( n_threads ); ++i)</div>
+<div class="line"><a name="l01293"></a><span class="lineno"> 1293</span>&#160;    {</div>
+<div class="line"><a name="l01294"></a><span class="lineno"> 1294</span>&#160;        <a class="code" href="namespacenvbio.html#a0b63c7bb7267a493b42771fea3126fd6">nvbio::merge_by_key</a>(</div>
+<div class="line"><a name="l01295"></a><span class="lineno"> 1295</span>&#160;            A_keys   + A_diag[i],</div>
+<div class="line"><a name="l01296"></a><span class="lineno"> 1296</span>&#160;            A_keys   + A_diag[i+1],</div>
+<div class="line"><a name="l01297"></a><span class="lineno"> 1297</span>&#160;            B_keys   + B_diag[i],</div>
+<div class="line"><a name="l01298"></a><span class="lineno"> 1298</span>&#160;            B_keys   + B_diag[i+1],</div>
+<div class="line"><a name="l01299"></a><span class="lineno"> 1299</span>&#160;            A_values + A_diag[i],</div>
+<div class="line"><a name="l01300"></a><span class="lineno"> 1300</span>&#160;            B_values + B_diag[i],</div>
+<div class="line"><a name="l01301"></a><span class="lineno"> 1301</span>&#160;            C_keys   + i * n_partition,</div>
+<div class="line"><a name="l01302"></a><span class="lineno"> 1302</span>&#160;            C_values + i * n_partition );</div>
+<div class="line"><a name="l01303"></a><span class="lineno"> 1303</span>&#160;    }</div>
+<div class="line"><a name="l01304"></a><span class="lineno"> 1304</span>&#160;<span class="comment">/*  for (uint32 i = 1; i &lt; C_len; ++i)</span></div>
+<div class="line"><a name="l01305"></a><span class="lineno"> 1305</span>&#160;<span class="comment">    {</span></div>
+<div class="line"><a name="l01306"></a><span class="lineno"> 1306</span>&#160;<span class="comment">        if (C_keys[i-1] &gt; C_keys[i])</span></div>
+<div class="line"><a name="l01307"></a><span class="lineno"> 1307</span>&#160;<span class="comment">        {</span></div>
+<div class="line"><a name="l01308"></a><span class="lineno"> 1308</span>&#160;<span class="comment">            fprintf(stderr, &quot;merging error at %u: %llu, %llu\n&quot;, i, C_keys[i-1], C_keys[i] );</span></div>
+<div class="line"><a name="l01309"></a><span class="lineno"> 1309</span>&#160;<span class="comment">            exit(1);</span></div>
+<div class="line"><a name="l01310"></a><span class="lineno"> 1310</span>&#160;<span class="comment">        }</span></div>
+<div class="line"><a name="l01311"></a><span class="lineno"> 1311</span>&#160;<span class="comment">    }*/</span></div>
+<div class="line"><a name="l01312"></a><span class="lineno"> 1312</span>&#160;}</div>
+<div class="line"><a name="l01313"></a><span class="lineno"> 1313</span>&#160;</div>
+<div class="line"><a name="l01314"></a><span class="lineno"> 1314</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l01315"></a><span class="lineno"> 1315</span>&#160;    <span class="keyword">typename</span> key_iterator1,</div>
+<div class="line"><a name="l01316"></a><span class="lineno"> 1316</span>&#160;    <span class="keyword">typename</span> key_iterator2,</div>
+<div class="line"><a name="l01317"></a><span class="lineno"> 1317</span>&#160;    <span class="keyword">typename</span> value_iterator1,</div>
+<div class="line"><a name="l01318"></a><span class="lineno"> 1318</span>&#160;    <span class="keyword">typename</span> value_iterator2,</div>
+<div class="line"><a name="l01319"></a><span class="lineno"> 1319</span>&#160;    <span class="keyword">typename</span> key_output,</div>
+<div class="line"><a name="l01320"></a><span class="lineno"> 1320</span>&#160;    <span class="keyword">typename</span> value_output&gt;</div>
+<div class="line"><a name="l01321"></a><span class="lineno"><a class="code" href="namespacenvbio.html#ab4872e41cf38d949e5bff76d123017a8"> 1321</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacenvbio.html#a0b63c7bb7267a493b42771fea3126fd6">merge_by_key</a>(</div>
+<div class="line"><a name="l01322"></a><span class="lineno"> 1322</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1device__tag.html">device_tag</a>        tag,</div>
+<div class="line"><a name="l01323"></a><span class="lineno"> 1323</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            A_len,</div>
+<div class="line"><a name="l01324"></a><span class="lineno"> 1324</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            B_len,</div>
+<div class="line"><a name="l01325"></a><span class="lineno"> 1325</span>&#160;    <span class="keyword">const</span> key_iterator1     A_keys,</div>
+<div class="line"><a name="l01326"></a><span class="lineno"> 1326</span>&#160;    <span class="keyword">const</span> key_iterator2     B_keys,</div>
+<div class="line"><a name="l01327"></a><span class="lineno"> 1327</span>&#160;    <span class="keyword">const</span> value_iterator1   A_values,</div>
+<div class="line"><a name="l01328"></a><span class="lineno"> 1328</span>&#160;    <span class="keyword">const</span> value_iterator2   B_values,</div>
+<div class="line"><a name="l01329"></a><span class="lineno"> 1329</span>&#160;          key_output        C_keys,</div>
+<div class="line"><a name="l01330"></a><span class="lineno"> 1330</span>&#160;          value_output      C_values)</div>
+<div class="line"><a name="l01331"></a><span class="lineno"> 1331</span>&#160;{</div>
+<div class="line"><a name="l01332"></a><span class="lineno"> 1332</span>&#160;    <a class="code" href="namespacenvbio.html#a0b63c7bb7267a493b42771fea3126fd6">thrust::merge_by_key</a>(</div>
+<div class="line"><a name="l01333"></a><span class="lineno"> 1333</span>&#160;        A_keys,</div>
+<div class="line"><a name="l01334"></a><span class="lineno"> 1334</span>&#160;        A_keys + A_len,</div>
+<div class="line"><a name="l01335"></a><span class="lineno"> 1335</span>&#160;        B_keys,</div>
+<div class="line"><a name="l01336"></a><span class="lineno"> 1336</span>&#160;        B_keys + A_len,</div>
+<div class="line"><a name="l01337"></a><span class="lineno"> 1337</span>&#160;        A_values,</div>
+<div class="line"><a name="l01338"></a><span class="lineno"> 1338</span>&#160;        B_values,</div>
+<div class="line"><a name="l01339"></a><span class="lineno"> 1339</span>&#160;        C_keys,</div>
+<div class="line"><a name="l01340"></a><span class="lineno"> 1340</span>&#160;        C_values );</div>
+<div class="line"><a name="l01341"></a><span class="lineno"> 1341</span>&#160;}</div>
+<div class="line"><a name="l01342"></a><span class="lineno"> 1342</span>&#160;</div>
+<div class="line"><a name="l01343"></a><span class="lineno"> 1343</span>&#160;<span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l01344"></a><span class="lineno"> 1344</span>&#160;    <span class="keyword">typename</span> system_tag,</div>
+<div class="line"><a name="l01345"></a><span class="lineno"> 1345</span>&#160;    <span class="keyword">typename</span> key_iterator1,</div>
+<div class="line"><a name="l01346"></a><span class="lineno"> 1346</span>&#160;    <span class="keyword">typename</span> key_iterator2,</div>
+<div class="line"><a name="l01347"></a><span class="lineno"> 1347</span>&#160;    <span class="keyword">typename</span> value_iterator1,</div>
+<div class="line"><a name="l01348"></a><span class="lineno"> 1348</span>&#160;    <span class="keyword">typename</span> value_iterator2,</div>
+<div class="line"><a name="l01349"></a><span class="lineno"> 1349</span>&#160;    <span class="keyword">typename</span> key_output,</div>
+<div class="line"><a name="l01350"></a><span class="lineno"> 1350</span>&#160;    <span class="keyword">typename</span> value_output&gt;</div>
+<div class="line"><a name="l01351"></a><span class="lineno"><a class="code" href="group___primitives.html#ga2568e774eeaa7d2a994038ae4cb61d6b"> 1351</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacenvbio.html#a0b63c7bb7267a493b42771fea3126fd6">merge_by_key</a>(</div>
+<div class="line"><a name="l01352"></a><span class="lineno"> 1352</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        A_len,</div>
+<div class="line"><a name="l01353"></a><span class="lineno"> 1353</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>                        B_len,</div>
+<div class="line"><a name="l01354"></a><span class="lineno"> 1354</span>&#160;    <span class="keyword">const</span> key_iterator1                 A_keys,</div>
+<div class="line"><a name="l01355"></a><span class="lineno"> 1355</span>&#160;    <span class="keyword">const</span> key_iterator2                 B_keys,</div>
+<div class="line"><a name="l01356"></a><span class="lineno"> 1356</span>&#160;    <span class="keyword">const</span> value_iterator1               A_values,</div>
+<div class="line"><a name="l01357"></a><span class="lineno"> 1357</span>&#160;    <span class="keyword">const</span> value_iterator2               B_values,</div>
+<div class="line"><a name="l01358"></a><span class="lineno"> 1358</span>&#160;          key_output                    C_keys,</div>
+<div class="line"><a name="l01359"></a><span class="lineno"> 1359</span>&#160;          value_output                  C_values,</div>
+<div class="line"><a name="l01360"></a><span class="lineno"> 1360</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;system_tag,uint8&gt;</a>&amp;    temp_storage)</div>
+<div class="line"><a name="l01361"></a><span class="lineno"> 1361</span>&#160;{</div>
+<div class="line"><a name="l01362"></a><span class="lineno"> 1362</span>&#160;    <a class="code" href="namespacenvbio.html#a0b63c7bb7267a493b42771fea3126fd6">merge_by_key</a>(</div>
+<div class="line"><a name="l01363"></a><span class="lineno"> 1363</span>&#160;        system_tag(),</div>
+<div class="line"><a name="l01364"></a><span class="lineno"> 1364</span>&#160;        A_len,</div>
+<div class="line"><a name="l01365"></a><span class="lineno"> 1365</span>&#160;        B_len,</div>
+<div class="line"><a name="l01366"></a><span class="lineno"> 1366</span>&#160;        A_keys,</div>
+<div class="line"><a name="l01367"></a><span class="lineno"> 1367</span>&#160;        B_keys,</div>
+<div class="line"><a name="l01368"></a><span class="lineno"> 1368</span>&#160;        A_values,</div>
+<div class="line"><a name="l01369"></a><span class="lineno"> 1369</span>&#160;        B_values,</div>
+<div class="line"><a name="l01370"></a><span class="lineno"> 1370</span>&#160;        C_keys,</div>
+<div class="line"><a name="l01371"></a><span class="lineno"> 1371</span>&#160;        C_values );</div>
+<div class="line"><a name="l01372"></a><span class="lineno"> 1372</span>&#160;}</div>
+<div class="line"><a name="l01373"></a><span class="lineno"> 1373</span>&#160;</div>
+<div class="line"><a name="l01374"></a><span class="lineno"> 1374</span>&#160;} <span class="comment">// namespace nvbio</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:42:48 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:34:44 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -99,21 +99,28 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gotoh_inl.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="packedstream_8h_source.html">nvbio/basic/packedstream.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="sink_8h_source.html">nvbio/alignment/sink.h</a>&gt;</code><br/>
+<div class="textblock"><code>#include &lt;<a class="el" href="sink_8h_source.html">nvbio/alignment/sink.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="nvbio_2alignment_2utils_8h_source.html">nvbio/alignment/utils.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="alignment__base__inl_8h_source.html">nvbio/alignment/alignment_base_inl.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="iterator_8h_source.html">nvbio/basic/iterator.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="vectorized__string_8h_source.html">nvbio/strings/vectorized_string.h</a>&gt;</code><br/>
 </div>
 <p><a href="gotoh__inl_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1gotoh__use__vectorization.html">nvbio::aln::priv::gotoh_use_vectorization&lt; string_type &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1gotoh__use__vectorization_3_01vector__view_3_01_t_01_5_01_4_01_4.html">nvbio::aln::priv::gotoh_use_vectorization&lt; vector_view&lt; T * &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1gotoh__use__vectorization_3_01vector__view_3_01const_01_t_01_5_01_4_01_4.html">nvbio::aln::priv::gotoh_use_vectorization&lt; vector_view&lt; const T * &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1_gotoh_scoring_context.html">nvbio::aln::priv::GotohScoringContext&lt; BAND_LEN, TYPE, algorithm_tag &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1aln_1_1priv_1_1_gotoh_checkpointed_scoring_context.html">nvbio::aln::priv::GotohCheckpointedScoringContext&lt; BAND_LEN, TYPE, algorithm_tag, checkpoint_type &gt;</a></td></tr>
@@ -147,6 +154,11 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacenvbio_1_1aln_1_1priv"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1aln_1_1priv.html">nvbio::aln::priv</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a99d59dc111412024f54fbc6dd8aa6794"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gotoh__inl_8h.html#a99d59dc111412024f54fbc6dd8aa6794">NVBIO_SW_VECTOR_LOADING</a></td></tr>
+<tr class="separator:a99d59dc111412024f54fbc6dd8aa6794"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a791200c0c3d153905522dca4b0ff521b"><td class="memTemplParams" colspan="2">template&lt;uint32 CHECKPOINTS, AlignmentType TYPE, typename scoring_type , typename checkpoint_type , typename submatrix_type , typename backtracer_type &gt; </td></tr>
@@ -154,10 +166,25 @@ Functions</h2></td></tr>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1aln_1_1priv.html#a791200c0c3d153905522dca4b0ff521b">nvbio::aln::priv::alignment_traceback</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> GotohAligner&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084">TYPE</a>, scoring_type &gt; aligner, checkpoint_type checkpoints, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 checkpoint_id, submatrix_type submatrix, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 submatrix_width, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 submatrix_height, uint8 &amp;state, uint2 &amp;sink, backtracer_type &amp;backtracer)</td></tr>
 <tr class="separator:a791200c0c3d153905522dca4b0ff521b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="a99d59dc111412024f54fbc6dd8aa6794"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define NVBIO_SW_VECTOR_LOADING</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="gotoh__inl_8h_source.html#l00041">41</a> of file <a class="el" href="gotoh__inl_8h_source.html">gotoh_inl.h</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:43:03 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:35:00 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

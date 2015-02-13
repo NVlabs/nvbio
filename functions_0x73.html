@@ -169,12 +169,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>s_range
 : <a class="el" href="structnvbio_1_1priv_1_1wtree_1_1node__type.html#af6dd3874dd2831c014e9f448e60d8bc2">nvbio::priv::wtree::node_type</a>
 </li>
+<li>sa()
+: <a class="el" href="structnvbio_1_1fm__index.html#aaf4ffcae3c7fe5a5a7aea61c569a3350">nvbio::fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;</a>
+</li>
 <li>SA
 : <a class="el" href="structnvbio_1_1io_1_1_f_m_index_data_core.html#ac4e5683b793eacf58d5df099ab146735">nvbio::io::FMIndexDataCore</a>
 , <a class="el" href="structnvbio_1_1io_1_1_f_m_index_data_device.html#af2ccdd68832a3cdf80ee5d61242dd75c">nvbio::io::FMIndexDataDevice</a>
-</li>
-<li>sa()
-: <a class="el" href="structnvbio_1_1fm__index.html#aaf4ffcae3c7fe5a5a7aea61c569a3350">nvbio::fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;</a>
 </li>
 <li>SA_INT
 : <a class="el" href="structnvbio_1_1io_1_1_f_m_index_data_core.html#a0fc5bdeb9846f72e9a671df634fca3aa">nvbio::io::FMIndexDataCore</a>
@@ -247,7 +247,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_scoring_scheme_selector_3_01smith__waterman__scoring__tag_01_4.html#abc7915064bc972f9cd607f469d80c94c">nvbio::bowtie2::cuda::ScoringSchemeSelector&lt; smith_waterman_scoring_tag &gt;</a>
 </li>
 <li>scheme_type
-: <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_all_score_stream.html#abf9c7e18acdf5af8f4f0488e2c170673">nvbio::bowtie2::cuda::detail::AllScoreStream&lt; AlignerType, PipelineType &gt;</a>
+: <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_anchor_score_stream.html#aa75f72142e7d86c97680eb2b6a730730">nvbio::bowtie2::cuda::detail::BestAnchorScoreStream&lt; AlignerType, PipelineType &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_edit_distance_scoring_scheme.html#a489d30f3a97bbbc5b191b53d2250b0f6">nvbio::bowtie2::cuda::EditDistanceScoringScheme</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_smith_waterman_scoring_scheme.html#ae9208585066660bc2b920fe151b41c98">nvbio::bowtie2::cuda::SmithWatermanScoringScheme&lt; MMCost, NCost &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_traceback_stream.html#acc2d63216f8c0504158038f4c6c01037">nvbio::bowtie2::cuda::detail::BestTracebackStream&lt; ALN_IDX, AlignerType, PipelineType &gt;</a>
@@ -258,8 +258,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_best_approx_scoring_pipeline_state.html#a66d512418a143b2bec3a1dfcc6b21928">nvbio::bowtie2::cuda::BestApproxScoringPipelineState&lt; ScoringScheme &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_all_mapping_pipeline_state.html#a7e3a91be6b4d95dcb65b76f0b478e861">nvbio::bowtie2::cuda::AllMappingPipelineState&lt; ScoringScheme &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_traceback_pipeline_state.html#a000e02c19023ec940b44f596ccdccbe0">nvbio::bowtie2::cuda::TracebackPipelineState&lt; ScoringScheme &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_all_score_stream.html#abf9c7e18acdf5af8f4f0488e2c170673">nvbio::bowtie2::cuda::detail::AllScoreStream&lt; AlignerType, PipelineType &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_score_stream.html#a5b81a02b8ceacfaea18521731a524748">nvbio::bowtie2::cuda::detail::BestScoreStream&lt; AlignerType, PipelineType &gt;</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_anchor_score_stream.html#aa75f72142e7d86c97680eb2b6a730730">nvbio::bowtie2::cuda::detail::BestAnchorScoreStream&lt; AlignerType, PipelineType &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_opposite_score_stream.html#a6adf188a162ef783ee4df4424ca81c8b">nvbio::bowtie2::cuda::detail::BestOppositeScoreStream&lt; AlignerType, PipelineType &gt;</a>
 </li>
 <li>ScopedLock()
@@ -481,12 +481,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>SeedHitDequeReference()
 : <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_reference.html#af4e84bc6738369bf54daccecb8ae66cb">nvbio::bowtie2::cuda::SeedHitDequeReference&lt; SeedHitDequeArrayType &gt;</a>
 </li>
-<li>Seek()
-: <a class="el" href="struct_bam_tools_1_1_bgzf_data.html#a68d40ff077ca2ea7841d8cd901b73f21">BamTools::BgzfData</a>
-</li>
 <li>seek
 : <a class="el" href="structh_f_i_l_e__backend.html#a943982c8934bb89a9121a6afad1dc436">hFILE_backend</a>
 , <a class="el" href="structgz__state.html#ab60b82012b8193c3f44b2e48974b9dd9">gz_state</a>
+</li>
+<li>Seek()
+: <a class="el" href="struct_bam_tools_1_1_bgzf_data.html#a68d40ff077ca2ea7841d8cd901b73f21">BamTools::BgzfData</a>
 </li>
 <li>seek_offset
 : <a class="el" href="structknet_file__s.html#a1c558ba2c5a28b099d14732856f2c4c0">knetFile_s</a>
@@ -708,7 +708,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1cuda_1_1condition.html#ae32479775c536735ab201ebc72c209b3">nvbio::cuda::condition</a>
 , <a class="el" href="structnvbio_1_1cuda_1_1condition__set__storage.html#a5119716125bdb244c144551a8463a8fe">nvbio::cuda::condition_set_storage</a>
 , <a class="el" href="structnvbio_1_1index__transform__iterator.html#afe3d6a37faf0ddc3795e742cf0506aac">nvbio::index_transform_iterator&lt; T, Transform &gt;</a>
-, <a class="el" href="structnvbio_1_1_packed_stream.html#a998ba3188985770a251469c218da0f5f">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+, <a class="el" href="structnvbio_1_1_packed_stream.html#abf6fc3a99791791ba88053c6f5a2730a">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
 , <a class="el" href="structnvbio_1_1_sum_tree.html#a1c036da0c16ea40d67176f224404abcb">nvbio::SumTree&lt; Iterator &gt;</a>
 , <a class="el" href="structnvbio_1_1_sparse_symbol_set.html#a6a073a048622f35b5358b5907d63c8e8">nvbio::SparseSymbolSet</a>
 , <a class="el" href="structnvbio_1_1priv_1_1_set_suffix_flattener.html#a2f0e9ddda79b541b0a514747dedd2676">nvbio::priv::SetSuffixFlattener&lt; SYMBOL_SIZE &gt;</a>
@@ -811,6 +811,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="structnvbio_1_1packer_3_01_b_i_g___e_n_d_i_a_n___t_00_014u_00_01_symbol_00_01_input_stream_00_01_index_type_00_01uint32_01_4.html#a6ebbea583ce4144106d382ea92df614b">nvbio::packer&lt; BIG_ENDIAN_T, 4u, Symbol, InputStream, IndexType, uint32 &gt;</a>
 , <a class="el" href="structnvbio_1_1packer_3_01_b_i_g___e_n_d_i_a_n___t_00_012u_00_01_symbol_00_01_input_stream_00_01_index_type_00_01uint4_01_4.html#ada443c36d29c074c3f417382712f8975">nvbio::packer&lt; BIG_ENDIAN_T, 2u, Symbol, InputStream, IndexType, uint4 &gt;</a>
 , <a class="el" href="structnvbio_1_1packer_3_01_b_i_g___e_n_d_i_a_n___t_00_014u_00_01_symbol_00_01_input_stream_00_01_index_type_00_01uint4_01_4.html#add20e496237d9ed9fa421b424bd55e56">nvbio::packer&lt; BIG_ENDIAN_T, 4u, Symbol, InputStream, IndexType, uint4 &gt;</a>
+, <a class="el" href="structnvbio_1_1packer_3_01_b_i_g___e_n_d_i_a_n___t_00_018u_00_01_symbol_00_01_input_stream_00_01_index_type_00_01uint4_01_4.html#a590367e14df3ca449eb9e5edf2f80a1f">nvbio::packer&lt; BIG_ENDIAN_T, 8u, Symbol, InputStream, IndexType, uint4 &gt;</a>
 , <a class="el" href="structnvbio_1_1packer_3_01_b_i_g___e_n_d_i_a_n___t_00_012u_00_01_symbol_00_01_input_stream_00_01_index_type_00_01uint64_01_4.html#a4a151132e252476c7c7b75152b76ad06">nvbio::packer&lt; BIG_ENDIAN_T, 2u, Symbol, InputStream, IndexType, uint64 &gt;</a>
 , <a class="el" href="structnvbio_1_1packer_3_01_b_i_g___e_n_d_i_a_n___t_00_014u_00_01_symbol_00_01_input_stream_00_01_index_type_00_01uint64_01_4.html#a3a2ba791148611406381bf5dac28a21f">nvbio::packer&lt; BIG_ENDIAN_T, 4u, Symbol, InputStream, IndexType, uint64 &gt;</a>
 </li>
@@ -920,6 +921,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>sindex_type
 : <a class="el" href="structnvbio_1_1_packed_stream_ref.html#a7ae0d1f13500aed72880d54b7b9e8a87">nvbio::PackedStreamRef&lt; Stream &gt;</a>
 , <a class="el" href="structnvbio_1_1_packed_stream.html#af9b67593a000c14906e600b749e789d8">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+, <a class="el" href="structnvbio_1_1_forward_packed_stream.html#adf41c857c94a3c62e51b86c09e4be848">nvbio::ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
 </li>
 <li>SingleHitPerRead
 : <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_index.html#a5a1b0f102be398f741c4cc3a044ff149a756a56314175dc2f0f8d6c8922c97e9d">nvbio::bowtie2::cuda::ReadHitsIndex</a>
@@ -964,7 +966,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1aln_1_1_best_column_sink.html#a27bd7ebb52bbc09841270c3592de1d1c">nvbio::aln::BestColumnSink&lt; ScoreType, N &gt;</a>
 </li>
 <li>size()
-: <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_all_traceback_stream.html#a98b89549ed0f5902605748e0025e4cb8">nvbio::bowtie2::cuda::detail::AllTracebackStream&lt; AlignerType, PipelineType &gt;</a>
+: <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_reference.html#a577b7a7f814b98f4593308344155d3f9">nvbio::bowtie2::cuda::ReadHitsReference&lt; ScoringQueuesType &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_binder.html#a896f27dfb7dadb6a4cbd0be4c1add5f5">nvbio::bowtie2::cuda::ReadHitsBinder&lt; ScoringQueuesType &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_reference.html#acb08faf7029fca2516d18ecebddcc98f">nvbio::bowtie2::cuda::SeedHitDequeReference&lt; SeedHitDequeArrayType &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_traceback_stream.html#a39c2b26236ba0889ea6b5d1e28eb6692">nvbio::bowtie2::cuda::detail::BestTracebackStream&lt; ALN_IDX, AlignerType, PipelineType &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_all_traceback_stream.html#a98b89549ed0f5902605748e0025e4cb8">nvbio::bowtie2::cuda::detail::AllTracebackStream&lt; AlignerType, PipelineType &gt;</a>
 , <a class="el" href="structcufmi_1_1bowtie2_1_1cuda_1_1_read_hits_index_device_view_1_1_hit_array.html#a20600c5c11d12e2802875f92679b2e24">cufmi::bowtie2::cuda::ReadHitsIndexDeviceView::HitArray</a>
 , <a class="el" href="structcufmi_1_1bowtie2_1_1cuda_1_1_read_hits_reference.html#a7b479a17104325e366e3ba93f6eda99c">cufmi::bowtie2::cuda::ReadHitsReference&lt; ReadHitsIndexType, HitQueuesType &gt;</a>
 </li>
@@ -1023,15 +1029,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="structnvbio_1_1_sorted_dictionary_suffix_trie.html#ac6976803de846d087ebcd696f9ae1445">nvbio::SortedDictionarySuffixTrie&lt; ALPHABET_SIZE_T, Iterator &gt;</a>
 , <a class="el" href="structnvbio_1_1_trie_node.html#a455c74c9e991c32615ac15213a692df3">nvbio::TrieNode&lt; ALPHABET_SIZE_T, TYPE_T &gt;</a>
 , <a class="el" href="structnvbio_1_1_trie_node5.html#a84d27061b603488d1cd93dffeb9f0d31">nvbio::TrieNode5&lt; TYPE_T &gt;</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_score_stream.html#aa99326637c73b23a3ae51a3c7ccbd8a5">nvbio::bowtie2::cuda::detail::BestScoreStream&lt; AlignerType, PipelineType &gt;</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_anchor_score_stream.html#aa5bf610b104df9655d38beb486df9ec1">nvbio::bowtie2::cuda::detail::BestAnchorScoreStream&lt; AlignerType, PipelineType &gt;</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_opposite_score_stream.html#a531cb5bae6423384bc2959c892b62554">nvbio::bowtie2::cuda::detail::BestOppositeScoreStream&lt; AlignerType, PipelineType &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_all_score_stream.html#a8137a1fa4fb6a86bea2da01ea541c5e4">nvbio::bowtie2::cuda::detail::AllScoreStream&lt; AlignerType, PipelineType &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_score_stream.html#aa99326637c73b23a3ae51a3c7ccbd8a5">nvbio::bowtie2::cuda::detail::BestScoreStream&lt; AlignerType, PipelineType &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_opposite_score_stream.html#a531cb5bae6423384bc2959c892b62554">nvbio::bowtie2::cuda::detail::BestOppositeScoreStream&lt; AlignerType, PipelineType &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_anchor_score_stream.html#aa5bf610b104df9655d38beb486df9ec1">nvbio::bowtie2::cuda::detail::BestAnchorScoreStream&lt; AlignerType, PipelineType &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_index_device_view_1_1_hit_array.html#a53cec9073b30450f5bced7a1c78f48bb">nvbio::bowtie2::cuda::ReadHitsIndexDeviceView::HitArray</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_reference.html#a577b7a7f814b98f4593308344155d3f9">nvbio::bowtie2::cuda::ReadHitsReference&lt; ScoringQueuesType &gt;</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_binder.html#a896f27dfb7dadb6a4cbd0be4c1add5f5">nvbio::bowtie2::cuda::ReadHitsBinder&lt; ScoringQueuesType &gt;</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_reference.html#acb08faf7029fca2516d18ecebddcc98f">nvbio::bowtie2::cuda::SeedHitDequeReference&lt; SeedHitDequeArrayType &gt;</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_best_traceback_stream.html#a39c2b26236ba0889ea6b5d1e28eb6692">nvbio::bowtie2::cuda::detail::BestTracebackStream&lt; ALN_IDX, AlignerType, PipelineType &gt;</a>
 </li>
 <li>size_cmd
 : <a class="el" href="structknet_file__s.html#a89a555b5b8b163970e2519c5ddf5fc5b">knetFile_s</a>
@@ -1051,11 +1053,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>skip_ahead()
 : <a class="el" href="structnvbio_1_1io_1_1_data_buffer.html#a5dd1c665a8d4e8dbb890920d80619835">nvbio::io::DataBuffer</a>
 </li>
-<li>slen
-: <a class="el" href="structkswq__t.html#a6d75f3f0f24ee8bc7764f80ade247a4c">kswq_t</a>
-</li>
 <li>SLEN
 : <a class="el" href="structnvbio_1_1io_1_1_b_g_z_f_compressor_1_1bgzf__extra__data.html#a78817fd0af3478e088783b5ffa3ac17c">nvbio::io::BGZFCompressor::bgzf_extra_data</a>
+</li>
+<li>slen
+: <a class="el" href="structkswq__t.html#a6d75f3f0f24ee8bc7764f80ade247a4c">kswq_t</a>
 </li>
 <li>slice
 : <a class="el" href="structcram__container.html#abcd8d39bb8b49b8ce5e24f31e83665fc">cram_container</a>
@@ -1115,12 +1117,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1io_1_1_cigar.html#a0c549ffa01df8c620c7f13a3ac69b7bda6d7ec9887f070fcba16b9a56f0d443c6">nvbio::io::Cigar</a>
 </li>
 <li>sort()
-: <a class="el" href="structnvbio_1_1cuda_1_1_sort_enactor.html#a3d7bc4c6a33d019700307cdaebddc292">nvbio::cuda::SortEnactor</a>
+: <a class="el" href="structnvbio_1_1cuda_1_1_compression_sort.html#ae18f52e0efd94c8d942103206a0ccc55">nvbio::cuda::CompressionSort</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a0fab52e00fd98cf0258cfb7fa88c6f13">nvbio::bowtie2::cuda::Stats</a>
 , <a class="el" href="structnvbio_1_1cuda_1_1_sort_enactor.html#a915ba44b7fe0f1c4deef794d7f26d123">nvbio::cuda::SortEnactor</a>
 , <a class="el" href="structnvbio_1_1cuda_1_1_compression_sort.html#a6c556b6ac3230aaa6fad1cc03c09edc0">nvbio::cuda::CompressionSort</a>
 , <a class="el" href="structnvbio_1_1cuda_1_1_prefix_doubling_suf_sort.html#ad98224f26baac7af09308f45b3aa77e1">nvbio::cuda::PrefixDoublingSufSort</a>
-, <a class="el" href="structnvbio_1_1cuda_1_1_sort_enactor.html#a608da9d2e38649395a16fd2454f1f8f9">nvbio::cuda::SortEnactor</a>
 </li>
 <li>sort_64_bits()
 : <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#a0dac4226975f3e9f81bc2565210019c8">nvbio::bowtie2::cuda::Aligner</a>
@@ -1158,8 +1159,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="structpopulate__unique__kmer__data.html#ab9fe7b03b74ee70b8ab8ce9481275953">populate_unique_kmer_data</a>
 </li>
 <li>sorted_kmer_keys
-: <a class="el" href="structmark__kmer__uniqueness.html#a90d713e599ba80bf4d387b3d1db65dde">mark_kmer_uniqueness</a>
-, <a class="el" href="structstore__kmer__unique__ids.html#a5b006469d96aa46da508ecfa63d16ff7">store_kmer_unique_ids</a>
+: <a class="el" href="structstore__kmer__unique__ids.html#a5b006469d96aa46da508ecfa63d16ff7">store_kmer_unique_ids</a>
+, <a class="el" href="structmark__kmer__uniqueness.html#a90d713e599ba80bf4d387b3d1db65dde">mark_kmer_uniqueness</a>
 </li>
 <li>SortedDictionaryNode()
 : <a class="el" href="structnvbio_1_1_sorted_dictionary_node.html#af6a3289b186819487d7c76d7a5f75665">nvbio::SortedDictionaryNode</a>
@@ -1185,16 +1186,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cbaa9bf347aec7eaf78ea6fecc3735881d7">nvbio::io::SequenceDataFile_SAM</a>
 </li>
 <li>SortOrder_queryname
-: <a class="el" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cba06c11b6b347c7f5c9eff10f5ad74e9dd">nvbio::io::SequenceDataFile_SAM</a>
-, <a class="el" href="structnvbio_1_1io_1_1_read_data_file___s_a_m.html#a993cc9f660aa5f78c40ee5cb2aab9964ab02e46d88b11fe8fdf13159f68251438">nvbio::io::ReadDataFile_SAM</a>
+: <a class="el" href="structnvbio_1_1io_1_1_read_data_file___s_a_m.html#a993cc9f660aa5f78c40ee5cb2aab9964ab02e46d88b11fe8fdf13159f68251438">nvbio::io::ReadDataFile_SAM</a>
+, <a class="el" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cba06c11b6b347c7f5c9eff10f5ad74e9dd">nvbio::io::SequenceDataFile_SAM</a>
 </li>
 <li>SortOrder_unknown
 : <a class="el" href="structnvbio_1_1io_1_1_read_data_file___s_a_m.html#a993cc9f660aa5f78c40ee5cb2aab9964a482639a2bd731e8da9546fa12cbbc49e">nvbio::io::ReadDataFile_SAM</a>
 , <a class="el" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cba7c19a58aa61c33f009da0da9a556cfd8">nvbio::io::SequenceDataFile_SAM</a>
 </li>
 <li>SortOrder_unsorted
-: <a class="el" href="structnvbio_1_1io_1_1_read_data_file___s_a_m.html#a993cc9f660aa5f78c40ee5cb2aab9964acf9fa1f3d65e9a8083f6f5284d063874">nvbio::io::ReadDataFile_SAM</a>
-, <a class="el" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cbad9c1e9604285f3d8ca94094a17e8bc42">nvbio::io::SequenceDataFile_SAM</a>
+: <a class="el" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#aeb117636971e51b167e936fb402926cbad9c1e9604285f3d8ca94094a17e8bc42">nvbio::io::SequenceDataFile_SAM</a>
+, <a class="el" href="structnvbio_1_1io_1_1_read_data_file___s_a_m.html#a993cc9f660aa5f78c40ee5cb2aab9964acf9fa1f3d65e9a8083f6f5284d063874">nvbio::io::ReadDataFile_SAM</a>
 </li>
 <li>source
 : <a class="el" href="structnvbio_1_1aln_1_1_alignment.html#a327cd1ea44b303bb4f2e9537839d86fc">nvbio::aln::Alignment&lt; ScoreType &gt;</a>
@@ -1202,10 +1203,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>source_ids
 : <a class="el" href="structextract__active__region__source__sink.html#a6b630f53b939b46634bf2e8f8c9eed3f">extract_active_region_source_sink&lt; string_set_type &gt;</a>
 </li>
-<li>span()
-: <a class="el" href="structnvbio_1_1_m_e_m_range.html#a2e0ad516780afa91830a0019cb5fc77c">nvbio::MEMRange&lt; coord_type &gt;</a>
+<li>span
+: <a class="el" href="structactive__region.html#a8ccba3b617ed7a19d4dced70d4dfea38">active_region</a>
 , <a class="el" href="structnvbio_1_1_m_e_m_hit.html#a1e20714ef09715e34a914ce16ba56380">nvbio::MEMHit&lt; coord_type &gt;</a>
-, <a class="el" href="structactive__region.html#a8ccba3b617ed7a19d4dced70d4dfea38">active_region</a>
+, <a class="el" href="structnvbio_1_1_m_e_m_range.html#a2e0ad516780afa91830a0019cb5fc77c">nvbio::MEMRange&lt; coord_type &gt;</a>
 </li>
 <li>SparseStringSet()
 : <a class="el" href="structnvbio_1_1_sparse_string_set.html#a378de727218ca50a27488e1fcb9b895b">nvbio::SparseStringSet&lt; StringIterator, RangeIterator &gt;</a>
@@ -1236,38 +1237,38 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="struct_b_a_m__header.html#ae5050b1d36365647b473bdfd5986845a">BAM_header</a>
 </li>
 <li>sq_names
-: <a class="el" href="structnvbio_1_1io_1_1_read_data_file___s_a_m.html#a0c08cfc76481bc8fd2aa7057e6689feb">nvbio::io::ReadDataFile_SAM</a>
-, <a class="el" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#acc4721ad07c664f09e04fcf935358277">nvbio::io::SequenceDataFile_SAM</a>
+: <a class="el" href="structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#acc4721ad07c664f09e04fcf935358277">nvbio::io::SequenceDataFile_SAM</a>
 , <a class="el" href="struct_b_a_m__header.html#a3a318c68b1a68b2568fb37872f01a882">BAM_header</a>
+, <a class="el" href="structnvbio_1_1io_1_1_read_data_file___s_a_m.html#a0c08cfc76481bc8fd2aa7057e6689feb">nvbio::io::ReadDataFile_SAM</a>
 </li>
 <li>SqrtFunc
 : <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_simple_func.html#a74e3d3fc83c172e6fbe6e72b6cb91adba98cac7f15a4c3d3c98a8096978d4e7d1">nvbio::bowtie2::cuda::SimpleFunc</a>
-</li>
-<li>ss
-: <a class="el" href="structtbx__intv__t.html#a83ddce0f5a20ebb5cfcd89b4ef3b6ee8">tbx_intv_t</a>
 </li>
 <li>SS
 : <a class="el" href="structnvbio_1_1_q_group_index_view_core.html#a9e7b2f5e06f6a84c3ae374cb2acfb854">nvbio::QGroupIndexViewCore&lt; index_iterator &gt;</a>
 , <a class="el" href="structnvbio_1_1_q_group_index_host.html#a9a3c3f392ea414283c58916c2c1d5891">nvbio::QGroupIndexHost</a>
 , <a class="el" href="structnvbio_1_1_q_group_index_device.html#ac2647fab5049dbf13e4b3e7d7cb54349">nvbio::QGroupIndexDevice</a>
 </li>
+<li>ss
+: <a class="el" href="structtbx__intv__t.html#a83ddce0f5a20ebb5cfcd89b4ef3b6ee8">tbx_intv_t</a>
+</li>
 <li>ssa
 : <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a97bd3946267cbcf70d07b96a38ce27dd">nvbio::bowtie2::cuda::HitQueues</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues_device_view.html#a49fadc67531de2e91f87352f8d03c7d2">nvbio::bowtie2::cuda::HitQueuesDeviceView</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_reference.html#a900dbd2ada6dd552946b736886011ce2">nvbio::bowtie2::cuda::HitReference&lt; HitQueuesType &gt;</a>
 , <a class="el" href="structcufmi_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a52343da411af13a8fb25786769227151">cufmi::bowtie2::cuda::HitQueues</a>
-, <a class="el" href="structcufmi_1_1bowtie2_1_1cuda_1_1_hit_queues_device_view.html#a7e3db06765758730812c95f4c987a7f3">cufmi::bowtie2::cuda::HitQueuesDeviceView</a>
 , <a class="el" href="structcufmi_1_1bowtie2_1_1cuda_1_1_hit_reference.html#ac66e4f4edee704eb9cd5c2402177f4eb">cufmi::bowtie2::cuda::HitReference&lt; HitQueuesType &gt;</a>
 , <a class="el" href="structnvbio_1_1io_1_1_f_m_index_data_core.html#a4b944195effabc37ed36b411642b81fc">nvbio::io::FMIndexDataCore</a>
+, <a class="el" href="structcufmi_1_1bowtie2_1_1cuda_1_1_hit_queues_device_view.html#a7e3db06765758730812c95f4c987a7f3">cufmi::bowtie2::cuda::HitQueuesDeviceView</a>
 </li>
 <li>ssa_handler
 : <a class="el" href="structnvbio_1_1_string_b_w_t_s_s_a_handler.html#a3e0961081a9927931971bf6d0aafb44d">nvbio::StringBWTSSAHandler&lt; string_type, output_bwt_iterator, output_ssa_iterator &gt;</a>
 </li>
 <li>SSA_index_multiple()
-: <a class="el" href="structnvbio_1_1_s_s_a__index__multiple.html#a7fa6e235ceb780732367e234e977e197">nvbio::SSA_index_multiple&lt; K, index_type &gt;</a>
+: <a class="el" href="structnvbio_1_1_s_s_a__index__multiple.html#a1a89f17fe47c536fc1f15f94074f6a80">nvbio::SSA_index_multiple&lt; K, index_type &gt;</a>
 </li>
 <li>SSA_index_multiple_context()
-: <a class="el" href="structnvbio_1_1_s_s_a__index__multiple__context.html#a1d659bfe0d7ea35369193b40cd946bce">nvbio::SSA_index_multiple_context&lt; K, Iterator &gt;</a>
+: <a class="el" href="structnvbio_1_1_s_s_a__index__multiple__context.html#a42af27dcc0508454f94465d98ad8e273">nvbio::SSA_index_multiple_context&lt; K, Iterator &gt;</a>
 </li>
 <li>SSA_index_multiple_device()
 : <a class="el" href="structnvbio_1_1_s_s_a__index__multiple__device.html#ad074b4c975f17afc43186a5892a8b922">nvbio::SSA_index_multiple_device&lt; K, index_type &gt;</a>
@@ -1281,18 +1282,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>ssa_storage_type
 : <a class="el" href="structnvbio_1_1io_1_1_f_m_index_data.html#a26a7c37766dc876f1dc3f5a798751588">nvbio::io::FMIndexData</a>
-, <a class="el" href="structnvbio_1_1io_1_1_f_m_index_data_device.html#a340cc4e41f3daec06a81f48ecad4a8c2">nvbio::io::FMIndexDataDevice</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a4ac391d3cb1c2c8cb063a5a00084666d">nvbio::bowtie2::cuda::HitQueues</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues_device_view.html#a0439ca254893e98aa097fff049baeaf6">nvbio::bowtie2::cuda::HitQueuesDeviceView</a>
-, <a class="el" href="structcufmi_1_1bowtie2_1_1cuda_1_1_hit_queues_device_view.html#a1318f93098b1b34e8fab0d37b81a9f68">cufmi::bowtie2::cuda::HitQueuesDeviceView</a>
 , <a class="el" href="structcufmi_1_1bowtie2_1_1cuda_1_1_hit_queues.html#a68f1047c71acced690f28c314f2bbf2c">cufmi::bowtie2::cuda::HitQueues</a>
+, <a class="el" href="structcufmi_1_1bowtie2_1_1cuda_1_1_hit_queues_device_view.html#a1318f93098b1b34e8fab0d37b81a9f68">cufmi::bowtie2::cuda::HitQueuesDeviceView</a>
+, <a class="el" href="structnvbio_1_1io_1_1_f_m_index_data_device.html#a340cc4e41f3daec06a81f48ecad4a8c2">nvbio::io::FMIndexDataDevice</a>
 </li>
 <li>ssa_type
 : <a class="el" href="structnvbio_1_1io_1_1_f_m_index_data_core.html#a6e55453e3cfe3e67a6e18f21db093965">nvbio::io::FMIndexDataCore</a>
 , <a class="el" href="structnvbio_1_1io_1_1_f_m_index_data_device.html#a07ad650be99367b1815e736c9452d77c">nvbio::io::FMIndexDataDevice</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_reference.html#a7d39c8825c95fc925e18afc985878e5e">nvbio::bowtie2::cuda::HitReference&lt; HitQueuesType &gt;</a>
-, <a class="el" href="structcufmi_1_1bowtie2_1_1cuda_1_1_hit_reference.html#aea85c4cca8a66fd05d5b3d087dbc3480">cufmi::bowtie2::cuda::HitReference&lt; HitQueuesType &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_f_m_index_def.html#a1827cbfbb13a5da04d22419f280841c4">nvbio::bowtie2::cuda::FMIndexDef</a>
+, <a class="el" href="structcufmi_1_1bowtie2_1_1cuda_1_1_hit_reference.html#aea85c4cca8a66fd05d5b3d087dbc3480">cufmi::bowtie2::cuda::HitReference&lt; HitQueuesType &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_reference.html#a7d39c8825c95fc925e18afc985878e5e">nvbio::bowtie2::cuda::HitReference&lt; HitQueuesType &gt;</a>
 </li>
 <li>SSA_value_multiple()
 : <a class="el" href="structnvbio_1_1_s_s_a__value__multiple.html#a21e84b6f9d7bc0e98a50de046326605f">nvbio::SSA_value_multiple</a>
@@ -1315,23 +1316,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>StandardContext()
 : <a class="el" href="classmgpu_1_1_cuda_context.html#a7481b0e164b631c03c91d46fba99f714">mgpu::CudaContext</a>
 </li>
+<li>Start()
+: <a class="el" href="classmgpu_1_1_cuda_timer.html#a2bacf9d2be442e59bc4522fb83ee0b7a">mgpu::CudaTimer</a>
+, <a class="el" href="classmgpu_1_1_cuda_context.html#ab52f00e44b60afed9f702f0f0a781b30">mgpu::CudaContext</a>
+</li>
 <li>start
 : <a class="el" href="structcram__index.html#ad5b41da83e58b88991eddc6049561ce8">cram_index</a>
-, <a class="el" href="structcram__range.html#ac3f5205756db4e6de9a76e520eedd07a">cram_range</a>
 , <a class="el" href="struct__bcf__sr__regions__t.html#a9067605080033856a1b670356d33d6d6">_bcf_sr_regions_t</a>
+, <a class="el" href="structregion1__t.html#ac37d0fff38e6a601938cd88d4ec6e84e">region1_t</a>
 , <a class="el" href="structgz__state.html#a0eb95c1935a32c508a1e6fc1e84c8f83">gz_state</a>
 , <a class="el" href="structgenome__loc.html#a079ee537bfc2709b9d945316ba93c79d">genome_loc</a>
 , <a class="el" href="structnvbio_1_1cuda_1_1_timer.html#a944fa35847e996ab681f96ecd6953cb0">nvbio::cuda::Timer</a>
+, <a class="el" href="structnvbio_1_1_timer.html#a81f4a384879cf65815000b582e465a65">nvbio::Timer</a>
 , <a class="el" href="structnvbio_1_1_fake_timer.html#aa5ec2f8fb396202955b0527baeabea84">nvbio::FakeTimer</a>
+, <a class="el" href="structcram__range.html#ac3f5205756db4e6de9a76e520eedd07a">cram_range</a>
 </li>
 <li>Start
 : <a class="el" href="struct_bam_tools_1_1_chunk.html#aa711e188b2834add917a11cb5c2b6cde">BamTools::Chunk</a>
-, <a class="el" href="classmgpu_1_1_cuda_timer.html#a2bacf9d2be442e59bc4522fb83ee0b7a">mgpu::CudaTimer</a>
-, <a class="el" href="classmgpu_1_1_cuda_context.html#ab52f00e44b60afed9f702f0f0a781b30">mgpu::CudaContext</a>
-</li>
-<li>start()
-: <a class="el" href="structnvbio_1_1_timer.html#a81f4a384879cf65815000b582e465a65">nvbio::Timer</a>
-, <a class="el" href="structregion1__t.html#ac37d0fff38e6a601938cd88d4ec6e84e">region1_t</a>
 </li>
 <li>start_block()
 : <a class="el" href="structnvbio_1_1io_1_1_gzip_compressor.html#ab3de0bf8debcc2f1c2c77ebc0dbe4de2">nvbio::io::GzipCompressor</a>
@@ -1352,10 +1353,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1_static_vector.html#ace09efe593d57cc0bb307c99b042ff18">nvbio::StaticVector&lt; T, DIM &gt;</a>
 </li>
 <li>StaticVectorBase()
-: <a class="el" href="structnvbio_1_1_static_vector_base_3_01_t_00_012_01_4.html#acef5fdff7a4a55dd3b37b00f76ae0977">nvbio::StaticVectorBase&lt; T, 2 &gt;</a>
+: <a class="el" href="structnvbio_1_1_static_vector_base_3_01_t_00_012_01_4.html#ac83ed802bb1f460f9919d644395cfb79">nvbio::StaticVectorBase&lt; T, 2 &gt;</a>
 , <a class="el" href="structnvbio_1_1_static_vector_base_3_01_t_00_013_01_4.html#ab971f73cc5eafd4627b724190fb0bfe2">nvbio::StaticVectorBase&lt; T, 3 &gt;</a>
-, <a class="el" href="structnvbio_1_1_static_vector_base_3_01_t_00_014_01_4.html#ab8874c5a3b660c9b9dedd066411b5e82">nvbio::StaticVectorBase&lt; T, 4 &gt;</a>
-, <a class="el" href="structnvbio_1_1_static_vector_base_3_01_t_00_012_01_4.html#ac83ed802bb1f460f9919d644395cfb79">nvbio::StaticVectorBase&lt; T, 2 &gt;</a>
+, <a class="el" href="structnvbio_1_1_static_vector_base_3_01_t_00_014_01_4.html#af5de28c8822e33afc9f285085a0e1dfb">nvbio::StaticVectorBase&lt; T, 4 &gt;</a>
+, <a class="el" href="structnvbio_1_1_static_vector_base_3_01_t_00_012_01_4.html#acef5fdff7a4a55dd3b37b00f76ae0977">nvbio::StaticVectorBase&lt; T, 2 &gt;</a>
 </li>
 <li>Statistics
 : <a class="el" href="structnvbio_1_1alndiff_1_1_filter.html#ab3c63fb26c819c01b00bfc3db241f84f">nvbio::alndiff::Filter</a>
@@ -1382,20 +1383,22 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="structnvbio_1_1cuda_1_1_timer.html#ad559677b791465bdee51d4848766a6d0">nvbio::cuda::Timer</a>
 , <a class="el" href="structnvbio_1_1_fake_timer.html#a16ed940a0ff39380d2a470b714bfba94">nvbio::FakeTimer</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_select_best_approx_context.html#a4de23f4716b88d8be58469fb37073041">nvbio::bowtie2::cuda::SelectBestApproxContext</a>
+, <a class="el" href="structnvbio_1_1_timer.html#ac2a1dc2e71d260bd7dba103e745f1136">nvbio::Timer</a>
 </li>
 <li>Stop
 : <a class="el" href="struct_bam_tools_1_1_chunk.html#a16044002b5d6a452f7b5eda8b0621a7d">BamTools::Chunk</a>
 </li>
-<li>stop()
-: <a class="el" href="structnvbio_1_1_timer.html#ac2a1dc2e71d260bd7dba103e745f1136">nvbio::Timer</a>
-</li>
 <li>storage_iterator
 : <a class="el" href="structnvbio_1_1_packed_stream.html#a606ef865f6c60e1a6696fb7cb8176c40">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+, <a class="el" href="structnvbio_1_1_forward_packed_stream.html#ae575b3969749a4b580212fc200691469">nvbio::ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+, <a class="el" href="structnvbio_1_1vectorized__string_3_01vector__view_3_01_packed_stream_3_01_input_stream_00_01_sy0d57524e4504f97a479e638aa48536f4.html#af0f6670f17bd5c410adf7f92776ae35b">nvbio::vectorized_string&lt; vector_view&lt; PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt; &gt;</a>
 </li>
 <li>storage_type
 : <a class="el" href="structnvbio_1_1_packed_stream.html#ad1c591036f006857633ad31729461f2f">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
-, <a class="el" href="structnvbio_1_1_packed_string_loader_3_01_storage_iterator_00_01_s_y_m_b_o_l___s_i_z_e___t_00_01fbc241e0163073e0f32669477de354a6.html#a2d476f0557dc9f84dafd07a7d6fce994">nvbio::PackedStringLoader&lt; StorageIterator, SYMBOL_SIZE_T, BIG_ENDIAN_T, lmem_cache_tag&lt; CACHE_SIZE &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1_forward_packed_stream.html#ab844d93e7e7c361c342c5497381d4c49">nvbio::ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
 , <a class="el" href="structnvbio_1_1_packed_string_loader_3_01_storage_iterator_00_01_s_y_m_b_o_l___s_i_z_e___t_00_01c7e34e439106cfd4cd40d1028934d1d9.html#a8f4022feba668c66fa00b92760f52818">nvbio::PackedStringLoader&lt; StorageIterator, SYMBOL_SIZE_T, BIG_ENDIAN_T, uncached_tag &gt;</a>
+, <a class="el" href="structnvbio_1_1vectorized__string_3_01vector__view_3_01_packed_stream_3_01_input_stream_00_01_sy0d57524e4504f97a479e638aa48536f4.html#a5e39ac19dcbcf45ea2759fb2d8f77724">nvbio::vectorized_string&lt; vector_view&lt; PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1_packed_string_loader_3_01_storage_iterator_00_01_s_y_m_b_o_l___s_i_z_e___t_00_01fbc241e0163073e0f32669477de354a6.html#a2d476f0557dc9f84dafd07a7d6fce994">nvbio::PackedStringLoader&lt; StorageIterator, SYMBOL_SIZE_T, BIG_ENDIAN_T, lmem_cache_tag&lt; CACHE_SIZE &gt; &gt;</a>
 </li>
 <li>store
 : <a class="el" href="structcram__codec.html#a6b6feb84aca7f85efadf76b0a7c883b0">cram_codec</a>
@@ -1411,37 +1414,37 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="struct_s_a_m__hdr.html#a4f51cf38eccb3adc5f5a990aea6658b9">SAM_hdr</a>
 </li>
 <li>StrandOp
-: <a class="el" href="structnvbio_1_1io_1_1_read_data_r_a_m.html#a9f4e16d0d723d939004426cba34d1356">nvbio::io::ReadDataRAM</a>
-, <a class="el" href="structnvbio_1_1io_1_1_sequence_data_encoder.html#a3299809a696977b7ced7b7561c63c9ee">nvbio::io::SequenceDataEncoder</a>
+: <a class="el" href="structnvbio_1_1io_1_1_sequence_data_encoder.html#a3299809a696977b7ced7b7561c63c9ee">nvbio::io::SequenceDataEncoder</a>
+, <a class="el" href="structnvbio_1_1io_1_1_read_data_r_a_m.html#a9f4e16d0d723d939004426cba34d1356">nvbio::io::ReadDataRAM</a>
 </li>
 <li>strategy
 : <a class="el" href="structinternal__state.html#a67219312df7fd2f86e06e6f14700eb28">internal_state</a>
 , <a class="el" href="structgz__state.html#a2777c46311012def486c2aa720fe5203">gz_state</a>
 </li>
-<li>Stream
-: <a class="el" href="struct_bam_tools_1_1_bgzf_data.html#a7ba6774acb9170d12d79c4b92c3e028d">BamTools::BgzfData</a>
-</li>
-<li>stream
-: <a class="el" href="structnvbio_1_1io_1_1_gzip_compressor.html#a337394f8e5d09e9cb0a3a0e9b0b4dc45">nvbio::io::GzipCompressor</a>
-, <a class="el" href="structnvbio_1_1_packed_stream.html#a17d7e64c6809e007cfcf41359551017f">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
-</li>
-<li>Stream()
-: <a class="el" href="classmgpu_1_1_cuda_context.html#a990166b33ec50057272733214822abdd">mgpu::CudaContext</a>
-</li>
 <li>stream
 : <a class="el" href="structnvbio_1_1aln_1_1_score_stream.html#ad1804adfa816dedf58ec88f94dc14454">nvbio::aln::ScoreStream&lt; stream_type &gt;</a>
+, <a class="el" href="structnvbio_1_1io_1_1_gzip_compressor.html#a337394f8e5d09e9cb0a3a0e9b0b4dc45">nvbio::io::GzipCompressor</a>
 , <a class="el" href="structnvbio_1_1_read_stream.html#ab37048b535f8f5688dc7879846f316d0">nvbio::ReadStream&lt; StreamType, QualType &gt;</a>
 , <a class="el" href="structnvbio_1_1const__cached__iterator.html#a3718d7db8e4ddbe50dbfe959c484ac73">nvbio::const_cached_iterator&lt; InputStream &gt;</a>
+, <a class="el" href="structnvbio_1_1_forward_packed_stream.html#a51cbbd288bc81986ad421c69c7d6c035">nvbio::ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+</li>
+<li>Stream
+: <a class="el" href="struct_bam_tools_1_1_bgzf_data.html#a7ba6774acb9170d12d79c4b92c3e028d">BamTools::BgzfData</a>
+, <a class="el" href="classmgpu_1_1_cuda_context.html#a990166b33ec50057272733214822abdd">mgpu::CudaContext</a>
+</li>
+<li>stream()
+: <a class="el" href="structnvbio_1_1_packed_stream.html#a17d7e64c6809e007cfcf41359551017f">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
 </li>
 <li>stream_iterator
-: <a class="el" href="structnvbio_1_1_sequence_stream_loader.html#aa66ad2b3190a5236008c7a5db16a650d">nvbio::SequenceStreamLoader&lt; SequenceDataT, Tag &gt;</a>
-, <a class="el" href="structnvbio_1_1_strided_packed_string_set.html#afefe79d2b78013283b71b6cdd53b6161">nvbio::StridedPackedStringSet&lt; StreamIterator, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, LengthIterator &gt;</a>
+: <a class="el" href="structnvbio_1_1_strided_packed_string_set.html#afefe79d2b78013283b71b6cdd53b6161">nvbio::StridedPackedStringSet&lt; StreamIterator, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, LengthIterator &gt;</a>
+, <a class="el" href="structnvbio_1_1_sequence_stream_loader.html#aa66ad2b3190a5236008c7a5db16a650d">nvbio::SequenceStreamLoader&lt; SequenceDataT, Tag &gt;</a>
 </li>
 <li>stream_storage
 : <a class="el" href="structnvbio_1_1_sequence_stream_loader.html#a31c571615d01e1fd6b3732b29f3797c4">nvbio::SequenceStreamLoader&lt; SequenceDataT, Tag &gt;</a>
 </li>
 <li>stream_type
 : <a class="el" href="structnvbio_1_1_packed_vector.html#aaaef98ae9861c9088f62579bbe5c4f19">nvbio::PackedVector&lt; SystemTag, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+, <a class="el" href="structnvbio_1_1_forward_packed_stream.html#ab6ea913c7e3673b9d4f0f29bf876f8e4">nvbio::ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
 , <a class="el" href="structnvbio_1_1_packed_stream.html#ab5899822a5351d4086610ad0efd8e7cb">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
 </li>
 <li>streaming
@@ -1453,7 +1456,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="structnvbio_1_1_strided_string_set.html#afb6618259b9e8dc740df5745987d016b">nvbio::StridedStringSet&lt; StringIterator, LengthIterator &gt;</a>
 </li>
 <li>strided_iterator()
-: <a class="el" href="structnvbio_1_1strided__iterator.html#a06a162087843a41b57bf86d4787916aa">nvbio::strided_iterator&lt; T &gt;</a>
+: <a class="el" href="structnvbio_1_1strided__iterator.html#a6d743d7c2c708c866be0a19c6d1e80da">nvbio::strided_iterator&lt; T &gt;</a>
 </li>
 <li>strided_stream_iterator
 : <a class="el" href="structnvbio_1_1_strided_packed_string_set.html#ada48a3ffb548b62c287ce69f724f0eb8">nvbio::StridedPackedStringSet&lt; StreamIterator, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, LengthIterator &gt;</a>
@@ -1470,45 +1473,48 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>string
 : <a class="el" href="structnvbio_1_1priv_1_1string__suffix__less.html#a266bc33c5a23d394c01a72411ab29009">nvbio::priv::string_suffix_less&lt; SYMBOL_SIZE, string_type &gt;</a>
 , <a class="el" href="structnvbio_1_1priv_1_1_d_c_s__string__suffix__less.html#aa40e5275ac077fbad7bd6f80fabedd38">nvbio::priv::DCS_string_suffix_less&lt; SYMBOL_SIZE, string_type &gt;</a>
-, <a class="el" href="structnvbio_1_1string__qgram__search__functor.html#a77c7d0285917128e00ce7c645a683996">nvbio::string_qgram_search_functor&lt; qgram_index_type, string_type &gt;</a>
-, <a class="el" href="structnvbio_1_1priv_1_1string__suffix__word__functor.html#a4eaa18b9712c07bae3fff4aa9e953970">nvbio::priv::string_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, string_type, word_type &gt;</a>
 , <a class="el" href="structnvbio_1_1string__qgram__functor.html#a6815d114ce3ecda60a6db2042ce6001a">nvbio::string_qgram_functor&lt; string_type &gt;</a>
 , <a class="el" href="structnvbio_1_1qgroup_1_1qgroup__setup___i.html#a7accd420518dca1589e066309a57bf63">nvbio::qgroup::qgroup_setup_I&lt; string_type &gt;</a>
-, <a class="el" href="structnvbio_1_1qgroup_1_1qgroup__setup___p.html#a2c6c91120ac32a9a4696168d4711e0ae">nvbio::qgroup::qgroup_setup_P&lt; string_type &gt;</a>
-, <a class="el" href="structnvbio_1_1priv_1_1string__suffix__difference.html#ab021f20584688c05666c4eba7e997877">nvbio::priv::string_suffix_difference&lt; string_type &gt;</a>
+, <a class="el" href="structnvbio_1_1string__qgram__search__functor.html#a77c7d0285917128e00ce7c645a683996">nvbio::string_qgram_search_functor&lt; qgram_index_type, string_type &gt;</a>
 , <a class="el" href="structnvbio_1_1qgroup_1_1qgroup__setup___s_s.html#a9fef9bb1e9cde963511378732f80bd93">nvbio::qgroup::qgroup_setup_SS&lt; string_type &gt;</a>
+, <a class="el" href="structnvbio_1_1qgroup_1_1qgroup__setup___p.html#a2c6c91120ac32a9a4696168d4711e0ae">nvbio::qgroup::qgroup_setup_P&lt; string_type &gt;</a>
 , <a class="el" href="structnvbio_1_1priv_1_1string__suffix__word__functor_3_01_s_y_m_b_o_l___s_i_z_e_00_01_w_o_r_d___af1d7fb42ac84d721634051864dc80bd.html#afda1adc11c82e8c5c6c96b2a51cdd7eb">nvbio::priv::string_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, PackedStream&lt; storage_type, symbol_type, SYMBOL_SIZE, true, index_type &gt;, word_type &gt;</a>
-, <a class="el" href="structnvbio_1_1priv_1_1string__bwt__functor.html#a3dcfb1e9684cbff7b16d70248b9fda8e">nvbio::priv::string_bwt_functor&lt; string_type &gt;</a>
+, <a class="el" href="structnvbio_1_1priv_1_1string__suffix__word__functor.html#a4eaa18b9712c07bae3fff4aa9e953970">nvbio::priv::string_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, string_type, word_type &gt;</a>
 , <a class="el" href="structnvbio_1_1_string_b_w_t_handler.html#ab424eb3698703267f55d6417dbb22a9e">nvbio::StringBWTHandler&lt; string_type, output_iterator &gt;</a>
+, <a class="el" href="structnvbio_1_1priv_1_1string__bwt__functor.html#a3dcfb1e9684cbff7b16d70248b9fda8e">nvbio::priv::string_bwt_functor&lt; string_type &gt;</a>
+, <a class="el" href="structnvbio_1_1priv_1_1string__suffix__difference.html#ab021f20584688c05666c4eba7e997877">nvbio::priv::string_suffix_difference&lt; string_type &gt;</a>
 </li>
 <li>string_bwt_functor()
 : <a class="el" href="structnvbio_1_1priv_1_1string__bwt__functor.html#a950633ee1858ee27b7c7f6c0a1a844ea">nvbio::priv::string_bwt_functor&lt; string_type &gt;</a>
 </li>
 <li>string_id()
-: <a class="el" href="structnvbio_1_1_m_e_m_hit.html#aa2b8e589666e427f56c11d0512c30ff7">nvbio::MEMHit&lt; coord_type &gt;</a>
-, <a class="el" href="structnvbio_1_1_m_e_m_range.html#abff83f4efe8efa2a761ce3249f38e101">nvbio::MEMRange&lt; coord_type &gt;</a>
+: <a class="el" href="structnvbio_1_1_infix_core_3_01_string_type_00_01_coord_type_00_014u_01_4.html#a21f6a4d9f0b2edcd9dc241391c1c5e9c">nvbio::InfixCore&lt; StringType, CoordType, 4u &gt;</a>
 , <a class="el" href="structnvbio_1_1mem_1_1mem__handler.html#a2309697f0bb38c3c0f40e530068bcc0d">nvbio::mem::mem_handler&lt; coord_type &gt;</a>
-, <a class="el" href="structnvbio_1_1_infix_core_3_01_string_type_00_01_coord_type_00_014u_01_4.html#a21f6a4d9f0b2edcd9dc241391c1c5e9c">nvbio::InfixCore&lt; StringType, CoordType, 4u &gt;</a>
+, <a class="el" href="structnvbio_1_1_m_e_m_hit.html#aa2b8e589666e427f56c11d0512c30ff7">nvbio::MEMHit&lt; coord_type &gt;</a>
+, <a class="el" href="structnvbio_1_1_m_e_m_range.html#abff83f4efe8efa2a761ce3249f38e101">nvbio::MEMRange&lt; coord_type &gt;</a>
 </li>
 <li>string_ids
 : <a class="el" href="structnvbio_1_1priv_1_1localize__suffix__functor.html#a5dc2566a726e91661eb6c5ebda674ce7">nvbio::priv::localize_suffix_functor</a>
 , <a class="el" href="structnvbio_1_1priv_1_1_set_suffix_flattener.html#aff0dc40fa84eba2dcc36736e7ed7a573">nvbio::priv::SetSuffixFlattener&lt; SYMBOL_SIZE &gt;</a>
 </li>
+<li>string_iterator()
+: <a class="el" href="structnvbio_1_1string__iterator.html#a9acd28d43dbba0d4b6d26c58d7a94ee0">nvbio::string_iterator&lt; StringType &gt;</a>
+</li>
 <li>string_len
-: <a class="el" href="structnvbio_1_1_string_b_w_t_handler.html#a191248eaac4a366d2dfb9c5e7ce9c9d1">nvbio::StringBWTHandler&lt; string_type, output_iterator &gt;</a>
-, <a class="el" href="structnvbio_1_1priv_1_1_d_c_s__string__suffix__less.html#aaf1fcfcf4cbc70dc2f47c9dd87a6c810">nvbio::priv::DCS_string_suffix_less&lt; SYMBOL_SIZE, string_type &gt;</a>
-, <a class="el" href="structnvbio_1_1qgroup_1_1qgroup__setup___i.html#ad435c91e9ec3e813e7ef042bb34c44ee">nvbio::qgroup::qgroup_setup_I&lt; string_type &gt;</a>
-, <a class="el" href="structnvbio_1_1string__qgram__search__functor.html#a0a46717463af265b673941d424a4b5c8">nvbio::string_qgram_search_functor&lt; qgram_index_type, string_type &gt;</a>
+: <a class="el" href="structnvbio_1_1string__qgram__search__functor.html#a0a46717463af265b673941d424a4b5c8">nvbio::string_qgram_search_functor&lt; qgram_index_type, string_type &gt;</a>
+, <a class="el" href="structnvbio_1_1priv_1_1string__bwt__functor.html#a69a637720da2bf8407456e38cb8db057">nvbio::priv::string_bwt_functor&lt; string_type &gt;</a>
+, <a class="el" href="structnvbio_1_1_string_b_w_t_handler.html#a191248eaac4a366d2dfb9c5e7ce9c9d1">nvbio::StringBWTHandler&lt; string_type, output_iterator &gt;</a>
 , <a class="el" href="structnvbio_1_1qgroup_1_1qgroup__setup___s_s.html#acd3255c1aeacf2b7a5f327151ad6a0b7">nvbio::qgroup::qgroup_setup_SS&lt; string_type &gt;</a>
+, <a class="el" href="structnvbio_1_1priv_1_1string__suffix__word__functor_3_01_s_y_m_b_o_l___s_i_z_e_00_01_w_o_r_d___af1d7fb42ac84d721634051864dc80bd.html#a39a9b154ab54e4d51ddbeac0ac6eb1b6">nvbio::priv::string_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, PackedStream&lt; storage_type, symbol_type, SYMBOL_SIZE, true, index_type &gt;, word_type &gt;</a>
+, <a class="el" href="structnvbio_1_1qgroup_1_1qgroup__setup___p.html#affe3ba22b9f71dd482387108cba3b97a">nvbio::qgroup::qgroup_setup_P&lt; string_type &gt;</a>
+, <a class="el" href="structnvbio_1_1string__qgram__functor.html#a393d6a679767ef160207379c91a6aee5">nvbio::string_qgram_functor&lt; string_type &gt;</a>
+, <a class="el" href="structnvbio_1_1qgroup_1_1qgroup__setup___i.html#ad435c91e9ec3e813e7ef042bb34c44ee">nvbio::qgroup::qgroup_setup_I&lt; string_type &gt;</a>
+, <a class="el" href="structnvbio_1_1priv_1_1_d_c_s__string__suffix__less.html#aaf1fcfcf4cbc70dc2f47c9dd87a6c810">nvbio::priv::DCS_string_suffix_less&lt; SYMBOL_SIZE, string_type &gt;</a>
+, <a class="el" href="structnvbio_1_1priv_1_1string__suffix__word__functor.html#a8c7a796ee7028ec36e746540da154aa0">nvbio::priv::string_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, string_type, word_type &gt;</a>
+, <a class="el" href="structnvbio_1_1priv_1_1string__suffix__less.html#a2f831bd23b581d57820194aceb7a0191">nvbio::priv::string_suffix_less&lt; SYMBOL_SIZE, string_type &gt;</a>
 , <a class="el" href="structnvbio_1_1string__seed__functor.html#ac3bdfc57f123484033a295afca467138">nvbio::string_seed_functor&lt; index_type, seed_functor, coord_type &gt;</a>
 , <a class="el" href="structnvbio_1_1priv_1_1string__suffix__difference.html#a3f9fe1720eb89994d84f50db9e516b0f">nvbio::priv::string_suffix_difference&lt; string_type &gt;</a>
-, <a class="el" href="structnvbio_1_1priv_1_1string__suffix__less.html#a2f831bd23b581d57820194aceb7a0191">nvbio::priv::string_suffix_less&lt; SYMBOL_SIZE, string_type &gt;</a>
-, <a class="el" href="structnvbio_1_1priv_1_1string__bwt__functor.html#a69a637720da2bf8407456e38cb8db057">nvbio::priv::string_bwt_functor&lt; string_type &gt;</a>
 , <a class="el" href="structnvbio_1_1_string_s_s_a_handler.html#a5541983d1bfa24483a29ed0a75c0c8d8">nvbio::StringSSAHandler&lt; output_iterator &gt;</a>
-, <a class="el" href="structnvbio_1_1string__qgram__functor.html#a393d6a679767ef160207379c91a6aee5">nvbio::string_qgram_functor&lt; string_type &gt;</a>
-, <a class="el" href="structnvbio_1_1qgroup_1_1qgroup__setup___p.html#affe3ba22b9f71dd482387108cba3b97a">nvbio::qgroup::qgroup_setup_P&lt; string_type &gt;</a>
-, <a class="el" href="structnvbio_1_1priv_1_1string__suffix__word__functor.html#a8c7a796ee7028ec36e746540da154aa0">nvbio::priv::string_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, string_type, word_type &gt;</a>
-, <a class="el" href="structnvbio_1_1priv_1_1string__suffix__word__functor_3_01_s_y_m_b_o_l___s_i_z_e_00_01_w_o_r_d___af1d7fb42ac84d721634051864dc80bd.html#a39a9b154ab54e4d51ddbeac0ac6eb1b6">nvbio::priv::string_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, PackedStream&lt; storage_type, symbol_type, SYMBOL_SIZE, true, index_type &gt;, word_type &gt;</a>
 </li>
 <li>string_offset
 : <a class="el" href="structnvbio_1_1priv_1_1localize__suffix__functor.html#a1972a89f51d329561742087da57f636e">nvbio::priv::localize_suffix_functor</a>
@@ -1523,37 +1529,37 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1string__seed__functor.html#a2a80df1524dc746c855143466305d94a">nvbio::string_seed_functor&lt; index_type, seed_functor, coord_type &gt;</a>
 </li>
 <li>string_set
-: <a class="el" href="structnvbio_1_1priv_1_1length__functor.html#a9e97b4b3ef77289dfaadcbaaacc4a069">nvbio::priv::length_functor&lt; string_set_type &gt;</a>
-, <a class="el" href="structprint__super__kmer__functor.html#a80e4caded16b95bcdaa701fb3cd3265a">print_super_kmer_functor&lt; string_set_type &gt;</a>
-, <a class="el" href="struct_d___kmer_set.html#aa7a1e627d39fc659ae2b44cf34f47159">D_KmerSet&lt; string_set_type &gt;</a>
-, <a class="el" href="structnvbio_1_1priv_1_1local__set__suffix__word__functor_3_01_s_y_m_b_o_l___s_i_z_e_00_01_w_o_r_0e0f0680998807b4e8820668a5384cd3.html#a40ae50fd5383bf247468f4cec0b0b827">nvbio::priv::local_set_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, ConcatenatedStringSet&lt; PackedStream&lt; storage_type, uint8, SYMBOL_SIZE, true, typename std::iterator_traits&lt; offsets_iterator &gt;::value_type &gt;, offsets_iterator &gt;, word_type &gt;</a>
-, <a class="el" href="structnvbio_1_1mem_1_1left__mem__functor.html#a998dfa553c7347dc1f69322c793ffd5b">nvbio::mem::left_mem_functor&lt; index_type, string_set_type &gt;</a>
-, <a class="el" href="structnvbio_1_1mem_1_1mem__functor.html#acc0eee363678974cb57be40b7291198e">nvbio::mem::mem_functor&lt; index_type, string_set_type &gt;</a>
-, <a class="el" href="structnvbio_1_1fmindex_1_1rank__functor.html#ad95d3770717b0e6b1d667425f28a3ea4">nvbio::fmindex::rank_functor&lt; index_type, string_set_type &gt;</a>
-, <a class="el" href="structnvbio_1_1mem_1_1split__mem__functor.html#a2b0040c950df4507310a16162e268e94">nvbio::mem::split_mem_functor&lt; index_type, string_set_type &gt;</a>
+: <a class="el" href="structnvbio_1_1string__set__qgram__functor.html#aa5b00f9c33ad58790ef736167ffbf592">nvbio::string_set_qgram_functor&lt; string_set_type &gt;</a>
 , <a class="el" href="structnvbio_1_1localized__seed__functor.html#a70a3930ba39ed9a2c27fdc453c9669c4">nvbio::localized_seed_functor&lt; string_set_type, seed_functor, coord_type &gt;</a>
-, <a class="el" href="structnvbio_1_1_string_set_iterator.html#a473a43adaec06b86dedae9b275c78e99">nvbio::StringSetIterator&lt; StringSetType &gt;</a>
-, <a class="el" href="structnvbio_1_1string__set__length__functor.html#a04d1a06689739a28fb33b084c63126fa">nvbio::string_set_length_functor&lt; string_set_type &gt;</a>
-, <a class="el" href="structnvbio_1_1priv_1_1local__set__suffix__word__functor.html#a2f7e7096dd02cbf63f1156b1227d4ea4">nvbio::priv::local_set_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, string_set_type, word_type &gt;</a>
+, <a class="el" href="structnvbio_1_1mem_1_1mem__functor.html#acc0eee363678974cb57be40b7291198e">nvbio::mem::mem_functor&lt; index_type, string_set_type &gt;</a>
 , <a class="el" href="structextract__active__region__source__sink.html#af957cff0b7f2f220286b57b71029b0b0">extract_active_region_source_sink&lt; string_set_type &gt;</a>
-, <a class="el" href="structkmers__to__64b__functor.html#ac8e7960e0cc4456cb5a5ce7831fa3b88">kmers_to_64b_functor&lt; string_set_type &gt;</a>
-, <a class="el" href="structextract__super__kmers__functor.html#a54a9725634b952e18c64035879bd0958">extract_super_kmers_functor&lt; string_set_type &gt;</a>
-, <a class="el" href="structsuper__coord__to__seq.html#a24bf387f8ff0238b79c47f164c1c0b52">super_coord_to_seq&lt; string_set_type &gt;</a>
-, <a class="el" href="structnvbio_1_1localize__functor.html#a44d1370449fb5f06e8a1a750e8b62ba9">nvbio::localize_functor&lt; string_set_type &gt;</a>
-, <a class="el" href="structnvbio_1_1mem_1_1right__mem__functor.html#ab0c7677642d77357080681c6d289c0d4">nvbio::mem::right_mem_functor&lt; index_type, string_set_type &gt;</a>
-, <a class="el" href="structnvbio_1_1string__set__qgram__functor.html#aa5b00f9c33ad58790ef736167ffbf592">nvbio::string_set_qgram_functor&lt; string_set_type &gt;</a>
 , <a class="el" href="structfind__max__kmer__overlaps.html#ac2b075ffc5f887600ac2cbf3f7a2a877">find_max_kmer_overlaps&lt; string_set_type &gt;</a>
-, <a class="el" href="structnvbio_1_1priv_1_1string__set__bwt__functor.html#ab3be4504396f0c32727a4b2e0c58127c">nvbio::priv::string_set_bwt_functor&lt; string_set_type &gt;</a>
+, <a class="el" href="structnvbio_1_1string__set__length__functor.html#a04d1a06689739a28fb33b084c63126fa">nvbio::string_set_length_functor&lt; string_set_type &gt;</a>
+, <a class="el" href="structnvbio_1_1priv_1_1length__functor.html#a9e97b4b3ef77289dfaadcbaaacc4a069">nvbio::priv::length_functor&lt; string_set_type &gt;</a>
+, <a class="el" href="structnvbio_1_1mem_1_1right__mem__functor.html#ab0c7677642d77357080681c6d289c0d4">nvbio::mem::right_mem_functor&lt; index_type, string_set_type &gt;</a>
 , <a class="el" href="structcoord__to__seq.html#a2287c84548c88de9459e99b11423b27f">coord_to_seq&lt; string_set_type &gt;</a>
-, <a class="el" href="structextract__non__overlapped__repeats.html#a52dbb4b3afeca0cc3a695668ee48586a">extract_non_overlapped_repeats&lt; string_set_type &gt;</a>
 , <a class="el" href="structkmer__word__extractor__functor.html#ac7ab02e097bf467325a0c730efb66b48">kmer_word_extractor_functor&lt; string_set_type &gt;</a>
+, <a class="el" href="structnvbio_1_1localize__functor.html#a44d1370449fb5f06e8a1a750e8b62ba9">nvbio::localize_functor&lt; string_set_type &gt;</a>
+, <a class="el" href="structnvbio_1_1fmindex_1_1rank__functor.html#ad95d3770717b0e6b1d667425f28a3ea4">nvbio::fmindex::rank_functor&lt; index_type, string_set_type &gt;</a>
+, <a class="el" href="structnvbio_1_1mem_1_1left__mem__functor.html#a998dfa553c7347dc1f69322c793ffd5b">nvbio::mem::left_mem_functor&lt; index_type, string_set_type &gt;</a>
+, <a class="el" href="structnvbio_1_1_string_set_iterator.html#a473a43adaec06b86dedae9b275c78e99">nvbio::StringSetIterator&lt; StringSetType &gt;</a>
+, <a class="el" href="structnvbio_1_1priv_1_1local__set__suffix__word__functor_3_01_s_y_m_b_o_l___s_i_z_e_00_01_w_o_r_0e0f0680998807b4e8820668a5384cd3.html#a40ae50fd5383bf247468f4cec0b0b827">nvbio::priv::local_set_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, ConcatenatedStringSet&lt; PackedStream&lt; storage_type, uint8, SYMBOL_SIZE, true, typename std::iterator_traits&lt; offsets_iterator &gt;::value_type &gt;, offsets_iterator &gt;, word_type &gt;</a>
+, <a class="el" href="structnvbio_1_1priv_1_1string__set__bwt__functor.html#ab3be4504396f0c32727a4b2e0c58127c">nvbio::priv::string_set_bwt_functor&lt; string_set_type &gt;</a>
+, <a class="el" href="struct_d___kmer_set.html#aa7a1e627d39fc659ae2b44cf34f47159">D_KmerSet&lt; string_set_type &gt;</a>
+, <a class="el" href="structprint__super__kmer__functor.html#a80e4caded16b95bcdaa701fb3cd3265a">print_super_kmer_functor&lt; string_set_type &gt;</a>
+, <a class="el" href="structextract__non__overlapped__repeats.html#a52dbb4b3afeca0cc3a695668ee48586a">extract_non_overlapped_repeats&lt; string_set_type &gt;</a>
+, <a class="el" href="structnvbio_1_1mem_1_1split__mem__functor.html#a2b0040c950df4507310a16162e268e94">nvbio::mem::split_mem_functor&lt; index_type, string_set_type &gt;</a>
+, <a class="el" href="structnvbio_1_1priv_1_1local__set__suffix__word__functor.html#a2f7e7096dd02cbf63f1156b1227d4ea4">nvbio::priv::local_set_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, string_set_type, word_type &gt;</a>
+, <a class="el" href="structextract__super__kmers__functor.html#a54a9725634b952e18c64035879bd0958">extract_super_kmers_functor&lt; string_set_type &gt;</a>
+, <a class="el" href="structkmers__to__64b__functor.html#ac8e7960e0cc4456cb5a5ce7831fa3b88">kmers_to_64b_functor&lt; string_set_type &gt;</a>
+, <a class="el" href="structsuper__coord__to__seq.html#a24bf387f8ff0238b79c47f164c1c0b52">super_coord_to_seq&lt; string_set_type &gt;</a>
 </li>
 <li>string_set_bwt_functor()
 : <a class="el" href="structnvbio_1_1priv_1_1string__set__bwt__functor.html#a24a13947ff5801c4ed4f037c8c957fd1">nvbio::priv::string_set_bwt_functor&lt; string_set_type &gt;</a>
 </li>
 <li>string_set_handler
-: <a class="el" href="structnvbio_1_1cuda_1_1_host_b_w_t_config_c_p_u_bucketer.html#a95151ec7951c567f033d9b4a34727cba">nvbio::cuda::HostBWTConfigCPUBucketer&lt; BUCKETING_BITS_T, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
-, <a class="el" href="structnvbio_1_1cuda_1_1_host_b_w_t_config_g_p_u_bucketer.html#a1af420fa5fb6050aaae720e08fa191b6">nvbio::cuda::HostBWTConfigGPUBucketer&lt; BUCKETING_BITS_T, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
+: <a class="el" href="structnvbio_1_1cuda_1_1_host_b_w_t_config_g_p_u_bucketer.html#a1af420fa5fb6050aaae720e08fa191b6">nvbio::cuda::HostBWTConfigGPUBucketer&lt; BUCKETING_BITS_T, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
+, <a class="el" href="structnvbio_1_1cuda_1_1_host_b_w_t_config_c_p_u_bucketer.html#a95151ec7951c567f033d9b4a34727cba">nvbio::cuda::HostBWTConfigCPUBucketer&lt; BUCKETING_BITS_T, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
 , <a class="el" href="structnvbio_1_1cuda_1_1_device_b_w_t_config.html#ae1ca2ac2a6fc90e92119155aef95e4e3">nvbio::cuda::DeviceBWTConfig&lt; BUCKETING_BITS_T, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
 </li>
 <li>string_set_handler_type
@@ -1566,20 +1572,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1string__set__qgram__functor.html#ab042e10df907769793246d0b9a9f0d45">nvbio::string_set_qgram_functor&lt; string_set_type &gt;</a>
 </li>
 <li>string_set_tag
-: <a class="el" href="structnvbio_1_1_sparse_string_set.html#a7f1a8ebd7c9f6ccbf5bd9ce723f3e4a1">nvbio::SparseStringSet&lt; StringIterator, RangeIterator &gt;</a>
+: <a class="el" href="structnvbio_1_1_strided_packed_string_set.html#adba7edd8e31c0499abd53e33e1d1bde6">nvbio::StridedPackedStringSet&lt; StreamIterator, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, LengthIterator &gt;</a>
 , <a class="el" href="structnvbio_1_1_strided_string_set.html#af6965f65185cdef0a50040aa0a50b546">nvbio::StridedStringSet&lt; StringIterator, LengthIterator &gt;</a>
+, <a class="el" href="structnvbio_1_1_sparse_string_set.html#a7f1a8ebd7c9f6ccbf5bd9ce723f3e4a1">nvbio::SparseStringSet&lt; StringIterator, RangeIterator &gt;</a>
 , <a class="el" href="structnvbio_1_1_concatenated_string_set.html#a6053263b8b334367f1cdfa719c41c9e7">nvbio::ConcatenatedStringSet&lt; StringIterator, OffsetIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_strided_packed_string_set.html#adba7edd8e31c0499abd53e33e1d1bde6">nvbio::StridedPackedStringSet&lt; StreamIterator, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, LengthIterator &gt;</a>
 </li>
 <li>string_set_type
-: <a class="el" href="structnvbio_1_1_b_w_t_e_context.html#a57e60eafb9ce766896f7b9f7e5116e13">nvbio::BWTEContext&lt; SYMBOL_SIZE, BIG_ENDIAN, storage_type, offsets_iterator &gt;</a>
+: <a class="el" href="structnvbio_1_1cuda_1_1_device_b_w_t_config.html#af373fd9fec4fb3d1f572c0955aa94f56">nvbio::cuda::DeviceBWTConfig&lt; BUCKETING_BITS_T, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
 , <a class="el" href="structnvbio_1_1cuda_1_1_host_b_w_t_config_g_p_u_bucketer.html#afb9e3512abf04053ec5dea4df8e2258b">nvbio::cuda::HostBWTConfigGPUBucketer&lt; BUCKETING_BITS_T, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
-, <a class="el" href="structnvbio_1_1cuda_1_1_host_b_w_t_config_c_p_u_bucketer.html#af3d892afdf6f38faf76893c06556920b">nvbio::cuda::HostBWTConfigCPUBucketer&lt; BUCKETING_BITS_T, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
 , <a class="el" href="structnvbio_1_1priv_1_1local__set__suffix__word__functor_3_01_s_y_m_b_o_l___s_i_z_e_00_01_w_o_r_0e0f0680998807b4e8820668a5384cd3.html#a83a113a6908dd2f311df7c94fab2169c">nvbio::priv::local_set_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, ConcatenatedStringSet&lt; PackedStream&lt; storage_type, uint8, SYMBOL_SIZE, true, typename std::iterator_traits&lt; offsets_iterator &gt;::value_type &gt;, offsets_iterator &gt;, word_type &gt;</a>
-, <a class="el" href="structnvbio_1_1_transform_string_set.html#a7a679a65cb86c7df18aa40d5bce14b17">nvbio::TransformStringSet&lt; StringSet, StringTransform &gt;</a>
-, <a class="el" href="structnvbio_1_1cuda_1_1_device_b_w_t_config.html#af373fd9fec4fb3d1f572c0955aa94f56">nvbio::cuda::DeviceBWTConfig&lt; BUCKETING_BITS_T, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
-, <a class="el" href="structnvbio_1_1cuda_1_1_large_b_w_t_skeleton.html#a4fa218f25c88ab3e00c88e7395812b4d">nvbio::cuda::LargeBWTSkeleton&lt; ConfigType, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
 , <a class="el" href="structnvbio_1_1priv_1_1_chunk_loader_3_01_s_y_m_b_o_l___s_i_z_e_00_01_b_i_g___e_n_d_i_a_n_00_01s389cce8a5c7abaf6aeabeab3d03b07cb.html#a16af94858a3b6193c55694c42a270881">nvbio::priv::ChunkLoader&lt; SYMBOL_SIZE, BIG_ENDIAN, storage_type, offsets_iterator, system_tag, system_tag &gt;</a>
+, <a class="el" href="structnvbio_1_1_b_w_t_e_context.html#a57e60eafb9ce766896f7b9f7e5116e13">nvbio::BWTEContext&lt; SYMBOL_SIZE, BIG_ENDIAN, storage_type, offsets_iterator &gt;</a>
+, <a class="el" href="structnvbio_1_1cuda_1_1_host_b_w_t_config_c_p_u_bucketer.html#af3d892afdf6f38faf76893c06556920b">nvbio::cuda::HostBWTConfigCPUBucketer&lt; BUCKETING_BITS_T, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
+, <a class="el" href="structnvbio_1_1cuda_1_1_large_b_w_t_skeleton.html#a4fa218f25c88ab3e00c88e7395812b4d">nvbio::cuda::LargeBWTSkeleton&lt; ConfigType, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
+, <a class="el" href="structnvbio_1_1_transform_string_set.html#a7a679a65cb86c7df18aa40d5bce14b17">nvbio::TransformStringSet&lt; StringSet, StringTransform &gt;</a>
 </li>
 <li>string_suffix_difference()
 : <a class="el" href="structnvbio_1_1priv_1_1string__suffix__difference.html#afba3f712c7b11ab74f4e71de7d44154d">nvbio::priv::string_suffix_difference&lt; string_type &gt;</a>
@@ -1588,43 +1594,49 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1priv_1_1string__suffix__less.html#ad63ede234f6f4c23c569cbf95bc77a4c">nvbio::priv::string_suffix_less&lt; SYMBOL_SIZE, string_type &gt;</a>
 </li>
 <li>string_suffix_word_functor()
-: <a class="el" href="structnvbio_1_1priv_1_1string__suffix__word__functor_3_01_s_y_m_b_o_l___s_i_z_e_00_01_w_o_r_d___af1d7fb42ac84d721634051864dc80bd.html#a4ef73e0f19013ef79101944211fa4eba">nvbio::priv::string_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, PackedStream&lt; storage_type, symbol_type, SYMBOL_SIZE, true, index_type &gt;, word_type &gt;</a>
-, <a class="el" href="structnvbio_1_1priv_1_1string__suffix__word__functor.html#a10adf2757c0557ddd3076e3d2b291ee0">nvbio::priv::string_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, string_type, word_type &gt;</a>
+: <a class="el" href="structnvbio_1_1priv_1_1string__suffix__word__functor.html#a10adf2757c0557ddd3076e3d2b291ee0">nvbio::priv::string_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, string_type, word_type &gt;</a>
+, <a class="el" href="structnvbio_1_1priv_1_1string__suffix__word__functor_3_01_s_y_m_b_o_l___s_i_z_e_00_01_w_o_r_d___af1d7fb42ac84d721634051864dc80bd.html#a4ef73e0f19013ef79101944211fa4eba">nvbio::priv::string_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, PackedStream&lt; storage_type, symbol_type, SYMBOL_SIZE, true, index_type &gt;, word_type &gt;</a>
 </li>
 <li>string_type
-: <a class="el" href="structnvbio_1_1_prefix_core_3_01_string_type_00_01_coord_type_00_011u_01_4.html#a43a51bb142c857d364563ce2b198aa92">nvbio::PrefixCore&lt; StringType, CoordType, 1u &gt;</a>
-, <a class="el" href="structnvbio_1_1_sequence_stream_loader.html#a233e1eaec140606351974db6cd332187">nvbio::SequenceStreamLoader&lt; SequenceDataT, Tag &gt;</a>
-, <a class="el" href="structnvbio_1_1_string_prefetcher_3_01_infix_3_01vector__view_3_01_packed_stream_3_01_storage_it90896505d6936a26b3731f6a0dab7be2.html#a37f94dee53386a3d54db4243b0c80966">nvbio::StringPrefetcher&lt; Infix&lt; vector_view&lt; PackedStream&lt; StorageIterator, uint8, SYMBOL_SIZE_T, BIG_ENDIAN_T &gt; &gt;, InfixCoordType &gt;, lmem_cache_tag&lt; CACHE_SIZE &gt; &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string__set.html#a92ad40deb19185ab194b9cf1178019a2">nvbio::aln::trivial_quality_string_set</a>
-, <a class="el" href="structnvbio_1_1_infix_core_3_01_string_type_00_01_coord_type_00_012u_01_4.html#ab2ddb187e8b7eeb43104c40481d06fd5">nvbio::InfixCore&lt; StringType, CoordType, 2u &gt;</a>
-, <a class="el" href="structnvbio_1_1_infix_set_core_3_01_sequence_type_00_01_infix_iterator_00_014u_01_4.html#adfc296bfc070cfe6330e8ac65380d0ea">nvbio::InfixSetCore&lt; SequenceType, InfixIterator, 4u &gt;</a>
-, <a class="el" href="structnvbio_1_1_infix_set.html#a93a44b11e3ff8548abb7b7aeb967e071">nvbio::InfixSet&lt; SequenceType, InfixIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_string_prefetcher.html#ae767ba0dea37517ec8a6ba0eac18b9c6">nvbio::StringPrefetcher&lt; StringType, CacheTag &gt;</a>
-, <a class="el" href="structnvbio_1_1_string_prefetcher_3_01_infix_3_01_packed_stream_3_01_storage_iterator_00_01uint8e9a31f95d7f572943e276df0b7f0363a.html#ac183a57c9a1a46e5df7046aa1decc9da">nvbio::StringPrefetcher&lt; Infix&lt; PackedStream&lt; StorageIterator, uint8, SYMBOL_SIZE_T, BIG_ENDIAN_T &gt;, InfixCoordType &gt;, lmem_cache_tag&lt; CACHE_SIZE &gt; &gt;</a>
-, <a class="el" href="structnvbio_1_1_prefix.html#a28d6edad5f07cec80714170e6c8e9872">nvbio::Prefix&lt; StringType, CoordType &gt;</a>
-, <a class="el" href="structnvbio_1_1_prefix_set_core_3_01_sequence_type_00_01_prefix_iterator_00_012u_01_4.html#ab647d6172040a8c10141ddbb8c79bf08">nvbio::PrefixSetCore&lt; SequenceType, PrefixIterator, 2u &gt;</a>
-, <a class="el" href="structnvbio_1_1_concatenated_string_set.html#a20b2051d16469e3cadbb7f301fe80dfe">nvbio::ConcatenatedStringSet&lt; StringIterator, OffsetIterator &gt;</a>
+: <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string__set.html#a92ad40deb19185ab194b9cf1178019a2">nvbio::aln::trivial_quality_string_set</a>
+, <a class="el" href="structnvbio_1_1_strided_string_set.html#aeb250117d48ed22980199ca004fb1590">nvbio::StridedStringSet&lt; StringIterator, LengthIterator &gt;</a>
 , <a class="el" href="structnvbio_1_1_transform_string_set.html#a506f51d8545fb0381cba8f3f5d729650">nvbio::TransformStringSet&lt; StringSet, StringTransform &gt;</a>
 , <a class="el" href="structnvbio_1_1_suffix_core_3_01_string_type_00_01_coord_type_00_011u_01_4.html#a8ba6e3c4f582ecd5d6342fc37df2fc47">nvbio::SuffixCore&lt; StringType, CoordType, 1u &gt;</a>
+, <a class="el" href="structnvbio_1_1_prefix.html#a28d6edad5f07cec80714170e6c8e9872">nvbio::Prefix&lt; StringType, CoordType &gt;</a>
+, <a class="el" href="structnvbio_1_1_sparse_string_set.html#ab39da675b727f1a3b803a7c3571ed39d">nvbio::SparseStringSet&lt; StringIterator, RangeIterator &gt;</a>
+, <a class="el" href="structnvbio_1_1_prefix_set_core_3_01_sequence_type_00_01_prefix_iterator_00_011u_01_4.html#a6cf9819a2f0bad58a876a38c8ac5c8a9">nvbio::PrefixSetCore&lt; SequenceType, PrefixIterator, 1u &gt;</a>
+, <a class="el" href="structnvbio_1_1string__iterator.html#ab3f261b63deaca8d491febcec1c9229b">nvbio::string_iterator&lt; StringType &gt;</a>
+, <a class="el" href="structnvbio_1_1_prefix_set_core_3_01_sequence_type_00_01_prefix_iterator_00_012u_01_4.html#ab647d6172040a8c10141ddbb8c79bf08">nvbio::PrefixSetCore&lt; SequenceType, PrefixIterator, 2u &gt;</a>
+, <a class="el" href="structnvbio_1_1_string_prefetcher.html#ae767ba0dea37517ec8a6ba0eac18b9c6">nvbio::StringPrefetcher&lt; StringType, CacheTag &gt;</a>
+, <a class="el" href="structnvbio_1_1_prefix_core_3_01_string_type_00_01_coord_type_00_011u_01_4.html#a43a51bb142c857d364563ce2b198aa92">nvbio::PrefixCore&lt; StringType, CoordType, 1u &gt;</a>
+, <a class="el" href="structnvbio_1_1_infix_set_core_3_01_sequence_type_00_01_infix_iterator_00_014u_01_4.html#adfc296bfc070cfe6330e8ac65380d0ea">nvbio::InfixSetCore&lt; SequenceType, InfixIterator, 4u &gt;</a>
+, <a class="el" href="structnvbio_1_1_string_prefetcher_3_01vector__view_3_01_packed_stream_3_01_storage_iterator_00_00f3bb135ec59bb62595265176042b5b0.html#a95b20e20ccace2a8ab0091e848dba0de">nvbio::StringPrefetcher&lt; vector_view&lt; PackedStream&lt; StorageIterator, uint8, SYMBOL_SIZE_T, BIG_ENDIAN_T &gt; &gt;, lmem_cache_tag&lt; CACHE_SIZE &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1_infix_core_3_01_string_type_00_01_coord_type_00_012u_01_4.html#ab2ddb187e8b7eeb43104c40481d06fd5">nvbio::InfixCore&lt; StringType, CoordType, 2u &gt;</a>
+, <a class="el" href="structnvbio_1_1_string_prefetcher_3_01_infix_3_01_packed_stream_3_01_storage_iterator_00_01uint8e9a31f95d7f572943e276df0b7f0363a.html#ac183a57c9a1a46e5df7046aa1decc9da">nvbio::StringPrefetcher&lt; Infix&lt; PackedStream&lt; StorageIterator, uint8, SYMBOL_SIZE_T, BIG_ENDIAN_T &gt;, InfixCoordType &gt;, lmem_cache_tag&lt; CACHE_SIZE &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1_infix.html#a314a9d51842158ba397cb222431d6c29">nvbio::Infix&lt; StringType, CoordType &gt;</a>
+, <a class="el" href="structnvbio_1_1vectorized__string_3_01vector__view_3_01const_01_t_01_5_00_01_index_type_01_4_01_4.html#aa8553bb5f82f13f004c676ed2bda57e4">nvbio::vectorized_string&lt; vector_view&lt; const T *, IndexType &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1_sequence_stream_loader.html#a233e1eaec140606351974db6cd332187">nvbio::SequenceStreamLoader&lt; SequenceDataT, Tag &gt;</a>
+, <a class="el" href="structnvbio_1_1string__set__qgram__functor.html#ad32e2ad2fe7b19313d32dc188e17a317">nvbio::string_set_qgram_functor&lt; string_set_type &gt;</a>
+, <a class="el" href="structnvbio_1_1_read_loader.html#ab3b6f04ab17846ddbd732bdef8344f5b">nvbio::ReadLoader&lt; SequenceDataT, Tag &gt;</a>
+, <a class="el" href="structnvbio_1_1_infix_core_3_01_string_type_00_01_coord_type_00_014u_01_4.html#a6f7ab8f759b6ab6e12b1b48e958eaac6">nvbio::InfixCore&lt; StringType, CoordType, 4u &gt;</a>
+, <a class="el" href="structnvbio_1_1_infix_set_core_3_01_sequence_type_00_01_infix_iterator_00_012u_01_4.html#a54af90952fe542203ee7e6260ab26e2c">nvbio::InfixSetCore&lt; SequenceType, InfixIterator, 2u &gt;</a>
+, <a class="el" href="structnvbio_1_1_infix_set.html#a93a44b11e3ff8548abb7b7aeb967e071">nvbio::InfixSet&lt; SequenceType, InfixIterator &gt;</a>
+, <a class="el" href="structnvbio_1_1_string_prefetcher_3_01vector__view_3_01_t_01_5_01_4_00_01lmem__cache__tag_3_01_c_a_c_h_e___s_i_z_e_01_4_01_4.html#a56ce7763f179b43e80f4abdcebc9741e">nvbio::StringPrefetcher&lt; vector_view&lt; T * &gt;, lmem_cache_tag&lt; CACHE_SIZE &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1_string_prefetcher_3_01_infix_3_01vector__view_3_01_packed_stream_3_01_storage_it90896505d6936a26b3731f6a0dab7be2.html#a37f94dee53386a3d54db4243b0c80966">nvbio::StringPrefetcher&lt; Infix&lt; vector_view&lt; PackedStream&lt; StorageIterator, uint8, SYMBOL_SIZE_T, BIG_ENDIAN_T &gt; &gt;, InfixCoordType &gt;, lmem_cache_tag&lt; CACHE_SIZE &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1_string_prefetcher_3_01vector__view_3_01const_01_t_01_5_01_4_00_01lmem__cache__ta358bf8959021f7ac71c7cb7a09c94983.html#a8eb9f4b5e59529ff8fc9d28a7b51399a">nvbio::StringPrefetcher&lt; vector_view&lt; const T * &gt;, lmem_cache_tag&lt; CACHE_SIZE &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1_prefix_core_3_01_string_type_00_01_coord_type_00_012u_01_4.html#a79f12a9045e45b14c119a31005dc0fe0">nvbio::PrefixCore&lt; StringType, CoordType, 2u &gt;</a>
+, <a class="el" href="structnvbio_1_1_prefix_set.html#a52478aab5d8a150b1f62d4088be2616e">nvbio::PrefixSet&lt; SequenceType, PrefixIterator &gt;</a>
+, <a class="el" href="structnvbio_1_1_concatenated_string_set.html#a20b2051d16469e3cadbb7f301fe80dfe">nvbio::ConcatenatedStringSet&lt; StringIterator, OffsetIterator &gt;</a>
+, <a class="el" href="structnvbio_1_1_strided_packed_string_set.html#a4e36a7f99dfc07c87e47e5f0552cdbc6">nvbio::StridedPackedStringSet&lt; StreamIterator, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, LengthIterator &gt;</a>
 , <a class="el" href="structnvbio_1_1_suffix_core_3_01_string_type_00_01_coord_type_00_012u_01_4.html#ae526aad254b5ccb18401272bf63bb877">nvbio::SuffixCore&lt; StringType, CoordType, 2u &gt;</a>
-, <a class="el" href="structnvbio_1_1_suffix_set_core_3_01_sequence_type_00_01_suffix_iterator_00_011u_01_4.html#a279bd5a01b990a29d92c34710347a3d4">nvbio::SuffixSetCore&lt; SequenceType, SuffixIterator, 1u &gt;</a>
-, <a class="el" href="structnvbio_1_1_sorted_dictionary_suffix_trie.html#a80d85d59a1e03bdd5c168ed2b93ee2cc">nvbio::SortedDictionarySuffixTrie&lt; ALPHABET_SIZE_T, Iterator &gt;</a>
 , <a class="el" href="structnvbio_1_1_suffix.html#ae479667e43af2f64327ed00fd0184b11">nvbio::Suffix&lt; StringType, CoordType &gt;</a>
+, <a class="el" href="structnvbio_1_1_suffix_set_core_3_01_sequence_type_00_01_suffix_iterator_00_011u_01_4.html#a279bd5a01b990a29d92c34710347a3d4">nvbio::SuffixSetCore&lt; SequenceType, SuffixIterator, 1u &gt;</a>
+, <a class="el" href="structnvbio_1_1_suffix_set.html#aeeca1d9c625d6dc73784a6abbe7448a5">nvbio::SuffixSet&lt; SequenceType, SuffixIterator &gt;</a>
 , <a class="el" href="structnvbio_1_1priv_1_1string__suffix__word__functor_3_01_s_y_m_b_o_l___s_i_z_e_00_01_w_o_r_d___af1d7fb42ac84d721634051864dc80bd.html#a1af74aa24d7f3cd7e342870e782074af">nvbio::priv::string_suffix_word_functor&lt; SYMBOL_SIZE, WORD_BITS, DOLLAR_BITS, PackedStream&lt; storage_type, symbol_type, SYMBOL_SIZE, true, index_type &gt;, word_type &gt;</a>
 , <a class="el" href="structnvbio_1_1_suffix_set_core_3_01_sequence_type_00_01_suffix_iterator_00_012u_01_4.html#a56724a4d494e135a25483403fb37ad8c">nvbio::SuffixSetCore&lt; SequenceType, SuffixIterator, 2u &gt;</a>
-, <a class="el" href="structnvbio_1_1_suffix_set.html#aeeca1d9c625d6dc73784a6abbe7448a5">nvbio::SuffixSet&lt; SequenceType, SuffixIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_prefix_set.html#a52478aab5d8a150b1f62d4088be2616e">nvbio::PrefixSet&lt; SequenceType, PrefixIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_strided_string_set.html#aeb250117d48ed22980199ca004fb1590">nvbio::StridedStringSet&lt; StringIterator, LengthIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_sparse_string_set.html#ab39da675b727f1a3b803a7c3571ed39d">nvbio::SparseStringSet&lt; StringIterator, RangeIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_strided_packed_string_set.html#a4e36a7f99dfc07c87e47e5f0552cdbc6">nvbio::StridedPackedStringSet&lt; StreamIterator, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, LengthIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_string_prefetcher_3_01vector__view_3_01_packed_stream_3_01_storage_iterator_00_00f3bb135ec59bb62595265176042b5b0.html#a95b20e20ccace2a8ab0091e848dba0de">nvbio::StringPrefetcher&lt; vector_view&lt; PackedStream&lt; StorageIterator, uint8, SYMBOL_SIZE_T, BIG_ENDIAN_T &gt; &gt;, lmem_cache_tag&lt; CACHE_SIZE &gt; &gt;</a>
-, <a class="el" href="structnvbio_1_1_prefix_set_core_3_01_sequence_type_00_01_prefix_iterator_00_011u_01_4.html#a6cf9819a2f0bad58a876a38c8ac5c8a9">nvbio::PrefixSetCore&lt; SequenceType, PrefixIterator, 1u &gt;</a>
-, <a class="el" href="structnvbio_1_1_prefix_core_3_01_string_type_00_01_coord_type_00_012u_01_4.html#a79f12a9045e45b14c119a31005dc0fe0">nvbio::PrefixCore&lt; StringType, CoordType, 2u &gt;</a>
-, <a class="el" href="structnvbio_1_1string__set__qgram__functor.html#ad32e2ad2fe7b19313d32dc188e17a317">nvbio::string_set_qgram_functor&lt; string_set_type &gt;</a>
-, <a class="el" href="structnvbio_1_1_infix_set_core_3_01_sequence_type_00_01_infix_iterator_00_012u_01_4.html#a54af90952fe542203ee7e6260ab26e2c">nvbio::InfixSetCore&lt; SequenceType, InfixIterator, 2u &gt;</a>
-, <a class="el" href="structnvbio_1_1_infix_core_3_01_string_type_00_01_coord_type_00_014u_01_4.html#a6f7ab8f759b6ab6e12b1b48e958eaac6">nvbio::InfixCore&lt; StringType, CoordType, 4u &gt;</a>
-, <a class="el" href="structnvbio_1_1_infix.html#a314a9d51842158ba397cb222431d6c29">nvbio::Infix&lt; StringType, CoordType &gt;</a>
-, <a class="el" href="structnvbio_1_1_read_loader.html#ab3b6f04ab17846ddbd732bdef8344f5b">nvbio::ReadLoader&lt; SequenceDataT, Tag &gt;</a>
+, <a class="el" href="structnvbio_1_1_sorted_dictionary_suffix_trie.html#a80d85d59a1e03bdd5c168ed2b93ee2cc">nvbio::SortedDictionarySuffixTrie&lt; ALPHABET_SIZE_T, Iterator &gt;</a>
+, <a class="el" href="structnvbio_1_1vectorized__string_3_01const_01char_01_5_01_4.html#a9b335b223dc775b7b7811a17d3ea3a42">nvbio::vectorized_string&lt; const char * &gt;</a>
+, <a class="el" href="structnvbio_1_1vectorized__string_3_01vector__view_3_01_packed_stream_3_01_input_stream_00_01_sy0d57524e4504f97a479e638aa48536f4.html#aa192a3a1232e0aba0045fdb04564c18f">nvbio::vectorized_string&lt; vector_view&lt; PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt; &gt;</a>
 </li>
 <li>StringBWTHandler()
 : <a class="el" href="structnvbio_1_1_string_b_w_t_handler.html#a15df95d50b4401147e316500bb3df64b">nvbio::StringBWTHandler&lt; string_type, output_iterator &gt;</a>
@@ -1633,12 +1645,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1_string_b_w_t_s_s_a_handler.html#a1322a67609a0e071ff2dad45a2cfac71">nvbio::StringBWTSSAHandler&lt; string_type, output_bwt_iterator, output_ssa_iterator &gt;</a>
 </li>
 <li>strings
-: <a class="el" href="structnvbio_1_1aln_1_1_staged_alignment_unit_base.html#a9d5947622f958e83b62c2b0e1c8a4136">nvbio::aln::StagedAlignmentUnitBase&lt; stream_type, derived_type &gt;</a>
-, <a class="el" href="structstring__alloc__t.html#a860121dd8ffd8a79770c4c7ca2ff2cd8">string_alloc_t</a>
+: <a class="el" href="structstring__alloc__t.html#a860121dd8ffd8a79770c4c7ca2ff2cd8">string_alloc_t</a>
+, <a class="el" href="structnvbio_1_1aln_1_1_staged_alignment_unit_base.html#a9d5947622f958e83b62c2b0e1c8a4136">nvbio::aln::StagedAlignmentUnitBase&lt; stream_type, derived_type &gt;</a>
 </li>
 <li>strings_type
-: <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a6532dafa80d7cbfdc57205871092f7dc">nvbio::bowtie2::cuda::detail::AlignmentStreamBase&lt; TYPE, AlignerType, PipelineType &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1_staged_alignment_unit_base.html#aadd5bbf8f2e12c3de5c146ed92e29649">nvbio::aln::StagedAlignmentUnitBase&lt; stream_type, derived_type &gt;</a>
+: <a class="el" href="structnvbio_1_1aln_1_1_staged_alignment_unit_base.html#aadd5bbf8f2e12c3de5c146ed92e29649">nvbio::aln::StagedAlignmentUnitBase&lt; stream_type, derived_type &gt;</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1detail_1_1_alignment_stream_base.html#a6532dafa80d7cbfdc57205871092f7dc">nvbio::bowtie2::cuda::detail::AlignmentStreamBase&lt; TYPE, AlignerType, PipelineType &gt;</a>
 </li>
 <li>StringSetIterator()
 : <a class="el" href="structnvbio_1_1_string_set_iterator.html#a26cd7f51870948bd95d2f99a6512ad80">nvbio::StringSetIterator&lt; StringSetType &gt;</a>
@@ -1660,26 +1672,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structcram__codec.html#aaf31a6b4822c2e356c78178641045bba">cram_codec</a>
 </li>
 <li>subgraph_n_nodes
-: <a class="el" href="structdebruijn__graph_1_1view.html#a43199c92cffcf2737010774373cfc1dd">debruijn_graph::view</a>
-, <a class="el" href="structdebruijn__graph.html#a9b60d5658235f58e3af05cbe831ede31">debruijn_graph</a>
+: <a class="el" href="structdebruijn__graph.html#a9b60d5658235f58e3af05cbe831ede31">debruijn_graph</a>
+, <a class="el" href="structdebruijn__graph_1_1view.html#a43199c92cffcf2737010774373cfc1dd">debruijn_graph::view</a>
 </li>
 <li>subgraph_sink_ids
-: <a class="el" href="structdebruijn__graph_1_1view.html#ae29a3bd68f4b55d78e6bd9baf1559650">debruijn_graph::view</a>
-, <a class="el" href="structdebruijn__graph.html#ab870458de8fe34fb10aed4c99ef3b473">debruijn_graph</a>
+: <a class="el" href="structdebruijn__graph.html#ab870458de8fe34fb10aed4c99ef3b473">debruijn_graph</a>
+, <a class="el" href="structdebruijn__graph_1_1view.html#ae29a3bd68f4b55d78e6bd9baf1559650">debruijn_graph::view</a>
 </li>
 <li>subgraph_source_ids
-: <a class="el" href="structdebruijn__graph_1_1view.html#a754d20655fb2f6122ba383f07fe86f62">debruijn_graph::view</a>
-, <a class="el" href="structdebruijn__graph.html#a362e017b7cbc03bffcd21b9e567265f3">debruijn_graph</a>
+: <a class="el" href="structdebruijn__graph.html#a362e017b7cbc03bffcd21b9e567265f3">debruijn_graph</a>
+, <a class="el" href="structdebruijn__graph_1_1view.html#a754d20655fb2f6122ba383f07fe86f62">debruijn_graph::view</a>
 </li>
 <li>submatrix_storage()
-: <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback_3_01_c_h_e_c_k_p_o_i_n_t_s_00_01stream__type_e816adbf5880de2a7fcabf42808ba443.html#a5cd4820454660cd150d6ddece4991d70">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_traceback_3_01_b_a_n_d___l_e_n_00_01_c_h_e_c_k_pdd42a2f4700aad7eacd1d840a49ae8fc.html#ac5461ad75a32807182ee98b7112a8279">nvbio::aln::BatchedBandedAlignmentTraceback&lt; BAND_LEN, CHECKPOINTS, stream_type, DeviceThreadScheduler &gt;</a>
+: <a class="el" href="structnvbio_1_1aln_1_1_batched_banded_alignment_traceback_3_01_b_a_n_d___l_e_n_00_01_c_h_e_c_k_pdd42a2f4700aad7eacd1d840a49ae8fc.html#ac5461ad75a32807182ee98b7112a8279">nvbio::aln::BatchedBandedAlignmentTraceback&lt; BAND_LEN, CHECKPOINTS, stream_type, DeviceThreadScheduler &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1_batched_alignment_traceback_3_01_c_h_e_c_k_p_o_i_n_t_s_00_01stream__type_e816adbf5880de2a7fcabf42808ba443.html#a5cd4820454660cd150d6ddece4991d70">nvbio::aln::BatchedAlignmentTraceback&lt; CHECKPOINTS, stream_type, DeviceThreadBlockScheduler&lt; BLOCKDIM, MINBLOCKS &gt; &gt;</a>
 </li>
-<li>subs
-: <a class="el" href="structnvbio_1_1io_1_1_debug_output_1_1_dbg_info.html#a8bdeefc5106d536d22970453a54ca931">nvbio::io::DebugOutput::DbgInfo</a>
+<li>subs()
+: <a class="el" href="structnvbio_1_1alndiff_1_1_alignment_pair.html#a80b8218b29a7119bc2735b7de5516954">nvbio::alndiff::AlignmentPair</a>
 , <a class="el" href="structnvbio_1_1alndiff_1_1_debug_alignment_stream_1_1_info.html#ad0f72b9c42033a437662c4322296c869">nvbio::alndiff::DebugAlignmentStream::Info</a>
-, <a class="el" href="structnvbio_1_1alndiff_1_1_alignment_pair.html#a80b8218b29a7119bc2735b7de5516954">nvbio::alndiff::AlignmentPair</a>
 , <a class="el" href="structnvbio_1_1alndiff_1_1_alignment.html#a2c3254eb0b2373f155520ee915b284ee">nvbio::alndiff::Alignment</a>
+, <a class="el" href="structnvbio_1_1io_1_1_debug_output_1_1_dbg_info.html#a8bdeefc5106d536d22970453a54ca931">nvbio::io::DebugOutput::DbgInfo</a>
 </li>
 <li>subseed_len
 : <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params_p_o_d.html#a808b605ff834329a87c41d4bcae5d9b3">nvbio::bowtie2::cuda::ParamsPOD</a>
@@ -1687,22 +1699,29 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>SUBSTITUTION
 : <a class="el" href="structnvbio_1_1io_1_1_cigar.html#a0c549ffa01df8c620c7f13a3ac69b7bdab05be4ba1c66e22db8baca025c0c012a">nvbio::io::Cigar</a>
 </li>
+<li>substitution()
+: <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_smith_waterman_scoring_scheme.html#a7096db10093463eda3b8d8cb3305ca34">nvbio::bowtie2::cuda::SmithWatermanScoringScheme&lt; MMCost, NCost &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1_simple_gotoh_scheme.html#a52ad166bdd18291fdb2b934a1ebfbe8e">nvbio::aln::SimpleGotohScheme</a>
+</li>
 <li>substitution_matrix
 : <a class="el" href="structcram__block__compression__hdr.html#aec394e27b082b9b27aa036d9d6b923b6">cram_block_compression_hdr</a>
 </li>
 <li>substring_wrapper()
 : <a class="el" href="classdivsufsortxx_1_1substring_1_1substring__wrapper.html#ae6f30554811191ed76037e8573530020">divsufsortxx::substring::substring_wrapper&lt; StringIterator_type, PAIterator_type &gt;</a>
 </li>
+<li>SUBWORD_SIZE
+: <a class="el" href="structnvbio_1_1forward__packer_3_01_b_i_g___e_n_d_i_a_n_00_01_s_y_m_b_o_l___s_i_z_e_00_01_symbol3da5cf6eab383b28054647b91d5aea50.html#aa425ee1fc90622d22b3c825d4e113a6e">nvbio::forward_packer&lt; BIG_ENDIAN, SYMBOL_SIZE, Symbol, InputStream, IndexType, uint4 &gt;</a>
+</li>
 <li>Suffix()
-: <a class="el" href="structnvbio_1_1_suffix.html#ac4b1eb7a59c2cb3388f900c22fc6ec93">nvbio::Suffix&lt; StringType, CoordType &gt;</a>
+: <a class="el" href="structnvbio_1_1_suffix.html#a4341469440f37891f368cc42277b7c25">nvbio::Suffix&lt; StringType, CoordType &gt;</a>
 </li>
 <li>suffix_array_type
 : <a class="el" href="structnvbio_1_1fm__index.html#ac27ff3f622f5b56bf89341b1d028d409">nvbio::fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;</a>
 </li>
 <li>suffix_bucketer
 : <a class="el" href="structnvbio_1_1cuda_1_1_host_b_w_t_config_g_p_u_bucketer.html#a84c411b1f198ed0340ffb67ce7b1dade">nvbio::cuda::HostBWTConfigGPUBucketer&lt; BUCKETING_BITS_T, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
-, <a class="el" href="structnvbio_1_1cuda_1_1_device_b_w_t_config.html#a8a045e03bb81a789f0d1611d78d1ef57">nvbio::cuda::DeviceBWTConfig&lt; BUCKETING_BITS_T, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
 , <a class="el" href="structnvbio_1_1cuda_1_1_host_b_w_t_config_c_p_u_bucketer.html#a3fa72a01adc240564fe648475cebca1d">nvbio::cuda::HostBWTConfigCPUBucketer&lt; BUCKETING_BITS_T, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
+, <a class="el" href="structnvbio_1_1cuda_1_1_device_b_w_t_config.html#a8a045e03bb81a789f0d1611d78d1ef57">nvbio::cuda::DeviceBWTConfig&lt; BUCKETING_BITS_T, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
 </li>
 <li>suffix_bucketer_type
 : <a class="el" href="structnvbio_1_1cuda_1_1_large_b_w_t_skeleton.html#a8b7d2a9ea4e8dce92381c6aed65b8e27">nvbio::cuda::LargeBWTSkeleton&lt; ConfigType, SYMBOL_SIZE, BIG_ENDIAN, storage_type &gt;</a>
@@ -1712,27 +1731,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>suffix_iterator
 : <a class="el" href="structnvbio_1_1_suffix_set_core_3_01_sequence_type_00_01_suffix_iterator_00_011u_01_4.html#a80f028dd701748da1fbe7be544f52a4e">nvbio::SuffixSetCore&lt; SequenceType, SuffixIterator, 1u &gt;</a>
-, <a class="el" href="structnvbio_1_1_suffix_set.html#a7f533d6e53caae5cb77cdf4828b43e8c">nvbio::SuffixSet&lt; SequenceType, SuffixIterator &gt;</a>
 , <a class="el" href="structnvbio_1_1_suffix_set_core_3_01_sequence_type_00_01_suffix_iterator_00_012u_01_4.html#ab27d573c014d0d0e1e1496a1ac39dd92">nvbio::SuffixSetCore&lt; SequenceType, SuffixIterator, 2u &gt;</a>
+, <a class="el" href="structnvbio_1_1_suffix_set.html#a7f533d6e53caae5cb77cdf4828b43e8c">nvbio::SuffixSet&lt; SequenceType, SuffixIterator &gt;</a>
 </li>
 <li>suffix_kmer_ids
-: <a class="el" href="structnum__adj__repeats.html#afc9abcbfde3d46d7dd3269ea51b315e8">num_adj_repeats</a>
-, <a class="el" href="structnum__non__overlapped__repeats.html#a7a3bf63fe1878f9f509e9e50de2f9f52">num_non_overlapped_repeats</a>
+: <a class="el" href="structnum__non__overlapped__repeats.html#a7a3bf63fe1878f9f509e9e50de2f9f52">num_non_overlapped_repeats</a>
+, <a class="el" href="structnum__adj__repeats.html#afc9abcbfde3d46d7dd3269ea51b315e8">num_adj_repeats</a>
 </li>
 <li>suffix_offset_functor()
 : <a class="el" href="structnvbio_1_1priv_1_1suffix__offset__functor.html#aa5a8101a8dfd387899b6b99f2cd624c0">nvbio::priv::suffix_offset_functor</a>
 </li>
 <li>suffix_uids
 : <a class="el" href="structextract__non__overlapped__repeats.html#a57db7775a91651a71b24ad2529ccd9d7">extract_non_overlapped_repeats&lt; string_set_type &gt;</a>
-, <a class="el" href="structextract__repeat__adjacencies.html#af7db9158004c431092961228d0d07bd3">extract_repeat_adjacencies</a>
-, <a class="el" href="structextract__super__kmers__functor.html#ac86d7ed4685975490eebdc5ab36c1ff5">extract_super_kmers_functor&lt; string_set_type &gt;</a>
 , <a class="el" href="structextract__unique__adjacencies.html#ad921905fd09fa59a0e47287c5cde3d98">extract_unique_adjacencies</a>
+, <a class="el" href="structextract__super__kmers__functor.html#ac86d7ed4685975490eebdc5ab36c1ff5">extract_super_kmers_functor&lt; string_set_type &gt;</a>
+, <a class="el" href="structextract__repeat__adjacencies.html#af7db9158004c431092961228d0d07bd3">extract_repeat_adjacencies</a>
 </li>
 <li>SuffixCore()
 : <a class="el" href="structnvbio_1_1_suffix_core_3_01_string_type_00_01_coord_type_00_012u_01_4.html#a6403c869b038b445087ff8b46bf2b50b">nvbio::SuffixCore&lt; StringType, CoordType, 2u &gt;</a>
-, <a class="el" href="structnvbio_1_1_suffix_core_3_01_string_type_00_01_coord_type_00_011u_01_4.html#a5d0cf24ec71897c2cb2848fac5e2b652">nvbio::SuffixCore&lt; StringType, CoordType, 1u &gt;</a>
-, <a class="el" href="structnvbio_1_1_suffix_core_3_01_string_type_00_01_coord_type_00_012u_01_4.html#ac0461a3be74e17849d6351df16ce59e1">nvbio::SuffixCore&lt; StringType, CoordType, 2u &gt;</a>
 , <a class="el" href="structnvbio_1_1_suffix_core_3_01_string_type_00_01_coord_type_00_011u_01_4.html#a40e4aef27e99e6bf9c752b53d1264390">nvbio::SuffixCore&lt; StringType, CoordType, 1u &gt;</a>
+, <a class="el" href="structnvbio_1_1_suffix_core_3_01_string_type_00_01_coord_type_00_012u_01_4.html#ac0461a3be74e17849d6351df16ce59e1">nvbio::SuffixCore&lt; StringType, CoordType, 2u &gt;</a>
 </li>
 <li>suffixes
 : <a class="el" href="structnvbio_1_1priv_1_1_device_core_set_suffix_bucketer.html#a28b1ef51b5dcff4e5d17598e89fe72b1">nvbio::priv::DeviceCoreSetSuffixBucketer&lt; SYMBOL_SIZE, N_BITS, DOLLAR_BITS, bucket_type &gt;</a>
@@ -1741,10 +1759,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1_suffix_set.html#aae43b888e2f1c2554e9f8193254626c8">nvbio::SuffixSet&lt; SequenceType, SuffixIterator &gt;</a>
 </li>
 <li>SuffixSetCore()
-: <a class="el" href="structnvbio_1_1_suffix_set_core_3_01_sequence_type_00_01_suffix_iterator_00_011u_01_4.html#a3ada1a5d31f42bdb2e9460286f4a3b1d">nvbio::SuffixSetCore&lt; SequenceType, SuffixIterator, 1u &gt;</a>
-, <a class="el" href="structnvbio_1_1_suffix_set_core_3_01_sequence_type_00_01_suffix_iterator_00_012u_01_4.html#a7e1b9089d382f859307b6484dc5c4e1c">nvbio::SuffixSetCore&lt; SequenceType, SuffixIterator, 2u &gt;</a>
-, <a class="el" href="structnvbio_1_1_suffix_set_core_3_01_sequence_type_00_01_suffix_iterator_00_011u_01_4.html#a668a4daa514cafb47b247777c4240c04">nvbio::SuffixSetCore&lt; SequenceType, SuffixIterator, 1u &gt;</a>
-, <a class="el" href="structnvbio_1_1_suffix_set_core_3_01_sequence_type_00_01_suffix_iterator_00_012u_01_4.html#a305b40b4dae4eac91bdf1dbbb8444e07">nvbio::SuffixSetCore&lt; SequenceType, SuffixIterator, 2u &gt;</a>
+: <a class="el" href="structnvbio_1_1_suffix_set_core_3_01_sequence_type_00_01_suffix_iterator_00_012u_01_4.html#a7e1b9089d382f859307b6484dc5c4e1c">nvbio::SuffixSetCore&lt; SequenceType, SuffixIterator, 2u &gt;</a>
+, <a class="el" href="structnvbio_1_1_suffix_set_core_3_01_sequence_type_00_01_suffix_iterator_00_011u_01_4.html#a3ada1a5d31f42bdb2e9460286f4a3b1d">nvbio::SuffixSetCore&lt; SequenceType, SuffixIterator, 1u &gt;</a>
 </li>
 <li>SuffixTrie()
 : <a class="el" href="structnvbio_1_1_suffix_trie.html#a9a49899fd30d7fa27cabdd9d72f0a313">nvbio::SuffixTrie&lt; ALPHABET_SIZE_T, NodeIterator &gt;</a>
@@ -1759,10 +1775,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structsuper__coord__to__seq.html#ace332964e3a1e3c5cddbee284c679f12">super_coord_to_seq&lt; string_set_type &gt;</a>
 </li>
 <li>super_coords
-: <a class="el" href="struct_d___kmer_set.html#a2423ad8b1e2a8a6e4eaa2d9f4141dba1">D_KmerSet&lt; string_set_type &gt;</a>
+: <a class="el" href="structextract__super__kmers__functor.html#a9d38cdc419424680e8dee1d7d1d55f88">extract_super_kmers_functor&lt; string_set_type &gt;</a>
 , <a class="el" href="structextract__non__overlapped__repeats.html#ada0994f6f2677ff98fd69b2a399c78ff">extract_non_overlapped_repeats&lt; string_set_type &gt;</a>
+, <a class="el" href="struct_d___kmer_set.html#a2423ad8b1e2a8a6e4eaa2d9f4141dba1">D_KmerSet&lt; string_set_type &gt;</a>
 , <a class="el" href="structsuper__coord__to__seq.html#a40e553ab1016904e11398ff13ee26333">super_coord_to_seq&lt; string_set_type &gt;</a>
-, <a class="el" href="structextract__super__kmers__functor.html#a9d38cdc419424680e8dee1d7d1d55f88">extract_super_kmers_functor&lt; string_set_type &gt;</a>
 </li>
 <li>super_prefix_global_ids
 : <a class="el" href="structextract__non__overlapped__repeats.html#a13ca521d947f2b3b1723bc58fa8d472f">extract_non_overlapped_repeats&lt; string_set_type &gt;</a>
@@ -1780,23 +1796,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_uber_scoring_scheme.html#aa5aaf10271369e7fc29b23d5be5ed3c6">nvbio::bowtie2::cuda::UberScoringScheme</a>
 </li>
 <li>swap()
-: <a class="el" href="structnvbio_1_1_device_vector_array.html#acd1e7981d964c93ef662e4dd920ac201">nvbio::DeviceVectorArray&lt; T &gt;</a>
-, <a class="el" href="structnvbio_1_1_host_vector_array.html#aab3f1843cc5af24dbd71862c211fed7e">nvbio::HostVectorArray&lt; T &gt;</a>
-, <a class="el" href="classnvbio_1_1_shared_pointer.html#a8607e08799acf56afa33713935d63157">nvbio::SharedPointer&lt; T, CounterT &gt;</a>
-, <a class="el" href="classnvbio_1_1_weak_pointer.html#a780414a2ae02b52076320859f4e18cf5">nvbio::WeakPointer&lt; T, CounterT &gt;</a>
-, <a class="el" href="group___priority_deques.html#gaa6dd74ea790d6b6af557b68b67adea09">nvbio::priority_deque&lt; Type, Sequence, Compare &gt;</a>
+: <a class="el" href="classnvbio_1_1_weak_pointer.html#a780414a2ae02b52076320859f4e18cf5">nvbio::WeakPointer&lt; T, CounterT &gt;</a>
 , <a class="el" href="classboost_1_1container_1_1priority__deque.html#aa6dd74ea790d6b6af557b68b67adea09">boost::container::priority_deque&lt; Type, Sequence, Compare &gt;</a>
-, <a class="el" href="classmgpu_1_1intrusive__ptr.html#acbab356b9f7d984d3e945bd3f65b857f">mgpu::intrusive_ptr&lt; T &gt;</a>
-, <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#a3c5184609b6ecab3bf9f48c38abdec54">nvbio::cuda::PingPongQueues&lt; T &gt;</a>
-, <a class="el" href="classnvbio_1_1internals_1_1_shared_count.html#acf0a85617c161e0ae2f47e6370219a7f">nvbio::internals::SharedCount&lt; CounterT &gt;</a>
-, <a class="el" href="classnvbio_1_1internals_1_1_weak_count.html#ae24946bf75ae5ab5c27b97377630ead4">nvbio::internals::WeakCount&lt; CounterT &gt;</a>
+, <a class="el" href="group___priority_deques.html#gaa6dd74ea790d6b6af557b68b67adea09">nvbio::priority_deque&lt; Type, Sequence, Compare &gt;</a>
+, <a class="el" href="classnvbio_1_1_shared_pointer.html#a8607e08799acf56afa33713935d63157">nvbio::SharedPointer&lt; T, CounterT &gt;</a>
+, <a class="el" href="structnvbio_1_1_device_vector_array.html#acd1e7981d964c93ef662e4dd920ac201">nvbio::DeviceVectorArray&lt; T &gt;</a>
 </li>
 <li>Swap()
 : <a class="el" href="classmgpu_1_1_cuda_event.html#a54aa544b8bf08179f40fc14cc5313294">mgpu::CudaEvent</a>
 </li>
 <li>swap()
-: <a class="el" href="classboost_1_1container_1_1priority__deque.html#aacfaa31584ed11b1cfddd20fea7827c3">boost::container::priority_deque&lt; Type, Sequence, Compare &gt;</a>
+: <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#a3c5184609b6ecab3bf9f48c38abdec54">nvbio::cuda::PingPongQueues&lt; T &gt;</a>
 , <a class="el" href="group___priority_deques.html#ga2d885860ab0f595225432e1d6846d673">nvbio::priority_deque&lt; Type, Sequence, Compare &gt;</a>
+, <a class="el" href="classnvbio_1_1internals_1_1_shared_count.html#acf0a85617c161e0ae2f47e6370219a7f">nvbio::internals::SharedCount&lt; CounterT &gt;</a>
+, <a class="el" href="classmgpu_1_1intrusive__ptr.html#acbab356b9f7d984d3e945bd3f65b857f">mgpu::intrusive_ptr&lt; T &gt;</a>
+, <a class="el" href="classnvbio_1_1internals_1_1_weak_count.html#ae24946bf75ae5ab5c27b97377630ead4">nvbio::internals::WeakCount&lt; CounterT &gt;</a>
+, <a class="el" href="classboost_1_1container_1_1priority__deque.html#aacfaa31584ed11b1cfddd20fea7827c3">boost::container::priority_deque&lt; Type, Sequence, Compare &gt;</a>
+, <a class="el" href="structnvbio_1_1_host_vector_array.html#aab3f1843cc5af24dbd71862c211fed7e">nvbio::HostVectorArray&lt; T &gt;</a>
 </li>
 <li>SWCheckpointContext()
 : <a class="el" href="structnvbio_1_1aln_1_1priv_1_1_s_w_checkpoint_context.html#a88b2f3e5bd57a216ebd318327c094260">nvbio::aln::priv::SWCheckpointContext&lt; BAND_LEN, TYPE, CHECKPOINTS, checkpoint_type &gt;</a>
@@ -1814,37 +1830,40 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1_packed_stream_ref.html#a0cd7ca02374620eaccebffca21cca474">nvbio::PackedStreamRef&lt; Stream &gt;</a>
 </li>
 <li>SYMBOL_COUNT
-: <a class="el" href="structnvbio_1_1copy__merge__pages.html#aeca987fa7f3015f3469675d6f2ceed86">nvbio::copy_merge_pages&lt; SYMBOL_SIZE, BIG_ENDIAN &gt;</a>
-, <a class="el" href="structnvbio_1_1stream__traits_3_01const_01_t_01_5_01_4.html#a770d6d87676c83799b308f2f1301d629">nvbio::stream_traits&lt; const T * &gt;</a>
-, <a class="el" href="structnvbio_1_1stream__traits_3_01_packed_stream_3_01_input_stream_00_01_symbol_type_00_01_s_y_mb1bcf1f1d667a89cd075d832bf5de604.html#a43f8101c875e0eec114469b278f0ce0f">nvbio::stream_traits&lt; PackedStream&lt; InputStream, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt;</a>
-, <a class="el" href="structnvbio_1_1dispatch__rank_3_01_s_y_m_b_o_l___s_i_z_e_00_01_k_00_01_packed_stream_3_01_text_s7d382084edac250f44e9477634ea841e.html#a39e86134fb77b7f761eaa873103c550b">nvbio::dispatch_rank&lt; SYMBOL_SIZE, K, PackedStream&lt; TextStorage, uint8, SYMBOL_SIZE, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;</a>
-</li>
-<li>symbol_count()
-: <a class="el" href="structnvbio_1_1_wavelet_tree.html#a9310c89e52ebe5538669f5cbd96e07ed">nvbio::WaveletTree&lt; BitStreamIterator, IndexIterator, SymbolType &gt;</a>
-</li>
-<li>SYMBOL_COUNT
-: <a class="el" href="structnvbio_1_1_paged_text.html#a6754a30e682a91e488c96dafc8d7d0da">nvbio::PagedText&lt; SYMBOL_SIZE_T, BIG_ENDIAN_T &gt;</a>
-, <a class="el" href="structnvbio_1_1copy__insert__pages.html#ae8cf567e0dc5f4b43c7684ae3f69524e">nvbio::copy_insert_pages&lt; SYMBOL_SIZE, BIG_ENDIAN &gt;</a>
-</li>
-<li>symbol_count()
-: <a class="el" href="structnvbio_1_1rank__dictionary.html#a3167325c41c82c8060cbd7bf4539ad38">nvbio::rank_dictionary&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;</a>
-</li>
-<li>SYMBOL_COUNT
-: <a class="el" href="structnvbio_1_1rank__dictionary.html#a9d73ef842eb216e7716cd448cf6a6962">nvbio::rank_dictionary&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;</a>
-, <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_p_r_o_t_e_i_n_01_4.html#a794a2dc1545a980601a0c4c641a7217c">nvbio::AlphabetTraits&lt; PROTEIN &gt;</a>
-, <a class="el" href="structnvbio_1_1stream__traits.html#aad2d5df5e7baebcf0addb2c3e635b56b">nvbio::stream_traits&lt; T &gt;</a>
-, <a class="el" href="structnvbio_1_1_packed_stream.html#abd74f679dbc37a7af26b0789d9103cae">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+: <a class="el" href="structnvbio_1_1stream__traits_3_01const_01_t_01_5_01_4.html#a770d6d87676c83799b308f2f1301d629">nvbio::stream_traits&lt; const T * &gt;</a>
+, <a class="el" href="structnvbio_1_1forward__packer_3_01_b_i_g___e_n_d_i_a_n_00_01_s_y_m_b_o_l___s_i_z_e_00_01_symbol3da5cf6eab383b28054647b91d5aea50.html#ae4a316a0c3919a2524e0dae373af0316">nvbio::forward_packer&lt; BIG_ENDIAN, SYMBOL_SIZE, Symbol, InputStream, IndexType, uint4 &gt;</a>
 </li>
 <li>symbol_count()
 : <a class="el" href="structnvbio_1_1fm__index.html#ac66574ed34bf18e3b96d332bad5f0413">nvbio::fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;</a>
 </li>
 <li>SYMBOL_COUNT
-: <a class="el" href="structnvbio_1_1stream__traits_3_01_t_01_5_01_4.html#af8de61d728b0fff8342e726c64e28e5f">nvbio::stream_traits&lt; T * &gt;</a>
-, <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_r_n_a_01_4.html#ad064286f8caea54377482983b69da179">nvbio::AlphabetTraits&lt; RNA &gt;</a>
-, <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_d_n_a___n_01_4.html#a4761ecba18deb1c942ec045e7c82be9d">nvbio::AlphabetTraits&lt; DNA_N &gt;</a>
-, <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_r_n_a___n_01_4.html#ac26d3b1586820bffd0ab1bf8688f5fa5">nvbio::AlphabetTraits&lt; RNA_N &gt;</a>
-, <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_d_n_a___i_u_p_a_c_01_4.html#a294e45d4e8e02fc5ad74df9b538748a5">nvbio::AlphabetTraits&lt; DNA_IUPAC &gt;</a>
+: <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_r_n_a_01_4.html#ad064286f8caea54377482983b69da179">nvbio::AlphabetTraits&lt; RNA &gt;</a>
+, <a class="el" href="structnvbio_1_1stream__traits_3_01_t_01_5_01_4.html#af8de61d728b0fff8342e726c64e28e5f">nvbio::stream_traits&lt; T * &gt;</a>
+, <a class="el" href="structnvbio_1_1vectorized__string_3_01vector__view_3_01_packed_stream_3_01_input_stream_00_01_sy0d57524e4504f97a479e638aa48536f4.html#a8c319ce80753ded92d7a050dafc30ebd">nvbio::vectorized_string&lt; vector_view&lt; PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt; &gt;</a>
 , <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_d_n_a_01_4.html#a9f9ec2b8eff406e71d402fed16df70e3">nvbio::AlphabetTraits&lt; DNA &gt;</a>
+, <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_d_n_a___i_u_p_a_c_01_4.html#a294e45d4e8e02fc5ad74df9b538748a5">nvbio::AlphabetTraits&lt; DNA_IUPAC &gt;</a>
+, <a class="el" href="structnvbio_1_1copy__insert__pages.html#ae8cf567e0dc5f4b43c7684ae3f69524e">nvbio::copy_insert_pages&lt; SYMBOL_SIZE, BIG_ENDIAN &gt;</a>
+, <a class="el" href="structnvbio_1_1copy__merge__pages.html#aeca987fa7f3015f3469675d6f2ceed86">nvbio::copy_merge_pages&lt; SYMBOL_SIZE, BIG_ENDIAN &gt;</a>
+, <a class="el" href="structnvbio_1_1rank__dictionary.html#a9d73ef842eb216e7716cd448cf6a6962">nvbio::rank_dictionary&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;</a>
+, <a class="el" href="structnvbio_1_1stream__traits_3_01_forward_packed_stream_3_01_input_stream_00_01_symbol_type_00_bc503e3c1c2c9a60f83226bbf65bbb4c.html#a925e6842dcdce4d132fc54b4d3591c9a">nvbio::stream_traits&lt; ForwardPackedStream&lt; InputStream, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1forward__packer.html#a98648dbffc45bed49ba941d9bc28e158">nvbio::forward_packer&lt; BIG_ENDIAN, SYMBOL_SIZE, Symbol, InputStream, IndexType, ValueType &gt;</a>
+, <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_r_n_a___n_01_4.html#ac26d3b1586820bffd0ab1bf8688f5fa5">nvbio::AlphabetTraits&lt; RNA_N &gt;</a>
+</li>
+<li>symbol_count()
+: <a class="el" href="structnvbio_1_1rank__dictionary.html#a3167325c41c82c8060cbd7bf4539ad38">nvbio::rank_dictionary&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;</a>
+</li>
+<li>SYMBOL_COUNT
+: <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_p_r_o_t_e_i_n_01_4.html#a794a2dc1545a980601a0c4c641a7217c">nvbio::AlphabetTraits&lt; PROTEIN &gt;</a>
+, <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_d_n_a___n_01_4.html#a4761ecba18deb1c942ec045e7c82be9d">nvbio::AlphabetTraits&lt; DNA_N &gt;</a>
+, <a class="el" href="structnvbio_1_1_paged_text.html#a6754a30e682a91e488c96dafc8d7d0da">nvbio::PagedText&lt; SYMBOL_SIZE_T, BIG_ENDIAN_T &gt;</a>
+, <a class="el" href="structnvbio_1_1dispatch__rank_3_01_s_y_m_b_o_l___s_i_z_e_00_01_k_00_01_packed_stream_3_01_text_s7d382084edac250f44e9477634ea841e.html#a39e86134fb77b7f761eaa873103c550b">nvbio::dispatch_rank&lt; SYMBOL_SIZE, K, PackedStream&lt; TextStorage, uint8, SYMBOL_SIZE, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;</a>
+, <a class="el" href="structnvbio_1_1_forward_packed_stream.html#ac6aa713f1bf58357cd7f31ec8d876a7d">nvbio::ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+, <a class="el" href="structnvbio_1_1stream__traits_3_01_packed_stream_3_01_input_stream_00_01_symbol_type_00_01_s_y_mb1bcf1f1d667a89cd075d832bf5de604.html#a43f8101c875e0eec114469b278f0ce0f">nvbio::stream_traits&lt; PackedStream&lt; InputStream, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1stream__traits.html#aad2d5df5e7baebcf0addb2c3e635b56b">nvbio::stream_traits&lt; T &gt;</a>
+, <a class="el" href="structnvbio_1_1_packed_stream.html#abd74f679dbc37a7af26b0789d9103cae">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+</li>
+<li>symbol_count()
+: <a class="el" href="structnvbio_1_1_wavelet_tree.html#a9310c89e52ebe5538669f5cbd96e07ed">nvbio::WaveletTree&lt; BitStreamIterator, IndexIterator, SymbolType &gt;</a>
 </li>
 <li>symbol_frequencies()
 : <a class="el" href="structnvbio_1_1_paged_text.html#ab59e86ebec6669b27f69b2c20bbe403d">nvbio::PagedText&lt; SYMBOL_SIZE_T, BIG_ENDIAN_T &gt;</a>
@@ -1853,122 +1872,158 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1_paged_text.html#ae9c014f3d17a9eb26c0ace021865a961">nvbio::PagedText&lt; SYMBOL_SIZE_T, BIG_ENDIAN_T &gt;</a>
 </li>
 <li>symbol_iterator
-: <a class="el" href="structnvbio_1_1_strided_string_set.html#a3a4ec13a232dffaa373e8541ce87b041">nvbio::StridedStringSet&lt; StringIterator, LengthIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_sparse_string_set.html#a246c0cd688ef2f9196164a5e5846de7f">nvbio::SparseStringSet&lt; StringIterator, RangeIterator &gt;</a>
+: <a class="el" href="structnvbio_1_1_sparse_string_set.html#a246c0cd688ef2f9196164a5e5846de7f">nvbio::SparseStringSet&lt; StringIterator, RangeIterator &gt;</a>
 , <a class="el" href="structnvbio_1_1_concatenated_string_set.html#a19ad3e2a87af9ed8dc3921b1eb1a5f05">nvbio::ConcatenatedStringSet&lt; StringIterator, OffsetIterator &gt;</a>
+, <a class="el" href="structnvbio_1_1_strided_string_set.html#a3a4ec13a232dffaa373e8541ce87b041">nvbio::StridedStringSet&lt; StringIterator, LengthIterator &gt;</a>
 </li>
 <li>symbol_mask
 : <a class="el" href="structnvbio_1_1string__set__qgram__functor.html#a23fe17dc957e57e3a0ce2ccaed23215e">nvbio::string_set_qgram_functor&lt; string_set_type &gt;</a>
+, <a class="el" href="structnvbio_1_1string__qgram__functor.html#aaef6d29b30e77eef069dad5284ca7e66">nvbio::string_qgram_functor&lt; string_type &gt;</a>
+, <a class="el" href="structkmers__to__64b__functor.html#ac73a0a226e94de656c0f61fe99de307f">kmers_to_64b_functor&lt; string_set_type &gt;</a>
 </li>
 <li>SYMBOL_MASK
-: <a class="el" href="structnvbio_1_1_packed_stream.html#a746bdabb1cb7e0aaf0c779df7735c8d6">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
-</li>
-<li>symbol_mask
-: <a class="el" href="structnvbio_1_1string__qgram__functor.html#aaef6d29b30e77eef069dad5284ca7e66">nvbio::string_qgram_functor&lt; string_type &gt;</a>
-, <a class="el" href="structkmers__to__64b__functor.html#ac73a0a226e94de656c0f61fe99de307f">kmers_to_64b_functor&lt; string_set_type &gt;</a>
+: <a class="el" href="structnvbio_1_1forward__packer_3_01_b_i_g___e_n_d_i_a_n_00_01_s_y_m_b_o_l___s_i_z_e_00_01_symbol3da5cf6eab383b28054647b91d5aea50.html#ab09ec890714c9626b925bae81a1f5542">nvbio::forward_packer&lt; BIG_ENDIAN, SYMBOL_SIZE, Symbol, InputStream, IndexType, uint4 &gt;</a>
+, <a class="el" href="structnvbio_1_1forward__packer.html#a6efac9b84655f4a03479ff02ca7ba286">nvbio::forward_packer&lt; BIG_ENDIAN, SYMBOL_SIZE, Symbol, InputStream, IndexType, ValueType &gt;</a>
+, <a class="el" href="structnvbio_1_1_packed_stream.html#a746bdabb1cb7e0aaf0c779df7735c8d6">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+, <a class="el" href="structnvbio_1_1_forward_packed_stream.html#a763a65bcc7b4d69938a245bdaf04bcb9">nvbio::ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
 </li>
 <li>symbol_offset
 : <a class="el" href="structkmer__word__extractor__functor.html#a8d813477239ddd5948fe19c886c667dd">kmer_word_extractor_functor&lt; string_set_type &gt;</a>
 </li>
-<li>symbol_size
-: <a class="el" href="structnvbio_1_1_q_group_index_device.html#a31bc62c52880d334694636380d2cf63a">nvbio::QGroupIndexDevice</a>
-</li>
 <li>SYMBOL_SIZE
-: <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_d_n_a___i_u_p_a_c_01_4.html#a56412949970013197f60923f3178ee58">nvbio::AlphabetTraits&lt; DNA_IUPAC &gt;</a>
-</li>
-<li>symbol_size
-: <a class="el" href="structnvbio_1_1_q_gram_index_core.html#a5657d394885da864a725d72cedce1959">nvbio::QGramIndexCore&lt; SystemTag, QGramType, IndexType, CoordType &gt;</a>
-</li>
-<li>SYMBOL_SIZE
-: <a class="el" href="structnvbio_1_1_paged_text.html#aeab70270eb0d72262e70c08d134aa10c">nvbio::PagedText&lt; SYMBOL_SIZE_T, BIG_ENDIAN_T &gt;</a>
-, <a class="el" href="structnvbio_1_1stream__traits.html#a72a22cf782e245fbf5a29b05c983698a">nvbio::stream_traits&lt; T &gt;</a>
-</li>
-<li>symbol_size
-: <a class="el" href="structnvbio_1_1string__qgram__functor.html#acd55c2a6d5dfcff444d8174c72963438">nvbio::string_qgram_functor&lt; string_type &gt;</a>
-, <a class="el" href="structnvbio_1_1_wavelet_tree.html#a6be30a8560cc6c02dccdaa563588fc3a">nvbio::WaveletTree&lt; BitStreamIterator, IndexIterator, SymbolType &gt;</a>
-</li>
-<li>SYMBOL_SIZE
-: <a class="el" href="structnvbio_1_1_packed_stream.html#ad9ab6904b98094cb641e451a757293a5">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
-, <a class="el" href="structnvbio_1_1_strided_packed_string_set.html#adee225ed4ef6382ec377ffbc5733abe4">nvbio::StridedPackedStringSet&lt; StreamIterator, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, LengthIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1stream__traits_3_01const_01_t_01_5_01_4.html#a28366ef3a6be3ffa69a0eb49d2736d37">nvbio::stream_traits&lt; const T * &gt;</a>
-</li>
-<li>symbol_size
-: <a class="el" href="structnvbio_1_1_q_group_index_view_core.html#a898795d9005c558afabeed5a27b96624">nvbio::QGroupIndexViewCore&lt; index_iterator &gt;</a>
-</li>
-<li>SYMBOL_SIZE
-: <a class="el" href="structnvbio_1_1stream__traits_3_01_packed_stream_3_01_input_stream_00_01_symbol_type_00_01_s_y_mb1bcf1f1d667a89cd075d832bf5de604.html#a804206c789f959af180736e1ca1c17c9">nvbio::stream_traits&lt; PackedStream&lt; InputStream, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt;</a>
-, <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_d_n_a___n_01_4.html#a74a8135091b99db7b81f476e03bf8382">nvbio::AlphabetTraits&lt; DNA_N &gt;</a>
-</li>
-<li>symbol_size()
-: <a class="el" href="structnvbio_1_1fm__index.html#af0c753f3390f0b14590020f9efaab5b1">nvbio::fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;</a>
-</li>
-<li>SYMBOL_SIZE
-: <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_r_n_a___n_01_4.html#a67124cde372d31d674b1a1cd93dbdaf2">nvbio::AlphabetTraits&lt; RNA_N &gt;</a>
-, <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_p_r_o_t_e_i_n_01_4.html#a505f9992110d28042016c9db7327f01e">nvbio::AlphabetTraits&lt; PROTEIN &gt;</a>
-, <a class="el" href="structnvbio_1_1stream__traits_3_01_t_01_5_01_4.html#a881b7512148f0e0311fb60e7c65410f0">nvbio::stream_traits&lt; T * &gt;</a>
-, <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_d_n_a_01_4.html#a6d962560209a7644c042182621f33ba9">nvbio::AlphabetTraits&lt; DNA &gt;</a>
-, <a class="el" href="structnvbio_1_1_packed_vector.html#a8cec846532b9446542c8920fd5945cbf">nvbio::PackedVector&lt; SystemTag, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
-</li>
-<li>symbol_size
-: <a class="el" href="structnvbio_1_1string__set__qgram__functor.html#a5bd6d7587650219e29dea468e468e0e0">nvbio::string_set_qgram_functor&lt; string_set_type &gt;</a>
-, <a class="el" href="structnvbio_1_1_wavelet_tree_storage.html#aad96febc4f9c7abc06aed87beba503af">nvbio::WaveletTreeStorage&lt; SystemTag, IndexType, SymbolType &gt;</a>
-</li>
-<li>SYMBOL_SIZE
-: <a class="el" href="structnvbio_1_1rank__dictionary.html#a6b35f2c4ff8683bb4ba98cb89e867aff">nvbio::rank_dictionary&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;</a>
+: <a class="el" href="structnvbio_1_1stream__traits_3_01_forward_packed_stream_3_01_input_stream_00_01_symbol_type_00_bc503e3c1c2c9a60f83226bbf65bbb4c.html#a01b45de66e04b1ff80e2aef11b61267e">nvbio::stream_traits&lt; ForwardPackedStream&lt; InputStream, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1string__traits_3_01vector__view_3_01_iterator_00_01_index_type_01_4_01_4.html#a01511b31d56721582ebfc22fc23ede8b">nvbio::string_traits&lt; vector_view&lt; Iterator, IndexType &gt; &gt;</a>
 </li>
 <li>symbol_size
 : <a class="el" href="structnvbio_1_1_q_gram_index_view_core.html#a1cb14c0315a2bcfa845ca20811534d51">nvbio::QGramIndexViewCore&lt; QGramVectorType, IndexVectorType, CoordVectorType &gt;</a>
 </li>
 <li>SYMBOL_SIZE
-: <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_r_n_a_01_4.html#a0cc584f50147b82e030a98e1c179d418">nvbio::AlphabetTraits&lt; RNA &gt;</a>
+: <a class="el" href="structnvbio_1_1_packed_vector.html#a8cec846532b9446542c8920fd5945cbf">nvbio::PackedVector&lt; SystemTag, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+</li>
+<li>symbol_size
+: <a class="el" href="structnvbio_1_1string__set__qgram__functor.html#a5bd6d7587650219e29dea468e468e0e0">nvbio::string_set_qgram_functor&lt; string_set_type &gt;</a>
+</li>
+<li>SYMBOL_SIZE
+: <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_p_r_o_t_e_i_n_01_4.html#a505f9992110d28042016c9db7327f01e">nvbio::AlphabetTraits&lt; PROTEIN &gt;</a>
+, <a class="el" href="structnvbio_1_1_forward_packed_stream.html#a5551a747747fbc4deea1163321891f06">nvbio::ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+, <a class="el" href="structnvbio_1_1stream__traits_3_01_packed_stream_3_01_input_stream_00_01_symbol_type_00_01_s_y_mb1bcf1f1d667a89cd075d832bf5de604.html#a804206c789f959af180736e1ca1c17c9">nvbio::stream_traits&lt; PackedStream&lt; InputStream, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt;</a>
+</li>
+<li>symbol_size()
+: <a class="el" href="structnvbio_1_1fm__index.html#af0c753f3390f0b14590020f9efaab5b1">nvbio::fm_index&lt; TRankDictionary, TSuffixArray, TL2 &gt;</a>
+</li>
+<li>SYMBOL_SIZE
+: <a class="el" href="structnvbio_1_1stream__traits_3_01_t_01_5_01_4.html#a881b7512148f0e0311fb60e7c65410f0">nvbio::stream_traits&lt; T * &gt;</a>
+, <a class="el" href="structnvbio_1_1string__traits_3_01_t_01_5_01_4.html#aa749e7dafe7744254ee7905b47078cf4">nvbio::string_traits&lt; T * &gt;</a>
+</li>
+<li>symbol_size()
+: <a class="el" href="structnvbio_1_1_wavelet_tree.html#a6be30a8560cc6c02dccdaa563588fc3a">nvbio::WaveletTree&lt; BitStreamIterator, IndexIterator, SymbolType &gt;</a>
+</li>
+<li>SYMBOL_SIZE
+: <a class="el" href="structnvbio_1_1_packed_stream.html#ad9ab6904b98094cb641e451a757293a5">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+, <a class="el" href="structnvbio_1_1_infix.html#a574a1904e4f12b9d602baf1f590ba6b1">nvbio::Infix&lt; StringType, CoordType &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1trivial__quality__string.html#a89cae3354a1e2304f4000e53d2ef23c6">nvbio::aln::trivial_quality_string</a>
+, <a class="el" href="structnvbio_1_1string__iterator.html#aff53e8fb79bfaea50f5029790e7f4f45">nvbio::string_iterator&lt; StringType &gt;</a>
+</li>
+<li>symbol_size
+: <a class="el" href="structnvbio_1_1string__qgram__functor.html#acd55c2a6d5dfcff444d8174c72963438">nvbio::string_qgram_functor&lt; string_type &gt;</a>
+</li>
+<li>SYMBOL_SIZE
+: <a class="el" href="structnvbio_1_1_prefix.html#a254523c8ce45660dd6ce0370be00dd86">nvbio::Prefix&lt; StringType, CoordType &gt;</a>
+</li>
+<li>symbol_size()
+: <a class="el" href="structnvbio_1_1_wavelet_tree_storage.html#aad96febc4f9c7abc06aed87beba503af">nvbio::WaveletTreeStorage&lt; SystemTag, IndexType, SymbolType &gt;</a>
+</li>
+<li>SYMBOL_SIZE
+: <a class="el" href="structnvbio_1_1_paged_text.html#aeab70270eb0d72262e70c08d134aa10c">nvbio::PagedText&lt; SYMBOL_SIZE_T, BIG_ENDIAN_T &gt;</a>
+</li>
+<li>symbol_size
+: <a class="el" href="structnvbio_1_1_q_group_index_view_core.html#a898795d9005c558afabeed5a27b96624">nvbio::QGroupIndexViewCore&lt; index_iterator &gt;</a>
+</li>
+<li>SYMBOL_SIZE
+: <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_d_n_a_01_4.html#a6d962560209a7644c042182621f33ba9">nvbio::AlphabetTraits&lt; DNA &gt;</a>
+, <a class="el" href="structnvbio_1_1_strided_packed_string_set.html#adee225ed4ef6382ec377ffbc5733abe4">nvbio::StridedPackedStringSet&lt; StreamIterator, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, LengthIterator &gt;</a>
+, <a class="el" href="structnvbio_1_1string__traits.html#a45982e717aa3a3350eb24177172f9d89">nvbio::string_traits&lt; T &gt;</a>
+, <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_r_n_a_01_4.html#a0cc584f50147b82e030a98e1c179d418">nvbio::AlphabetTraits&lt; RNA &gt;</a>
+</li>
+<li>symbol_size
+: <a class="el" href="structnvbio_1_1_q_gram_index_core.html#a5657d394885da864a725d72cedce1959">nvbio::QGramIndexCore&lt; SystemTag, QGramType, IndexType, CoordType &gt;</a>
+</li>
+<li>SYMBOL_SIZE
+: <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_d_n_a___i_u_p_a_c_01_4.html#a56412949970013197f60923f3178ee58">nvbio::AlphabetTraits&lt; DNA_IUPAC &gt;</a>
+, <a class="el" href="structnvbio_1_1stream__traits_3_01const_01_t_01_5_01_4.html#a28366ef3a6be3ffa69a0eb49d2736d37">nvbio::stream_traits&lt; const T * &gt;</a>
+, <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_r_n_a___n_01_4.html#a67124cde372d31d674b1a1cd93dbdaf2">nvbio::AlphabetTraits&lt; RNA_N &gt;</a>
+, <a class="el" href="structnvbio_1_1_read_stream_qualities.html#a2f11db67fddfb1194b25d54489e45c7e">nvbio::ReadStreamQualities&lt; ReadStreamType &gt;</a>
+</li>
+<li>symbol_size
+: <a class="el" href="structnvbio_1_1_q_group_index_device.html#a31bc62c52880d334694636380d2cf63a">nvbio::QGroupIndexDevice</a>
+</li>
+<li>SYMBOL_SIZE
+: <a class="el" href="structnvbio_1_1_alphabet_traits_3_01_d_n_a___n_01_4.html#a74a8135091b99db7b81f476e03bf8382">nvbio::AlphabetTraits&lt; DNA_N &gt;</a>
+, <a class="el" href="structnvbio_1_1string__traits_3_01const_01_t_01_5_01_4.html#a9136203c278311487791791558a1614e">nvbio::string_traits&lt; const T * &gt;</a>
+, <a class="el" href="structnvbio_1_1_suffix.html#a9791552207186903b8ac05b4cbb6366f">nvbio::Suffix&lt; StringType, CoordType &gt;</a>
+, <a class="el" href="structnvbio_1_1rank__dictionary.html#a6b35f2c4ff8683bb4ba98cb89e867aff">nvbio::rank_dictionary&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;</a>
+, <a class="el" href="structnvbio_1_1vectorized__string_3_01vector__view_3_01_packed_stream_3_01_input_stream_00_01_sy0d57524e4504f97a479e638aa48536f4.html#ab068dff6f81c69fea7fe85c3aceecd1b">nvbio::vectorized_string&lt; vector_view&lt; PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1_read_stream.html#a1916ea8f5a8fff0cb80246fa3e57fa13">nvbio::ReadStream&lt; StreamType, QualType &gt;</a>
 </li>
 <li>symbol_size()
 : <a class="el" href="structnvbio_1_1rank__dictionary.html#adc8e760abbb5d39364d546464bcbd47d">nvbio::rank_dictionary&lt; SYMBOL_SIZE_T, K, TextString, OccIterator, CountTable &gt;</a>
 </li>
+<li>SYMBOL_SIZE
+: <a class="el" href="structnvbio_1_1stream__traits.html#a72a22cf782e245fbf5a29b05c983698a">nvbio::stream_traits&lt; T &gt;</a>
+</li>
 <li>symbol_type
-: <a class="el" href="structnvbio_1_1stream__traits_3_01_t_01_5_01_4.html#a7c758b09c19f037be1a368fbac2a3cd2">nvbio::stream_traits&lt; T * &gt;</a>
-, <a class="el" href="structnvbio_1_1_strided_packed_string_set.html#af951849955f01bdcda0ea67654d9ecea">nvbio::StridedPackedStringSet&lt; StreamIterator, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, LengthIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_wavelet_tree_storage.html#a768e6c66616e127f3e6bc2d86f1bf01f">nvbio::WaveletTreeStorage&lt; SystemTag, IndexType, SymbolType &gt;</a>
-, <a class="el" href="structnvbio_1_1_suffix_core_3_01_string_type_00_01_coord_type_00_011u_01_4.html#ab5d25ba30dc5413304b6490b5956c279">nvbio::SuffixCore&lt; StringType, CoordType, 1u &gt;</a>
-, <a class="el" href="structnvbio_1_1_packed_stream_ref.html#a067dc74fe5da7f4f1bb3c331a7a0a581">nvbio::PackedStreamRef&lt; Stream &gt;</a>
-, <a class="el" href="structnvbio_1_1_prefix_core_3_01_string_type_00_01_coord_type_00_012u_01_4.html#a1f98fbfa60948925de7e7309af148054">nvbio::PrefixCore&lt; StringType, CoordType, 2u &gt;</a>
-, <a class="el" href="structnvbio_1_1_concatenated_string_set.html#a88d459bffab2e71439940183641f6e3e">nvbio::ConcatenatedStringSet&lt; StringIterator, OffsetIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_wavelet_tree.html#aa3f5f8de9fa9be74da539704e95a8be2">nvbio::WaveletTree&lt; BitStreamIterator, IndexIterator, SymbolType &gt;</a>
+: <a class="el" href="structnvbio_1_1_wavelet_tree.html#aa3f5f8de9fa9be74da539704e95a8be2">nvbio::WaveletTree&lt; BitStreamIterator, IndexIterator, SymbolType &gt;</a>
 , <a class="el" href="structnvbio_1_1stream__traits_3_01const_01_t_01_5_01_4.html#a7417cd1291db731c1ac342d663734aca">nvbio::stream_traits&lt; const T * &gt;</a>
-, <a class="el" href="structnvbio_1_1_suffix_core_3_01_string_type_00_01_coord_type_00_012u_01_4.html#adc9aee2cc29b78dd4ac0bba1d207f2e4">nvbio::SuffixCore&lt; StringType, CoordType, 2u &gt;</a>
-, <a class="el" href="structnvbio_1_1_infix_core_3_01_string_type_00_01_coord_type_00_012u_01_4.html#ade450db0bdc13f2299640f9b6f5a4fcd">nvbio::InfixCore&lt; StringType, CoordType, 2u &gt;</a>
-, <a class="el" href="structnvbio_1_1_suffix.html#ac7df904767a2fa2491fe3e64dcd16f0e">nvbio::Suffix&lt; StringType, CoordType &gt;</a>
+, <a class="el" href="structnvbio_1_1stream__traits_3_01_packed_stream_3_01_input_stream_00_01_symbol_type_00_01_s_y_mb1bcf1f1d667a89cd075d832bf5de604.html#a7d6041066149cdfd67d2c9db899fa532">nvbio::stream_traits&lt; PackedStream&lt; InputStream, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1_packed_stream.html#a27380c170e2fa8483bb5d085c6dab886">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+, <a class="el" href="structnvbio_1_1_forward_packed_stream.html#ad47d5c9788c337f2f647f3186de364f5">nvbio::ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+, <a class="el" href="structnvbio_1_1_prefix_core_3_01_string_type_00_01_coord_type_00_012u_01_4.html#a1f98fbfa60948925de7e7309af148054">nvbio::PrefixCore&lt; StringType, CoordType, 2u &gt;</a>
+, <a class="el" href="structnvbio_1_1_transform_string_set.html#a6a1772eb4ad57231de04b5641150c77c">nvbio::TransformStringSet&lt; StringSet, StringTransform &gt;</a>
+, <a class="el" href="structnvbio_1_1_prefix_core_3_01_string_type_00_01_coord_type_00_011u_01_4.html#a3dbf74d2d2c64029a6e04dd386ea63b2">nvbio::PrefixCore&lt; StringType, CoordType, 1u &gt;</a>
 , <a class="el" href="structnvbio_1_1_infix_core_3_01_string_type_00_01_coord_type_00_014u_01_4.html#af0f5a6863dc72d37cd035336bba1c64e">nvbio::InfixCore&lt; StringType, CoordType, 4u &gt;</a>
 , <a class="el" href="structnvbio_1_1_strided_string_set.html#ae1a6a7aa68c3e1d0c0b3b7ed5fcbdfd7">nvbio::StridedStringSet&lt; StringIterator, LengthIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1stream__traits_3_01_packed_stream_3_01_input_stream_00_01_symbol_type_00_01_s_y_mb1bcf1f1d667a89cd075d832bf5de604.html#a7d6041066149cdfd67d2c9db899fa532">nvbio::stream_traits&lt; PackedStream&lt; InputStream, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt;</a>
-, <a class="el" href="structnvbio_1_1_transform_string_set.html#a6a1772eb4ad57231de04b5641150c77c">nvbio::TransformStringSet&lt; StringSet, StringTransform &gt;</a>
+, <a class="el" href="structnvbio_1_1stream__traits_3_01_t_01_5_01_4.html#a7c758b09c19f037be1a368fbac2a3cd2">nvbio::stream_traits&lt; T * &gt;</a>
+, <a class="el" href="structnvbio_1_1_suffix.html#ac7df904767a2fa2491fe3e64dcd16f0e">nvbio::Suffix&lt; StringType, CoordType &gt;</a>
+, <a class="el" href="structnvbio_1_1_packed_stream_ref.html#a067dc74fe5da7f4f1bb3c331a7a0a581">nvbio::PackedStreamRef&lt; Stream &gt;</a>
+, <a class="el" href="structnvbio_1_1_strided_packed_string_set.html#af951849955f01bdcda0ea67654d9ecea">nvbio::StridedPackedStringSet&lt; StreamIterator, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, LengthIterator &gt;</a>
+, <a class="el" href="structnvbio_1_1_suffix_core_3_01_string_type_00_01_coord_type_00_011u_01_4.html#ab5d25ba30dc5413304b6490b5956c279">nvbio::SuffixCore&lt; StringType, CoordType, 1u &gt;</a>
+, <a class="el" href="structnvbio_1_1_infix_core_3_01_string_type_00_01_coord_type_00_012u_01_4.html#ade450db0bdc13f2299640f9b6f5a4fcd">nvbio::InfixCore&lt; StringType, CoordType, 2u &gt;</a>
+, <a class="el" href="structnvbio_1_1_suffix_core_3_01_string_type_00_01_coord_type_00_012u_01_4.html#adc9aee2cc29b78dd4ac0bba1d207f2e4">nvbio::SuffixCore&lt; StringType, CoordType, 2u &gt;</a>
+, <a class="el" href="structnvbio_1_1_wavelet_tree_storage.html#a768e6c66616e127f3e6bc2d86f1bf01f">nvbio::WaveletTreeStorage&lt; SystemTag, IndexType, SymbolType &gt;</a>
 , <a class="el" href="structnvbio_1_1_sparse_string_set.html#af4a2f3f4051757d1b767ea3c3fd1231a">nvbio::SparseStringSet&lt; StringIterator, RangeIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_infix.html#a3fc3d58027116254090c5d72d50c0b28">nvbio::Infix&lt; StringType, CoordType &gt;</a>
-, <a class="el" href="structnvbio_1_1_packed_stream.html#a27380c170e2fa8483bb5d085c6dab886">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
 , <a class="el" href="structnvbio_1_1stream__traits.html#a01e8e637f0f0cde4c6b4371f3c09d130">nvbio::stream_traits&lt; T &gt;</a>
-, <a class="el" href="structnvbio_1_1_prefix_core_3_01_string_type_00_01_coord_type_00_011u_01_4.html#a3dbf74d2d2c64029a6e04dd386ea63b2">nvbio::PrefixCore&lt; StringType, CoordType, 1u &gt;</a>
+, <a class="el" href="structnvbio_1_1_infix.html#a3fc3d58027116254090c5d72d50c0b28">nvbio::Infix&lt; StringType, CoordType &gt;</a>
+, <a class="el" href="structnvbio_1_1stream__traits_3_01_forward_packed_stream_3_01_input_stream_00_01_symbol_type_00_bc503e3c1c2c9a60f83226bbf65bbb4c.html#aecc8661cfcd521d1d170fb062701c709">nvbio::stream_traits&lt; ForwardPackedStream&lt; InputStream, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt;</a>
 , <a class="el" href="structnvbio_1_1_prefix.html#a1f4df274977031ad96db83588ad2dbb0">nvbio::Prefix&lt; StringType, CoordType &gt;</a>
+, <a class="el" href="structnvbio_1_1_concatenated_string_set.html#a88d459bffab2e71439940183641f6e3e">nvbio::ConcatenatedStringSet&lt; StringIterator, OffsetIterator &gt;</a>
+</li>
+<li>SYMBOLS_PER_SUBWORD
+: <a class="el" href="structnvbio_1_1forward__packer_3_01_b_i_g___e_n_d_i_a_n_00_01_s_y_m_b_o_l___s_i_z_e_00_01_symbol3da5cf6eab383b28054647b91d5aea50.html#a959c8fd17145316196049043417b51fa">nvbio::forward_packer&lt; BIG_ENDIAN, SYMBOL_SIZE, Symbol, InputStream, IndexType, uint4 &gt;</a>
 </li>
 <li>SYMBOLS_PER_WORD
-: <a class="el" href="structnvbio_1_1lmem__selector_3_01vector__view_3_01_packed_stream_3_01_stream_type_00_01_symbol_7a08b1ab3c87387708cd5be0ef6a6ec0.html#af3141bccebd944c99a84a93ebbde8233">nvbio::lmem_selector&lt; vector_view&lt; PackedStream&lt; StreamType, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T &gt; &gt; &gt;</a>
-, <a class="el" href="structnvbio_1_1priv_1_1_chunk_loader_3_01_s_y_m_b_o_l___s_i_z_e_00_01_b_i_g___e_n_d_i_a_n_00_01sd4d1cb938ac0ade718f287ad34236f17.html#aa044875506e354940594974a263ca895">nvbio::priv::ChunkLoader&lt; SYMBOL_SIZE, BIG_ENDIAN, storage_type, offsets_iterator, host_tag, device_tag &gt;</a>
-, <a class="el" href="structnvbio_1_1_paged_text.html#a4449aa06c780aac92b2bedd6e2888b15">nvbio::PagedText&lt; SYMBOL_SIZE_T, BIG_ENDIAN_T &gt;</a>
+: <a class="el" href="structnvbio_1_1forward__packer_3_01_b_i_g___e_n_d_i_a_n_00_01_s_y_m_b_o_l___s_i_z_e_00_01_symbol3da5cf6eab383b28054647b91d5aea50.html#aef206827d3b0356c1a634c0dd6389909">nvbio::forward_packer&lt; BIG_ENDIAN, SYMBOL_SIZE, Symbol, InputStream, IndexType, uint4 &gt;</a>
+, <a class="el" href="structnvbio_1_1forward__packer.html#a696ede49da055911356aa3157b543a16">nvbio::forward_packer&lt; BIG_ENDIAN, SYMBOL_SIZE, Symbol, InputStream, IndexType, ValueType &gt;</a>
+, <a class="el" href="structnvbio_1_1_packed_vector.html#a65140f35f661b0629ca15c920a7de6ed">nvbio::PackedVector&lt; SystemTag, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+, <a class="el" href="structnvbio_1_1_forward_packed_stream.html#ab0d7dffaafc801abc21c85c5fc88db57">nvbio::ForwardPackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
 </li>
 <li>symbols_per_word
 : <a class="el" href="structkmer__word__extractor__functor.html#acdeb91cf8f5c299ee5a0629f6a84b29c">kmer_word_extractor_functor&lt; string_set_type &gt;</a>
 </li>
 <li>SYMBOLS_PER_WORD
-: <a class="el" href="structnvbio_1_1_host_b_w_t_handler_3_01_packed_stream_3_01word__type_01_5_00_01uint8_00_01_s_y_mece7f5f021aa7d905197083a5b114cf2.html#ac9f3f2838c85b8b36cdfc0a0eebee57e">nvbio::HostBWTHandler&lt; PackedStream&lt; word_type *, uint8, SYMBOL_SIZE, BIG_ENDIAN, uint64 &gt; &gt;</a>
-, <a class="el" href="structnvbio_1_1_packed_vector.html#a65140f35f661b0629ca15c920a7de6ed">nvbio::PackedVector&lt; SystemTag, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+: <a class="el" href="structnvbio_1_1priv_1_1_chunk_loader_3_01_s_y_m_b_o_l___s_i_z_e_00_01_b_i_g___e_n_d_i_a_n_00_01sd4d1cb938ac0ade718f287ad34236f17.html#aa044875506e354940594974a263ca895">nvbio::priv::ChunkLoader&lt; SYMBOL_SIZE, BIG_ENDIAN, storage_type, offsets_iterator, host_tag, device_tag &gt;</a>
+, <a class="el" href="structnvbio_1_1_paged_text.html#a4449aa06c780aac92b2bedd6e2888b15">nvbio::PagedText&lt; SYMBOL_SIZE_T, BIG_ENDIAN_T &gt;</a>
+, <a class="el" href="structnvbio_1_1_host_b_w_t_handler_3_01_packed_stream_3_01word__type_01_5_00_01uint8_00_01_s_y_mece7f5f021aa7d905197083a5b114cf2.html#ac9f3f2838c85b8b36cdfc0a0eebee57e">nvbio::HostBWTHandler&lt; PackedStream&lt; word_type *, uint8, SYMBOL_SIZE, BIG_ENDIAN, uint64 &gt; &gt;</a>
+, <a class="el" href="structnvbio_1_1_packed_stream.html#ad1acaccb1c34c620bffe729003c7d6dc">nvbio::PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+, <a class="el" href="structnvbio_1_1lmem__selector_3_01vector__view_3_01_packed_stream_3_01_stream_type_00_01_symbol_7a08b1ab3c87387708cd5be0ef6a6ec0.html#af3141bccebd944c99a84a93ebbde8233">nvbio::lmem_selector&lt; vector_view&lt; PackedStream&lt; StreamType, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T &gt; &gt; &gt;</a>
 </li>
 <li>SYMS_PER_WORD
-: <a class="el" href="structnvbio_1_1rank__word__traits_3_018_00_01uint32_01_4.html#ad205472768b4ea7e0511fdd7250af98d">nvbio::rank_word_traits&lt; 8, uint32 &gt;</a>
-, <a class="el" href="structnvbio_1_1rank__word__traits_3_012_00_01uint64_01_4.html#a8caef79d0ea57529461a89850a2eb372">nvbio::rank_word_traits&lt; 2, uint64 &gt;</a>
+: <a class="el" href="structnvbio_1_1rank__word__traits_3_012_00_01uint64_01_4.html#a8caef79d0ea57529461a89850a2eb372">nvbio::rank_word_traits&lt; 2, uint64 &gt;</a>
 , <a class="el" href="structnvbio_1_1dispatch__rank_3_01_s_y_m_b_o_l___s_i_z_e_00_01_k_00_01_packed_stream_3_01_text_s7d382084edac250f44e9477634ea841e.html#a99d84e1a226067575cdef07907044888">nvbio::dispatch_rank&lt; SYMBOL_SIZE, K, PackedStream&lt; TextStorage, uint8, SYMBOL_SIZE, true, index_type &gt;, OccIterator, CountTable, word_type, index_type &gt;</a>
 , <a class="el" href="structnvbio_1_1rank__word__traits_3_014_00_01uint32_01_4.html#ab48a5c9ca223dfb1b6412bbad38c393d">nvbio::rank_word_traits&lt; 4, uint32 &gt;</a>
-, <a class="el" href="structnvbio_1_1rank__word__traits_3_018_00_01uint64_01_4.html#a3bf04509355f12475f9b312224feaff8">nvbio::rank_word_traits&lt; 8, uint64 &gt;</a>
-, <a class="el" href="structnvbio_1_1rank__word__traits_3_012_00_01uint32_01_4.html#accfe2662c6e662498583973ff3fff530">nvbio::rank_word_traits&lt; 2, uint32 &gt;</a>
 , <a class="el" href="structnvbio_1_1rank__word__traits_3_014_00_01uint64_01_4.html#a5ab65e2da5e1eee259f19b2fe1796d89">nvbio::rank_word_traits&lt; 4, uint64 &gt;</a>
+, <a class="el" href="structnvbio_1_1rank__word__traits_3_012_00_01uint32_01_4.html#accfe2662c6e662498583973ff3fff530">nvbio::rank_word_traits&lt; 2, uint32 &gt;</a>
+, <a class="el" href="structnvbio_1_1rank__word__traits_3_018_00_01uint32_01_4.html#ad205472768b4ea7e0511fdd7250af98d">nvbio::rank_word_traits&lt; 8, uint32 &gt;</a>
+, <a class="el" href="structnvbio_1_1rank__word__traits_3_018_00_01uint64_01_4.html#a3bf04509355f12475f9b312224feaff8">nvbio::rank_word_traits&lt; 8, uint64 &gt;</a>
 </li>
 <li>syncblocks()
 : <a class="el" href="structnvbio_1_1cuda_1_1syncblocks.html#ac64f35aecaba0b28315804add3bacbad">nvbio::cuda::syncblocks</a>
@@ -1977,43 +2032,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1cuda_1_1syncblocks__storage.html#ade7eab4674a4bd037b65b859e20b8ca1">nvbio::cuda::syncblocks_storage</a>
 </li>
 <li>system_tag
-: <a class="el" href="structnvbio_1_1_device_vector_array.html#a16f20ec422be40143ec8bcd6cbd63e35">nvbio::DeviceVectorArray&lt; T &gt;</a>
-, <a class="el" href="structnvbio_1_1_string_set_iterator.html#ad63f91f164972dd3a490685c737bb279">nvbio::StringSetIterator&lt; StringSetType &gt;</a>
-, <a class="el" href="structnvbio_1_1_wavelet_tree_storage.html#aff3890128c9e2e48021d9fb1e5028b13">nvbio::WaveletTreeStorage&lt; SystemTag, IndexType, SymbolType &gt;</a>
-, <a class="el" href="structnvbio_1_1_q_gram_index_host.html#ab8669b51f381ac4395e58585f8e298d5">nvbio::QGramIndexHost</a>
-, <a class="el" href="structnvbio_1_1_packed_vector.html#a8a0c3a514275908c0f0eb18789c4e7cd">nvbio::PackedVector&lt; SystemTag, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
-, <a class="el" href="structnvbio_1_1_suffix_set.html#acb2fa84569c9f3bdec29e77a2702587f">nvbio::SuffixSet&lt; SequenceType, SuffixIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_sparse_string_set.html#a1157a3ef526583b1bfc75e09ae59a5e9">nvbio::SparseStringSet&lt; StringIterator, RangeIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_strided_packed_string_set.html#a237d3bb1eec347687fdf39601a63c526">nvbio::StridedPackedStringSet&lt; StreamIterator, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, LengthIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_q_gram_filter_3_01host__tag_00_01qgram__index__type_00_01query__iterator_00_01index__iterator_01_4.html#ad34ce58db46da3b7c4b9ede19baa7241">nvbio::QGramFilter&lt; host_tag, qgram_index_type, query_iterator, index_iterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_q_gram_filter_3_01device__tag_00_01qgram__index__type_00_01query__iterator_00_01index__iterator_01_4.html#a4b18874863ab1de73bf1aa655afd5930">nvbio::QGramFilter&lt; device_tag, qgram_index_type, query_iterator, index_iterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_infix_set.html#ad19ca07bc3d4f80f8dc15a96738ab17a">nvbio::InfixSet&lt; SequenceType, InfixIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_m_e_m_filter_3_01host__tag_00_01fm__index__type_01_4.html#a9f9fd00155998594b27bf91a951da2de">nvbio::MEMFilter&lt; host_tag, fm_index_type &gt;</a>
-, <a class="el" href="structnvbio_1_1_m_e_m_filter_3_01device__tag_00_01fm__index__type_01_4.html#a089392fc2fc70f02a94c28c186c1caf4">nvbio::MEMFilter&lt; device_tag, fm_index_type &gt;</a>
-, <a class="el" href="structnvbio_1_1_f_m_index_filter_3_01host__tag_00_01fm__index__type_01_4.html#a87d407a81908409daff43f67a46dece2">nvbio::FMIndexFilter&lt; host_tag, fm_index_type &gt;</a>
-, <a class="el" href="structnvbio_1_1_q_gram_set_index_device.html#a3b2a01d586184ecfdf43d8e1f254c8ae">nvbio::QGramSetIndexDevice</a>
-, <a class="el" href="structnvbio_1_1_prefix_set.html#aab2ec15b89cb218df48e86fa5ae2c2d4">nvbio::PrefixSet&lt; SequenceType, PrefixIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_q_gram_index_device.html#af20f28f033d0efaf3cc7728878b7cfd4">nvbio::QGramIndexDevice</a>
-, <a class="el" href="structnvbio_1_1vector_3_01device__tag_00_01_t_01_4.html#a70d781c7f70e08c38752e11cb395b174">nvbio::vector&lt; device_tag, T &gt;</a>
-, <a class="el" href="structnvbio_1_1_q_group_index_device.html#aee801aebc0266a4e324653ffdcd9dc29">nvbio::QGroupIndexDevice</a>
-, <a class="el" href="structnvbio_1_1_concatenated_string_set.html#af3c33cfc7801fb7a68f79702a2e277fc">nvbio::ConcatenatedStringSet&lt; StringIterator, OffsetIterator &gt;</a>
-, <a class="el" href="structnvbio_1_1_f_m_index_filter_device.html#aea8f649368f0df30abda3756ef8694b0">nvbio::FMIndexFilterDevice&lt; fm_index_type &gt;</a>
-, <a class="el" href="structnvbio_1_1_f_m_index_filter_3_01device__tag_00_01fm__index__type_01_4.html#ae3e311b8408c4218fa5139d33db9d39c">nvbio::FMIndexFilter&lt; device_tag, fm_index_type &gt;</a>
-, <a class="el" href="structnvbio_1_1vector_3_01host__tag_00_01_t_01_4.html#ae58e7cd388ff6da7d4e79edf540725a7">nvbio::vector&lt; host_tag, T &gt;</a>
+: <a class="el" href="structnvbio_1_1_sparse_string_set.html#a1157a3ef526583b1bfc75e09ae59a5e9">nvbio::SparseStringSet&lt; StringIterator, RangeIterator &gt;</a>
 , <a class="el" href="structnvbio_1_1_f_m_index_filter_host.html#a1d3c197cd153593f0a1ce4c3df2d5f18">nvbio::FMIndexFilterHost&lt; fm_index_type &gt;</a>
-, <a class="el" href="structnvbio_1_1_q_gram_index_core.html#a2b7f9edf0cd28c264c4bd687eb653f0c">nvbio::QGramIndexCore&lt; SystemTag, QGramType, IndexType, CoordType &gt;</a>
-, <a class="el" href="structnvbio_1_1_strided_string_set.html#a1ed971b012baaaa871335ef9926e4f96">nvbio::StridedStringSet&lt; StringIterator, LengthIterator &gt;</a>
 , <a class="el" href="structnvbio_1_1_host_vector_array.html#a8bee542167a0692b69c9048f708eb886">nvbio::HostVectorArray&lt; T &gt;</a>
 , <a class="el" href="structnvbio_1_1_q_gram_set_index_host.html#a491dad8045a43ab2951bdeeb8f965094">nvbio::QGramSetIndexHost</a>
+, <a class="el" href="structnvbio_1_1_f_m_index_filter_3_01device__tag_00_01fm__index__type_01_4.html#ae3e311b8408c4218fa5139d33db9d39c">nvbio::FMIndexFilter&lt; device_tag, fm_index_type &gt;</a>
+, <a class="el" href="structnvbio_1_1_strided_string_set.html#a1ed971b012baaaa871335ef9926e4f96">nvbio::StridedStringSet&lt; StringIterator, LengthIterator &gt;</a>
+, <a class="el" href="structnvbio_1_1_m_e_m_filter_3_01host__tag_00_01fm__index__type_01_4.html#a9f9fd00155998594b27bf91a951da2de">nvbio::MEMFilter&lt; host_tag, fm_index_type &gt;</a>
+, <a class="el" href="structnvbio_1_1_wavelet_tree_storage.html#aff3890128c9e2e48021d9fb1e5028b13">nvbio::WaveletTreeStorage&lt; SystemTag, IndexType, SymbolType &gt;</a>
+, <a class="el" href="structnvbio_1_1_q_gram_set_index_device.html#a3b2a01d586184ecfdf43d8e1f254c8ae">nvbio::QGramSetIndexDevice</a>
+, <a class="el" href="structnvbio_1_1_f_m_index_filter_3_01host__tag_00_01fm__index__type_01_4.html#a87d407a81908409daff43f67a46dece2">nvbio::FMIndexFilter&lt; host_tag, fm_index_type &gt;</a>
+, <a class="el" href="structnvbio_1_1_packed_vector.html#a8a0c3a514275908c0f0eb18789c4e7cd">nvbio::PackedVector&lt; SystemTag, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt;</a>
+, <a class="el" href="structnvbio_1_1_q_gram_index_host.html#ab8669b51f381ac4395e58585f8e298d5">nvbio::QGramIndexHost</a>
+, <a class="el" href="structnvbio_1_1_q_group_index_device.html#aee801aebc0266a4e324653ffdcd9dc29">nvbio::QGroupIndexDevice</a>
+, <a class="el" href="structnvbio_1_1_q_gram_index_device.html#af20f28f033d0efaf3cc7728878b7cfd4">nvbio::QGramIndexDevice</a>
+, <a class="el" href="structnvbio_1_1_q_group_index_host.html#af202f55dc39f0a56e5829a9805e4c537">nvbio::QGroupIndexHost</a>
+, <a class="el" href="structnvbio_1_1_f_m_index_filter_device.html#aea8f649368f0df30abda3756ef8694b0">nvbio::FMIndexFilterDevice&lt; fm_index_type &gt;</a>
+, <a class="el" href="structnvbio_1_1_q_gram_index_core.html#a2b7f9edf0cd28c264c4bd687eb653f0c">nvbio::QGramIndexCore&lt; SystemTag, QGramType, IndexType, CoordType &gt;</a>
+, <a class="el" href="structnvbio_1_1_q_gram_filter_3_01host__tag_00_01qgram__index__type_00_01query__iterator_00_01index__iterator_01_4.html#ad34ce58db46da3b7c4b9ede19baa7241">nvbio::QGramFilter&lt; host_tag, qgram_index_type, query_iterator, index_iterator &gt;</a>
+, <a class="el" href="structnvbio_1_1_suffix_set.html#acb2fa84569c9f3bdec29e77a2702587f">nvbio::SuffixSet&lt; SequenceType, SuffixIterator &gt;</a>
 , <a class="el" href="structnvbio_1_1_wavelet_tree.html#a687459669805fee8f2c844a55ae7d241">nvbio::WaveletTree&lt; BitStreamIterator, IndexIterator, SymbolType &gt;</a>
 , <a class="el" href="structnvbio_1_1_transform_string_set.html#a63a891ab6181b8eea4d81162c21d3012">nvbio::TransformStringSet&lt; StringSet, StringTransform &gt;</a>
-, <a class="el" href="structnvbio_1_1_q_group_index_host.html#af202f55dc39f0a56e5829a9805e4c537">nvbio::QGroupIndexHost</a>
+, <a class="el" href="structnvbio_1_1_strided_packed_string_set.html#a237d3bb1eec347687fdf39601a63c526">nvbio::StridedPackedStringSet&lt; StreamIterator, SymbolType, SYMBOL_SIZE_T, BIG_ENDIAN_T, LengthIterator &gt;</a>
+, <a class="el" href="structnvbio_1_1_concatenated_string_set.html#af3c33cfc7801fb7a68f79702a2e277fc">nvbio::ConcatenatedStringSet&lt; StringIterator, OffsetIterator &gt;</a>
+, <a class="el" href="structnvbio_1_1_m_e_m_filter_3_01device__tag_00_01fm__index__type_01_4.html#a089392fc2fc70f02a94c28c186c1caf4">nvbio::MEMFilter&lt; device_tag, fm_index_type &gt;</a>
+, <a class="el" href="structnvbio_1_1_infix_set.html#ad19ca07bc3d4f80f8dc15a96738ab17a">nvbio::InfixSet&lt; SequenceType, InfixIterator &gt;</a>
+, <a class="el" href="structnvbio_1_1vector_3_01device__tag_00_01_t_01_4.html#a70d781c7f70e08c38752e11cb395b174">nvbio::vector&lt; device_tag, T &gt;</a>
+, <a class="el" href="structnvbio_1_1_device_vector_array.html#a16f20ec422be40143ec8bcd6cbd63e35">nvbio::DeviceVectorArray&lt; T &gt;</a>
+, <a class="el" href="structnvbio_1_1_string_set_iterator.html#ad63f91f164972dd3a490685c737bb279">nvbio::StringSetIterator&lt; StringSetType &gt;</a>
+, <a class="el" href="structnvbio_1_1_prefix_set.html#aab2ec15b89cb218df48e86fa5ae2c2d4">nvbio::PrefixSet&lt; SequenceType, PrefixIterator &gt;</a>
+, <a class="el" href="structnvbio_1_1_q_gram_filter_3_01device__tag_00_01qgram__index__type_00_01query__iterator_00_01index__iterator_01_4.html#a4b18874863ab1de73bf1aa655afd5930">nvbio::QGramFilter&lt; device_tag, qgram_index_type, query_iterator, index_iterator &gt;</a>
+, <a class="el" href="structnvbio_1_1vector_3_01host__tag_00_01_t_01_4.html#ae58e7cd388ff6da7d4e79edf540725a7">nvbio::vector&lt; host_tag, T &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 30 2015 16:44:28 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 13 2015 11:36:25 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

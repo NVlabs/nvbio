@@ -32,6 +32,7 @@
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/vector_loads.h>
 #include <nvbio/strings/string_traits.h>
+#include <nvbio/strings/string.h>
 #include <string.h>
 
 

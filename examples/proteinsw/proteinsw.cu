@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// seeding.cu
+// proteinsw.cu
 //
 
 #include <nvbio/basic/console.h>
@@ -70,18 +70,29 @@ int8 s_blosum62[] =
  0, -2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -4, -2, -1, -1,  0,  0, -1, -2, -1, -1, -1, -1,
 };
 
+// A scoring scheme class that will be used in conjunction with the \ref GotohAligner;
+//
 template <typename matrix_iterator>
 struct BlosumScheme
 {
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE BlosumScheme(const matrix_iterator m, const int32 gap_open, const int32 gap_ext) :
         m_matrix(m), m_gap_open(gap_open), m_gap_ext(gap_ext) {}
 
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 match(const uint8 q = 0)      const { return 11; };
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 substitution(const uint32 r_i, const uint32 q_j, const uint8 r, const uint8 q, const uint8 qq = 0)   const { return int8( m_matrix[ r + q*24 ] ); };
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 pattern_gap_open()            const { return m_gap_open; };
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 pattern_gap_extension()       const { return m_gap_ext; };
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 text_gap_open()               const { return m_gap_open; };
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 text_gap_extension()          const { return m_gap_ext; };
+    // return the maximum match bonus at the given quality score
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 match(const uint8 q = 0) const { return 11; };
+
+    // return the substitution score at the given (reference,query) position (r_i,q_j),
+    // with values (r,q) and quality score qq
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 substitution(
+        const uint32 r_i, const uint32 q_j,
+        const uint8  r,  const uint8   q,
+        const uint8  qq = 0) const { return int8( m_matrix[ r + q*24 ] ); };
+
+    // return gap open and extension penalties for the pattern (query) and the text (reference)
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 pattern_gap_open()      const { return m_gap_open; };
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 pattern_gap_extension() const { return m_gap_ext; };
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 text_gap_open()         const { return m_gap_open; };
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 text_gap_extension()    const { return m_gap_ext; };
 
     const matrix_iterator   m_matrix;
     const int32             m_gap_open;
@@ -98,7 +109,7 @@ int main(int argc, char* argv[])
     const uint32 P         = 128;
     const uint32 T         = 1024;
 
-    // alloc a device vector for holding the BLOSUM62 scoring matrix
+    // alloc a device vector for holding the Blosum-62 scoring matrix
     nvbio::vector<device_tag,uint8> d_blosum62( 24*24 );
 
     // copy the matrix to the device
@@ -110,11 +121,8 @@ int main(int argc, char* argv[])
 
     // fill the strings with random characters
     LCG_random rand;
-    for (uint32 i = 0; i < n_strings; ++i)
-    {
-        for (uint32 j = 0; j < P; ++j)
-            h_pattern_strings[i*P + j] = nvbio::min( uint8( rand.next() * 24.0f ), (uint8)23u );
-    }
+    for (uint32 i = 0; i < P * n_strings; ++i)
+        h_pattern_strings[i] = nvbio::min( uint8( rand.next() * 24.0f ), (uint8)23u );
     for (uint32 i = 0; i < T * n_strings; ++i)
         h_text_strings[i] = nvbio::min( uint8( rand.next() * 24.0f ), (uint8)23u );
 

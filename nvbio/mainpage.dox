@@ -93,7 +93,7 @@
 ///
 /// <a href="https://github.com/NVlabs/nvbio"><img src="download-icon.png" style="position:relative; bottom:-10px; border:0px;"/></a>
 /// &nbsp;&nbsp;
-/// <a href="https://github.com/NVlabs/nvbio">Download NVBIO 1.0</a>
+/// <a href="https://github.com/NVlabs/nvbio">Download NVBIO 1.1</a>
 /// </div>
 ///\endhtmlonly
 ///
@@ -109,6 +109,18 @@
 /// - \subpage nvsetbwt_page - a tool to perform BWT-based read indexing
 ///
 /// \section RecentNew Recent News
+///\par
+/// <table>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">13/2/2015 \n NVBIO 1.1</td>
+/// <td style="vertical-align:text-top;" width="90%">
+/// - <b>New Features:</b> \n
+///   * Added support for position-dependent scoring in the \ref AlignersSection "Gotoh DP Alignment" module, and optimized
+///     it for protein sequences
+///   * Refined the string and string iterator interfaces
+///   * Added performance-oriented utilities such as the \ref VectorizedStringLoadingModule
+///     interface and the \subpage packed_streams_page "ForwardPackedStream" iterator.
+/// </td></tr>
+/// </table>
 ///\par
 /// <table>
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">24/1/2015 \n NVBIO 1.0</td>

@@ -41,7 +41,7 @@ namespace nvbio {
 ///@{
 
 ///
-///@defgroup VectorLoadingModule Vectorized String Loading
+///@defgroup VectorizedStringLoadingModule Vectorized String Loading
 ///\par
 /// The functions in this module define a vector loading API for strings:
 /// strings, are usually made up of tiny characters, often a byte each, or
@@ -63,11 +63,51 @@ namespace nvbio {
 ///  void  vectorized_string_load(const string_type& string, const uint32 i, value_type* v);
 ///\endcode
 ///
+/// The following example shows how the API could be used:
+///
+///\code
+/// const char* string = "this is a long enough protein string - or isn't it? whatever...";
+///
+/// // determine the vectorization width
+/// const uint32 VECW = vectorized_string<const char*>::VECTOR_WIDTH;
+/// printf("w = %u\n", VECW);
+/// 
+/// // determine the vectorized string range
+/// const uint2 vec_range = vectorized_string_range( string );
+/// printf("range(%u,%u)\n", vec_range.x, vec_range.y);
+///
+/// // loop through the scalar range
+/// for (uint32 i = 0; i < vec_range.x; ++i)
+/// {
+///     const char c = string[i];
+///     printf("%c", c);
+/// }
+/// 
+/// // loop through the vectorized range
+/// for (uint32 i = vec_range.x; i < vec_range.y; i += VECW)
+/// {
+///     char v[VECW];
+/// 
+///     // load a vector
+///     vectorized_string_load( string, i, v );
+/// 
+///     for (uint32 j = 0; j < VECW; ++j)
+///         printf("%c", v[j]);
+/// }
+///
+/// // loop through the scalar range
+/// for (uint32 i = vec_range.y; i < length( string ); ++i)
+/// {
+///     const char c = string[i];
+///     printf("%c", c);
+/// }
+/// printf("\n");
+///
 
-///@addtogroup VectorLoadingModule
+///@addtogroup VectorizedStringLoadingModule
 ///@{
 
-/// Vectorized string interface
+/// \ref VectorizedStringLoadingModule interface
 ///
 template <typename string_type>
 struct vectorized_string
@@ -140,9 +180,76 @@ void vectorized_string_load(const string_type& string, const uint32 i, typename 
 }
 
 //
+// --- const char* specialization------------------------------------------------------------------------
+//
+
+/// const char* specialization
+///
+template <>
+struct vectorized_string<const char*>
+{
+    typedef const char*                    string_type;
+    typedef char                           value_type;
+    typedef uint64                         index_type;
+
+    static const uint32 VECTOR_WIDTH = maximum_vector_width<char>::VALUE; ///< the intrinsic vector width
+
+    /// determine the vectorized range of a string with a specified vector width
+    ///
+    template <uint32 VECTOR_WIDTH_T>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static uint2 range(const char* string)
+    {
+        const uint64 offset = uint64( string ) % VECTOR_WIDTH_T;
+        const uint64 len    = length( string );
+
+        const uint64 aligned_begin = util::round_i( offset,                 VECTOR_WIDTH );
+        const uint64 aligned_end   = util::round_z( offset + len, VECTOR_WIDTH );
+
+        return aligned_begin < aligned_end ?
+            make_uint2( aligned_begin - offset, aligned_end - offset ) :
+            make_uint2( len, len );
+    }
+
+    /// load a vector with a specified vector width
+    ///
+    template <uint32 VECTOR_WIDTH_T>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static void load(
+        const char*  string,
+        const uint32 offset,
+        char*        vector)
+    {
+        const char* base_ptr = string + offset;
+        vector_load<VECTOR_WIDTH_T>( base_ptr, vector );
+    }
+
+    /// determine the vectorized range of a string using the maximum vector width
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static uint2 range(const char* string)
+    {
+        return range<VECTOR_WIDTH>( string );
+    }
+
+    /// load a vector using the maximum vector width
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static void load(
+        const char*  string,
+        const uint32 offset,
+        char*        vector)
+    {
+        load<VECTOR_WIDTH>( string, offset, vector );
+    }
+};
+
+//
 // --- vector_view<const T*> specialization------------------------------------------------------------------------
 //
 
+/// vector_view specialization
+///
 template <typename T, typename IndexType>
 struct vectorized_string< vector_view<const T*,IndexType> >
 {
@@ -205,6 +312,8 @@ struct vectorized_string< vector_view<const T*,IndexType> >
 // --- vector_view< PackedStream > specialization---------------------------------------------------------------------
 //
 
+/// PackedStream specialization
+///
 template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
 struct vectorized_string< vector_view< PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> > >
 {
@@ -267,7 +376,7 @@ struct vectorized_string< vector_view< PackedStream<InputStream,Symbol,SYMBOL_SI
     }
 };
 
-///@} VectorLoadingModule
+///@} VectorizedStringLoadingModule
 
 ///@} Strings
 

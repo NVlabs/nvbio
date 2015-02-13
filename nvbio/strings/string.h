@@ -41,7 +41,16 @@ namespace nvbio {
 /// length of an ASCII string
 ///
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-uint64 length(const char* str) { return strlen( str ); }
+uint64 length(const char* str) {
+#if defined(NVBIO_DEVICE_COMPILATION)
+    uint64 l = 0;
+    for (; *str != '\0'; ++str)
+        ++l;
+    return l;
+#else
+    return strlen( str );
+#endif
+}
 
 ///@} Strings
 

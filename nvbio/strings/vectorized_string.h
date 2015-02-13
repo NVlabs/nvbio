@@ -65,7 +65,7 @@ namespace nvbio {
 /// The following example shows how the API could be used:
 ///
 ///\code
-/// const char* string = "this is a long enough protein string - or isn't it? whatever...";
+/// const char* string = "this is a long enough ASCII string - let's see if this stuff works...";
 ///
 /// // determine the vectorization width
 /// const uint32 VECW = vectorized_string<const char*>::VECTOR_WIDTH;

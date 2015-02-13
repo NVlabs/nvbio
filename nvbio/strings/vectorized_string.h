@@ -51,7 +51,7 @@ namespace nvbio {
 /// Loading them in bigger chunks, when possible (e.g. when the string is
 /// properly aligned), can be very favourable.
 /// This API defines:
-///\par
+///
 ///\code
 ///  // the size of the vector which can be used to load many symbols at once
 ///  vectorized_string<string_type>::VECTOR_WIDTH;
@@ -62,7 +62,7 @@ namespace nvbio {
 ///  // a function to retrieve a vector
 ///  void  vectorized_string_load(const string_type& string, const uint32 i, value_type* v);
 ///\endcode
-///
+///\par
 /// The following example shows how the API could be used:
 ///
 ///\code

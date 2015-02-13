@@ -10,6 +10,7 @@ nvbio_add_module_directory(basic)
 nvbio_add_module_directory(basic/cuda)
 nvbio_add_module_directory(fasta)
 nvbio_add_module_directory(fmindex)
+nvbio_add_module_directory(strings)
 nvbio_add_module_directory(sufsort)
 nvbio_add_module_directory(trie)
 

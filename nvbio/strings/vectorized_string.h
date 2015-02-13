@@ -40,7 +40,6 @@ namespace nvbio {
 ///@addtogroup Strings
 ///@{
 
-///
 ///\defgroup VectorizedStringLoadingModule Vectorized String Loading
 ///\par
 /// The functions in this module define a vector loading API for strings:

@@ -78,10 +78,7 @@ namespace nvbio {
 ///
 /// // loop through the scalar range
 /// for (uint32 i = 0; i < vec_range.x; ++i)
-/// {
-///     const char c = string[i];
-///     printf("%c", c);
-/// }
+///     printf("%c", string[i]);
 /// 
 /// // loop through the vectorized range
 /// for (uint32 i = vec_range.x; i < vec_range.y; i += VECW)
@@ -97,10 +94,7 @@ namespace nvbio {
 ///
 /// // loop through the scalar range
 /// for (uint32 i = vec_range.y; i < length( string ); ++i)
-/// {
-///     const char c = string[i];
-///     printf("%c", c);
-/// }
+///     printf("%c", string[i]);
 /// printf("\n");
 ///
 

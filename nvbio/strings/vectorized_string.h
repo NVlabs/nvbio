@@ -95,6 +95,7 @@ namespace nvbio {
 /// for (uint32 i = vec_range.y; i < length( string ); ++i)
 ///     printf("%c", string[i]);
 /// printf("\n");
+///\endcode
 ///
 
 ///@addtogroup VectorizedStringLoadingModule
@@ -370,7 +371,6 @@ struct vectorized_string< vector_view< PackedStream<InputStream,Symbol,SYMBOL_SI
 };
 
 ///@} VectorizedStringLoadingModule
-
 ///@} Strings
 
 } // namespace nvbio

@@ -404,6 +404,9 @@ struct iterator_traits< PackedStream<InputStream,SymbolType,SYMBOL_SIZE_T,BIG_EN
 /// as a template parameter.
 /// The sequence is packed on top of an underlying stream of words, whose type can also be specified at compile-time
 /// in order to allow for different memory access patterns.
+/// This class is a ForwardIterator, and is useful when one needs to just stream sequentially through a packed stream;
+/// in this case, in fact, the symbols are unpacked incrementally, reducing the amount of logic operations and memory
+/// transactions.
 ///
 /// \tparam InputStream         the underlying stream of words used to hold the packed stream (e.g. uint32, uint4)
 /// \tparam Symbol              the unpacked symbol type (e.g. uint8)

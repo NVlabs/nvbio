@@ -54,10 +54,11 @@ namespace nvbio {
 /// The main classes are:
 ///
 /// - PackedVector :             a packed vector object
-/// - PackedStream :             a packed stream object
+/// - PackedStream :             a packed stream iterator
 /// - PackedStreamRef :          a proxy object to represent packed symbol references
 /// - \ref PackedStringLoaders : a packed stream loader which allows to cache portions of a packed stream into
 ///                              different memory spaces (e.g. local memory)
+/// - ForwardPackedStream :      a forward packed stream iterator
 ///
 /// \section ExampleSection Example
 ///

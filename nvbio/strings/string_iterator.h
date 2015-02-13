@@ -90,6 +90,7 @@ public:
     index_type  m_index;
 };
 
+///\relates string_iterator
 /// make a string iterator
 ///
 template <typename StringType>
@@ -99,6 +100,7 @@ string_iterator<StringType> make_string_iterator(const StringType& string)
     return string_iterator<StringType>( string );
 }
 
+///\relates string_iterator
 /// less than
 ///
 template <typename StringType>
@@ -106,6 +108,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator< (
     const string_iterator<StringType>& it1,
     const string_iterator<StringType>& it2);
 
+///\relates string_iterator
 /// greater than
 ///
 template <typename StringType>
@@ -113,6 +116,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator> (
     const string_iterator<StringType>& it1,
     const string_iterator<StringType>& it2);
 
+///\relates string_iterator
 /// less than
 ///
 template <typename StringType>
@@ -120,6 +124,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator<= (
     const string_iterator<StringType>& it1,
     const string_iterator<StringType>& it2);
 
+///\relates string_iterator
 /// greater than
 ///
 template <typename StringType>
@@ -127,6 +132,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator>= (
     const string_iterator<StringType>& it1,
     const string_iterator<StringType>& it2);
 
+///\relates string_iterator
 /// equality test
 ///
 template <typename StringType>
@@ -134,6 +140,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator== (
     const string_iterator<StringType>& it1,
     const string_iterator<StringType>& it2);
 
+///\relates string_iterator
 /// inequality test
 ///
 template <typename StringType>
@@ -141,54 +148,63 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator!= (
     const string_iterator<StringType>& it1,
     const string_iterator<StringType>& it2);
 
+///\relates string_iterator
 /// pre-increment operator
 ///
 template <typename StringType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 string_iterator<StringType>& operator++ (string_iterator<StringType>& it);
 
+///\relates string_iterator
 /// post-increment operator
 ///
 template <typename StringType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 string_iterator<StringType> operator++ (string_iterator<StringType>& it, int dummy);
 
+///\relates string_iterator
 /// pre-decrement operator
 ///
 template <typename StringType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 string_iterator<StringType>& operator-- (string_iterator<StringType>& it);
 
+///\relates string_iterator
 /// post-decrement operator
 ///
 template <typename StringType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 string_iterator<StringType> operator-- (string_iterator<StringType>& it, int dummy);
 
+///\relates string_iterator
 /// add offset
 ///
 template <typename StringType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 string_iterator<StringType>& operator+= (string_iterator<StringType>& it, const typename string_iterator<StringType>::difference_type distance);
 
+///\relates string_iterator
 /// subtract offset
 ///
 template <typename StringType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 string_iterator<StringType>& operator-= (string_iterator<StringType>& it, const typename string_iterator<StringType>::difference_type distance);
 
+///\relates string_iterator
 /// add offset
 ///
 template <typename StringType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 string_iterator<StringType> operator+ (const string_iterator<StringType> it, const typename string_iterator<StringType>::difference_type distance);
 
+///\relates string_iterator
 /// subtract offset
 ///
 template <typename StringType>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 string_iterator<StringType> operator- (const string_iterator<StringType> it, const typename string_iterator<StringType>::difference_type distance);
 
+///\relates string_iterator
 /// difference
 ///
 template <typename StringType>

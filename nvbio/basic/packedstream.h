@@ -327,6 +327,7 @@ private:
     index_type  m_index;
 };
 
+///\relates PackedStream
 /// less than
 ///
 template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
@@ -334,6 +335,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator< (
     const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
     const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2);
 
+///\relates PackedStream
 /// greater than
 ///
 template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
@@ -341,6 +343,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator> (
     const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
     const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2);
 
+///\relates PackedStream
 /// equality test
 ///
 template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
@@ -348,6 +351,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator== (
     const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
     const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2);
 
+///\relates PackedStream
 /// inequality test
 ///
 template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
@@ -355,6 +359,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator!= (
     const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
     const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2);
 
+///\relates PackedStream
 /// assign a sequence to a packed stream
 ///
 template <typename InputIterator, typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
@@ -550,6 +555,7 @@ public:
     uint32          m_word_offset;
 };
 
+///\relates ForwardPackedStream
 /// less than
 ///
 template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
@@ -557,6 +563,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator< (
     const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
     const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2);
 
+///\relates ForwardPackedStream
 /// greater than
 ///
 template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
@@ -564,6 +571,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator> (
     const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
     const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2);
 
+///\relates ForwardPackedStream
 /// equality test
 ///
 template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
@@ -571,6 +579,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator== (
     const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
     const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2);
 
+///\relates ForwardPackedStream
 /// inequality test
 ///
 template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>

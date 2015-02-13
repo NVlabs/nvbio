@@ -41,7 +41,7 @@ namespace nvbio {
 ///@{
 
 ///
-///@defgroup VectorizedStringLoadingModule Vectorized String Loading
+///\defgroup VectorizedStringLoadingModule Vectorized String Loading
 ///\par
 /// The functions in this module define a vector loading API for strings:
 /// strings, are usually made up of tiny characters, often a byte each, or

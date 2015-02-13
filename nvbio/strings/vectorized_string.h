@@ -177,7 +177,7 @@ void vectorized_string_load(const string_type& string, const uint32 i, typename 
 // --- const char* specialization------------------------------------------------------------------------
 //
 
-/// const char* specialization
+/// const char* specialization of the \ref VectorizedStringLoadingModule interface
 ///
 template <>
 struct vectorized_string<const char*>
@@ -242,7 +242,7 @@ struct vectorized_string<const char*>
 // --- vector_view<const T*> specialization------------------------------------------------------------------------
 //
 
-/// vector_view specialization
+/// vector_view specialization of the \ref VectorizedStringLoadingModule interface
 ///
 template <typename T, typename IndexType>
 struct vectorized_string< vector_view<const T*,IndexType> >
@@ -306,7 +306,7 @@ struct vectorized_string< vector_view<const T*,IndexType> >
 // --- vector_view< PackedStream > specialization---------------------------------------------------------------------
 //
 
-/// PackedStream specialization
+/// PackedStream specialization of the \ref VectorizedStringLoadingModule interface
 ///
 template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
 struct vectorized_string< vector_view< PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> > >

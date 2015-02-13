@@ -26,7 +26,7 @@
  */
 
 #include <nvBowtie/bowtie2/cuda/score.h>
-#include <nvBowtie/bowtie2/cuda/score_impl.h>
+#include <nvBowtie/bowtie2/cuda/score_all_impl.h>
 #include <nvBowtie/bowtie2/cuda/scoring.h>
 #include <nvBowtie/bowtie2/cuda/params.h>
 #include <nvbio/io/utils.h>

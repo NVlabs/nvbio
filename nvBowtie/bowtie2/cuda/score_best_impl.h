@@ -25,54 +25,47 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <nvBowtie/bowtie2/cuda/score.h>
-#include <nvBowtie/bowtie2/cuda/score_best_impl.h>
-#include <nvBowtie/bowtie2/cuda/scoring.h>
-#include <nvBowtie/bowtie2/cuda/params.h>
+#pragma once
+
+#include <nvbio/alignment/alignment.h>
+#include <nvbio/alignment/batched.h>
 #include <nvbio/io/utils.h>
 
 namespace nvbio {
 namespace bowtie2 {
 namespace cuda {
 
-//
-// execute a batch of single-ended banded-alignment score calculations, best mapping
-//
-// \b inputs:
-//  - HitQueues::seed
-//  - HitQueues::loc
-//
-// \b outputs:
-//  - HitQueues::score
-//  - HitQueues::sink
-//
-void score_best(
-    const uint32                                                            band_len,
-    const BestApproxScoringPipelineState<EditDistanceScoringScheme >&       pipeline,
-    const ParamsPOD&                                                        params)
-{
-    score_best_t( band_len, pipeline, params );
-}
+template <typename ScoringScheme> struct BaseScoringPipelineState;
+template <typename ScoringScheme> struct BestApproxScoringPipelineState;
 
-//
-// execute a batch of single-ended banded-alignment score calculations, best mapping
-//
-// \b inputs:
-//  - HitQueues::seed
-//  - HitQueues::loc
-//
-// \b outputs:
-//  - HitQueues::score
-//  - HitQueues::sink
-//
-void score_best(
-    const uint32                                                            band_len,
-    const BestApproxScoringPipelineState<SmithWatermanScoringScheme<> >&    pipeline,
-    const ParamsPOD&                                                        params)
-{
-    score_best_t( band_len, pipeline, params );
-}
+///@addtogroup nvBowtie
+///@{
+
+///@addtogroup Scoring
+///@{
+
+///
+/// execute a batch of single-ended banded-alignment score calculations, best mapping
+///
+/// \b inputs:
+///  - HitQueues::seed
+///  - HitQueues::loc
+///
+/// \b outputs:
+///  - HitQueues::score
+///  - HitQueues::sink
+///
+template <typename scheme_type>
+void score_best_t(
+    const uint32                                        band_len,
+    const BestApproxScoringPipelineState<scheme_type>&  pipeline,
+    const ParamsPOD                                     params);
+
+///@}  // group Scoring
+///@}  // group nvBowtie
 
 } // namespace cuda
 } // namespace bowtie2
 } // namespace nvbio
+
+#include <nvBowtie/bowtie2/cuda/score_best_inl.h>

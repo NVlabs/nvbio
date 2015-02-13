@@ -94,7 +94,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">Smith-Waterman Alignment of Protein Strings </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><dl class="section user"><dt></dt><dd>In &lt;a href:"https://github.com/NVlabs/nvbio/tree/master/examples/proteinsw"&gt;this example, we want to show how to perform Smith-Waterman alignment of protein strings, using a Blosum-62 substitution matrix, and the Gotoh variant of the Smith-Waterman aligner, supporting affine gap penalties. </dd></dl>
+<div class="textblock"><dl class="section user"><dt></dt><dd>In <a href="https://github.com/NVlabs/nvbio/tree/master/examples/proteinsw">this example</a>, we want to show how to perform Smith-Waterman alignment of protein strings, using a Blosum-62 substitution matrix, and the Gotoh variant of the Smith-Waterman aligner, supporting affine gap penalties. </dd></dl>
 <dl class="section user"><dt></dt><dd>We'll start by loading taking a hard-coded matrix representing the substition scores among protein characters in the order they appear in the PROTEIN <a class="el" href="strings_page.html#AlphabetsSection">Alphabet</a>.</dd></dl>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="console_8h.html">nvbio/basic/console.h</a>&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;<a class="code" href="timer_8h.html">nvbio/basic/timer.h</a>&gt;</span></div>
@@ -224,12 +224,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"></div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-</div><!-- fragment --><p>Notice that in the above example we used a <a class="el" href="structnvbio_1_1aln_1_1_text_blocking_tag.html#TextBlockingTag">TextBlockingTag</a> specialization of the <a class="el" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#GotohAligner">GotohAligner</a>, which is generally more efficient when the text is much longer than the pattern. In the &lt;a href:"https://github.com/NVlabs/nvbio/tree/master/examples/proteinsw"&gt;original example you'll find a test of various template instantiations, useful for performing some due-diligence auto-tuning to understand which specialization is optimal for your use-case. Similarly, one can play with the thread block scheduler configuration to try atteining better utilization of the available hardware resources.</p>
+</div><!-- fragment --><p>Notice that in the above example we used a <a class="el" href="structnvbio_1_1aln_1_1_text_blocking_tag.html#TextBlockingTag">TextBlockingTag</a> specialization of the <a class="el" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#GotohAligner">GotohAligner</a>, which is generally more efficient when the text is much longer than the pattern. In the <a href="https://github.com/NVlabs/nvbio/tree/master/examples/proteinsw">original example</a> you'll find a test of various template instantiations, useful for performing some due-diligence auto-tuning to understand which specialization is optimal for your use-case. Similarly, one can play with the thread block scheduler configuration to try atteining better utilization of the available hardware resources.</p>
 <p>Top: <a class="el" href="nvbio_page.html">NVBIO</a> </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 13 2015 11:35:05 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Feb 14 2015 00:08:33 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

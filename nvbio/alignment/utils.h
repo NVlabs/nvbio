@@ -222,12 +222,57 @@ uint32 max_text_gaps(
     int32                                           pattern_len);
 
 ///
-/// A trivial implementation of a quality string, constantly zero
+/// A trivial implementation of a quality string, constantly zero;
+/// This class has both a string and an iterator interface, as it is used as its own iterator.
 ///
 struct trivial_quality_string
 {
+    static const uint32 SYMBOL_SIZE = 8u;
+
+    typedef random_access_universal_iterator_tag    iterator_category;
+    typedef uint8                                   value_type;
+    typedef uint8                                   reference;
+    typedef const uint8*                            pointer;
+    typedef  int32                                  difference_type;
+    typedef uint32                                  index_type;
+    typedef trivial_quality_string                  iterator;
+    typedef trivial_quality_string                  const_iterator;
+    typedef trivial_quality_string                  forward_iterator;
+
+    /// indexing operator
+    ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
-    uint8 operator[] (const uint32 i) const { return 0u; }
+    uint8 operator[] (const index_type i) const { return 0u; }
+
+    /// dereference operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    uint8 operator* () const { return 0u; }
+
+    /// pre-decrement
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    trivial_quality_string& operator++ (){ return *this; }
+
+    /// pre-increment
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    trivial_quality_string operator++ (int dummy) { return *this; }
+
+    /// pre-decrement
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    trivial_quality_string& operator-- (){ return *this; }
+
+    /// post-decrement
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    trivial_quality_string operator-- (int dummy) { return *this; }
+
+    /// return beginning iterator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    iterator begin() const { return *this; }
 };
 
 ///

@@ -101,4 +101,17 @@ struct iterator_system
     typedef typename iterator_category_system<iterator_category>::type  type;
 };
 
+/// extend the std::iterator_traits class
+///
+template <typename T>
+struct iterator_traits : public std::iterator_traits<T>
+{
+    typedef typename std::iterator_traits<T>::iterator_category  iterator_category;
+    typedef typename std::iterator_traits<T>::value_type         value_type;
+    typedef typename std::iterator_traits<T>::difference_type    difference_type;
+    typedef typename std::iterator_traits<T>::pointer            pointer;
+    typedef typename std::iterator_traits<T>::reference          reference;
+    typedef T                                                    forward_iterator;       ///< add forward iterator conversion
+};
+
 } // namespace nvbio

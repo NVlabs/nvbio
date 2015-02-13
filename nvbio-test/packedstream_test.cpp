@@ -55,6 +55,21 @@ bool check_stream(const uint8* uncomp_stream, const CompStream& comp_stream)
     return true;
 }
 
+template <typename CompStream>
+bool check_forward_stream(const uint8* uncomp_stream, CompStream comp_stream)
+{
+    for (uint32 i = 0; i < LEN; ++i)
+    {
+        if (uncomp_stream[i] != *comp_stream)
+        {
+            fprintf(stderr, "  forward iterator error at %u : found %u, expected %u\n", i, uint32( *comp_stream ), uint32( uncomp_stream[i] ));
+            return false;
+        }
+        ++comp_stream;
+    }
+    return true;
+}
+
 int packedstream_test()
 {
     {
@@ -221,6 +236,10 @@ int packedstream_test()
         if (check_stream( uncomp_stream, stream ) == false)
             exit(1);
 
+        ForwardPackedStream<const uint32*,uint8,4,true> forward_stream( stream );
+        if (check_forward_stream( uncomp_stream, forward_stream ) == false)
+            exit(1);
+
         const_cached_iterator<const uint32*> cached_base_stream( base_stream );
         PackedStream<const_cached_iterator<const uint32*>,uint8,4,true> cached_stream( cached_base_stream );
         if (check_stream( uncomp_stream, cached_stream ) == false)
@@ -263,6 +282,10 @@ int packedstream_test()
         std::sort( uncomp_stream, uncomp_stream + LEN );
         std::sort( stream.begin(), stream.begin() + LEN );
         if (check_stream( uncomp_stream, stream ) == false)
+            exit(1);
+
+        ForwardPackedStream<const uint4*,uint8,4,true> forward_stream( stream );
+        if (check_forward_stream( uncomp_stream, forward_stream ) == false)
             exit(1);
 
         const_cached_iterator<const uint4*> cached_base_stream( base_stream );
@@ -346,6 +369,10 @@ int packedstream_test()
         std::sort( uncomp_stream, uncomp_stream + LEN );
         std::sort( stream.begin(), stream.begin() + LEN );
         if (check_stream( uncomp_stream, stream ) == false)
+            exit(1);
+
+        ForwardPackedStream<const uint8*,uint8,2,true> forward_stream( stream );
+        if (check_forward_stream( uncomp_stream, forward_stream ) == false)
             exit(1);
 
         fprintf(stderr, "2-bit byte-stream test... done\n");

@@ -61,20 +61,21 @@ struct PackedVector
     typedef SystemTag   system_tag;
     typedef IndexType   index_type;
 
-    typedef typename nvbio::vector<system_tag,uint32>::pointer                        pointer;
-    typedef typename nvbio::vector<system_tag,uint32>::const_pointer            const_pointer;
+    typedef typename nvbio::vector<system_tag,uint32>::pointer                                pointer;
+    typedef typename nvbio::vector<system_tag,uint32>::const_pointer                    const_pointer;
 
-    typedef PackedStream<      pointer,uint8,SYMBOL_SIZE,BIG_ENDIAN,IndexType>        stream_type;
-    typedef PackedStream<const_pointer,uint8,SYMBOL_SIZE,BIG_ENDIAN,IndexType>  const_stream_type;
-    typedef typename stream_type::iterator                                            iterator;
-    typedef typename const_stream_type::iterator                                const_iterator;
+    typedef PackedStream<      pointer,uint8,SYMBOL_SIZE,BIG_ENDIAN,IndexType>                stream_type;
+    typedef PackedStream<const_pointer,uint8,SYMBOL_SIZE,BIG_ENDIAN,IndexType>          const_stream_type;
+    typedef typename stream_type::iterator                                                    iterator;
+    typedef typename const_stream_type::iterator                                        const_iterator;
+    typedef ForwardPackedStream<const_pointer,uint8,SYMBOL_SIZE,BIG_ENDIAN,IndexType>   forward_iterator;
 
-    typedef uint8                                                                     value_type;
-    typedef PackedStreamRef<stream_type>                                              reference;
-    typedef PackedStreamRef<const_stream_type>                                  const_reference;
+    typedef uint8                                                                             value_type;
+    typedef PackedStreamRef<stream_type>                                                      reference;
+    typedef PackedStreamRef<const_stream_type>                                          const_reference;
 
-    typedef stream_type                                                               plain_view_type;
-    typedef const_stream_type                                                   const_plain_view_type;
+    typedef stream_type                                                                       plain_view_type;
+    typedef const_stream_type                                                           const_plain_view_type;
 
     /// constructor
     ///

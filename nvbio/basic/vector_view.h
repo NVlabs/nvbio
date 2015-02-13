@@ -32,6 +32,7 @@
 #pragma once
 
 #include <nvbio/basic/types.h>
+#include <nvbio/basic/iterator.h>
 #include <nvbio/strings/string_traits.h>
 #include <iterator>
 #include <vector>
@@ -88,14 +89,15 @@ struct vector_view
 {
     typedef Iterator                                                    iterator;
     typedef Iterator                                                    const_iterator;
+    typedef typename iterator_traits<Iterator>::forward_iterator        forward_iterator;
 
-    typedef typename std::iterator_traits<Iterator>::value_type         value_type;
-    typedef typename std::iterator_traits<Iterator>::reference          reference;
+    typedef typename iterator_traits<Iterator>::value_type              value_type;
+    typedef typename iterator_traits<Iterator>::reference               reference;
     typedef typename to_const<reference>::type                          const_reference;
-    typedef typename std::iterator_traits<Iterator>::pointer            pointer;
+    typedef typename iterator_traits<Iterator>::pointer                 pointer;
     typedef IndexType                                                   size_type;
-    typedef typename std::iterator_traits<Iterator>::difference_type    difference_type;
-    //typedef typename std::iterator_traits<Iterator>::distance_type     distance_type;
+    typedef IndexType                                                   index_type;
+    typedef typename iterator_traits<Iterator>::difference_type         difference_type;
     typedef std::random_access_iterator_tag                             iterator_category;
 
     typedef vector_view<Iterator,IndexType>                                   plain_view_type;
@@ -228,8 +230,12 @@ struct string_traits< vector_view<Iterator,IndexType> >
 {
     static const uint32 SYMBOL_SIZE  = string_traits<Iterator>::SYMBOL_SIZE;
 
-    typedef typename vector_view<Iterator,IndexType>::value_type  value_type;
-    typedef typename vector_view<Iterator,IndexType>::reference   reference;
+    typedef typename vector_view<Iterator,IndexType>::value_type        value_type;
+    typedef typename vector_view<Iterator,IndexType>::reference         reference;
+    typedef typename vector_view<Iterator,IndexType>::index_type        index_type;
+    typedef typename vector_view<Iterator,IndexType>::iterator          iterator;
+    typedef typename vector_view<Iterator,IndexType>::const_iterator    const_iterator;
+    typedef typename vector_view<Iterator,IndexType>::forward_iterator  forward_iterator;
 };
 
 /// return length of a vector_view

@@ -41,8 +41,12 @@ struct string_traits
 {
     static const uint32 SYMBOL_SIZE = T::SYMBOL_SIZE;
 
-    typedef typename T::value_type  value_type;
-    typedef typename T::reference   reference;
+    typedef typename T::value_type          value_type;
+    typedef typename T::reference           reference;
+    typedef typename T::index_type          index_type;
+    typedef typename T::iterator            iterator;
+    typedef typename T::const_iterator      const_iterator;
+    typedef typename T::forward_iterator    forward_iterator;
 };
 
 /// a string-traits specialization for plain arrays (like C strings)
@@ -52,8 +56,12 @@ struct string_traits<T*>
 {
     static const uint32 SYMBOL_SIZE = 8u * uint32( sizeof(T) );
 
-    typedef T  value_type;
-    typedef T& reference;
+    typedef T           value_type;
+    typedef T&          reference;
+    typedef uint64      index_type;
+    typedef T*          iterator;
+    typedef const T*    const_iterator;
+    typedef const T*    forward_iterator;
 };
 
 /// a string-traits specialization for plain arrays (like C strings)
@@ -63,8 +71,12 @@ struct string_traits<const T*>
 {
     static const uint32 SYMBOL_SIZE = 8u * uint32( sizeof(T) );
 
-    typedef T        value_type;
-    typedef const T& reference;
+    typedef T           value_type;
+    typedef const T&    reference;
+    typedef uint64      index_type;
+    typedef const T*    iterator;
+    typedef const T*    const_iterator;
+    typedef const T*    forward_iterator;
 };
 
 ///@} Strings

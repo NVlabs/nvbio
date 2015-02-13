@@ -30,6 +30,7 @@
 #include <nvbio/basic/packedstream_loader.h>
 #include <nvbio/basic/vector_view.h>
 #include <nvbio/io/sequence/sequence.h>
+#include <nvbio/strings/string_iterator.h>
 
 #pragma once
 
@@ -103,32 +104,84 @@ struct OffsetXform
 struct quality_nop {};
 
 ///
-/// Helper class to extract qualities from a read
+/// Helper class to extract qualities from a read.
+/// This class has a string interface.
 ///
 template <typename ReadStreamType>
 struct ReadStreamQualities
 {
+    static const uint32 SYMBOL_SIZE = 8u;
+
+    typedef ReadStreamQualities<ReadStreamType>         this_type;
+    typedef random_access_universal_iterator_tag        iterator_category;
+    typedef uint8                                       value_type;
+    typedef value_type                                  reference;
+    typedef const value_type*                           pointer;
+    typedef typename ReadStreamType::difference_type    difference_type;
+    typedef typename ReadStreamType::index_type         index_type;
+    typedef string_iterator<this_type>                  iterator;
+    typedef string_iterator<this_type>                  const_iterator;
+    typedef string_iterator<this_type>                  forward_iterator;
+
+    /// default constructor
+    ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
     ReadStreamQualities() : m_read( NULL ) {}
 
+    /// constructor
+    ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
     ReadStreamQualities(const ReadStreamType& read) : m_read( &read ) {}
 
+    /// indexing operator
+    ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
     uint8 operator[] (const uint32 pos) const { return m_read->quality(pos); }
+
+    /// return a begin iterator
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
+    iterator begin() { return iterator( *this ); }
+
+    /// return an end iterator
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
+    iterator end() { return iterator( *this, m_read->length() ); }
+
+    /// return a begin iterator
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
+    const_iterator begin() const { return const_iterator( *this ); }
+
+    /// return an end iterator
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
+    const_iterator end() const { return const_iterator( *this, m_read->length() ); }
 
     const ReadStreamType* m_read;
 };
 
 ///
 /// Helper class to represent a read or its reverse-complement - useful to avoid warp-divergence.
+/// This class has a string interface.
 ///
 template< typename StreamType, typename QualType = quality_nop >
 struct ReadStream
 {
-    typedef typename StreamType::symbol_type value_type;
-    typedef ReadStream<StreamType,QualType>  this_type;
-    typedef ReadStreamQualities<this_type>   qual_string_type; 
+    static const uint32 SYMBOL_SIZE = StreamType::SYMBOL_SIZE;
+
+    typedef typename StreamType::symbol_type        value_type;
+    typedef typename StreamType::index_type         index_type;
+    typedef ReadStream<StreamType,QualType>         this_type;
+    typedef ReadStreamQualities<this_type>          qual_string_type;
+
+    typedef random_access_universal_iterator_tag    iterator_category;
+    typedef value_type                              reference;
+    typedef const value_type*                       pointer;
+    typedef typename signed_type<index_type>::type  difference_type;
+    typedef string_iterator<this_type>              iterator;
+    typedef string_iterator<this_type>              const_iterator;
+    typedef string_iterator<this_type>              forward_iterator;
 
     /// default constructor
     ///
@@ -181,6 +234,27 @@ struct ReadStream
     ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
     qual_string_type qualities() const { return qual_string_type(*this); }
+
+    /// return a begin iterator
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
+    iterator begin() { return iterator( *this ); }
+
+    /// return an end iterator
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
+    iterator end() { return iterator( *this, length() ); }
+
+    /// return a begin iterator
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
+    const_iterator begin() const { return const_iterator( *this ); }
+
+    /// return an end iterator
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE
+    const_iterator end() const { return const_iterator( *this, length() ); }
+
 
     uint32      rev;                ///< reverse flag
     uint32      comp;               ///< complement flag

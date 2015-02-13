@@ -88,6 +88,10 @@ struct InfixCore<StringType,CoordType,2u>
     typedef typename std::iterator_traits<string_type>::value_type  value_type;
     typedef typename std::iterator_traits<string_type>::reference   reference;
 
+    typedef typename string_traits<StringType>::iterator            iterator;
+    typedef typename string_traits<StringType>::const_iterator      const_iterator;
+    typedef typename string_traits<StringType>::forward_iterator    forward_iterator;
+
     /// constructor
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
@@ -132,6 +136,22 @@ struct InfixCore<StringType,CoordType,2u>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     coord_type coords() const { return m_coords; }
 
+    /// return an iterator
+    ///
+    iterator begin() { return m_string.begin() + m_coords.x; }
+
+    /// return an iterator
+    ///
+    iterator end() { return m_string.begin() + m_coords.y; }
+
+    /// return an iterator
+    ///
+    const_iterator begin() const { return m_string.begin() + m_coords.x; }
+
+    /// return an iterator
+    ///
+    const_iterator end() const { return m_string.begin() + m_coords.y; }
+
     string_type     m_string;       ///< the underlying string set
     coord_type      m_coords;       ///< the infix coordinates
 };
@@ -154,6 +174,10 @@ struct InfixCore<StringType,CoordType,4u>
     typedef typename std::iterator_traits<string_type>::value_type  symbol_type;
     typedef typename std::iterator_traits<string_type>::value_type  value_type;
     typedef typename std::iterator_traits<string_type>::reference   reference;
+
+    typedef typename string_traits<StringType>::iterator            iterator;
+    typedef typename string_traits<StringType>::const_iterator      const_iterator;
+    typedef typename string_traits<StringType>::forward_iterator    forward_iterator;
 
     /// constructor
     ///
@@ -204,6 +228,22 @@ struct InfixCore<StringType,CoordType,4u>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     index_type string_id() const { return m_coords.x; }
 
+    /// return an iterator
+    ///
+    iterator begin() { return m_string.begin() + m_coords.y; }
+
+    /// return an iterator
+    ///
+    iterator end() { return m_string.begin() + m_coords.z; }
+
+    /// return an iterator
+    ///
+    const_iterator begin() const { return m_string.begin() + m_coords.y; }
+
+    /// return an iterator
+    ///
+    const_iterator end() const { return m_string.begin() + m_coords.z; }
+
     string_type     m_string;       ///< the underlying string set
     coord_type      m_coords;       ///< the infix coordinates
 };
@@ -231,6 +271,10 @@ struct Infix : public InfixCore< StringType, CoordType, vector_traits<CoordType>
     typedef typename std::iterator_traits<string_type>::value_type              symbol_type;
     typedef typename std::iterator_traits<string_type>::value_type              value_type;
     typedef typename std::iterator_traits<string_type>::reference               reference;
+
+    typedef typename string_traits<StringType>::iterator                        iterator;
+    typedef typename string_traits<StringType>::const_iterator                  const_iterator;
+    typedef typename string_traits<StringType>::forward_iterator                forward_iterator;
 
     /// constructor
     ///

@@ -27,19 +27,25 @@
 
 #pragma once
 
-#include <nvbio/basic/packedstream.h>
 #include <nvbio/alignment/sink.h>
 #include <nvbio/alignment/utils.h>
 #include <nvbio/alignment/alignment_base_inl.h>
 #include <nvbio/basic/iterator.h>
+#include <nvbio/strings/vectorized_string.h>
 
 namespace nvbio {
 namespace aln {
 
 // ----------------------------- Gotoh functions ---------------------------- //
 
+#define NVBIO_SW_VECTOR_LOADING
+
 namespace priv
 {
+
+template <typename string_type> struct gotoh_use_vectorization                          { static const bool VALUE = false; };
+template <typename T>           struct gotoh_use_vectorization< vector_view<      T*> > { static const bool VALUE = true; };
+template <typename T>           struct gotoh_use_vectorization< vector_view<const T*> > { static const bool VALUE = true; };
 
 //
 // A helper scoring context class, which can be used to adapt the basic
@@ -612,7 +618,7 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_ty
     //
     template <
         typename context_type,
-        typename string_type,
+        typename query_type,
         typename qual_type,
         typename ref_type,
         typename scoring_type,
@@ -623,7 +629,7 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_ty
     bool run(
         const scoring_type& scoring,
         context_type&       context,
-        string_type         query,
+        query_type         query,
         qual_type           quals,
         ref_type            ref,
         const int32         min_score,
@@ -694,28 +700,127 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_ty
 
             score_type temp_i = H_band[0];
 
-            // loop across the long edge of the DP matrix (i.e. the rows)
-            for (uint32 i = 0; i < N; ++i)
-            {
-                // load the new character from the reference
-                const uint8 r_i = ref[i];
+            //typedef typename string_traits<ref_type>::forward_iterator  forward_ref_iterator;
 
-                update_row<false>(
-                    context,
-                    block, M,
-                    i, N,
-                    r_i,
-                    q_cache,
-                    temp,
-                    temp_i,
-                    H_band,
-                    F_band,
-                    sink,
-                    min_score,
-                    max_score,
-                    G_o,G_e,
-                    zero,
-                    scoring );
+        #if defined(NVBIO_SW_VECTOR_LOADING)
+            // check whether we should use vectorized loads
+            if (gotoh_use_vectorization< ref_type >::VALUE)
+            {
+                //
+                // loop across the long edge of the DP matrix (i.e. the rows)
+                //
+                const uint32 REF_VECTOR_WIDTH = vectorized_string<ref_type>::VECTOR_WIDTH;
+
+                const uint2 vec_range = vectorized_string_range( ref );
+
+                for (uint32 i = 0; i < vec_range.x; ++i)
+                {
+                    // load the new character from the reference
+                    const uint8 r_i = ref[i];
+
+                    update_row<false>(
+                        context,
+                        block, M,
+                        i, N,
+                        r_i,
+                        q_cache,
+                        temp,
+                        temp_i,
+                        H_band,
+                        F_band,
+                        sink,
+                        min_score,
+                        max_score,
+                        G_o,G_e,
+                        zero,
+                        scoring );
+                }
+                for (uint32 i = vec_range.x; i < vec_range.y; i += REF_VECTOR_WIDTH)
+                {
+                    uint8 r[REF_VECTOR_WIDTH];
+
+                    // load REF_VECTOR_WIDTH new characters from the reference
+                    vectorized_string_load( ref, i, r );
+
+                    for (uint32 j = 0; j < REF_VECTOR_WIDTH; ++j)
+                    {
+                        // load the new character from the reference
+                        const uint8 r_i = r[j];
+
+                        update_row<false>(
+                            context,
+                            block, M,
+                            i + j, N,
+                            r_i,
+                            q_cache,
+                            temp,
+                            temp_i,
+                            H_band,
+                            F_band,
+                            sink,
+                            min_score,
+                            max_score,
+                            G_o,G_e,
+                            zero,
+                            scoring );
+                    }
+                }
+
+                for (uint32 i = vec_range.y; i < N; ++i)
+                {
+                    // load the new character from the reference
+                    const uint8 r_i = ref[i];
+
+                    update_row<false>(
+                        context,
+                        block, M,
+                        i, N,
+                        r_i,
+                        q_cache,
+                        temp,
+                        temp_i,
+                        H_band,
+                        F_band,
+                        sink,
+                        min_score,
+                        max_score,
+                        G_o,G_e,
+                        zero,
+                        scoring );
+                }
+            }
+            else
+        #endif
+            {
+                //
+                // loop across the long edge of the DP matrix (i.e. the rows)
+                //
+
+                //forward_ref_iterator ref_it( ref.begin() );
+
+                for (uint32 i = 0; i < N; ++i)
+                {
+                    // load the new character from the reference
+                    const uint8 r_i = ref[i];
+                    //const uint8 r_i = *ref_it; ++ref_it;
+
+                    update_row<false>(
+                        context,
+                        block, M,
+                        i, N,
+                        r_i,
+                        q_cache,
+                        temp,
+                        temp_i,
+                        H_band,
+                        F_band,
+                        sink,
+                        min_score,
+                        max_score,
+                        G_o,G_e,
+                        zero,
+                        scoring );
+                }
             }
 
             // we are now (M - block - BAND_LEN) columns from the last one: check whether
@@ -821,7 +926,7 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_ty
     template <
         uint32   MAX_REF_LEN,
         typename context_type,
-        typename string_type,
+        typename query_type,
         typename qual_type,
         typename ref_type,
         typename scoring_type,
@@ -831,7 +936,7 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,PatternBlockingTag,symbol_ty
     bool run(
         const scoring_type& scoring,
         context_type&       context,
-        string_type         query,
+        query_type         query,
         qual_type           quals,
         ref_type            ref,
         const int32         min_score,
@@ -1013,7 +1118,7 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
     //
     template <
         typename context_type,
-        typename string_type,
+        typename query_type,
         typename qual_type,
         typename ref_type,
         typename scoring_type,
@@ -1024,7 +1129,7 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
     bool run(
         const scoring_type& scoring,
         context_type&       context,
-        string_type         query,
+        query_type         query,
         qual_type           quals,
         ref_type            ref,
         const int32         min_score,
@@ -1159,33 +1264,140 @@ struct gotoh_alignment_score_dispatch<BAND_LEN,TYPE,TextBlockingTag,symbol_type>
 
             score_type temp_i = H_band[0];
 
-            // loop across the short edge of the DP matrix (i.e. the rows)
-            for (uint32 i = 0; i < M; ++i)
+        #if defined(NVBIO_SW_VECTOR_LOADING)
+            // check whether we should use vectorized loads
+            if (gotoh_use_vectorization< query_type >::VALUE)
             {
-                // load the new character from the reference
-                const uint8 q_i  = query[i];
-                const uint8 qq_i = quals[i];
+                //
+                // loop across the long edge of the DP matrix (i.e. the rows)
+                //
+                const uint32 QUERY_VECTOR_WIDTH = vectorized_string<query_type>::VECTOR_WIDTH;
 
-                //const int32 m_i = scoring.match(qq_i);
+                const uint2 vec_range = vectorized_string_range( query );
 
-                update_row<true>(
-                    context,
-                    block, N,
-                    i, M,
-                    q_i,
-                    qq_i,
-                    //m_i,
-                    r_cache,
-                    temp,
-                    temp_i,
-                    H_band,
-                    F_band,
-                    sink,
-                    min_score,
-                    max_score,
-                    G_o,G_e,
-                    zero,
-                    scoring );
+                for (uint32 i = 0; i < vec_range.x; ++i)
+                {
+                    // load the new character from the query
+                    const uint8 q_i  = query[i];
+                    const uint8 qq_i = quals[i];
+
+                    update_row<true>(
+                        context,
+                        block, N,
+                        i, M,
+                        q_i,
+                        qq_i,
+                        r_cache,
+                        temp,
+                        temp_i,
+                        H_band,
+                        F_band,
+                        sink,
+                        min_score,
+                        max_score,
+                        G_o,G_e,
+                        zero,
+                        scoring );
+                }
+                for (uint32 i = vec_range.x; i < vec_range.y; i += QUERY_VECTOR_WIDTH)
+                {
+                    uint8 q[QUERY_VECTOR_WIDTH];
+                    uint8 qq[QUERY_VECTOR_WIDTH];
+
+                    // load QUERY_VECTOR_WIDTH new characters from the query
+                    vectorized_string_load( query, i, q );
+
+                    for (uint32 j = 0; j < QUERY_VECTOR_WIDTH; ++j)
+                        qq[j] = quals[i + j];
+
+                    for (uint32 j = 0; j < QUERY_VECTOR_WIDTH; ++j)
+                    {
+                        // load the new character from the reference
+                        const uint8 q_i = q[j];
+                        const uint8 qq_i = qq[j];
+
+                        update_row<true>(
+                            context,
+                            block, N,
+                            i + j, M,
+                            q_i,
+                            qq_i,
+                            r_cache,
+                            temp,
+                            temp_i,
+                            H_band,
+                            F_band,
+                            sink,
+                            min_score,
+                            max_score,
+                            G_o,G_e,
+                            zero,
+                            scoring );
+                    }
+                }
+                for (uint32 i = vec_range.y; i < M; ++i)
+                {
+                    // load the new character from the query
+                    const uint8 q_i  = query[i];
+                    const uint8 qq_i = quals[i];
+
+                    update_row<true>(
+                        context,
+                        block, N,
+                        i, M,
+                        q_i,
+                        qq_i,
+                        r_cache,
+                        temp,
+                        temp_i,
+                        H_band,
+                        F_band,
+                        sink,
+                        min_score,
+                        max_score,
+                        G_o,G_e,
+                        zero,
+                        scoring );
+                }
+            }
+            else
+        #endif
+            {
+                //typedef typename string_traits<query_type>::forward_iterator forward_query_iterator;
+                //typedef typename string_traits<qual_type>::forward_iterator  forward_qual_iterator;
+
+                //forward_query_iterator query_it( query.begin() );
+                //forward_qual_iterator  quals_it( quals.begin() );
+
+                //
+                // loop across the short edge of the DP matrix (i.e. the query)
+                //
+                for (uint32 i = 0; i < M; ++i)
+                {
+                    // load the new character from the query
+                    const uint8 q_i  = query[i];
+                    const uint8 qq_i = quals[i];
+                    //const uint8 q_i  = *query_it; ++query_it;
+                    //const uint8 qq_i = *quals_it; ++quals_it;
+
+                    update_row<true>(
+                        context,
+                        block, N,
+                        i, M,
+                        q_i,
+                        qq_i,
+                        r_cache,
+                        temp,
+                        temp_i,
+                        H_band,
+                        F_band,
+                        sink,
+                        min_score,
+                        max_score,
+                        G_o,G_e,
+                        zero,
+                        scoring );
+                }
             }
 
             if (TYPE == SEMI_GLOBAL)

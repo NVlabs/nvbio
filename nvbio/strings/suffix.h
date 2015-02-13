@@ -81,10 +81,15 @@ struct SuffixCore<StringType,CoordType,1u>
 {
     typedef StringType                                              string_type;
     typedef CoordType                                               coord_type;
+    typedef typename vector_traits<CoordType>::value_type           index_type;
 
     typedef typename std::iterator_traits<string_type>::value_type  symbol_type;
     typedef typename std::iterator_traits<string_type>::value_type  value_type;
     typedef typename std::iterator_traits<string_type>::reference   reference;
+
+    typedef typename string_traits<StringType>::iterator            iterator;
+    typedef typename string_traits<StringType>::const_iterator      const_iterator;
+    typedef typename string_traits<StringType>::forward_iterator    forward_iterator;
 
     /// constructor
     ///
@@ -125,6 +130,22 @@ struct SuffixCore<StringType,CoordType,1u>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     coord_type coords() const { return m_coords; }
 
+    /// return an iterator
+    ///
+    iterator begin() { return m_string.begin() + m_coords; }
+
+    /// return an iterator
+    ///
+    iterator end() { return m_string.end(); }
+
+    /// return an iterator
+    ///
+    const_iterator begin() const { return m_string.begin() + m_coords; }
+
+    /// return an iterator
+    ///
+    const_iterator end() const { return m_string.end(); }
+
     string_type     m_string;       ///< the underlying string set
     coord_type      m_coords;       ///< the suffix coordinates
 };
@@ -141,10 +162,15 @@ struct SuffixCore<StringType,CoordType,2u>
 {
     typedef StringType                                              string_type;
     typedef CoordType                                               coord_type;
+    typedef typename vector_traits<CoordType>::value_type           index_type;
 
     typedef typename std::iterator_traits<string_type>::value_type  symbol_type;
     typedef typename std::iterator_traits<string_type>::value_type  value_type;
     typedef typename std::iterator_traits<string_type>::reference   reference;
+
+    typedef typename string_traits<StringType>::iterator            iterator;
+    typedef typename string_traits<StringType>::const_iterator      const_iterator;
+    typedef typename string_traits<StringType>::forward_iterator    forward_iterator;
 
     /// constructor
     ///
@@ -185,6 +211,22 @@ struct SuffixCore<StringType,CoordType,2u>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     coord_type coords() const { return m_coords; }
 
+    /// return an iterator
+    ///
+    iterator begin() { return m_string.begin() + m_coords.y; }
+
+    /// return an iterator
+    ///
+    iterator end() { return m_string.end(); }
+
+    /// return an iterator
+    ///
+    const_iterator begin() const { return m_string.begin() + m_coords.y; }
+
+    /// return an iterator
+    ///
+    const_iterator end() const { return m_string.end(); }
+
     string_type     m_string;       ///< the underlying string set
     coord_type      m_coords;       ///< the suffix coordinates
 };
@@ -208,10 +250,15 @@ struct Suffix : SuffixCore< StringType, CoordType, vector_traits<CoordType>::DIM
     typedef SuffixCore< StringType, CoordType, vector_traits<CoordType>::DIM >  core_type;
     typedef StringType                                                          string_type;
     typedef CoordType                                                           coord_type;
+    typedef typename vector_traits<CoordType>::value_type                       index_type;
 
     typedef typename std::iterator_traits<string_type>::value_type              symbol_type;
     typedef typename std::iterator_traits<string_type>::value_type              value_type;
     typedef typename std::iterator_traits<string_type>::reference               reference;
+
+    typedef typename string_traits<StringType>::iterator                        iterator;
+    typedef typename string_traits<StringType>::const_iterator                  const_iterator;
+    typedef typename string_traits<StringType>::forward_iterator                forward_iterator;
 
     /// constructor
     ///

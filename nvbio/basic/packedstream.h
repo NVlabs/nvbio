@@ -92,6 +92,11 @@ namespace nvbio {
 /// patterns.
 ///@{
 
+// forward declaration
+//
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+struct ForwardPackedStream;
+
 /// Basic stream traits class, providing compile-time information about a string type
 ///
 template <typename T> struct stream_traits
@@ -186,31 +191,33 @@ struct PackedStream
 {
     typedef PackedStream<InputStream,Symbol,SYMBOL_SIZE_T, BIG_ENDIAN_T,IndexType> This;
 
+    typedef typename unsigned_type<IndexType>::type                                         index_type;
+    typedef typename   signed_type<IndexType>::type                                         sindex_type;
+    typedef typename std::iterator_traits<InputStream>::value_type                          storage_type;
+
     static const uint32 SYMBOL_SIZE   = SYMBOL_SIZE_T;
     static const uint32 SYMBOL_COUNT  = 1u << SYMBOL_SIZE;
     static const uint32 SYMBOL_MASK   = SYMBOL_COUNT - 1u;
     static const uint32 BIG_ENDIAN    = BIG_ENDIAN_T;
     static const uint32 ALPHABET_SIZE = SYMBOL_COUNT;
 
-    typedef typename unsigned_type<IndexType>::type                  index_type;
-    typedef typename   signed_type<IndexType>::type                 sindex_type;
-    typedef typename std::iterator_traits<InputStream>::value_type  storage_type;
-
     static const uint32 WORD_SIZE        = uint32( sizeof(storage_type) );
     static const uint32 SYMBOLS_PER_WORD = (8u * WORD_SIZE) / SYMBOL_SIZE;
     static const uint32 VECTOR_WIDTH     = SYMBOLS_PER_WORD;
 
-    typedef InputStream                                                     stream_type;
-    typedef InputStream                                                     storage_iterator;
-    typedef Symbol                                                          symbol_type;
-    typedef This                                                            iterator;
-    typedef PackedStreamRef<This>                                           reference;
-    typedef Symbol                                                          const_reference;
-    typedef reference*                                                      pointer;
-    typedef typename std::iterator_traits<InputStream>::iterator_category   iterator_category;
-    typedef symbol_type                                                     value_type;
-    typedef sindex_type                                                     difference_type;
-    typedef sindex_type                                                     distance_type;
+    typedef InputStream                                                                     stream_type;
+    typedef InputStream                                                                     storage_iterator;
+    typedef Symbol                                                                          symbol_type;
+    typedef PackedStreamRef<This>                                                           reference;
+    typedef Symbol                                                                          const_reference;
+    typedef reference*                                                                      pointer;
+    typedef typename std::iterator_traits<InputStream>::iterator_category                   iterator_category;
+    typedef symbol_type                                                                     value_type;
+    typedef sindex_type                                                                     difference_type;
+    typedef sindex_type                                                                     distance_type;
+    typedef This                                                                            iterator;
+    typedef This                                                                            const_iterator;
+    typedef ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T, BIG_ENDIAN_T,IndexType>   forward_iterator;
 
     /// empty constructor
     ///
@@ -238,6 +245,14 @@ struct PackedStream
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE reference operator[] (const index_type i) { return reference( *this + i ); }
 
+    /// get the current symbol
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Symbol get() const { return get(0); }
+
+    /// set the current symbol
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void set(const Symbol s) { set( 0, s ); }
+
     /// get the i-th symbol
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Symbol get(const index_type i) const;
@@ -248,7 +263,7 @@ struct PackedStream
 
     /// return begin iterator
     ///
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE iterator begin() const;
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE iterator begin() const { return *this; }
 
     /// return the base stream
     ///
@@ -267,6 +282,7 @@ struct PackedStream
     PackedStream& operator=(const PackedStream<UInputStream,USymbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& other)
     {
         m_stream = static_cast<InputStream>( other.stream() );
+        m_index  = other.m_index;
         return *this;
     }
 
@@ -359,6 +375,220 @@ struct stream_traits< PackedStream<InputStream,SymbolType,SYMBOL_SIZE_T,BIG_ENDI
 
     static const uint32 SYMBOL_SIZE  = PackedStream<InputStream,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>::SYMBOL_SIZE;
     static const uint32 SYMBOL_COUNT = PackedStream<InputStream,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>::SYMBOL_COUNT;
+};
+
+///\relates PackedStream
+/// PackedStream specialization of the iterator_traits class
+///
+template <typename InputStream, typename SymbolType, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+struct iterator_traits< PackedStream<InputStream,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> > : public std::iterator_traits< PackedStream<InputStream,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> >
+{
+    typedef PackedStream<InputStream,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>   iterator;
+
+    typedef typename iterator::iterator_category  iterator_category;
+    typedef typename iterator::value_type         value_type;
+    typedef typename iterator::difference_type    difference_type;
+    typedef typename iterator::pointer            pointer;
+    typedef typename iterator::reference          reference;
+    typedef typename iterator::forward_iterator   forward_iterator;
+};
+
+///
+/// A class to represent a forward packed stream of symbols, where the size of the symbol is specified at compile-time
+/// as a template parameter.
+/// The sequence is packed on top of an underlying stream of words, whose type can also be specified at compile-time
+/// in order to allow for different memory access patterns.
+///
+/// \tparam InputStream         the underlying stream of words used to hold the packed stream (e.g. uint32, uint4)
+/// \tparam Symbol              the unpacked symbol type (e.g. uint8)
+/// \tparam SYMBOL_SIZE_T       the number of bits needed for each symbol
+/// \tparam BIG_ENDIAN_T        the "endianness" of the words: if true, symbols will be packed from right to left within each word
+/// \tparam IndexType           the type of integer used to address the stream (e.g. uint32, uint64)
+///
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType = uint32>
+struct ForwardPackedStream
+{
+    typedef ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T, BIG_ENDIAN_T,IndexType> This;
+
+    static const uint32 SYMBOL_SIZE   = SYMBOL_SIZE_T;
+    static const uint32 SYMBOL_COUNT  = 1u << SYMBOL_SIZE;
+    static const uint32 SYMBOL_MASK   = SYMBOL_COUNT - 1u;
+    static const uint32 BIG_ENDIAN    = BIG_ENDIAN_T;
+    static const uint32 ALPHABET_SIZE = SYMBOL_COUNT;
+
+    typedef typename unsigned_type<IndexType>::type                  index_type;
+    typedef typename   signed_type<IndexType>::type                 sindex_type;
+    typedef typename std::iterator_traits<InputStream>::value_type  storage_type;
+
+    static const uint32 WORD_SIZE        = uint32( sizeof(storage_type) );
+    static const uint32 SYMBOLS_PER_WORD = (8u * WORD_SIZE) / SYMBOL_SIZE;
+    static const uint32 VECTOR_WIDTH     = SYMBOLS_PER_WORD;
+
+    typedef InputStream                                                     stream_type;
+    typedef InputStream                                                     storage_iterator;
+    typedef Symbol                                                          symbol_type;
+    typedef PackedStreamRef<This>                                           reference;
+    typedef Symbol                                                          const_reference;
+    typedef reference*                                                      pointer;
+    typedef typename std::iterator_traits<InputStream>::iterator_category   iterator_category;
+    typedef symbol_type                                                     value_type;
+    typedef sindex_type                                                     difference_type;
+    typedef sindex_type                                                     distance_type;
+    typedef This                                                            iterator;
+    typedef This                                                            const_iterator;
+    typedef This                                                            forward_iterator;
+
+    /// empty constructor
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE ForwardPackedStream() {}
+
+    /// constructor
+    ///
+    template <typename UInputStream>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE explicit ForwardPackedStream(const UInputStream stream, const index_type index = 0) :
+        m_stream( static_cast<InputStream>(stream) ), m_index( index )
+    {
+        rebase();
+    }
+
+    /// constructor
+    ///
+    template <typename UInputStream, typename USymbol>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE ForwardPackedStream(const ForwardPackedStream<UInputStream,USymbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& other) :
+        m_stream( static_cast<InputStream>( other.stream() ) ), m_index( other.index() ), m_word( other.m_word ), m_word_index( other.m_word_index ), m_word_offset( other.m_word_offset ) {}
+
+    /// constructor
+    ///
+    template <typename UInputStream, typename USymbol>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE ForwardPackedStream(const PackedStream<UInputStream,USymbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& other) :
+        m_stream( static_cast<InputStream>( other.stream() ) ), m_index( other.index() )
+    {
+        rebase();
+    }
+
+    /// dereference operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE reference operator* () const { return reference( *this ); }
+
+    /// get the current symbol
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE Symbol get() const;
+
+    /// return begin iterator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE iterator begin() const { return *this; }
+
+    /// return the base stream
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    InputStream stream() const { return m_stream; }
+
+    /// return the offset this iterator refers to
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    index_type index() const { return m_index; }
+
+    /// assignment operator
+    ///
+    template <typename UInputStream, typename USymbol>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    ForwardPackedStream& operator=(const ForwardPackedStream<UInputStream,USymbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& other)
+    {
+        m_stream      = static_cast<InputStream>( other.stream() );
+        m_index       = other.m_index;
+        m_word        = other.m_word;
+        m_word_index  = other.m_word_index;
+        m_word_offset = other.m_word_offset;
+        return *this;
+    }
+
+    /// pre-increment operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE ForwardPackedStream& operator++ ();
+
+    /// post-increment operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE ForwardPackedStream operator++ (int dummy);
+
+    /// pre-decrement operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE ForwardPackedStream& operator-- ();
+
+    /// post-decrement operator
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE ForwardPackedStream operator-- (int dummy);
+
+    /// add offset
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE ForwardPackedStream& operator+= (const sindex_type distance);
+
+    /// subtract offset
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE ForwardPackedStream& operator-= (const sindex_type distance);
+
+    /// add offset
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE ForwardPackedStream operator+ (const sindex_type distance) const;
+
+    /// subtract offset
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE ForwardPackedStream operator- (const sindex_type distance) const;
+
+    /// difference
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE sindex_type operator- (const ForwardPackedStream it) const;
+
+    /// rebase the iterator at the current location
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void rebase();
+
+public:
+    InputStream     m_stream;
+    index_type      m_index;
+    storage_type    m_word;
+    uint32          m_word_index;
+    uint32          m_word_offset;
+};
+
+/// less than
+///
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator< (
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2);
+
+/// greater than
+///
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator> (
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2);
+
+/// equality test
+///
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator== (
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2);
+
+/// inequality test
+///
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator!= (
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2);
+
+/// PackedStream specialization of the stream_traits class, providing compile-time information about the
+/// corresponding string type
+///
+template <typename InputStream, typename SymbolType, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+struct stream_traits< ForwardPackedStream<InputStream,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType> >
+{
+    typedef IndexType   index_type;
+    typedef SymbolType  symbol_type;
+
+    static const uint32 SYMBOL_SIZE  = ForwardPackedStream<InputStream,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>::SYMBOL_SIZE;
+    static const uint32 SYMBOL_COUNT = ForwardPackedStream<InputStream,SymbolType,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>::SYMBOL_COUNT;
 };
 
 ///

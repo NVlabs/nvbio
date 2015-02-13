@@ -616,16 +616,6 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void PackedStream<InputStream,Symbol, SYMBOL
     return packer<BIG_ENDIAN_T, SYMBOL_SIZE,Symbol,InputStream,IndexType,storage_type>::set_symbol( m_stream, sym_idx + m_index, sym );
 }
 
-// return begin iterator
-//
-template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-typename PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::iterator
-PackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::begin() const
-{
-    return iterator( m_stream, m_index );
-}
-
 // pre-increment operator
 //
 template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
@@ -737,7 +727,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamRef<Stream>& PackedStreamRef<Str
 template <typename Stream>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamRef<Stream>& PackedStreamRef<Stream>::operator= (const Symbol s)
 {
-    m_stream.set( 0u, s );
+    m_stream.set( s );
     return *this;
 }
 
@@ -746,7 +736,7 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamRef<Stream>& PackedStreamRef<Str
 template <typename Stream>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE PackedStreamRef<Stream>::operator Symbol() const
 {
-    return m_stream.get( 0u );
+    return m_stream.get();
 }
 
 /// less than
@@ -785,6 +775,323 @@ template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator!= (
     const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
     const PackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2)
+{
+    return it1.stream() != it2.stream() || it1.index() != it2.index();
+}
+
+template <bool BIG_ENDIAN, uint32 SYMBOL_SIZE, typename Symbol, typename InputStream, typename IndexType, typename ValueType>
+struct forward_packer
+{
+    typedef ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE,BIG_ENDIAN,IndexType> forward_stream_type;
+
+    static const uint32 SYMBOL_COUNT     = 1u << SYMBOL_SIZE;
+    static const uint32 SYMBOL_MASK      = SYMBOL_COUNT - 1u;
+    static const uint32 WORD_SIZE        = 8u * uint32( sizeof(ValueType) );
+    static const uint32 SYMBOLS_PER_WORD = WORD_SIZE / SYMBOL_SIZE;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static void rebase(forward_stream_type& it)
+    {
+        const uint32 symbol_idx = it.m_index & (SYMBOLS_PER_WORD-1);
+
+        it.m_word_index  = it.m_index / SYMBOLS_PER_WORD;
+        it.m_word_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - symbol_idx * SYMBOL_SIZE) : symbol_idx * SYMBOL_SIZE;
+
+        it.m_word = it.m_stream[ it.m_word_index ];
+    }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static void next(forward_stream_type& it)
+    {
+        it.m_index++;
+
+        if (BIG_ENDIAN)
+        {
+            if (it.m_word_offset > 0)
+                it.m_word_offset -= SYMBOL_SIZE;
+            else
+            {
+                // need a new word
+                ++it.m_word_index;
+
+                it.m_word        = it.m_stream[ it.m_word_index ];
+                it.m_word_offset = WORD_SIZE - SYMBOL_SIZE;
+            }
+        }
+        else
+        {
+            if (it.m_word_offset < WORD_SIZE - SYMBOL_SIZE)
+                it.m_word_offset += SYMBOL_SIZE;
+            else
+            {
+                // need a new word
+                ++it.m_word_index;
+
+                it.m_word        = it.m_stream[ it.m_word_index ];
+                it.m_word_offset = 0;
+            }
+        }
+    }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static void prev(forward_stream_type& it)
+    {
+        it.m_index--;
+
+        if (BIG_ENDIAN)
+        {
+            if (it.m_word_offset < WORD_SIZE - SYMBOL_SIZE)
+                it.m_word_offset += SYMBOL_SIZE;
+            else
+            {
+                // need a new word
+                --it.m_word_index;
+
+                it.m_word        = it.m_stream[ it.m_word_index ];
+                it.m_word_offset = 0u;
+            }
+        }
+        else
+        {
+            if (it.m_word_offset > 0)
+                it.m_word_offset -= SYMBOL_SIZE;
+            else
+            {
+                // need a new word
+                --it.m_word_index;
+
+                it.m_word        = it.m_stream[ it.m_word_index ];
+                it.m_word_offset = WORD_SIZE - SYMBOL_SIZE;
+            }
+        }
+    }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static Symbol fetch(const forward_stream_type& it)
+    {
+        return Symbol( (it.m_word >> it.m_word_offset) & SYMBOL_MASK );
+    }
+};
+
+template <bool BIG_ENDIAN, uint32 SYMBOL_SIZE, typename Symbol, typename InputStream, typename IndexType>
+struct forward_packer<BIG_ENDIAN, SYMBOL_SIZE, Symbol, InputStream, IndexType, uint4>
+{
+    typedef ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE,BIG_ENDIAN,IndexType> forward_stream_type;
+
+    static const uint32 SYMBOL_COUNT        = 1u << SYMBOL_SIZE;
+    static const uint32 SYMBOL_MASK         = SYMBOL_COUNT - 1u;
+    static const uint32 WORD_SIZE           = 128;
+    static const uint32 SUBWORD_SIZE        = 32;
+    static const uint32 SYMBOLS_PER_WORD    = WORD_SIZE / SYMBOL_SIZE;
+    static const uint32 SYMBOLS_PER_SUBWORD = SUBWORD_SIZE / SYMBOL_SIZE;
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static void rebase(forward_stream_type& it)
+    {
+        const uint32 symbol_idx = it.m_index & (SYMBOLS_PER_WORD-1);
+
+        it.m_word_index  = it.m_index / SYMBOLS_PER_WORD;
+        it.m_word_offset = it.m_index & (SYMBOLS_PER_WORD-1);
+
+        it.m_word = it.m_stream[ it.m_word_index ];
+    }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static void next(forward_stream_type& it)
+    {
+        it.m_index++;
+
+        if (it.m_word_offset < SYMBOLS_PER_WORD-1)
+            it.m_word_offset++;
+        else
+        {
+            // need a new word
+            ++it.m_word_index;
+
+            it.m_word        = it.m_stream[ it.m_word_index ];
+            it.m_word_offset = 0;
+        }
+    }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static void prev(forward_stream_type& it)
+    {
+        it.m_index--;
+
+        if (it.m_word_offset > 0)
+            it.m_word_offset--;
+        else
+        {
+            // need a new word
+            --it.m_word_index;
+
+            it.m_word        = it.m_stream[ it.m_word_index ];
+            it.m_word_offset = SYMBOLS_PER_WORD - 1u;
+        }
+    }
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    static Symbol fetch(const forward_stream_type& it)
+    {
+        const uint32 word_comp = comp( it.m_word, it.m_word_offset / SYMBOLS_PER_SUBWORD );
+        const uint32 word_mod  =                  it.m_word_offset & (SYMBOLS_PER_SUBWORD-1);
+
+        const uint32 word_offset = BIG_ENDIAN ? (SUBWORD_SIZE - SYMBOL_SIZE - word_mod * SYMBOL_SIZE) :
+                                                                             (word_mod * SYMBOL_SIZE);
+
+        return Symbol( (word_comp >> word_offset) & SYMBOL_MASK );
+    }
+};
+
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+Symbol ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::get() const
+{
+    return forward_packer<BIG_ENDIAN_T,SYMBOL_SIZE,Symbol,InputStream,IndexType,storage_type>::fetch( *this );
+}
+
+// rebase the iterator
+//
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+void ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::rebase(void)
+{
+    forward_packer<BIG_ENDIAN_T,SYMBOL_SIZE_T,Symbol,InputStream,IndexType,storage_type>::rebase(*this);
+}
+
+// pre-increment operator
+//
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>&
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator++ ()
+{
+    forward_packer<BIG_ENDIAN_T,SYMBOL_SIZE_T,Symbol,InputStream,IndexType,storage_type>::next(*this);
+    return *this;
+}
+
+// post-increment operator
+//
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator++ (int dummy)
+{
+    This r( m_stream, m_index );
+    forward_packer<BIG_ENDIAN_T,SYMBOL_SIZE_T,Symbol,InputStream,IndexType,storage_type>::next(*this);
+    return r;
+}
+
+// pre-decrement operator
+//
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>&
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator-- ()
+{
+    forward_packer<BIG_ENDIAN_T,SYMBOL_SIZE_T,Symbol,InputStream,IndexType,storage_type>::prev(*this);
+    return *this;
+}
+
+// post-decrement operator
+//
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator-- (int dummy)
+{
+    This r( m_stream, m_index );
+    forward_packer<BIG_ENDIAN_T,SYMBOL_SIZE_T,Symbol,InputStream,IndexType,storage_type>::prev(*this);
+    return r;
+}
+
+
+// add offset
+//
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>&
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator+= (const sindex_type distance)
+{
+    m_index += distance;
+    rebase();
+    return *this;
+}
+
+// subtract offset
+//
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>&
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator-= (const sindex_type distance)
+{
+    m_index -= distance;
+    rebase();
+    return *this;
+}
+
+// add offset
+//
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator+ (const sindex_type distance) const
+{
+    return This( m_stream, m_index + distance );
+}
+
+// subtract offset
+//
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator- (const sindex_type distance) const
+{
+    return This( m_stream, m_index - distance );
+}
+
+// difference
+//
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+typename ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::sindex_type
+ForwardPackedStream<InputStream,Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType>::operator- (const ForwardPackedStream it) const
+{
+    return sindex_type( m_index - it.m_index );
+}
+
+/// less than
+///
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator< (
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2)
+{
+    return it1.index() < it2.index();
+}
+
+/// greater than
+///
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator> (
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2)
+{
+    return it1.index() > it2.index();
+}
+
+/// equality test
+///
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator== (
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2)
+{
+    return it1.stream() == it2.stream() && it1.index() == it2.index();
+}
+
+/// inequality test
+///
+template <typename InputStream, typename Symbol, uint32 SYMBOL_SIZE_T, bool BIG_ENDIAN_T, typename IndexType>
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE bool operator!= (
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it1,
+    const ForwardPackedStream<InputStream,Symbol,SYMBOL_SIZE_T,BIG_ENDIAN_T,IndexType>& it2)
 {
     return it1.stream() != it2.stream() || it1.index() != it2.index();
 }

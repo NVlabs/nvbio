@@ -1045,11 +1045,11 @@
 
 /// \page proteinsw_page Smith-Waterman Alignment of Protein Strings
 ///\par
-/// In <a href:"https://github.com/NVlabs/nvbio/tree/master/examples/proteinsw">this example</a>, we want to show
+/// In <a href="https://github.com/NVlabs/nvbio/tree/master/examples/proteinsw">this example</a>, we want to show
 /// how to perform Smith-Waterman alignment of protein strings, using a Blosum-62 substitution matrix, and the
 /// Gotoh variant of the Smith-Waterman aligner, supporting affine gap penalties.
 ///\par
-/// We'll start by loading taking a hard-coded matrix representing the substition scores among protein characters
+/// We'll start by taking a hard-coded matrix representing the substition scores among protein characters
 /// in the order they appear in the \ref PROTEIN \ref AlphabetsSection "Alphabet".
 ///
 ///\code
@@ -1194,10 +1194,10 @@
 ///
 /// Notice that in the above example we used a \ref TextBlockingTag specialization of the \ref GotohAligner,
 /// which is generally more efficient when the text is much longer than the pattern.
-/// In the <a href:"https://github.com/NVlabs/nvbio/tree/master/examples/proteinsw">original example</a> you'll find
+/// In the <a href="https://github.com/NVlabs/nvbio/tree/master/examples/proteinsw">original example</a> you'll find
 /// a test of various template instantiations, useful for performing some due-diligence auto-tuning to understand
 /// which specialization is optimal for your use-case.
-/// Similarly, one can play with the thread block scheduler configuration to try atteining better utilization of the
+/// Similarly, one can play with the thread block scheduler configuration to try attaining better utilization of the
 /// available hardware resources.
 ///
 /// Top: \ref nvbio_page

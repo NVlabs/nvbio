@@ -232,8 +232,8 @@ EditDistanceAligner<TYPE,PatternBlockingTag> transpose(const EditDistanceAligner
 ///     // the maximum match bonus at a given quality q 
 ///     int32 match(const uint8 q = 0) const;
 ///
-///     // the substitution score of text and pattern bases (t,p) at positions (t_i,p_j),
-///     // with a given quality q
+///     // the substitution score of text and pattern bases (t,p),
+///     // at positions (t_i,p_j), with a given pattern quality q
 ///     int32 substitution(
 ///         const uint32 t_i, const uint32 p_j,
 ///         const uint8  t,   const uint8  p,   const uint8 q = 0) const;

@@ -41,6 +41,7 @@ namespace aln {
 /// Four such algorithms are currently available:
 ///
 ///     - HostThreadScheduler
+///     - DeviceThreadBlockScheduler
 ///     - DeviceThreadScheduler
 ///     - DeviceStagedThreadScheduler
 ///     - DeviceWarpScheduler
@@ -50,7 +51,11 @@ namespace aln {
 ///
 struct HostThreadScheduler {};
 
-/// Identify a staged thread-parallel batch execution algorithm
+/// Identify a device thread-parallel batch execution algorithm, specifying
+/// the CUDA kernel grid configuration
+///
+/// \tparam BLOCKDIM_T          thread-block (CTA) size
+/// \tparam MINBLOCKS_T         minimum number of blocks per SM
 ///
 template <uint32 BLOCKDIM_T, uint32 MINBLOCKS_T>
 struct DeviceThreadBlockScheduler

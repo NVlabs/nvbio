@@ -1197,7 +1197,7 @@
 /// In the <a href="https://github.com/NVlabs/nvbio/tree/master/examples/proteinsw">original example</a> you'll find
 /// a test of various template instantiations, useful for performing some due-diligence auto-tuning to understand
 /// which specialization is optimal for your use-case.
-/// Similarly, one can play with the thread block scheduler configuration to try attaining better utilization of the
+/// Similarly, one can play with the \ref BatchScheduler "thread block scheduler" configuration to try attaining better utilization of the
 /// available hardware resources.
 ///
 /// Top: \ref nvbio_page

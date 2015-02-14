@@ -41,8 +41,7 @@ namespace aln {
 /// Four such algorithms are currently available:
 ///
 ///     - HostThreadScheduler
-///     - DeviceThreadBlockScheduler
-///     - DeviceThreadScheduler
+///     - DeviceThreadScheduler (inheriting from DeviceThreadBlockScheduler)
 ///     - DeviceStagedThreadScheduler
 ///     - DeviceWarpScheduler
 ///@{

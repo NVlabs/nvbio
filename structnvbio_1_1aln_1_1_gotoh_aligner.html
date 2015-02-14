@@ -117,7 +117,8 @@ struct nvbio::aln::GotohAligner&lt; T_TYPE, scoring_scheme_type, AlgorithmType &
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T_TYPE</td><td>specifies whether the alignment is LOCAL/SEMI_GLOBAL/GLOBAL </td></tr>
-    <tr><td class="paramname">scoring_scheme_type</td><td>specifies the scoring scheme, a model of <a class="el" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#GotohScoringScheme">Gotoh Scoring Scheme</a></td></tr>
+    <tr><td class="paramname">scoring_scheme_type</td><td>specifies the scoring scheme, a model of <a class="el" href="structnvbio_1_1aln_1_1_gotoh_aligner.html#GotohScoringScheme">Gotoh Scoring Scheme</a> </td></tr>
+    <tr><td class="paramname">AlgorithmType</td><td>specifies the <a class="el" href="group___algorithm_tag.html">Algorithm Tag</a></td></tr>
   </table>
   </dd>
 </dl>
@@ -126,26 +127,29 @@ Gotoh Scoring Scheme</h1>
 <p>A Gotoh scoring scheme is a class exposing the following interface:</p>
 <div class="fragment"><div class="line"><span class="keyword">struct </span>GotohScoringScheme</div>
 <div class="line">{</div>
-<div class="line">    <span class="comment">// the match bonus at a given quality q </span></div>
-<div class="line">    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> <a class="code" href="namespacenvbio.html#a10edbd2a2ecb580dcffbcf19898f80ea">match</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> q = 0)      <span class="keyword">const</span>;</div>
+<div class="line">    <span class="comment">// the maximum match bonus at a given quality q </span></div>
+<div class="line">    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> <a class="code" href="namespacenvbio.html#a10edbd2a2ecb580dcffbcf19898f80ea">match</a>(<span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> q = 0) <span class="keyword">const</span>;</div>
 <div class="line"></div>
-<div class="line">    <span class="comment">// the mismatch penalty at a given quality q </span></div>
-<div class="line">    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> mismatch(<span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> a, <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> b, <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> q = 0)   <span class="keyword">const</span>;</div>
+<div class="line">    <span class="comment">// the substitution score of text and pattern bases (t,p),</span></div>
+<div class="line">    <span class="comment">// at positions (t_i,p_j), with a given pattern quality q</span></div>
+<div class="line">    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> substitution(</div>
+<div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> t_i, <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> p_j,</div>
+<div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>  t,   <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>  p,   <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> q = 0) <span class="keyword">const</span>;</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// the pattern gap open cost</span></div>
-<div class="line">    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> pattern_gap_open()            <span class="keyword">const</span>;</div>
+<div class="line">    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> pattern_gap_open()       <span class="keyword">const</span>;</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// the pattern gap extension cost</span></div>
-<div class="line">    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> pattern_gap_extension()       <span class="keyword">const</span>;</div>
+<div class="line">    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> pattern_gap_extension()  <span class="keyword">const</span>;</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// the text gap open cost</span></div>
-<div class="line">    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> text_gap_open()               <span class="keyword">const</span>;</div>
+<div class="line">    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> text_gap_open()          <span class="keyword">const</span>;</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// the text gap extension cost</span></div>
-<div class="line">    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> text_gap_extension()          <span class="keyword">const</span>;</div>
+<div class="line">    <a class="code" href="group___basic.html#ga938b5b5bd985a42f95879b4616c3ea8a">int32</a> text_gap_extension()     <span class="keyword">const</span>;</div>
 <div class="line">};</div>
 </div><!-- fragment --> 
-<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00251">251</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00256">256</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -189,7 +193,7 @@ template&lt;AlignmentType T_TYPE, typename scoring_scheme_type, typename Algorit
 
 <p>the <a class="el" href="group___algorithm_tag.html">Algorithm Tag</a> </p>
 
-<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00256">256</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00261">261</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -207,7 +211,7 @@ template&lt;AlignmentType T_TYPE, typename scoring_scheme_type, typename Algorit
 
 <p>the <a class="el" href="group___aligner_tag.html">Aligner Tag</a> </p>
 
-<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00255">255</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00260">260</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -236,7 +240,7 @@ template&lt;AlignmentType T_TYPE, typename scoring_scheme_type, typename Algorit
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00259">259</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00264">264</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -253,7 +257,7 @@ template&lt;AlignmentType T_TYPE, typename scoring_scheme_type, typename Algorit
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00261">261</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00266">266</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -279,7 +283,7 @@ template&lt;AlignmentType T_TYPE, typename scoring_scheme_type, typename Algorit
 
 <p>the AlignmentType </p>
 
-<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00253">253</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
+<p>Definition at line <a class="el" href="alignment__base_8h_source.html#l00258">258</a> of file <a class="el" href="alignment__base_8h_source.html">alignment_base.h</a>.</p>
 
 </div>
 </div>
@@ -289,7 +293,7 @@ template&lt;AlignmentType T_TYPE, typename scoring_scheme_type, typename Algorit
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 13 2015 11:35:47 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Feb 14 2015 09:22:18 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

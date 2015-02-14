@@ -230,23 +230,25 @@ EditDistanceAligner<TYPE,PatternBlockingTag> transpose(const EditDistanceAligner
 /// struct GotohScoringScheme
 /// {
 ///     // the maximum match bonus at a given quality q 
-///     int32 match(const uint8 q = 0)      const;
+///     int32 match(const uint8 q = 0) const;
 ///
 ///     // the substitution score of text and pattern bases (t,p) at positions (t_i,p_j),
 ///     // with a given quality q
-///     int32 mismatch(const uint8 a, const uint8 b, const uint8 q = 0)   const;
+///     int32 substitution(
+///         const uint32 t_i, const uint32 p_j,
+///         const uint8  t,   const uint8  p,   const uint8 q = 0) const;
 ///
 ///     // the pattern gap open cost
-///     int32 pattern_gap_open()            const;
+///     int32 pattern_gap_open()       const;
 ///
 ///     // the pattern gap extension cost
-///     int32 pattern_gap_extension()       const;
+///     int32 pattern_gap_extension()  const;
 ///
 ///     // the text gap open cost
-///     int32 text_gap_open()               const;
+///     int32 text_gap_open()          const;
 ///
 ///     // the text gap extension cost
-///     int32 text_gap_extension()          const;
+///     int32 text_gap_extension()     const;
 /// };
 /// \endcode
 ///

@@ -173,7 +173,8 @@ enum State
 /// An edit distance alignment algorithm, see \ref Aligner
 /// \anchor EditDistanceAligner
 ///
-/// \tparam T_TYPE                    specifies whether the alignment is SEMI_GLOBAL/GLOBAL
+/// \tparam T_TYPE                  specifies whether the alignment is SEMI_GLOBAL/GLOBAL
+/// \tparam AlgorithmType           specifies the \ref AlgorithmTag "Algorithm Tag"
 ///
 template <AlignmentType T_TYPE, typename AlgorithmType = PatternBlockingTag>
 struct EditDistanceAligner
@@ -220,6 +221,7 @@ EditDistanceAligner<TYPE,PatternBlockingTag> transpose(const EditDistanceAligner
 ///
 /// \tparam T_TYPE                  specifies whether the alignment is LOCAL/SEMI_GLOBAL/GLOBAL
 /// \tparam scoring_scheme_type     specifies the scoring scheme, a model of \ref GotohScoringScheme
+/// \tparam AlgorithmType           specifies the \ref AlgorithmTag "Algorithm Tag"
 ///
 ///\section GotohScoringScheme Gotoh Scoring Scheme
 /// A Gotoh scoring scheme is a class exposing the following interface:
@@ -298,6 +300,7 @@ GotohAligner<TYPE,scoring_scheme_type,PatternBlockingTag> transpose(const GotohA
 ///
 /// \tparam TYPE                    specifies whether the alignment is LOCAL/SEMI_GLOBAL/GLOBAL
 /// \tparam scoring_scheme_type     specifies the scoring scheme, a model of \ref SmithWatermanScoringScheme
+/// \tparam AlgorithmType           specifies the \ref AlgorithmTag "Algorithm Tag"
 ///
 ///\section SmithWatermanScoringScheme Smith-Waterman Scoring Scheme
 /// A Smith-Waterman scoring scheme is a class exposing the following interface:

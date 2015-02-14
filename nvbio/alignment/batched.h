@@ -47,11 +47,11 @@ namespace aln {
 ///     - DeviceWarpScheduler
 ///@{
 
-/// Identify a thread-parallel batch execution algorithm
+/// Identify a thread-parallel \ref BatchScheduler "batch scheduling" algorithm
 ///
 struct HostThreadScheduler {};
 
-/// Identify a device thread-parallel batch execution algorithm, specifying
+/// Identify a device thread-parallel \ref BatchScheduler "batch scheduling" algorithm, specifying
 /// the CUDA kernel grid configuration
 ///
 /// \tparam BLOCKDIM_T          thread-block (CTA) size
@@ -64,15 +64,15 @@ struct DeviceThreadBlockScheduler
     static const uint32 MINBLOCKS = MINBLOCKS_T;
 };
 
-/// Identify a staged thread-parallel batch execution algorithm
+/// Identify a staged thread-parallel \ref BatchScheduler "batch scheduling" algorithm
 ///
 typedef DeviceThreadBlockScheduler<128,1> DeviceThreadScheduler;
 
-/// Identify a staged thread-parallel batch execution algorithm
+/// Identify a staged thread-parallel \ref BatchScheduler "batch scheduling" algorithm
 ///
 struct DeviceStagedThreadScheduler {};
 
-/// Identify a warp-parallel batch execution algorithm
+/// Identify a warp-parallel \ref BatchScheduler "batch scheduling" algorithm
 ///
 struct DeviceWarpScheduler {};
 

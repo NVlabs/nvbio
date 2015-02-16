@@ -113,11 +113,11 @@ struct inplace_or
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
     void operator() (uint32* word, const uint32 mask) const
     {
-        #if defined (NVBIO_DEVICE_COMPILATION)
+      #if defined(NVBIO_DEVICE_COMPILATION)
         atomicOr( word, mask );
-        #else
+      #else
         *word |= mask;
-        #endif
+      #endif
     }
 };
 

@@ -1143,7 +1143,7 @@ void serial_assign(
             const word_type     symbol = word_type(bp) << symbol_offset;
 
             // clear all bits
-            word &= ~(uint64(SYMBOL_MASK) << symbol_offset);
+            word &= ~(word_type(SYMBOL_MASK) << symbol_offset);
 
             // set bits
             word |= symbol;
@@ -1154,36 +1154,73 @@ void serial_assign(
     }
 
   #if defined(_OPENMP) && !defined(NVBIO_DEVICE_COMPILATION)
-    #pragma omp parallel for if (input_len > 1000000)
-  #endif
-    for (int64 i = word_rem; i < int64( input_len ); i += SYMBOLS_PER_WORD)
+    // we use this solution because the 'if' clause in the 'pragma omp for' results in 30% slowdown
+    // when the if is not taken and the loop is executed serially
+    if (input_len > 1000000)
     {
-        // encode a word's worth of characters
-        word_type word = 0u;
-
-        const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, uint32( input_len - IndexType(i) ) );
-
-        // loop through the word's bp's
-        for (uint32 j = 0; j < SYMBOLS_PER_WORD; ++j)
+        #pragma omp parallel for
+        for (int64 i = word_rem; i < int64( input_len ); i += SYMBOLS_PER_WORD)
         {
-            if (j < n_symbols)
+            // encode a word's worth of characters
+            word_type word = 0u;
+
+            const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, uint32( input_len - IndexType(i) ) );
+
+            // loop through the word's bp's
+            for (uint32 j = 0; j < SYMBOLS_PER_WORD; ++j)
             {
-                // fetch the bp
-                const uint8 bp = input_string[IndexType(i) + j] & SYMBOL_MASK;
+                if (j < n_symbols)
+                {
+                    // fetch the bp
+                    const uint8 bp = input_string[IndexType(i) + j] & SYMBOL_MASK;
 
-                const uint32       bit_idx = j * SYMBOL_SIZE;
-                const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
-                const word_type     symbol = word_type(bp) << symbol_offset;
+                    const uint32       bit_idx = j * SYMBOL_SIZE;
+                    const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
+                    const word_type     symbol = word_type(bp) << symbol_offset;
 
-                // set bits
-                word |= symbol;
+                    // set bits
+                    word |= symbol;
+                }
             }
+
+            // write out the word
+            const uint32 word_idx = uint32( (stream_offset + IndexType(i)) / SYMBOLS_PER_WORD );
+
+            words[ word_idx ] = word;
         }
+    }
+    else
+  #endif
+    {
+        for (int64 i = word_rem; i < int64( input_len ); i += SYMBOLS_PER_WORD)
+        {
+            // encode a word's worth of characters
+            word_type word = 0u;
 
-        // write out the word
-        const uint32 word_idx = uint32( (stream_offset + IndexType(i)) / SYMBOLS_PER_WORD );
+            const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, uint32( input_len - IndexType(i) ) );
 
-        words[ word_idx ] = word;
+            // loop through the word's bp's
+            for (uint32 j = 0; j < SYMBOLS_PER_WORD; ++j)
+            {
+                if (j < n_symbols)
+                {
+                    // fetch the bp
+                    const uint8 bp = input_string[IndexType(i) + j] & SYMBOL_MASK;
+
+                    const uint32       bit_idx = j * SYMBOL_SIZE;
+                    const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
+                    const word_type     symbol = word_type(bp) << symbol_offset;
+
+                    // set bits
+                    word |= symbol;
+                }
+            }
+
+            // write out the word
+            const uint32 word_idx = uint32( (stream_offset + IndexType(i)) / SYMBOLS_PER_WORD );
+
+            words[ word_idx ] = word;
+        }
     }
 }
 

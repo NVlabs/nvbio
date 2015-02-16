@@ -556,6 +556,8 @@ uint64 hash3(uint64 key)
 ///
 struct LCG_random
 {
+    static const uint32 MAX = 0xFFFFFFFF;
+
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE LCG_random(const uint32 s = 0) : m_s(s) {}
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 next() { m_s = m_s*NVBIO_RAND_A + NVBIO_RAND_C; return m_s; }

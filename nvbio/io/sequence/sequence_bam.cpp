@@ -165,6 +165,19 @@ inline unsigned char decode_BAM_bp(uint8 bp)
 
 }
 
+// rewind
+//
+bool SequenceDataFile_BAM::rewind()
+{
+    if (fp == NULL)
+        return false;
+
+    gzrewind( fp );
+
+    m_file_state = FILE_OK;
+    return init();
+}
+
 // grab the next chunk of reads from the file, up to max_reads
 int SequenceDataFile_BAM::nextChunk(SequenceDataEncoder *output, uint32 max_reads, uint32 max_bps)
 {

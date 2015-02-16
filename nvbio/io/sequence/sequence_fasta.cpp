@@ -136,6 +136,15 @@ SequenceDataFile_FASTA_gz::SequenceDataFile_FASTA_gz(
 	}
 }
 
+// rewind
+//
+bool SequenceDataFile_FASTA_gz::rewind()
+{
+    m_fasta_reader.rewind();
+    m_file_state = FILE_OK;
+    return true;
+}
+
 // get a chunk of reads
 //
 int SequenceDataFile_FASTA_gz::nextChunk(SequenceDataEncoder *output, uint32 max_reads, uint32 max_bps)

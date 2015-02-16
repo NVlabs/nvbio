@@ -607,6 +607,10 @@ struct SequenceDataStream
     /// is the stream ok?
     ///
     virtual bool is_ok() = 0;
+
+    /// rewind
+    ///
+    virtual bool rewind() = 0;
 };
 
 /// utility method to get the next batch from a SequenceDataStream

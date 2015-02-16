@@ -108,7 +108,13 @@ struct SequenceDataFile_TXT_gz : public SequenceDataFile_TXT
 
     ~SequenceDataFile_TXT_gz();
 
+    /// fill the buffer
+    ///
     virtual FileState fillBuffer(void);
+
+    /// rewind the file
+    ///
+    virtual bool rewind();
 
 private:
     gzFile m_file;

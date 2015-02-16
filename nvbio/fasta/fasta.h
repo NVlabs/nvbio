@@ -158,6 +158,10 @@ struct FASTA_reader
     ///
     uint8 get();
 
+    /// rewind the file
+    ///
+    void rewind();
+
 private:
     gzFile m_file;
 

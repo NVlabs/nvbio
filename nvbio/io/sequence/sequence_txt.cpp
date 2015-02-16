@@ -165,6 +165,23 @@ SequenceDataFile_TXT_gz::~SequenceDataFile_TXT_gz()
     gzclose( m_file );
 }
 
+// rewind the file
+//
+bool SequenceDataFile_TXT_gz::rewind()
+{
+    if (m_file == NULL)
+        return false;
+
+    gzrewind( m_file );
+
+    m_file_state = FILE_OK;
+
+    m_buffer_size = 0;
+    m_buffer_pos  = 0;
+    m_line        = 0;
+    return true;
+}
+
 SequenceDataFile_TXT::FileState SequenceDataFile_TXT_gz::fillBuffer(void)
 {
     m_buffer_size = gzread(m_file, &m_buffer[0], (uint32)m_buffer.size());

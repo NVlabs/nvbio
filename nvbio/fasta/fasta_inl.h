@@ -150,6 +150,17 @@ FASTA_reader::~FASTA_reader()
         gzclose( m_file );
 }
 
+// rewind the file
+//
+void FASTA_reader::rewind()
+{
+    if (m_file)
+        gzrewind( m_file );
+
+    m_buffer_size = 0;
+    m_buffer_pos  = 0;
+}
+
 // read a batch of bp reads
 //
 // \tparam Writer          an output handler class, which must

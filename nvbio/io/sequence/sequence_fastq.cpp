@@ -267,6 +267,23 @@ SequenceDataFile_FASTQ_parser::FileState SequenceDataFile_FASTQ_gz::fillBuffer(v
     return FILE_OK;
 }
 
+// rewind
+//
+bool SequenceDataFile_FASTQ_gz::rewind()
+{
+    if (m_file == NULL)
+        return false;
+
+    gzrewind( m_file );
+
+    m_file_state = FILE_OK;
+
+    m_buffer_size = 0;
+    m_buffer_pos  = 0;
+    m_line        = 0;
+    return true;
+}
+
 ///@} // SequenceIODetail
 ///@} // SequenceIO
 ///@} // IO

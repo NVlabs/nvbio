@@ -60,6 +60,10 @@ struct SequenceDataFile_BAM : public SequenceDataFile
     ///
     virtual int nextChunk(struct SequenceDataEncoder *output, uint32 max_reads, uint32 max_bps);
 
+    /// rewind the file
+    ///
+    virtual bool rewind();
+
     /// initialize the stream
     ///
     bool init(void);
@@ -69,8 +73,7 @@ private:
     ///
     bool readData(void *output, unsigned int len);
 
-    // our file pointer
-    gzFile fp;
+    gzFile fp;              ///< file pointer
 };
 
 ///@} // SequenceIODetail

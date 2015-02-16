@@ -112,6 +112,10 @@ struct SequenceDataFile_FASTQ_gz : public SequenceDataFile_FASTQ_parser
 
     virtual FileState fillBuffer(void);
 
+    /// rewind the file
+    ///
+    virtual bool rewind();
+
 private:
     gzFile m_file;
 };

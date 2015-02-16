@@ -59,6 +59,10 @@ struct SequenceDataFile_FASTA_gz : public SequenceDataFile
     ///
     int nextChunk(SequenceDataEncoder *output, uint32 max_reads, uint32 max_bps);
 
+    /// rewind the file
+    ///
+    bool rewind();
+
 private:
     FASTA_reader m_fasta_reader; ///< the FASTA file parser
 };

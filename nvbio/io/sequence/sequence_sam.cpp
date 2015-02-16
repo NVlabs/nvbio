@@ -51,14 +51,12 @@ SequenceDataFile_SAM::SequenceDataFile_SAM(
         m_file_state = FILE_OK;
     }
 
-    linebuf = NULL;
+    linebuf      = NULL;
     linebuf_size = 0;
-    line_length = 0;
-
-    numLines = 0;
-
-    version = NULL;
-    sortOrder = SortOrder_unknown;
+    line_length  = 0;
+    numLines     = 0;
+    version      = NULL;
+    sortOrder    = SortOrder_unknown;
 }
 
 bool SequenceDataFile_SAM::readLine(void)
@@ -342,6 +340,25 @@ bool SequenceDataFile_SAM::parseReferenceSequenceLine(char *start)
     return true;
 }
 
+// rewind
+//
+bool SequenceDataFile_SAM::rewind()
+{
+    if (fp == NULL)
+        return false;
+
+    gzrewind( fp );
+
+    linebuf      = NULL;
+    linebuf_size = 0;
+    line_length  = 0;
+    numLines     = 0;
+    version      = NULL;
+    sortOrder    = SortOrder_unknown;
+
+    m_file_state = FILE_OK;
+    return init();
+}
 
 // fetch the next chunk of reads (up to max_reads) from the file and push it into output
 int SequenceDataFile_SAM::nextChunk(SequenceDataEncoder *output, uint32 max_reads, uint32 max_bps)

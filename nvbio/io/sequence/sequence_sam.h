@@ -36,11 +36,20 @@
 namespace nvbio {
 namespace io {
 
+///@addtogroup IO
+///@{
+
+///@addtogroup SequenceIO
+///@{
+
+///@addtogroup SequenceIODetail
+///@{
+
 // SAM format description: http://samtools.sourceforge.net/SAM1.pdf
 
-// flag comments come from SAMtools spec
-// a better explanation is available at:
-// http://genome.sph.umich.edu/wiki/SAM#What_Information_Does_SAM.2FBAM_Have_for_an_Alignment
+/// flag comments come from SAMtools spec
+/// a better explanation is available at:
+/// http://genome.sph.umich.edu/wiki/SAM#What_Information_Does_SAM.2FBAM_Have_for_an_Alignment
 enum AlignmentFlags
 {
     // SAMtools: template having multiple segments in sequencing
@@ -68,7 +77,8 @@ enum AlignmentFlags
 };
 
 
-// SequenceDataFile from a SAM file
+/// SequenceDataFile from a BAM file
+///
 struct SequenceDataFile_SAM : public SequenceDataFile
 {
     enum { LINE_BUFFER_INIT_SIZE = 1024 };
@@ -81,11 +91,19 @@ struct SequenceDataFile_SAM : public SequenceDataFile
         SortOrder_coordinate,
     };
 
+    /// constructor
+    ///
     SequenceDataFile_SAM(
         const char*                      read_file_name,
         const SequenceDataFile::Options& options);
 
+    /// load the next chunk
+    ///
     virtual int nextChunk(struct SequenceDataEncoder *output, uint32 max_reads, uint32 max_bps);
+
+    /// rewind the file
+    ///
+    virtual bool rewind();
 
     bool init(void);
 
@@ -95,21 +113,15 @@ private:
     bool parseHeaderLine(char *start);
     bool parseReferenceSequenceLine(char *start);
 
-    gzFile fp;
-
-    // a buffer for a full line; this will grow as needed
-    char *linebuf;
-    // current size of the buffer
-    int linebuf_size;
-    // length of the current line in the buffer
-    int line_length;
-
-    // how many lines we parsed so far
-    int numLines;
+    gzFile  fp;                             ///< file pointer
+    char*   linebuf;                        ///< a buffer for a full line; this will grow as needed
+    int     linebuf_size;                   ///< current size of the buffer
+    int     line_length;                    ///< length of the current line in the buffer
+    int     numLines;                       ///< how many lines we parsed so far
 
     // info from the header
-    char *version;
-    SortOrder sortOrder;
+    char *version;                          ///< SAM version
+    SortOrder sortOrder;                    ///< sorting order
 
 public:
     // reference sequence info

@@ -152,6 +152,7 @@ FASTA_reader::~FASTA_reader()
 
 // rewind the file
 //
+inline
 void FASTA_reader::rewind()
 {
     if (m_file)

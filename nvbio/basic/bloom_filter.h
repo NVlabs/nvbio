@@ -111,20 +111,15 @@ namespace nvbio {
 struct inplace_or
 {
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
-    void operator() (uint32* word, const uint32 mask) const { *word |= mask; }
-};
-#if defined(__CUDACC__)
-struct atomic_or
-{
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
     void operator() (uint32* word, const uint32 mask) const
     {
-        #if defined(__CUDA_ARCH__)
+        #if defined (NVBIO_DEVICE_COMPILATION)
         atomicOr( word, mask );
+        #else
+        *word |= mask;
         #endif
     }
 };
-#endif
 
 ///
 /// A Bloom filter implementation.

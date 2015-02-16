@@ -435,6 +435,15 @@ SequenceDataEncoder* create_encoder(const Alphabet alphabet, SequenceDataHost* d
     case PROTEIN:
         return new SequenceDataEncoderImpl<PROTEIN>( data );
         break;
+    case RNA:
+        return new SequenceDataEncoderImpl<RNA>( data );
+        break;
+    case RNA_N:
+        return new SequenceDataEncoderImpl<RNA_N>( data );
+        break;
+    case ASCII:
+        return new SequenceDataEncoderImpl<ASCII>( data );
+        break;
 
     default:
         break;
@@ -466,6 +475,24 @@ int next(const Alphabet alphabet, SequenceDataHost* data, SequenceDataStream* st
             return stream->next( &encoder, batch_size, batch_bps );
         }
         break;
+    case RNA:
+        {
+            SequenceDataEncoderImpl<RNA> encoder( data );
+            return stream->next( &encoder, batch_size, batch_bps );
+        }
+        break;
+    case RNA_N:
+        {
+            SequenceDataEncoderImpl<RNA_N> encoder( data );
+            return stream->next( &encoder, batch_size, batch_bps );
+        }
+        break;
+    case ASCII:
+        {
+            SequenceDataEncoderImpl<ASCII> encoder( data );
+            return stream->next( &encoder, batch_size, batch_bps );
+        }
+        break;
 
     default:
         break;
@@ -494,6 +521,24 @@ int append(const Alphabet alphabet, SequenceDataHost* data, SequenceDataStream* 
     case PROTEIN:
         {
             SequenceDataEncoderImpl<PROTEIN> encoder( data, true );
+            return stream->next( &encoder, batch_size, batch_bps );
+        }
+        break;
+    case RNA:
+        {
+            SequenceDataEncoderImpl<DNA> encoder( data, true );
+            return stream->next( &encoder, batch_size, batch_bps );
+        }
+        break;
+    case RNA_N:
+        {
+            SequenceDataEncoderImpl<RNA_N> encoder( data, true );
+            return stream->next( &encoder, batch_size, batch_bps );
+        }
+        break;
+    case ASCII:
+        {
+            SequenceDataEncoderImpl<ASCII> encoder( data, true );
             return stream->next( &encoder, batch_size, batch_bps );
         }
         break;

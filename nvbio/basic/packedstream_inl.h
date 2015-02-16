@@ -1199,6 +1199,9 @@ void serial_assign(
 
             const uint32 n_symbols = nvbio::min( SYMBOLS_PER_WORD, uint32( input_len - IndexType(i) ) );
 
+            // get the offset to the first symbol
+            uint32 symbol_offset = BIG_ENDIAN ? WORD_SIZE - SYMBOL_SIZE : 0u;
+
             // loop through the word's bp's
             for (uint32 j = 0; j < SYMBOLS_PER_WORD; ++j)
             {
@@ -1207,12 +1210,16 @@ void serial_assign(
                     // fetch the bp
                     const uint8 bp = input_string[IndexType(i) + j] & SYMBOL_MASK;
 
-                    const uint32       bit_idx = j * SYMBOL_SIZE;
-                    const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
-                    const word_type     symbol = word_type(bp) << symbol_offset;
+                    //const uint32       bit_idx = j * SYMBOL_SIZE;
+                    //const uint32 symbol_offset = BIG_ENDIAN ? (WORD_SIZE - SYMBOL_SIZE - bit_idx) : bit_idx;
+                    const word_type symbol = word_type(bp) << symbol_offset;
 
                     // set bits
                     word |= symbol;
+
+                    // move the offset
+                    if (BIG_ENDIAN) symbol_offset -= SYMBOL_SIZE;
+                    else            symbol_offset += SYMBOL_SIZE;
                 }
             }
 

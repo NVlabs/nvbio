@@ -1192,7 +1192,7 @@ void serial_assign(
     else
   #endif
     {
-        for (int64 i = word_rem; i < int64( input_len ); i += SYMBOLS_PER_WORD)
+        for (IndexType i = word_rem; i < input_len; i += SYMBOLS_PER_WORD)
         {
             // encode a word's worth of characters
             word_type word = 0u;

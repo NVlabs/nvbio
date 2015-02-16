@@ -214,7 +214,7 @@ void encode(
 
 // encode a sequence according to some given run-time flags and quality-encoding
 //
-template <Alphabet         ALPHABET>
+template <Alphabet ALPHABET>
 void encode(
     const SequenceDataEncoder::StrandOp                                             conversion_flags,
     const QualityEncoding                                                           quality_encoding,
@@ -224,7 +224,6 @@ void encode(
     typename SequenceDataEdit<ALPHABET,SequenceDataView>::sequence_stream_type      stream,
     char*                                                                           qual_stream)
 {
-
     const sequence_string<SequenceDataEncoder::REVERSE_OP>              r_sequence( sequence_len, sequence, quality );
     const sequence_string<SequenceDataEncoder::REVERSE_COMPLEMENT_OP>   rc_sequence( sequence_len, sequence, quality );
     const sequence_string<SequenceDataEncoder::COMPLEMENT_OP>           fc_sequence( sequence_len, sequence, quality );

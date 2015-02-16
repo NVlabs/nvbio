@@ -120,7 +120,7 @@ inline unsigned char convert_to_phred_quality(const uint8 q)
 
 // a small sequence class supporting REVERSE | COMPLEMENT operations
 //
-template <SequenceDataEncoder::StrandOp FLAGS>
+template <Alphabet ALPHABET, SequenceDataEncoder::StrandOp FLAGS>
 struct sequence_string
 {
     // constructor
@@ -135,12 +135,28 @@ struct sequence_string
         const uint32 index = (FLAGS & SequenceDataEncoder::REVERSE_OP) ? m_len - i - 1u : i;
 
         // fetch the bp
-        const uint8 bp = nst_nt4_encode( m_sequence[index] );
+        const uint8 c = m_sequence[index];
 
-        if (FLAGS & SequenceDataEncoder::COMPLEMENT_OP)
-            return bp < 4u ? 3u - bp : 4u;
+        // and convert it to the proper alphabet
+        if (ALPHABET == DNA || ALPHABET == DNA_N)
+        {
+            const uint8 bp = nst_nt4_encode( c );
 
-        return bp;
+            if (FLAGS & SequenceDataEncoder::COMPLEMENT_OP)
+                return bp < 4u ? 3u - bp : 4u;
+    
+            return bp;
+        }
+        else
+        {
+            const uint8 bp = from_char<ALPHABET>( c );
+
+            // TODO: implement complementing!
+            //if (FLAGS & SequenceDataEncoder::COMPLEMENT_OP)
+            //    return ???;
+
+            return bp;
+        }
     }
 
     // quality operator
@@ -155,6 +171,8 @@ struct sequence_string
     const uint8* m_sequence;
     const uint8* m_qual;
 };
+
+
 
 // encode a sequence according to a compile-time quality-encoding
 //
@@ -224,10 +242,10 @@ void encode(
     typename SequenceDataEdit<ALPHABET,SequenceDataView>::sequence_stream_type      stream,
     char*                                                                           qual_stream)
 {
-    const sequence_string<SequenceDataEncoder::REVERSE_OP>              r_sequence( sequence_len, sequence, quality );
-    const sequence_string<SequenceDataEncoder::REVERSE_COMPLEMENT_OP>   rc_sequence( sequence_len, sequence, quality );
-    const sequence_string<SequenceDataEncoder::COMPLEMENT_OP>           fc_sequence( sequence_len, sequence, quality );
-    const sequence_string<SequenceDataEncoder::NO_OP>                   f_sequence( sequence_len, sequence, quality );
+    const sequence_string<ALPHABET,SequenceDataEncoder::REVERSE_OP>              r_sequence( sequence_len, sequence, quality );
+    const sequence_string<ALPHABET,SequenceDataEncoder::REVERSE_COMPLEMENT_OP>   rc_sequence( sequence_len, sequence, quality );
+    const sequence_string<ALPHABET,SequenceDataEncoder::COMPLEMENT_OP>           fc_sequence( sequence_len, sequence, quality );
+    const sequence_string<ALPHABET,SequenceDataEncoder::NO_OP>                   f_sequence( sequence_len, sequence, quality );
 
     if (conversion_flags & SequenceDataEncoder::REVERSE_OP)
     {

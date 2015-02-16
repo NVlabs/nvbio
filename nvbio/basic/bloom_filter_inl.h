@@ -60,7 +60,7 @@ void bloom_filter<K,Hash1,Hash2,Iterator,OrOperator>::insert(const Key key, cons
     #endif
     for (uint64 i = 0; i < K; ++i)
     {
-        const uint64 r = (h0 + i * h1) & (m_size-1u);
+        const uint64 r = (h0 + i * h1) % m_size;
 
         const uint32 word = uint32(r >> 5);
         const uint32 bit  = uint32(r) & 31u;

@@ -73,6 +73,7 @@ enum Alphabet
     PROTEIN   = 3u,           ///< 24-letter Protein alphabet   { A,C,D,E,F,G,H,I,K,L,M,N,O,P,Q,R,S,T,V,W,Y,B,Z,X }
     RNA       = 4u,           ///< 4-letter RNA alphabet        { A,C,G,U }
     RNA_N     = 5u,           ///< 5-letter RNA + N alphabet    { A,C,G,U,N }
+    ASCII     = 6u            ///< standard ASCII alphabet
 };
 
 /// A traits class for Alphabet
@@ -197,6 +198,13 @@ template <> struct AlphabetTraits<RNA_N>
          N = 4,
     };
 };
+/// A traits class for ASCII Alphabet
+///
+template <> struct AlphabetTraits<ASCII>
+{
+    static const uint32 SYMBOL_SIZE  = 8;
+    static const uint32 SYMBOL_COUNT = 256;
+};
 
 /// return the number of bits per symbol for a given alphabet
 ///
@@ -209,6 +217,7 @@ uint32 bits_per_symbol(const Alphabet alphabet)
            alphabet == PROTEIN   ? 8 :
            alphabet == RNA       ? 2 :
            alphabet == RNA_N     ? 4 :
+           alphabet == ASCII     ? 8 :
            8u;
 }
 

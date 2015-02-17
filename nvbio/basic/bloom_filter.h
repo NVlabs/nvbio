@@ -28,6 +28,7 @@
 #pragma once
 
 #include <nvbio/basic/types.h>
+#include <nvbio/basic/static_vector.h>
 
 namespace nvbio {
 
@@ -108,7 +109,16 @@ namespace nvbio {
 ///
 /// atomic in-place OR binary functor used to construct a bloom_filter
 ///
+template <typename T>
 struct inplace_or
+{
+};
+
+///
+/// atomic in-place OR binary functor used to construct a bloom_filter
+///
+template <>
+struct inplace_or<uint32>
 {
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
     void operator() (uint32* word, const uint32 mask) const
@@ -117,6 +127,107 @@ struct inplace_or
         atomicOr( word, mask );
       #else
         *word |= mask;
+      #endif
+    }
+};
+
+///
+/// atomic in-place OR binary functor used to construct a bloom_filter
+///
+template <>
+struct inplace_or<uint2>
+{
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    void operator() (uint2* word, const uint2 mask) const
+    {
+      #if defined(NVBIO_DEVICE_COMPILATION)
+        atomicOr( &(word->x), mask.x );
+        atomicOr( &(word->y), mask.y );
+      #else
+        word->x |= mask.x;
+        word->y |= mask.y;
+      #endif
+    }
+};
+
+///
+/// atomic in-place OR binary functor used to construct a bloom_filter
+///
+template <>
+struct inplace_or<uint4>
+{
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    void operator() (uint4* word, const uint4 mask) const
+    {
+      #if defined(NVBIO_DEVICE_COMPILATION)
+        atomicOr( &(word->x), mask.x );
+        atomicOr( &(word->y), mask.y );
+        atomicOr( &(word->z), mask.z );
+        atomicOr( &(word->w), mask.w );
+      #else
+        word->x |= mask.x;
+        word->y |= mask.y;
+        word->z |= mask.z;
+        word->w |= mask.w;
+      #endif
+    }
+};
+
+///
+/// atomic in-place OR binary functor used to construct a bloom_filter
+///
+template <>
+struct inplace_or<uint64>
+{
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    void operator() (uint64* word, const uint64 mask) const
+    {
+      #if defined(NVBIO_DEVICE_COMPILATION)
+        atomicOr( word, mask );
+      #else
+        *word |= mask;
+      #endif
+    }
+};
+
+///
+/// atomic in-place OR binary functor used to construct a bloom_filter
+///
+template <>
+struct inplace_or<uint64_2>
+{
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    void operator() (uint64_2* word, const uint64_2 mask) const
+    {
+      #if defined(NVBIO_DEVICE_COMPILATION)
+        atomicOr( &(word->x), mask.x );
+        atomicOr( &(word->y), mask.y );
+      #else
+        word->x |= mask.x;
+        word->y |= mask.y;
+      #endif
+    }
+};
+
+///
+/// atomic in-place OR binary functor used to construct a bloom_filter
+///
+template <>
+struct inplace_or<uint64_4>
+{
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    void operator() (uint64_4* word, const uint64_4 mask) const
+    {
+      #if defined(NVBIO_DEVICE_COMPILATION)
+        atomicOr( &(word->x), mask.x );
+        atomicOr( &(word->y), mask.y );
+        atomicOr( &(word->z), mask.z );
+        atomicOr( &(word->w), mask.w );
+      #else
+        word->x |= mask.x;
+        word->y |= mask.y;
+        word->z |= mask.z;
+        word->w |= mask.w;
       #endif
     }
 };
@@ -137,11 +248,11 @@ struct inplace_or
 ///                         in parallel
 ///
 template <
-    uint32   K,         // number of hash functions { Hash1 + i * Hash2 | i : 0, ..., K-1 }
-    typename Hash1,     // first hash generator function
-    typename Hash2,     // second hash generator function
-    typename Iterator,
-    typename OrOperator = inplace_or>  // storage iterator - must dereference to uint32
+    uint32   K,                         // number of hash functions { Hash1 + i * Hash2 | i : 0, ..., K-1 }
+    typename Hash1,                     // first hash generator function
+    typename Hash2,                     // second hash generator function
+    typename Iterator,                  // storage iterator - must dereference to uint32
+    typename OrOperator = inplace_or<uint32> >   // OR binary operator
 struct bloom_filter
 {
     /// constructor
@@ -180,6 +291,77 @@ struct bloom_filter
     Iterator    m_storage;
     Hash1       m_hash1;
     Hash2       m_hash2;
+};
+
+
+///
+/// A Bloom filter implementation.
+/// This clsss is <i>storage-free</i>, and can used both from the host and the device.
+/// Constructing a Bloom filter can be done incrementally calling insert(), either sequentially
+/// or in parallel.
+///
+/// \tparam  K                  the number of hash functions, obtained as { Hash1 + i * Hash2 | i : 0, ..., K-1 }
+/// \tparam  Hash1              the first hash function
+/// \tparam  Hash2              the second hash function
+/// \tparam  Iterator           the iterator to the internal filter storage, iterator_traits<iterator>::value_type
+///                             must be one of {uint32|uint2|uint4|uint64|uint64_2|uint64_4}
+/// \tparam  OrOperator         the binary functor used to OR the filter's words with the inserted keys;
+///                             NOTE: this operation must be performed atomically if the filter is constructed
+///                             in parallel
+///
+template <
+    uint32   K,                         // number of hash functions { Hash1 + i * Hash2 | i : 0, ..., K-1 }
+    typename Hash1,                     // first hash generator function
+    typename Hash2,                     // second hash generator function
+    typename Iterator,                  // storage iterator - must be one of {uint32|uint2|uint4|uint64|uint64_2|uint64_4}
+    typename OrOperator = inplace_or<typename std::iterator_traits<Iterator>::value_type> >   // OR binary operator
+struct blocked_bloom_filter
+{
+    typedef typename std::iterator_traits<Iterator>::value_type block_type;
+    typedef typename vector_traits<block_type>::value_type      word_type;
+
+    static const uint32 BLOCK_DIM  = vector_traits<block_type>::DIM;
+    static const uint32 BLOCK_SIZE = sizeof(block_type)*8u;
+    static const uint32 WORD_SIZE  = sizeof(word_type)*8u;
+
+    typedef StaticVector<word_type,BLOCK_DIM>                   vector_type;
+
+    /// constructor
+    ///
+    /// \param size         the Bloom filter's storage size, in bits
+    /// \param storage      the Bloom filter's internal storage
+    /// \param hash1        the first hashing function
+    /// \param hash2        the second hashing function
+    ///
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    blocked_bloom_filter(
+        const uint64    size,
+        Iterator        storage,
+        const Hash1     hash1 = Hash1(),
+        const Hash2     hash2 = Hash2());
+
+    /// insert a key
+    ///
+    template <typename Key>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    void insert(const Key key, const OrOperator or_op = OrOperator());
+
+    /// check for a key
+    ///
+    template <typename Key>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    bool has(const Key key) const;
+
+    /// check for a key
+    ///
+    template <typename Key>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    bool operator[] (const Key key) const { return has( key ); }
+
+    uint64          m_size;
+    Iterator        m_storage;
+    Hash1           m_hash1;
+    Hash2           m_hash2;
 };
 
 ///@} BloomFilterModule

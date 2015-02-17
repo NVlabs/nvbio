@@ -97,4 +97,89 @@ bool bloom_filter<K,Hash1,Hash2,Iterator,OrOperator>::has(const Key key) const
     return true;
 }
 
+
+template <
+    uint32   K,                 // number of hash functions { Hash1 + i * Hash2 | i : 0, ..., K-1 }
+    typename Hash1,             // first hash generator function
+    typename Hash2,             // second hash generator function
+    typename Iterator,          // storage iterator - must be one of {uint32|uint2|uint4|uint64|uint64_2|uint64_4}
+    typename OrOperator>
+blocked_bloom_filter<K,Hash1,Hash2,Iterator,OrOperator>::blocked_bloom_filter(
+    const uint64    size,
+    Iterator        storage,
+    const Hash1     hash1,
+    const Hash2     hash2) :
+    m_size( size ),
+    m_storage( storage ),
+    m_hash1( hash1 ),
+    m_hash2( hash2 ) {}
+
+template <
+    uint32   K,         // number of hash functions { Hash1 + i * Hash2 | i : 0, ..., K-1 }
+    typename Hash1,     // first hash generator function
+    typename Hash2,     // second hash generator function
+    typename Iterator,  // storage iterator - must be one of {uint32|uint2|uint4|uint64|uint64_2|uint64_4}
+    typename OrOperator>
+template <typename Key>
+void blocked_bloom_filter<K,Hash1,Hash2,Iterator,OrOperator>::insert(const Key key, const OrOperator or_op)
+{
+    const uint64 h0 = m_hash1( key );
+    const uint64 h1 = m_hash2( key );
+
+    const uint64 block_idx = (h0 % m_size) / BLOCK_SIZE;
+          block_type block = vector_type( 0u );
+
+    #if defined(__CUDA_ARCH__)
+    #pragma unroll
+    #endif
+    for (uint64 i = 1; i <= K; ++i)
+    {
+        const uint64 r = (h0 + i * h1) % BLOCK_SIZE;
+
+        const word_type word = word_type(r / WORD_SIZE);
+        const word_type bit  = word_type(r) & (WORD_SIZE-1);
+
+        const word_type pattern = (word_type(1u) << bit);
+
+        if      (word == 0) block.x |= pattern;
+        else if (word == 1) block.y |= pattern;
+        else if (word == 2) block.z |= pattern;
+        else                block.w |= pattern;
+    }
+    or_op( &m_storage[block_idx], block );
+}
+
+template <
+    uint32   K,         // number of hash functions { Hash1 + i * Hash2 | i : 0, ..., K-1 }
+    typename Hash1,     // first hash generator function
+    typename Hash2,     // second hash generator function
+    typename Iterator,  // storage iterator - must be one of {uint32|uint2|uint4|uint64|uint64_2|uint64_4}
+    typename OrOperator>
+template <typename Key>
+bool blocked_bloom_filter<K,Hash1,Hash2,Iterator,OrOperator>::has(const Key key) const
+{
+    const uint64 h0 = m_hash1( key );
+    const uint64 h1 = m_hash2( key );
+
+    const uint64 block_idx = (h0 % m_size) / BLOCK_SIZE;
+    const block_type block = m_storage[block_idx];
+
+    #if defined(__CUDA_ARCH__)
+    #pragma unroll
+    #endif
+    for (uint64 i = 1; i <= K; ++i)
+    {
+        const uint64 r = (h0 + i * h1) % BLOCK_SIZE;
+
+        const word_type word = word_type(r / WORD_SIZE);
+        const word_type bit  = word_type(r) & (WORD_SIZE-1);
+
+        const word_type pattern = (word_type(1u) << bit);
+
+        if ((comp( block, word ) & pattern) == 0u)
+            return false;
+    }
+    return true;
+}
+
 } // namespace nvbio

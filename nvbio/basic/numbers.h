@@ -207,6 +207,26 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 comp(const uint2 a, const uint32 c)
 {
     return (c == 0 ? a.x : a.y);
 }
+/// set the c'th component of a
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void set(uint2& a, const uint32 c, const uint32 v)
+{
+    if (c == 0) a.x = v;
+    else        a.y = v;
+}
+/// return the c'th component of a by value
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint64 comp(const ulonglong2 a, const uint32 c)
+{
+    return (c == 0 ? a.x : a.y);
+}
+/// set the c'th component of a
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void set(ulonglong2& a, const uint32 c, const uint64 v)
+{
+    if (c == 0) a.x = v;
+    else        a.y = v;
+}
 /// return the c'th component of a by value
 ///
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE  int32 comp(const  int2 a, const uint32 c)
@@ -220,6 +240,15 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 comp(const uint4 a, const uint32 c)
     return c <= 1 ?
         (c == 0 ? a.x : a.y) :
         (c == 2 ? a.z : a.w);
+}
+/// set the c'th component of a
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void set(uint4& a, const uint32 c, const uint32 v)
+{
+    if (c == 0)         a.x = v;
+    else if (c == 1)    a.y = v;
+    else if (c == 2)    a.z = v;
+    else                a.w = v;
 }
 /// return the c'th component of a by value
 ///
@@ -245,6 +274,24 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint16 comp(const ushort4 a, const uint32 c)
     return c <= 1 ?
         (c == 0 ? a.x : a.y) :
         (c == 2 ? a.z : a.w);
+}
+
+/// return the c'th component of a by value
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint64 comp(const ulonglong4 a, const uint32 c)
+{
+    return c <= 1 ?
+        (c == 0 ? a.x : a.y) :
+        (c == 2 ? a.z : a.w);
+}
+/// set the c'th component of a
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE void set(ulonglong4& a, const uint32 c, const uint64 v)
+{
+    if (c == 0)         a.x = v;
+    else if (c == 1)    a.y = v;
+    else if (c == 2)    a.z = v;
+    else                a.w = v;
 }
 
 ///@addtogroup VectorTypes
@@ -285,42 +332,52 @@ typedef  longlong4  int64_4;
 template <typename T, uint32 DIM>
 struct vector_type {};
 
+template <> struct vector_type<char,1> { typedef char  type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const char i1)                { return i1; } };
 template <> struct vector_type<char,2> { typedef char2 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const char i1, const char i2) { return make_char2(i1,i2); } };
 template <> struct vector_type<char,3> { typedef char3 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const char i1, const char i2, const char i3) { return make_char3(i1,i2,i3); }  };
 template <> struct vector_type<char,4> { typedef char4 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const char i1, const char i2, const char i3, const char i4) { return make_char4(i1,i2,i3,i4); }  };
 
+template <> struct vector_type<unsigned char,1> { typedef unsigned char type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const unsigned char i1)                  { return i1; } };
 template <> struct vector_type<unsigned char,2> { typedef uchar2 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const unsigned char i1, const unsigned char i2) { return make_uchar2(i1,i2); } };
 template <> struct vector_type<unsigned char,3> { typedef uchar3 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const unsigned char i1, const unsigned char i2, const unsigned char i3) { return make_uchar3(i1,i2,i3); }  };
 template <> struct vector_type<unsigned char,4> { typedef uchar4 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const unsigned char i1, const unsigned char i2, const unsigned char i3, const unsigned char i4) { return make_uchar4(i1,i2,i3,i4); }  };
 
+template <> struct vector_type<short,1> { typedef short  type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const short i1)                 { return i1; } };
 template <> struct vector_type<short,2> { typedef short2 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const short i1, const short i2) { return make_short2(i1,i2); } };
 template <> struct vector_type<short,3> { typedef short3 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const short i1, const short i2, const short i3) { return make_short3(i1,i2,i3); }  };
 template <> struct vector_type<short,4> { typedef short4 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const short i1, const short i2, const short i3, const short i4) { return make_short4(i1,i2,i3,i4); }  };
 
+template <> struct vector_type<unsigned short,1> { typedef unsigned short type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const unsigned short i1)                   { return i1; } };
 template <> struct vector_type<unsigned short,2> { typedef ushort2 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const unsigned short i1, const unsigned short i2) { return make_ushort2(i1,i2); } };
 template <> struct vector_type<unsigned short,3> { typedef ushort3 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const unsigned short i1, const unsigned short i2, const unsigned short i3) { return make_ushort3(i1,i2,i3); }  };
 template <> struct vector_type<unsigned short,4> { typedef ushort4 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const unsigned short i1, const unsigned short i2, const unsigned short i3, const unsigned short i4) { return make_ushort4(i1,i2,i3,i4); }  };
 
+template <> struct vector_type<int,1> { typedef int  type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const int i1)               { return i1; } };
 template <> struct vector_type<int,2> { typedef int2 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const int i1, const int i2) { return make_int2(i1,i2); } };
-template <> struct vector_type<int,3> { typedef int3 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const int i1, const int i2, const int i3) { return make_int3(i1,i2,i3); }  };
-template <> struct vector_type<int,4> { typedef int4 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const int i1, const int i2, const int i3, const int i4) { return make_int4(i1,i2,i3,i4); }  };
+template <> struct vector_type<int,3> { typedef int3 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const int i1, const int i2, const int i3) { return make_int3(i1,i2,i3); } };
+template <> struct vector_type<int,4> { typedef int4 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const int i1, const int i2, const int i3, const int i4) { return make_int4(i1,i2,i3,i4); } };
 
+template <> struct vector_type<unsigned int,1> { typedef unsigned int type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const unsigned int i1)                 { return i1; } };
 template <> struct vector_type<unsigned int,2> { typedef uint2 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const unsigned int i1, const unsigned int i2) { return make_uint2(i1,i2); } };
-template <> struct vector_type<unsigned int,3> { typedef uint3 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const unsigned int i1, const unsigned int i2, const unsigned int i3) { return make_uint3(i1,i2,i3); }  };
-template <> struct vector_type<unsigned int,4> { typedef uint4 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const unsigned int i1, const unsigned int i2, const unsigned int i3, const unsigned int i4) { return make_uint4(i1,i2,i3,i4); }  };
+template <> struct vector_type<unsigned int,3> { typedef uint3 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const unsigned int i1, const unsigned int i2, const unsigned int i3) { return make_uint3(i1,i2,i3); } };
+template <> struct vector_type<unsigned int,4> { typedef uint4 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const unsigned int i1, const unsigned int i2, const unsigned int i3, const unsigned int i4) { return make_uint4(i1,i2,i3,i4); } };
 
+template <> struct vector_type<int64,1>  { typedef  int64   type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const int64 i1)                                                 { return i1; } };
 template <> struct vector_type<int64,2>  { typedef  int64_2 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const int64 i1, const int64 i2)                                 {  int64_2 r; r.x = i1; r.y = i2; return r; } };
 template <> struct vector_type<int64,3>  { typedef  int64_3 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const int64 i1, const int64 i2, const int64 i3)                 {  int64_3 r; r.x = i1; r.y = i2; r.z = i3; return r; } };
 template <> struct vector_type<int64,4>  { typedef  int64_4 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const int64 i1, const int64 i2, const int64 i3, const int64 i4) {  int64_4 r; r.x = i1; r.y = i2; r.z = i3, r.w = i4; return r; } };
 
+template <> struct vector_type<uint64,1>  { typedef uint64   type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const uint64 i1)                                                    { return i1; } };
 template <> struct vector_type<uint64,2>  { typedef uint64_2 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const uint64 i1, const uint64 i2)                                   { uint64_2 r; r.x = i1; r.y = i2; return r; } };
 template <> struct vector_type<uint64,3>  { typedef uint64_3 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const uint64 i1, const uint64 i2, const uint64 i3)                  { uint64_3 r; r.x = i1; r.y = i2; r.z = i3; return r; } };
 template <> struct vector_type<uint64,4>  { typedef uint64_4 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const uint64 i1, const uint64 i2, const uint64 i3, const uint64 i4) { uint64_4 r; r.x = i1; r.y = i2; r.z = i3, r.w = i4; return r; } };
 
+template <> struct vector_type<float,1> { typedef float  type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const float i1)                 { return i1; } };
 template <> struct vector_type<float,2> { typedef float2 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const float i1, const float i2) { return make_float2(i1,i2); } };
 template <> struct vector_type<float,3> { typedef float3 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const float i1, const float i2, const float i3) { return make_float3(i1,i2,i3); }  };
 template <> struct vector_type<float,4> { typedef float4 type; NVBIO_FORCEINLINE NVBIO_HOST_DEVICE static type make(const float i1, const float i2, const float i3, const float i4) { return make_float4(i1,i2,i3,i4); }  };
 
+template <typename T> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE typename vector_type<T,1>::type make_vector(const T i1)                                     { return vector_type<T,1>::make( i1 ); }
 template <typename T> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE typename vector_type<T,2>::type make_vector(const T i1, const T i2)                         { return vector_type<T,2>::make( i1, i2 ); }
 template <typename T> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE typename vector_type<T,3>::type make_vector(const T i1, const T i2, const T i3)             { return vector_type<T,3>::make( i1, i2, i3 ); }
 template <typename T> NVBIO_FORCEINLINE NVBIO_HOST_DEVICE typename vector_type<T,4>::type make_vector(const T i1, const T i2, const T i3, const T i4) { return vector_type<T,4>::make( i1, i2, i3, i4 ); }

@@ -170,6 +170,12 @@ struct bloom_filter
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
     bool has(const Key key) const;
 
+    /// check for a key
+    ///
+    template <typename Key>
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+    bool operator[] (const Key key) const { return has( key ); }
+
     uint64      m_size;
     Iterator    m_storage;
     Hash1       m_hash1;

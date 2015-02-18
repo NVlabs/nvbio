@@ -300,7 +300,6 @@ struct bloom_filter
 /// Constructing a Bloom filter can be done incrementally calling insert(), either sequentially
 /// or in parallel.
 ///
-/// \tparam  K                  the number of hash functions, obtained as { Hash1 + i * Hash2 | i : 0, ..., K-1 }
 /// \tparam  Hash1              the first hash function
 /// \tparam  Hash2              the second hash function
 /// \tparam  Iterator           the iterator to the internal filter storage, iterator_traits<iterator>::value_type
@@ -310,7 +309,6 @@ struct bloom_filter
 ///                             in parallel
 ///
 template <
-    uint32   K,                         // number of hash functions { Hash1 + i * Hash2 | i : 0, ..., K-1 }
     typename Hash1,                     // first hash generator function
     typename Hash2,                     // second hash generator function
     typename Iterator,                  // storage iterator - must be one of {uint32|uint2|uint4|uint64|uint64_2|uint64_4}
@@ -335,6 +333,7 @@ struct blocked_bloom_filter
     ///
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
     blocked_bloom_filter(
+        const uint32    k,
         const uint64    size,
         Iterator        storage,
         const Hash1     hash1 = Hash1(),
@@ -358,11 +357,58 @@ struct blocked_bloom_filter
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     bool operator[] (const Key key) const { return has( key ); }
 
+    uint32          m_k;
     uint64          m_size;
     Iterator        m_storage;
     Hash1           m_hash1;
     Hash2           m_hash2;
 };
+
+/// compute the optimal number of Bloom filter hash functions given the
+/// number of bits per key
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 optimal_bloom_filter_hashes(const float bits_per_key)
+{
+    return uint32( bits_per_key * logf(2.0) ) + 1u;
+}
+
+/// compute the optimal Bloom filter size for a given target false positive rate,
+/// assuming an optimal number of hash functions
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+float optimal_bloom_filter_bits_per_key(const float fp_rate)
+{
+    return -logf(fp_rate) / (logf(2.0f)*logf(2.0f));
+}
+
+/// compute the optimal Bloom filter size for a given number of hash functions
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+float optimal_bloom_filter_bits_per_key(const uint32 K)
+{
+    return float(K) / logf(2.0f);
+}
+
+/// compute the optimal Bloom filter parameters for a given target false positive rate,
+/// specifically the number of hash functions K, and the number of bits per key
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+void optimal_bloom_filter_parameters(const float fp_rate, uint32* K, float* bits_per_key)
+{
+    *bits_per_key = optimal_bloom_filter_bits_per_key( fp_rate );
+
+    *K = optimal_bloom_filter_hashes( *bits_per_key );
+}
+
+/// compute the achievable false positive rate of a Bloom filter with a given number
+/// of hash functions and bits per key
+///
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+float optimal_bloom_filter_fp_rate(const uint32 K, const float bits_per_key)
+{
+    return powf( 1.0f - expf( -float(K) / bits_per_key ), float(K) );
+}
 
 ///@} BloomFilterModule
 ///@} Basic

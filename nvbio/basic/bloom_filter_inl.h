@@ -99,29 +99,29 @@ bool bloom_filter<K,Hash1,Hash2,Iterator,OrOperator>::has(const Key key) const
 
 
 template <
-    uint32   K,                 // number of hash functions { Hash1 + i * Hash2 | i : 0, ..., K-1 }
     typename Hash1,             // first hash generator function
     typename Hash2,             // second hash generator function
     typename Iterator,          // storage iterator - must be one of {uint32|uint2|uint4|uint64|uint64_2|uint64_4}
     typename OrOperator>
-blocked_bloom_filter<K,Hash1,Hash2,Iterator,OrOperator>::blocked_bloom_filter(
+blocked_bloom_filter<Hash1,Hash2,Iterator,OrOperator>::blocked_bloom_filter(
+    const uint32    k,
     const uint64    size,
     Iterator        storage,
     const Hash1     hash1,
     const Hash2     hash2) :
+    m_k( k ),
     m_size( size ),
     m_storage( storage ),
     m_hash1( hash1 ),
     m_hash2( hash2 ) {}
 
 template <
-    uint32   K,         // number of hash functions { Hash1 + i * Hash2 | i : 0, ..., K-1 }
     typename Hash1,     // first hash generator function
     typename Hash2,     // second hash generator function
     typename Iterator,  // storage iterator - must be one of {uint32|uint2|uint4|uint64|uint64_2|uint64_4}
     typename OrOperator>
 template <typename Key>
-void blocked_bloom_filter<K,Hash1,Hash2,Iterator,OrOperator>::insert(const Key key, const OrOperator or_op)
+void blocked_bloom_filter<Hash1,Hash2,Iterator,OrOperator>::insert(const Key key, const OrOperator or_op)
 {
     const uint64 h0 = m_hash1( key );
     const uint64 h1 = m_hash2( key );
@@ -132,7 +132,7 @@ void blocked_bloom_filter<K,Hash1,Hash2,Iterator,OrOperator>::insert(const Key k
     #if defined(__CUDA_ARCH__)
     #pragma unroll
     #endif
-    for (uint64 i = 1; i <= K; ++i)
+    for (uint64 i = 1; i <= m_k; ++i)
     {
         const uint64 r = (h0 + i * h1) % BLOCK_SIZE;
 
@@ -150,13 +150,12 @@ void blocked_bloom_filter<K,Hash1,Hash2,Iterator,OrOperator>::insert(const Key k
 }
 
 template <
-    uint32   K,         // number of hash functions { Hash1 + i * Hash2 | i : 0, ..., K-1 }
     typename Hash1,     // first hash generator function
     typename Hash2,     // second hash generator function
     typename Iterator,  // storage iterator - must be one of {uint32|uint2|uint4|uint64|uint64_2|uint64_4}
     typename OrOperator>
 template <typename Key>
-bool blocked_bloom_filter<K,Hash1,Hash2,Iterator,OrOperator>::has(const Key key) const
+bool blocked_bloom_filter<Hash1,Hash2,Iterator,OrOperator>::has(const Key key) const
 {
     const uint64 h0 = m_hash1( key );
     const uint64 h1 = m_hash2( key );
@@ -167,7 +166,7 @@ bool blocked_bloom_filter<K,Hash1,Hash2,Iterator,OrOperator>::has(const Key key)
     #if defined(__CUDA_ARCH__)
     #pragma unroll
     #endif
-    for (uint64 i = 1; i <= K; ++i)
+    for (uint64 i = 1; i <= m_k; ++i)
     {
         const uint64 r = (h0 + i * h1) % BLOCK_SIZE;
 

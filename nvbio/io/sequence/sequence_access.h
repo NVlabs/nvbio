@@ -99,6 +99,8 @@ struct SequenceDataAccess
         sequence_storage_iterator,uint8,SEQUENCE_BITS,SEQUENCE_BIG_ENDIAN>            sequence_stream_type;         ///< the packed read-stream type
 
     typedef vector_view<sequence_stream_type>                                         sequence_string;              ///< the read string type
+    typedef vector_view<qual_storage_iterator>                                        qual_string;                  ///< the quality string type
+    typedef vector_view<name_storage_iterator>                                        name_string;                  ///< the name string type
 
     typedef ConcatenatedStringSet<
         sequence_stream_type,
@@ -159,6 +161,22 @@ struct SequenceDataAccess
     {
         const uint2 sequence_range = get_range( i );
         return sequence_string( sequence_range.y - sequence_range.x, sequence_stream().begin() + sequence_range.x );
+    }
+
+    /// return the i-th quality read as a string
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE qual_string get_quals(const uint32 i) const
+    {
+        const uint2 sequence_range = get_range( i );
+        return qual_string( sequence_range.y - sequence_range.x, qual_stream() + sequence_range.x );
+    }
+
+    /// return the i-th read name as a string
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_string get_name(const uint32 i) const
+    {
+        const uint2 name_range = make_uint2( name_index()[i], name_index()[i+1] );
+        return name_string( name_range.y - name_range.x, name_stream() + name_range.x );
     }
 
     /// return the a string-set view of this set of reads
@@ -252,6 +270,12 @@ struct SequenceDataEdit
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_storage_iterator       sequence_storage()          const { return m_data.sequence_storage(); }
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE qual_storage_iterator           qual_stream()               const { return m_data.qual_stream(); }
 
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator                  name_index()                      { return m_data.name_index();  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE index_iterator                  sequence_index()                  { return m_data.sequence_index();  }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_storage_iterator           name_stream()                     { return m_data.name_stream(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_storage_iterator       sequence_storage()                { return m_data.sequence_storage(); }
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE qual_storage_iterator           qual_stream()                     { return m_data.qual_stream(); }
+
     /// constructor
     ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE SequenceDataEdit(SequenceDataT& data) : m_data( data )
@@ -269,9 +293,23 @@ struct SequenceDataEdit
     ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_stream_type sequence_stream() const { return sequence_stream_type( sequence_storage() ); }
 
+    /// return a sequence stream object
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_stream_type sequence_stream() { return sequence_stream_type( sequence_storage() ); }
+
     /// return the a string-set view of this set of reads
     ///
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_string_set_type sequence_string_set() const
+    {
+        return sequence_string_set_type(
+            size(),
+            sequence_stream().begin(),
+            sequence_index() );
+    }
+
+    /// return the a string-set view of this set of reads
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE sequence_string_set_type sequence_string_set()
     {
         return sequence_string_set_type(
             size(),
@@ -297,6 +335,15 @@ struct SequenceDataEdit
             sequence_index() );
     }
 
+    /// return the a string-set view of this set of reads
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE qual_string_set_type qual_string_set()
+    {
+        return qual_string_set_type(
+            size(),
+            qual_stream(),
+            sequence_index() );
+    }
 
     /// return the a string-set view of this set of reads
     ///
@@ -308,7 +355,17 @@ struct SequenceDataEdit
             name_index() );
     }
 
-    const sequence_reference m_data;
+    /// return the a string-set view of this set of reads
+    ///
+    NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_string_set_type name_string_set()
+    {
+        return name_string_set_type(
+            size(),
+            name_stream(),
+            name_index() );
+    }
+
+    mutable sequence_reference m_data;
 };
 
 ///@} // SequenceIO

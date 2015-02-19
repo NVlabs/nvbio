@@ -326,6 +326,13 @@ SequenceDataOutputStream* open_output_sequence_file(
                 options );
         }
     }
+
+    // we don't actually know what this is; guess fastq
+    log_warning(stderr, "could not determine file type for %s; guessing fastq\n", sequence_file_name);
+    return new SequenceDataOutputFile_FASTQ(
+        sequence_file_name,
+        compressor,
+        options );
 }
 
 } // namespace io

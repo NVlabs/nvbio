@@ -49,7 +49,7 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
 {
     uint32 n_reads = 0;
     uint32 n_bps   = 0;
-    uint8  marker;
+    char   marker;
 
     const uint32 read_mult =
         ((m_options.flags & FORWARD)            ? 1u : 0u) +
@@ -68,7 +68,7 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
             if (marker == '\n')
                 m_line++;
         }
-        while (marker == '\n' || marker == ' ');
+        while (marker >= 1 && marker <= 31);
 
         // check for EOF or read errors
         if (m_file_state != FILE_OK)
@@ -78,6 +78,24 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
         // issue a parsing error...
         if (marker != '@')
         {
+            log_error(stderr, "FASTQ loader: parsing error at %u!\n", m_line);
+
+            fprintf(stderr, "line %u, buffer pos: %u = %c=%u\n", m_line, m_buffer_pos-1, m_buffer[m_buffer_pos-1], uint32(m_buffer[m_buffer_pos-1]));
+            if (m_buffer_pos > 200)
+            {
+                fprintf(stderr, "\n----------------------------------\n");
+                for (uint32 i = m_buffer_pos-200; i < m_buffer_pos; ++i)
+                {
+                    fprintf(stderr, "%c", m_buffer[i] );
+                }
+                fprintf(stderr, "\n----------------------------------\n");
+            }
+            m_buffer[m_buffer.size()-1] = '\0';
+            for (uint32 i = m_buffer_pos-1; i < m_buffer_size; ++i)
+                if (m_buffer[i] != 0)
+                    fprintf(stderr, "%c", m_buffer[i] );
+            fprintf(stderr, "\n----------------------------------\n");
+
             m_file_state = FILE_PARSE_ERROR;
             m_error_char = marker;
             return uint32(-1);
@@ -99,7 +117,7 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
         // check for errors
         if (m_file_state != FILE_OK)
         {
-            log_error(stderr, "incomplete read!\n");
+            log_error(stderr, "FASTQ loader: incomplete read at line %u!\n", m_line);
 
             m_error_char = 0;
             return uint32(-1);
@@ -109,7 +127,7 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
 
         // start reading the bp read
         len = 0;
-        for (uint8 c = get(); c != '+' && c != 0; c = get())
+        for (char c = get(); c != '+' && c != 0; c = get())
         {
             // if (isgraph(c))
             if (c >= 0x21 && c <= 0x7E)
@@ -125,22 +143,24 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
             }
         }
 
+        const uint32 read_len = len;
+
         // check for errors
         if (m_file_state != FILE_OK)
         {
-            log_error(stderr, "incomplete read!\n");
+            log_error(stderr, "FASTQ loader: incomplete read at line %u!\n", m_line);
 
             m_error_char = 0;
             return uint32(-1);
         }
 
         // read all the line
-        for(uint8 c = get(); c != '\n' && c != 0; c = get()) {}
+        for(char c = get(); c != '\n' && c != 0; c = get()) {}
 
         // check for errors
         if (m_file_state != FILE_OK)
         {
-            log_error(stderr, "incomplete read!\n");
+            log_error(stderr, "FASTQ loader: incomplete read at line %u!\n", m_line);
 
             m_error_char = 0;
             return uint32(-1);
@@ -150,13 +170,42 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
 
         // start reading the quality read
         len = 0;
+
+        // read as many qualities as there are in the read
+        for (char c = get(); (len < read_len) && (m_file_state == FILE_OK); c = get())
+        {
+            // if (isgraph(c))
+            if (c >= 0x21 && c <= 0x7E)
+                m_read_q[ len++ ] = c;
+            else if (c == '\n')
+                m_line++;
+        }
+/*
+        // the below works for proper FASTQ files, but not for old Sanger ones
+        // allowing strings to span multiple lines...
         for (uint8 c = get(); c != '\n' && c != 0; c = get())
             m_read_q[ len++ ] = c;
+
+        if (len < read_len)
+        {
+            m_read_bp[ read_len ] = '\0';
+            m_read_q[ len ] = '\0';
+
+            log_error(stderr, "FASTQ loader: qualities and read lengths differ at line %u!\n", m_line);
+            log_error(stderr, "  name: %s\n", &m_name[0]);
+            log_error(stderr, "  read: %s\n", &m_read_bp[0]);
+            log_error(stderr, "  qual: %s\n", &m_read_q[0]);
+
+            m_file_state = FILE_PARSE_ERROR;
+
+            m_error_char = 0;
+            return uint32(-1);
+        }*/
 
         // check for errors
         if (m_file_state != FILE_OK)
         {
-            log_error(stderr, "incomplete read!\n");
+            log_error(stderr, "FASTQ loader: incomplete read at line %u!\n", m_line);
 
             m_error_char = 0;
             return uint32(-1);
@@ -249,12 +298,13 @@ SequenceDataFile_FASTQ_parser::FileState SequenceDataFile_FASTQ_gz::fillBuffer(v
     {
         // check for EOF separately; zlib will not always return Z_STREAM_END at EOF below
         if (gzeof(m_file))
-        {
             return FILE_EOF;
-        } else {
+        else
+        {
             // ask zlib what happened and inform the user
             int err;
             const char *msg;
+            log_warning(stderr, "zlib error\n");
 
             msg = gzerror(m_file, &err);
             // we're making the assumption that we never see Z_STREAM_END here
@@ -271,15 +321,15 @@ SequenceDataFile_FASTQ_parser::FileState SequenceDataFile_FASTQ_gz::fillBuffer(v
 //
 bool SequenceDataFile_FASTQ_gz::rewind()
 {
-    if (m_file == NULL)
+    if (m_file == NULL || (m_file_state != FILE_OK && m_file_state != FILE_EOF))
         return false;
 
     gzrewind( m_file );
 
     m_file_state = FILE_OK;
 
-    m_buffer_size = 0;
-    m_buffer_pos  = 0;
+    m_buffer_size = (uint32)m_buffer.size();
+    m_buffer_pos  = (uint32)m_buffer.size();
     m_line        = 0;
     return true;
 }

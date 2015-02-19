@@ -176,8 +176,8 @@ bool SequenceDataFile_TXT_gz::rewind()
 
     m_file_state = FILE_OK;
 
-    m_buffer_size = 0;
-    m_buffer_pos  = 0;
+    m_buffer_size = (uint32)m_buffer.size();
+    m_buffer_pos  = (uint32)m_buffer.size();
     m_line        = 0;
     return true;
 }

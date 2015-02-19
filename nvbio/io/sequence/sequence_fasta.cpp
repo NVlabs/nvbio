@@ -140,6 +140,9 @@ SequenceDataFile_FASTA_gz::SequenceDataFile_FASTA_gz(
 //
 bool SequenceDataFile_FASTA_gz::rewind()
 {
+    if (!m_fasta_reader.valid() || (m_file_state != FILE_OK && m_file_state != FILE_EOF))
+        return false;
+
     m_fasta_reader.rewind();
     m_file_state = FILE_OK;
     return true;

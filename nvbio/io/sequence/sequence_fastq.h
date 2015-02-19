@@ -79,7 +79,7 @@ protected:
 
 private:
     // get next character from file
-    uint8 get();
+    char get();
 
 protected:
     // file name we're reading from
@@ -155,17 +155,26 @@ private:
 ///@} // SequenceIO
 ///@} // IO
 
-inline uint8 SequenceDataFile_FASTQ_parser::get(void)
+inline char SequenceDataFile_FASTQ_parser::get(void)
 {
-    if (m_buffer_pos >= m_buffer_size)
+    if (m_buffer_pos >= m_buffer_size /*|| m_buffer[m_buffer_pos] == '\0'*/)
     {
-        // grab more data from the underlying file
-        m_file_state = fillBuffer();
-        m_buffer_pos = 0;
-
-        // if we failed to read more data, return \0
-        if (m_file_state != FILE_OK)
+        // check whether we had already reached the end of file
+        if (m_buffer_size < m_buffer.size())
+        {
+            m_file_state = FILE_EOF;
             return 0;
+        }
+        else
+        {
+            // grab more data from the underlying file
+            m_file_state = fillBuffer();
+            m_buffer_pos = 0;
+
+            // if we failed to read more data, return \0
+            if (m_file_state != FILE_OK)
+                return 0;
+        }
     }
 
     return m_buffer[m_buffer_pos++];

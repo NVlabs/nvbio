@@ -365,7 +365,7 @@ void SequenceDataOutputFile_FASTQ::next(const SequenceDataHost& sequence_data)
 
 // return whether the stream is ok
 //
-bool SequenceDataOutputFile_FASTQ::is_ok() { return m_file->is_valid(); }
+bool SequenceDataOutputFile_FASTQ::is_ok() { return m_file && m_file->is_valid(); }
 
 
 ///@} // SequenceIODetail

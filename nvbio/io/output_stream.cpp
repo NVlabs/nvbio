@@ -37,10 +37,10 @@ namespace nvbio {
 
 GZOutputFile::GZOutputFile(const char* name, const char* comp)
 {
-    char string[16];
-    sprintf( string, "w%s", comp);
+    char options_string[16];
+    sprintf( options_string, "w%s", comp);
 
-    m_file = gzopen( name, comp );
+    m_file = gzopen( name, options_string );
 }
 GZOutputFile::~GZOutputFile()
 {
@@ -65,6 +65,7 @@ uint32 GZOutputFile::write(const uint32 bytes, const void* buffer)
 
 LZ4OutputFile::LZ4OutputFile(const char* name, const char* comp)
 {
+    fprintf(stderr, "LZ4OutputFile\n" );
     m_file = (FILE*)fopen( name, "wb" );
     if (m_file == NULL)
         return;

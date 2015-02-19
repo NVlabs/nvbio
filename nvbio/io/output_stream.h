@@ -49,7 +49,7 @@ struct OutputStream
 
     /// is valid?
     ///
-    virtual bool is_valid() const { return false; }
+    virtual bool is_valid() const { return true; }
 };
 
 // Base abstract output file class

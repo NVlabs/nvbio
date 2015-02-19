@@ -137,7 +137,7 @@ uint32 LZ4OutputFile::write(const uint32 bytes, const void* buffer)
 
 // output file factory method
 //
-OutputFile* open_output_file(const char* file_name, const char* compressor, const char* options)
+OutputStream* open_output_file(const char* file_name, const char* compressor, const char* options)
 {
     if (compressor == NULL || strcmp( compressor, "" ) == 0)
         return new GZOutputFile( file_name, "" );

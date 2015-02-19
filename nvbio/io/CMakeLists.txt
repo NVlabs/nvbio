@@ -6,6 +6,6 @@ bufferedtextfile.h
 utils.h
 vcf.cpp
 vcf.h
-output_file.cpp
-output_file.h
+output_stream.cpp
+output_stream.h
 )

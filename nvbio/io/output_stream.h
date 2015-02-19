@@ -37,11 +37,11 @@ namespace nvbio {
 
 /// Base abstract output file class
 ///
-struct OutputFile
+struct OutputStream
 {
     /// virtual destructor
     ///
-    virtual ~OutputFile() {}
+    virtual ~OutputStream() {}
 
     /// write a given number of bytes
     ///
@@ -54,7 +54,7 @@ struct OutputFile
 
 // Base abstract output file class
 //
-struct GZOutputFile
+struct GZOutputFile : public OutputStream
 {
     /// constructor
     ///
@@ -62,7 +62,7 @@ struct GZOutputFile
 
     /// destructor
     ///
-    ~GZOutputFile() {}
+    ~GZOutputFile();
 
     /// write a given number of bytes
     ///
@@ -77,7 +77,7 @@ struct GZOutputFile
 
 // Base abstract output file class
 //
-struct LZ4OutputFile
+struct LZ4OutputFile : public OutputStream
 {
     /// constructor
     ///
@@ -85,7 +85,7 @@ struct LZ4OutputFile
 
     /// destructor
     ///
-    ~LZ4OutputFile() {}
+    ~LZ4OutputFile();
 
     /// write a given number of bytes
     ///
@@ -102,7 +102,7 @@ struct LZ4OutputFile
 
 /// output file factory method
 ///
-OutputFile* open_output_file(const char* file_name, const char* compressor, const char* options);
+OutputStream* open_output_file(const char* file_name, const char* compressor, const char* options);
 
 ///@} // IO
 

@@ -299,7 +299,7 @@ namespace {
 
 template <Alphabet ALPHABET>
 void write(
-   OutputFile*                              output_file,
+   OutputStream*                            output_file,
    const io::SequenceDataAccess<ALPHABET>&  sequence_data)
 {
     typedef typename io::SequenceDataAccess<ALPHABET>::sequence_string  sequence_string;

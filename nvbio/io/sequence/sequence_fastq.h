@@ -29,7 +29,7 @@
 
 #include <nvbio/io/sequence/sequence.h>
 #include <nvbio/io/sequence/sequence_priv.h>
-#include <nvbio/io/output_file.h>
+#include <nvbio/io/output_stream.h>
 #include <nvbio/basic/console.h>
 
 #include <zlib/zlib.h>
@@ -147,8 +147,8 @@ struct SequenceDataOutputFile_FASTQ : SequenceDataOutputStream
 
 private:
     // file name we're reading from
-    const char* m_file_name;
-    OutputFile* m_file;
+    const char*   m_file_name;
+    OutputStream* m_file;
 };
 
 ///@} // SequenceIODetail

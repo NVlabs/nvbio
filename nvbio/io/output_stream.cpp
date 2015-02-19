@@ -25,13 +25,17 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <nvbio/basic/types.h>
+#include <nvbio/io/output_stream.h>
+#include <nvbio/basic/console.h>
 #include <zlib/zlib.h>
 #include <lz4/lz4frame.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 namespace nvbio {
 
-GZOutputFile::GZOutputFile(const char* name, const char* comp);
+GZOutputFile::GZOutputFile(const char* name, const char* comp)
 {
     char string[16];
     sprintf( string, "w%s", comp);
@@ -59,9 +63,11 @@ uint32 GZOutputFile::write(const uint32 bytes, const void* buffer)
     return uint32(r);
 }
 
-LZ4OutputFile::LZ4OutputFile(const char* name, const char* comp);
+LZ4OutputFile::LZ4OutputFile(const char* name, const char* comp)
 {
-    m_file = fopen( name, "wb" );
+    m_file = (FILE*)fopen( name, "wb" );
+    if (m_file == NULL)
+        return;
 
     m_buffer.resize( 1024*1024 );
 
@@ -71,7 +77,19 @@ LZ4OutputFile::LZ4OutputFile(const char* name, const char* comp);
     LZ4F_preferences_t* preferences = (LZ4F_preferences_t*)calloc( sizeof(LZ4F_preferences_t), 1u );
         // TODO: handle compression modes
 
-    LZ4F_compressBegin( m_context, &m_buffer[0], m_buffer.size(), preferences );
+    const size_t compressed_bytes = LZ4F_compressBegin( m_context, &m_buffer[0], m_buffer.size(), preferences );
+
+    if (compressed_bytes == 0)
+        return;
+
+    // write down
+    if (fwrite( &m_buffer[0], 1u, compressed_bytes, (FILE*)m_file ) < compressed_bytes)
+    {
+        // an error has occurred, shutdown the file
+        fclose( (FILE*)m_file ); m_file = NULL;
+
+        LZ4F_freeCompressionContext( m_context ); m_context = NULL;
+    }
 }
 LZ4OutputFile::~LZ4OutputFile()
 {
@@ -80,11 +98,11 @@ LZ4OutputFile::~LZ4OutputFile()
     {
         const size_t compressed_bytes = LZ4F_compressEnd( m_context, &m_buffer[0], m_buffer.size(), NULL );
 
-        fwrite( &m_buffer[0], 1u, compressed_bytes, m_file );
+        fwrite( &m_buffer[0], 1u, compressed_bytes, (FILE*)m_file );
     }
 
     if (m_file)
-        fclose( m_file );
+        fclose( (FILE*)m_file );
 
     if (m_context)
         LZ4F_freeCompressionContext( m_context );
@@ -100,17 +118,17 @@ uint32 LZ4OutputFile::write(const uint32 bytes, const void* buffer)
         m_buffer.resize( dst_max );
 
     // compress in-memory
-    const size_t compressed_bytes = LZ4F_compressUpdate( m_context, &m_buffer[0], m_buffer.size(), bytes, NULL );
+    const size_t compressed_bytes = LZ4F_compressUpdate( m_context, &m_buffer[0], m_buffer.size(), buffer, bytes, NULL );
 
     // check whether the compressor has actually produced any output
     if (compressed_bytes == 0)
         return bytes;
 
     // write down
-    if (fwrite( &m_buffer[0], 1u, compressed_bytes, m_file ) < compressed_bytes)
+    if (fwrite( &m_buffer[0], 1u, compressed_bytes, (FILE*)m_file ) < compressed_bytes)
     {
         // an error has occurred, shutdown the file
-        fclose( m_file ); m_file = NULL;
+        fclose( (FILE*)m_file ); m_file = NULL;
 
         LZ4F_freeCompressionContext( m_context ); m_context = NULL;
     }

@@ -141,7 +141,7 @@ uint32 LZ4OutputFile::write(const uint32 bytes, const void* buffer)
 OutputStream* open_output_file(const char* file_name, const char* compressor, const char* options)
 {
     if (compressor == NULL || strcmp( compressor, "" ) == 0)
-        return new GZOutputFile( file_name, "" );
+        return new GZOutputFile( file_name, "T" );
     else if (strcmp( compressor, "gzip" ) == 0 || strcmp( compressor, "gz" ) == 0)
         return new GZOutputFile( file_name, options );
     else if (strcmp( compressor, "lz4" ) == 0)

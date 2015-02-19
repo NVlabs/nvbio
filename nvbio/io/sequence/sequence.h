@@ -42,7 +42,7 @@ namespace io {
 /// \page sequence_io_page Sequence Data Input
 ///\par
 /// This module contains a series of classes to load and represent sequence streams.
-/// The idea is that a sequence stream is an object implementing a simple interface, \ref SequenceDataStream,
+/// The idea is that a sequence stream is an object implementing a simple interface, \ref SequenceDataInputStream,
 /// which allows to stream through a file or other set of reads in batches, which are represented in memory
 /// with an object inheriting from SequenceData.
 /// There are several kinds of SequenceData containers to keep the reads in the host or in CUDA device memory.
@@ -57,7 +57,8 @@ namespace io {
 /// - io::SequenceDataDevice
 /// - io::SequenceDataMMAP
 /// - io::SequenceDataMMAPServer
-/// - io::SequenceDataStream
+/// - io::SequenceDataInputStream
+/// - io::SequenceDataOutputStream
 /// - io::open_sequence_file()
 /// - io::load_sequence_file()
 /// - io::map_sequence_file()
@@ -120,7 +121,7 @@ namespace io {
 /// SequenceDataStream provides an abstract interface for doing just this:
 ///\code
 /// // open a sequence file
-/// SharedPointer<io::SequenceDataStream> reads_file = io::open_sequence_file( "reads.fastq" );
+/// SharedPointer<io::SequenceDataInputStream> reads_file = io::open_sequence_file( "reads.fastq" );
 ///
 /// // instantiate a host SequenceData object
 /// io::SequenceDataHost reads;
@@ -594,11 +595,11 @@ typedef SequenceDataStorage<device_tag> SequenceDataDevice;         ///< a Seque
 ///
 /// A stream of SequenceData, allowing to process the associated reads in batches.
 ///
-struct SequenceDataStream
+struct SequenceDataInputStream
 {
     /// virtual destructor
     ///
-    virtual ~SequenceDataStream() {}
+    virtual ~SequenceDataInputStream() {}
 
     /// next batch
     ///
@@ -613,18 +614,26 @@ struct SequenceDataStream
     virtual bool rewind() = 0;
 };
 
-/// utility method to get the next batch from a SequenceDataStream
+/// legacy typedef
 ///
-int next(const Alphabet alphabet, SequenceDataHost* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
+typedef SequenceDataInputStream SequenceDataStream;
 
-/// utility method to append the next batch from a SequenceDataStream
+///\relates SequenceDataInputStream
+/// utility method to get the next batch from a SequenceDataInputStream
 ///
-int append(const Alphabet alphabet, SequenceDataHost* data, SequenceDataStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
+int next(const Alphabet alphabet, SequenceDataHost* data, SequenceDataInputStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
 
-/// utility method to skip a batch from a SequenceDataStream
+///\relates SequenceDataInputStream
+/// utility method to append the next batch from a SequenceDataInputStream
 ///
-int skip(SequenceDataStream* stream, const uint32 batch_size);
+int append(const Alphabet alphabet, SequenceDataHost* data, SequenceDataInputStream* stream, const uint32 batch_size, const uint32 batch_bps = uint32(-1));
 
+///\relates SequenceDataInputStream
+/// utility method to skip a batch from a SequenceDataInputStream
+///
+int skip(SequenceDataInputStream* stream, const uint32 batch_size);
+
+///\relates SequenceDataInputStream
 /// factory method to open a read file
 ///
 /// \param sequence_file_name   the file to open
@@ -637,7 +646,7 @@ int skip(SequenceDataStream* stream, const uint32 batch_size);
 ///                             will result in a stream containing BOTH the forward
 ///                             and reverse-complemented strands.
 ///
-SequenceDataStream* open_sequence_file(
+SequenceDataInputStream* open_sequence_file(
     const char*              sequence_file_name,
     const QualityEncoding    qualities        = Phred33,
     const uint32             max_seqs         = uint32(-1),
@@ -646,6 +655,7 @@ SequenceDataStream* open_sequence_file(
     const uint32             trim3            = 0,
     const uint32             trim5            = 0);
 
+///\relates SequenceDataHost
 /// load a sequence file
 ///
 /// \param alphabet             the alphabet used to encode the sequence data
@@ -661,6 +671,7 @@ bool load_sequence_file(
     const SequenceFlags         load_flags  = io::SequenceFlags( io::SEQUENCE_DATA | io::SEQUENCE_QUALS | io::SEQUENCE_NAMES ),
     const QualityEncoding       qualities   = Phred33);
 
+///\relates SequenceDataHost
 /// load a sequence file
 ///
 /// \param alphabet             the alphabet used to encode the sequence data
@@ -673,6 +684,34 @@ SequenceDataHost* load_sequence_file(
     const char*                 sequence_file_name,
     const SequenceFlags         load_flags  = io::SequenceFlags( io::SEQUENCE_DATA | io::SEQUENCE_QUALS | io::SEQUENCE_NAMES ),
     const QualityEncoding       qualities   = Phred33);
+
+///
+/// An output stream of SequenceData, allowing to write reads in batches.
+///
+struct SequenceDataOutputStream
+{
+    /// virtual destructor
+    ///
+    virtual ~SequenceDataOutputStream() {}
+
+    /// next batch
+    ///
+    virtual void next(const SequenceDataHost& sequence_data) = 0;
+
+    /// is the stream ok?
+    ///
+    virtual bool is_ok() = 0;
+};
+
+///\relates SequenceDataOutputStream
+/// factory method to open a read file for writing
+///
+/// \param sequence_file_name   the file to open
+/// \param compression          compression options
+///
+SequenceDataOutputStream* open_output_sequence_file(
+    const char* sequence_file_name,
+    const char* compression);
 
 ///@} // SequenceIO
 ///@} // IO

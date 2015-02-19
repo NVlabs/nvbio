@@ -29,6 +29,7 @@
 
 #include <nvbio/io/sequence/sequence.h>
 #include <nvbio/io/sequence/sequence_priv.h>
+#include <nvbio/io/output_file.h>
 #include <nvbio/basic/console.h>
 
 #include <zlib/zlib.h>
@@ -45,9 +46,10 @@ namespace io {
 ///@addtogroup SequenceIODetail
 ///@{
 
-// SequenceDataFile from a FASTQ file
-// contains the code to parse FASTQ files and dump the results into a SequenceDataRAM object
-// file access is done via derived classes
+/// SequenceDataFile from a FASTQ file
+/// contains the code to parse FASTQ files and dump the results into a SequenceDataRAM object
+/// file access is done via derived classes
+///
 struct SequenceDataFile_FASTQ_parser : public SequenceDataFile
 {
 protected:
@@ -64,7 +66,7 @@ protected:
         m_name( 1024*1024 ),
         m_read_bp( 1024*1024 ),
         m_read_q( 1024*1024 )
-    {};
+    {}
 
     // get next read chunk from file and parse it (up to max reads)
     // this can cause m_file_state to change
@@ -100,8 +102,9 @@ protected:
     std::vector<uint8> m_read_q;
 };
 
-// loader for gzipped files
-// this also works for plain uncompressed files, as zlib does that transparently
+/// loader for gzipped files
+/// this also works for plain uncompressed files, as zlib does that transparently
+///
 struct SequenceDataFile_FASTQ_gz : public SequenceDataFile_FASTQ_parser
 {
     SequenceDataFile_FASTQ_gz(
@@ -118,6 +121,34 @@ struct SequenceDataFile_FASTQ_gz : public SequenceDataFile_FASTQ_parser
 
 private:
     gzFile m_file;
+};
+
+
+/// SequenceDataFile from a FASTQ file
+/// contains the code to parse FASTQ files and dump the results into a SequenceDataRAM object
+/// file access is done via derived classes
+///
+struct SequenceDataOutputFile_FASTQ : SequenceDataOutputStream
+{
+    /// constructor
+    ///
+    SequenceDataOutputFile_FASTQ(
+        const char* file_name,
+        const char* compressor,
+        const char* options);
+
+    /// next batch
+    ///
+    void next(const SequenceDataHost& sequence_data);
+
+    /// return whether the stream is ok
+    ///
+    bool is_ok();
+
+private:
+    // file name we're reading from
+    const char* m_file_name;
+    OutputFile* m_file;
 };
 
 ///@} // SequenceIODetail

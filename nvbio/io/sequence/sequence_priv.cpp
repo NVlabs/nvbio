@@ -267,5 +267,66 @@ SequenceDataHost* load_sequence_file(
     return ret;
 }
 
+//\relates SequenceDataOutputStream
+// factory method to open a read file for writing
+//
+// \param sequence_file_name   the file to open
+// \param compression          compression options
+//
+SequenceDataOutputStream* open_output_sequence_file(
+    const char* sequence_file_name,
+    const char* options)
+{
+    // parse out file extension; look for .fastq.gz, .fastq suffixes
+    uint32 len = uint32( strlen(sequence_file_name) );
+    const char* gz  = "gz";
+    const char* lz4 = "lz4";
+    const char* compressor = NULL;
+
+    // do we have a .gz suffix?
+    if (len >= strlen(".gz"))
+    {
+        if (strcmp(&sequence_file_name[len - strlen(".gz")], ".gz") == 0)
+        {
+            compressor = gz;
+            len = uint32(len - strlen(".gz"));
+        }
+    }
+
+    // do we have a .gz suffix?
+    if (len >= strlen(".lz4"))
+    {
+        if (strcmp(&sequence_file_name[len - strlen(".lz4")], ".lz4") == 0)
+        {
+            compressor = lz4;
+            len = uint32(len - strlen(".lz4"));
+        }
+    }
+
+    // check for fastq suffix
+    if (len >= strlen(".fastq"))
+    {
+        if (strncmp(&sequence_file_name[len - strlen(".fastq")], ".fastq", strlen(".fastq")) == 0)
+        {
+            return new SequenceDataOutputFile_FASTQ(
+                sequence_file_name,
+                compressor,
+                options );
+        }
+    }
+
+    // check for fastq suffix
+    if (len >= strlen(".fq"))
+    {
+        if (strncmp(&sequence_file_name[len - strlen(".fq")], ".fq", strlen(".fq")) == 0)
+        {
+            return new SequenceDataOutputFile_FASTQ(
+                sequence_file_name,
+                compressor,
+                options );
+        }
+    }
+}
+
 } // namespace io
 } // namespace nvbio

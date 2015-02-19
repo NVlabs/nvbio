@@ -80,6 +80,7 @@ include_directories(${INCLUDE_DIRS})
 set(nvbio_INCLUDE_DIRECTORIES ${INCLUDE_DIRS} CACHE STRING "nvbio include paths")
 
 add_subdirectory(contrib/zlib-1.2.7)
+add_subdirectory(contrib/lz4)
 add_subdirectory(contrib/crc)
 add_subdirectory(contrib/bamtools)
 add_subdirectory(contrib/moderngpu)

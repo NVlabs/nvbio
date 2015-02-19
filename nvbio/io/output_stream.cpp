@@ -54,7 +54,7 @@ uint32 GZOutputFile::write(const uint32 bytes, const void* buffer)
         return 0;
 
     const int r = gzwrite( m_file, buffer, bytes );
-    if (r < 0)
+    if (r <= 0)
     {
         gzclose( m_file );
         m_file = NULL;

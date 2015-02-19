@@ -306,7 +306,7 @@ void write(
     typedef typename io::SequenceDataAccess<ALPHABET>::qual_string      qual_string;
     typedef typename io::SequenceDataAccess<ALPHABET>::name_string      name_string;
 
-    std::vector<char> buffer( 1024*1024 );
+    std::vector<char> buffer( 16*1024*1024 );
 
     for (uint32 i = 0; i < sequence_data.size(); ++i)
     {
@@ -338,7 +338,7 @@ void write(
 
         buffer[ buffer_len++ ] = '\n';
 
-        if (output_file->write( buffer_len, &buffer[0] ) == 0 );
+        if (output_file->write( buffer_len, &buffer[0] ) == 0)
             throw runtime_error( "failed writing FASTQ output file" );
     }
 }

@@ -17,5 +17,5 @@ ssw.h
 endif()
 
 cuda_add_executable(sw-benchmark ${sw-benchmark_srcs})
-target_link_libraries(sw-benchmark nvbio zlibstatic crcstatic ${SYSTEM_LINK_LIBRARIES})
+target_link_libraries(sw-benchmark nvbio zlibstatic lz4 crcstatic ${SYSTEM_LINK_LIBRARIES})
 

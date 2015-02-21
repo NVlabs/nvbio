@@ -33,6 +33,7 @@
 #include <nvBowtie/bowtie2/cuda/seed_hit.h>
 #include <nvBowtie/bowtie2/cuda/seed_hit_deque_array.h>
 #include <nvbio/io/utils.h>
+#include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/cuda/pingpong_queues.h>
 #include <nvbio/basic/cached_iterator.h>
 #include <nvbio/basic/packedstream.h>
@@ -228,14 +229,14 @@ struct seed_mapper {};
 template <>
 struct seed_mapper<EXACT_MAPPING>
 {
-    template<typename BatchType, typename FMType, typename rFMType, typename HitType>
+    template<typename SeedIterator, typename FMType, typename rFMType, typename HitType>
     NVBIO_FORCEINLINE NVBIO_DEVICE
     static void enact(
-        const BatchType&    read_batch, const FMType fmi, const rFMType rfmi,
+        const FMType fmi, const rFMType rfmi,
+        const SeedIterator  seed,
         const uint2         read_range,
         const uint32        pos,
         const uint32        seed_len,
-        uint32*             S,
         HitType&            hitheap,
         uint32&             range_sum,
         uint32&             range_count,
@@ -243,31 +244,17 @@ struct seed_mapper<EXACT_MAPPING>
         const bool          fw,
         const bool          rc)
     {
-        //typedef const_cached_iterator<const uint32*> BaseStream;
-        typedef PackedStream<
-            const uint32*,uint8,
-            BatchType::SEQUENCE_BITS,
-            BatchType::SEQUENCE_BIG_ENDIAN> Reader;
+        const OffsetXform <typename SeedIterator::index_type> forward_offset(0);
+        const ReverseXform<typename SeedIterator::index_type> reverse_offset(seed_len);
 
-        // First we have to buffer the seed into shared memory.
-        const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
-        const uint32 seed_offs = pos & (SYMBOLS_PER_WORD-1); // pos % 8, there are 8 bases per uint32
-        const uint32 nwords    = (seed_offs + seed_len+SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD; //seed_len/8+1
-        const uint32 fword     = pos / SYMBOLS_PER_WORD;
-        for (uint32 i = 0; i < nwords; ++i)
-            S[i] = read_batch.sequence_storage()[fword + i];
-
-        const Reader reader(S);
-        const OffsetXform <typename Reader::index_type> forward_offset(seed_offs);
-        const ReverseXform<typename Reader::index_type> reverse_offset(seed_offs+seed_len);
-        typedef index_transform_iterator< Reader, OffsetXform <typename Reader::index_type> > fSeedReader;
-        typedef index_transform_iterator< Reader, ReverseXform<typename Reader::index_type> > rSeedReader;
+        typedef index_transform_iterator< SeedIterator, OffsetXform <typename SeedIterator::index_type> > fSeedReader;
+        typedef index_transform_iterator< SeedIterator, ReverseXform<typename SeedIterator::index_type> > rSeedReader;
 
         SeedHit::Flags flags;
         uint2          range;
 
         // forward scan, forward index=0
-        const fSeedReader f_reader(reader, forward_offset);
+        const fSeedReader f_reader(seed, forward_offset);
         if (util::count_occurrences( f_reader, seed_len, 4u, 1u ))
             return;
 
@@ -304,7 +291,7 @@ struct seed_mapper<EXACT_MAPPING>
             }
         #else
             // Complement seed=1, reverse scan, forward index=0
-            const rSeedReader r_reader(reader, reverse_offset);                        
+            const rSeedReader r_reader(seed, reverse_offset);                        
             const transform_iterator<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
 
             range = make_uint2(0, fmi.length());
@@ -331,14 +318,14 @@ struct seed_mapper<EXACT_MAPPING>
 template <>
 struct seed_mapper<APPROX_MAPPING>
 {
-    template<typename BatchType, typename FMType, typename rFMType, typename HitType>
+    template<typename SeedIterator, typename FMType, typename rFMType, typename HitType>
     NVBIO_FORCEINLINE NVBIO_DEVICE
     static void enact(
-        const BatchType&    read_batch, const FMType fmi, const rFMType rfmi,
+        const FMType fmi, const rFMType rfmi,
+        const SeedIterator  seed,
         const uint2         read_range,
         const uint32        pos,
         const uint32        seed_len,
-        uint32*             S,
         HitType&            hitheap,
         uint32&             range_sum,
         uint32&             range_count,
@@ -346,39 +333,16 @@ struct seed_mapper<APPROX_MAPPING>
         const bool          fw,
         const bool          rc)
     {
-    #if 0
-        typedef PackedStream<
-            const uint32*,uint8,
-            BatchType::SEQUENCE_BITS,
-            BatchType::SEQUENCE_BIG_ENDIAN> Reader;
+        const OffsetXform <typename SeedIterator::index_type> forward_offset(0);
+        const ReverseXform<typename SeedIterator::index_type> reverse_offset(seed_len);
 
-        // First we have to buffer the seed into shared memory.
-        const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
-        const uint32 storage_offset   = pos;
-        const uint32 word_offset      = storage_offset & (SYMBOLS_PER_WORD-1);
-        const uint32 begin_word       = storage_offset / SYMBOLS_PER_WORD;
-        const uint32 end_word         = (storage_offset + seed_len + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
-        NVBIO_CUDA_DEBUG_ASSERT( end_word <= read_batch.words(), "map_kernel(): seed %u accessing word %u / %u", pos, end_word, read_batch.words() );
-        for (uint32 i = begin_word; i < end_word; ++i)
-            S[i - begin_word] = read_batch.sequence_storage()[i];
-
-        const Reader reader(S);
-        const OffsetXform <typename Reader::index_type> forward_offset(word_offset);
-        const ReverseXform<typename Reader::index_type> reverse_offset(word_offset+seed_len);
-    #else
-        typedef typename BatchType::sequence_stream_type Reader;
-
-        const Reader reader( read_batch.sequence_storage() );
-        const OffsetXform <typename Reader::index_type> forward_offset(pos);
-        const ReverseXform<typename Reader::index_type> reverse_offset(pos + seed_len);
-    #endif
-        typedef index_transform_iterator< Reader, OffsetXform <typename Reader::index_type> > fSeedReader;
-        typedef index_transform_iterator< Reader, ReverseXform<typename Reader::index_type> > rSeedReader;
+        typedef index_transform_iterator< SeedIterator, OffsetXform <typename SeedIterator::index_type> > fSeedReader;
+        typedef index_transform_iterator< SeedIterator, ReverseXform<typename SeedIterator::index_type> > rSeedReader;
 
         SeedHit::Flags flags;
 
         // Standard seed=0, forward scan, forward index=0
-        const fSeedReader f_reader(reader, forward_offset);
+        const fSeedReader f_reader(seed, forward_offset);
         if (util::count_occurrences( f_reader, seed_len, 4u, 2u ))
             return;
 
@@ -391,7 +355,7 @@ struct seed_mapper<APPROX_MAPPING>
         // Complement seed=1, reverse scan, forward  index=0
         if (rc)
         {
-            const rSeedReader r_reader(reader, reverse_offset);                        
+            const rSeedReader r_reader(seed, reverse_offset);                        
             const transform_iterator<rSeedReader, complement_functor<4> > cr_reader(r_reader, complement_functor<4>());
             flags = SeedHit::build_flags(COMPLEMENT, FORWARD, pos-read_range.x);
             map<IGNORE_EXACT>(cr_reader, params.subseed_len, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
@@ -408,14 +372,14 @@ struct seed_mapper<APPROX_MAPPING>
 template <>
 struct seed_mapper<CASE_PRUNING_MAPPING>
 {
-    template<typename BatchType, typename FMType, typename rFMType, typename HitType>
+    template<typename SeedIterator, typename FMType, typename rFMType, typename HitType>
     NVBIO_FORCEINLINE NVBIO_DEVICE
     static void enact(
-        const BatchType&    read_batch, const FMType fmi, const rFMType rfmi,
+        const FMType fmi, const rFMType rfmi,
+        const SeedIterator  seed,
         const uint2         read_range,
         const uint32        pos,
         const uint32        seed_len,
-        uint32*             S,
         HitType&            hitheap,
         uint32&             range_sum,
         uint32&             range_count,
@@ -423,46 +387,23 @@ struct seed_mapper<CASE_PRUNING_MAPPING>
         const bool          fw,
         const bool          rc)
     {
-    #if 0
-        typedef PackedStream<
-            const uint32*,uint8,
-            BatchType::SEQUENCE_BITS,
-            BatchType::SEQUENCE_BIG_ENDIAN> Reader;
+        const OffsetXform <typename SeedIterator::index_type> forward_offset(0);
+        const ReverseXform<typename SeedIterator::index_type> reverse_offset(seed_len);
 
-        // First we have to buffer the seed into shared memory.
-        const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
-        const uint32 storage_offset   = pos;
-        const uint32 word_offset      = storage_offset & (SYMBOLS_PER_WORD-1);
-        const uint32 begin_word       = storage_offset / SYMBOLS_PER_WORD;
-        const uint32 end_word         = (storage_offset + seed_len + SYMBOLS_PER_WORD-1) / SYMBOLS_PER_WORD;
-        NVBIO_CUDA_DEBUG_ASSERT( end_word <= read_batch.words(), "map_kernel(): seed %u accessing word %u / %u", pos, end_word, read_batch.words() );
-        for (uint32 i = begin_word; i < end_word; ++i)
-            S[i - begin_word] = read_batch.sequence_storage()[i];
-
-        const Reader reader(S);
-        const OffsetXform <typename Reader::index_type> forward_offset(word_offset);
-        const ReverseXform<typename Reader::index_type> reverse_offset(word_offset+seed_len);
-    #else
-        typedef typename BatchType::sequence_stream_type Reader;
-
-        const Reader reader( read_batch.sequence_storage() );
-        const OffsetXform <typename Reader::index_type> forward_offset(pos);
-        const ReverseXform<typename Reader::index_type> reverse_offset(pos + seed_len);
-    #endif
-        typedef index_transform_iterator< Reader, OffsetXform <typename Reader::index_type> > fSeedReader;
-        typedef index_transform_iterator< Reader, ReverseXform<typename Reader::index_type> > rSeedReader;
+        typedef index_transform_iterator< SeedIterator, OffsetXform <typename SeedIterator::index_type> > fSeedReader;
+        typedef index_transform_iterator< SeedIterator, ReverseXform<typename SeedIterator::index_type> > rSeedReader;
 
         SeedHit::Flags flags;
 
         // Standard seed=0, forward scan, forward index=0
-        const fSeedReader f_reader(reader, forward_offset);
+        const fSeedReader f_reader(seed, forward_offset);
         if (fw)
         {
             flags = SeedHit::build_flags(STANDARD, FORWARD, read_range.y-pos-seed_len);
             map<CHECK_EXACT> (f_reader,  (seed_len  )/2, seed_len,  fmi, flags, hitheap, params.max_hits, range_sum, range_count);
         }
         // Standard seed=0, reverse scan, reverse index=1
-        const rSeedReader r_reader(reader, reverse_offset);
+        const rSeedReader r_reader(seed, reverse_offset);
         if (fw)
         {
             flags = SeedHit::build_flags(STANDARD, REVERSE, read_range.y-pos-1);
@@ -500,53 +441,66 @@ void map_whole_read_kernel(
     const bool                                      fw,
     const bool                                      rc)
 {
-    __shared__ volatile uint32 sm_broadcast[BLOCKDIM >> 5];
-    volatile uint32& warp_broadcast = sm_broadcast[ warp_id() ];
+    typedef PackedStringLoader<
+        typename BatchType::sequence_storage_iterator,
+        BatchType::SEQUENCE_BITS,
+        BatchType::SEQUENCE_BIG_ENDIAN,
+        uncached_tag >                              packed_loader_type;
+    typedef typename packed_loader_type::iterator   seed_iterator;
 
-    // local cache
-    uint32 S[128];  // up to 1024bps
+    // instantiate a packed loader to cache the seed in local memory
+    packed_loader_type packer_loader;
+
+    // instantiate storage for a local memory hits queue
+    SeedHit local_hits[512];
 
     const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;
-    if (thread_id >= queues.in_size) return;
-    const uint32 read_id = queues.in_queue[ thread_id ];
-    NVBIO_CUDA_ASSERT( read_id < read_batch.size() );
-    const uint2  read_range = read_batch.get_range( read_id );
+    const uint32 grid_size = BLOCKDIM * gridDim.x;
 
-    // filter away short strings
-    if (read_range.y - read_range.x < params.min_read_len)
+    for (uint32 id = thread_id; id < queues.in_size; id += grid_size)
     {
-        hits.resize_deque( read_id, 0 );
-        return;
+        const uint32 read_id = queues.in_queue[ id ];
+        NVBIO_CUDA_ASSERT( read_id < read_batch.size() );
+        const uint2  read_range = read_batch.get_range( read_id );
+
+        // filter away short strings
+        if (read_range.y - read_range.x < params.min_read_len)
+        {
+            hits.resize_deque( read_id, 0 );
+            return;
+        }
+
+        typedef SeedHitDequeArrayDeviceView::hit_vector_type hit_storage_type;
+        typedef SeedHitDequeArrayDeviceView::hit_deque_type  hit_deque_type;
+        hit_deque_type hitheap( hit_storage_type( 0, local_hits ), true );
+
+        uint32 range_sum   = 0;
+        uint32 range_count = 0;
+
+        // load the whole read
+        const seed_iterator read = packer_loader.load( read_batch.sequence_stream() + read_range.x, read_range.y - read_range.x );
+
+        // map the read
+        seed_mapper<EXACT_MAPPING>::enact(
+            fmi, rfmi,
+            read,
+            read_range,
+            read_range.x,
+            read_range.y - read_range.x,
+            hitheap,
+            range_sum,
+            range_count,
+            params,
+            fw,
+            rc );
+
+        // save the hits
+        store_deque( hits, read_id, hitheap.size(), local_hits );
+
+        // enqueue for re-seeding if there are no hits
+        if (reseed)
+            reseed[ id ] = (range_count == 0);
     }
-
-    SeedHit local_hits[512];
-    typedef SeedHitDequeArrayDeviceView::hit_vector_type hit_storage_type;
-    typedef SeedHitDequeArrayDeviceView::hit_deque_type  hit_deque_type;
-    hit_deque_type hitheap( hit_storage_type( 0, local_hits ), true );
-
-    uint32 range_sum   = 0;
-    uint32 range_count = 0;
-
-    // map the read
-    seed_mapper<EXACT_MAPPING>::enact(
-        read_batch, fmi, rfmi,
-        read_range,
-        read_range.x,
-        read_range.y - read_range.x,
-        &S[0],
-        hitheap,
-        range_sum,
-        range_count,
-        params,
-        fw,
-        rc );
-
-    // save the hits
-    store_deque( hits, read_id, hitheap.size(), local_hits );
-
-    // enqueue for re-seeding if there are no hits
-    if (reseed)
-        reseed[ thread_id ] = (range_count == 0);
 }
 
 ///
@@ -554,8 +508,8 @@ void map_whole_read_kernel(
 /// queue, filling the corresponding hit priority-deque, and fills the output queue with
 /// the list of reads that need reseeding.
 ///
-template<MappingAlgorithm ALGO, uint32 MAX_SEED, typename BatchType, typename FMType, typename rFMType> __global__ 
-void map_kernel(
+template<MappingAlgorithm ALGO, typename BatchType, typename FMType, typename rFMType> __global__ 
+void map_queues_kernel(
     const BatchType                                 read_batch, const FMType fmi, const rFMType rfmi,
     const uint32                                    retry,
     const nvbio::cuda::PingPongQueuesView<uint32>   queues,
@@ -565,67 +519,76 @@ void map_kernel(
     const bool                                      fw,
     const bool                                      rc)
 {
-    __shared__ volatile uint32 sm_broadcast[BLOCKDIM >> 5];
-    volatile uint32& warp_broadcast = sm_broadcast[ warp_id() ];
+    typedef PackedStringLoader<
+        typename BatchType::sequence_storage_iterator,
+        BatchType::SEQUENCE_BITS,
+        BatchType::SEQUENCE_BIG_ENDIAN,
+        uncached_tag >                              packed_loader_type;
+        //lmem_cache_tag<128> >                       packed_loader_type; // TODO: this produces a crashing kernel, for no good reason
+    typedef typename packed_loader_type::iterator   seed_iterator;
 
-    // Pad shared by 1 uint32 because seed may not start at beginning of uint.
-    // For MAX_SEED=32, SHARED_DIM=5, so gcd(SHARED_DIM, SMEM_BANKS)=1, and
-    // we don't have to worry about bank conflicts.
-    const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
-    enum { SHARED_DIM = MAX_SEED/SYMBOLS_PER_WORD+1 };
-    __shared__ uint32 S[BLOCKDIM][SHARED_DIM];
+    // instantiate a packed loader to cache the seed in local memory
+    packed_loader_type packer_loader;
+
+    // instantiate storage for a local memory hits queue
+    SeedHit local_hits[512];
 
     const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;
-    if (thread_id >= queues.in_size) return;
-    const uint32 read_id = queues.in_queue[ thread_id ];
-    NVBIO_CUDA_ASSERT( read_id < read_batch.size() );
-    const uint2  read_range = read_batch.get_range( read_id );
-    const uint32 read_len   = read_range.y - read_range.x;
+    const uint32 grid_size = BLOCKDIM * gridDim.x;
 
-    // filter away short strings
-    if (read_len < params.min_read_len)
+    for (uint32 id = thread_id; id < queues.in_size; id += grid_size)
     {
-        hits.resize_deque( read_id, 0 );
-        return;
+        const uint32 read_id = queues.in_queue[ id ];
+        NVBIO_CUDA_ASSERT( read_id < read_batch.size() );
+        const uint2  read_range = read_batch.get_range( read_id );
+        const uint32 read_len   = read_range.y - read_range.x;
+
+        // filter away short strings
+        if (read_len < params.min_read_len)
+        {
+            hits.resize_deque( read_id, 0 );
+            continue;
+        }
+
+        const uint32 seed_len     = nvbio::min( params.seed_len, read_len );
+        const uint32 seed_freq    = (uint32)params.seed_freq( read_len );
+        const uint32 retry_stride = seed_freq/(params.max_reseed+1);
+
+        typedef SeedHitDequeArrayDeviceView::hit_vector_type hit_storage_type;
+        typedef SeedHitDequeArrayDeviceView::hit_deque_type  hit_deque_type;
+        hit_deque_type hitheap( hit_storage_type( 0, local_hits ), true );
+
+        uint32 range_sum   = 0;
+        uint32 range_count = 0;
+
+        // loop over seeds
+        for (uint32 pos = read_range.x + retry * retry_stride; pos + seed_len <= read_range.y; pos += seed_freq)
+        {
+            const seed_iterator seed = packer_loader.load( read_batch.sequence_stream() + pos, seed_len );
+
+            seed_mapper<ALGO>::enact(
+                fmi, rfmi,
+                seed,
+                read_range,
+                pos,
+                seed_len,
+                hitheap,
+                range_sum,
+                range_count,
+                params,
+                fw,
+                rc );
+        }
+
+        // save the hits
+        store_deque( hits, read_id, hitheap.size(), local_hits );
+
+        // enqueue for re-seeding if there are too many hits
+        if (reseed)
+            reseed[ id ] = (range_count == 0 || range_sum >= params.rep_seeds * range_count);
+
+        NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.read_id == read_id, "map:  ranges[%u], rows[%u]\n", read_id, range_count, range_sum );
     }
-
-    const uint32 seed_len     = nvbio::min( params.seed_len, read_len );
-    const uint32 seed_freq    = (uint32)params.seed_freq( read_len );
-    const uint32 retry_stride = seed_freq/(params.max_reseed+1);
-
-    SeedHit local_hits[512];
-    typedef SeedHitDequeArrayDeviceView::hit_vector_type hit_storage_type;
-    typedef SeedHitDequeArrayDeviceView::hit_deque_type  hit_deque_type;
-    hit_deque_type hitheap( hit_storage_type( 0, local_hits ), true );
-
-    uint32 range_sum   = 0;
-    uint32 range_count = 0;
-
-    // loop over seeds
-    for (uint32 pos = read_range.x + retry * retry_stride; pos + seed_len <= read_range.y; pos += seed_freq)
-    {
-        seed_mapper<ALGO>::enact(
-            read_batch, fmi, rfmi,
-            read_range,
-            pos,
-            seed_len,
-            &S[threadIdx.x][0],
-            hitheap,
-            range_sum,
-            range_count,
-            params,
-            fw,
-            rc );
-    }
-
-    // save the hits
-    store_deque( hits, read_id, hitheap.size(), local_hits );
-
-    // enqueue for re-seeding if there are too many hits
-    if (reseed)
-        reseed[ thread_id ] = (range_count == 0 || range_sum >= params.rep_seeds * range_count);
-
-    NVBIO_CUDA_DEBUG_PRINT_IF( params.debug.read_id == read_id, "map:  ranges[%u], rows[%u]\n", read_id, range_count, range_sum );
 }
 
 ///
@@ -633,7 +596,7 @@ void map_kernel(
 /// queue, filling the corresponding hit priority-deque.
 /// Internally performs re-seeding to find a good seeding scheme.
 ///
-template<MappingAlgorithm ALGO, uint32 MAX_SEED, typename BatchType, typename FMType, typename rFMType> __global__ 
+template<MappingAlgorithm ALGO, typename BatchType, typename FMType, typename rFMType> __global__ 
 void map_kernel(
     const BatchType             read_batch, const FMType fmi, const rFMType rfmi,
     SeedHitDequeArrayDeviceView hits,
@@ -642,80 +605,88 @@ void map_kernel(
     const bool                  fw,
     const bool                  rc)
 {
-    __shared__ volatile uint32 sm_broadcast[BLOCKDIM >> 5];
-    volatile uint32& warp_broadcast = sm_broadcast[ warp_id() ];
+    typedef PackedStringLoader<
+        typename BatchType::sequence_storage_iterator,
+        BatchType::SEQUENCE_BITS,
+        BatchType::SEQUENCE_BIG_ENDIAN,
+        uncached_tag >                              packed_loader_type;
+        //lmem_cache_tag<128> >                       packed_loader_type; // TODO: this produces a crashing kernel, for no good reason
+    typedef typename packed_loader_type::iterator   seed_iterator;
 
-    // Pad shared by 1 uint32 because seed may not start at beginning of uint.
-    // For MAX_SEED=32, SHARED_DIM=5, so gcd(SHARED_DIM, SMEM_BANKS)=1, and
-    // we don't have to worry about bank conflicts.
-    const uint32 SYMBOLS_PER_WORD = BatchType::SEQUENCE_SYMBOLS_PER_WORD;
-    enum { SHARED_DIM = MAX_SEED/SYMBOLS_PER_WORD+1 };
-    __shared__ uint32 S[BLOCKDIM][SHARED_DIM];
+    // instantiate a packed loader to cache the seed in local memory
+    packed_loader_type packer_loader;
+
+    // instantiate storage for a local memory hits queue
+    SeedHit local_hits[512];
 
     const uint32 thread_id = threadIdx.x + BLOCKDIM*blockIdx.x;
-    if (thread_id >= read_batch.size()) return;
-    const uint32 read_id = thread_id;
-    const uint2  read_range = read_batch.get_range( read_id );
-    const uint32 read_len   = read_range.y - read_range.x;
+    const uint32 grid_size = BLOCKDIM * gridDim.x;
 
-    // filter away short strings
-    if (read_len < params.min_read_len)
+    for (uint32 read_id = thread_id; read_id < read_batch.size(); read_id += grid_size)
     {
-        hits.resize_deque( read_id, 0 );
-        return;
-    }
+        const uint2  read_range = read_batch.get_range( read_id );
+        const uint32 read_len   = read_range.y - read_range.x;
 
-    const uint32 seed_len     = nvbio::min( params.seed_len, read_len );
-    const uint32 seed_freq    = (uint32)params.seed_freq( read_len );
-    const uint32 retry_stride = seed_freq/(params.max_reseed+1);
-
-    SeedHit local_hits[512];
-    typedef SeedHitDequeArrayDeviceView::hit_vector_type hit_storage_type;
-    typedef SeedHitDequeArrayDeviceView::hit_deque_type  hit_deque_type;
-    hit_deque_type hitheap( hit_storage_type( 0, local_hits ), true );
-
-    bool active = true;
-
-    //for (uint32 retry = 0; retry <= params.max_reseed; ++retry) // TODO: this makes the kernel crash even when
-                                                                  // max_reseed is 0, for apparently no good reason...
-    for (uint32 retry = 0; retry <= 0; ++retry)
-    {
-        if (active)
+        // filter away short strings
+        if (read_len < params.min_read_len)
         {
-            // restore the result heap
-            hitheap.clear();
-
-            uint32 range_sum   = 0;
-            uint32 range_count = 0;
-
-            for (uint32 i = seed_range.x; i < seed_range.y; ++i)
-            {
-                const uint32 pos = read_range.x + retry * retry_stride + i * seed_freq;
-                if (pos + seed_len <= read_range.y)
-                {
-                    seed_mapper<ALGO>::enact(
-                        read_batch, fmi, rfmi,
-                        read_range,
-                        pos,
-                        seed_len,
-                        &S[threadIdx.x][0],
-                        hitheap,
-                        range_sum,
-                        range_count,
-                        params,
-                        fw,
-                        rc );
-                }
-            }
-
-            // check whether we could stop here or if we need re-seeding
-            if (retry == params.max_reseed || range_count == 0 && range_sum < params.rep_seeds * range_count)
-                active = false;
+            hits.resize_deque( read_id, 0 );
+            return;
         }
-    }
 
-    // save the hits
-    store_deque( hits, read_id, hitheap.size(), local_hits );
+        const uint32 seed_len     = nvbio::min( params.seed_len, read_len );
+        const uint32 seed_freq    = (uint32)params.seed_freq( read_len );
+        const uint32 retry_stride = seed_freq/(params.max_reseed+1);
+
+        typedef SeedHitDequeArrayDeviceView::hit_vector_type hit_storage_type;
+        typedef SeedHitDequeArrayDeviceView::hit_deque_type  hit_deque_type;
+        hit_deque_type hitheap( hit_storage_type( 0, local_hits ), true );
+
+        bool active = true;
+
+        //for (uint32 retry = 0; retry <= params.max_reseed; ++retry) // TODO: this makes the kernel crash even when
+                                                                      // max_reseed is 0, for apparently no good reason...
+        for (uint32 retry = 0; retry <= 0; ++retry)
+        {
+            if (active)
+            {
+                // restore the result heap
+                hitheap.clear();
+
+                uint32 range_sum   = 0;
+                uint32 range_count = 0;
+
+                for (uint32 i = seed_range.x; i < seed_range.y; ++i)
+                {
+                    const uint32 pos = read_range.x + retry * retry_stride + i * seed_freq;
+                    if (pos + seed_len <= read_range.y)
+                    {
+                        const seed_iterator seed = packer_loader.load( read_batch.sequence_stream() + pos, seed_len );
+
+                        seed_mapper<ALGO>::enact(
+                            fmi, rfmi,
+                            seed,
+                            read_range,
+                            pos,
+                            seed_len,
+                            hitheap,
+                            range_sum,
+                            range_count,
+                            params,
+                            fw,
+                            rc );
+                    }
+                }
+
+                // check whether we could stop here or if we need re-seeding
+                if (retry == params.max_reseed || range_count == 0 && range_sum < params.rep_seeds * range_count)
+                    active = false;
+            }
+        }
+
+        // save the hits
+        store_deque( hits, read_id, hitheap.size(), local_hits );
+    }
 }
 
 ///@}  // group MappingDetail
@@ -738,28 +709,9 @@ void map_case_pruning_t(
     const bool                                      fw,
     const bool                                      rc)
 {
-    const int blocks = (read_batch.size() + BLOCKDIM-1) / BLOCKDIM;
-
-    if (params.seed_len <= 16)
-    {
-        detail::map_kernel<detail::CASE_PRUNING_MAPPING,16> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
-    }
-    else if (params.seed_len <= 24)
-    {
-        detail::map_kernel<detail::CASE_PRUNING_MAPPING,24> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
-    }
-    else if (params.seed_len <= 32)
-    {
-        detail::map_kernel<detail::CASE_PRUNING_MAPPING,32> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
-    }
-    else if (params.seed_len <= 40)
-    {
-        detail::map_kernel<detail::CASE_PRUNING_MAPPING,40> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
-    }
+    const int blocks = nvbio::cuda::max_active_blocks( detail::map_queues_kernel<detail::CASE_PRUNING_MAPPING,BatchType,FMType,rFMType>, BLOCKDIM, 0 );
+    detail::map_queues_kernel<detail::CASE_PRUNING_MAPPING> <<<blocks, BLOCKDIM>>>(
+        read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
 }
 
 //
@@ -776,28 +728,9 @@ void map_approx_t(
     const bool                                      fw,
     const bool                                      rc)
 {
-    const int blocks = (queues.in_size + BLOCKDIM-1) / BLOCKDIM;
-
-    if (params.seed_len <= 16)
-    {
-        detail::map_kernel<detail::APPROX_MAPPING,16> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
-    }
-    else if (params.seed_len <= 24)
-    {
-        detail::map_kernel<detail::APPROX_MAPPING,24> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
-    }
-    else if (params.seed_len <= 32)
-    {
-        detail::map_kernel<detail::APPROX_MAPPING,32> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
-    }
-    else if (params.seed_len <= 40)
-    {
-        detail::map_kernel<detail::APPROX_MAPPING,40> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
-    }
+    const int blocks = nvbio::cuda::max_active_blocks( detail::map_queues_kernel<detail::APPROX_MAPPING,BatchType,FMType,rFMType>, BLOCKDIM, 0 );
+    detail::map_queues_kernel<detail::APPROX_MAPPING> <<<blocks, BLOCKDIM>>>(
+        read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
 }
 
 //
@@ -812,28 +745,9 @@ void map_approx_t(
     const bool                  fw,
     const bool                  rc)
 {
-    const int blocks = (read_batch.size() + BLOCKDIM-1) / BLOCKDIM;
-
-    if (params.seed_len <= 16)
-    {
-        detail::map_kernel<detail::APPROX_MAPPING,16> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
-    }
-    else if (params.seed_len <= 24)
-    {
-        detail::map_kernel<detail::APPROX_MAPPING,24> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
-    }
-    else if (params.seed_len <= 32)
-    {
-        detail::map_kernel<detail::APPROX_MAPPING,32> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
-    }
-    else if (params.seed_len <= 40)
-    {
-        detail::map_kernel<detail::APPROX_MAPPING,40> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
-    }
+    const int blocks = nvbio::cuda::max_active_blocks( detail::map_kernel<detail::APPROX_MAPPING,BatchType,FMType,rFMType>, BLOCKDIM, 0 );
+    detail::map_kernel<detail::APPROX_MAPPING> <<<blocks, BLOCKDIM>>>(
+        read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
 }
 
 //
@@ -849,8 +763,7 @@ void map_whole_read_t(
     const bool                                      fw,
     const bool                                      rc)
 {
-    const int blocks = (queues.in_size + BLOCKDIM-1) / BLOCKDIM;
-
+    const uint32 blocks = nvbio::cuda::max_active_blocks( detail::map_whole_read_kernel<BatchType,FMType,rFMType>, BLOCKDIM, 0 );
     detail::map_whole_read_kernel<<<blocks, BLOCKDIM>>> (
         read_batch, fmi, rfmi, queues, reseed, hits, params, fw, rc );
 }
@@ -869,28 +782,9 @@ void map_exact_t(
     const bool                                      fw,
     const bool                                      rc)
 {
-    const int blocks = (queues.in_size + BLOCKDIM-1) / BLOCKDIM;
-
-    if (params.seed_len <= 16)
-    {
-        detail::map_kernel<detail::EXACT_MAPPING,16> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
-    }
-    else if (params.seed_len <= 24)
-    {
-        detail::map_kernel<detail::EXACT_MAPPING,24> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
-    }
-    else if (params.seed_len <= 32)
-    {
-        detail::map_kernel<detail::EXACT_MAPPING,32> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
-    }
-    else if (params.seed_len <= 40)
-    {
-        detail::map_kernel<detail::EXACT_MAPPING,40> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
-    }
+    const uint32 blocks = nvbio::cuda::max_active_blocks( detail::map_queues_kernel<detail::EXACT_MAPPING,BatchType,FMType,rFMType>, BLOCKDIM, 0 );
+    detail::map_queues_kernel<detail::EXACT_MAPPING> <<<blocks, BLOCKDIM>>>(
+        read_batch, fmi, rfmi, retry, queues, reseed, hits, params, fw, rc );
 }
 
 //
@@ -905,28 +799,9 @@ void map_exact_t(
     const bool                  fw,
     const bool                  rc)
 {
-    const int blocks = (read_batch.size() + BLOCKDIM-1) / BLOCKDIM;
-
-    if (params.seed_len <= 16)
-    {
-        detail::map_kernel<detail::EXACT_MAPPING,16> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
-    }
-    else if (params.seed_len <= 24)
-    {
-        detail::map_kernel<detail::EXACT_MAPPING,24> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
-    }
-    else if (params.seed_len <= 32)
-    {
-        detail::map_kernel<detail::EXACT_MAPPING,32> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
-    }
-    else if (params.seed_len <= 40)
-    {
-        detail::map_kernel<detail::EXACT_MAPPING,40> <<<blocks, BLOCKDIM>>>(
-            read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
-    }
+    const uint32 blocks = nvbio::cuda::max_active_blocks( detail::map_kernel<detail::EXACT_MAPPING,BatchType,FMType,rFMType>, BLOCKDIM, 0 );
+    detail::map_kernel<detail::EXACT_MAPPING> <<<blocks, BLOCKDIM>>>(
+        read_batch, fmi, rfmi, hits, seed_range, params, fw, rc );
 }
 
 //

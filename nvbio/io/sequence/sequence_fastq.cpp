@@ -212,8 +212,7 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
             else if (c == '\n')
                 m_line++;
         }
-    #endif
-/*
+        /*
         // the below works for proper FASTQ files, but not for old Sanger ones
         // allowing strings to span multiple lines...
         for (uint8 c = get(); c != '\n' && c != 0; c = get())
@@ -245,6 +244,7 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
         }
 
         m_line++;
+    #endif
 
         if (m_options.flags & FORWARD)
         {

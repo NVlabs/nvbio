@@ -62,8 +62,9 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
     {
     #if defined(NVBIO_WEAK_FASTQ_SUPPORT)
         //
-        // This parser works only with modern FASTQ files which
-        // don't split reads across multiple lines...
+        // This parser works only with properly formatted, modern FASTQ files which
+        // don't split reads across multiple lines and don't contain extraneous
+        // characters...
         //
 
         const int MAX_LINE = 32*1024;
@@ -187,7 +188,7 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
         }
 
         // read all the line
-        for(char c = get(); c != '\n' && c != 0; c = get()) {}
+        for (char c = get(); c != '\n' && c != 0; c = get()) {}
 
         // check for errors
         if (m_file_state != FILE_OK)

@@ -120,12 +120,9 @@ inline unsigned char convert_to_phred_quality(const uint8 q)
 
 // a small sequence class supporting REVERSE | COMPLEMENT operations
 //
-template <Alphabet ALPHABET_T, SequenceDataEncoder::StrandOp FLAGS_T>
+template <Alphabet ALPHABET, SequenceDataEncoder::StrandOp FLAGS>
 struct sequence_string
 {
-    static const Alphabet                       ALPHABET = ALPHABET_T;
-    static const SequenceDataEncoder::StrandOp  FLAGS    = FLAGS_T;
-
     // constructor
     sequence_string(const uint32 len, const uint8* sequence, const uint8* qual) : m_len(len), m_sequence(sequence), m_qual(qual) {}
 

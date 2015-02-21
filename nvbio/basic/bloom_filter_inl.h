@@ -134,17 +134,14 @@ void blocked_bloom_filter<Hash1,Hash2,Iterator,OrOperator>::insert(const Key key
     #endif
     for (uint64 i = 1; i <= m_k; ++i)
     {
-        const uint64 r = (h0 + i * h1) % BLOCK_SIZE;
+        const uint32 r = uint32(h0 + i * h1) % BLOCK_SIZE;
 
-        const word_type word = word_type(r / WORD_SIZE);
-        const word_type bit  = word_type(r) & (WORD_SIZE-1);
+        const uint32 word = r / WORD_SIZE;
+        const uint32 bit  = r & (WORD_SIZE-1);
 
         const word_type pattern = (word_type(1u) << bit);
 
-        if      (word == 0) block.x |= pattern;
-        else if (word == 1) block.y |= pattern;
-        else if (word == 2) block.z |= pattern;
-        else                block.w |= pattern;
+        or_op( block, word, pattern );
     }
     or_op( &m_storage[block_idx], block );
 }
@@ -168,10 +165,10 @@ bool blocked_bloom_filter<Hash1,Hash2,Iterator,OrOperator>::has(const Key key) c
     #endif
     for (uint64 i = 1; i <= m_k; ++i)
     {
-        const uint64 r = (h0 + i * h1) % BLOCK_SIZE;
+        const uint32 r = uint32(h0 + i * h1) % BLOCK_SIZE;
 
-        const word_type word = word_type(r / WORD_SIZE);
-        const word_type bit  = word_type(r) & (WORD_SIZE-1);
+        const uint32 word = r / WORD_SIZE;
+        const uint32 bit  = r & (WORD_SIZE-1);
 
         const word_type pattern = (word_type(1u) << bit);
 

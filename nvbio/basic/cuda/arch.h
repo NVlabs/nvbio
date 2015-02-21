@@ -47,11 +47,14 @@ struct Arch
     static const uint32 WARP_SIZE     = 1u << LOG_WARP_SIZE;
 };
 
-// granularity of shared memory allocation
+// granularity of shared memory allocation (for the current device)
 inline void device_arch(uint32& major, uint32& minor);
 
-// granularity of the maximum grid size
+// granularity of the maximum grid size (for the current device)
 inline uint32 max_grid_size();
+
+// number of multiprocessors (for the current device)
+inline size_t multiprocessor_count();
 
 // granularity of shared memory allocation
 inline size_t smem_allocation_unit(const cudaDeviceProp& properties);
@@ -73,6 +76,9 @@ inline size_t num_regs_per_block(const cudaDeviceProp& properties, const cudaFun
 
 template <typename KernelFunction>
 inline cudaFuncAttributes function_attributes(KernelFunction kernel);
+
+template <typename KernelFunction>
+size_t max_active_blocks_per_multiprocessor(KernelFunction kernel, const size_t CTA_SIZE, const size_t dynamic_smem_bytes);
 
 template <typename KernelFunction>
 size_t max_active_blocks(KernelFunction kernel, const size_t CTA_SIZE, const size_t dynamic_smem_bytes);

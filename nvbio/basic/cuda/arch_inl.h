@@ -48,6 +48,18 @@ inline uint32 max_grid_size()
     return major <= 2 ? 32*1024 : uint32(-1);
 }
 
+// number of multiprocessors (for the current device)
+inline size_t multiprocessor_count()
+{
+    int            device;
+    cudaGetDevice( &device );
+
+    cudaDeviceProp properties;
+    cudaGetDeviceProperties( &properties, device );
+
+    return properties.multiProcessorCount;
+}
+
 // granularity of shared memory allocation
 inline size_t smem_allocation_unit(const cudaDeviceProp& properties)
 {
@@ -161,6 +173,20 @@ inline size_t max_active_blocks_per_multiprocessor(const cudaDeviceProp&        
     const size_t ctaLimitThreads =                  maxThreadsPerSM              / CTA_SIZE;
 
     return nvbio::min( (uint32)ctaLimitRegs, nvbio::min( (uint32)ctaLimitSMem, nvbio::min((uint32)ctaLimitThreads, (uint32)maxBlocksPerSM)));
+}
+
+template <typename KernelFunction>
+size_t max_active_blocks_per_multiprocessor(KernelFunction kernel, const size_t CTA_SIZE, const size_t dynamic_smem_bytes)
+{
+    int            device;
+    cudaGetDevice( &device );
+
+    cudaDeviceProp properties;
+    cudaGetDeviceProperties( &properties, device );
+
+    cudaFuncAttributes attributes = function_attributes( kernel );
+
+    return max_active_blocks_per_multiprocessor(properties, attributes, CTA_SIZE, dynamic_smem_bytes);
 }
 
 template <typename KernelFunction>

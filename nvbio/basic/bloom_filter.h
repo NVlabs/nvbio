@@ -129,6 +129,12 @@ struct inplace_or<uint32>
         *word |= mask;
       #endif
     }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    void operator() (uint32& block, const uint32 word, const uint32 mask) const
+    {
+        block |= mask;
+    }
 };
 
 ///
@@ -147,6 +153,13 @@ struct inplace_or<uint2>
         word->x |= mask.x;
         word->y |= mask.y;
       #endif
+    }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    void operator() (uint2& block, const uint32 word, const uint32 mask) const
+    {
+        if (word == 0) block.x |= mask;
+        else           block.y |= mask;
     }
 };
 
@@ -170,6 +183,15 @@ struct inplace_or<uint4>
         word->z |= mask.z;
         word->w |= mask.w;
       #endif
+    }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    void operator() (uint4& block, const uint32 word, const uint32 mask) const
+    {
+        if      (word == 0) block.x |= mask;
+        else if (word == 1) block.y |= mask;
+        else if (word == 2) block.z |= mask;
+        else                block.w |= mask;
     }
 };
 
@@ -207,6 +229,13 @@ struct inplace_or<uint64_2>
         word->y |= mask.y;
       #endif
     }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    void operator() (uint64_2& block, const uint32 word, const uint64 mask) const
+    {
+        if (word == 0) block.x |= mask;
+        else           block.y |= mask;
+    }
 };
 
 ///
@@ -229,6 +258,15 @@ struct inplace_or<uint64_4>
         word->z |= mask.z;
         word->w |= mask.w;
       #endif
+    }
+
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
+    void operator() (uint64_4& block, const uint32 word, const uint64 mask) const
+    {
+        if      (word == 0) block.x |= mask;
+        else if (word == 1) block.y |= mask;
+        else if (word == 2) block.z |= mask;
+        else                block.w |= mask;
     }
 };
 

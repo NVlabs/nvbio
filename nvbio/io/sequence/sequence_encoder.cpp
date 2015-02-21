@@ -120,9 +120,12 @@ inline unsigned char convert_to_phred_quality(const uint8 q)
 
 // a small sequence class supporting REVERSE | COMPLEMENT operations
 //
-template <Alphabet ALPHABET, SequenceDataEncoder::StrandOp FLAGS>
+template <Alphabet ALPHABET_T, SequenceDataEncoder::StrandOp FLAGS_T>
 struct sequence_string
 {
+    static const Alphabet                       ALPHABET = ALPHABET_T;
+    static const SequenceDataEncoder::StrandOp  FLAGS    = FLAGS_T;
+
     // constructor
     sequence_string(const uint32 len, const uint8* sequence, const uint8* qual) : m_len(len), m_sequence(sequence), m_qual(qual) {}
 
@@ -183,14 +186,14 @@ void encode(
     char*                                                                          qual_stream)
 {
   #if 1
+    const uint32 len = sequence.length();
 
     // use the custom PackedStream assign() method
-    assign( sequence.length(), sequence, stream  );
+    assign( len, sequence, stream  );
 
     // naive serial implementation
-    for (uint32 i = 0; i < sequence.length(); i++)
+    for (uint32 i = 0; i < len; i++)
         qual_stream[i] = convert_to_phred_quality<quality_encoding>(sequence.quality(i));
-
   #else
     // naive serial implementation
     for (uint32 i = 0; i < sequence.length(); i++)
@@ -378,7 +381,7 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
         // update sequence and bp counts
         m_data->m_n_seqs++;
         m_data->m_sequence_stream_len += sequence_len;
-        //m_data->m_sequence_index_vec.push_back( m_data->m_sequence_stream_len );
+
         if (m_data->m_sequence_index_vec.size() < m_data->m_n_seqs + 1u)
             m_data->m_sequence_index_vec.resize( (m_data->m_n_seqs + 1u)*2 );
         m_data->m_sequence_index_vec[ m_data->m_n_seqs ] = m_data->m_sequence_stream_len;
@@ -395,7 +398,6 @@ struct SequenceDataEncoderImpl : public SequenceDataEncoder
         memcpy( nvbio::raw_pointer( m_data->m_name_vec ) + name_offset, name, name_len + 1 );
 
         m_data->m_name_stream_len += name_len + 1;
-        //m_data->m_name_index_vec.push_back( m_data->m_name_stream_len );
 
         if (m_data->m_name_index_vec.size() < m_data->m_n_seqs + 1u)
             m_data->m_name_index_vec.resize( (m_data->m_n_seqs + 1u)*2 );

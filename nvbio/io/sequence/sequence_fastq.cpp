@@ -57,9 +57,57 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
         ((m_options.flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
         ((m_options.flags & REVERSE_COMPLEMENT) ? 1u : 0u);
 
-    while (n_reads + read_mult                         <= max_reads &&
+    while (n_reads + read_mult                             <= max_reads &&
            n_bps   + read_mult*SequenceDataFile::LONG_READ <= max_bps)
     {
+    #if defined(NVBIO_WEAK_FASTQ_SUPPORT)
+        //
+        // This parser works only with modern FASTQ files which
+        // don't split reads across multiple lines...
+        //
+
+        const int MAX_LINE = 32*1024;
+        char line_buffer[MAX_LINE];
+
+        // read the name line
+        if (gets( line_buffer, MAX_LINE ) == false)
+        {
+            m_file_state = FILE_EOF;
+            break;
+        }
+        m_line++;
+
+        strcpy( (char*)&m_name[0], &line_buffer[1] );
+
+        // read the sequence line
+        if (gets( (char*)&m_read_bp[0], (int)m_read_bp.size() ) == false)
+        {
+            log_error(stderr, "FASTQ loader: incomplete read at line %u!\n", m_line);
+            m_file_state = FILE_PARSE_ERROR;
+            return -1;
+        }
+        m_line++;
+
+        const uint32 len = strlen( (const char*)&m_read_bp[0] );
+
+        // read the "+" line
+        if (gets( line_buffer, MAX_LINE ) == false)
+        {
+            log_error(stderr, "FASTQ loader: incomplete read at line %u!\n", m_line);
+            m_file_state = FILE_PARSE_ERROR;
+            return -1;
+        }
+        m_line++;
+
+        // read the qualities line
+        if (gets( (char*)&m_read_q[0], (int)m_read_q.size() ) == false)
+        {
+            log_error(stderr, "FASTQ loader: incomplete read at line %u!\n", m_line);
+            m_file_state = FILE_PARSE_ERROR;
+            return -1;
+        }
+        m_line++;
+    #else
         // consume spaces & newlines
         do {
             marker = get();
@@ -79,22 +127,6 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
         if (marker != '@')
         {
             log_error(stderr, "FASTQ loader: parsing error at %u!\n", m_line);
-
-            fprintf(stderr, "line %u, buffer pos: %u = %c=%u\n", m_line, m_buffer_pos-1, m_buffer[m_buffer_pos-1], uint32(m_buffer[m_buffer_pos-1]));
-            if (m_buffer_pos > 200)
-            {
-                fprintf(stderr, "\n----------------------------------\n");
-                for (uint32 i = m_buffer_pos-200; i < m_buffer_pos; ++i)
-                {
-                    fprintf(stderr, "%c", m_buffer[i] );
-                }
-                fprintf(stderr, "\n----------------------------------\n");
-            }
-            m_buffer[m_buffer.size()-1] = '\0';
-            for (uint32 i = m_buffer_pos-1; i < m_buffer_size; ++i)
-                if (m_buffer[i] != 0)
-                    fprintf(stderr, "%c", m_buffer[i] );
-            fprintf(stderr, "\n----------------------------------\n");
 
             m_file_state = FILE_PARSE_ERROR;
             m_error_char = marker;
@@ -180,6 +212,7 @@ int SequenceDataFile_FASTQ_parser::nextChunk(SequenceDataEncoder *output, uint32
             else if (c == '\n')
                 m_line++;
         }
+    #endif
 /*
         // the below works for proper FASTQ files, but not for old Sanger ones
         // allowing strings to span multiple lines...

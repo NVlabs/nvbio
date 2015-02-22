@@ -68,6 +68,9 @@ uint32 host_atomic_sub(uint32* value, const uint32 op);
 int64  host_atomic_sub( int64* value, const  int64 op);
 uint64 host_atomic_sub(uint64* value, const uint64 op);
 
+uint32 host_atomic_or(uint32* value, const uint32 op);
+uint64 host_atomic_or(uint64* value, const uint64 op);
+
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
 int32 atomic_add(int32* value, const int32 op)
 {
@@ -115,6 +118,26 @@ uint32 atomic_sub(uint32* value, const uint32 op)
     return atomicSub( value, op );
   #else
     return host_atomic_sub( value, op );
+  #endif
+}
+
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint32 atomic_or(uint32* value, const uint32 op)
+{
+  #if defined(NVBIO_DEVICE_COMPILATION)
+    return atomicOr( value, op );
+  #else
+    return host_atomic_or( value, op );
+  #endif
+}
+
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
+uint64 atomic_or(uint64* value, const uint64 op)
+{
+  #if defined(NVBIO_DEVICE_COMPILATION)
+    return atomicOr( value, op );
+  #else
+    return host_atomic_or( value, op );
   #endif
 }
 

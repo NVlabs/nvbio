@@ -168,4 +168,31 @@ uint64 host_atomic_sub(uint64* value, const uint64 op)
 #endif
 }
 
+uint32 host_atomic_or(uint32* value, const uint32 op)
+{
+#if defined(__GNUC__)
+    return __atomic_fetch_or( value, op, __ATOMIC_RELAXED );
+#else
+    Mutex mutex;
+    ScopedLock lock( &mutex );
+
+    const uint32 old = *value;
+    *value |= op;
+    return old;
+#endif
+}
+uint64 host_atomic_or(uint64* value, const uint64 op)
+{
+#if defined(__GNUC__)
+    return __atomic_fetch_or( value, op, __ATOMIC_RELAXED );
+#else
+    Mutex mutex;
+    ScopedLock lock( &mutex );
+
+    const uint64 old = *value;
+    *value |= op;
+    return old;
+#endif
+}
+
 } // namespace nvbio

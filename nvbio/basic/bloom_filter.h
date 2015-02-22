@@ -28,6 +28,7 @@
 #pragma once
 
 #include <nvbio/basic/types.h>
+#include <nvbio/basic/atomics.h>
 #include <nvbio/basic/static_vector.h>
 
 namespace nvbio {
@@ -123,11 +124,7 @@ struct inplace_or<uint32>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
     void operator() (uint32* word, const uint32 mask) const
     {
-      #if defined(NVBIO_DEVICE_COMPILATION)
-        atomicOr( word, mask );
-      #else
-        *word |= mask;
-      #endif
+        atomic_or( word, mask );
     }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
@@ -146,13 +143,8 @@ struct inplace_or<uint2>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
     void operator() (uint2* word, const uint2 mask) const
     {
-      #if defined(NVBIO_DEVICE_COMPILATION)
-        atomicOr( &(word->x), mask.x );
-        atomicOr( &(word->y), mask.y );
-      #else
-        word->x |= mask.x;
-        word->y |= mask.y;
-      #endif
+        atomic_or( &(word->x), mask.x );
+        atomic_or( &(word->y), mask.y );
     }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
@@ -172,17 +164,10 @@ struct inplace_or<uint4>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
     void operator() (uint4* word, const uint4 mask) const
     {
-      #if defined(NVBIO_DEVICE_COMPILATION)
-        atomicOr( &(word->x), mask.x );
-        atomicOr( &(word->y), mask.y );
-        atomicOr( &(word->z), mask.z );
-        atomicOr( &(word->w), mask.w );
-      #else
-        word->x |= mask.x;
-        word->y |= mask.y;
-        word->z |= mask.z;
-        word->w |= mask.w;
-      #endif
+        atomic_or( &(word->x), mask.x );
+        atomic_or( &(word->y), mask.y );
+        atomic_or( &(word->z), mask.z );
+        atomic_or( &(word->w), mask.w );
     }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
@@ -204,11 +189,7 @@ struct inplace_or<uint64>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
     void operator() (uint64* word, const uint64 mask) const
     {
-      #if defined(NVBIO_DEVICE_COMPILATION)
-        atomicOr( word, mask );
-      #else
-        *word |= mask;
-      #endif
+        atomic_or( word, mask );
     }
 };
 
@@ -221,13 +202,8 @@ struct inplace_or<uint64_2>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
     void operator() (uint64_2* word, const uint64_2 mask) const
     {
-      #if defined(NVBIO_DEVICE_COMPILATION)
-        atomicOr( &(word->x), mask.x );
-        atomicOr( &(word->y), mask.y );
-      #else
-        word->x |= mask.x;
-        word->y |= mask.y;
-      #endif
+        atomic_or( &(word->x), mask.x );
+        atomic_or( &(word->y), mask.y );
     }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
@@ -247,17 +223,10 @@ struct inplace_or<uint64_4>
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 
     void operator() (uint64_4* word, const uint64_4 mask) const
     {
-      #if defined(NVBIO_DEVICE_COMPILATION)
-        atomicOr( &(word->x), mask.x );
-        atomicOr( &(word->y), mask.y );
-        atomicOr( &(word->z), mask.z );
-        atomicOr( &(word->w), mask.w );
-      #else
-        word->x |= mask.x;
-        word->y |= mask.y;
-        word->z |= mask.z;
-        word->w |= mask.w;
-      #endif
+        atomic_or( &(word->x), mask.x );
+        atomic_or( &(word->y), mask.y );
+        atomic_or( &(word->z), mask.z );
+        atomic_or( &(word->w), mask.w );
     }
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE 

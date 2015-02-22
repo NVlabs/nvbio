@@ -104,7 +104,7 @@ struct PipelineSinkThread : public PipelineThreadBase
     ///
     void run()
     {
-        while (fill()) {}
+        while (fill()) { yield(); }
     }
 
     /// fill the next batch
@@ -195,7 +195,7 @@ struct PipelineStageThread : public PipelineThreadBase
     ///
     void run()
     {
-        while (fill()) {}
+        while (fill()) { yield(); }
     }
 
     /// fill the next batch

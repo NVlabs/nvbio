@@ -164,6 +164,16 @@ int SequenceDataFile_FASTA_gz::nextChunk(SequenceDataEncoder *output, uint32 max
     return m_fasta_reader.read( max_reads / read_mult, writer );
 }
 
+// constructor
+//
+SequenceDataOutputFile_FASTA::SequenceDataOutputFile_FASTA(
+    const char* file_name,
+    const char* compressor,
+    const char* options)
+  : m_file_name(file_name)
+{
+    m_file = open_output_file( file_name, compressor, options );
+}
 
 namespace {
 

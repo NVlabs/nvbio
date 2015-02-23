@@ -208,6 +208,17 @@ SequenceDataFile_TXT::FileState SequenceDataFile_TXT_gz::fillBuffer(void)
     return FILE_OK;
 }
 
+// constructor
+//
+SequenceDataOutputFile_TXT::SequenceDataOutputFile_TXT(
+    const char* file_name,
+    const char* compressor,
+    const char* options)
+  : m_file_name(file_name)
+{
+    m_file = open_output_file( file_name, compressor, options );
+}
+
 namespace {
 
 template <Alphabet ALPHABET>

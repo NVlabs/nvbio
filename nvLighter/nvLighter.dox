@@ -41,7 +41,7 @@
 ///\par
 /// nvLighter can use both multiple CPU threads as well as multiple GPUs to concurrently
 /// correct large sets of reads.
-/// In practice, the error correction algorithm is so fast that often it can be easily bottlenecked by I/O.
+/// In practice, the error correction algorithm is so fast it can be easily bottlenecked by I/O.
 /// For this reason, it is recommended to use nvLighter on a system equipped with fast SSD drives.
 ///
 /// \section nvLighterUsage Usage

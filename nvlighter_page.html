@@ -97,12 +97,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"> 
    <img src="nvidia_cubes.png" style="position:relative; bottom:-10px; border:0px;"/>
   <dl class="section user"><dt></dt><dd><br/>
- nvLighter is a GPU-accelerated re-engineering of <a href="https://github.com/mourisl/Lighter">Lighter</a>, a very low memory footprint error corrector, implementing the algorithms described in: <br/>
+ <a href="https://github.com/NVlabs/nvbio/tree/master/nvLighter">nvLighter</a> is a GPU-accelerated re-engineering of <a href="https://github.com/mourisl/Lighter">Lighter</a>, a very low memory footprint error corrector, implementing the algorithms described in: <br/>
  <br/>
  <a href="http://genomebiology.com/2014/15/11/509">Lighter: fast and memory-efficient sequencing error correction without counting</a> <br/>
  Li Song, Liliana Florea and Ben Langmead <br/>
  <em>Genome Biology</em>, 2014, 15:509 </dd></dl>
-<dl class="section user"><dt></dt><dd>nvLighter can use both multiple CPU threads as well as multiple GPUs to concurrently correct large sets of reads. In practice, the error correction algorithm is so fast it can be easily bottlenecked by I/O. For this reason, it is recommended to use nvLighter on a system equipped with fast SSD drives.</dd></dl>
+<dl class="section user"><dt></dt><dd>nvLighter can use both multiple CPU threads as well as multiple GPUs to concurrently correct large sets of reads. In practice, the error correction algorithm is so fast it can be easily bottlenecked by I/O: hence, we recommend using nvLighter on an SSD-equipped system in order to appreciate maximum acceleration.</dd></dl>
 <h1><a class="anchor" id="nvLighterUsage"></a>
 Usage</h1>
 <dl class="section user"><dt></dt><dd>At the moment, the command line options of nvLighter differ from those of Lighter, as nvLighter is designed to handle a single input file at the time. Moreover, nvLighter supports many file formats for both input and output, among which plain .txt files (with one read per row), FASTA, and FASTQ. Additionally, as <em>slow gzip compression</em> can quickly become a bottleneck, nvLighter supports LZ4 compression on any of the above formats.</dd></dl>
@@ -131,7 +131,7 @@ Usage</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:55 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 23 2015 21:15:55 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

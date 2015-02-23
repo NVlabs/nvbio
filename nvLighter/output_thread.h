@@ -25,11 +25,52 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// output_thread.h
+//
+
 #pragma once
 
-#define NVBIO_VERSION           100150                       // 1.1.50
-#define NVBIO_MAJOR_VERSION     (NVBIO_VERSION / 100000)
-#define NVBIO_MINOR_VERSION     (NVBIO_VERSION / 100 % 1000)
-#define NVBIO_SUBMINOR_VERSION  (NVBIO_VERSION % 100)
+#include "utils.h"
+#include <nvbio/basic/pipeline_context.h>
+#include <nvbio/io/sequence/sequence.h>
+#include <zlib/zlib.h>
 
-#define NVBIO_VERSION_STRING    "1.1.50"
+using namespace nvbio;
+
+struct OutputStageData : public SequenceStats
+{
+    /// constructor
+    ///
+    ///\param file          input sequence file
+    ///\param max_strings   maximum number of strings per batch
+    ///\param max_bps       maximum number of base pairs per batch
+    ///
+    OutputStageData(io::SequenceDataOutputStream* file) : m_file( file ) {}
+
+    io::SequenceDataOutputStream* m_file;
+};
+
+///
+///
+/// A small class implementing a Pipeline stage reading sequence batches from a file
+///
+struct OutputStage
+{
+    typedef io::SequenceDataHost   argument_type;
+
+    /// empty constructor
+    ///
+    OutputStage() : data(NULL) {}
+
+    /// constructor
+    ///
+    ///\param file          input sequence file
+    ///
+    OutputStage(OutputStageData* _data) : data(_data) {}
+
+    /// fill the next batch
+    ///
+    bool process(PipelineContext& context);
+
+    OutputStageData* data;
+};

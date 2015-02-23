@@ -107,8 +107,18 @@
 /// - \subpage nvssa_page - a tool to build auxiliary Sampled Suffix Arrays needed for reference indexing
 /// - \subpage nvfm_server_page - a shared memory FM-index server
 /// - \subpage nvsetbwt_page - a tool to perform BWT-based read indexing
+/// - \subpage nvlighter_page - a re-engineered implementation of the <a href="https://github.com/mourisl/Lighter">Lighter</a> error corrector
 ///
 /// \section RecentNew Recent News
+///\par
+/// <table>
+/// <tr><td style="white-space: nowrap; vertical-align:text-top;">13/2/2015 \n NVBIO 1.1.50 (dev)</td>
+/// <td style="vertical-align:text-top;" width="90%">
+/// - <b>New Features:</b> \n
+///   * Added \subpage nvlighter_page "nvLighter", a re-engineered implementation of the <a href="https://github.com/mourisl/Lighter">Lighter</a> error corrector.
+///   * Added support for sequencing data output in many formats (.txt, FASTA, FASTQ, with optional gzip and LZ4 compression).
+/// </td></tr>
+/// </table>
 ///\par
 /// <table>
 /// <tr><td style="white-space: nowrap; vertical-align:text-top;">13/2/2015 \n NVBIO 1.1</td>

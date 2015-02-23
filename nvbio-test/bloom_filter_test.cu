@@ -91,7 +91,7 @@ struct bloom_filter_lookup
         return r;
     }
 
-    blocked_bloom_filter< hash_functor1, hash_functor2, cuda::ldg_pointer<uint4> > filter;
+    blocked_bloom_filter< hash_functor1, hash_functor2, cuda::load_pointer<uint4,cuda::LOAD_LDG> > filter;
 };
 
 template <typename system_tag>

@@ -61,7 +61,7 @@ struct bloom_filter_inserter
     typedef uint64 argument_type;
     typedef uint8  return_type;
 
-    bloom_filter_inserter(const uint64 _size, uint32* _words) : filter( FILTER_K, _size * 32, (uint64_2*)_words ) {}
+    bloom_filter_inserter(const uint64 _size, uint32* _words) : filter( FILTER_K, _size, (uint64_2*)_words ) {}
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     void operator() (const uint64 i)
@@ -78,7 +78,7 @@ struct bloom_filter_lookup
     typedef uint64 argument_type;
     typedef uint8  return_type;
 
-    bloom_filter_lookup(const uint64 _size, const uint32* _words) : filter( FILTER_K, _size * 32, (const uint4*)_words ) {}
+    bloom_filter_lookup(const uint64 _size, const uint32* _words) : filter( FILTER_K, _size, (const uint4*)_words ) {}
 
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     uint8 operator() (const uint64 i) const
@@ -99,7 +99,8 @@ void do_bloom_filter_test(const uint64 size, const uint32 N)
 {
     log_info(stderr, "  %s test\n", equal<system_tag,device_tag>() ? "gpu" : "cpu" );
 
-    nvbio::vector<system_tag,uint32> filter( size );
+    const uint64 n_words = util::divide_ri( size, uint64(32) );
+    nvbio::vector<system_tag,uint32> filter( n_words );
     nvbio::vector<system_tag,uint8>  temp(N);
 
     Timer timer;
@@ -135,20 +136,20 @@ void do_bloom_filter_test(const uint64 size, const uint32 N)
 
 int bloom_filter_test(int argc, char* argv[])
 {
-    uint64 size = 1000000;
+    uint64 size = 4*1024*1024; // 4MB
     uint32 N    = 100000;
 
     for (int i = 0; i < argc; ++i)
     {
         if (strcmp( argv[i], "-size" ) == 0)
-            size = uint64( atoi( argv[++i] ) ) * 1000u;
+            size = uint64( atoi( argv[++i] ) ) * uint64( 8*1024u*1024u );
         else if (strcmp( argv[i], "-queries" ) == 0)
             N = atoi( argv[++i] )*1000;
     }
 
     try
     {
-        log_info(stderr, "bloom filter test... started\n");
+        log_info(stderr, "bloom filter test... started (%.1f MB)\n", float(size) / float(8*1024*1024));
 
         // set the number of OpenMP threads
         omp_set_num_threads( omp_get_num_procs() );

@@ -327,6 +327,42 @@ SequenceDataOutputStream* open_output_sequence_file(
         }
     }
 
+    // check for fastq suffix
+    if (len >= strlen(".fasta"))
+    {
+        if (strncmp(&sequence_file_name[len - strlen(".fasta")], ".fasta", strlen(".fasta")) == 0)
+        {
+            return new SequenceDataOutputFile_FASTA(
+                sequence_file_name,
+                compressor,
+                options );
+        }
+    }
+
+    // check for fastq suffix
+    if (len >= strlen(".fa"))
+    {
+        if (strncmp(&sequence_file_name[len - strlen(".fa")], ".fa", strlen(".fa")) == 0)
+        {
+            return new SequenceDataOutputFile_FASTA(
+                sequence_file_name,
+                compressor,
+                options );
+        }
+    }
+
+    // check for fastq suffix
+    if (len >= strlen(".txt"))
+    {
+        if (strncmp(&sequence_file_name[len - strlen(".txt")], ".txt", strlen(".txt")) == 0)
+        {
+            return new SequenceDataOutputFile_TXT(
+                sequence_file_name,
+                compressor,
+                options );
+        }
+    }
+
     // we don't actually know what this is; guess fastq
     log_warning(stderr, "could not determine file type for %s; guessing fastq\n", sequence_file_name);
     return new SequenceDataOutputFile_FASTQ(

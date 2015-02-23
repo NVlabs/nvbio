@@ -29,6 +29,7 @@
 
 #include <nvbio/io/sequence/sequence.h>
 #include <nvbio/io/sequence/sequence_priv.h>
+#include <nvbio/io/output_stream.h>
 #include <nvbio/basic/console.h>
 
 #include <zlib/zlib.h>
@@ -118,6 +119,33 @@ struct SequenceDataFile_TXT_gz : public SequenceDataFile_TXT
 
 private:
     gzFile m_file;
+};
+
+/// SequenceDataFile from a FASTQ file
+/// contains the code to parse FASTQ files and dump the results into a SequenceDataRAM object
+/// file access is done via derived classes
+///
+struct SequenceDataOutputFile_TXT : SequenceDataOutputStream
+{
+    /// constructor
+    ///
+    SequenceDataOutputFile_TXT(
+        const char* file_name,
+        const char* compressor,
+        const char* options);
+
+    /// next batch
+    ///
+    void next(const SequenceDataHost& sequence_data);
+
+    /// return whether the stream is ok
+    ///
+    bool is_ok();
+
+private:
+    // file name we're reading from
+    const char*   m_file_name;
+    OutputStream* m_file;
 };
 
 ///@} // SequenceIODetail

@@ -29,6 +29,7 @@
 
 #include <nvbio/io/sequence/sequence.h>
 #include <nvbio/io/sequence/sequence_priv.h>
+#include <nvbio/io/output_stream.h>
 #include <nvbio/fasta/fasta.h>
 #include <nvbio/basic/console.h>
 
@@ -65,6 +66,33 @@ struct SequenceDataFile_FASTA_gz : public SequenceDataFile
 
 private:
     FASTA_reader m_fasta_reader; ///< the FASTA file parser
+};
+
+/// SequenceDataFile from a FASTQ file
+/// contains the code to parse FASTQ files and dump the results into a SequenceDataRAM object
+/// file access is done via derived classes
+///
+struct SequenceDataOutputFile_FASTA : SequenceDataOutputStream
+{
+    /// constructor
+    ///
+    SequenceDataOutputFile_FASTA(
+        const char* file_name,
+        const char* compressor,
+        const char* options);
+
+    /// next batch
+    ///
+    void next(const SequenceDataHost& sequence_data);
+
+    /// return whether the stream is ok
+    ///
+    bool is_ok();
+
+private:
+    // file name we're reading from
+    const char*   m_file_name;
+    OutputStream* m_file;
 };
 
 ///@} // SequenceIODetail

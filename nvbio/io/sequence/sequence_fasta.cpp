@@ -164,6 +164,69 @@ int SequenceDataFile_FASTA_gz::nextChunk(SequenceDataEncoder *output, uint32 max
     return m_fasta_reader.read( max_reads / read_mult, writer );
 }
 
+
+namespace {
+
+template <Alphabet ALPHABET>
+void write(
+   OutputStream*                            output_file,
+   const io::SequenceDataAccess<ALPHABET>&  sequence_data)
+{
+    typedef typename io::SequenceDataAccess<ALPHABET>::sequence_string  sequence_string;
+    typedef typename io::SequenceDataAccess<ALPHABET>::name_string      name_string;
+
+    std::vector<char> buffer( 16*1024*1024 );
+
+    for (uint32 i = 0; i < sequence_data.size(); ++i)
+    {
+        const sequence_string read = sequence_data.get_read( i );
+        const name_string     name = sequence_data.get_name( i );
+
+        uint32 buffer_len = 0;
+
+        buffer[ buffer_len++ ] = '>';
+
+        for (uint32 j = 0; j < name.size(); ++j)
+            buffer[ buffer_len++ ] = name[j];
+
+        // setup the ASCII read
+        buffer[ buffer_len++ ] = '\n';
+
+        to_string<ALPHABET>( read.begin(), read.size(), &buffer[0] + buffer_len );
+
+        buffer_len += read.size();
+
+        buffer[ buffer_len++ ] = '\n';
+
+        if (output_file->write( buffer_len, &buffer[0] ) == 0)
+            throw runtime_error( "failed writing FASTA output file" );
+    }
+}
+
+} // anonymous namespace
+
+// next batch
+//
+void SequenceDataOutputFile_FASTA::next(const SequenceDataHost& sequence_data)
+{
+    if (sequence_data.alphabet() == DNA)
+        write( m_file, io::SequenceDataAccess<DNA>( sequence_data ) );
+    else if (sequence_data.alphabet() == DNA_N)
+        write( m_file, io::SequenceDataAccess<DNA_N>( sequence_data ) );
+    else if (sequence_data.alphabet() == PROTEIN)
+        write( m_file, io::SequenceDataAccess<PROTEIN>( sequence_data ) );
+    else if (sequence_data.alphabet() == RNA)
+        write( m_file, io::SequenceDataAccess<RNA>( sequence_data ) );
+    else if (sequence_data.alphabet() == RNA_N)
+        write( m_file, io::SequenceDataAccess<RNA_N>( sequence_data ) );
+    else if (sequence_data.alphabet() == ASCII)
+        write( m_file, io::SequenceDataAccess<ASCII>( sequence_data ) );
+}
+
+// return whether the stream is ok
+//
+bool SequenceDataOutputFile_FASTA::is_ok() { return m_file && m_file->is_valid(); }
+
 ///@} // SequenceIODetail
 ///@} // SequenceIO
 ///@} // IO

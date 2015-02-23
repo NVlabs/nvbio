@@ -4,6 +4,7 @@ var searchData=
   ['kalignment',['kAlignment',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0a58ac240a2595c240eef5e476c1eeaf0a',1,'nvbio-test.cpp']]],
   ['kall',['kALL',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0af21c7069639c247a4c8e34aa0c65cce8',1,'nvbio-test.cpp']]],
   ['kalloc',['kAlloc',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0aba8232a08fa3d33c675c08481d731997',1,'nvbio-test.cpp']]],
+  ['kbloomfilter',['kBloomFilter',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0aef518b86c165bddee854a780e1bae553',1,'nvbio-test.cpp']]],
   ['kbwt',['kBWT',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0a8e623da692732f6cf0e5a5e23bbfec46',1,'nvbio-test.cpp']]],
   ['kcache',['kCache',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0ab62316a78d30070f43f103f9b0d40571',1,'nvbio-test.cpp']]],
   ['kcondition',['kCondition',['../nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0a9011027911d872f84bb153309b6344d9',1,'nvbio-test.cpp']]],

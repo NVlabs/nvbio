@@ -26,6 +26,7 @@ var searchData=
   ['blockwise_5fsufsort_2eh',['blockwise_sufsort.h',['../blockwise__sufsort_8h.html',1,'']]],
   ['bloom_5ffilter_2eh',['bloom_filter.h',['../bloom__filter_8h.html',1,'']]],
   ['bloom_5ffilter_5finl_2eh',['bloom_filter_inl.h',['../bloom__filter__inl_8h.html',1,'']]],
+  ['bloom_5ffilters_2eh',['bloom_filters.h',['../bloom__filters_8h.html',1,'']]],
   ['bnt_2ecpp',['bnt.cpp',['../bnt_8cpp.html',1,'']]],
   ['bnt_2eh',['bnt.h',['../bnt_8h.html',1,'']]],
   ['bufferedtextfile_2eh',['bufferedtextfile.h',['../bufferedtextfile_8h.html',1,'']]],

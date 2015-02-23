@@ -441,7 +441,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        {</div>
 <div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;            <span class="comment">// add unknown option to the string options</span></div>
 <div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;            <span class="keyword">const</span> std::string key = std::string( argv[i][1] == <span class="charliteral">&#39;-&#39;</span> ? argv[i] + 2 : argv[i] + 1 );</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;            <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="group___sequence_i_o.html#ga0b124ee3d2c51b0a1f555c91ad4948a2">next</a> = argv[i+1];</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;            <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="namespacenvbio_1_1io.html#aff46befa264cba7847dfdcc470ffeda2">next</a> = argv[i+1];</div>
 <div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;</div>
 <div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="nv_bowtie_8cpp.html#afb0072b5aaa5d909969ee1ce287ae095">is_number</a>(next) || next[0] != <span class="charliteral">&#39;-&#39;</span>)</div>
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;            {</div>
@@ -571,7 +571,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;            <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;  file: \&quot;%s\&quot;\n&quot;</span>, reference_name);</div>
 <div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;</div>
 <div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;            <span class="comment">// load the reference data</span></div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;            reference_data = <a class="code" href="group___sequence_i_o.html#ga51edb4491c012a5c6c91b8de1472cb13">io::load_sequence_file</a>( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a6c8c7655bd0085241eed95780a3aa4c4" title="4-letter DNA alphabet { A,C,G,T } ">DNA</a>, reference_name );</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;            reference_data = <a class="code" href="namespacenvbio_1_1io.html#aadf9e7a4a14c2f357a4fc95f1c051950">io::load_sequence_file</a>( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a6c8c7655bd0085241eed95780a3aa4c4" title="4-letter DNA alphabet { A,C,G,T } ">DNA</a>, reference_name );</div>
 <div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;            <span class="keywordflow">if</span> (reference_data == NULL)</div>
 <div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;            {</div>
 <div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;unable to load reference index \&quot;%s\&quot;\n&quot;</span>, reference_name);</div>
@@ -603,7 +603,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;                <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;  file: \&quot;%s\&quot;\n&quot;</span>, reference_name);</div>
 <div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;</div>
 <div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;                <span class="comment">// load the reference data</span></div>
-<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;                reference_data = <a class="code" href="group___sequence_i_o.html#ga51edb4491c012a5c6c91b8de1472cb13">io::load_sequence_file</a>( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a6c8c7655bd0085241eed95780a3aa4c4" title="4-letter DNA alphabet { A,C,G,T } ">DNA</a>, reference_name );</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;                reference_data = <a class="code" href="namespacenvbio_1_1io.html#aadf9e7a4a14c2f357a4fc95f1c051950">io::load_sequence_file</a>( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a6c8c7655bd0085241eed95780a3aa4c4" title="4-letter DNA alphabet { A,C,G,T } ">DNA</a>, reference_name );</div>
 <div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;                <span class="keywordflow">if</span> (reference_data == NULL)</div>
 <div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;                {</div>
 <div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;                    <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;unable to load reference index \&quot;%s\&quot;\n&quot;</span>, reference_name);</div>
@@ -663,7 +663,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;</div>
 <div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;            <a class="code" href="console_8cpp.html#a2c4c0d7ab0fcc45c6e6c643dddaa2d6c">log_visible</a>(stderr, <span class="stringliteral">&quot;opening read file [1] \&quot;%s\&quot;\n&quot;</span>, read_name1);</div>
 <div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;            <a class="code" href="classnvbio_1_1_shared_pointer.html">SharedPointer&lt;nvbio::io::SequenceDataStream&gt;</a> read_data_file1(</div>
-<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;                <a class="code" href="group___sequence_i_o.html#ga249422025262954363e6857c7903dfa6">nvbio::io::open_sequence_file</a>(</div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;                <a class="code" href="namespacenvbio_1_1io.html#a944bce4f190c38942cda8f69faad54b9">nvbio::io::open_sequence_file</a>(</div>
 <div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;                    read_name1,</div>
 <div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;                    qencoding,</div>
 <div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;                    max_reads,</div>
@@ -673,7 +673,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;                    trim5 )</div>
 <div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;            );</div>
 <div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;</div>
-<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;            <span class="keywordflow">if</span> (read_data_file1 == NULL || read_data_file1-&gt;<a class="code" href="structnvbio_1_1io_1_1_sequence_data_stream.html#a075f354dca7f6f7e4c56d4a690ffb953">is_ok</a>() == <span class="keyword">false</span>)</div>
+<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;            <span class="keywordflow">if</span> (read_data_file1 == NULL || read_data_file1-&gt;<a class="code" href="structnvbio_1_1io_1_1_sequence_data_input_stream.html#a94dd106c44180bda5c6f82f54f9a3e10">is_ok</a>() == <span class="keyword">false</span>)</div>
 <div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;            {</div>
 <div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;unable to open read file \&quot;%s\&quot;\n&quot;</span>, read_name1);</div>
 <div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;                <span class="keywordflow">return</span> 1;</div>
@@ -681,7 +681,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;</div>
 <div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;            <a class="code" href="console_8cpp.html#a2c4c0d7ab0fcc45c6e6c643dddaa2d6c">log_visible</a>(stderr, <span class="stringliteral">&quot;opening read file [2] \&quot;%s\&quot;\n&quot;</span>, read_name2);</div>
 <div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;            <a class="code" href="classnvbio_1_1_shared_pointer.html">SharedPointer&lt;nvbio::io::SequenceDataStream&gt;</a> read_data_file2(</div>
-<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;                <a class="code" href="group___sequence_i_o.html#ga249422025262954363e6857c7903dfa6">nvbio::io::open_sequence_file</a>(</div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;                <a class="code" href="namespacenvbio_1_1io.html#a944bce4f190c38942cda8f69faad54b9">nvbio::io::open_sequence_file</a>(</div>
 <div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;                    read_name2,</div>
 <div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;                    qencoding,</div>
 <div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;                    max_reads,</div>
@@ -691,7 +691,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;                    trim5 )</div>
 <div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;            );</div>
 <div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;</div>
-<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;            <span class="keywordflow">if</span> (read_data_file2 == NULL || read_data_file2-&gt;<a class="code" href="structnvbio_1_1io_1_1_sequence_data_stream.html#a075f354dca7f6f7e4c56d4a690ffb953">is_ok</a>() == <span class="keyword">false</span>)</div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;            <span class="keywordflow">if</span> (read_data_file2 == NULL || read_data_file2-&gt;<a class="code" href="structnvbio_1_1io_1_1_sequence_data_input_stream.html#a94dd106c44180bda5c6f82f54f9a3e10">is_ok</a>() == <span class="keyword">false</span>)</div>
 <div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;            {</div>
 <div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;unable to open read file \&quot;%s\&quot;\n&quot;</span>, read_name2);</div>
 <div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;                <span class="keywordflow">return</span> 1;</div>
@@ -858,7 +858,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;</div>
 <div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;            <a class="code" href="console_8cpp.html#a2c4c0d7ab0fcc45c6e6c643dddaa2d6c">log_visible</a>(stderr, <span class="stringliteral">&quot;opening read file \&quot;%s\&quot;\n&quot;</span>, read_name1);</div>
 <div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;            <a class="code" href="classnvbio_1_1_shared_pointer.html">SharedPointer&lt;io::SequenceDataStream&gt;</a> read_data_file(</div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;                <a class="code" href="group___sequence_i_o.html#ga249422025262954363e6857c7903dfa6">io::open_sequence_file</a>(</div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;                <a class="code" href="namespacenvbio_1_1io.html#a944bce4f190c38942cda8f69faad54b9">io::open_sequence_file</a>(</div>
 <div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;                    read_name1,</div>
 <div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;                    qencoding,</div>
 <div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;                    max_reads,</div>
@@ -868,7 +868,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;                    trim5 )</div>
 <div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;            );</div>
 <div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;</div>
-<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;            <span class="keywordflow">if</span> (read_data_file == NULL || read_data_file-&gt;<a class="code" href="structnvbio_1_1io_1_1_sequence_data_stream.html#a075f354dca7f6f7e4c56d4a690ffb953">is_ok</a>() == <span class="keyword">false</span>)</div>
+<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;            <span class="keywordflow">if</span> (read_data_file == NULL || read_data_file-&gt;<a class="code" href="structnvbio_1_1io_1_1_sequence_data_input_stream.html#a94dd106c44180bda5c6f82f54f9a3e10">is_ok</a>() == <span class="keyword">false</span>)</div>
 <div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;            {</div>
 <div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;unable to open read file \&quot;%s\&quot;\n&quot;</span>, read_name1);</div>
 <div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;                <span class="keywordflow">return</span> 1;</div>
@@ -1042,7 +1042,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 14 2015 09:21:26 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 23 2015 19:36:45 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

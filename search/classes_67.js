@@ -28,8 +28,8 @@ var searchData=
   ['gotohcheckpointcontext',['GotohCheckpointContext',['../structnvbio_1_1aln_1_1priv_1_1_gotoh_checkpoint_context.html',1,'nvbio::aln::priv']]],
   ['gotohcheckpointedscoringcontext',['GotohCheckpointedScoringContext',['../structnvbio_1_1aln_1_1priv_1_1banded_1_1_gotoh_checkpointed_scoring_context.html',1,'nvbio::aln::priv::banded']]],
   ['gotohcheckpointedscoringcontext',['GotohCheckpointedScoringContext',['../structnvbio_1_1aln_1_1priv_1_1_gotoh_checkpointed_scoring_context.html',1,'nvbio::aln::priv']]],
-  ['gotohscoringcontext',['GotohScoringContext',['../structnvbio_1_1aln_1_1priv_1_1banded_1_1_gotoh_scoring_context.html',1,'nvbio::aln::priv::banded']]],
   ['gotohscoringcontext',['GotohScoringContext',['../structnvbio_1_1aln_1_1priv_1_1_gotoh_scoring_context.html',1,'nvbio::aln::priv']]],
+  ['gotohscoringcontext',['GotohScoringContext',['../structnvbio_1_1aln_1_1priv_1_1banded_1_1_gotoh_scoring_context.html',1,'nvbio::aln::priv::banded']]],
   ['gotohsubmatrixcontext',['GotohSubmatrixContext',['../structnvbio_1_1aln_1_1priv_1_1_gotoh_submatrix_context.html',1,'nvbio::aln::priv']]],
   ['gotohsubmatrixcontext',['GotohSubmatrixContext',['../structnvbio_1_1aln_1_1priv_1_1banded_1_1_gotoh_submatrix_context.html',1,'nvbio::aln::priv::banded']]],
   ['gotohtag',['GotohTag',['../structnvbio_1_1aln_1_1_gotoh_tag.html',1,'nvbio::aln']]],
@@ -37,5 +37,6 @@ var searchData=
   ['gz_5fheader_5fs',['gz_header_s',['../structgz__header__s.html',1,'']]],
   ['gz_5fstate',['gz_state',['../structgz__state.html',1,'']]],
   ['gzfile_5fs',['gzFile_s',['../structgz_file__s.html',1,'']]],
-  ['gzipcompressor',['GzipCompressor',['../structnvbio_1_1io_1_1_gzip_compressor.html',1,'nvbio::io']]]
+  ['gzipcompressor',['GzipCompressor',['../structnvbio_1_1io_1_1_gzip_compressor.html',1,'nvbio::io']]],
+  ['gzoutputfile',['GZOutputFile',['../structnvbio_1_1_g_z_output_file.html',1,'nvbio']]]
 ];

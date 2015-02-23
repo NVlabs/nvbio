@@ -6,6 +6,7 @@ var searchData=
   ['kmer_5fpos_5fsid_5feq',['kmer_pos_sid_eq',['../structkmer__pos__sid__eq.html',1,'']]],
   ['kmer_5fuid_5feq',['kmer_uid_eq',['../structkmer__uid__eq.html',1,'']]],
   ['kmer_5fword_5fextractor_5ffunctor',['kmer_word_extractor_functor',['../structkmer__word__extractor__functor.html',1,'']]],
+  ['kmercode',['KmerCode',['../struct_kmer_code.html',1,'']]],
   ['kmers_5fto_5f64b_5ffunctor',['kmers_to_64b_functor',['../structkmers__to__64b__functor.html',1,'']]],
   ['knetfile_5fs',['knetFile_s',['../structknet_file__s.html',1,'']]],
   ['ks_5fisort_5fstack_5ft',['ks_isort_stack_t',['../structks__isort__stack__t.html',1,'']]],

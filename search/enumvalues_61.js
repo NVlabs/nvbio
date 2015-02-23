@@ -5,5 +5,6 @@ var searchData=
   ['allmapping',['AllMapping',['../group__nv_bowtie.html#gga82f17b4edea2ba6b87a1e0a9fff0ff65a406e91e73fc3c934a9a4ede01f9339c7',1,'nvbio::bowtie2::cuda']]],
   ['anchormate',['AnchorMate',['../group___traceback.html#ggadc7fb90dc1dd526250d72fd81c2ab0d3a8dd3817c66a92295e6410d91fe8632a2',1,'nvbio::bowtie2::cuda']]],
   ['approx_5fmapping',['APPROX_MAPPING',['../group___mapping_detail.html#gga0b8fce785fc51d3d816dac9a35893148a222f1e88761fdbf3f3fa304282949250',1,'nvbio::bowtie2::cuda::detail']]],
+  ['ascii',['ASCII',['../group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48ab3427e52ab37c8f1f2e89a91e41bc060',1,'nvbio']]],
   ['avg_5fread_5flength',['AVG_READ_LENGTH',['../group___defs.html#ggaeaa32ae3d0ee0909291058b3f12da60dab92d80daa7cb4c704029cb33835928d1',1,'nvbio::bowtie2::cuda']]]
 ];

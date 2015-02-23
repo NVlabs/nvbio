@@ -1,6 +1,7 @@
 var searchData=
 [
   ['k',['K',['../sam__header_8c.html#aedc9dda87d07432b47438559f710ea89',1,'sam_header.c']]],
+  ['kb',['KB',['../lz4_8c.html#a1841fd1a462d245d8c73dce55e2f45da',1,'KB():&#160;lz4.c'],['../lz4frame_8c.html#a1841fd1a462d245d8c73dce55e2f45da',1,'KB():&#160;lz4frame.c']]],
   ['kcalloc',['kcalloc',['../khash_8h.html#a79da6c08e663c565078ebcaf56df8666',1,'khash.h']]],
   ['key_5fpruning',['KEY_PRUNING',['../compression__sort_8h.html#a446a5a8b3334894d569e0ab30da925b0',1,'compression_sort.h']]],
   ['kf_5fgamma_5feps',['KF_GAMMA_EPS',['../kfunc_8c.html#a98be19d1e273dc15dea4e63f960e2bc7',1,'kfunc.c']]],

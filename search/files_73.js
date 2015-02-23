@@ -7,6 +7,7 @@ var searchData=
   ['sam_2eh',['sam.h',['../nvbio_2io_2reads_2sam_8h.html',1,'']]],
   ['sam_5fheader_2ec',['sam_header.c',['../sam__header_8c.html',1,'']]],
   ['sam_5fheader_2eh',['sam_header.h',['../sam__header_8h.html',1,'']]],
+  ['sample_5fkmers_2eh',['sample_kmers.h',['../sample__kmers_8h.html',1,'']]],
   ['scan_2eh',['scan.h',['../scan_8h.html',1,'']]],
   ['score_2eh',['score.h',['../score_8h.html',1,'']]],
   ['score_5fall_5fimpl_2eh',['score_all_impl.h',['../score__all__impl_8h.html',1,'']]],

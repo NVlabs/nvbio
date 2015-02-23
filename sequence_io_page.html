@@ -94,7 +94,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">Sequence Data Input </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><dl class="section user"><dt></dt><dd>This module contains a series of classes to load and represent sequence streams. The idea is that a sequence stream is an object implementing a simple interface, <a class="el" href="structnvbio_1_1io_1_1_sequence_data_stream.html">SequenceDataStream</a>, which allows to stream through a file or other set of reads in batches, which are represented in memory with an object inheriting from <a class="el" href="structnvbio_1_1io_1_1_sequence_data.html">SequenceData</a>. There are several kinds of <a class="el" href="structnvbio_1_1io_1_1_sequence_data.html">SequenceData</a> containers to keep the reads in the host or in CUDA device memory. Additionally, the same containers can be <a class="el" href="host_device_page.html#PlainViewsSection">viewed</a> with different <a class="el" href="group___sequence_data_views.html">SequenceData Views</a>, in order to allow reinterpreting the base arrays with iterators of different types, e.g. to perform vector loads or use LDG. </dd></dl>
+<div class="textblock"><dl class="section user"><dt></dt><dd>This module contains a series of classes to load and represent sequence streams. The idea is that a sequence stream is an object implementing a simple interface, <a class="el" href="structnvbio_1_1io_1_1_sequence_data_input_stream.html">SequenceDataInputStream</a>, which allows to stream through a file or other set of reads in batches, which are represented in memory with an object inheriting from <a class="el" href="structnvbio_1_1io_1_1_sequence_data.html">SequenceData</a>. There are several kinds of <a class="el" href="structnvbio_1_1io_1_1_sequence_data.html">SequenceData</a> containers to keep the reads in the host or in CUDA device memory. Additionally, the same containers can be <a class="el" href="host_device_page.html#PlainViewsSection">viewed</a> with different <a class="el" href="group___sequence_data_views.html">SequenceData Views</a>, in order to allow reinterpreting the base arrays with iterators of different types, e.g. to perform vector loads or use LDG. </dd></dl>
 <dl class="section user"><dt></dt><dd>Specifically, it exposes the following core classes and methods: </dd></dl>
 <dl class="section user"><dt></dt><dd><ul>
 <li><a class="el" href="structnvbio_1_1io_1_1_sequence_data.html">io::SequenceData</a></li>
@@ -102,9 +102,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li><a class="el" href="group___sequence_i_o.html#ga320e6b720c7ea82793f41b21c184d960" title="a SequenceData object stored in device memory ">io::SequenceDataDevice</a></li>
 <li><a class="el" href="structnvbio_1_1io_1_1_sequence_data_m_m_a_p.html">io::SequenceDataMMAP</a></li>
 <li><a class="el" href="structnvbio_1_1io_1_1_sequence_data_m_m_a_p_server.html">io::SequenceDataMMAPServer</a></li>
-<li><a class="el" href="structnvbio_1_1io_1_1_sequence_data_stream.html">io::SequenceDataStream</a></li>
-<li><a class="el" href="group___sequence_i_o.html#ga249422025262954363e6857c7903dfa6">io::open_sequence_file()</a></li>
-<li><a class="el" href="group___sequence_i_o.html#ga51edb4491c012a5c6c91b8de1472cb13">io::load_sequence_file()</a></li>
+<li><a class="el" href="structnvbio_1_1io_1_1_sequence_data_input_stream.html">io::SequenceDataInputStream</a></li>
+<li><a class="el" href="structnvbio_1_1io_1_1_sequence_data_output_stream.html">io::SequenceDataOutputStream</a></li>
+<li><a class="el" href="namespacenvbio_1_1io.html#a944bce4f190c38942cda8f69faad54b9">io::open_sequence_file()</a></li>
+<li><a class="el" href="namespacenvbio_1_1io.html#aadf9e7a4a14c2f357a4fc95f1c051950">io::load_sequence_file()</a></li>
 <li><a class="el" href="group___sequence_i_o.html#ga82fce7fe2d3c4b7ef60f98fcddcdac67">io::map_sequence_file()</a> </li>
 </ul>
 </dd></dl>
@@ -149,8 +150,8 @@ Sequence Data</h1>
 </div><!-- fragment --></dd></dl>
 <h1><a class="anchor" id="SequenceDataStreamSection"></a>
 Sequence Data Streams</h1>
-<dl class="section user"><dt></dt><dd>Sometimes it is convenient to stream through sequences in batches. <a class="el" href="structnvbio_1_1io_1_1_sequence_data_stream.html">SequenceDataStream</a> provides an abstract interface for doing just this: <div class="fragment"><div class="line"><span class="comment">// open a sequence file</span></div>
-<div class="line">SharedPointer&lt;io::SequenceDataStream&gt; reads_file = <a class="code" href="group___sequence_i_o.html#ga249422025262954363e6857c7903dfa6">io::open_sequence_file</a>( <span class="stringliteral">&quot;reads.fastq&quot;</span> );</div>
+<dl class="section user"><dt></dt><dd>Sometimes it is convenient to stream through sequences in batches. SequenceDataStream provides an abstract interface for doing just this: <div class="fragment"><div class="line"><span class="comment">// open a sequence file</span></div>
+<div class="line">SharedPointer&lt;io::SequenceDataInputStream&gt; reads_file = <a class="code" href="namespacenvbio_1_1io.html#a944bce4f190c38942cda8f69faad54b9">io::open_sequence_file</a>( <span class="stringliteral">&quot;reads.fastq&quot;</span> );</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// instantiate a host SequenceData object</span></div>
 <div class="line"><a class="code" href="group___sequence_i_o.html#gaeda29063a8a35631e18372d8a6001e27" title="a SequenceData object stored in host memory ">io::SequenceDataHost</a> reads;</div>
@@ -160,7 +161,7 @@ Sequence Data Streams</h1>
 <div class="line"><span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>   bps_per_batch = 128*1024*100;    <span class="comment">// the maximum number of base pairs</span></div>
 <div class="line"></div>
 <div class="line"><span class="comment">// loop through the stream in batches</span></div>
-<div class="line"><span class="keywordflow">while</span> (<a class="code" href="group___sequence_i_o.html#ga0b124ee3d2c51b0a1f555c91ad4948a2">io::next</a>( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a312b63ba76d209928476bcefde8f124d" title="5-letter DNA + N alphabet { A,C,G,T,N } ">DNA_N</a>, &amp;reads, reads_file.get(), seqs_per_batch, bps_per_batch ))</div>
+<div class="line"><span class="keywordflow">while</span> (<a class="code" href="namespacenvbio_1_1io.html#aff46befa264cba7847dfdcc470ffeda2">io::next</a>( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a312b63ba76d209928476bcefde8f124d" title="5-letter DNA + N alphabet { A,C,G,T,N } ">DNA_N</a>, &amp;reads, reads_file.get(), seqs_per_batch, bps_per_batch ))</div>
 <div class="line">{</div>
 <div class="line">    <span class="comment">// copy the loaded batch on the device</span></div>
 <div class="line">    <span class="keyword">const</span> <a class="code" href="group___sequence_i_o.html#ga320e6b720c7ea82793f41b21c184d960" title="a SequenceData object stored in device memory ">io::SequenceDataDevice</a> device_reads( reads );</div>
@@ -173,7 +174,7 @@ Technical Documentation</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 14 2015 09:21:35 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 23 2015 19:36:54 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

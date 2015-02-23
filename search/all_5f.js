@@ -1,5 +1,10 @@
 var searchData=
 [
+  ['_5f1bit',['_1BIT',['../lz4frame_8c.html#aeb96afd850ef097baf8edc0198e38639',1,'lz4frame.c']]],
+  ['_5f2bits',['_2BITS',['../lz4frame_8c.html#a0bc676dfd4151eaf9889d49b7de69d98',1,'lz4frame.c']]],
+  ['_5f3bits',['_3BITS',['../lz4frame_8c.html#a234bc681ca1e1db9eddd76b2c9c6de04',1,'lz4frame.c']]],
+  ['_5f4bits',['_4BITS',['../lz4frame_8c.html#af3c09506057972920670fce828be6c5e',1,'lz4frame.c']]],
+  ['_5f8bits',['_8BITS',['../lz4frame_8c.html#a8d1d190940dcc00cb275c1fd4271be11',1,'lz4frame.c']]],
   ['_5f_5fac_5ffsize',['__ac_fsize',['../khash_8h.html#a97713aa7fb8b3cfc816305738bfa504c',1,'khash.h']]],
   ['_5f_5fac_5fisdel',['__ac_isdel',['../khash_8h.html#a381aad5b57f82fc003034fd8c47086b7',1,'khash.h']]],
   ['_5f_5fac_5fiseither',['__ac_iseither',['../khash_8h.html#a777def495774b40bdc4f2fdcba9b4ab1',1,'khash.h']]],
@@ -43,6 +48,7 @@ var searchData=
   ['_5flength_5fcode',['_length_code',['../deflate_8h.html#ac88cdfc823257dd30e51939e7f2e18d5',1,'_length_code():&#160;trees.c'],['../trees_8c.html#a970df3a5fad079dfda5bbc4cb6d11b42',1,'_length_code():&#160;trees.c'],['../trees_8h.html#aad8a9dfa73cf8ffa9346a441aa6c82ba',1,'_length_code():&#160;trees.h']]],
   ['_5fm_5fget_5fdeleter',['_M_get_deleter',['../classnvbio_1_1_shared_pointer.html#a1f4b088dd303fa2cbee8dfceda2abdba',1,'nvbio::SharedPointer']]],
   ['_5fmd5_5fh',['_MD5_H',['../md5_8h.html#a9b665b394b050dba7f88a694f2e20994',1,'md5.h']]],
+  ['_5fpacked',['_PACKED',['../xxhash_8c.html#aa1ed035ac46973db2babb746c8ebc06a',1,'xxhash.c']]],
   ['_5fparse_5ferr',['_parse_err',['../sam_8c.html#a8d8c8da9c5fd63e594cf85474f40730b',1,'sam.c']]],
   ['_5fparse_5fwarn',['_parse_warn',['../sam_8c.html#a042d009401fb04919519bb5d8c561440',1,'sam.c']]],
   ['_5fprofile',['_profile',['../struct__profile.html',1,'']]],
@@ -59,6 +65,8 @@ var searchData=
   ['_5ftr_5ftally_5fdist',['_tr_tally_dist',['../deflate_8h.html#a68f55cdd396ad603d9f0b01afdbdf592',1,'deflate.h']]],
   ['_5ftr_5ftally_5flit',['_tr_tally_lit',['../deflate_8h.html#af3b11322da0fb4ec60a5ccc28e2554df',1,'deflate.h']]],
   ['_5ftrbudget_5ft',['_trbudget_t',['../struct__trbudget__t.html',1,'']]],
+  ['_5fu32_5fs',['_U32_S',['../struct___u32___s.html',1,'']]],
+  ['_5fu64_5fs',['_U64_S',['../struct___u64___s.html',1,'']]],
   ['_5fuse_5fknetfile',['_USE_KNETFILE',['../config_8h.html#a358eb92296feac4cce3b0bcea37eb2c7',1,'config.h']]],
   ['_5fvcf_5fparse_5fformat',['_vcf_parse_format',['../vcf_8c.html#a7ff8fb998247002a0f20b770a65fad38',1,'vcf.c']]]
 ];

@@ -35,6 +35,7 @@ var searchData=
   ['stack_5fsize',['STACK_SIZE',['../divsufsort_8c.html#a6423a880df59733d2d9b509c7718d3a9',1,'STACK_SIZE():&#160;divsufsort.c'],['../divsufsort_8c.html#a6423a880df59733d2d9b509c7718d3a9',1,'STACK_SIZE():&#160;divsufsort.c'],['../divsufsort_8c.html#a6423a880df59733d2d9b509c7718d3a9',1,'STACK_SIZE():&#160;divsufsort.c']]],
   ['static_5ftrees',['STATIC_TREES',['../zutil_8h.html#a0f63a9090acfe4f653f117b638b289d1',1,'zutil.h']]],
   ['step',['STEP',['../md5_8c.html#a642b3a091bb90dabdf2abb865fefab69',1,'md5.c']]],
+  ['stepsize',['STEPSIZE',['../lz4_8c.html#a0b31438dd90256ed47b3bea0eb62be06',1,'lz4.c']]],
   ['stored_5fblock',['STORED_BLOCK',['../zutil_8h.html#a9f650bc9c1fbd9499098e3a70d295b8a',1,'zutil.h']]],
   ['strat2',['STRAT2',['../cram__encode_8c.html#a686bc9eb3a5ba047be0f23992331e45c',1,'cram_encode.c']]],
   ['strncmp',['STRNCMP',['../sam_8c.html#aa4e9a3270c4e5f8667c58e4670bae4ca',1,'sam.c']]],

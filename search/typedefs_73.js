@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['s32',['S32',['../lz4_8c.html#a57a2244776e01ad620c556de58eb7880',1,'S32():&#160;lz4.c'],['../lz4frame_8c.html#a57a2244776e01ad620c556de58eb7880',1,'S32():&#160;lz4frame.c'],['../xxhash_8c.html#a57a2244776e01ad620c556de58eb7880',1,'S32():&#160;xxhash.c']]],
   ['s_5fprofile',['s_profile',['../ssw_8h.html#ac2bd70d18468dfd971a5dd30e6edd73a',1,'ssw.h']]],
   ['sam_5fhdr_5ftag',['SAM_hdr_tag',['../sam__header_8h.html#a46435a4504c4bd353113bc2ef8fc68b4',1,'sam_header.h']]],
   ['sam_5fhdr_5ftype',['SAM_hdr_type',['../sam__header_8h.html#ab07a83207f1edcbdf072c0decaaf71e2',1,'sam_header.h']]],
@@ -21,6 +22,7 @@ var searchData=
   ['sequencedatabase',['SequenceDataBase',['../structnvbio_1_1io_1_1_sequence_data_storage.html#ab294097c6ab9c7ca5007e288d04190af',1,'nvbio::io::SequenceDataStorage']]],
   ['sequencedatadevice',['SequenceDataDevice',['../group___sequence_i_o.html#ga320e6b720c7ea82793f41b21c184d960',1,'nvbio::io']]],
   ['sequencedatahost',['SequenceDataHost',['../group___sequence_i_o.html#gaeda29063a8a35631e18372d8a6001e27',1,'nvbio::io']]],
+  ['sequencedatastream',['SequenceDataStream',['../group___sequence_i_o.html#ga68ccff6d2aa7dd1a853f209595dde4c6',1,'nvbio::io']]],
   ['sequencedataview',['SequenceDataView',['../group___sequence_data_views.html#ga27c4bed1f0230e637cb838b909047510',1,'nvbio::io']]],
   ['sequencesetkmercoord',['SequenceSetKmerCoord',['../assembly__types_8h.html#ab73e232894f427581e11331384ec5fd2',1,'assembly_types.h']]],
   ['sindex_5ftype',['sindex_type',['../structnvbio_1_1_packed_stream_ref.html#a7ae0d1f13500aed72880d54b7b9e8a87',1,'nvbio::PackedStreamRef::sindex_type()'],['../structnvbio_1_1_packed_stream.html#af9b67593a000c14906e600b749e789d8',1,'nvbio::PackedStream::sindex_type()'],['../structnvbio_1_1_forward_packed_stream.html#adf41c857c94a3c62e51b86c09e4be848',1,'nvbio::ForwardPackedStream::sindex_type()']]],

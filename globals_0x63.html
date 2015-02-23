@@ -112,6 +112,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="globals_0x75.html#index_u"><span>u</span></a></li>
       <li><a href="globals_0x76.html#index_v"><span>v</span></a></li>
       <li><a href="globals_0x77.html#index_w"><span>w</span></a></li>
+      <li><a href="globals_0x78.html#index_x"><span>x</span></a></li>
       <li><a href="globals_0x7a.html#index_z"><span>z</span></a></li>
     </ul>
   </div>
@@ -210,11 +211,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>compressBound()
 : <a class="el" href="compress_8c.html#a6bfd92b4426ff6008c841c2cc6f8fed3">compress.c</a>
 </li>
+<li>compressFunc_t
+: <a class="el" href="lz4frame_8c.html#aaf5f8d54656835d327a880cb73e62ac9">lz4frame.c</a>
+</li>
 <li>COMPRESSION_HEADER
 : <a class="el" href="cram__structs_8h.html#af9934fb23b7763e058c4dfb074ce9a49a2e2b585e9729f519f2df9d64ba20a4f7">cram_structs.h</a>
 </li>
 <li>COMPRESSION_SORTING
 : <a class="el" href="blockwise__sufsort_8h.html#a527ff9ba1a523f15fa6eb124ff7a8ad3">blockwise_sufsort.h</a>
+</li>
+<li>compute_bloom_filter_stats()
+: <a class="el" href="bloom__filters_8h.html#a9d5b849f1bf9ebfdea47c15d8ccec260">bloom_filters.h</a>
 </li>
 <li>config
 : <a class="el" href="deflate_8c.html#a4473b5227787415097004fd39f55185e">deflate.c</a>
@@ -224,6 +231,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>const
 : <a class="el" href="build_2contrib_2zlib-1_82_87_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">zconf.h</a>
+</li>
+<li>contentChecksum_t
+: <a class="el" href="lz4frame_8h.html#a82723f78086a96e5ee02288571dab4df">lz4frame.h</a>
+</li>
+<li>contentChecksumEnabled
+: <a class="el" href="lz4frame_8h.html#a82723f78086a96e5ee02288571dab4dfadc3f4958a032faa0f9946ac189dd6697">lz4frame.h</a>
 </li>
 <li>COPY
 : <a class="el" href="gzguts_8h.html#a9e77d621548de2a80bc9c5909bfa2b8a">gzguts.h</a>
@@ -235,8 +248,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>copy_block()
 : <a class="el" href="trees_8c.html#a1f3d6aa6a0147df6a48af35bcb5719d6">trees.c</a>
 </li>
+<li>COPYLENGTH
+: <a class="el" href="lz4_8c.html#a155d81bbd0ae81c533d696c563c6ea87">lz4.c</a>
+</li>
 <li>CORE
 : <a class="el" href="cram__structs_8h.html#af9934fb23b7763e058c4dfb074ce9a49a6fb62912f795482b5e8a28aded6b02e9">cram_structs.h</a>
+</li>
+<li>CORRECTIONS
+: <a class="el" href="nv_lighter_2utils_8h.html#a79e9f285d34216706a748fd7ba8941b7ae4c0aa84a89e2dd88cb86d1ca5432741">utils.h</a>
 </li>
 <li>cpu_ksw_test()
 : <a class="el" href="cpu_8cpp.html#af136671b011df6e4c3b2e9984330a389">cpu.cpp</a>
@@ -560,20 +579,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cram__codecs_8c.html#a61bfee0b70773c21593cfcd85caf2628">cram_codecs.c</a>
 </li>
 <li>cram_get_bam_seq()
-: <a class="el" href="cram__decode_8c.html#aec86c84f392f3c6f9ea40cbe299066f4">cram_decode.c</a>
-, <a class="el" href="cram__decode_8h.html#aec86c84f392f3c6f9ea40cbe299066f4">cram_decode.h</a>
+: <a class="el" href="cram__decode_8h.html#aec86c84f392f3c6f9ea40cbe299066f4">cram_decode.h</a>
+, <a class="el" href="cram__decode_8c.html#aec86c84f392f3c6f9ea40cbe299066f4">cram_decode.c</a>
 </li>
 <li>cram_get_ref()
-: <a class="el" href="cram__io_8h.html#a5b02f18351c1d4293007cf7626dc0550">cram_io.h</a>
-, <a class="el" href="cram__io_8c.html#a5b02f18351c1d4293007cf7626dc0550">cram_io.c</a>
+: <a class="el" href="cram__io_8c.html#a5b02f18351c1d4293007cf7626dc0550">cram_io.c</a>
+, <a class="el" href="cram__io_8h.html#a5b02f18351c1d4293007cf7626dc0550">cram_io.h</a>
 </li>
 <li>cram_get_seq()
-: <a class="el" href="cram__decode_8c.html#ae83134f2dbd3019d2609dadec24b9130">cram_decode.c</a>
-, <a class="el" href="cram__decode_8h.html#ae83134f2dbd3019d2609dadec24b9130">cram_decode.h</a>
+: <a class="el" href="cram__decode_8h.html#ae83134f2dbd3019d2609dadec24b9130">cram_decode.h</a>
+, <a class="el" href="cram__decode_8c.html#ae83134f2dbd3019d2609dadec24b9130">cram_decode.c</a>
 </li>
 <li>cram_header_to_bam()
-: <a class="el" href="cram__samtools_8h.html#a49d38169d7afb0ad54d9690bd28c14c1">cram_samtools.h</a>
-, <a class="el" href="cram__samtools_8c.html#a49d38169d7afb0ad54d9690bd28c14c1">cram_samtools.c</a>
+: <a class="el" href="cram__samtools_8c.html#a49d38169d7afb0ad54d9690bd28c14c1">cram_samtools.c</a>
+, <a class="el" href="cram__samtools_8h.html#a49d38169d7afb0ad54d9690bd28c14c1">cram_samtools.h</a>
 </li>
 <li>cram_huffman_decode_char()
 : <a class="el" href="cram__codecs_8c.html#a42e788a057968ac0a967da5b39cd1f14">cram_codecs.c</a>
@@ -618,8 +637,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cram__structs_8h.html#a111764495fb5cc0c1ecbe619c2489c2b">cram_structs.h</a>
 </li>
 <li>cram_index_build()
-: <a class="el" href="cram__index_8h.html#a92ccd4bec1b217cfdca42ea0735680d6">cram_index.h</a>
-, <a class="el" href="cram__index_8c.html#a92ccd4bec1b217cfdca42ea0735680d6">cram_index.c</a>
+: <a class="el" href="cram__index_8c.html#a92ccd4bec1b217cfdca42ea0735680d6">cram_index.c</a>
+, <a class="el" href="cram__index_8h.html#a92ccd4bec1b217cfdca42ea0735680d6">cram_index.h</a>
 </li>
 <li>cram_index_free()
 : <a class="el" href="cram__index_8c.html#a684bc44e4448068753f875b0270e121a">cram_index.c</a>
@@ -666,8 +685,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="cram__io_8h.html#a991dcfd8577ade942c778b3c4ab6c34e">cram_io.h</a>
 </li>
 <li>cram_new_compression_header()
-: <a class="el" href="cram__io_8h.html#ac441453571a04702576ae5c3f850f18c">cram_io.h</a>
-, <a class="el" href="cram__io_8c.html#ac441453571a04702576ae5c3f850f18c">cram_io.c</a>
+: <a class="el" href="cram__io_8c.html#ac441453571a04702576ae5c3f850f18c">cram_io.c</a>
+, <a class="el" href="cram__io_8h.html#ac441453571a04702576ae5c3f850f18c">cram_io.h</a>
 </li>
 <li>cram_new_container()
 : <a class="el" href="cram__io_8c.html#a06e09102ee415de9070bfea9c366eb41">cram_io.c</a>
@@ -678,8 +697,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="cram__io_8h.html#aa780a4c38f5e0335659b4facd24b5731">cram_io.h</a>
 </li>
 <li>cram_new_slice()
-: <a class="el" href="cram__io_8c.html#a700adca4f9e4478348fc84f53639eda4">cram_io.c</a>
-, <a class="el" href="cram__io_8h.html#a700adca4f9e4478348fc84f53639eda4">cram_io.h</a>
+: <a class="el" href="cram__io_8h.html#a700adca4f9e4478348fc84f53639eda4">cram_io.h</a>
+, <a class="el" href="cram__io_8c.html#a700adca4f9e4478348fc84f53639eda4">cram_io.c</a>
 </li>
 <li>cram_open()
 : <a class="el" href="cram__io_8c.html#a2a4185c705fea977b95d30cda4af0c00">cram_io.c</a>
@@ -747,16 +766,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cram__structs_8h.html#a9eeb5702c876068ba263248c77d192f6">cram_structs.h</a>
 </li>
 <li>cram_read_block()
-: <a class="el" href="cram__io_8h.html#a94c5bed4f46422941984ff9fd1df735c">cram_io.h</a>
-, <a class="el" href="cram__io_8c.html#a94c5bed4f46422941984ff9fd1df735c">cram_io.c</a>
+: <a class="el" href="cram__io_8c.html#a94c5bed4f46422941984ff9fd1df735c">cram_io.c</a>
+, <a class="el" href="cram__io_8h.html#a94c5bed4f46422941984ff9fd1df735c">cram_io.h</a>
 </li>
 <li>cram_read_container()
 : <a class="el" href="cram__io_8c.html#ad00f125e50a98b9b0d8f0396722bf6d7">cram_io.c</a>
 , <a class="el" href="cram__io_8h.html#ad00f125e50a98b9b0d8f0396722bf6d7">cram_io.h</a>
 </li>
 <li>cram_read_file_def()
-: <a class="el" href="cram__io_8h.html#aad7ed7f5bcb7c8eb65a4807e052484c9">cram_io.h</a>
-, <a class="el" href="cram__io_8c.html#aad7ed7f5bcb7c8eb65a4807e052484c9">cram_io.c</a>
+: <a class="el" href="cram__io_8c.html#aad7ed7f5bcb7c8eb65a4807e052484c9">cram_io.c</a>
+, <a class="el" href="cram__io_8h.html#aad7ed7f5bcb7c8eb65a4807e052484c9">cram_io.h</a>
 </li>
 <li>cram_read_SAM_hdr()
 : <a class="el" href="cram__io_8c.html#ae1610e1b285d6a648a76256854c5381f">cram_io.c</a>
@@ -767,12 +786,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="cram__io_8h.html#abd43a2704620acdcd429683bb8c64dad">cram_io.h</a>
 </li>
 <li>cram_ref_decr()
-: <a class="el" href="cram__io_8c.html#af118c72c7b38f478a2cd13e591f586c9">cram_io.c</a>
-, <a class="el" href="cram__io_8h.html#af118c72c7b38f478a2cd13e591f586c9">cram_io.h</a>
+: <a class="el" href="cram__io_8h.html#af118c72c7b38f478a2cd13e591f586c9">cram_io.h</a>
+, <a class="el" href="cram__io_8c.html#af118c72c7b38f478a2cd13e591f586c9">cram_io.c</a>
 </li>
 <li>cram_ref_incr()
-: <a class="el" href="cram__io_8c.html#a135248706e994f9ae382903f2d5b8bfa">cram_io.c</a>
-, <a class="el" href="cram__io_8h.html#a135248706e994f9ae382903f2d5b8bfa">cram_io.h</a>
+: <a class="el" href="cram__io_8h.html#a135248706e994f9ae382903f2d5b8bfa">cram_io.h</a>
+, <a class="el" href="cram__io_8c.html#a135248706e994f9ae382903f2d5b8bfa">cram_io.c</a>
 </li>
 <li>cram_ref_load()
 : <a class="el" href="cram__io_8c.html#acfee4d064336acca4f2b2ac017db1f13">cram_io.c</a>
@@ -782,8 +801,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="cram__io_8c.html#a0d98cc1407c6b54c3dc3285cd05bbe5e">cram_io.c</a>
 </li>
 <li>cram_seek_to_refpos()
-: <a class="el" href="cram__index_8h.html#abdd3708c743dc1172f678f1f31fd6d8b">cram_index.h</a>
-, <a class="el" href="cram__index_8c.html#abdd3708c743dc1172f678f1f31fd6d8b">cram_index.c</a>
+: <a class="el" href="cram__index_8c.html#abdd3708c743dc1172f678f1f31fd6d8b">cram_index.c</a>
+, <a class="el" href="cram__index_8h.html#abdd3708c743dc1172f678f1f31fd6d8b">cram_index.h</a>
 </li>
 <li>cram_seq
 : <a class="el" href="cram__structs_8h.html#af0e896de5d590b2d79911a0d128f05a9">cram_structs.h</a>
@@ -792,8 +811,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cram__structs_8h.html#a00000380dbac8fbdb18d65b5689b17f3">cram_structs.h</a>
 </li>
 <li>cram_set_header()
-: <a class="el" href="cram__io_8h.html#a5982b7b402e0d135c90a1b9a1a628824">cram_io.h</a>
-, <a class="el" href="cram__io_8c.html#a5982b7b402e0d135c90a1b9a1a628824">cram_io.c</a>
+: <a class="el" href="cram__io_8c.html#a5982b7b402e0d135c90a1b9a1a628824">cram_io.c</a>
+, <a class="el" href="cram__io_8h.html#a5982b7b402e0d135c90a1b9a1a628824">cram_io.h</a>
 </li>
 <li>cram_set_option()
 : <a class="el" href="cram__io_8c.html#ae1dee1b6de5f6a318b3fa89b6c66f984">cram_io.c</a>
@@ -811,12 +830,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="cram__stats_8c.html#aca810dbcba7f6626b5914578459c13d2">cram_stats.c</a>
 </li>
 <li>cram_stats_create()
-: <a class="el" href="cram__stats_8c.html#a66698f5bf34343df276b9dd77e228b2a">cram_stats.c</a>
-, <a class="el" href="cram__stats_8h.html#a66698f5bf34343df276b9dd77e228b2a">cram_stats.h</a>
+: <a class="el" href="cram__stats_8h.html#a66698f5bf34343df276b9dd77e228b2a">cram_stats.h</a>
+, <a class="el" href="cram__stats_8c.html#a66698f5bf34343df276b9dd77e228b2a">cram_stats.c</a>
 </li>
 <li>cram_stats_del()
-: <a class="el" href="cram__stats_8c.html#ad6df51e0c8bc6ce34d05cebc4dafb0f0">cram_stats.c</a>
-, <a class="el" href="cram__stats_8h.html#ad6df51e0c8bc6ce34d05cebc4dafb0f0">cram_stats.h</a>
+: <a class="el" href="cram__stats_8h.html#ad6df51e0c8bc6ce34d05cebc4dafb0f0">cram_stats.h</a>
+, <a class="el" href="cram__stats_8c.html#ad6df51e0c8bc6ce34d05cebc4dafb0f0">cram_stats.c</a>
 </li>
 <li>cram_stats_dump()
 : <a class="el" href="cram__stats_8h.html#ae15c841cd23978c8327ee01bfba82710">cram_stats.h</a>
@@ -846,24 +865,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cram__structs_8h.html#af1d697dd8863d256e62b8a66373ea22a">cram_structs.h</a>
 </li>
 <li>cram_uncompress_block()
-: <a class="el" href="cram__io_8h.html#a6ea795b61f37415c5f4477843310612f">cram_io.h</a>
-, <a class="el" href="cram__io_8c.html#a6ea795b61f37415c5f4477843310612f">cram_io.c</a>
+: <a class="el" href="cram__io_8c.html#a6ea795b61f37415c5f4477843310612f">cram_io.c</a>
+, <a class="el" href="cram__io_8h.html#a6ea795b61f37415c5f4477843310612f">cram_io.h</a>
 </li>
 <li>cram_write_block()
-: <a class="el" href="cram__io_8h.html#af6df1c159f4f6d1e80683c5dd4240b35">cram_io.h</a>
-, <a class="el" href="cram__io_8c.html#af6df1c159f4f6d1e80683c5dd4240b35">cram_io.c</a>
+: <a class="el" href="cram__io_8c.html#af6df1c159f4f6d1e80683c5dd4240b35">cram_io.c</a>
+, <a class="el" href="cram__io_8h.html#af6df1c159f4f6d1e80683c5dd4240b35">cram_io.h</a>
 </li>
 <li>cram_write_container()
-: <a class="el" href="cram__io_8h.html#a3e281993f05141e92e21efbb9898ecb4">cram_io.h</a>
-, <a class="el" href="cram__io_8c.html#ac4f90ebf5c3fb3de3c748953cbd25ff6">cram_io.c</a>
+: <a class="el" href="cram__io_8c.html#ac4f90ebf5c3fb3de3c748953cbd25ff6">cram_io.c</a>
+, <a class="el" href="cram__io_8h.html#a3e281993f05141e92e21efbb9898ecb4">cram_io.h</a>
 </li>
 <li>cram_write_file_def()
 : <a class="el" href="cram__io_8c.html#a3f78aad92ffa2f231cf15f329597f9b3">cram_io.c</a>
 , <a class="el" href="cram__io_8h.html#a3f78aad92ffa2f231cf15f329597f9b3">cram_io.h</a>
 </li>
 <li>cram_write_SAM_hdr()
-: <a class="el" href="cram__io_8h.html#aa623411a09dc516cd3de57940c6bb34b">cram_io.h</a>
-, <a class="el" href="cram__io_8c.html#aa623411a09dc516cd3de57940c6bb34b">cram_io.c</a>
+: <a class="el" href="cram__io_8c.html#aa623411a09dc516cd3de57940c6bb34b">cram_io.c</a>
+, <a class="el" href="cram__io_8h.html#aa623411a09dc516cd3de57940c6bb34b">cram_io.h</a>
 </li>
 <li>crc
 : <a class="el" href="crc_8h.html#ade449deef700bc9a133f3d169f10e806">crc.h</a>
@@ -905,12 +924,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="crc_8h.html#a98ff2ee5352d78e72ff2c6f1c11895c6">crc.h</a>
 </li>
 <li>crcInit()
-: <a class="el" href="nvbio-aln-diff_8cpp.html#a1e1933ab237886b0c242e8a20b2e4c13">nvbio-aln-diff.cpp</a>
+: <a class="el" href="nv_bowtie_8cpp.html#a1e1933ab237886b0c242e8a20b2e4c13">nvBowtie.cpp</a>
 , <a class="el" href="nvbio-test_8cpp.html#a1e1933ab237886b0c242e8a20b2e4c13">nvbio-test.cpp</a>
 , <a class="el" href="crc_8cpp.html#a5a735798e6972adc694a5428dd7ccaf9">crc.cpp</a>
-, <a class="el" href="nv_bowtie_8cpp.html#a1e1933ab237886b0c242e8a20b2e4c13">nvBowtie.cpp</a>
-, <a class="el" href="crc_8h.html#a5a735798e6972adc694a5428dd7ccaf9">crc.h</a>
+, <a class="el" href="nvbio-aln-diff_8cpp.html#a1e1933ab237886b0c242e8a20b2e4c13">nvbio-aln-diff.cpp</a>
 , <a class="el" href="nv_s_s_a_8cpp.html#a1e1933ab237886b0c242e8a20b2e4c13">nvSSA.cpp</a>
+, <a class="el" href="crc_8h.html#a5a735798e6972adc694a5428dd7ccaf9">crc.h</a>
 </li>
 <li>crcTable
 : <a class="el" href="crc_8h.html#aa0b98c402a809d26602bb9a693083720">crc.h</a>
@@ -929,7 +948,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 14 2015 09:22:57 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 23 2015 19:38:21 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

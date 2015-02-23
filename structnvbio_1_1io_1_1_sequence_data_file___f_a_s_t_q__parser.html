@@ -105,8 +105,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00051">51</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
+<div class="textblock"><p><a class="el" href="structnvbio_1_1io_1_1_sequence_data_file.html">SequenceDataFile</a> from a FASTQ file contains the code to parse FASTQ files and dump the results into a SequenceDataRAM object file access is done via derived classes </p>
+
+<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00053">53</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -116,7 +117,7 @@ Inheritance diagram for nvbio::io::SequenceDataFile_FASTQ_parser:</div>
   <img src="structnvbio_1_1io_1_1_sequence_data_file___f_a_s_t_q__parser.png" usemap="#nvbio::io::SequenceDataFile_FASTQ_parser_map" alt=""/>
   <map id="nvbio::io::SequenceDataFile_FASTQ_parser_map" name="nvbio::io::SequenceDataFile_FASTQ_parser_map">
 <area href="structnvbio_1_1io_1_1_sequence_data_file.html" alt="nvbio::io::SequenceDataFile" shape="rect" coords="0,56,261,80"/>
-<area href="structnvbio_1_1io_1_1_sequence_data_stream.html" alt="nvbio::io::SequenceDataStream" shape="rect" coords="0,0,261,24"/>
+<area href="structnvbio_1_1io_1_1_sequence_data_input_stream.html" alt="nvbio::io::SequenceDataInputStream" shape="rect" coords="0,0,261,24"/>
 <area href="structnvbio_1_1io_1_1_sequence_data_file___f_a_s_t_q__gz.html" alt="nvbio::io::SequenceDataFile_FASTQ_gz" shape="rect" coords="0,168,261,192"/>
 </map>
  </div></div>
@@ -129,6 +130,8 @@ Proteced Methods</h2></td></tr>
 <tr class="separator:ga9403cc2849a05a0e02feb52cff9e931e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d95a0afa652a7a41e7c37f72260d309"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structnvbio_1_1io_1_1_sequence_data_file.html#aafa121f1d856b5e7d5eddc3580324661">FileState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1_sequence_data_file___f_a_s_t_q__parser.html#a5d95a0afa652a7a41e7c37f72260d309">fillBuffer</a> (void)=0</td></tr>
 <tr class="separator:a5d95a0afa652a7a41e7c37f72260d309"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2b1b5ec0fbc6959b51c51d295380181"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1_sequence_data_file___f_a_s_t_q__parser.html#ae2b1b5ec0fbc6959b51c51d295380181">gets</a> (char *buffer, int len)=0</td></tr>
+<tr class="separator:ae2b1b5ec0fbc6959b51c51d295380181"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_structnvbio_1_1io_1_1_sequence_data_file"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_structnvbio_1_1io_1_1_sequence_data_file')"><img src="closed.png" alt="-"/>&#160;Proteced Methods inherited from <a class="el" href="structnvbio_1_1io_1_1_sequence_data_file.html">nvbio::io::SequenceDataFile</a></td></tr>
 <tr class="memitem:ac17806e0a159585850aff109c52578d8 inherit pro_methods_structnvbio_1_1io_1_1_sequence_data_file"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1_sequence_data_file.html#ac17806e0a159585850aff109c52578d8">SequenceDataFile</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="structnvbio_1_1io_1_1_sequence_data_file_1_1_options.html">Options</a> &amp;options)</td></tr>
 <tr class="separator:ac17806e0a159585850aff109c52578d8 inherit pro_methods_structnvbio_1_1io_1_1_sequence_data_file"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -185,6 +188,15 @@ Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_static_attribs_structnvbio_1_1io_1_1_sequence_data_file"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_structnvbio_1_1io_1_1_sequence_data_file')"><img src="closed.png" alt="-"/>&#160;Static Public Members inherited from <a class="el" href="structnvbio_1_1io_1_1_sequence_data_file.html">nvbio::io::SequenceDataFile</a></td></tr>
 <tr class="memitem:a220eb44ed7d58835147891f551d3b62d inherit pub_static_attribs_structnvbio_1_1io_1_1_sequence_data_file"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1_sequence_data_file.html#a220eb44ed7d58835147891f551d3b62d">LONG_READ</a> = 32*1024</td></tr>
 <tr class="separator:a220eb44ed7d58835147891f551d3b62d inherit pub_static_attribs_structnvbio_1_1io_1_1_sequence_data_file"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header related_structnvbio_1_1io_1_1_sequence_data_input_stream"><td colspan="2" onclick="javascript:toggleInherit('related_structnvbio_1_1io_1_1_sequence_data_input_stream')"><img src="closed.png" alt="-"/>&#160;Related Functions inherited from <a class="el" href="structnvbio_1_1io_1_1_sequence_data_input_stream.html">nvbio::io::SequenceDataInputStream</a></td></tr>
+<tr class="memitem:ga7e9df7748b8f362fc80bac419c2c1d5e inherit related_structnvbio_1_1io_1_1_sequence_data_input_stream"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___sequence_i_o.html#ga7e9df7748b8f362fc80bac419c2c1d5e">next</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___alphabets_module.html#gacd06da18687b2a345bef56a9fdad1a48">Alphabet</a> alphabet, <a class="el" href="group___sequence_i_o.html#gaeda29063a8a35631e18372d8a6001e27">SequenceDataHost</a> *data, <a class="el" href="structnvbio_1_1io_1_1_sequence_data_input_stream.html">SequenceDataInputStream</a> *stream, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> batch_size, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> batch_bps=<a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(-1))</td></tr>
+<tr class="separator:ga7e9df7748b8f362fc80bac419c2c1d5e inherit related_structnvbio_1_1io_1_1_sequence_data_input_stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga40371c8ee9a2a41aba24854cf619903d inherit related_structnvbio_1_1io_1_1_sequence_data_input_stream"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___sequence_i_o.html#ga40371c8ee9a2a41aba24854cf619903d">append</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___alphabets_module.html#gacd06da18687b2a345bef56a9fdad1a48">Alphabet</a> alphabet, <a class="el" href="group___sequence_i_o.html#gaeda29063a8a35631e18372d8a6001e27">SequenceDataHost</a> *data, <a class="el" href="structnvbio_1_1io_1_1_sequence_data_input_stream.html">SequenceDataInputStream</a> *stream, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> batch_size, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> batch_bps=<a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(-1))</td></tr>
+<tr class="separator:ga40371c8ee9a2a41aba24854cf619903d inherit related_structnvbio_1_1io_1_1_sequence_data_input_stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab65304fd3696fdecd4be3ef9737b4074 inherit related_structnvbio_1_1io_1_1_sequence_data_input_stream"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___sequence_i_o.html#gab65304fd3696fdecd4be3ef9737b4074">skip</a> (<a class="el" href="structnvbio_1_1io_1_1_sequence_data_input_stream.html">SequenceDataInputStream</a> *stream, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> batch_size)</td></tr>
+<tr class="separator:gab65304fd3696fdecd4be3ef9737b4074 inherit related_structnvbio_1_1io_1_1_sequence_data_input_stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga94d8894e6d814de5245726de78fc021e inherit related_structnvbio_1_1io_1_1_sequence_data_input_stream"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnvbio_1_1io_1_1_sequence_data_input_stream.html">SequenceDataInputStream</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___sequence_i_o.html#ga94d8894e6d814de5245726de78fc021e">open_sequence_file</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> char *sequence_file_name, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___reads_i_o.html#ga3415ac326089788da99884c50b8ccb16">QualityEncoding</a> qualities=<a class="el" href="group___sequence_i_o.html#gga3415ac326089788da99884c50b8ccb16a014958857dbbddee90a1489d4fa5d3d2">Phred33</a>, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> max_seqs=<a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(-1), <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> max_sequence_len=<a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(-1), <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___sequence_i_o.html#gaa3df48d0ab11675e05f2c34fb70e5673">SequenceEncoding</a> flags=<a class="el" href="group___sequence_i_o.html#ggaa3df48d0ab11675e05f2c34fb70e5673a8ff7c616502f05c17e72a0b525ff9d61">FORWARD</a>, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> trim3=0, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> trim5=0)</td></tr>
+<tr class="separator:ga94d8894e6d814de5245726de78fc021e inherit related_structnvbio_1_1io_1_1_sequence_data_input_stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ad2428d767b0691f53e78105822132247"></a>
@@ -225,7 +237,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00054">54</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
+<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00056">56</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
 
 </div>
 </div>
@@ -256,6 +268,42 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae2b1b5ec0fbc6959b51c51d295380181"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool nvbio::io::SequenceDataFile_FASTQ_parser::gets </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="structnvbio_1_1io_1_1_sequence_data_file___f_a_s_t_q__gz.html#a72c268dd522254da7b4ec5f2bf639f37">nvbio::io::SequenceDataFile_FASTQ_gz</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="a7c810014f1bd1da90c6557827295d2f6"></a>
 <div class="memitem">
@@ -275,7 +323,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00087">87</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
+<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00091">91</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
 
 </div>
 </div>
@@ -297,7 +345,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00089">89</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
+<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00093">93</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
 
 </div>
 </div>
@@ -319,7 +367,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00088">88</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
+<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00092">92</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
 
 </div>
 </div>
@@ -341,7 +389,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00095">95</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
+<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00099">99</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
 
 </div>
 </div>
@@ -363,7 +411,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00084">84</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
+<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00088">88</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
 
 </div>
 </div>
@@ -385,7 +433,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00092">92</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
+<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00096">96</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
 
 </div>
 </div>
@@ -407,7 +455,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00098">98</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
+<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00102">102</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
 
 </div>
 </div>
@@ -429,7 +477,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00099">99</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
+<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00103">103</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
 
 </div>
 </div>
@@ -451,7 +499,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00100">100</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
+<p>Definition at line <a class="el" href="sequence__fastq_8h_source.html#l00104">104</a> of file <a class="el" href="sequence__fastq_8h_source.html">sequence_fastq.h</a>.</p>
 
 </div>
 </div>
@@ -462,7 +510,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 14 2015 09:22:47 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 23 2015 19:38:11 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

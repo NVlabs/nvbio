@@ -1,5 +1,10 @@
 var searchData=
 [
+  ['_5f1bit',['_1BIT',['../lz4frame_8c.html#aeb96afd850ef097baf8edc0198e38639',1,'lz4frame.c']]],
+  ['_5f2bits',['_2BITS',['../lz4frame_8c.html#a0bc676dfd4151eaf9889d49b7de69d98',1,'lz4frame.c']]],
+  ['_5f3bits',['_3BITS',['../lz4frame_8c.html#a234bc681ca1e1db9eddd76b2c9c6de04',1,'lz4frame.c']]],
+  ['_5f4bits',['_4BITS',['../lz4frame_8c.html#af3c09506057972920670fce828be6c5e',1,'lz4frame.c']]],
+  ['_5f8bits',['_8BITS',['../lz4frame_8c.html#a8d1d190940dcc00cb275c1fd4271be11',1,'lz4frame.c']]],
   ['_5f_5fac_5ffsize',['__ac_fsize',['../khash_8h.html#a97713aa7fb8b3cfc816305738bfa504c',1,'khash.h']]],
   ['_5f_5fac_5fisdel',['__ac_isdel',['../khash_8h.html#a381aad5b57f82fc003034fd8c47086b7',1,'khash.h']]],
   ['_5f_5fac_5fiseither',['__ac_iseither',['../khash_8h.html#a777def495774b40bdc4f2fdcba9b4ab1',1,'khash.h']]],
@@ -28,6 +33,7 @@ var searchData=
   ['_5fcram_5fh_5f',['_CRAM_H_',['../cram_8h.html#a658d1281c046a0972128b653b17aeec0',1,'cram.h']]],
   ['_5fget_5fmem',['_get_mem',['../sam_8c.html#a606c69c70117c2f25625123684ec7f83',1,'sam.c']]],
   ['_5fmd5_5fh',['_MD5_H',['../md5_8h.html#a9b665b394b050dba7f88a694f2e20994',1,'md5.h']]],
+  ['_5fpacked',['_PACKED',['../xxhash_8c.html#aa1ed035ac46973db2babb746c8ebc06a',1,'xxhash.c']]],
   ['_5fparse_5ferr',['_parse_err',['../sam_8c.html#a8d8c8da9c5fd63e594cf85474f40730b',1,'sam.c']]],
   ['_5fparse_5fwarn',['_parse_warn',['../sam_8c.html#a042d009401fb04919519bb5d8c561440',1,'sam.c']]],
   ['_5fread_5ftoken',['_read_token',['../sam_8c.html#a008084e381a290c0a820c67a169e7023',1,'sam.c']]],

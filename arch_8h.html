@@ -135,6 +135,8 @@ Functions</h2></td></tr>
 <tr class="separator:a77ee93f3ce559665bf417ed73c9585c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70e4761b9bf929be6ecc6782e074e24d"><td class="memItemLeft" align="right" valign="top">uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html#a70e4761b9bf929be6ecc6782e074e24d">nvbio::cuda::max_grid_size</a> ()</td></tr>
 <tr class="separator:a70e4761b9bf929be6ecc6782e074e24d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05eee33ec76e0b7dbb955d2eca609648"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html#a05eee33ec76e0b7dbb955d2eca609648">nvbio::cuda::multiprocessor_count</a> ()</td></tr>
+<tr class="separator:a05eee33ec76e0b7dbb955d2eca609648"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a442a6c41a9681e2e875a8d8407d64a02"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html#a442a6c41a9681e2e875a8d8407d64a02">nvbio::cuda::smem_allocation_unit</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> cudaDeviceProp &amp;properties)</td></tr>
 <tr class="separator:a442a6c41a9681e2e875a8d8407d64a02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53c0a6665aa38ac2aca5651eaf95560c"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html#a53c0a6665aa38ac2aca5651eaf95560c">nvbio::cuda::reg_allocation_unit</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> cudaDeviceProp &amp;properties, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> size_t regsPerThread)</td></tr>
@@ -150,6 +152,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a8b83b2b50204230a594980fe7711a05f"><td class="memTemplParams" colspan="2">template&lt;typename KernelFunction &gt; </td></tr>
 <tr class="memitem:a8b83b2b50204230a594980fe7711a05f"><td class="memTemplItemLeft" align="right" valign="top">cudaFuncAttributes&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html#a8b83b2b50204230a594980fe7711a05f">nvbio::cuda::function_attributes</a> (KernelFunction kernel)</td></tr>
 <tr class="separator:a8b83b2b50204230a594980fe7711a05f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fb5880feb0a0743ff1ae5c14f8cf73a"><td class="memTemplParams" colspan="2">template&lt;typename KernelFunction &gt; </td></tr>
+<tr class="memitem:a5fb5880feb0a0743ff1ae5c14f8cf73a"><td class="memTemplItemLeft" align="right" valign="top">size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html#a5fb5880feb0a0743ff1ae5c14f8cf73a">nvbio::cuda::max_active_blocks_per_multiprocessor</a> (KernelFunction kernel, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> size_t CTA_SIZE, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> size_t dynamic_smem_bytes)</td></tr>
+<tr class="separator:a5fb5880feb0a0743ff1ae5c14f8cf73a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15b9e30316921c79e9aef83ef483c266"><td class="memTemplParams" colspan="2">template&lt;typename KernelFunction &gt; </td></tr>
 <tr class="memitem:a15b9e30316921c79e9aef83ef483c266"><td class="memTemplItemLeft" align="right" valign="top">size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html#a15b9e30316921c79e9aef83ef483c266">nvbio::cuda::max_active_blocks</a> (KernelFunction kernel, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> size_t CTA_SIZE, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> size_t dynamic_smem_bytes)</td></tr>
 <tr class="separator:a15b9e30316921c79e9aef83ef483c266"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,7 +176,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 14 2015 09:21:31 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 23 2015 19:36:50 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

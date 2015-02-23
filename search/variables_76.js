@@ -1,7 +1,10 @@
 var searchData=
 [
-  ['v',['v',['../structhts__pair64__t.html#acd13be07b4326fbb222ca26ce483c9b8',1,'hts_pair64_t']]],
-  ['v1',['v1',['../structbcf__info__t.html#a6196599fd64293ea535a93c1f6d81e60',1,'bcf_info_t']]],
+  ['v',['v',['../structhts__pair64__t.html#acd13be07b4326fbb222ca26ce483c9b8',1,'hts_pair64_t::v()'],['../struct___u32___s.html#a9e62321efa6315b0fb8b252add8029b4',1,'_U32_S::v()'],['../struct___u64___s.html#a1e1e14b1bad2667070e9adaa40da71df',1,'_U64_S::v()']]],
+  ['v1',['v1',['../structbcf__info__t.html#a6196599fd64293ea535a93c1f6d81e60',1,'bcf_info_t::v1()'],['../struct_x_x_h__istate32__t.html#abe7ccbc29303d4f4126d7c1c6003e67a',1,'XXH_istate32_t::v1()'],['../struct_x_x_h__istate64__t.html#a5bdd6967a8d80194d4e55b2f61431b8f',1,'XXH_istate64_t::v1()']]],
+  ['v2',['v2',['../struct_x_x_h__istate32__t.html#a2e56f8d3931253d5706f6354c228e7c4',1,'XXH_istate32_t::v2()'],['../struct_x_x_h__istate64__t.html#a8e14247869d90a1eea79cd99c0b06029',1,'XXH_istate64_t::v2()']]],
+  ['v3',['v3',['../struct_x_x_h__istate32__t.html#ae19dc091e2c1c51e516024137603cd4a',1,'XXH_istate32_t::v3()'],['../struct_x_x_h__istate64__t.html#a714d26f89359d5b897e3e8ffa97b946d',1,'XXH_istate64_t::v3()']]],
+  ['v4',['v4',['../struct_x_x_h__istate32__t.html#a8ca5625843153eb81437e9cee7364c1c',1,'XXH_istate32_t::v4()'],['../struct_x_x_h__istate64__t.html#aeb3e5e9f7d5ce61021dca87fae23df27',1,'XXH_istate64_t::v4()']]],
   ['val',['val',['../structbcf__idpair__t.html#acf636df3ed86024d1e7a8ac08d8fdcbd',1,'bcf_idpair_t::val()'],['../structcode.html#a6f9c73627997e8fc6df02e620cf9a6f5',1,'code::val()']]],
   ['val2code',['val2code',['../structcram__huffman__encoder.html#a39d411b921037029f8037e7992819a4e',1,'cram_huffman_encoder']]],
   ['val_5fdat',['val_dat',['../structcram__byte__array__len__encoder.html#acb23a70d3c5c3cc5086f3b5a86155c23',1,'cram_byte_array_len_encoder']]],
@@ -19,7 +22,7 @@ var searchData=
   ['variants',['variants',['../structnvbio_1_1io_1_1_s_n_p_database.html#a39067b6d003eea93337613bbc2381c6e',1,'nvbio::io::SNPDatabase']]],
   ['vector_5fwidth',['VECTOR_WIDTH',['../structnvbio_1_1_packed_vector.html#af69895adf1970915ac90b6897b94f961',1,'nvbio::PackedVector::VECTOR_WIDTH()'],['../structnvbio_1_1_packed_stream.html#aed631936bfac04e9c4ab2a5401b6e413',1,'nvbio::PackedStream::VECTOR_WIDTH()'],['../structnvbio_1_1_forward_packed_stream.html#a98e4e8b44c5581daf07af520bda5bc64',1,'nvbio::ForwardPackedStream::VECTOR_WIDTH()'],['../structnvbio_1_1vectorized__string.html#a49fcf1aa64d403fe63441146935162da',1,'nvbio::vectorized_string::VECTOR_WIDTH()'],['../structnvbio_1_1vectorized__string_3_01const_01char_01_5_01_4.html#a1362dcb80aeccffa48e308e51d73d44f',1,'nvbio::vectorized_string&lt; const char * &gt;::VECTOR_WIDTH()'],['../structnvbio_1_1vectorized__string_3_01vector__view_3_01const_01_t_01_5_00_01_index_type_01_4_01_4.html#af767ce15f382265329b310d79fa4c17e',1,'nvbio::vectorized_string&lt; vector_view&lt; const T *, IndexType &gt; &gt;::VECTOR_WIDTH()'],['../structnvbio_1_1vectorized__string_3_01vector__view_3_01_packed_stream_3_01_input_stream_00_01_sy0d57524e4504f97a479e638aa48536f4.html#a18e13c66ff15b2b49cf883d89653f1ab',1,'nvbio::vectorized_string&lt; vector_view&lt; PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt; &gt;::VECTOR_WIDTH()']]],
   ['verbose',['verbose',['../structcram__fd.html#a75d820ae9b3c36b168436988d44d667c',1,'cram_fd']]],
-  ['version',['version',['../structcram__fd.html#a3ab0e73d202910db3fd6cbc0596190b4',1,'cram_fd']]],
+  ['version',['version',['../structcram__fd.html#a3ab0e73d202910db3fd6cbc0596190b4',1,'cram_fd::version()'],['../struct_l_z4_f__cctx__internal__t.html#ade6003832f2a9c7ee30c08fbc3d740ad',1,'LZ4F_cctx_internal_t::version()'],['../struct_l_z4_f__dctx__internal__t.html#a10768bb0a3c6550f7d60da24b7bc3d2a',1,'LZ4F_dctx_internal_t::version()']]],
   ['voidp',['voidp',['../structhts_file.html#afa4e03c78e80d6adb2541889388f9691',1,'htsFile']]],
   ['vptr',['vptr',['../structbcf__info__t.html#a9705839372ee6e3c22fa87bb23eecf7c',1,'bcf_info_t']]],
   ['vptr_5ffree',['vptr_free',['../structbcf__info__t.html#a12ba93e9c9e2378a9ab5b9d2e3934880',1,'bcf_info_t']]],

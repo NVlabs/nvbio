@@ -191,13 +191,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classmgpu_1_1_cuda_alloc.html#a069c687b0f5cc3d65e2f3f6c8573c082">mgpu::CudaAlloc</a>
 , <a class="el" href="classmgpu_1_1_cuda_mem_support.html#a25e7ee300ec359e68d5a089cbb2e7b8e">mgpu::CudaMemSupport</a>
 </li>
+<li>device_memory()
+: <a class="el" href="struct_bloom_filters.html#a0027e1e81f1c3f5ab645dbfbca881825">BloomFilters&lt; system_tag &gt;</a>
+</li>
 <li>device_ptr()
 : <a class="el" href="structnvbio_1_1cuda_1_1host__device__buffer.html#a9f2120dcc46a5f91d5fd8b74dc36e47f">nvbio::cuda::host_device_buffer&lt; T &gt;</a>
 , <a class="el" href="structnvbio_1_1cuda_1_1host__device__buffer__zero__copy.html#a3f73a8269bbe177599a8df77ea3434c5">nvbio::cuda::host_device_buffer_zero_copy&lt; T &gt;</a>
 , <a class="el" href="structnvbio_1_1cuda_1_1host__device__buffer__sync.html#a3cbf32ef61e59059e389f0760834525a">nvbio::cuda::host_device_buffer_sync&lt; T &gt;</a>
 </li>
 <li>device_view()
-: <a class="el" href="structnvbio_1_1_device_vector_array.html#a0d7947903a2a2f0c1c0d529352e17d0f">nvbio::DeviceVectorArray&lt; T &gt;</a>
+: <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#ad1eb0e87f2a8e347483710497e280ac3">nvbio::cuda::PingPongQueues&lt; T &gt;</a>
+, <a class="el" href="structnvbio_1_1_device_vector_array.html#a0d7947903a2a2f0c1c0d529352e17d0f">nvbio::DeviceVectorArray&lt; T &gt;</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_read_hits_index.html#ad707f922fdc3818818f014777873a9cf">nvbio::bowtie2::cuda::ReadHitsIndex</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_hit_queues.html#ab832648bc95618b81a38a53330ef6251">nvbio::bowtie2::cuda::HitQueues</a>
 , <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_scoring_queues.html#a431f54a858433e8258ffea1c70d99102">nvbio::bowtie2::cuda::ScoringQueues</a>
@@ -205,7 +209,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="structcufmi_1_1bowtie2_1_1cuda_1_1_read_hits_index.html#a09e0f9c2d4323e80a009106861f4fdcb">cufmi::bowtie2::cuda::ReadHitsIndex</a>
 , <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#a1772616dd677861ba54feffd6dd4307c">nvbio::cuda::PingPongQueues&lt; T &gt;</a>
 , <a class="el" href="group___vector_array_module.html#ga7a80d8f73fa176b8ce75733140d3a923">nvbio::DeviceVectorArray&lt; T &gt;</a>
-, <a class="el" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#ad1eb0e87f2a8e347483710497e280ac3">nvbio::cuda::PingPongQueues&lt; T &gt;</a>
 </li>
 <li>DeviceBWTHandler()
 : <a class="el" href="structnvbio_1_1_device_b_w_t_handler.html#abe53d6ac8d813af463a651df0b10c107">nvbio::DeviceBWTHandler&lt; OutputIterator &gt;</a>
@@ -243,33 +246,34 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1difference__transform.html#a71bb74602ef506d430fde8cece33b48b">nvbio::bowtie2::cuda::difference_transform&lt; Iterator &gt;</a>
 </li>
 <li>different_ref()
-: <a class="el" href="structnvbio_1_1alndiff_1_1_s_e_analyzer.html#a70d74fda39b1aaec5a9e0a4735f2eaf9">nvbio::alndiff::SEAnalyzer</a>
-, <a class="el" href="structnvbio_1_1alndiff_1_1_p_e_analyzer.html#a8ba5ece6aa6f15a5c6ff9f06073ea589">nvbio::alndiff::PEAnalyzer</a>
+: <a class="el" href="structnvbio_1_1alndiff_1_1_p_e_analyzer.html#a8ba5ece6aa6f15a5c6ff9f06073ea589">nvbio::alndiff::PEAnalyzer</a>
+, <a class="el" href="structnvbio_1_1alndiff_1_1_s_e_analyzer.html#a70d74fda39b1aaec5a9e0a4735f2eaf9">nvbio::alndiff::SEAnalyzer</a>
 </li>
 <li>discordant()
 : <a class="el" href="structnvbio_1_1alndiff_1_1_p_e_analyzer.html#a4701ab2ba94e83780569b2dc7ddeb1e2">nvbio::alndiff::PEAnalyzer</a>
 , <a class="el" href="structnvbio_1_1alndiff_1_1_s_e_analyzer.html#ae806c8b6c84990315c7865f20bae1cc8">nvbio::alndiff::SEAnalyzer</a>
 </li>
 <li>dispatch()
-: <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_edit_distance_aligner_3_01_t_y_p_efb5f03badcc518bb6354d71f46c4fe18.html#af78f0e8308ba142c2895d9aaba233270">nvbio::aln::priv::alignment_score_dispatch&lt; EditDistanceAligner&lt; TYPE, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_hamming_distance_aligner_3_01_t_y_80d0f1a9710764845de15aab35ae4674.html#ab8ca347bd51cae4ba7bd8d68bafed572">nvbio::aln::priv::alignment_score_dispatch&lt; HammingDistanceAligner&lt; TYPE, scoring_type, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
+: <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_edit_distance_aligner_3_01_t_y_p_efb5f03badcc518bb6354d71f46c4fe18.html#aaffe7c1733acbe54031ece12f481adb2">nvbio::aln::priv::alignment_score_dispatch&lt; EditDistanceAligner&lt; TYPE, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_gotoh_aligner_3_01_t_y_p_e_00_01sc357575890393314af1775ce538bbd4a9.html#a350eb6218a803754dcb0d809c27f664a">nvbio::aln::priv::alignment_score_dispatch&lt; GotohAligner&lt; TYPE, scoring_type, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_hamming_distance_aligner_3_01_t_y_80d0f1a9710764845de15aab35ae4674.html#ab8ca347bd51cae4ba7bd8d68bafed572">nvbio::aln::priv::alignment_score_dispatch&lt; HammingDistanceAligner&lt; TYPE, scoring_type, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_smith_waterman_aligner_3_01_t_y_p_2d96886386e581531458455e09d8eb95.html#ac4e947185dcfe52d350f5e9411c248ea">nvbio::aln::priv::alignment_score_dispatch&lt; SmithWatermanAligner&lt; TYPE, scoring_type, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_edit_distance_aligner_3_01_t_y_p_efb5f03badcc518bb6354d71f46c4fe18.html#ab23c200a3f4e456b3bb9e75532bf2e3d">nvbio::aln::priv::alignment_score_dispatch&lt; EditDistanceAligner&lt; TYPE, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_hamming_distance_aligner_3_01_t_y_80d0f1a9710764845de15aab35ae4674.html#ae479bc88ee0bc395eed8c137b590a4eb">nvbio::aln::priv::alignment_score_dispatch&lt; HammingDistanceAligner&lt; TYPE, scoring_type, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_smith_waterman_aligner_3_01_t_y_p_2d96886386e581531458455e09d8eb95.html#a8f5cf5cc7cd5db52839f06f942effa30">nvbio::aln::priv::alignment_score_dispatch&lt; SmithWatermanAligner&lt; TYPE, scoring_type, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_hamming_distance_aligner_3_01_t_y_80d0f1a9710764845de15aab35ae4674.html#a162944665d23cb49984046daebb70f58">nvbio::aln::priv::alignment_score_dispatch&lt; HammingDistanceAligner&lt; TYPE, scoring_type, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_smith_waterman_aligner_3_01_t_y_p_2d96886386e581531458455e09d8eb95.html#a680d1b73947f7c852a2488c4633a93d1">nvbio::aln::priv::alignment_score_dispatch&lt; SmithWatermanAligner&lt; TYPE, scoring_type, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_gotoh_aligner_3_01_t_y_p_e_00_01sc357575890393314af1775ce538bbd4a9.html#a63a75f9393216822835af56a86173f85">nvbio::aln::priv::alignment_score_dispatch&lt; GotohAligner&lt; TYPE, scoring_type, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_edit_distance_aligner_3_01_t_y_p_efb5f03badcc518bb6354d71f46c4fe18.html#aaffe7c1733acbe54031ece12f481adb2">nvbio::aln::priv::alignment_score_dispatch&lt; EditDistanceAligner&lt; TYPE, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_gotoh_aligner_3_01_t_y_p_e_00_01sc357575890393314af1775ce538bbd4a9.html#aa7993571c687e1494847758ea50b660e">nvbio::aln::priv::alignment_score_dispatch&lt; GotohAligner&lt; TYPE, scoring_type, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__score__dispatch_3_01_edit_distance_aligner_3_01_t_y_p_efb5f03badcc518bb6354d71f46c4fe18.html#af78f0e8308ba142c2895d9aaba233270">nvbio::aln::priv::alignment_score_dispatch&lt; EditDistanceAligner&lt; TYPE, algorithm_tag &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
 </li>
 <li>dispatch_checkpoints()
-: <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_017565b148ef50669810e720a848df26ca.html#a43d0a254ed0107535fb30a465792bbdf">nvbio::aln::priv::alignment_checkpointed_dispatch&lt; CHECKPOINTS, HammingDistanceAligner&lt; TYPE, scoring_type &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_0110e7c0277f01bc21ef8266d43055906a.html#a3f83e6774791cc38b384cbed2883a716">nvbio::aln::priv::alignment_checkpointed_dispatch&lt; CHECKPOINTS, EditDistanceAligner&lt; TYPE &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_010d958baf96d3bea446c3351c904dafc0.html#a8dbd125de636238ea7e91e59d758e1a0">nvbio::aln::priv::alignment_checkpointed_dispatch&lt; CHECKPOINTS, GotohAligner&lt; TYPE, scoring_type &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
+: <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_010d958baf96d3bea446c3351c904dafc0.html#a8dbd125de636238ea7e91e59d758e1a0">nvbio::aln::priv::alignment_checkpointed_dispatch&lt; CHECKPOINTS, GotohAligner&lt; TYPE, scoring_type &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_012d91b605d39c8b91c23fa7f94e856635.html#a6065d6e3acad5555d0faf38667af73d7">nvbio::aln::priv::alignment_checkpointed_dispatch&lt; CHECKPOINTS, SmithWatermanAligner&lt; TYPE, scoring_type &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_017565b148ef50669810e720a848df26ca.html#a43d0a254ed0107535fb30a465792bbdf">nvbio::aln::priv::alignment_checkpointed_dispatch&lt; CHECKPOINTS, HammingDistanceAligner&lt; TYPE, scoring_type &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_0110e7c0277f01bc21ef8266d43055906a.html#a3f83e6774791cc38b384cbed2883a716">nvbio::aln::priv::alignment_checkpointed_dispatch&lt; CHECKPOINTS, EditDistanceAligner&lt; TYPE &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
 </li>
 <li>dispatch_submatrix()
-: <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_010d958baf96d3bea446c3351c904dafc0.html#ae1bd3b0304976acb33d8ede8488ee2ff">nvbio::aln::priv::alignment_checkpointed_dispatch&lt; CHECKPOINTS, GotohAligner&lt; TYPE, scoring_type &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
-, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_017565b148ef50669810e720a848df26ca.html#a5c35c5a90c8aca36fa9bc1054cfa57ce">nvbio::aln::priv::alignment_checkpointed_dispatch&lt; CHECKPOINTS, HammingDistanceAligner&lt; TYPE, scoring_type &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
+: <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_017565b148ef50669810e720a848df26ca.html#a5c35c5a90c8aca36fa9bc1054cfa57ce">nvbio::aln::priv::alignment_checkpointed_dispatch&lt; CHECKPOINTS, HammingDistanceAligner&lt; TYPE, scoring_type &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
+, <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_010d958baf96d3bea446c3351c904dafc0.html#ae1bd3b0304976acb33d8ede8488ee2ff">nvbio::aln::priv::alignment_checkpointed_dispatch&lt; CHECKPOINTS, GotohAligner&lt; TYPE, scoring_type &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_0110e7c0277f01bc21ef8266d43055906a.html#aa63ed9d75004effe3945346d9e10c299">nvbio::aln::priv::alignment_checkpointed_dispatch&lt; CHECKPOINTS, EditDistanceAligner&lt; TYPE &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
 , <a class="el" href="structnvbio_1_1aln_1_1priv_1_1alignment__checkpointed__dispatch_3_01_c_h_e_c_k_p_o_i_n_t_s_00_012d91b605d39c8b91c23fa7f94e856635.html#a7f015fc4b414d5bb0f140c72d880d008">nvbio::aln::priv::alignment_checkpointed_dispatch&lt; CHECKPOINTS, SmithWatermanAligner&lt; TYPE, scoring_type &gt;, pattern_string, qual_string, text_string, column_type &gt;</a>
 </li>
@@ -278,8 +282,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classnvbio_1_1internals_1_1_counted_base__impl.html#aa76cb1c77080a82602b814e91493a056">nvbio::internals::CountedBase_impl&lt; PtrT, DeleterT, CounterT &gt;</a>
 </li>
 <li>distant()
-: <a class="el" href="structnvbio_1_1alndiff_1_1_p_e_analyzer.html#ad092568df2bf2e544c52e5b354eb0720">nvbio::alndiff::PEAnalyzer</a>
-, <a class="el" href="structnvbio_1_1alndiff_1_1_s_e_analyzer.html#a939797ed6ec65dbadb49649e8e062ba8">nvbio::alndiff::SEAnalyzer</a>
+: <a class="el" href="structnvbio_1_1alndiff_1_1_s_e_analyzer.html#a939797ed6ec65dbadb49649e8e062ba8">nvbio::alndiff::SEAnalyzer</a>
+, <a class="el" href="structnvbio_1_1alndiff_1_1_p_e_analyzer.html#ad092568df2bf2e544c52e5b354eb0720">nvbio::alndiff::PEAnalyzer</a>
 </li>
 <li>divide_ri_functor()
 : <a class="el" href="structnvbio_1_1divide__ri__functor.html#a78bc16963bb4011086d48ddb1e0c3d7d">nvbio::divide_ri_functor&lt; word_type &gt;</a>
@@ -289,12 +293,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="structnvbio_1_1_host_b_w_t_handler_3_01_packed_stream_3_01word__type_01_5_00_01uint8_00_01_s_y_mece7f5f021aa7d905197083a5b114cf2.html#af97b7142b6551432f2f15ec6b1c0218e">nvbio::HostBWTHandler&lt; PackedStream&lt; word_type *, uint8, SYMBOL_SIZE, BIG_ENDIAN, uint64 &gt; &gt;</a>
 </li>
 <li>do_run()
-: <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_compute_thread_p_e.html#a5bec42b4173a1c345340b3c526c6c813">nvbio::bowtie2::cuda::ComputeThreadPE</a>
-, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_compute_thread_s_e.html#ac10f30d637c45c61e4cb1dc3537d8375">nvbio::bowtie2::cuda::ComputeThreadSE</a>
+: <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_compute_thread_s_e.html#ac10f30d637c45c61e4cb1dc3537d8375">nvbio::bowtie2::cuda::ComputeThreadSE</a>
+, <a class="el" href="structnvbio_1_1bowtie2_1_1cuda_1_1_compute_thread_p_e.html#a5bec42b4173a1c345340b3c526c6c813">nvbio::bowtie2::cuda::ComputeThreadPE</a>
 </li>
 <li>dollar_bwt()
-: <a class="el" href="structnvbio_1_1priv_1_1_host_string_set_radices.html#ace6c097e205ac7e2af54983b7f98c3ab">nvbio::priv::HostStringSetRadices&lt; string_set_type, SYMBOL_SIZE, DOLLAR_BITS, WORD_BITS &gt;</a>
-, <a class="el" href="structnvbio_1_1priv_1_1_device_string_set_radices.html#abee3ec077bf5acac90f9ad490c61cdc1">nvbio::priv::DeviceStringSetRadices&lt; string_set_type, SYMBOL_SIZE, DOLLAR_BITS, WORD_BITS &gt;</a>
+: <a class="el" href="structnvbio_1_1priv_1_1_device_string_set_radices.html#abee3ec077bf5acac90f9ad490c61cdc1">nvbio::priv::DeviceStringSetRadices&lt; string_set_type, SYMBOL_SIZE, DOLLAR_BITS, WORD_BITS &gt;</a>
+, <a class="el" href="structnvbio_1_1priv_1_1_host_string_set_radices.html#ace6c097e205ac7e2af54983b7f98c3ab">nvbio::priv::HostStringSetRadices&lt; string_set_type, SYMBOL_SIZE, DOLLAR_BITS, WORD_BITS &gt;</a>
 </li>
 <li>DollarExtractor()
 : <a class="el" href="structnvbio_1_1priv_1_1_dollar_extractor.html#a395fcf6f491cbc8515d7e61b927f8b04">nvbio::priv::DollarExtractor</a>
@@ -303,7 +307,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 14 2015 09:22:55 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 23 2015 19:38:20 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -111,7 +111,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string&lt; FLAGS &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string&lt; ALPHABET, FLAGS &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1_sequence_data_encoder_impl.html">nvbio::io::SequenceDataEncoderImpl&lt; SEQUENCE_ALPHABET &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,17 +137,17 @@ Functions</h2></td></tr>
 <tr class="separator:a4df9c8fad399aa4dd6389f532ad5a788"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa0019152589bdc6a88e411dbe7bca21"><td class="memItemLeft" align="right" valign="top">SequenceDataEncoder *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1io.html#aaa0019152589bdc6a88e411dbe7bca21">nvbio::io::create_encoder</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Alphabet alphabet, SequenceDataHost *data)</td></tr>
 <tr class="separator:aaa0019152589bdc6a88e411dbe7bca21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0b124ee3d2c51b0a1f555c91ad4948a2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___sequence_i_o.html#ga0b124ee3d2c51b0a1f555c91ad4948a2">nvbio::io::next</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Alphabet alphabet, SequenceDataHost *data, SequenceDataStream *stream, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 batch_size, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 batch_bps=uint32(-1))</td></tr>
-<tr class="separator:ga0b124ee3d2c51b0a1f555c91ad4948a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga92ab2ec86711b977073b780d1fd1b478"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___sequence_i_o.html#ga92ab2ec86711b977073b780d1fd1b478">nvbio::io::append</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Alphabet alphabet, SequenceDataHost *data, SequenceDataStream *stream, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 batch_size, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 batch_bps=uint32(-1))</td></tr>
-<tr class="separator:ga92ab2ec86711b977073b780d1fd1b478"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff46befa264cba7847dfdcc470ffeda2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1io.html#aff46befa264cba7847dfdcc470ffeda2">nvbio::io::next</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Alphabet alphabet, SequenceDataHost *data, SequenceDataStream *stream, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 batch_size, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 batch_bps)</td></tr>
+<tr class="separator:aff46befa264cba7847dfdcc470ffeda2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20bf6eb9fed28b86b652cc9e39d8ead6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1io.html#a20bf6eb9fed28b86b652cc9e39d8ead6">nvbio::io::append</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Alphabet alphabet, SequenceDataHost *data, SequenceDataStream *stream, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 batch_size, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 batch_bps)</td></tr>
+<tr class="separator:a20bf6eb9fed28b86b652cc9e39d8ead6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fd8913367b2e85ca6a563157fbbb59f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1io.html#a6fd8913367b2e85ca6a563157fbbb59f">nvbio::io::skip</a> (SequenceDataStream *stream, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 batch_size, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 batch_bps)</td></tr>
 <tr class="separator:a6fd8913367b2e85ca6a563157fbbb59f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 14 2015 09:21:33 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 23 2015 19:36:52 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

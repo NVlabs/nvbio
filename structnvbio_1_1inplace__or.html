@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: nvbio::inplace_or Struct Reference</title>
+<title>NVBIO: nvbio::inplace_or&lt; T &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -96,70 +96,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="summary">
-<a href="#pub-methods">Public Methods</a> &#124;
-<a href="structnvbio_1_1inplace__or-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">nvbio::inplace_or Struct Reference<div class="ingroups"><a class="el" href="group___bloom_filter_module.html">Bloom Filters</a></div></div>  </div>
+<div class="title">nvbio::inplace_or&lt; T &gt; Struct Template Reference<div class="ingroups"><a class="el" href="group___bloom_filter_module.html">Bloom Filters</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed description</h2>
-<div class="textblock"><p>atomic in-place OR binary functor used to construct a <a class="el" href="structnvbio_1_1bloom__filter.html">bloom_filter</a> </p>
+<div class="textblock"><h3>template&lt;
+    typename T&gt;<br/>
+struct nvbio::inplace_or&lt; T &gt;</h3>
 
-<p>Definition at line <a class="el" href="bloom__filter_8h_source.html#l00111">111</a> of file <a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>.</p>
-</div>
-<p><code>#include &lt;<a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>&gt;</code></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Methods</h2></td></tr>
-<tr class="memitem:af75580fb59e6d1ce850ff3db766043de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
-<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1inplace__or.html#af75580fb59e6d1ce850ff3db766043de">operator()</a> (<a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> *word, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> mask) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
-<tr class="separator:af75580fb59e6d1ce850ff3db766043de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="af75580fb59e6d1ce850ff3db766043de"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> void nvbio::inplace_or::operator() </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> *&#160;</td>
-          <td class="paramname"><em>word</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
-          <td class="paramname"><em>mask</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>atomic in-place OR binary functor used to construct a <a class="el" href="structnvbio_1_1bloom__filter.html">bloom_filter</a> </p>
 
 <p>Definition at line <a class="el" href="bloom__filter_8h_source.html#l00114">114</a> of file <a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>.</p>
-
 </div>
-</div>
+<p><code>#include &lt;<a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>&gt;</code></p>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>E:/git/nvbio/nvbio/basic/<a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 14 2015 09:21:53 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 23 2015 19:37:13 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

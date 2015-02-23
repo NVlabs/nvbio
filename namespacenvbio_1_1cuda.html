@@ -270,6 +270,8 @@ Functions</h2></td></tr>
 <tr class="separator:a77ee93f3ce559665bf417ed73c9585c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70e4761b9bf929be6ecc6782e074e24d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html#a70e4761b9bf929be6ecc6782e074e24d">max_grid_size</a> ()</td></tr>
 <tr class="separator:a70e4761b9bf929be6ecc6782e074e24d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05eee33ec76e0b7dbb955d2eca609648"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html#a05eee33ec76e0b7dbb955d2eca609648">multiprocessor_count</a> ()</td></tr>
+<tr class="separator:a05eee33ec76e0b7dbb955d2eca609648"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a442a6c41a9681e2e875a8d8407d64a02"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html#a442a6c41a9681e2e875a8d8407d64a02">smem_allocation_unit</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> cudaDeviceProp &amp;properties)</td></tr>
 <tr class="separator:a442a6c41a9681e2e875a8d8407d64a02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53c0a6665aa38ac2aca5651eaf95560c"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html#a53c0a6665aa38ac2aca5651eaf95560c">reg_allocation_unit</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> cudaDeviceProp &amp;properties, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> size_t regsPerThread)</td></tr>
@@ -285,6 +287,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a8b83b2b50204230a594980fe7711a05f"><td class="memTemplParams" colspan="2">template&lt;typename KernelFunction &gt; </td></tr>
 <tr class="memitem:a8b83b2b50204230a594980fe7711a05f"><td class="memTemplItemLeft" align="right" valign="top">cudaFuncAttributes&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html#a8b83b2b50204230a594980fe7711a05f">function_attributes</a> (KernelFunction kernel)</td></tr>
 <tr class="separator:a8b83b2b50204230a594980fe7711a05f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fb5880feb0a0743ff1ae5c14f8cf73a"><td class="memTemplParams" colspan="2">template&lt;typename KernelFunction &gt; </td></tr>
+<tr class="memitem:a5fb5880feb0a0743ff1ae5c14f8cf73a"><td class="memTemplItemLeft" align="right" valign="top">size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html#a5fb5880feb0a0743ff1ae5c14f8cf73a">max_active_blocks_per_multiprocessor</a> (KernelFunction kernel, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> size_t CTA_SIZE, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> size_t dynamic_smem_bytes)</td></tr>
+<tr class="separator:a5fb5880feb0a0743ff1ae5c14f8cf73a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15b9e30316921c79e9aef83ef483c266"><td class="memTemplParams" colspan="2">template&lt;typename KernelFunction &gt; </td></tr>
 <tr class="memitem:a15b9e30316921c79e9aef83ef483c266"><td class="memTemplItemLeft" align="right" valign="top">size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenvbio_1_1cuda.html#a15b9e30316921c79e9aef83ef483c266">max_active_blocks</a> (KernelFunction kernel, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> size_t CTA_SIZE, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> size_t dynamic_smem_bytes)</td></tr>
 <tr class="separator:a15b9e30316921c79e9aef83ef483c266"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -864,7 +869,7 @@ template&lt;uint32 BLOCKDIM&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00237">237</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00263">263</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1345,7 +1350,7 @@ template&lt;typename KernelFunction &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00089">89</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00101">101</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1370,7 +1375,7 @@ template&lt;typename KernelFunction &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00228">228</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00254">254</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1448,7 +1453,43 @@ template&lt;typename KernelFunction &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00167">167</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00193">193</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5fb5880feb0a0743ff1ae5c14f8cf73a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename KernelFunction &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t nvbio::cuda::max_active_blocks_per_multiprocessor </td>
+          <td>(</td>
+          <td class="paramtype">KernelFunction&#160;</td>
+          <td class="paramname"><em>kernel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> size_t&#160;</td>
+          <td class="paramname"><em>CTA_SIZE</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> size_t&#160;</td>
+          <td class="paramname"><em>dynamic_smem_bytes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00179">179</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1496,7 +1537,7 @@ template&lt;typename KernelFunction &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00142">142</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00154">154</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1522,7 +1563,7 @@ template&lt;typename KernelFunction &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00104">104</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00116">116</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1552,7 +1593,7 @@ template&lt;typename KernelFunction &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00216">216</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00242">242</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1594,7 +1635,7 @@ template&lt;typename KernelFunction &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00187">187</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00213">213</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1623,6 +1664,31 @@ template&lt;typename KernelFunction &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a05eee33ec76e0b7dbb955d2eca609648"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t nvbio::cuda::multiprocessor_count </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00052">52</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a7190320e4939441d058358708f257acd"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1639,7 +1705,7 @@ template&lt;typename KernelFunction &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00181">181</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00207">207</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1681,7 +1747,7 @@ template&lt;typename KernelFunction &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00122">122</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00134">134</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1707,7 +1773,7 @@ template&lt;typename KernelFunction &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00110">110</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00122">122</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
@@ -1856,7 +1922,7 @@ template&lt;typename KernelFunction &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00058">58</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00070">70</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
@@ -2086,7 +2152,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00052">52</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00064">64</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
@@ -2106,7 +2172,7 @@ template&lt;uint32 N&gt; </div>
 </div><div class="memdoc">
 <p>a generic <a class="el" href="namespacenvbio_1_1cuda.html#a80597977d4f60872b6c494ddd23f432f">syncthreads()</a> implementation to synchronize contiguous blocks of N threads at a time </p>
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00253">253</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00279">279</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
@@ -2132,14 +2198,14 @@ template&lt;uint32 N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00083">83</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="arch__inl_8h_source.html#l00095">95</a> of file <a class="el" href="arch__inl_8h_source.html">arch_inl.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 14 2015 09:22:32 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 23 2015 19:37:55 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

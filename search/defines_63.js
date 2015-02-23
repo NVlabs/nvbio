@@ -14,6 +14,7 @@ var searchData=
   ['compression_5fsorting',['COMPRESSION_SORTING',['../blockwise__sufsort_8h.html#a527ff9ba1a523f15fa6eb124ff7a8ad3',1,'blockwise_sufsort.h']]],
   ['const',['const',['../build_2contrib_2zlib-1_82_87_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e',1,'const():&#160;zconf.h'],['../contrib_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e',1,'const():&#160;zconf.h'],['../vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e',1,'const():&#160;zconf.h']]],
   ['copy',['COPY',['../gzguts_8h.html#a9e77d621548de2a80bc9c5909bfa2b8a',1,'gzguts.h']]],
+  ['copylength',['COPYLENGTH',['../lz4_8c.html#a155d81bbd0ae81c533d696c563c6ea87',1,'lz4.c']]],
   ['cram_5f1_5fvers',['CRAM_1_VERS',['../cram__structs_8h.html#a77396b9650e6fbbc186ecb8153948c85',1,'cram_structs.h']]],
   ['cram_5f2_5fvers',['CRAM_2_VERS',['../cram__structs_8h.html#a43e4acef81d2547610be03d1100e2daf',1,'cram_structs.h']]],
   ['cram_5faux',['cram_aux',['../cram__structs_8h.html#aed2d86341111adc4b9307d0a15ba18fb',1,'cram_structs.h']]],

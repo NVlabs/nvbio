@@ -1,9 +1,12 @@
 var searchData=
 [
   ['g',['G',['../md5_8c.html#ad96b7cf3182ce2ba85e5a7a93b12c441',1,'md5.c']]],
+  ['gb',['GB',['../lz4_8c.html#a44172ac633c517cb4c9e278cef36b000',1,'GB():&#160;lz4.c'],['../lz4frame_8c.html#a44172ac633c517cb4c9e278cef36b000',1,'GB():&#160;lz4frame.c']]],
+  ['gcc_5fversion',['GCC_VERSION',['../lz4_8c.html#adbba0f726fc66d7100916c683b7568ae',1,'GCC_VERSION():&#160;lz4.c'],['../lz4frame_8c.html#adbba0f726fc66d7100916c683b7568ae',1,'GCC_VERSION():&#160;lz4frame.c'],['../xxhash_8c.html#adbba0f726fc66d7100916c683b7568ae',1,'GCC_VERSION():&#160;xxhash.c']]],
   ['get',['GET',['../md5_8c.html#a22c5b6b56a260ea33a06c9fdebed523e',1,'md5.c']]],
   ['get_5fbit_5fmsb',['GET_BIT_MSB',['../cram__codecs_8h.html#a1342b12c281a1dcaf72a2f4c9eb092f6',1,'cram_codecs.h']]],
   ['getidx',['GETIDX',['../divsufsort_8c.html#a243fd08bbc201429305086ac33f2c625',1,'GETIDX():&#160;divsufsort.c'],['../divsufsortxx_8h.html#a243fd08bbc201429305086ac33f2c625',1,'GETIDX():&#160;divsufsortxx.h']]],
+  ['getnext',['GETNEXT',['../lz4hc_8c.html#ac075fca35da616cc1be2c276dabbc377',1,'lz4hc.c']]],
   ['gf2_5fdim',['GF2_DIM',['../crc32_8c.html#a366ddceacb9041c5f12bb75fa6d75163',1,'crc32.c']]],
   ['gt_5fhapl_5fa',['GT_HAPL_A',['../vcfutils_8h.html#acd5d768b0dc6be7586c594621db30ffc',1,'vcfutils.h']]],
   ['gt_5fhapl_5fr',['GT_HAPL_R',['../vcfutils_8h.html#a906846aacd0c51057f6c153c542d0fd1',1,'vcfutils.h']]],

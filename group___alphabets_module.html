@@ -128,6 +128,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_alphabet_traits_3_01_r_n_a___n_01_4.html">nvbio::AlphabetTraits&lt; RNA_N &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1_alphabet_traits_3_01_a_s_c_i_i_01_4.html">nvbio::AlphabetTraits&lt; ASCII &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1to__char__functor.html">nvbio::to_char_functor&lt; ALPHABET &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1from__char__functor.html">nvbio::from_char_functor&lt; ALPHABET &gt;</a></td></tr>
@@ -142,7 +144,8 @@ Enumerations</h2></td></tr>
 <a class="el" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48ab7d484aaff6f63c5dc0b25819b60e589">nvbio::PROTEIN</a> = 3u, 
 <br/>
 &#160;&#160;<a class="el" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a008d429354ed4f28ee75803cc7ec5705">nvbio::RNA</a> = 4u, 
-<a class="el" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48aaa2ca3215962ff5d283acb433e5c51af">nvbio::RNA_N</a> = 5u
+<a class="el" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48aaa2ca3215962ff5d283acb433e5c51af">nvbio::RNA_N</a> = 5u, 
+<a class="el" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48ab3427e52ab37c8f1f2e89a91e41bc060">nvbio::ASCII</a> = 6u
 <br/>
  }</td></tr>
 <tr class="separator:gacd06da18687b2a345bef56a9fdad1a48"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -219,6 +222,9 @@ from_char_functor&lt; ALPHABET &gt; &gt;&#160;</td><td class="memTemplItemRight"
 <tr><td class="fieldname"><em><a class="anchor" id="ggacd06da18687b2a345bef56a9fdad1a48aaa2ca3215962ff5d283acb433e5c51af"></a>RNA_N</em>&nbsp;</td><td class="fielddoc">
 <p>5-letter RNA + N alphabet { A,C,G,U,N } </p>
 </td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ggacd06da18687b2a345bef56a9fdad1a48ab3427e52ab37c8f1f2e89a91e41bc060"></a>ASCII</em>&nbsp;</td><td class="fielddoc">
+<p>standard ASCII alphabet </p>
+</td></tr>
 </table>
 
 <p>Definition at line <a class="el" href="alphabet_8h_source.html#l00068">68</a> of file <a class="el" href="alphabet_8h_source.html">alphabet.h</a>.</p>
@@ -241,7 +247,7 @@ from_char_functor&lt; ALPHABET &gt; &gt;&#160;</td><td class="memTemplItemRight"
 </div><div class="memdoc">
 <p>return the number of bits per symbol for a given alphabet </p>
 
-<p>Definition at line <a class="el" href="alphabet_8h_source.html#l00204">204</a> of file <a class="el" href="alphabet_8h_source.html">alphabet.h</a>.</p>
+<p>Definition at line <a class="el" href="alphabet_8h_source.html#l00212">212</a> of file <a class="el" href="alphabet_8h_source.html">alphabet.h</a>.</p>
 
 </div>
 </div>
@@ -262,7 +268,7 @@ template&lt;Alphabet ALPHABET&gt; </div>
 </div><div class="memdoc">
 <p>convert a given symbol to its ASCII character </p>
 
-<p>Definition at line <a class="el" href="alphabet__inl_8h_source.html#l00143">143</a> of file <a class="el" href="alphabet__inl_8h_source.html">alphabet_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="alphabet__inl_8h_source.html#l00145">145</a> of file <a class="el" href="alphabet__inl_8h_source.html">alphabet_inl.h</a>.</p>
 
 </div>
 </div>
@@ -299,7 +305,7 @@ template&lt;Alphabet ALPHABET, typename SymbolIterator &gt; </div>
 </div><div class="memdoc">
 <p>convert from an ASCII string to the given alphabet </p>
 
-<p>Definition at line <a class="el" href="alphabet__inl_8h_source.html#l00192">192</a> of file <a class="el" href="alphabet__inl_8h_source.html">alphabet_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="alphabet__inl_8h_source.html#l00196">196</a> of file <a class="el" href="alphabet__inl_8h_source.html">alphabet_inl.h</a>.</p>
 
 </div>
 </div>
@@ -330,7 +336,7 @@ template&lt;Alphabet ALPHABET, typename SymbolIterator &gt; </div>
 </div><div class="memdoc">
 <p>convert from an ASCII string to the given alphabet </p>
 
-<p>Definition at line <a class="el" href="alphabet__inl_8h_source.html#l00204">204</a> of file <a class="el" href="alphabet__inl_8h_source.html">alphabet_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="alphabet__inl_8h_source.html#l00208">208</a> of file <a class="el" href="alphabet__inl_8h_source.html">alphabet_inl.h</a>.</p>
 
 </div>
 </div>
@@ -351,7 +357,7 @@ template&lt;Alphabet ALPHABET, typename Iterator &gt; </div>
 </div><div class="memdoc">
 <p>convert an ASCII string iterator to a given alphabet string iterator </p>
 
-<p>Definition at line <a class="el" href="alphabet_8h_source.html#l00297">297</a> of file <a class="el" href="alphabet_8h_source.html">alphabet.h</a>.</p>
+<p>Definition at line <a class="el" href="alphabet_8h_source.html#l00306">306</a> of file <a class="el" href="alphabet_8h_source.html">alphabet.h</a>.</p>
 
 </div>
 </div>
@@ -409,7 +415,7 @@ template&lt;Alphabet ALPHABET, typename SymbolIterator &gt; </div>
 </div><div class="memdoc">
 <p>convert from the given alphabet to an ASCII string </p>
 
-<p>Definition at line <a class="el" href="alphabet__inl_8h_source.html#l00164">164</a> of file <a class="el" href="alphabet__inl_8h_source.html">alphabet_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="alphabet__inl_8h_source.html#l00168">168</a> of file <a class="el" href="alphabet__inl_8h_source.html">alphabet_inl.h</a>.</p>
 
 </div>
 </div>
@@ -446,7 +452,7 @@ template&lt;Alphabet ALPHABET, typename SymbolIterator &gt; </div>
 </div><div class="memdoc">
 <p>convert from the given alphabet to an ASCII string </p>
 
-<p>Definition at line <a class="el" href="alphabet__inl_8h_source.html#l00178">178</a> of file <a class="el" href="alphabet__inl_8h_source.html">alphabet_inl.h</a>.</p>
+<p>Definition at line <a class="el" href="alphabet__inl_8h_source.html#l00182">182</a> of file <a class="el" href="alphabet__inl_8h_source.html">alphabet_inl.h</a>.</p>
 
 </div>
 </div>
@@ -467,14 +473,14 @@ template&lt;Alphabet ALPHABET, typename Iterator &gt; </div>
 </div><div class="memdoc">
 <p>convert a string iterator from a given alphabet to an ASCII string iterator </p>
 
-<p>Definition at line <a class="el" href="alphabet_8h_source.html#l00287">287</a> of file <a class="el" href="alphabet_8h_source.html">alphabet.h</a>.</p>
+<p>Definition at line <a class="el" href="alphabet_8h_source.html#l00296">296</a> of file <a class="el" href="alphabet_8h_source.html">alphabet.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 14 2015 09:21:37 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 23 2015 19:36:56 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

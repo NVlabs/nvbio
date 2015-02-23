@@ -56,5 +56,6 @@ var searchData=
   ['trienode_3c_205_2c_20type_5ft_20_3e',['TrieNode&lt; 5, TYPE_T &gt;',['../structnvbio_1_1_trie_node_3_015_00_01_t_y_p_e___t_01_4.html',1,'nvbio']]],
   ['trivial_5fquality_5fstring',['trivial_quality_string',['../structnvbio_1_1aln_1_1trivial__quality__string.html',1,'nvbio::aln']]],
   ['trivial_5fquality_5fstring_5fset',['trivial_quality_string_set',['../structnvbio_1_1aln_1_1trivial__quality__string__set.html',1,'nvbio::aln']]],
+  ['trustedkmersstage',['TrustedKmersStage',['../struct_trusted_kmers_stage.html',1,'']]],
   ['typeidmap',['TypeIdMap',['../classmgpu_1_1_type_id_map.html',1,'mgpu']]]
 ];

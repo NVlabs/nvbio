@@ -16,5 +16,8 @@ var searchData=
   ['long_5fstring_5fset_5finfix_5fcoord_5ftype',['long_string_set_infix_coord_type',['../group___string_sets_module.html#ga9cb2cd73ee2bb184b5508cfa5b8600c0',1,'nvbio']]],
   ['long_5fstring_5fset_5fprefix_5fcoord_5ftype',['long_string_set_prefix_coord_type',['../group___string_sets_module.html#ga2e9f5009b08db93e5ccb84eeb172ed94',1,'nvbio']]],
   ['long_5fstring_5fset_5fsuffix_5fcoord_5ftype',['long_string_set_suffix_coord_type',['../group___string_sets_module.html#gaaa6b4d5a0d97f7a74e153e23ef77286f',1,'nvbio']]],
-  ['long_5fstring_5fsuffix_5fcoord_5ftype',['long_string_suffix_coord_type',['../group___string_sets_module.html#ga6bd02e722b087da1156334a27debbf7f',1,'nvbio']]]
+  ['long_5fstring_5fsuffix_5fcoord_5ftype',['long_string_suffix_coord_type',['../group___string_sets_module.html#ga6bd02e722b087da1156334a27debbf7f',1,'nvbio']]],
+  ['lz4f_5fcompressioncontext_5ft',['LZ4F_compressionContext_t',['../lz4frame_8h.html#ac86857d64beacd37baec6074d0e25921',1,'lz4frame.h']]],
+  ['lz4f_5fdecompressioncontext_5ft',['LZ4F_decompressionContext_t',['../lz4frame_8h.html#a0d7474469301aa17b25ea4dad3503a1a',1,'lz4frame.h']]],
+  ['lz4f_5ferrorcode_5ft',['LZ4F_errorCode_t',['../lz4frame_8h.html#a20606752d25685647d704bcfb2de7bec',1,'lz4frame.h']]]
 ];

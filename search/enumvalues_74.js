@@ -4,6 +4,9 @@ var searchData=
   ['table',['TABLE',['../inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa2e160f29fc076de5496a2b9968be9cc1',1,'inflate.h']]],
   ['time',['TIME',['../inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaae9e4c627760f36823cdd153c24229157',1,'inflate.h']]],
   ['traceback_5fstream',['TRACEBACK_STREAM',['../group___alignment_detail.html#gga9db88865ab2bd7b1f501d885f06434c7a93d86c113162390fdff7e6803b9658ca',1,'nvbio::bowtie2::cuda::detail']]],
+  ['trimmed_5fbases',['TRIMMED_BASES',['../nv_lighter_2utils_8h.html#a79e9f285d34216706a748fd7ba8941b7a7f0f01bb814ba2badce94e9e3b84388e',1,'utils.h']]],
+  ['trimmed_5freads',['TRIMMED_READS',['../nv_lighter_2utils_8h.html#a79e9f285d34216706a748fd7ba8941b7a0d9e28d12783daa1ded2c545e2c877dc',1,'utils.h']]],
+  ['trusted_5fkmers',['TRUSTED_KMERS',['../bloom__filters_8h.html#ab645f21103d42e032c63ccc07b2db4e3a76f560f7b49b6461e708f6493d921bdf',1,'bloom_filters.h']]],
   ['type',['TYPE',['../inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaab47ea8bb955afd0adc0ef98517dd6084',1,'inflate.h']]],
   ['typedo',['TYPEDO',['../inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa9e64f20508d4395d6f91237950664f6e',1,'inflate.h']]]
 ];

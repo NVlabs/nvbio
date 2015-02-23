@@ -19,6 +19,7 @@ var searchData=
   ['kmer_5fpos_5fsid_5feq',['kmer_pos_sid_eq',['../structkmer__pos__sid__eq.html#a182edef7ab517b7d11ee54fbf27c809e',1,'kmer_pos_sid_eq']]],
   ['kmer_5fuid_5feq',['kmer_uid_eq',['../structkmer__uid__eq.html#a8b09f6170f14c32107b820964a2963bb',1,'kmer_uid_eq']]],
   ['kmer_5fword_5fextractor_5ffunctor',['kmer_word_extractor_functor',['../structkmer__word__extractor__functor.html#a00ea9472ab99971af03b1f092b69462f',1,'kmer_word_extractor_functor']]],
+  ['kmercode',['KmerCode',['../struct_kmer_code.html#a002c4d1fdba59634b1d2e4f12de910a3',1,'KmerCode::KmerCode()'],['../struct_kmer_code.html#a4b669987d33979bb8688aef47fe4c237',1,'KmerCode::KmerCode(const int l)'],['../struct_kmer_code.html#aa05f680e37904b5d863cabb61bed8cde',1,'KmerCode::KmerCode(const KmerCode &amp;k)']]],
   ['kmers_5fto_5f64b_5ffunctor',['kmers_to_64b_functor',['../structkmers__to__64b__functor.html#a62c28728c6410212503c6377cbda3339',1,'kmers_to_64b_functor']]],
   ['knet_5fclose',['knet_close',['../knetfile_8h.html#a75d7ca76433cea080588b69f8119f7fc',1,'knet_close(knetFile *fp):&#160;knetfile.c'],['../knetfile_8c.html#a75d7ca76433cea080588b69f8119f7fc',1,'knet_close(knetFile *fp):&#160;knetfile.c']]],
   ['knet_5fdopen',['knet_dopen',['../knetfile_8h.html#ac771f660fda9fef4306cc2676f33318a',1,'knet_dopen(int fd, const char *mode):&#160;knetfile.c'],['../knetfile_8c.html#ac771f660fda9fef4306cc2676f33318a',1,'knet_dopen(int fd, const char *mode):&#160;knetfile.c']]],

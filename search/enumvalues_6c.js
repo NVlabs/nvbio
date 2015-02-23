@@ -8,7 +8,8 @@ var searchData=
   ['length',['LENGTH',['../inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3418c365e56fa4587ae44612afc6fa48',1,'inflate.h']]],
   ['lenlens',['LENLENS',['../inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaaaeda44348e46a8bc21bd6122b3f3e0d5',1,'inflate.h']]],
   ['lens',['LENS',['../inftrees_8h.html#a0f33f5acf9079ff1f054fa235df2443ba86b0f8050ddd8ae0b99e2f9323ad00a1',1,'inftrees.h']]],
-  ['line_5fbuffer_5finit_5fsize',['LINE_BUFFER_INIT_SIZE',['../structnvbio_1_1io_1_1_read_data_file___s_a_m.html#a29b1b72c549fd377c1c1c10157567fb2a42cfbf07322114a323b2b5e780ee2828',1,'nvbio::io::ReadDataFile_SAM::LINE_BUFFER_INIT_SIZE()'],['../structnvbio_1_1io_1_1_sequence_data_file___s_a_m.html#a368c95ab64b30ad7275bc7c6699b3699a07236618e8aa3c030503f4f102934c38',1,'nvbio::io::SequenceDataFile_SAM::LINE_BUFFER_INIT_SIZE()']]],
+  ['limitedoutput',['limitedOutput',['../lz4_8c.html#ab93acf685743debab05876250a1cbe28a06ce6334cca200bdb7d30cf1422ca5aa',1,'limitedOutput():&#160;lz4.c'],['../lz4hc_8c.html#ab93acf685743debab05876250a1cbe28a06ce6334cca200bdb7d30cf1422ca5aa',1,'limitedOutput():&#160;lz4hc.c']]],
+  ['line_5fbuffer_5finit_5fsize',['LINE_BUFFER_INIT_SIZE',['../structnvbio_1_1io_1_1_read_data_file___s_a_m.html#a29b1b72c549fd377c1c1c10157567fb2a42cfbf07322114a323b2b5e780ee2828',1,'nvbio::io::ReadDataFile_SAM::LINE_BUFFER_INIT_SIZE()'],['../group___sequence_i_o_detail.html#gga368c95ab64b30ad7275bc7c6699b3699a07236618e8aa3c030503f4f102934c38',1,'nvbio::io::SequenceDataFile_SAM::LINE_BUFFER_INIT_SIZE()']]],
   ['linear',['LINEAR',['../namespacenvbio_1_1alndiff.html#adb604712a538dec605939f50ea0a5ac6a6a1c8b70b8b13216da5e254920939237',1,'nvbio::alndiff']]],
   ['linearfunc',['LinearFunc',['../structnvbio_1_1bowtie2_1_1cuda_1_1_simple_func.html#a74e3d3fc83c172e6fbe6e72b6cb91adbafa05d26014cb5b1404aba6f2b84ef098',1,'nvbio::bowtie2::cuda::SimpleFunc']]],
   ['lit',['LIT',['../inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3b759690471ed29ecd243a8f36b93f60',1,'inflate.h']]],
@@ -25,5 +26,7 @@ var searchData=
   ['log',['LOG',['../namespacenvbio_1_1alndiff.html#adb604712a538dec605939f50ea0a5ac6aeda4555a1a20ce8c9baa727354aca6c5',1,'nvbio::alndiff']]],
   ['log_5fvalue',['log_value',['../structmgpu_1_1s_bank_conflict_divisor.html#a98d3cdae09c891a93be372ff4530a655a3dd836fc5597e0acc2f0d964cdb01c1d',1,'mgpu::sBankConflictDivisor']]],
   ['logfunc',['LogFunc',['../structnvbio_1_1bowtie2_1_1cuda_1_1_simple_func.html#a74e3d3fc83c172e6fbe6e72b6cb91adbac41d28e2b2cf8bd2a20090dd4f60a885',1,'nvbio::bowtie2::cuda::SimpleFunc']]],
-  ['lower',['LOWER',['../namespacenvbio_1_1alndiff.html#a3fafb92423773206b5165d0849a6672aae14c7a8b7c68995e2958a614cb8bffab',1,'nvbio::alndiff']]]
+  ['lower',['LOWER',['../namespacenvbio_1_1alndiff.html#a3fafb92423773206b5165d0849a6672aae14c7a8b7c68995e2958a614cb8bffab',1,'nvbio::alndiff']]],
+  ['lz4f_5fdefault',['LZ4F_default',['../lz4frame_8h.html#a3c8f3416051c103af1db71804630c73ca439676a3c200bae986f2570b3b5e0273',1,'lz4frame.h']]],
+  ['lz4f_5flist_5ferrors',['LZ4F_LIST_ERRORS',['../lz4frame__static_8h.html#aaeec34c95bf9304272f882cae65bb78da0a571a5111cf95887464805d62612e87',1,'lz4frame_static.h']]]
 ];

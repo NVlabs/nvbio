@@ -110,7 +110,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     typename Hash1, 
     typename Hash2, 
     typename Iterator, 
-    typename OrOperator = inplace_or&gt;<br/>
+    typename OrOperator = inplace_or&lt;uint32&gt;&gt;<br/>
 struct nvbio::bloom_filter&lt; K, Hash1, Hash2, Iterator, OrOperator &gt;</h3>
 
 <p>A Bloom filter implementation. This clsss is <em>storage-free</em>, and can used both from the host and the device. Constructing a Bloom filter can be done incrementally calling <a class="el" href="structnvbio_1_1bloom__filter.html#abd06713905ec0e0ea3d98a5eca0eb43f">insert()</a>, either sequentially or in parallel.</p>
@@ -125,7 +125,7 @@ struct nvbio::bloom_filter&lt; K, Hash1, Hash2, Iterator, OrOperator &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="bloom__filter_8h_source.html#l00150">150</a> of file <a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>.</p>
+<p>Definition at line <a class="el" href="bloom__filter_8h_source.html#l00263">263</a> of file <a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -141,6 +141,10 @@ Public Methods</h2></td></tr>
 <tr class="memitem:a63c2ee342fd95ed730c076879a76b6fb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
 <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bloom__filter.html#a63c2ee342fd95ed730c076879a76b6fb">has</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Key key) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
 <tr class="separator:a63c2ee342fd95ed730c076879a76b6fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8069c2e0553b5e99c1a0661684f12a9"><td class="memTemplParams" colspan="2">template&lt;typename Key &gt; </td></tr>
+<tr class="memitem:ac8069c2e0553b5e99c1a0661684f12a9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <br class="typebreak"/>
+<a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bloom__filter.html#ac8069c2e0553b5e99c1a0661684f12a9">operator[]</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Key key) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:ac8069c2e0553b5e99c1a0661684f12a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32a645b44e2adc7ee946270705ab7bad"><td class="memTemplParams" colspan="2">template&lt;typename Key &gt; </td></tr>
 <tr class="memitem:a32a645b44e2adc7ee946270705ab7bad"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structnvbio_1_1bloom__filter.html#a32a645b44e2adc7ee946270705ab7bad">insert</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Key key, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> OrOperator <a class="el" href="namespacenvbio.html#a481dc70b5d4b5e951bf8872970dc0ee8">or_op</a>)</td></tr>
 <tr class="separator:a32a645b44e2adc7ee946270705ab7bad"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -217,7 +221,7 @@ template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , type
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&gt; </div>
+template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&lt;uint32&gt;&gt; </div>
 <div class="memtemplate">
 template&lt;typename Key &gt; </div>
       <table class="memname">
@@ -239,7 +243,7 @@ template&lt;typename Key &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&gt; </div>
+template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&lt;uint32&gt;&gt; </div>
 <div class="memtemplate">
 template&lt;typename Key &gt; </div>
       <table class="memname">
@@ -260,7 +264,7 @@ template&lt;typename Key &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&gt; </div>
+template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&lt;uint32&gt;&gt; </div>
 <div class="memtemplate">
 template&lt;typename Key &gt; </div>
       <table class="memname">
@@ -292,7 +296,7 @@ template&lt;typename Key &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&gt; </div>
+template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&lt;uint32&gt;&gt; </div>
 <div class="memtemplate">
 template&lt;typename Key &gt; </div>
       <table class="memname">
@@ -319,12 +323,43 @@ template&lt;typename Key &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="ac8069c2e0553b5e99c1a0661684f12a9"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&lt;uint32&gt;&gt; </div>
+<div class="memtemplate">
+template&lt;typename Key &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="types_8h.html#a56a96b87facf0565fee0a1fe27ffc2f0">NVBIO_FORCEINLINE</a> <a class="el" href="types_8h.html#aae8f5a3072675fd93df702e927eaf540">NVBIO_HOST_DEVICE</a> bool <a class="el" href="structnvbio_1_1bloom__filter.html">nvbio::bloom_filter</a>&lt; <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, Hash1, Hash2, Iterator, OrOperator &gt;::operator[] </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Key&#160;</td>
+          <td class="paramname"><em>key</em>)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>check for a key </p>
+
+<p>Definition at line <a class="el" href="bloom__filter_8h_source.html#l00295">295</a> of file <a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="ae79bc97faff13c6752d0e7ef4963eaaf"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&gt; </div>
+template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&lt;uint32&gt;&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">Hash1 <a class="el" href="structnvbio_1_1bloom__filter.html">nvbio::bloom_filter</a>&lt; <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, Hash1, Hash2, Iterator, OrOperator &gt;::m_hash1</td>
@@ -332,7 +367,7 @@ template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , type
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bloom__filter_8h_source.html#l00180">180</a> of file <a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>.</p>
+<p>Definition at line <a class="el" href="bloom__filter_8h_source.html#l00299">299</a> of file <a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>.</p>
 
 </div>
 </div>
@@ -340,7 +375,7 @@ template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , type
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&gt; </div>
+template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&lt;uint32&gt;&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">Hash2 <a class="el" href="structnvbio_1_1bloom__filter.html">nvbio::bloom_filter</a>&lt; <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, Hash1, Hash2, Iterator, OrOperator &gt;::m_hash2</td>
@@ -348,7 +383,7 @@ template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , type
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bloom__filter_8h_source.html#l00181">181</a> of file <a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>.</p>
+<p>Definition at line <a class="el" href="bloom__filter_8h_source.html#l00300">300</a> of file <a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>.</p>
 
 </div>
 </div>
@@ -356,7 +391,7 @@ template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , type
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&gt; </div>
+template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&lt;uint32&gt;&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> <a class="el" href="structnvbio_1_1bloom__filter.html">nvbio::bloom_filter</a>&lt; <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, Hash1, Hash2, Iterator, OrOperator &gt;::m_size</td>
@@ -364,7 +399,7 @@ template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , type
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bloom__filter_8h_source.html#l00178">178</a> of file <a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>.</p>
+<p>Definition at line <a class="el" href="bloom__filter_8h_source.html#l00297">297</a> of file <a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>.</p>
 
 </div>
 </div>
@@ -372,7 +407,7 @@ template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , type
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&gt; </div>
+template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , typename OrOperator  = inplace_or&lt;uint32&gt;&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">Iterator <a class="el" href="structnvbio_1_1bloom__filter.html">nvbio::bloom_filter</a>&lt; <a class="el" href="sam__header_8c.html#aedc9dda87d07432b47438559f710ea89">K</a>, Hash1, Hash2, Iterator, OrOperator &gt;::m_storage</td>
@@ -380,7 +415,7 @@ template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , type
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bloom__filter_8h_source.html#l00179">179</a> of file <a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>.</p>
+<p>Definition at line <a class="el" href="bloom__filter_8h_source.html#l00298">298</a> of file <a class="el" href="bloom__filter_8h_source.html">bloom_filter.h</a>.</p>
 
 </div>
 </div>
@@ -391,7 +426,7 @@ template&lt;uint32 K, typename Hash1 , typename Hash2 , typename Iterator , type
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 14 2015 09:21:53 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 23 2015 19:37:14 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

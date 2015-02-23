@@ -5,10 +5,11 @@ var searchData=
   ['util_2eh',['util.h',['../examples_2vsam_2util_8h.html',1,'']]],
   ['util_2eh',['util.h',['../examples_2fmmap_2util_8h.html',1,'']]],
   ['util_2eh',['util.h',['../examples_2qmap_2util_8h.html',1,'']]],
-  ['utils_2eh',['utils.h',['../nvbio_2io_2utils_8h.html',1,'']]],
-  ['utils_2eh',['utils.h',['../nvbio-test_2utils_8h.html',1,'']]],
   ['utils_2eh',['utils.h',['../nv_bowtie_2bowtie2_2cuda_2utils_8h.html',1,'']]],
-  ['utils_2eh',['utils.h',['../nvbio-aln-diff_2utils_8h.html',1,'']]],
+  ['utils_2eh',['utils.h',['../nvbio_2io_2utils_8h.html',1,'']]],
   ['utils_2eh',['utils.h',['../nvbio_2alignment_2utils_8h.html',1,'']]],
+  ['utils_2eh',['utils.h',['../nv_lighter_2utils_8h.html',1,'']]],
+  ['utils_2eh',['utils.h',['../nvbio-aln-diff_2utils_8h.html',1,'']]],
+  ['utils_2eh',['utils.h',['../nvbio-test_2utils_8h.html',1,'']]],
   ['utils_5finl_2eh',['utils_inl.h',['../utils__inl_8h.html',1,'']]]
 ];

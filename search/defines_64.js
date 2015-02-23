@@ -15,6 +15,8 @@ var searchData=
   ['def_5fwbits',['DEF_WBITS',['../zutil_8h.html#aef084f32d9ca8b9273a1c826b89b979a',1,'zutil.h']]],
   ['deflateinit',['deflateInit',['../contrib_2zlib_2zlib_8h.html#ae7440c1c5a8becba6dbf410275dc0a5c',1,'deflateInit():&#160;zlib.h'],['../contrib_2zlib-1_82_87_2zlib_8h.html#ae7440c1c5a8becba6dbf410275dc0a5c',1,'deflateInit():&#160;zlib.h'],['../vs_2zlib_2zlib_8h.html#ae7440c1c5a8becba6dbf410275dc0a5c',1,'deflateInit():&#160;zlib.h']]],
   ['deflateinit2',['deflateInit2',['../contrib_2zlib_2zlib_8h.html#a59b575a521efe7ea0d3b9dd3c8d315c1',1,'deflateInit2():&#160;zlib.h'],['../contrib_2zlib-1_82_87_2zlib_8h.html#a59b575a521efe7ea0d3b9dd3c8d315c1',1,'deflateInit2():&#160;zlib.h'],['../vs_2zlib_2zlib_8h.html#a59b575a521efe7ea0d3b9dd3c8d315c1',1,'deflateInit2():&#160;zlib.h']]],
+  ['deltanext',['DELTANEXT',['../lz4hc_8c.html#a1e251e06ca28337a897c9773f3ef2328',1,'lz4hc.c']]],
+  ['dictionary_5flogsize',['DICTIONARY_LOGSIZE',['../lz4hc_8c.html#ab5f1d2a214a9960a8d12a06c3cf26fc2',1,'lz4hc.c']]],
   ['dist_5fcode_5flen',['DIST_CODE_LEN',['../trees_8c.html#a368ebabef641e688c8f848e76b704500',1,'trees.c']]],
   ['dna_5fsymbol_5fbits',['DNA_SYMBOL_BITS',['../assembly__types_8h.html#a85b08134e3580b47491ae5fbbf657090',1,'assembly_types.h']]],
   ['dna_5fsymbol_5fmask',['DNA_SYMBOL_MASK',['../assembly__types_8h.html#a2759c331eab56040f130bf9f657610ec',1,'assembly_types.h']]],

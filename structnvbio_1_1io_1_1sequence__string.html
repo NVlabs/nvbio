@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>NVBIO: nvbio::io::sequence_string&lt; FLAGS &gt; Struct Template Reference</title>
+<title>NVBIO: nvbio::io::sequence_string&lt; ALPHABET, FLAGS &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -101,49 +101,50 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-attribs">Public Members</a> &#124;
 <a href="structnvbio_1_1io_1_1sequence__string-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">nvbio::io::sequence_string&lt; FLAGS &gt; Struct Template Reference</div>  </div>
+<div class="title">nvbio::io::sequence_string&lt; ALPHABET, FLAGS &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed description</h2>
 <div class="textblock"><h3>template&lt;
+    Alphabet ALPHABET, 
     SequenceDataEncoder::StrandOp FLAGS&gt;<br/>
-struct nvbio::io::sequence_string&lt; FLAGS &gt;</h3>
+struct nvbio::io::sequence_string&lt; ALPHABET, FLAGS &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="sequence__encoder_8cpp_source.html#l00124">124</a> of file <a class="el" href="sequence__encoder_8cpp_source.html">sequence_encoder.cpp</a>.</p>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Methods</h2></td></tr>
-<tr class="memitem:ab27099b58c837351d9a7375fcd00fbde"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html#ab27099b58c837351d9a7375fcd00fbde">sequence_string</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *sequence, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *qual)</td></tr>
-<tr class="separator:ab27099b58c837351d9a7375fcd00fbde"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afcebe6a9415671d4f9e3425228b12f66"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html#afcebe6a9415671d4f9e3425228b12f66">length</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
-<tr class="separator:afcebe6a9415671d4f9e3425228b12f66"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2af4c77d949830f96bd4c13493eb4c6b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html#a2af4c77d949830f96bd4c13493eb4c6b">operator[]</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
-<tr class="separator:a2af4c77d949830f96bd4c13493eb4c6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af25ac7a282f39add69252e67930abb91"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html#af25ac7a282f39add69252e67930abb91">quality</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
-<tr class="separator:af25ac7a282f39add69252e67930abb91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63d0d7b35f24f7aa56084b7e8fafe531"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html#a63d0d7b35f24f7aa56084b7e8fafe531">sequence_string</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> len, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *sequence, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *qual)</td></tr>
+<tr class="separator:a63d0d7b35f24f7aa56084b7e8fafe531"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6b55bf2532c6bbfe47ccd2b27815c3a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html#ab6b55bf2532c6bbfe47ccd2b27815c3a">length</a> () <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:ab6b55bf2532c6bbfe47ccd2b27815c3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53132af239d6b44e7c28dcf551f14d47"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html#a53132af239d6b44e7c28dcf551f14d47">operator[]</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:a53132af239d6b44e7c28dcf551f14d47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70cf03755e5fb21ab50f2dcdd38f406f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html#a70cf03755e5fb21ab50f2dcdd38f406f">quality</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i) <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> </td></tr>
+<tr class="separator:a70cf03755e5fb21ab50f2dcdd38f406f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Members</h2></td></tr>
-<tr class="memitem:a2616f476a1e3feeceed2a4a4e0cc1e88"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html#a2616f476a1e3feeceed2a4a4e0cc1e88">m_len</a></td></tr>
-<tr class="separator:a2616f476a1e3feeceed2a4a4e0cc1e88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae25fb2de772f053328ba39697a164fec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html#ae25fb2de772f053328ba39697a164fec">m_sequence</a></td></tr>
-<tr class="separator:ae25fb2de772f053328ba39697a164fec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00b64be3f0f2892be5a67bfc8b2f6c51"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html#a00b64be3f0f2892be5a67bfc8b2f6c51">m_qual</a></td></tr>
-<tr class="separator:a00b64be3f0f2892be5a67bfc8b2f6c51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e9160d72ac119ee09ceb1082966b112"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html#a8e9160d72ac119ee09ceb1082966b112">m_len</a></td></tr>
+<tr class="separator:a8e9160d72ac119ee09ceb1082966b112"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b0197927be9bca1100a2b689b9b0346"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html#a4b0197927be9bca1100a2b689b9b0346">m_sequence</a></td></tr>
+<tr class="separator:a4b0197927be9bca1100a2b689b9b0346"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ef7641303208a893497f5abf71a7f61"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html#a0ef7641303208a893497f5abf71a7f61">m_qual</a></td></tr>
+<tr class="separator:a0ef7641303208a893497f5abf71a7f61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="ab27099b58c837351d9a7375fcd00fbde"></a>
+<a class="anchor" id="a63d0d7b35f24f7aa56084b7e8fafe531"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;SequenceDataEncoder::StrandOp FLAGS&gt; </div>
+template&lt;Alphabet ALPHABET, SequenceDataEncoder::StrandOp FLAGS&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3aee94eb5ff82fe30d1195f935903b4a">FLAGS</a> &gt;::<a class="el" href="structnvbio_1_1io_1_1sequence__string.html">sequence_string</a> </td>
+          <td class="memname"><a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string</a>&lt; ALPHABET, <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3aee94eb5ff82fe30d1195f935903b4a">FLAGS</a> &gt;::<a class="el" href="structnvbio_1_1io_1_1sequence__string.html">sequence_string</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
           <td class="paramname"><em>len</em>, </td>
@@ -178,17 +179,17 @@ template&lt;SequenceDataEncoder::StrandOp FLAGS&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="afcebe6a9415671d4f9e3425228b12f66"></a>
+<a class="anchor" id="ab6b55bf2532c6bbfe47ccd2b27815c3a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;SequenceDataEncoder::StrandOp FLAGS&gt; </div>
+template&lt;Alphabet ALPHABET, SequenceDataEncoder::StrandOp FLAGS&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3aee94eb5ff82fe30d1195f935903b4a">FLAGS</a> &gt;::length </td>
+          <td class="memname"><a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string</a>&lt; ALPHABET, <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3aee94eb5ff82fe30d1195f935903b4a">FLAGS</a> &gt;::length </td>
           <td>(</td>
           <td class="paramname">)</td><td></td>
           <td> const</td>
@@ -205,17 +206,17 @@ template&lt;SequenceDataEncoder::StrandOp FLAGS&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a2af4c77d949830f96bd4c13493eb4c6b"></a>
+<a class="anchor" id="a53132af239d6b44e7c28dcf551f14d47"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;SequenceDataEncoder::StrandOp FLAGS&gt; </div>
+template&lt;Alphabet ALPHABET, SequenceDataEncoder::StrandOp FLAGS&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> <a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3aee94eb5ff82fe30d1195f935903b4a">FLAGS</a> &gt;::operator[] </td>
+          <td class="memname"><a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> <a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string</a>&lt; ALPHABET, <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3aee94eb5ff82fe30d1195f935903b4a">FLAGS</a> &gt;::operator[] </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
           <td class="paramname"><em>i</em>)</td><td></td>
@@ -233,17 +234,17 @@ template&lt;SequenceDataEncoder::StrandOp FLAGS&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="af25ac7a282f39add69252e67930abb91"></a>
+<a class="anchor" id="a70cf03755e5fb21ab50f2dcdd38f406f"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;SequenceDataEncoder::StrandOp FLAGS&gt; </div>
+template&lt;Alphabet ALPHABET, SequenceDataEncoder::StrandOp FLAGS&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> <a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3aee94eb5ff82fe30d1195f935903b4a">FLAGS</a> &gt;::quality </td>
+          <td class="memname"><a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> <a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string</a>&lt; ALPHABET, <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3aee94eb5ff82fe30d1195f935903b4a">FLAGS</a> &gt;::quality </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>&#160;</td>
           <td class="paramname"><em>i</em>)</td><td></td>
@@ -257,56 +258,56 @@ template&lt;SequenceDataEncoder::StrandOp FLAGS&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sequence__encoder_8cpp_source.html#l00147">147</a> of file <a class="el" href="sequence__encoder_8cpp_source.html">sequence_encoder.cpp</a>.</p>
+<p>Definition at line <a class="el" href="sequence__encoder_8cpp_source.html#l00163">163</a> of file <a class="el" href="sequence__encoder_8cpp_source.html">sequence_encoder.cpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a2616f476a1e3feeceed2a4a4e0cc1e88"></a>
+<a class="anchor" id="a8e9160d72ac119ee09ceb1082966b112"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;SequenceDataEncoder::StrandOp FLAGS&gt; </div>
+template&lt;Alphabet ALPHABET, SequenceDataEncoder::StrandOp FLAGS&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3aee94eb5ff82fe30d1195f935903b4a">FLAGS</a> &gt;::m_len</td>
+          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> <a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string</a>&lt; ALPHABET, <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3aee94eb5ff82fe30d1195f935903b4a">FLAGS</a> &gt;::m_len</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sequence__encoder_8cpp_source.html#l00154">154</a> of file <a class="el" href="sequence__encoder_8cpp_source.html">sequence_encoder.cpp</a>.</p>
+<p>Definition at line <a class="el" href="sequence__encoder_8cpp_source.html#l00170">170</a> of file <a class="el" href="sequence__encoder_8cpp_source.html">sequence_encoder.cpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a00b64be3f0f2892be5a67bfc8b2f6c51"></a>
+<a class="anchor" id="a0ef7641303208a893497f5abf71a7f61"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;SequenceDataEncoder::StrandOp FLAGS&gt; </div>
+template&lt;Alphabet ALPHABET, SequenceDataEncoder::StrandOp FLAGS&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>* <a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3aee94eb5ff82fe30d1195f935903b4a">FLAGS</a> &gt;::m_qual</td>
+          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>* <a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string</a>&lt; ALPHABET, <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3aee94eb5ff82fe30d1195f935903b4a">FLAGS</a> &gt;::m_qual</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sequence__encoder_8cpp_source.html#l00156">156</a> of file <a class="el" href="sequence__encoder_8cpp_source.html">sequence_encoder.cpp</a>.</p>
+<p>Definition at line <a class="el" href="sequence__encoder_8cpp_source.html#l00172">172</a> of file <a class="el" href="sequence__encoder_8cpp_source.html">sequence_encoder.cpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ae25fb2de772f053328ba39697a164fec"></a>
+<a class="anchor" id="a4b0197927be9bca1100a2b689b9b0346"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;SequenceDataEncoder::StrandOp FLAGS&gt; </div>
+template&lt;Alphabet ALPHABET, SequenceDataEncoder::StrandOp FLAGS&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>* <a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string</a>&lt; <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3aee94eb5ff82fe30d1195f935903b4a">FLAGS</a> &gt;::m_sequence</td>
+          <td class="memname"><a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> <a class="el" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a>* <a class="el" href="structnvbio_1_1io_1_1sequence__string.html">nvbio::io::sequence_string</a>&lt; ALPHABET, <a class="el" href="inflate_8h.html#a164ea0159d5f0b5f12a646f25f99eceaa3aee94eb5ff82fe30d1195f935903b4a">FLAGS</a> &gt;::m_sequence</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="sequence__encoder_8cpp_source.html#l00155">155</a> of file <a class="el" href="sequence__encoder_8cpp_source.html">sequence_encoder.cpp</a>.</p>
+<p>Definition at line <a class="el" href="sequence__encoder_8cpp_source.html#l00171">171</a> of file <a class="el" href="sequence__encoder_8cpp_source.html">sequence_encoder.cpp</a>.</p>
 
 </div>
 </div>
@@ -316,7 +317,7 @@ template&lt;SequenceDataEncoder::StrandOp FLAGS&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 14 2015 09:22:46 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 23 2015 19:38:10 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

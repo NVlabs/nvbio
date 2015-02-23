@@ -7,5 +7,6 @@ var searchData=
   ['equal',['EQUAL',['../deflate_8c.html#a214c717b2e51e1993a749ac99df7de58',1,'deflate.c']]],
   ['err_5fmsg',['ERR_MSG',['../zutil_8h.html#a66466516a4a71f3c78ccc40d203c92e5',1,'zutil.h']]],
   ['err_5freturn',['ERR_RETURN',['../zutil_8h.html#a0fcc2fe26110263e812ce50919b6a5c1',1,'zutil.h']]],
+  ['expect',['expect',['../lz4_8c.html#a7d26a1c40d6107cf2f19558492591e67',1,'lz4.c']]],
   ['extra_5fstate',['EXTRA_STATE',['../deflate_8h.html#affc01bd472ba5f5ad1519c40e20a3778',1,'deflate.h']]]
 ];

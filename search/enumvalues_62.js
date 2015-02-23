@@ -39,6 +39,11 @@ var searchData=
   ['bestmappingexact',['BestMappingExact',['../group__nv_bowtie.html#gga82f17b4edea2ba6b87a1e0a9fff0ff65a76e3a67e1ca786fc41857300ae941d94',1,'nvbio::bowtie2::cuda']]],
   ['block_5fdone',['block_done',['../deflate_8c.html#a1048c01fb24f2195a6b9a2a7c12e9454a94dca976f7dcfb0605e086068f09daa1',1,'deflate.c']]],
   ['blockdim',['BLOCKDIM',['../group___defs.html#gga526ecbe8a73c3761fcfe02a89ca04c60a55acd4ff0f7cc398c553b00baa29a518',1,'nvbio::bowtie2::cuda']]],
+  ['blockindependent',['blockIndependent',['../lz4frame_8h.html#a0fbbaee39d8d528af73298b712217c38a5bdd83d60deec4bb221a7793147dbd5b',1,'lz4frame.h']]],
+  ['blocklinked',['blockLinked',['../lz4frame_8h.html#a0fbbaee39d8d528af73298b712217c38a2c48e0e9f9b533e229690b66e675ee30',1,'lz4frame.h']]],
   ['bm_5ferror',['BM_ERROR',['../cram__structs_8h.html#aaba757c9ea23fabb284dc002713c30a5a88101b6cb7e050019872d39148eaaba9',1,'cram_structs.h']]],
+  ['byptr',['byPtr',['../lz4_8c.html#ae86e1d8a28953326b685d6ebb243a699a5c952c05e312cfc0589ef1d283397560',1,'lz4.c']]],
+  ['byu16',['byU16',['../lz4_8c.html#ae86e1d8a28953326b685d6ebb243a699a48aff40d7237850c996a1f6c266a598f',1,'lz4.c']]],
+  ['byu32',['byU32',['../lz4_8c.html#ae86e1d8a28953326b685d6ebb243a699ae7520fe8d6957f5029ddeb0652c65471',1,'lz4.c']]],
   ['bzip2',['BZIP2',['../cram__structs_8h.html#aaba757c9ea23fabb284dc002713c30a5af072cbd4765483ae305ca479f7764031',1,'cram_structs.h']]]
 ];

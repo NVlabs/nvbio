@@ -10,5 +10,7 @@ var searchData=
   ['_5fbcf_5fsweep_5ft',['_bcf_sweep_t',['../struct__bcf__sweep__t.html',1,'']]],
   ['_5fprofile',['_profile',['../struct__profile.html',1,'']]],
   ['_5fregion_5ft',['_region_t',['../struct__region__t.html',1,'']]],
-  ['_5ftrbudget_5ft',['_trbudget_t',['../struct__trbudget__t.html',1,'']]]
+  ['_5ftrbudget_5ft',['_trbudget_t',['../struct__trbudget__t.html',1,'']]],
+  ['_5fu32_5fs',['_U32_S',['../struct___u32___s.html',1,'']]],
+  ['_5fu64_5fs',['_U64_S',['../struct___u64___s.html',1,'']]]
 ];

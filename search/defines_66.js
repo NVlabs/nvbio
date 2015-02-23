@@ -8,6 +8,8 @@ var searchData=
   ['finish_5fstate',['FINISH_STATE',['../deflate_8h.html#a0474cba74b039aa45fe9412c1de86bed',1,'deflate.h']]],
   ['flush_5fblock',['FLUSH_BLOCK',['../deflate_8c.html#aa06152b875cc54ba4389f31444163886',1,'deflate.c']]],
   ['flush_5fblock_5fonly',['FLUSH_BLOCK_ONLY',['../deflate_8c.html#a140a98962b21d3838ef05baf4740e4ed',1,'deflate.c']]],
+  ['force_5finline',['FORCE_INLINE',['../lz4_8c.html#ac032d233a8ebfcd82fd49d0824eefb18',1,'FORCE_INLINE():&#160;lz4.c'],['../xxhash_8c.html#ac032d233a8ebfcd82fd49d0824eefb18',1,'FORCE_INLINE():&#160;xxhash.c']]],
+  ['freemem',['FREEMEM',['../lz4_8c.html#a2e47ec7ce19d2f57a60da284f1d7b0ab',1,'FREEMEM():&#160;lz4.c'],['../lz4frame_8c.html#a2e47ec7ce19d2f57a60da284f1d7b0ab',1,'FREEMEM():&#160;lz4frame.c']]],
   ['freq',['Freq',['../deflate_8h.html#a8bab2775fa423836b05f407d2f8bf6e2',1,'deflate.h']]],
   ['ft_5fbcf',['FT_BCF',['../hts_8h.html#a2a610149fba0056df1cc8f8ee30f4f84',1,'hts.h']]],
   ['ft_5fbcf_5fgz',['FT_BCF_GZ',['../hts_8h.html#aa2062d88c8960dac49093906bb9a3573',1,'hts.h']]],

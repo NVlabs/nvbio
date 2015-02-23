@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['r',['R',['../structnvbio_1_1alndiff_1_1_boolean_stats.html#a584945b44049666c714de2497acb90aa',1,'nvbio::alndiff::BooleanStats::R()'],['../structnvbio_1_1alndiff_1_1_stats.html#a19e12a1723b8b77db82ce75fff6757ef',1,'nvbio::alndiff::Stats::r()']]],
+  ['r',['r',['../structnvbio_1_1alndiff_1_1_stats.html#a19e12a1723b8b77db82ce75fff6757ef',1,'nvbio::alndiff::Stats::r()'],['../structnvbio_1_1alndiff_1_1_boolean_stats.html#a584945b44049666c714de2497acb90aa',1,'nvbio::alndiff::BooleanStats::R()']]],
   ['r_5findex',['r_index',['../structnvbio_1_1mem_1_1mem__functor.html#ae55b0aafd4b7e4a03f0d63d2de4c37f5',1,'nvbio::mem::mem_functor::r_index()'],['../structnvbio_1_1mem_1_1right__mem__functor.html#aa5ef3378597c66b13e4a918a697f14c1',1,'nvbio::mem::right_mem_functor::r_index()'],['../structnvbio_1_1mem_1_1split__mem__functor.html#aa77e5d09172d0609da44a00bb5f8dd9e',1,'nvbio::mem::split_mem_functor::r_index()'],['../structnvbio_1_1mem_1_1left__mem__functor.html#a4a53a1cb556f1bfd80291e21a2306516',1,'nvbio::mem::left_mem_functor::r_index()']]],
   ['r_5fnot_5fl',['R_not_L',['../structnvbio_1_1alndiff_1_1_boolean_stats.html#a529b330b0b851ddbc5b382b2c2a711d3',1,'nvbio::alndiff::BooleanStats']]],
   ['radix_5fslice',['radix_slice',['../group___sufsort.html#ga4b13c63ee457fc65a76c5b675e41d508',1,'nvbio::BWTParams']]],
@@ -67,7 +67,7 @@ var searchData=
   ['reference_5fstart',['reference_start',['../structnvbio_1_1io_1_1_s_n_p__sequence__index.html#a1959e3789edcdc1ed3021a0464f4f6cb',1,'nvbio::io::SNP_sequence_index']]],
   ['references',['References',['../struct_bam_reader_1_1_bam_reader_private.html#a75d53888661d6bce7800d988a1bb4896',1,'BamReader::BamReaderPrivate']]],
   ['refhasalignments',['RefHasAlignments',['../struct_bam_tools_1_1_ref_data.html#a07b656704aadb4df0e1d8c04e78dc19c',1,'BamTools::RefData']]],
-  ['refid',['refID',['../structnvbio_1_1io_1_1_b_a_m__alignment.html#aaa9200dde443c9ac1119fcf1523cbd06',1,'nvbio::io::BAM_alignment::refID()'],['../struct_b_a_m__alignment__header.html#a2a38f456b48b624c60cfa163c83bcdd4',1,'BAM_alignment_header::refID()'],['../structcram__index.html#a5af90f008f565eb6a0bcd74eb945a921',1,'cram_index::refid()'],['../structcram__range.html#a20a4b0a2b0d2189bce931cc3c3f456d3',1,'cram_range::refid()'],['../struct_bam_tools_1_1_bam_alignment.html#a75e553ad2c2bdf155f12e4f6e432787c',1,'BamTools::BamAlignment::RefID()']]],
+  ['refid',['RefID',['../struct_bam_tools_1_1_bam_alignment.html#a75e553ad2c2bdf155f12e4f6e432787c',1,'BamTools::BamAlignment::RefID()'],['../structnvbio_1_1io_1_1_b_a_m__alignment.html#aaa9200dde443c9ac1119fcf1523cbd06',1,'nvbio::io::BAM_alignment::refID()'],['../struct_b_a_m__alignment__header.html#a2a38f456b48b624c60cfa163c83bcdd4',1,'BAM_alignment_header::refID()'],['../structcram__index.html#a5af90f008f565eb6a0bcd74eb945a921',1,'cram_index::refid()'],['../structcram__range.html#a20a4b0a2b0d2189bce931cc3c3f456d3',1,'cram_range::refid()']]],
   ['refids',['refIDs',['../struct_b_a_m__alignment__batch___so_a.html#afad4d548912c86ddbda0e58b961ce23f',1,'BAM_alignment_batch_SoA']]],
   ['reflength',['RefLength',['../struct_bam_tools_1_1_ref_data.html#a1306a0e07253a45420faf823fabffbd2',1,'BamTools::RefData']]],
   ['refname',['RefName',['../struct_bam_tools_1_1_ref_data.html#a06dc4dd6f05bed1531234d49180a8402',1,'BamTools::RefData']]],
@@ -82,7 +82,7 @@ var searchData=
   ['require_5findex',['require_index',['../structbcf__srs__t.html#a0b5733cbe984965e9b22b167a0850750',1,'bcf_srs_t']]],
   ['reseed_5fdptr',['reseed_dptr',['../structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#a7a838d9a07f17edd23ebcaf8e332191e',1,'nvbio::bowtie2::cuda::Aligner']]],
   ['reseed_5fdvec',['reseed_dvec',['../structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#ae2be31f3d64e1f7981abbd3dbffc62e2',1,'nvbio::bowtie2::cuda::Aligner']]],
-  ['reserved',['reserved',['../structz__stream__s.html#add73791dd19b49c9c68f3f3d328c37db',1,'z_stream_s']]],
+  ['reserved',['reserved',['../struct_l_z4_f__frame_info__t.html#af1e7b2f83af7dc1423bf894baa89dae2',1,'LZ4F_frameInfo_t::reserved()'],['../struct_l_z4_f__preferences__t.html#a42e62b234fab63afd0bc3517ef77cd92',1,'LZ4F_preferences_t::reserved()'],['../struct_l_z4_f__compress_options__t.html#a76cba4fcd3e836fcc1043c380d8edc96',1,'LZ4F_compressOptions_t::reserved()'],['../struct_l_z4_f__decompress_options__t.html#a1535aee088f698f3857095e6682683c3',1,'LZ4F_decompressOptions_t::reserved()'],['../structz__stream__s.html#add73791dd19b49c9c68f3f3d328c37db',1,'z_stream_s::reserved()']]],
   ['response',['response',['../structknet_file__s.html#a20234e26c1cf7ba4e17305dde456eee8',1,'knetFile_s']]],
   ['result_5favail_5fc',['result_avail_c',['../structt__results__queue.html#adb4e3b26110c6f21c90222aaf394a8e7',1,'t_results_queue']]],
   ['result_5fhead',['result_head',['../structt__results__queue.html#a68592c7f543f96e8028081948f57c94a',1,'t_results_queue']]],

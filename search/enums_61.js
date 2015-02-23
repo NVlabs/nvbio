@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['alignmentflags',['AlignmentFlags',['../namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01c',1,'nvbio::io::AlignmentFlags()'],['../namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01c',1,'nvbio::io::AlignmentFlags()']]],
+  ['alignmentflags',['AlignmentFlags',['../namespacenvbio_1_1io.html#a5f4b72893841e9a68cd81d071ef8e01c',1,'nvbio::io::AlignmentFlags()'],['../group___sequence_i_o_detail.html#ga5f4b72893841e9a68cd81d071ef8e01c',1,'nvbio::io::AlignmentFlags()']]],
   ['alignmentmate',['AlignmentMate',['../group___output.html#ga33a303d7df8d2b996a60298573bf109c',1,'nvbio::io']]],
   ['alignmentscore',['AlignmentScore',['../group___output.html#ga14685a9d6ccdc4e08dd5454ded3821ae',1,'nvbio::io']]],
   ['alignmentstreamtype',['AlignmentStreamType',['../group___alignment_detail.html#ga9db88865ab2bd7b1f501d885f06434c7',1,'nvbio::bowtie2::cuda::detail']]],

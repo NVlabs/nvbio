@@ -4,7 +4,7 @@ var searchData=
   ['uint32_5fmax',['UINT32_MAX',['../kstdint_8h.html#ab5eb23180f7cc12b7d6c04a8ec067fdd',1,'kstdint.h']]],
   ['uint64_5fmax',['UINT64_MAX',['../kstdint_8h.html#a30654b4b67d97c42ca3f9b6052dda916',1,'kstdint.h']]],
   ['uint8_5fmax',['UINT8_MAX',['../kstdint_8h.html#aeb4e270a084ee26fe73e799861bd0252',1,'kstdint.h']]],
-  ['unlikely',['UNLIKELY',['../ssw_8cpp.html#ab10d0a221f4d7a706701b806c8135fd7',1,'UNLIKELY():&#160;ssw.cpp'],['../cpu_8cpp.html#ab10d0a221f4d7a706701b806c8135fd7',1,'UNLIKELY():&#160;cpu.cpp']]],
+  ['unlikely',['UNLIKELY',['../ssw_8cpp.html#ab10d0a221f4d7a706701b806c8135fd7',1,'UNLIKELY():&#160;ssw.cpp'],['../cpu_8cpp.html#ab10d0a221f4d7a706701b806c8135fd7',1,'UNLIKELY():&#160;cpu.cpp'],['../lz4_8c.html#ad8700448546b3b5111404cc021061fd5',1,'unlikely():&#160;lz4.c']]],
   ['update',['UPDATE',['../inflate_8c.html#a5eea7ffd1fff4fbea834bcb292d1bea2',1,'inflate.c']]],
   ['update_5fbudget',['UPDATE_BUDGET',['../divsufsortxx_8h.html#add75bad0a00bf44ca9b34e7e3637203b',1,'divsufsortxx.h']]],
   ['update_5fhash',['UPDATE_HASH',['../deflate_8c.html#a44b283365d6ca10b7028e639c4a10e67',1,'deflate.c']]],

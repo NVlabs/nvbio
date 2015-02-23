@@ -228,23 +228,24 @@ void write(
 {
     typedef typename io::SequenceDataAccess<ALPHABET>::sequence_string  sequence_string;
 
-    std::vector<char> buffer( 16*1024*1024 );
+    const uint32 buffer_len = sequence_data.size() + sequence_data.bps();
 
-    for (uint32 i = 0; i < sequence_data.size(); ++i)
+    std::vector<char> buffer( buffer_len );
+
+    #pragma omp parallel for
+    for (int32 i = 0; i < (int32)sequence_data.size(); ++i)
     {
         const sequence_string read = sequence_data.get_read( i );
 
-        uint32 buffer_len = 0;
+        uint32 buffer_offset = sequence_data.get_range( i ).x + i;
 
-        to_string<ALPHABET>( read.begin(), read.size(), &buffer[0] + buffer_len );
+        to_string<ALPHABET>( read.begin(), read.size(), &buffer[0] + buffer_offset );
 
-        buffer_len += read.size();
-
-        buffer[ buffer_len++ ] = '\n';
-
-        if (output_file->write( buffer_len, &buffer[0] ) == 0)
-            throw runtime_error( "failed writing FASTA output file" );
+        buffer[ buffer_offset + read.size() ] = '\n';
     }
+
+    if (output_file->write( buffer_len, &buffer[0] ) == 0)
+        throw runtime_error( "failed writing TXT output file" );
 }
 
 } // anonymous namespace

@@ -176,7 +176,7 @@ struct SequenceDataAccess
     NVBIO_HOST_DEVICE NVBIO_FORCEINLINE name_string get_name(const uint32 i) const
     {
         const uint2 name_range = make_uint2( name_index()[i], name_index()[i+1] );
-        return name_string( name_range.y - name_range.x, name_stream() + name_range.x );
+        return name_string( name_range.y - name_range.x - 1u, name_stream() + name_range.x );
     }
 
     /// return the a string-set view of this set of reads

@@ -185,32 +185,39 @@ void write(
     typedef typename io::SequenceDataAccess<ALPHABET>::sequence_string  sequence_string;
     typedef typename io::SequenceDataAccess<ALPHABET>::name_string      name_string;
 
-    std::vector<char> buffer( 16*1024*1024 );
 
-    for (uint32 i = 0; i < sequence_data.size(); ++i)
+    const uint32 buffer_len =
+        sequence_data.size() * 2 +          // the number of delimiters consumed for each read (i.e. '>', '\n')
+        sequence_data.bps()      +          // the number of characters consumed by reads
+        sequence_data.name_stream_len();    // the number of characters consumed by names
+
+    std::vector<char> buffer( buffer_len );
+
+    #pragma omp parallel for
+    for (int32 i = 0; i < (int32)sequence_data.size(); ++i)
     {
         const sequence_string read = sequence_data.get_read( i );
         const name_string     name = sequence_data.get_name( i );
 
-        uint32 buffer_len = 0;
+        uint32 buffer_offset = i*2 + sequence_data.get_range( i ).x + sequence_data.name_index()[ i ];
 
-        buffer[ buffer_len++ ] = '>';
+        buffer[ buffer_offset++ ] = '@';
 
         for (uint32 j = 0; j < name.size(); ++j)
-            buffer[ buffer_len++ ] = name[j];
+            buffer[ buffer_offset++ ] = name[j];
 
         // setup the ASCII read
-        buffer[ buffer_len++ ] = '\n';
+        buffer[ buffer_offset++ ] = '\n';
 
-        to_string<ALPHABET>( read.begin(), read.size(), &buffer[0] + buffer_len );
+        to_string<ALPHABET>( read.begin(), read.size(), &buffer[0] + buffer_offset );
 
-        buffer_len += read.size();
+        buffer_offset += read.size();
 
-        buffer[ buffer_len++ ] = '\n';
-
-        if (output_file->write( buffer_len, &buffer[0] ) == 0)
-            throw runtime_error( "failed writing FASTA output file" );
+        buffer[ buffer_offset++ ] = '\n';
     }
+
+    if (output_file->write( buffer_len, &buffer[0] ) == 0)
+        throw runtime_error( "failed writing FASTQ output file" );
 }
 
 } // anonymous namespace

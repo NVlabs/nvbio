@@ -55,6 +55,7 @@ int sum_tree_test();
 int qgram_test(int argc, char* argv[]);
 int sequence_test(int argc, char* argv[]);
 int wavelet_test(int argc, char* argv[]);
+int bloom_filter_test(int argc, char* argv[]);
 
 namespace cuda { void scan_test(); }
 namespace aln { void test(int argc, char* argv[]); }
@@ -82,6 +83,7 @@ enum Tests {
     kQGram          = 65536u,
     kSequence       = 131072u,
     kWaveletTree    = 262144u,
+    kBloomFilter    = 524288u,
     kALL            = 0xFFFFFFFFu
 };
 
@@ -141,6 +143,8 @@ int main(int argc, char* argv[])
                 tests = kSequence;
             else if (strcmp( argv[arg], "-wavelet" ) == 0)
                 tests = kWaveletTree;
+            else if (strcmp( argv[arg], "-bloom-filter" ) == 0)
+                tests = kBloomFilter;
 
             ++arg;
         }
@@ -205,6 +209,7 @@ int main(int argc, char* argv[])
     if (tests & kQGram)         qgram_test( argc, argv+arg );
     if (tests & kSequence)      sequence_test( argc, argv+arg );
     if (tests & kWaveletTree)   wavelet_test( argc, argv+arg );
+    if (tests & kBloomFilter)   bloom_filter_test( argc, argv+arg );
 
     cudaDeviceReset();
 	return 0;

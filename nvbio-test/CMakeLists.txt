@@ -3,6 +3,7 @@ nvbio_module(nvbio-test)
 addsources(
 alignment_test.cu
 alloc_test.cu
+bloom_filter_test.cu
 bwt_test.cpp
 cache_test.cpp
 condtion_test.cu

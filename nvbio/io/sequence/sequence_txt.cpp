@@ -76,16 +76,16 @@ int SequenceDataFile_TXT::nextChunk(SequenceDataEncoder* output, uint32 max_read
 
         while (1)
         {
-            char* next_chunk = (char*)&m_read_bp[0] + read_off;
+            char* read_ptr = (char*)&m_read_bp[0] + read_off;
 
-            if (gets( next_chunk, m_read_bp.size() - read_off ) == 0)
+            if (gets( read_ptr, m_read_bp.size() - read_off ) == 0)
             {
                 m_file_state = FILE_EOF;
                 break;
             }
 
             // look for the new read length
-            read_len = strlen( next_chunk ) + read_off;
+            read_len = strlen( read_ptr ) + read_off;
 
             // check whether we reached the end of the buffer without finding a newline
             if (read_len == m_read_bp.size()-1 &&

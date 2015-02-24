@@ -42,6 +42,9 @@
 
 using namespace nvbio;
 
+///@addtogroup nvLighter
+///@{
+
 ///
 /// A small class implementing a Pipeline sink stage building the sampled kmers filter
 ///
@@ -144,3 +147,5 @@ struct TrustedKmersStage
     for_each_enactor<host_tag>   host_for_each;
     for_each_enactor<device_tag> device_for_each;
 };
+
+///@}  // group nvLighter

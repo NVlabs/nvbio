@@ -41,6 +41,12 @@
 
 using namespace nvbio;
 
+///@addtogroup nvLighter
+///@{
+
+/// A small class encapsulating the core data needed by all input threads,
+/// i.e. the actual input file, a lock, and the relative statistics
+///
 struct InputStageData
 {
     /// constructor
@@ -132,3 +138,5 @@ struct InputStage
 
     InputStageData*  m_data;
 };
+
+///@}  // group nvLighter

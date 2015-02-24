@@ -37,6 +37,12 @@
 
 using namespace nvbio;
 
+///@addtogroup nvLighter
+///@{
+
+/// A small class encapsulating the core data needed by all output threads,
+/// i.e. the output file and its relevant statistics
+///
 struct OutputStageData : public SequenceStats
 {
     /// constructor
@@ -50,7 +56,6 @@ struct OutputStageData : public SequenceStats
     io::SequenceDataOutputStream* m_file;
 };
 
-///
 ///
 /// A small class implementing a Pipeline stage reading sequence batches from a file
 ///
@@ -74,3 +79,5 @@ struct OutputStage
 
     OutputStageData* data;
 };
+
+///@}  // group nvLighter

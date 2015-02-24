@@ -40,8 +40,16 @@
 
 using namespace nvbio;
 
+///@addtogroup nvLighter
+///@{
+
+/// The kmer Bloom filter types
+///
 enum KmersType { SAMPLED_KMERS = 0, TRUSTED_KMERS = 1 };
 
+/// Bloom filters container - this class contains all the per-device data
+/// needed during nvLighter's execution
+///
 template <typename system_tag>
 struct BloomFilters
 {
@@ -127,7 +135,8 @@ struct BloomFilters
     }
 };
 
-// merge several Bloom filters
+/// merge several Bloom filters
+///
 inline
 void merge(BloomFilters<host_tag>* h_bloom_filters, const uint32 device_count, BloomFilters<device_tag>* d_bloom_filters, const KmersType type)
 {
@@ -180,7 +189,8 @@ void merge(BloomFilters<host_tag>* h_bloom_filters, const uint32 device_count, B
 }
 
 
-// merge several stats
+/// merge several stats
+///
 inline
 void merged_stats(const BloomFilters<host_tag>* h_bloom_filters, const uint32 device_count, const BloomFilters<device_tag>* d_bloom_filters, nvbio::vector<host_tag,uint64>& stats)
 {
@@ -205,7 +215,8 @@ void merged_stats(const BloomFilters<host_tag>* h_bloom_filters, const uint32 de
     }
 }
 
-// helper functor
+/// helper functor to compute a blocked Bloom filter's occupancy
+///
 struct block_occupancy_functor
 {
     typedef uint4  argument_type;
@@ -223,7 +234,8 @@ struct block_occupancy_functor
     const float K;
 };
 
-// compute Bloom filter usage statistics
+/// compute Bloom filter usage statistics
+///
 template <typename system_tag>
 void compute_bloom_filter_stats(
     const BloomFilters<system_tag>& bloom_filters,
@@ -274,3 +286,5 @@ void compute_bloom_filter_stats(
         temp_storage ) / double(n_words / 4) );
   #endif
 }
+
+///@}  // group nvLighter

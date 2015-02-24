@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// sample_kmers.h
+// error_correct.h
 //
 
 #pragma once
@@ -41,6 +41,9 @@
 #include <stdlib.h>
 
 using namespace nvbio;
+
+///@addtogroup nvLighter
+///@{
 
 ///
 /// A small class implementing a Pipeline sink stage building the trusted kmers filter
@@ -99,3 +102,5 @@ struct ErrorCorrectStage
     for_each_enactor<host_tag>   host_for_each;
     for_each_enactor<device_tag> device_for_each;
 };
+
+///@}  // group nvLighter

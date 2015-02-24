@@ -50,7 +50,7 @@ using namespace nvbio;
 /// - the OutputStage, i.e. an object encapsulating a Pipeline stage writing read batches
 /// - the SampleKmersStage, i.e. an object encapsulating a Pipeline stage performing kmer sampling
 /// - the TrustedKmersStage, i.e. an object encapsulating a Pipeline stage performing trusted kmer marking
-/// - the ErrorCorrectionStage, i.e. an object encapsulating a Pipeline stage performing the actual error correction
+/// - the ErrorCorrectStage, i.e. an object encapsulating a Pipeline stage performing the actual error correction
 ///
 
 ///@addtogroup nvLighterModule

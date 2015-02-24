@@ -59,10 +59,12 @@ int SequenceDataFile_TXT::nextChunk(SequenceDataEncoder* output, uint32 max_read
 
     const uint32 max_read_len = 16*1024*1024;
 
+    const uint8 best_quality = uint8('~'); // ASCII code 126
+
     if (m_read_bp.size() < max_read_len)
     {
         m_read_bp.resize( max_read_len );
-        m_read_q.resize( max_read_len, 127u );
+        m_read_q.resize( max_read_len, best_quality );
     }
 
     while (n_reads + read_mult                             <= max_reads &&
@@ -130,7 +132,7 @@ int SequenceDataFile_TXT::nextChunk(SequenceDataEncoder* output, uint32 max_read
             const size_t old_size = m_read_q.size();
             m_read_q.resize( read_len );
             for (size_t i = old_size; i < read_len; ++i)
-                m_read_q[i] = 127u;
+                m_read_q[i] = best_quality;
         }
 
         if (read_len)

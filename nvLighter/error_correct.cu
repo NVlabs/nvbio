@@ -776,8 +776,7 @@ bool ErrorCorrectStage::process(PipelineContext& context)
     // fetch the input
     io::SequenceDataHost* h_read_data = context.input<io::SequenceDataHost>( 0 );
 
-    uint32 n_blocks = 0;
-    float  time     = 0.0f;
+    float time = 0.0f;
 
     // introduce a timing scope
     try
@@ -811,12 +810,10 @@ bool ErrorCorrectStage::process(PipelineContext& context)
                 uint8(bad_quality),
                 uint8(new_quality) );
 
-            const uint32 block_size = 128;
-
-            // ask the occupancy optimizer how many blocks we should use
-            n_blocks = m_optimizer.n_blocks( for_each_kernel<functor_type>, block_size );
-
-            for_each_kernel<<<n_blocks,block_size>>>( d_read_view.size(), error_corrector );
+            // and apply the functor to all reads in the batch
+            device_for_each(
+                d_read_view.size(),
+                error_corrector );
 
             cudaDeviceSynchronize();
             cuda::check_error("error-correct");
@@ -856,9 +853,9 @@ bool ErrorCorrectStage::process(PipelineContext& context)
                 uint8(bad_quality),
                 uint8(new_quality) );
 
-            nvbio::for_each<host_tag>(
+            // and apply the functor to all reads in the batch
+            host_for_each(
                 h_read_view.size(),
-                thrust::make_counting_iterator<uint32>(0),
                 error_corrector );
         }
     }
@@ -915,12 +912,6 @@ bool ErrorCorrectStage::process(PipelineContext& context)
         log_error(stderr, "[ErrorCorrectStage] caught an unknown exception!\n");
         exit(1);
     }
-
-    // compute a speed data-point
-    const float speed = float( h_read_data->bps() ) / time;
-
-    // update the occupancy optimizer
-    m_optimizer.update( n_blocks, speed );
 
     // update the time stats
     stats->m_mutex.lock();

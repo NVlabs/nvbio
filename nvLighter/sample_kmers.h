@@ -35,6 +35,7 @@
 #include <nvbio/basic/numbers.h>
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/timer.h>
+#include <nvbio/basic/primitives.h>
 #include <nvbio/io/sequence/sequence.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -84,7 +85,9 @@ struct SampleKmersStage
     uint64              filter_size;
     uint32*             filter_storage;
     SequenceStats*      stats;
-    OccupancyOptimizer  m_optimizer;
+
+    for_each_enactor<host_tag>   host_for_each;
+    for_each_enactor<device_tag> device_for_each;
 };
 
 
@@ -137,5 +140,7 @@ struct TrustedKmersStage
     uint32*             trusted_filter_storage;
     const uint32*       threshold;
     SequenceStats*      stats;
-    OccupancyOptimizer  m_optimizer;
+
+    for_each_enactor<host_tag>   host_for_each;
+    for_each_enactor<device_tag> device_for_each;
 };

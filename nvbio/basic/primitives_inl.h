@@ -255,7 +255,7 @@ bool is_segment_sorted(
 template <typename Iterator, typename Functor>
 void for_each(
     const host_tag          tag,
-    const uint32            n,
+    const uint64            n,
     const Iterator          in,
           Functor           functor)
 {
@@ -271,7 +271,7 @@ void for_each(
 template <typename Iterator, typename Functor>
 void for_each(
     const device_tag        tag,
-    const uint32            n,
+    const uint64            n,
     const Iterator          in,
           Functor           functor)
 {
@@ -282,7 +282,7 @@ void for_each(
 //
 template <typename system_tag, typename Iterator, typename Functor>
 void for_each(
-    const uint32            n,
+    const uint64            n,
     const Iterator          in,
           Functor           functor)
 {
@@ -294,7 +294,7 @@ void for_each(
 template <typename Iterator, typename Output, typename Functor>
 void transform(
     const device_tag        tag,
-    const uint32            n,
+    const uint64            n,
     const Iterator          in,
     const Output            out,
     const Functor           functor)
@@ -1369,6 +1369,95 @@ void merge_by_key(
         B_values,
         C_keys,
         C_values );
+}
+
+#if defined(__CUDACC__)
+
+/// A very simple for_each CUDA kernel
+///
+template <typename iterator_type, typename functor_type>
+__global__
+void for_each_kernel(const uint64 n, const iterator_type in, const functor_type f)
+{
+    const uint32 grid_size = blockDim.x * gridDim.x;
+
+    for (uint64 i = threadIdx.x + blockIdx.x * blockDim.x; i < n; i += grid_size)
+        f( in[i] );
+};
+
+#endif
+
+// ask the optimizer how many blocks we should try using next
+//
+template <typename KernelFunction>
+uint32 for_each_enactor<device_tag>::suggested_blocks(KernelFunction kernel, const uint32 cta_size) const
+{
+#if defined(__CUDACC__)
+    if (m_blocks_hi == 0)
+        return cuda::multiprocessor_count() * cuda::max_active_blocks_per_multiprocessor( kernel, cta_size, 0u );
+    else if (m_blocks_lo == 0)
+        return cuda::multiprocessor_count();
+    else
+        return cuda::multiprocessor_count() * (m_blocks_lo + m_blocks_hi) / 2;
+#else
+    return 0u;
+#endif
+}
+
+// update the optimizer's internal state with the latest speed data-point
+//
+inline
+void for_each_enactor<device_tag>::update(const uint32 n_blocks, const float speed)
+{
+#if defined(__CUDACC__)
+    // carry out a little binary search over the best number of blocks/SM
+    if (m_blocks_hi == 0)
+    {
+        m_blocks_hi = n_blocks / cuda::multiprocessor_count();
+        m_speed_hi  = speed;
+    }
+    else if (m_blocks_lo == 0)
+    {
+        m_blocks_lo = n_blocks / cuda::multiprocessor_count();
+        m_speed_lo  = speed;
+    }
+    else if (m_speed_lo > m_speed_hi)
+    {
+        m_blocks_hi = n_blocks / cuda::multiprocessor_count();
+        m_speed_hi  = speed;
+    }
+    else 
+    {
+        m_blocks_lo = n_blocks / cuda::multiprocessor_count();
+        m_speed_lo  = speed;
+    }
+    // TODO: once the optimizer settles to a given value, it will never change:
+    // we should explore using occasional "mutations" to adapt to possibly
+    // changing conditions...
+#endif
+}
+
+// enact the for_each
+//
+template <typename Iterator, typename Functor>
+void for_each_enactor<device_tag>::operator () (
+    const uint64            n,
+    const Iterator          in,
+          Functor           functor)
+{
+#if defined(__CUDACC__)
+    const uint32 blockdim = 128;
+    const uint32 n_blocks = suggested_blocks( for_each_kernel<Iterator,Functor>, blockdim );
+
+    cuda::Timer timer;
+    timer.start();
+
+    for_each_kernel<<<n_blocks,blockdim>>>( n, in, functor );
+
+    timer.stop();
+
+    update( n_blocks, float(n) / timer.seconds() );
+#endif
 }
 
 } // namespace nvbio

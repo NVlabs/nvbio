@@ -32,6 +32,7 @@
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/vector.h>
 #include <nvbio/basic/algorithms.h>
+#include <nvbio/basic/cuda/timer.h>
 #include <thrust/reduce.h>
 #include <thrust/scan.h>
 #include <thrust/copy.h>
@@ -124,7 +125,7 @@ bool is_segment_sorted(
 ///
 template <typename system_tag, typename Iterator, typename Functor>
 void for_each(
-    const uint32            n,
+    const uint64            n,
     const Iterator          in,
           Functor           functor);
 
@@ -359,6 +360,83 @@ void merge_by_key(
           key_output                    C_keys,
           value_output                  C_values,
     nvbio::vector<system_tag,uint8>&    temp_storage);
+
+/// A stateful for_each enactor class that optimizes the kernel launches at run-time,
+/// using per-launch statistics
+///
+template <typename system_tag>
+struct for_each_enactor
+{
+    /// enact the for_each
+    ///
+    template <typename Iterator, typename Functor>
+    void operator () (
+        const uint64    n,
+        const Iterator  in,
+              Functor   functor)
+    {
+        for_each<system_tag>( n, in, functor );
+    }
+
+    /// enact the for_each
+    ///
+    template <typename Functor>
+    void operator () (
+        const uint64    n,
+              Functor   functor)
+    {
+        for_each<system_tag>( n, thrust::make_counting_iterator<uint64>(0), functor );
+    }
+};
+
+/// A stateful for_each enactor class that optimizes the kernel launches at run-time,
+/// using per-launch statistics
+///
+template <>
+struct for_each_enactor<device_tag>
+{
+    /// constructor
+    ///
+    for_each_enactor() :
+        m_blocks_lo( 0 ),
+        m_blocks_hi( 0 ),
+        m_speed_lo( 0.0f ),
+        m_speed_hi( 0.0f ) {}
+
+    /// enact the for_each
+    ///
+    template <typename Iterator, typename Functor>
+    void operator () (
+        const uint64            n,
+        const Iterator          in,
+              Functor           functor);
+
+    /// enact the for_each
+    ///
+    template <typename Functor>
+    void operator () (
+        const uint64    n,
+              Functor   functor)
+    {
+        this->operator()( n, thrust::make_counting_iterator<uint64>(0), functor );
+    }
+
+  private:
+
+    /// ask the optimizer how many blocks we should try using next
+    ///
+    template <typename KernelFunction>
+    uint32 suggested_blocks(KernelFunction kernel, const uint32 cta_size) const;
+
+    /// update the optimizer's internal state with the latest speed data-point
+    ///
+    void update(const uint32 n_blocks, const float speed);
+
+    uint32  m_blocks_lo;
+    uint32  m_blocks_hi;
+    float   m_speed_lo;
+    float   m_speed_hi;
+};
 
 ///@} // end of the Primitives group
 ///@} // end of the Basic group

@@ -35,6 +35,7 @@
 #include <nvbio/basic/numbers.h>
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/timer.h>
+#include <nvbio/basic/primitives.h>
 #include <nvbio/io/sequence/sequence.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -94,5 +95,7 @@ struct ErrorCorrectStage
     char                bad_quality;
     char                new_quality;
     SequenceStats*      stats;
-    OccupancyOptimizer  m_optimizer;
+
+    for_each_enactor<host_tag>   host_for_each;
+    for_each_enactor<device_tag> device_for_each;
 };

@@ -96,5 +96,5 @@
 ///
 /// \section nvLighterArchitecture Architecture
 ///
-/// nvLighter's class hierarchy is documented in the nvLighterModule module
+/// nvLighter's class hierarchy is documented in the \ref nvLighterModule module
 ///

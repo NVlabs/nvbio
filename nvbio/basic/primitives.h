@@ -62,6 +62,7 @@
 /// - nvbio::is_sorted()
 /// - nvbio::is_segment_sorted()
 /// - nvbio::for_each()
+/// - nvbio::for_each_enactor
 /// - nvbio::transform()
 /// - nvbio::reduce()
 /// - nvbio::inclusive_scan()

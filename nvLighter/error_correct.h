@@ -46,7 +46,7 @@ using namespace nvbio;
 ///@{
 
 ///
-/// A small class implementing a Pipeline sink stage building the trusted kmers filter
+/// A small class implementing a Pipeline stage performing the actual error correction work
 ///
 struct ErrorCorrectStage
 {

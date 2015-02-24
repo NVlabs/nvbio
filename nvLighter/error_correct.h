@@ -42,7 +42,7 @@
 
 using namespace nvbio;
 
-///@addtogroup nvLighter
+///@addtogroup nvLighterModule
 ///@{
 
 ///
@@ -103,4 +103,4 @@ struct ErrorCorrectStage
     for_each_enactor<device_tag> device_for_each;
 };
 
-///@}  // group nvLighter
+///@}  // group nvLighterModule

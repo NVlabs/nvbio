@@ -413,6 +413,13 @@ int main(int argc, char* argv[])
         
         log_info(stderr,"  sample kmers... started\n");
         {
+            //
+            // The following code implements a parallel Pipeline to sample kmers from the input
+            // reads. The pipeline is composed several subpipelines, one per active device, each made
+            // of two stages (which will be run in separate threads): an InputStage, and a
+            // SampleKmersStage doing the actual sampling work.
+            //
+
             log_debug(stderr, "  assemble pipeline\n");
 
             // build the input stage
@@ -478,6 +485,14 @@ int main(int argc, char* argv[])
 
         log_info(stderr,"  mark trusted kmers... started\n");
         {
+            //
+            // The following code implements a parallel Pipeline to mark trusted kmers in the input
+            // reads. The pipeline is composed several subpipelines, one per active device, each made
+            // of two stages (which will be run in separate threads): an InputStage, and a
+            // TrustedKmersStage doing the actual marking work.
+            //
+
+            // gather Bloom filter statistics
             nvbio::vector<host_tag,uint32> threshold( 100, 0u );
             {
                 double untrustF[100][100];
@@ -617,6 +632,14 @@ int main(int argc, char* argv[])
 
         log_info(stderr,"  error correction... started\n");
         {
+            //
+            // The following code implements a parallel Pipeline to error-correct the input
+            // reads. The pipeline is composed several subpipelines, one per active device, each made
+            // of three stages (which will be run in separate threads): an InputStage, an
+            // ErrorCorrectStage doing the actual error correction work, and a final OutputStage.
+            //
+
+            // gather Bloom filter statistics
             {
                 // compute the number of bits set
                 float occupancy;

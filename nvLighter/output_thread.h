@@ -37,7 +37,7 @@
 
 using namespace nvbio;
 
-///@addtogroup nvLighter
+///@addtogroup nvLighterModule
 ///@{
 
 /// A small class encapsulating the core data needed by all output threads,
@@ -80,4 +80,4 @@ struct OutputStage
     OutputStageData* data;
 };
 
-///@}  // group nvLighter
+///@}  // group nvLighterModule

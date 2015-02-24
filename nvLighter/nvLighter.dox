@@ -93,3 +93,8 @@
 /// As described in the original paper, the <i>alpha</i> parameter should be generally set as 7.0/C, where C is the coverage of the genome.
 /// If alpha is not specified, it will be computed with an additional streaming pass through the input reads.
 ///
+///
+/// \section nvLighterArchitecture Architecture
+///
+/// nvLighter's class hierarchy is documented in the nvLighterModule module
+///

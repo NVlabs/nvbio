@@ -40,7 +40,20 @@
 
 using namespace nvbio;
 
-///@addtogroup nvLighter
+///@defgroup nvLighterModule nvLighter
+/// This module encapsulates all of nvLighter's class hierarchy.
+/// nvLighter is composed of the following important pieces:
+///\par
+/// - the BloomFilters class, containing all the per-device data needed during nvLighter's execution,
+///   i.e. the <i>sampled</i> and <i>trusted kmers</i> Bloom filters and the error correction statistics
+/// - the InputStage, i.e. an object encapsulating a Pipeline stage loading read batches
+/// - the OutputStage, i.e. an object encapsulating a Pipeline stage writing read batches
+/// - the SampleKmersStage, i.e. an object encapsulating a Pipeline stage performing kmer sampling
+/// - the TrustedKmersStage, i.e. an object encapsulating a Pipeline stage performing trusted kmer marking
+/// - the ErrorCorrectionStage, i.e. an object encapsulating a Pipeline stage performing the actual error correction
+///
+
+///@addtogroup nvLighterModule
 ///@{
 
 /// The kmer Bloom filter types
@@ -287,4 +300,4 @@ void compute_bloom_filter_stats(
   #endif
 }
 
-///@}  // group nvLighter
+///@}  // group nvLighterModule

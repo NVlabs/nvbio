@@ -41,7 +41,7 @@
 
 using namespace nvbio;
 
-///@addtogroup nvLighter
+///@addtogroup nvLighterModule
 ///@{
 
 /// A small class encapsulating the core data needed by all input threads,
@@ -139,4 +139,4 @@ struct InputStage
     InputStageData*  m_data;
 };
 
-///@}  // group nvLighter
+///@}  // group nvLighterModule

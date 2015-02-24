@@ -57,36 +57,88 @@ int SequenceDataFile_TXT::nextChunk(SequenceDataEncoder* output, uint32 max_read
         ((m_options.flags & FORWARD_COMPLEMENT) ? 1u : 0u) +
         ((m_options.flags & REVERSE_COMPLEMENT) ? 1u : 0u);
 
+    const uint32 max_read_len = 16*1024*1024;
+
+    if (m_read_bp.size() < max_read_len)
+    {
+        m_read_bp.resize( max_read_len );
+        m_read_q.resize( max_read_len, 127u );
+    }
+
     while (n_reads + read_mult                             <= max_reads &&
            n_bps   + read_mult*SequenceDataFile::LONG_READ <= max_bps)
     {
+      #define NVBIO_TXT_LINE_PARSING
+
+      #if defined(NVBIO_TXT_LINE_PARSING)
+        uint32 read_len = 0;
+        uint32 read_off = 0;
+
+        while (1)
+        {
+            char* next_chunk = (char*)&m_read_bp[0] + read_off;
+
+            if (gets( next_chunk, m_read_bp.size() - read_off ) == 0)
+            {
+                m_file_state = FILE_EOF;
+                break;
+            }
+
+            // look for the new read length
+            read_len = strlen( next_chunk ) + read_off;
+
+            // check whether we reached the end of the buffer without finding a newline
+            if (read_len == m_read_bp.size()-1 &&
+                m_read_bp[ read_len-1 ] != '\n')
+            {
+                // resize the read
+                m_read_bp.resize( m_read_bp.size() * 2 );
+
+                // advance the buffer offset
+                read_off = read_len;
+            }
+            else
+                break;
+        }
+
+        // drop the newline
+        if (read_len && m_read_bp[ read_len-1 ] == '\n')
+            read_len--;
+     #else
         // reset the read
-        m_read_bp.erase( m_read_bp.begin(), m_read_bp.end() );
+        uint32 read_len = 0;
 
         // read an entire line
         for (uint8 c = get(); c != '\n' && c != 0; c = get())
         {
             // if (isgraph(c))
             if (c >= 0x21 && c <= 0x7E)
-                m_read_bp.push_back( c );
+            {
+                if (m_read_bp.size() < read_len)
+                    m_read_bp.resize( read_len );
+
+                m_read_bp[ read_len++ ] = c;
+            }
         }
+     #endif
 
         ++m_line;
 
-        if (m_read_q.size() < m_read_bp.size())
+        if (m_read_q.size() < read_len)
         {
             // extend the quality score vector if needed
             const size_t old_size = m_read_q.size();
-            m_read_q.resize( m_read_bp.size() );
-            for (size_t i = old_size; i < m_read_bp.size(); ++i)
-                m_read_q[i] = char(255);
+            m_read_q.resize( read_len );
+            for (size_t i = old_size; i < read_len; ++i)
+                m_read_q[i] = 127u;
         }
 
-        if (m_read_bp.size())
+        if (read_len)
         {
             if (m_options.flags & FORWARD)
             {
-                output->push_back(uint32( m_read_bp.size() ),
+                output->push_back(
+                                read_len,
                                 name,
                                 &m_read_bp[0],
                                 &m_read_q[0],
@@ -98,7 +150,8 @@ int SequenceDataFile_TXT::nextChunk(SequenceDataEncoder* output, uint32 max_read
             }
             if (m_options.flags & REVERSE)
             {
-                output->push_back(uint32( m_read_bp.size() ),
+                output->push_back(
+                                read_len,
                                 name,
                                 &m_read_bp[0],
                                 &m_read_q[0],
@@ -110,7 +163,8 @@ int SequenceDataFile_TXT::nextChunk(SequenceDataEncoder* output, uint32 max_read
             }
             if (m_options.flags & FORWARD_COMPLEMENT)
             {
-                output->push_back(uint32( m_read_bp.size() ),
+                output->push_back(
+                                read_len,
                                 name,
                                 &m_read_bp[0],
                                 &m_read_q[0],
@@ -122,7 +176,8 @@ int SequenceDataFile_TXT::nextChunk(SequenceDataEncoder* output, uint32 max_read
             }
             if (m_options.flags & REVERSE_COMPLEMENT)
             {
-                output->push_back(uint32( m_read_bp.size() ),
+                output->push_back(
+                                read_len,
                                 name,
                                 &m_read_bp[0],
                                 &m_read_q[0],
@@ -133,7 +188,7 @@ int SequenceDataFile_TXT::nextChunk(SequenceDataEncoder* output, uint32 max_read
                                 SequenceDataEncoder::REVERSE_COMPLEMENT_OP );
             }
 
-            n_bps   += read_mult * (uint32)m_read_bp.size();
+            n_bps   += read_mult * (uint32)read_len;
             n_reads += read_mult;
         }
 

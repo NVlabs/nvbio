@@ -73,6 +73,8 @@ protected:
     // derived classes should override this method to return actual file data
     virtual FileState fillBuffer(void) = 0;
 
+    virtual bool gets(char* buffer, int len) = 0;
+
 private:
     // get next character from file
     uint8 get();
@@ -112,6 +114,8 @@ struct SequenceDataFile_TXT_gz : public SequenceDataFile_TXT
     /// fill the buffer
     ///
     virtual FileState fillBuffer(void);
+
+    virtual bool gets(char* buffer, int len) { return gzgets( m_file, buffer, len ) != NULL; };
 
     /// rewind the file
     ///

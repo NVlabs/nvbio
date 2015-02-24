@@ -33,16 +33,18 @@
 ///
 ///\par
 ///\n
-/// nvLighter is a GPU-accelerated re-engineering of <a href="https://github.com/mourisl/Lighter">Lighter</a>, a very low memory footprint
-/// error corrector, implementing the algorithms described in: \n \n
+/// <a href="https://github.com/NVlabs/nvbio/tree/master/nvLighter">nvLighter</a> is a GPU-accelerated re-engineering of
+/// <a href="https://github.com/mourisl/Lighter">Lighter</a>, a very low memory footprint error corrector, implementing
+/// the algorithms described in: \n \n
 ///   <a href="http://genomebiology.com/2014/15/11/509">Lighter: fast and memory-efficient sequencing error correction without counting</a> \n
 ///   Li Song, Liliana Florea and Ben Langmead \n
 ///   <i>Genome Biology</i>, 2014, 15:509
 ///\par
 /// nvLighter can use both multiple CPU threads as well as multiple GPUs to concurrently
 /// correct large sets of reads.
-/// In practice, the error correction algorithm is so fast it can be easily bottlenecked by I/O.
-/// For this reason, it is recommended to use nvLighter on a system equipped with fast SSD drives.
+/// In practice, the error correction algorithm is so fast it can be easily bottlenecked by I/O:
+/// hence, we recommend using nvLighter on an SSD-equipped system in order to appreciate
+/// maximum acceleration.
 ///
 /// \section nvLighterUsage Usage
 ///

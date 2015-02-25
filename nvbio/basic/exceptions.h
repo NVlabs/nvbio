@@ -36,6 +36,9 @@
 
 namespace nvbio
 {
+   
+///@addtogroup Basic
+///@{
 
 struct cuda_error
 {
@@ -74,5 +77,7 @@ struct logic_error
 private:
     static char s_error[4096];
 };
+
+///@} Basic
 
 } // namespace nvbio

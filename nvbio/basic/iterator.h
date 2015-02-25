@@ -59,6 +59,9 @@ struct iterator_traits<const _Ty * __restrict__>
 
 namespace nvbio {
 
+///@addtogroup Basic
+///@{
+
 typedef std::input_iterator_tag                     input_host_iterator_tag;
 typedef std::output_iterator_tag                    output_host_iterator_tag;
 typedef std::forward_iterator_tag                   forward_host_iterator_tag;
@@ -113,5 +116,7 @@ struct iterator_traits : public std::iterator_traits<T>
     typedef typename std::iterator_traits<T>::reference          reference;
     typedef T                                                    forward_iterator;       ///< add forward iterator conversion
 };
+
+///@} Basic
 
 } // namespace nvbio

@@ -36,6 +36,9 @@ extern unsigned int TEXT_GREEN;
 extern unsigned int TEXT_BRIGHT;
 #endif
 
+///@addtogroup Basic
+///@{
+
 void textcolor(unsigned int color);
 
 void log_visible(FILE* file, const char* string, ...);
@@ -74,3 +77,5 @@ enum Verbosity
 };
 
 void set_verbosity(Verbosity);
+
+///@} Basic

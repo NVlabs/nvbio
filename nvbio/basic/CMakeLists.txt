@@ -28,6 +28,8 @@ packedstream.h
 packedstream_inl.h
 packedstream_loader.h
 packedstream_loader_inl.h
+pipeline.h
+pipeline_inl.h
 pod.h
 popcount.h
 priority_deque.h

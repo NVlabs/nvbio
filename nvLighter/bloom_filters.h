@@ -46,11 +46,11 @@ using namespace nvbio;
 ///\par
 /// - the BloomFilters class, containing all the per-device data needed during nvLighter's execution,
 ///   i.e. the <i>sampled</i> and <i>trusted kmers</i> Bloom filters and the error correction statistics
-/// - the InputStage, i.e. an object encapsulating a \ref Pipeline stage loading read batches
-/// - the OutputStage, i.e. an object encapsulating a \ref Pipeline stage writing read batches
-/// - the SampleKmersStage, i.e. an object encapsulating a \ref Pipeline stage performing kmer sampling
-/// - the TrustedKmersStage, i.e. an object encapsulating a \ref Pipeline stage performing trusted kmer marking
-/// - the ErrorCorrectStage, i.e. an object encapsulating a \ref Pipeline stage performing the actual error correction
+/// - the InputStage, i.e. an object encapsulating an nvbio::Pipeline stage loading read batches
+/// - the OutputStage, i.e. an object encapsulating an nvbio::Pipeline stage writing read batches
+/// - the SampleKmersStage, i.e. an object encapsulating an nvbio::Pipeline stage performing kmer sampling
+/// - the TrustedKmersStage, i.e. an object encapsulating an nvbio::Pipeline stage performing trusted kmer marking
+/// - the ErrorCorrectStage, i.e. an object encapsulating an nvbio::Pipeline stage performing the actual error correction
 ///
 
 ///@addtogroup nvLighterModule

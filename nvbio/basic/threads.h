@@ -43,6 +43,7 @@ namespace nvbio {
 /// - Mutex
 /// - ScopedLock
 /// - WorkQueue
+/// - Pipeline
 ///
 
 ///@addtogroup Basic

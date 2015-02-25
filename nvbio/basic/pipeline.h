@@ -44,6 +44,9 @@ namespace priv { struct PipelineThreadBase; }
 ///@addtogroup Basic
 ///@{
 
+///@addtogroup Threads
+///@{
+
 ///
 /// A class implementing a parallel CPU task-pipeline.
 /// The pipeline can be composed by any number of user-defined stages connected
@@ -92,6 +95,7 @@ struct Pipeline
     std::vector<priv::PipelineThreadBase*> m_stages;
 };
 
+///@} Threads
 ///@} Basic
 
 } // namespace nvbio

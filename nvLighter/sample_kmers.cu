@@ -145,23 +145,22 @@ struct SampleKmersFunctor
 //
 bool SampleKmersStage::process(PipelineContext& context)
 {
-    typedef io::SequenceDataAccess<DNA_N>::sequence_string_set_type string_set_type;
+    typedef nvbio::io::SequenceDataAccess<DNA_N>::sequence_string_set_type string_set_type;
 
     // declare the Bloom filter type
-    typedef blocked_bloom_filter<hash_functor1, hash_functor2, uint64_2*> filter_type;
-    //typedef bloom_filter<SAMPLED_KMERS_FILTER_K, hash_functor1, hash_functor2, uint32*> filter_type;
+    typedef nvbio::blocked_bloom_filter<hash_functor1, hash_functor2, uint64_2*> filter_type;
 
     typedef SampleKmersFunctor<string_set_type,filter_type> functor_type;
 
     // fetch the input
-    io::SequenceDataHost* h_read_data = context.input<io::SequenceDataHost>( 0 );
+    nvbio::io::SequenceDataHost* h_read_data = context.input<nvbio::io::SequenceDataHost>( 0 );
 
     float time = 0.0f;
 
     // introduce a timing scope
     try
     {
-        const ScopedTimer<float> timer( &time );
+        const nvbio::ScopedTimer<float> timer( &time );
 
         if (device >= 0)
         {
@@ -173,10 +172,10 @@ bool SampleKmersStage::process(PipelineContext& context)
             cudaSetDevice( device );
 
             // copy it to the device
-            io::SequenceDataDevice d_read_data( *h_read_data );
+            nvbio::io::SequenceDataDevice d_read_data( *h_read_data );
 
             // build a view
-            const io::SequenceDataAccess<DNA_N> d_read_view( d_read_data );
+            const nvbio::io::SequenceDataAccess<DNA_N> d_read_view( d_read_data );
 
             // build the Bloom filter
             filter_type filter( SAMPLED_KMERS_FILTER_K, filter_size, (uint64_2*)filter_storage );
@@ -331,17 +330,15 @@ struct TrustedKmersFunctor
     NVBIO_HOST_DEVICE
     void operator() (const uint32 i) const
     {
-        typedef typename string_set_type::string_type                   string_type;
-        //typedef typename string_traits<string_type>::forward_iterator   forward_iterator;
-
-        typedef StringPrefetcher< string_type, lmem_cache_tag<MAX_READ_LENGTH> > string_prefetcher_type;
-        typedef typename string_prefetcher_type::string_type                     local_string_type;
-        typedef typename string_traits<local_string_type>::forward_iterator      forward_iterator;
+        typedef typename string_set_type::string_type                                           string_type;
+        typedef nvbio::StringPrefetcher< string_type, nvbio::lmem_cache_tag<MAX_READ_LENGTH> >  string_prefetcher_type;
+        typedef typename string_prefetcher_type::string_type                                    local_string_type;
+        typedef typename nvbio::string_traits<local_string_type>::forward_iterator              forward_iterator;
 
         //bool occur[MAX_READ_LENGTH];
         uint32 occur_storage[MAX_READ_LENGTH/32];
 
-        PackedStream<uint32*,uint8,1u,false> occur( occur_storage );
+        nvbio::PackedStream<uint32*,uint8,1u,false> occur( occur_storage );
 
         // instantiate a prefetcher
         string_prefetcher_type string_prefetcher;
@@ -473,17 +470,17 @@ struct TrustedKmersFunctor
 //
 bool TrustedKmersStage::process(PipelineContext& context)
 {
-    typedef io::SequenceDataAccess<DNA_N>::sequence_string_set_type string_set_type;
+    typedef nvbio::io::SequenceDataAccess<DNA_N>::sequence_string_set_type string_set_type;
 
     // fetch the input
-    io::SequenceDataHost* h_read_data = context.input<io::SequenceDataHost>( 0 );
+    nvbio::io::SequenceDataHost* h_read_data = context.input<nvbio::io::SequenceDataHost>( 0 );
 
     float time = 0.0f;
 
     // introduce a timing scope
     try
     {
-        const ScopedTimer<float> timer( &time );
+        const nvbio::ScopedTimer<float> timer( &time );
 
         if (device >= 0)
         {
@@ -492,10 +489,8 @@ bool TrustedKmersStage::process(PipelineContext& context)
             //
 
             // declare the Bloom filter types
-            typedef blocked_bloom_filter<hash_functor1, hash_functor2, cuda::ldg_pointer<uint4> > sampled_filter_type;
-            typedef blocked_bloom_filter<hash_functor1, hash_functor2, uint64_2*>                 trusted_filter_type;
-            //typedef bloom_filter<SAMPLED_KMERS_FILTER_K, hash_functor1, hash_functor2, cuda::ldg_pointer<uint32> > sampled_filter_type;
-            //typedef bloom_filter<TRUSTED_KMERS_FILTER_K, hash_functor1, hash_functor2, uint32*>                    trusted_filter_type;
+            typedef nvbio::blocked_bloom_filter<hash_functor1, hash_functor2, nvbio::cuda::ldg_pointer<uint4> > sampled_filter_type;
+            typedef nvbio::blocked_bloom_filter<hash_functor1, hash_functor2, uint64_2*>                        trusted_filter_type;
 
             typedef TrustedKmersFunctor<string_set_type,sampled_filter_type,trusted_filter_type, cuda::ldg_pointer<uint32> > functor_type;
 
@@ -537,13 +532,13 @@ bool TrustedKmersStage::process(PipelineContext& context)
             omp_set_num_threads( -device );
 
             // declare the Bloom filter types
-            typedef blocked_bloom_filter<hash_functor1, hash_functor2, const uint64_2*>         sampled_filter_type;
-            typedef blocked_bloom_filter<hash_functor1, hash_functor2,       uint64_2*>         trusted_filter_type;
+            typedef nvbio::blocked_bloom_filter<hash_functor1, hash_functor2, const uint64_2*>         sampled_filter_type;
+            typedef nvbio::blocked_bloom_filter<hash_functor1, hash_functor2,       uint64_2*>         trusted_filter_type;
 
             typedef TrustedKmersFunctor<string_set_type,sampled_filter_type,trusted_filter_type,const uint32*> functor_type;
 
             // build a view
-            const io::SequenceDataAccess<DNA_N> h_read_view( *h_read_data );
+            const nvbio::io::SequenceDataAccess<DNA_N> h_read_view( *h_read_data );
 
             // build the Bloom filter
             sampled_filter_type sampled_filter( SAMPLED_KMERS_FILTER_K, sampled_filter_size, (const uint64_2*)sampled_filter_storage );

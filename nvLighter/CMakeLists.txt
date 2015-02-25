@@ -3,6 +3,7 @@ nvbio_module(nvLighter)
 addsources(
 error_correct.cu
 error_correct.h
+input_thread.cu
 input_thread.h
 output_thread.h
 output_thread.cu

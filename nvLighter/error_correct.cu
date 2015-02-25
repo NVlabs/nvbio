@@ -762,11 +762,11 @@ struct ErrorCorrectFunctor
 //
 bool ErrorCorrectStage::process(PipelineContext& context)
 {
-    typedef io::SequenceDataEdit<DNA_N,io::SequenceDataView>::sequence_string_set_type string_set_type;
-    typedef io::SequenceDataEdit<DNA_N,io::SequenceDataView>::qual_string_set_type     qual_set_type;
+    typedef nvbio::io::SequenceDataEdit<DNA_N,io::SequenceDataView>::sequence_string_set_type string_set_type;
+    typedef nvbio::io::SequenceDataEdit<DNA_N,io::SequenceDataView>::qual_string_set_type     qual_set_type;
 
     // declare the Bloom filter types
-    typedef blocked_bloom_filter<hash_functor1, hash_functor2, cuda::ldg_pointer<uint4> > trusted_filter_type;
+    typedef nvbio::blocked_bloom_filter<hash_functor1, hash_functor2, nvbio::cuda::ldg_pointer<uint4> > trusted_filter_type;
 
     // declare the error corrector functor
     typedef ErrorCorrectFunctor<string_set_type,qual_set_type,trusted_filter_type> functor_type;
@@ -781,7 +781,7 @@ bool ErrorCorrectStage::process(PipelineContext& context)
     // introduce a timing scope
     try
     {
-        const ScopedTimer<float> timer( &time );
+        const nvbio::ScopedTimer<float> timer( &time );
 
         if (device >= 0)
         {
@@ -789,12 +789,12 @@ bool ErrorCorrectStage::process(PipelineContext& context)
             cudaSetDevice( device );
 
             // copy it to the device
-            io::SequenceDataDevice d_read_data( *h_read_data );
+            nvbio::io::SequenceDataDevice d_read_data( *h_read_data );
 
-            io::SequenceDataView d_read_view( d_read_data );
+            nvbio::io::SequenceDataView d_read_view( d_read_data );
 
             // build an editable view
-            io::SequenceDataEdit<DNA_N,io::SequenceDataView> d_read_edit( d_read_view );
+            nvbio::io::SequenceDataEdit<DNA_N,nvbio::io::SequenceDataView> d_read_edit( d_read_view );
 
             // build the Bloom filter
             trusted_filter_type trusted_filter( TRUSTED_KMERS_FILTER_K, trusted_filter_size, (const uint4*)trusted_filter_storage );
@@ -816,10 +816,10 @@ bool ErrorCorrectStage::process(PipelineContext& context)
                 error_corrector );
 
             cudaDeviceSynchronize();
-            cuda::check_error("error-correct");
+            nvbio::cuda::check_error("error-correct");
 
             // fetch the output
-            io::SequenceDataHost* output = context.output<io::SequenceDataHost>();
+            nvbio::io::SequenceDataHost* output = context.output<nvbio::io::SequenceDataHost>();
 
             // copy the modified device data to the output
             *output = d_read_data;
@@ -829,15 +829,15 @@ bool ErrorCorrectStage::process(PipelineContext& context)
             omp_set_num_threads( -device );
 
             // fetch the output
-            io::SequenceDataHost* output = context.output<io::SequenceDataHost>();
+            nvbio::io::SequenceDataHost* output = context.output<nvbio::io::SequenceDataHost>();
 
             // copy from the input
             *output = *h_read_data;
 
-            io::SequenceDataView h_read_view( *output );
+            nvbio::io::SequenceDataView h_read_view( *output );
 
             // build an editable view
-            io::SequenceDataEdit<DNA_N,io::SequenceDataView> h_read_edit( h_read_view );
+            nvbio::io::SequenceDataEdit<DNA_N,nvbio::io::SequenceDataView> h_read_edit( h_read_view );
 
             // build the Bloom filter
             trusted_filter_type trusted_filter( TRUSTED_KMERS_FILTER_K, trusted_filter_size, (const uint4*)trusted_filter_storage );

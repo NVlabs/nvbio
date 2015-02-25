@@ -25,57 +25,55 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// output_thread.h
+// input_thread.cu
 //
 
-#pragma once
-
-#include "utils.h"
+#include "input_thread.h"
 #include <nvbio/basic/pipeline_context.h>
+#include <nvbio/basic/console.h>
+#include <nvbio/basic/timer.h>
+#include <nvbio/basic/threads.h>
 #include <nvbio/io/sequence/sequence.h>
-#include <zlib/zlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-///@addtogroup nvLighterModule
-///@{
+using namespace nvbio;
 
-/// A small class encapsulating the core data needed by all output threads,
-/// i.e. the output file and its relevant statistics
-///
-struct OutputStageData : public SequenceStats
+// fill the next batch
+//
+bool InputStage::process(nvbio::PipelineContext& context)
 {
-    /// constructor
-    ///
-    ///\param file          input sequence file
-    ///\param max_strings   maximum number of strings per batch
-    ///\param max_bps       maximum number of base pairs per batch
-    ///
-    OutputStageData(nvbio::io::SequenceDataOutputStream* file) : m_file( file ) {}
+    m_data->m_mutex.lock();
 
-    nvbio::io::SequenceDataOutputStream* m_file;
-};
+    nvbio::Timer timer;
+    timer.start();
 
-///
-/// A small class implementing an nvbio::Pipeline stage reading sequence batches from a file
-///
-struct OutputStage
-{
-    typedef nvbio::io::SequenceDataHost   argument_type;
+    // fetch the output
+    nvbio::io::SequenceDataHost* h_read_data = context.output<nvbio::io::SequenceDataHost>();
 
-    /// empty constructor
-    ///
-    OutputStage() : data(NULL) {}
+    const int ret = nvbio::io::next( DNA_N, h_read_data, m_data->m_file, m_data->m_max_strings, m_data->m_max_bps );
 
-    /// constructor
-    ///
-    ///\param file          input sequence file
-    ///
-    OutputStage(OutputStageData* _data) : data(_data) {}
+    timer.stop();
+    m_data->m_time  += timer.seconds();
+    m_data->m_reads += h_read_data->size();
+    m_data->m_bps   += h_read_data->bps();
 
-    /// fill the next batch
-    ///
-    bool process(nvbio::PipelineContext& context);
+    if (h_read_data->max_sequence_len() > MAX_READ_LENGTH)
+    {
+        log_error(stderr, "  maximum read length exceeded: %u > %u\n", h_read_data->max_sequence_len(), MAX_READ_LENGTH);
+        return false;
+    }
 
-    OutputStageData* data;
-};
+    log_verbose(stderr, "\r  loaded reads [%llu, %llu] (%.1fM / %.2fG bps, %.1fK reads/s, %.1fM bps/s)                ",
+        m_data->m_reads,
+        m_data->m_reads + h_read_data->size(),
+        1.0e-6f * (h_read_data->bps()),
+        1.0e-9f * (m_data->m_bps + h_read_data->bps()),
+        m_data->m_time ? (1.0e-3f * (m_data->m_reads + h_read_data->size())) / m_data->m_time : 0.0f,
+        m_data->m_time ? (1.0e-6f * (m_data->m_bps   + h_read_data->bps() )) / m_data->m_time : 0.0f );
+    log_debug_cont(stderr, "\n");
 
-///@}  // group nvLighterModule
+    m_data->m_mutex.unlock();
+
+    return ret;
+}

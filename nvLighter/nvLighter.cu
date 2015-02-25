@@ -73,7 +73,7 @@ void cumulative_binomial_distribution(double F[], uint32 l, double p)
     }
 }
 
-char get_bad_quality(io::SequenceDataStream* reads_file)
+char get_bad_quality(nvbio::io::SequenceDataStream* reads_file)
 {
     int i;
     int histogram1[300], histogram2[300];
@@ -88,13 +88,13 @@ char get_bad_quality(io::SequenceDataStream* reads_file)
 
     for (int batch = 0 ; batch < 100; ++batch)
     {
-        const int ret = io::next( ASCII, &reads, reads_file, 10000, 10000000 );
+        const int ret = nvbio::io::next( ASCII, &reads, reads_file, 10000, 10000000 );
         if (ret == 0)
             break;
 
-        const io::SequenceDataAccess<ASCII> reads_view( reads );
+        const nvbio::io::SequenceDataAccess<ASCII> reads_view( reads );
 
-        typedef io::SequenceDataAccess<ASCII>::qual_string qual_string;
+        typedef nvbio::io::SequenceDataAccess<ASCII>::qual_string qual_string;
 
         for (uint32 i = 0; i < reads.size(); ++i)
         {
@@ -133,11 +133,11 @@ char get_bad_quality(io::SequenceDataStream* reads_file)
     return (char)nvbio::min( t1, t2 );
 }
 
-float infer_alpha(io::SequenceDataStream* reads_file, const uint64 genome_size)
+float infer_alpha(nvbio::io::SequenceDataStream* reads_file, const uint64 genome_size)
 {
     log_info(stderr, "  inferring alpha... started\n" );
 
-    io::SequenceDataHost reads;
+    nvbio::io::SequenceDataHost reads;
 
     uint64 n_reads = 0;
     uint64 n_bps   = 0;
@@ -148,7 +148,7 @@ float infer_alpha(io::SequenceDataStream* reads_file, const uint64 genome_size)
         Timer timer;
         timer.start();
 
-        const int ret = io::next( ASCII, &reads, reads_file, 512*1024, 128*1024*1024 );
+        const int ret = nvbio::io::next( ASCII, &reads, reads_file, 512*1024, 128*1024*1024 );
         if (ret == 0)
             break;
 
@@ -414,7 +414,7 @@ int main(int argc, char* argv[])
         log_info(stderr,"  sample kmers... started\n");
         {
             //
-            // The following code implements a parallel Pipeline to sample kmers from the input
+            // The following code implements a parallel nvbio::Pipeline to sample kmers from the input
             // reads. The pipeline is composed several subpipelines, one per active device, each made
             // of two stages (which will be run in separate threads): an InputStage, and a
             // SampleKmersStage doing the actual sampling work.
@@ -457,7 +457,7 @@ int main(int argc, char* argv[])
             }
 
             // build the pipeline
-            Pipeline pipeline;
+            nvbio::Pipeline pipeline;
             for (uint32 i = 0; i < device_count + (cpu ? 1 : 0); ++i)
             {
                 const uint32 in0 = pipeline.append_stage( &input_stage[i], 4u );
@@ -486,7 +486,7 @@ int main(int argc, char* argv[])
         log_info(stderr,"  mark trusted kmers... started\n");
         {
             //
-            // The following code implements a parallel Pipeline to mark trusted kmers in the input
+            // The following code implements a parallel nvbio::Pipeline to mark trusted kmers in the input
             // reads. The pipeline is composed several subpipelines, one per active device, each made
             // of two stages (which will be run in separate threads): an InputStage, and a
             // TrustedKmersStage doing the actual marking work.
@@ -604,7 +604,7 @@ int main(int argc, char* argv[])
             }
 
             // build the pipeline
-            Pipeline pipeline;
+            nvbio::Pipeline pipeline;
             for (uint32 i = 0; i < device_count + (cpu ? 1 : 0); ++i)
             {
                 const uint32 in0 = pipeline.append_stage( &input_stage[i], 4u );
@@ -633,7 +633,7 @@ int main(int argc, char* argv[])
         log_info(stderr,"  error correction... started\n");
         {
             //
-            // The following code implements a parallel Pipeline to error-correct the input
+            // The following code implements a parallel nvbio::Pipeline to error-correct the input
             // reads. The pipeline is composed several subpipelines, one per active device, each made
             // of three stages (which will be run in separate threads): an InputStage, an
             // ErrorCorrectStage doing the actual error correction work, and a final OutputStage.
@@ -735,7 +735,7 @@ int main(int argc, char* argv[])
             log_debug(stderr, "  start pipeline\n");
 
             // build the pipeline
-            Pipeline pipeline;
+            nvbio::Pipeline pipeline;
             for (uint32 i = 0; i < device_count + (cpu ? 1 : 0); ++i)
             {
                 const uint32 in  = pipeline.append_stage( &input_stage[i], 4u );

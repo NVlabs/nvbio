@@ -40,8 +40,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-using namespace nvbio;
-
 ///@addtogroup nvLighterModule
 ///@{
 
@@ -99,8 +97,8 @@ struct ErrorCorrectStage
     char                new_quality;
     SequenceStats*      stats;
 
-    nvbio::for_each_enactor<host_tag>   host_for_each;
-    nvbio::for_each_enactor<device_tag> device_for_each;
+    nvbio::for_each_enactor<nvbio::host_tag>   host_for_each;
+    nvbio::for_each_enactor<nvbio::device_tag> device_for_each;
 };
 
 ///@}  // group nvLighterModule

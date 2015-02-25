@@ -38,8 +38,6 @@
 #include <nvbio/basic/primitives.h>
 #include <nvbio/basic/popcount.h>
 
-using namespace nvbio;
-
 ///@defgroup nvLighterModule nvLighter
 /// This module contains all of \subpage nvlighter_page "nvLighter"'s class hierarchy.
 /// nvLighter is composed of the following important pieces:
@@ -66,6 +64,8 @@ enum KmersType { SAMPLED_KMERS = 0, TRUSTED_KMERS = 1 };
 template <typename system_tag>
 struct BloomFilters
 {
+    /// setup the internal storage
+    ///
     bool setup(const int _device, const uint64 sampled_words, const uint64 trusted_words)
     {
         device = _device;
@@ -97,12 +97,6 @@ struct BloomFilters
         return true;
     }
 
-    int                              device;
-    nvbio::vector<system_tag,uint32> sampled_kmers_storage;
-    nvbio::vector<system_tag,uint32> trusted_kmers_storage;
-    nvbio::vector<system_tag,uint32> threshold;
-    nvbio::vector<system_tag,uint64> stats;
-
     const nvbio::vector<system_tag,uint32>& get_kmers(const KmersType type) const
     {
         return (type == SAMPLED_KMERS) ? sampled_kmers_storage :
@@ -113,21 +107,21 @@ struct BloomFilters
         return (type == SAMPLED_KMERS) ? sampled_kmers_storage :
                                          trusted_kmers_storage;
     }
-    void get_kmers(const KmersType type, nvbio::vector<host_tag,uint32>& bf)
+    void get_kmers(const KmersType type, nvbio::vector<nvbio::host_tag,uint32>& bf)
     {
         set_device();
 
         if (type == SAMPLED_KMERS) bf = sampled_kmers_storage;
         else                       bf = trusted_kmers_storage;
     }
-    void set_kmers(const KmersType type, const nvbio::vector<host_tag,uint32>& bf)
+    void set_kmers(const KmersType type, const nvbio::vector<nvbio::host_tag,uint32>& bf)
     {
         set_device();
 
         if (type == SAMPLED_KMERS) sampled_kmers_storage = bf;
         else                       trusted_kmers_storage = bf;
     }
-    void set_threshold(const nvbio::vector<host_tag,uint32>& _threshold)
+    void set_threshold(const nvbio::vector<nvbio::host_tag,uint32>& _threshold)
     {
         set_device();
 
@@ -136,22 +130,34 @@ struct BloomFilters
 
     void set_device() const
     {
-        if (equal<system_tag,device_tag>())
+        if (nvbio::equal<system_tag,nvbio::device_tag>())
             cudaSetDevice( device );
     }
     void device_memory(size_t* free_device, size_t* total_device) const
     {
-        if (equal<system_tag,device_tag>())
+        if (nvbio::equal<system_tag,nvbio::device_tag>())
             cudaMemGetInfo( free_device, total_device );
         else
             *free_device = *total_device = 1024llu * 1024llu * 1024llu * 1024llu; // TODO!
     }
+
+public:
+    int                              device;
+    nvbio::vector<system_tag,uint32> sampled_kmers_storage;
+    nvbio::vector<system_tag,uint32> trusted_kmers_storage;
+    nvbio::vector<system_tag,uint32> threshold;
+    nvbio::vector<system_tag,uint64> stats;
+
 };
 
 /// merge several Bloom filters
 ///
 inline
-void merge(BloomFilters<host_tag>* h_bloom_filters, const uint32 device_count, BloomFilters<device_tag>* d_bloom_filters, const KmersType type)
+void merge(
+    BloomFilters<nvbio::host_tag>*      h_bloom_filters,
+    const uint32                        device_count,
+    BloomFilters<nvbio::device_tag>*    d_bloom_filters,
+    const KmersType                     type)
 {
     // merge the Bloom filters on the host
     if (h_bloom_filters && device_count)
@@ -159,8 +165,8 @@ void merge(BloomFilters<host_tag>* h_bloom_filters, const uint32 device_count, B
         log_info(stderr,"  merge filters\n");
 
         // get the host Bloom filter
-        nvbio::vector<host_tag,uint32>& bf = h_bloom_filters->get_kmers( type );
-        nvbio::vector<host_tag,uint32>  bf2;
+        nvbio::vector<nvbio::host_tag,uint32>& bf = h_bloom_filters->get_kmers( type );
+        nvbio::vector<nvbio::host_tag,uint32>  bf2;
 
         // merge with all the device ones
         for (uint32 d = 0; d < device_count; ++d)
@@ -179,8 +185,8 @@ void merge(BloomFilters<host_tag>* h_bloom_filters, const uint32 device_count, B
     else if (device_count > 1)
     {
         log_info(stderr,"  merge filters\n");
-        nvbio::vector<host_tag,uint32>  bf;
-        nvbio::vector<host_tag,uint32>  bf2;
+        nvbio::vector<nvbio::host_tag,uint32>  bf;
+        nvbio::vector<nvbio::host_tag,uint32>  bf2;
 
         // get the first device Bloom filter
         d_bloom_filters[0].get_kmers( type, bf );
@@ -205,10 +211,14 @@ void merge(BloomFilters<host_tag>* h_bloom_filters, const uint32 device_count, B
 /// merge several stats
 ///
 inline
-void merged_stats(const BloomFilters<host_tag>* h_bloom_filters, const uint32 device_count, const BloomFilters<device_tag>* d_bloom_filters, nvbio::vector<host_tag,uint64>& stats)
+void merged_stats(
+    const BloomFilters<nvbio::host_tag>*    h_bloom_filters,
+    const uint32                            device_count,
+    const BloomFilters<nvbio::device_tag>*  d_bloom_filters,
+    nvbio::vector<nvbio::host_tag,uint64>&  stats)
 {
     // merge the stats on the host
-    nvbio::vector<host_tag,uint64> stats2;
+    nvbio::vector<nvbio::host_tag,uint64> stats2;
 
     // copy the first
     if (h_bloom_filters)
@@ -240,7 +250,11 @@ struct block_occupancy_functor
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
     double operator() (const uint4 block) const
     {
-        const uint32 used = popc( block.x ) + popc( block.y ) + popc( block.z ) + popc( block.w );
+        const uint32 used =
+            nvbio::popc( block.x ) +
+            nvbio::popc( block.y ) +
+            nvbio::popc( block.z ) +
+            nvbio::popc( block.w );
         return powf( float(used)/128.0f, K );
     }
 
@@ -258,8 +272,8 @@ void compute_bloom_filter_stats(
     float&                          approx_size,
     float&                          fp)
 {
-    typedef typename if_equal<system_tag,device_tag,thrust::device_ptr<const uint32>, const uint32*>::type uint_pointer_type;
-    typedef typename if_equal<system_tag,device_tag,thrust::device_ptr<const uint4>,  const uint4*>::type  uint4_pointer_type;
+    typedef typename nvbio::if_equal<system_tag,nvbio::device_tag,thrust::device_ptr<const uint32>, const uint32*>::type uint_pointer_type;
+    typedef typename nvbio::if_equal<system_tag,nvbio::device_tag,thrust::device_ptr<const uint4>,  const uint4*>::type  uint4_pointer_type;
 
     bloom_filters.set_device();
 
@@ -277,8 +291,8 @@ void compute_bloom_filter_stats(
         n_words,
         thrust::make_transform_iterator(
             thrust::make_transform_iterator(
-                uint_pointer_type( words ), popc_functor<uint32>() ),
-                cast_functor<uint32,uint64>() ),
+                uint_pointer_type( words ), nvbio::popc_functor<uint32>() ),
+                nvbio::cast_functor<uint32,uint64>() ),
         thrust::plus<uint64>(),
         temp_storage );
 

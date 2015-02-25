@@ -34,8 +34,6 @@
 #include <nvbio/basic/threads.h>
 #include <nvbio/basic/cuda/arch.h>
 
-using namespace nvbio;
-
 enum {
     ERROR_FREE    = 0,
     CORRECTIONS   = 1,
@@ -43,6 +41,16 @@ enum {
     TRIMMED_READS = 3,
     TRIMMED_BASES = 4
 };
+
+typedef nvbio::uint8    uint8;
+typedef nvbio::int16     int16;
+typedef nvbio::uint16   uint16;
+typedef nvbio::int32     int32;
+typedef nvbio::uint32   uint32;
+typedef nvbio::int64     int64;
+typedef nvbio::uint64   uint64;
+typedef nvbio::uint64_2 uint64_2;
+typedef nvbio::uint64_4 uint64_4;
 
 //static const uint32 SAMPLED_KMERS_FILTER_K = 9;    // optimal number of hashes for a Bloom filter with false probability rate of 0.01
 //static const uint32 TRUSTED_KMERS_FILTER_K = 11;   // optimal number of hashes for a Bloom filter with false probability rate of 0.0005
@@ -54,12 +62,12 @@ static const uint32 TRUSTED_KMERS_FILTER_K = 8;    // this parameter should theo
 struct hash_functor1
 {
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint64 operator() (const uint64 kmer) const { return hash( kmer ); }
+    uint64 operator() (const uint64 kmer) const { return nvbio::hash( kmer ); }
 };
 struct hash_functor2
 {
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE
-    uint64 operator() (const uint64 kmer) const { return hash2( kmer ); }
+    uint64 operator() (const uint64 kmer) const { return nvbio::hash2( kmer ); }
 };
 
 enum { MAX_READ_LENGTH = 2048 };
@@ -133,8 +141,8 @@ struct SequenceStats
 {
     SequenceStats() : m_reads(0), m_bps(0), m_time(0) {}
 
-    Mutex   m_mutex;
-    uint64  m_reads;
-    uint64  m_bps;
-    float   m_time;
+    nvbio::Mutex    m_mutex;
+    uint64          m_reads;
+    uint64          m_bps;
+    float           m_time;
 };

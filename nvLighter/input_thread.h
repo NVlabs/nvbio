@@ -78,8 +78,8 @@ struct InputStageData
 ///
 struct InputStage
 {
-    typedef void                   argument_type;
-    typedef io::SequenceDataHost   return_type;
+    typedef void                          argument_type;
+    typedef nvbio::io::SequenceDataHost   return_type;
 
     /// constructor
     ///
@@ -99,42 +99,7 @@ struct InputStage
 
     /// fill the next batch
     ///
-    bool process(nvbio::PipelineContext& context)
-    {
-        m_data->m_mutex.lock();
-
-        Timer timer;
-        timer.start();
-
-        // fetch the output
-        io::SequenceDataHost* h_read_data = context.output<io::SequenceDataHost>();
-
-        const int ret = io::next( DNA_N, h_read_data, m_data->m_file, m_data->m_max_strings, m_data->m_max_bps );
-
-        timer.stop();
-        m_data->m_time  += timer.seconds();
-        m_data->m_reads += h_read_data->size();
-        m_data->m_bps   += h_read_data->bps();
-
-        if (h_read_data->max_sequence_len() > MAX_READ_LENGTH)
-        {
-            log_error(stderr, "  maximum read length exceeded: %u > %u\n", h_read_data->max_sequence_len(), MAX_READ_LENGTH);
-            return false;
-        }
-
-        log_verbose(stderr, "\r  loaded reads [%llu, %llu] (%.1fM / %.2fG bps, %.1fK reads/s, %.1fM bps/s)                ",
-            m_data->m_reads,
-            m_data->m_reads + h_read_data->size(),
-            1.0e-6f * (h_read_data->bps()),
-            1.0e-9f * (m_data->m_bps + h_read_data->bps()),
-            m_data->m_time ? (1.0e-3f * (m_data->m_reads + h_read_data->size())) / m_data->m_time : 0.0f,
-            m_data->m_time ? (1.0e-6f * (m_data->m_bps   + h_read_data->bps() )) / m_data->m_time : 0.0f );
-        log_debug_cont(stderr, "\n");
-
-        m_data->m_mutex.unlock();
-
-        return ret;
-    }
+    bool process(nvbio::PipelineContext& context);
 
     InputStageData*  m_data;
 };

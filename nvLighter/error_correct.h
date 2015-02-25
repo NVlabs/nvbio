@@ -87,7 +87,7 @@ struct ErrorCorrectStage
 
     /// process the next batch
     ///
-    bool process(PipelineContext& context);
+    bool process(nvbio::PipelineContext& context);
 
     int                 device;
     uint32              k;
@@ -99,8 +99,8 @@ struct ErrorCorrectStage
     char                new_quality;
     SequenceStats*      stats;
 
-    for_each_enactor<host_tag>   host_for_each;
-    for_each_enactor<device_tag> device_for_each;
+    nvbio::for_each_enactor<host_tag>   host_for_each;
+    nvbio::for_each_enactor<device_tag> device_for_each;
 };
 
 ///@}  // group nvLighterModule

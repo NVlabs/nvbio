@@ -41,7 +41,7 @@
 using namespace nvbio;
 
 ///@defgroup nvLighterModule nvLighter
-/// This module encapsulates all of nvLighter's class hierarchy.
+/// This module contains all of \subpage nvlighter_page "nvLighter"'s class hierarchy.
 /// nvLighter is composed of the following important pieces:
 ///\par
 /// - the BloomFilters class, containing all the per-device data needed during nvLighter's execution,

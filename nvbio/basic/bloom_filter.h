@@ -38,10 +38,11 @@ namespace nvbio {
 /// <a href=http://en.wikipedia.org/wiki/Bloom_filter>Bloom filters</a> are a probabilistic data-structure
 /// useful to <i>conservatively</i> represent membership in a set using less than 1 bit per set item.
 ///\par
-/// NVBIO provides a simple generic class to incrementally build and work with Bloom filters
-/// both on the host and the device:
+/// NVBIO provides two simple generic classes to incrementally build and work with standard and <i>blocked</i>
+/// Bloom filters both on the host and the device:
 ///
 /// - bloom_filter
+/// - blocked_bloom_filter
 ///
 /// \section ExampleSection Example
 ///
@@ -241,7 +242,7 @@ struct inplace_or<uint64_4>
 
 ///
 /// A Bloom filter implementation.
-/// This clsss is <i>storage-free</i>, and can used both from the host and the device.
+/// This class is <i>storage-free</i>, and can used both from the host and the device.
 /// Constructing a Bloom filter can be done incrementally calling insert(), either sequentially
 /// or in parallel.
 ///
@@ -302,10 +303,13 @@ struct bloom_filter
 
 
 ///
-/// A Bloom filter implementation.
-/// This clsss is <i>storage-free</i>, and can used both from the host and the device.
+/// A blocked Bloom filter implementation.
+/// This class is <i>storage-free</i>, and can used both from the host and the device.
 /// Constructing a Bloom filter can be done incrementally calling insert(), either sequentially
 /// or in parallel.
+/// The block size is determined by the value_type of the storage Iterator: e.g. a uint4 or a uint64_2
+/// will cause the Bloom filter to use 128-bit blocks, whereas a uint64_4 will cause it to use
+/// 256-bit blocks.
 ///
 /// \tparam  Hash1              the first hash function
 /// \tparam  Hash2              the second hash function

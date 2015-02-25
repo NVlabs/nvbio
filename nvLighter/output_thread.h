@@ -51,9 +51,9 @@ struct OutputStageData : public SequenceStats
     ///\param max_strings   maximum number of strings per batch
     ///\param max_bps       maximum number of base pairs per batch
     ///
-    OutputStageData(io::SequenceDataOutputStream* file) : m_file( file ) {}
+    OutputStageData(nvbio::io::SequenceDataOutputStream* file) : m_file( file ) {}
 
-    io::SequenceDataOutputStream* m_file;
+    nvbio::io::SequenceDataOutputStream* m_file;
 };
 
 ///
@@ -75,7 +75,7 @@ struct OutputStage
 
     /// fill the next batch
     ///
-    bool process(PipelineContext& context);
+    bool process(nvbio::PipelineContext& context);
 
     OutputStageData* data;
 };

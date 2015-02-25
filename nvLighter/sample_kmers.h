@@ -80,7 +80,7 @@ struct SampleKmersStage
 
     /// process the next batch
     ///
-    bool process(PipelineContext& context);
+    bool process(nvbio::PipelineContext& context);
 
     int                 device;
     uint32              k;
@@ -89,8 +89,8 @@ struct SampleKmersStage
     uint32*             filter_storage;
     SequenceStats*      stats;
 
-    for_each_enactor<host_tag>   host_for_each;
-    for_each_enactor<device_tag> device_for_each;
+    nvbio::for_each_enactor<host_tag>   host_for_each;
+    nvbio::for_each_enactor<device_tag> device_for_each;
 };
 
 
@@ -133,7 +133,7 @@ struct TrustedKmersStage
 
     /// process the next batch
     ///
-    bool process(PipelineContext& context);
+    bool process(nvbio::PipelineContext& context);
 
     int                 device;
     uint32              k;
@@ -144,8 +144,8 @@ struct TrustedKmersStage
     const uint32*       threshold;
     SequenceStats*      stats;
 
-    for_each_enactor<host_tag>   host_for_each;
-    for_each_enactor<device_tag> device_for_each;
+    nvbio::for_each_enactor<host_tag>   host_for_each;
+    nvbio::for_each_enactor<device_tag> device_for_each;
 };
 
 ///@}  // group nvLighterModule

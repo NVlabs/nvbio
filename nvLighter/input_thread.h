@@ -55,7 +55,7 @@ struct InputStageData
     ///\param max_strings   maximum number of strings per batch
     ///\param max_bps       maximum number of base pairs per batch
     ///
-    InputStageData(io::SequenceDataStream* file, const uint32 max_strings, const uint32 max_bps) :
+    InputStageData(nvbio::io::SequenceDataStream* file, const uint32 max_strings, const uint32 max_bps) :
         m_file          ( file ),
         m_max_strings   ( max_strings ),
         m_max_bps       ( max_bps ),
@@ -64,8 +64,8 @@ struct InputStageData
         m_time          ( 0.0f )
     {}
 
-    Mutex                           m_mutex;
-    io::SequenceDataStream*         m_file;
+    nvbio::Mutex                    m_mutex;
+    nvbio::io::SequenceDataStream*  m_file;
     uint32                          m_max_strings;
     uint32                          m_max_bps;
     uint64                          m_reads;
@@ -99,7 +99,7 @@ struct InputStage
 
     /// fill the next batch
     ///
-    bool process(PipelineContext& context)
+    bool process(nvbio::PipelineContext& context)
     {
         m_data->m_mutex.lock();
 

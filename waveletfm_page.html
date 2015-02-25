@@ -100,7 +100,7 @@ Building the BWT</h1>
 <dl class="section user"><dt></dt><dd>If we want to build an FM-index, the first thing is computing the BWT of the database string we want to index. In this example, we'll use a very naive string containing all protein characters in a row - but in a real app this string might contain millions of entries, hence we'll do this using NVBIO's very fast parallel construction algorithm running on a CUDA device.</dd></dl>
 <dl class="section user"><dt></dt><dd><div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code" href="bgzip_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[])</div>
 <div class="line">{</div>
-<div class="line">    <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;waveletfm... started\n&quot;</span>);</div>
+<div class="line">    <a class="code" href="group___basic.html#ga6d47fc29868f0be35a8fc846e415f79b">log_info</a>(stderr, <span class="stringliteral">&quot;waveletfm... started\n&quot;</span>);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// this string will be our protein database we want to search in - just a short string</span></div>
 <div class="line">    <span class="comment">// with all protein characters in sequence</span></div>
@@ -108,7 +108,7 @@ Building the BWT</h1>
 <div class="line">    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> text_len = 24;</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// print the text</span></div>
-<div class="line">    <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;  text: %s\n&quot;</span>, proteins);</div>
+<div class="line">    <a class="code" href="group___basic.html#ga6d47fc29868f0be35a8fc846e415f79b">log_info</a>(stderr, <span class="stringliteral">&quot;  text: %s\n&quot;</span>, proteins);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// allocate a host packed vector</span></div>
 <div class="line">    PackedVector&lt;host_tag,8u,true&gt; h_text( text_len );</div>
@@ -135,7 +135,7 @@ Building the BWT</h1>
 <div class="line"></div>
 <div class="line">        proteins_bwt[24] = <span class="charliteral">&#39;\0&#39;</span>;</div>
 <div class="line"></div>
-<div class="line">        <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;  bwt: %s (primary %u)\n&quot;</span>, proteins_bwt, primary);</div>
+<div class="line">        <a class="code" href="group___basic.html#ga6d47fc29868f0be35a8fc846e415f79b">log_info</a>(stderr, <span class="stringliteral">&quot;  bwt: %s (primary %u)\n&quot;</span>, proteins_bwt, primary);</div>
 <div class="line">    }</div>
 <div class="line">    ...</div>
 </div><!-- fragment --> </dd></dl>
@@ -195,7 +195,7 @@ Building and querying the FM-index</h1>
 <div class="line">    <span class="comment">// do some string matching using our newly built FM-index - once again</span></div>
 <div class="line">    <span class="comment">// we are doing it on the host, though all data is on the device: the entire</span></div>
 <div class="line">    <span class="comment">// loop would be better moved to the device in a real app.</span></div>
-<div class="line">    <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;  string matching:\n&quot;</span>);</div>
+<div class="line">    <a class="code" href="group___basic.html#ga6d47fc29868f0be35a8fc846e415f79b">log_info</a>(stderr, <span class="stringliteral">&quot;  string matching:\n&quot;</span>);</div>
 <div class="line">    <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i = 0; i &lt; text_len; ++i)</div>
 <div class="line">    {</div>
 <div class="line">        <span class="comment">// match the i-th suffix of the text</span></div>
@@ -205,10 +205,10 @@ Building and querying the FM-index</h1>
 <div class="line">        <span class="keyword">const</span> uint2 range = <a class="code" href="group___f_m_index.html#gac4ed217af75673d34c35eaddbf80d11a">match</a>( fmi, d_text.begin() + i, pattern_len );</div>
 <div class="line"></div>
 <div class="line">        <span class="comment">// print the number of occurrences of our pattern, equal to the SA range size</span></div>
-<div class="line">        <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;    rank(%s): %u\n&quot;</span>, proteins + i, 1u + range.y - range.x);</div>
+<div class="line">        <a class="code" href="group___basic.html#ga6d47fc29868f0be35a8fc846e415f79b">log_info</a>(stderr, <span class="stringliteral">&quot;    rank(%s): %u\n&quot;</span>, proteins + i, 1u + range.y - range.x);</div>
 <div class="line">    }</div>
 <div class="line"></div>
-<div class="line">    <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;waveletfm... done\n&quot;</span>);</div>
+<div class="line">    <a class="code" href="group___basic.html#ga6d47fc29868f0be35a8fc846e415f79b">log_info</a>(stderr, <span class="stringliteral">&quot;waveletfm... done\n&quot;</span>);</div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
 </div><!-- fragment --> </dd></dl>
@@ -247,7 +247,7 @@ Building and querying the FM-index</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:55 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:16 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

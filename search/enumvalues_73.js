@@ -12,7 +12,7 @@ var searchData=
   ['samflag_5freversecomplemented',['SAMFlag_ReverseComplemented',['../group___sequence_i_o_detail.html#gga5f4b72893841e9a68cd81d071ef8e01caa35c9d7c06d10c40225aee844ff108a3',1,'nvbio::io']]],
   ['samflag_5fsecondaryalignment',['SAMFlag_SecondaryAlignment',['../group___sequence_i_o_detail.html#gga5f4b72893841e9a68cd81d071ef8e01caa9921da9f797fff0dbece334676da532',1,'nvbio::io']]],
   ['samflag_5fsegmentunmapped',['SAMFlag_SegmentUnmapped',['../group___sequence_i_o_detail.html#gga5f4b72893841e9a68cd81d071ef8e01ca358f97e30dbfb19712a90b6c0696ba44',1,'nvbio::io']]],
-  ['sampled_5fkmers',['SAMPLED_KMERS',['../bloom__filters_8h.html#ab645f21103d42e032c63ccc07b2db4e3a11b249989c121e9aba6026f29ec93ff7',1,'bloom_filters.h']]],
+  ['sampled_5fkmers',['SAMPLED_KMERS',['../group__nv_lighter_module.html#ggab645f21103d42e032c63ccc07b2db4e3a11b249989c121e9aba6026f29ec93ff7',1,'bloom_filters.h']]],
   ['score',['SCORE',['../structnvbio_1_1alndiff_1_1_filter.html#ab3c63fb26c819c01b00bfc3db241f84fa2b9d46d8f88a46290e12f81780c3c87b',1,'nvbio::alndiff::Filter']]],
   ['score_5fmate_5fblockdim',['SCORE_MATE_BLOCKDIM',['../group___defs.html#ggaacdbe56d292141e971444f299881c0dcab3c0873f43d99d5d0a14c52ed035839c',1,'nvbio::bowtie2::cuda']]],
   ['score_5fstream',['SCORE_STREAM',['../group___alignment_detail.html#gga9db88865ab2bd7b1f501d885f06434c7a0556e75a42dd678ad70c017a75c9fb29',1,'nvbio::bowtie2::cuda::detail']]],

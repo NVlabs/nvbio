@@ -139,29 +139,31 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">using namespace </span>nvbio;</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="code" href="struct_output_stage_data.html">   40</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_output_stage_data.html">OutputStageData</a> : <span class="keyword">public</span> <a class="code" href="struct_sequence_stats.html">SequenceStats</a></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;{</div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="code" href="struct_output_stage_data.html#a6bd8f054345526ec7e95e1e19c746636">   48</a></span>&#160;    <a class="code" href="struct_output_stage_data.html#a6bd8f054345526ec7e95e1e19c746636">OutputStageData</a>(<a class="code" href="structnvbio_1_1io_1_1_sequence_data_output_stream.html">io::SequenceDataOutputStream</a>* file) : m_file( file ) {}</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="code" href="struct_output_stage_data.html#a7f0279014071c5de901c95f6e0b1b219">   50</a></span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_sequence_data_output_stream.html">io::SequenceDataOutputStream</a>* <a class="code" href="struct_output_stage_data.html#a7f0279014071c5de901c95f6e0b1b219">m_file</a>;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;};</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno"><a class="code" href="struct_output_stage.html">   57</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_output_stage.html">OutputStage</a></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;{</div>
-<div class="line"><a name="l00059"></a><span class="lineno"><a class="code" href="struct_output_stage.html#a93e9b00e3ee6f2d7d72a586f381d6547">   59</a></span>&#160;    <span class="keyword">typedef</span> <a class="code" href="structnvbio_1_1io_1_1_sequence_data_storage.html">io::SequenceDataHost</a>   <a class="code" href="struct_output_stage.html#a93e9b00e3ee6f2d7d72a586f381d6547">argument_type</a>;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno"><a class="code" href="struct_output_stage.html#a4d076680b3824cbb8735f26bfc5bbe85">   63</a></span>&#160;    <a class="code" href="struct_output_stage.html#a4d076680b3824cbb8735f26bfc5bbe85">OutputStage</a>() : data(NULL) {}</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="code" href="struct_output_stage.html#a92db3baf7b9d1a257557d4824e533be1">   69</a></span>&#160;    <a class="code" href="struct_output_stage.html#a92db3baf7b9d1a257557d4824e533be1">OutputStage</a>(<a class="code" href="struct_output_stage_data.html">OutputStageData</a>* _data) : data(_data) {}</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordtype">bool</span> process(<a class="code" href="structnvbio_1_1_pipeline_context.html">PipelineContext</a>&amp; context);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno"><a class="code" href="struct_output_stage.html#acaa6ed44b68dfd06594d92dfd7fa2dd5">   75</a></span>&#160;    <a class="code" href="struct_output_stage_data.html">OutputStageData</a>* <a class="code" href="struct_output_stage.html#acaa6ed44b68dfd06594d92dfd7fa2dd5">data</a>;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;};</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="code" href="struct_output_stage_data.html">   46</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_output_stage_data.html">OutputStageData</a> : <span class="keyword">public</span> <a class="code" href="struct_sequence_stats.html">SequenceStats</a></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;{</div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="struct_output_stage_data.html#a6bd8f054345526ec7e95e1e19c746636">   54</a></span>&#160;    <a class="code" href="struct_output_stage_data.html#a6bd8f054345526ec7e95e1e19c746636">OutputStageData</a>(<a class="code" href="structnvbio_1_1io_1_1_sequence_data_output_stream.html">io::SequenceDataOutputStream</a>* file) : m_file( file ) {}</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="code" href="struct_output_stage_data.html#a7f0279014071c5de901c95f6e0b1b219">   56</a></span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_sequence_data_output_stream.html">io::SequenceDataOutputStream</a>* <a class="code" href="struct_output_stage_data.html#a7f0279014071c5de901c95f6e0b1b219">m_file</a>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;};</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="code" href="struct_output_stage.html">   62</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_output_stage.html">OutputStage</a></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;{</div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="code" href="struct_output_stage.html#a93e9b00e3ee6f2d7d72a586f381d6547">   64</a></span>&#160;    <span class="keyword">typedef</span> <a class="code" href="structnvbio_1_1io_1_1_sequence_data_storage.html">io::SequenceDataHost</a>   <a class="code" href="struct_output_stage.html#a93e9b00e3ee6f2d7d72a586f381d6547">argument_type</a>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="code" href="struct_output_stage.html#a4d076680b3824cbb8735f26bfc5bbe85">   68</a></span>&#160;    <a class="code" href="struct_output_stage.html#a4d076680b3824cbb8735f26bfc5bbe85">OutputStage</a>() : data(NULL) {}</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="code" href="struct_output_stage.html#a92db3baf7b9d1a257557d4824e533be1">   74</a></span>&#160;    <a class="code" href="struct_output_stage.html#a92db3baf7b9d1a257557d4824e533be1">OutputStage</a>(<a class="code" href="struct_output_stage_data.html">OutputStageData</a>* _data) : data(_data) {}</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">bool</span> process(<a class="code" href="structnvbio_1_1_pipeline_context.html">PipelineContext</a>&amp; context);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno"><a class="code" href="struct_output_stage.html#acaa6ed44b68dfd06594d92dfd7fa2dd5">   80</a></span>&#160;    <a class="code" href="struct_output_stage_data.html">OutputStageData</a>* <a class="code" href="struct_output_stage.html#acaa6ed44b68dfd06594d92dfd7fa2dd5">data</a>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;};</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:45 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:07 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

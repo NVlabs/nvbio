@@ -161,6 +161,6 @@ var searchData=
   ['vectorized_5fstring_3c_20vector_5fview_3c_20const_20t_20_2a_2c_20indextype_20_3e_20_3e',['vectorized_string&lt; vector_view&lt; const T *, IndexType &gt; &gt;',['../structnvbio_1_1vectorized__string_3_01vector__view_3_01const_01_t_01_5_00_01_index_type_01_4_01_4.html',1,'nvbio']]],
   ['vectorized_5fstring_3c_20vector_5fview_3c_20packedstream_3c_20inputstream_2c_20symbol_2c_20symbol_5fsize_5ft_2c_20big_5fendian_5ft_2c_20indextype_20_3e_20_3e_20_3e',['vectorized_string&lt; vector_view&lt; PackedStream&lt; InputStream, Symbol, SYMBOL_SIZE_T, BIG_ENDIAN_T, IndexType &gt; &gt; &gt;',['../structnvbio_1_1vectorized__string_3_01vector__view_3_01_packed_stream_3_01_input_stream_00_01_sy0d57524e4504f97a479e638aa48536f4.html',1,'nvbio']]],
   ['view',['view',['../structdebruijn__graph_1_1view.html',1,'debruijn_graph']]],
-  ['view_5ferror',['view_error',['../structnvbio_1_1_server_mapped_file_1_1view__error.html',1,'nvbio::ServerMappedFile']]],
-  ['view_5ferror',['view_error',['../structnvbio_1_1_mapped_file_1_1view__error.html',1,'nvbio::MappedFile']]]
+  ['view_5ferror',['view_error',['../structnvbio_1_1_mapped_file_1_1view__error.html',1,'nvbio::MappedFile']]],
+  ['view_5ferror',['view_error',['../structnvbio_1_1_server_mapped_file_1_1view__error.html',1,'nvbio::ServerMappedFile']]]
 ];

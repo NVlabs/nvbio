@@ -186,7 +186,7 @@ var searchData=
   ['compressionsort',['CompressionSort',['../structnvbio_1_1cuda_1_1_compression_sort.html',1,'nvbio::cuda']]],
   ['compressionsort',['CompressionSort',['../structnvbio_1_1cuda_1_1_compression_sort.html#a9306350fd984997db68d18815f104df5',1,'nvbio::cuda::CompressionSort']]],
   ['compression_20sort',['Compression Sort',['../group___compression_sort_module.html',1,'']]],
-  ['compute_5fbloom_5ffilter_5fstats',['compute_bloom_filter_stats',['../bloom__filters_8h.html#a9d5b849f1bf9ebfdea47c15d8ccec260',1,'bloom_filters.h']]],
+  ['compute_5fbloom_5ffilter_5fstats',['compute_bloom_filter_stats',['../group__nv_lighter_module.html#ga9d5b849f1bf9ebfdea47c15d8ccec260',1,'bloom_filters.h']]],
   ['compute_5fcigar_5fpos',['compute_cigar_pos',['../namespacenvbio_1_1io.html#a17bb0301dee55c7f7dbf841c6491fc84',1,'nvbio::io']]],
   ['compute_5fcomplexity',['compute_complexity',['../structdebruijn__graph.html#afa52830e224bdc93792173ca7ca7d1a9',1,'debruijn_graph']]],
   ['compute_5fedge_5fweights',['compute_edge_weights',['../structdebruijn__graph.html#a84426ab5d5be49b4a509a8a862651de0',1,'debruijn_graph']]],

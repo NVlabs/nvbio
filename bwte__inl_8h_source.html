@@ -229,7 +229,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;      + max_block_strings  * <span class="keyword">sizeof</span>(<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>)         <span class="comment">// d_dollar_off</span></div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;      + max_block_strings  * <span class="keyword">sizeof</span>(<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>);        <span class="comment">// d_dollar_id</span></div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;  allocating device sorting storage (%.1f GB)\n&quot;</span>,</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;  allocating device sorting storage (%.1f GB)\n&quot;</span>,</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordtype">float</span>( d_bytes ) / <span class="keywordtype">float</span>(1024*1024*1024) );</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <a class="code" href="namespacenvbio_1_1priv.html#ac9734bd843a3fafc4d7cbe8064af616e">priv::alloc_storage</a>( d_suffixes,     max_block_suffixes );</div>
@@ -256,7 +256,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        max_block_strings  * <span class="keyword">sizeof</span>(<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>)     +   <span class="comment">// h_dollar_id</span></div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        max_block_strings  * <span class="keyword">sizeof</span>(<a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>);        <span class="comment">// h_dollar_pos</span></div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;  allocating host sorting storage (%.1f GB)\n&quot;</span>,</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;  allocating host sorting storage (%.1f GB)\n&quot;</span>,</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keywordtype">float</span>( h_bytes ) / <span class="keywordtype">float</span>(1024*1024*1024) );</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    <a class="code" href="namespacenvbio_1_1priv.html#ac9734bd843a3fafc4d7cbe8064af616e">priv::alloc_storage</a>( g,             max_block_suffixes );</div>
@@ -337,18 +337,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( block.<a class="code" href="structnvbio_1_1_b_w_t_e_block.html#aa208c38d28b3a940160b7e3bd72cfe11">h_dollar_id</a> ) );</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="preprocessor">     #if defined(CHECK_COPY)</span></div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="preprocessor"></span>        <a class="code" href="console_8cpp.html#a2c4c0d7ab0fcc45c6e6c643dddaa2d6c">log_visible</a>(stderr, <span class="stringliteral">&quot;  check copy...      &quot;</span>);</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="preprocessor"></span>        <a class="code" href="group___basic.html#ga406f766a3b25cdad5b5392c94605de14">log_visible</a>(stderr, <span class="stringliteral">&quot;  check copy...      &quot;</span>);</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> occ[SYMBOL_COUNT] = { 0 };</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i = 0; i &lt; block.<a class="code" href="structnvbio_1_1_b_w_t_e_block.html#a8053ed3aaed2b25270de9dc572b834d4">n_suffixes</a>; ++i)</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        {</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;            <span class="keywordflow">if</span> ((i % 1000) == 0)</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                <a class="code" href="console_8cpp.html#a2c4c0d7ab0fcc45c6e6c643dddaa2d6c">log_visible</a>(stderr, <span class="stringliteral">&quot;\r  check copy... %6.2f%%     &quot;</span>, 100.0f * <span class="keywordtype">float</span>(i)/<span class="keywordtype">float</span>(block.<a class="code" href="structnvbio_1_1_b_w_t_e_block.html#a8053ed3aaed2b25270de9dc572b834d4">n_suffixes</a>));</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                <a class="code" href="group___basic.html#ga406f766a3b25cdad5b5392c94605de14">log_visible</a>(stderr, <span class="stringliteral">&quot;\r  check copy... %6.2f%%     &quot;</span>, 100.0f * <span class="keywordtype">float</span>(i)/<span class="keywordtype">float</span>(block.<a class="code" href="structnvbio_1_1_b_w_t_e_block.html#a8053ed3aaed2b25270de9dc572b834d4">n_suffixes</a>));</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> cb = block.<a class="code" href="structnvbio_1_1_b_w_t_e_block.html#a48481423eccd3c0c0ebe3c1fb77433b8">h_BWT</a>[i] &amp; (SYMBOL_COUNT-1);</div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;            <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> ce = BWT_ext[i];</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            <span class="keywordflow">if</span> (ce != cb)</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            {</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;at %u, expected %u, got %u!\n&quot;</span>, i, cb, ce);</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;at %u, expected %u, got %u!\n&quot;</span>, i, cb, ce);</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                exit(1);</div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;            }</div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;</div>
@@ -358,13 +358,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;                <span class="keyword">const</span> <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> r = BWT_ext.<a class="code" href="structnvbio_1_1_paged_text.html#ab3ee297b07cbac0c2115e6863bf2d668">rank</a>( i, q );</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;                <span class="keywordflow">if</span> (r != occ[q])</div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;                {</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;                    <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;ranks mismatch at c[%u], i[%llu]:p[%llu]: expected %llu, got %llu!\n&quot;</span>,</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;                    <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;ranks mismatch at c[%u], i[%llu]:p[%llu]: expected %llu, got %llu!\n&quot;</span>,</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;                        <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(q), i, occ[q], r );</div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;                    exit(1);</div>
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;                }</div>
 <div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;            }</div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        }</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <a class="code" href="console_8cpp.html#a2c4c0d7ab0fcc45c6e6c643dddaa2d6c">log_visible</a>(stderr, <span class="stringliteral">&quot;\r  check copy...            \n&quot;</span>);</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <a class="code" href="group___basic.html#ga406f766a3b25cdad5b5392c94605de14">log_visible</a>(stderr, <span class="stringliteral">&quot;\r  check copy...            \n&quot;</span>);</div>
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="preprocessor">     #endif</span></div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="preprocessor">      #if defined(CHECK_SORTING)</span></div>
@@ -405,7 +405,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    block.<a class="code" href="structnvbio_1_1_b_w_t_e_block.html#a8053ed3aaed2b25270de9dc572b834d4">n_suffixes</a> = n_block_suffixes;</div>
 <div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;</div>
 <div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    <span class="comment">// load this block</span></div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;  load device chunk (%u)\n&quot;</span>, n_block_suffixes);</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;  load device chunk (%u)\n&quot;</span>, n_block_suffixes);</div>
 <div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;</div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    <a class="code" href="structnvbio_1_1_timer.html">Timer</a> timer;</div>
 <div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    timer.<a class="code" href="structnvbio_1_1_timer.html#a81f4a384879cf65815000b582e465a65" title="start timing ">start</a>();</div>
@@ -417,11 +417,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    load_time += timer.<a class="code" href="structnvbio_1_1_timer.html#a22f9f6cb393a8355476b0d357afe406f">seconds</a>();</div>
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;</div>
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    <span class="comment">// compute its SA and BWT</span></div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;  sort\n&quot;</span>);</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;  sort\n&quot;</span>);</div>
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    {</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> SYMBOLS_PER_RADIXWORD = priv::symbols_per_word&lt;SYMBOL_SIZE,RADIX_BITS,DOLLAR_BITS&gt;();</div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    set suffix flattener\n&quot;</span>);</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    set suffix flattener\n&quot;</span>);</div>
 <div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        {</div>
 <div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            <a class="code" href="structnvbio_1_1cuda_1_1_scoped_timer.html">cuda::ScopedTimer&lt;float&gt;</a> timer( &amp;sort_time );</div>
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;</div>
@@ -431,7 +431,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            <span class="comment">// make sure we get the proper number of suffixes</span></div>
 <div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;            <span class="keywordflow">if</span> (suffixes.n_suffixes != n_block_suffixes)</div>
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            {</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;  unexpected number of suffixes! (%u)\n&quot;</span>, suffixes.n_suffixes);</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;  unexpected number of suffixes! (%u)\n&quot;</span>, suffixes.n_suffixes);</div>
 <div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;                exit(1);</div>
 <div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;            }</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        }</div>
@@ -453,7 +453,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;                block.<a class="code" href="structnvbio_1_1_b_w_t_e_block.html#a9097fc8be560f95082091918e2c0ca81">h_cum_lengths</a>.begin() );</div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        }</div>
 <div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    localize suffixes\n&quot;</span>);</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    localize suffixes\n&quot;</span>);</div>
 <div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        {</div>
 <div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;            <a class="code" href="structnvbio_1_1cuda_1_1_scoped_timer.html">cuda::ScopedTimer&lt;float&gt;</a> timer( &amp;sort_time );</div>
 <div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;</div>
@@ -477,7 +477,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;        thrust::device_ptr&lt;uint8&gt; d_unsorted_bwt = thrust::device_ptr&lt;uint8&gt;( <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( d_temp_storage ) );</div>
 <div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;        thrust::device_ptr&lt;uint8&gt; d_bwt          = thrust::device_ptr&lt;uint8&gt;( <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( d_BWT_block ) );</div>
 <div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;        </div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    compression sort\n&quot;</span>);</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    compression sort\n&quot;</span>);</div>
 <div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        {</div>
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;            <a class="code" href="structnvbio_1_1cuda_1_1_scoped_timer.html">cuda::ScopedTimer&lt;float&gt;</a> timer( &amp;sort_time );</div>
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;</div>
@@ -525,7 +525,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;        }</div>
 <div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;</div>
 <div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;        <span class="comment">// copy back results to the host</span></div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;        <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    copy to host\n&quot;</span>);</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;        <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    copy to host\n&quot;</span>);</div>
 <div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;        {</div>
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;            <a class="code" href="structnvbio_1_1cuda_1_1_scoped_timer.html">cuda::ScopedTimer&lt;float&gt;</a> timer( &amp;copy_time );</div>
 <div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;</div>
@@ -555,7 +555,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;</div>
 <div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;            <span class="keywordflow">if</span> (n_dollars != n_block_strings)</div>
 <div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;            {</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;mismatching number of dollars! expected %u, got %u\n&quot;</span>, n_block_strings, n_dollars);</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;mismatching number of dollars! expected %u, got %u\n&quot;</span>, n_block_strings, n_dollars);</div>
 <div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;                exit(1);</div>
 <div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;            }</div>
 <div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;</div>
@@ -573,7 +573,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        }</div>
 <div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;    }</div>
 <div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;</div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;    <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;  sort   : %.1f M suffixes/s (sort: %.1f%%, copy: %.1f%%)\n&quot;</span>,</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;    <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;  sort   : %.1f M suffixes/s (sort: %.1f%%, copy: %.1f%%)\n&quot;</span>,</div>
 <div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;        (1.0e-6f * (n_processed_suffixes + n_block_suffixes)) / (sort_time + copy_time),</div>
 <div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;        100.0f * sort_time / (sort_time + copy_time),</div>
 <div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;        100.0f * copy_time / (sort_time + copy_time));</div>
@@ -620,8 +620,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;    <span class="comment">//for (int i = 0; i &lt; int( n_block_suffixes ); ++i)</span></div>
 <div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;    <span class="comment">//    g[i] = 0u;</span></div>
 <div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;    <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;  rank\n&quot;</span>);</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;    <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;  C:\n&quot;</span>);</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;    <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;  rank\n&quot;</span>);</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;    <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;  C:\n&quot;</span>);</div>
 <div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;    <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> C[SYMBOL_COUNT+1];</div>
 <div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;    {</div>
 <div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>* freqs = BWT_ext.<a class="code" href="structnvbio_1_1_paged_text.html#ab59e86ebec6669b27f69b2c20bbe403d">symbol_frequencies</a>();</div>
@@ -634,7 +634,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;            <span class="keywordflow">if</span> ((255u % SYMBOL_COUNT) == i-1)</div>
 <div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;                C[i] -= n_strings_ext;</div>
 <div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;</div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;            <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    %llu\n&quot;</span>, C[i] );</div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;            <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    %llu\n&quot;</span>, C[i] );</div>
 <div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;        }</div>
 <div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;    }</div>
 <div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;</div>
@@ -676,8 +676,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;<span class="preprocessor"></span>            <span class="keywordflow">if</span> ((q == 243303  &amp;&amp; k &gt;= 56) ||</div>
 <div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;                (q == 2163961 &amp;&amp; k &gt;= 56))</div>
 <div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;            {</div>
-<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;                <span class="keywordflow">if</span> (k == 99) <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;\n&quot;</span>);</div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;                <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;  q[%8u:%2u] : LF[%9llu,%u] = %9llu (r[%9llu], $[%9llu]\n&quot;</span>,</div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;                <span class="keywordflow">if</span> (k == 99) <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;\n&quot;</span>);</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;                <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;  q[%8u:%2u] : LF[%9llu,%u] = %9llu (r[%9llu], $[%9llu]\n&quot;</span>,</div>
 <div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;                    q, k, i, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(c), j, r, i_dollars,</div>
 <div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;                    i_dollars,</div>
 <div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;                    i_dollars );</div>
@@ -695,11 +695,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;</div>
 <div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;    timer.<a class="code" href="structnvbio_1_1_timer.html#ac2a1dc2e71d260bd7dba103e745f1136" title="stop timing ">stop</a>();</div>
 <div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;    rank_time += timer.<a class="code" href="structnvbio_1_1_timer.html#a22f9f6cb393a8355476b0d357afe406f">seconds</a>();</div>
-<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;    <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;  rank   : %.1f M suffixes/s\n&quot;</span>,</div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;    <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;  rank   : %.1f M suffixes/s\n&quot;</span>,</div>
 <div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;        (1.0e-6f * (n_processed_suffixes + n_block_suffixes)) / rank_time);</div>
 <div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;</div>
 <div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;<span class="preprocessor">  #if defined(CHECK_SORTING)</span></div>
-<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;<span class="preprocessor"></span>    <a class="code" href="console_8cpp.html#a2c4c0d7ab0fcc45c6e6c643dddaa2d6c">log_visible</a>(stderr, <span class="stringliteral">&quot;  check sorting...  &quot;</span>);</div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;<span class="preprocessor"></span>    <a class="code" href="group___basic.html#ga406f766a3b25cdad5b5392c94605de14">log_visible</a>(stderr, <span class="stringliteral">&quot;  check sorting...  &quot;</span>);</div>
 <div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;</div>
 <div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;    <span class="comment">// build a suffix localizer</span></div>
 <div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;    <span class="keyword">const</span> priv::localize_suffix_functor suffix_localizer(</div>
@@ -712,7 +712,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;    <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i = 0; i &lt; n_block_suffixes; ++i)</div>
 <div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;    {</div>
 <div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;        <span class="keywordflow">if</span> ((i % 1000) == 0)</div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;            <a class="code" href="console_8cpp.html#a2c4c0d7ab0fcc45c6e6c643dddaa2d6c">log_visible</a>(stderr, <span class="stringliteral">&quot;\r  check sorting... %6.2f%%     &quot;</span>, 100.0f * <span class="keywordtype">float</span>(i)/<span class="keywordtype">float</span>(n_block_suffixes));</div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;            <a class="code" href="group___basic.html#ga406f766a3b25cdad5b5392c94605de14">log_visible</a>(stderr, <span class="stringliteral">&quot;\r  check sorting... %6.2f%%     &quot;</span>, 100.0f * <span class="keywordtype">float</span>(i)/<span class="keywordtype">float</span>(n_block_suffixes));</div>
 <div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;</div>
 <div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> sa = block.<a class="code" href="structnvbio_1_1_b_w_t_e_block.html#a0a594ddce40e6e4ab21b10410d23baab">h_SA</a>[i];</div>
 <div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;</div>
@@ -727,7 +727,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;</div>
 <div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;            <span class="keywordflow">if</span> (cmp == 1)</div>
 <div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;            {</div>
-<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;\ninsertion[%u -&gt; %llu] : (%u,%u) &gt; (%u,%u)\n&quot;</span>,</div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;\ninsertion[%u -&gt; %llu] : (%u,%u) &gt; (%u,%u)\n&quot;</span>,</div>
 <div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;                    i, g_sorted[i],</div>
 <div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;                    suffix_i.y, suffix_i.x,</div>
 <div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;                    suffix_n.y, suffix_n.x );</div>
@@ -735,21 +735,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;                <span class="keyword">const</span> suffix_type string_i = <a class="code" href="group___string_sets_module.html#ga2d872d0a546179d35d620624c6ae9534">make_suffix</a>( string_set[suffix_i.y], suffix_i.x );</div>
 <div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;                <span class="keyword">const</span> suffix_type string_n = <a class="code" href="group___string_sets_module.html#ga2d872d0a546179d35d620624c6ae9534">make_suffix</a>( string_set[suffix_n.y], suffix_n.x );</div>
 <div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;</div>
-<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;  I: \&quot;&quot;</span>);</div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;  I: \&quot;&quot;</span>);</div>
 <div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;                <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> j = 0; j &lt; <a class="code" href="group___basic.html#gae962be09940c267ce467e74a160a542a">nvbio::length</a>( string_i ); ++j)</div>
 <div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;                {</div>
 <div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;                    <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> c_i = string_i[j];</div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;                    <a class="code" href="console_8cpp.html#ac28cb6d1f02b9a70e257ab11cc3614bf">log_error_cont</a>(stderr, <span class="stringliteral">&quot;%u&quot;</span>, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(c_i) );</div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;                    <a class="code" href="group___basic.html#ga5aceab39b27c84ea2d80f17a31cba583">log_error_cont</a>(stderr, <span class="stringliteral">&quot;%u&quot;</span>, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(c_i) );</div>
 <div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;                }</div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;                <a class="code" href="console_8cpp.html#ac28cb6d1f02b9a70e257ab11cc3614bf">log_error_cont</a>(stderr, <span class="stringliteral">&quot;\&quot;\n&quot;</span> );</div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;                <a class="code" href="group___basic.html#ga5aceab39b27c84ea2d80f17a31cba583">log_error_cont</a>(stderr, <span class="stringliteral">&quot;\&quot;\n&quot;</span> );</div>
 <div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;</div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;  N: \&quot;&quot;</span>);</div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;  N: \&quot;&quot;</span>);</div>
 <div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;                <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> j = 0; j &lt; <a class="code" href="group___basic.html#gae962be09940c267ce467e74a160a542a">nvbio::length</a>( string_n ); ++j)</div>
 <div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;                {</div>
 <div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;                    <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> c_n = string_n[j];</div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;                    <a class="code" href="console_8cpp.html#ac28cb6d1f02b9a70e257ab11cc3614bf">log_error_cont</a>(stderr, <span class="stringliteral">&quot;%u&quot;</span>, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(c_n) );</div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;                    <a class="code" href="group___basic.html#ga5aceab39b27c84ea2d80f17a31cba583">log_error_cont</a>(stderr, <span class="stringliteral">&quot;%u&quot;</span>, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(c_n) );</div>
 <div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;                }</div>
-<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;                <a class="code" href="console_8cpp.html#ac28cb6d1f02b9a70e257ab11cc3614bf">log_error_cont</a>(stderr, <span class="stringliteral">&quot;\&quot;\n&quot;</span> );</div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;                <a class="code" href="group___basic.html#ga5aceab39b27c84ea2d80f17a31cba583">log_error_cont</a>(stderr, <span class="stringliteral">&quot;\&quot;\n&quot;</span> );</div>
 <div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;</div>
 <div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;                exit(1);</div>
 <div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;            }</div>
@@ -763,7 +763,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;</div>
 <div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;            <span class="keywordflow">if</span> (cmp == -1)</div>
 <div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;            {</div>
-<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;\ninsertion[%u-1 -&gt; %llu] : (%u,%u) &lt; (%u, %u)\n&quot;</span>,</div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;\ninsertion[%u-1 -&gt; %llu] : (%u,%u) &lt; (%u, %u)\n&quot;</span>,</div>
 <div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;                    i,</div>
 <div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;                    g_sorted[i],</div>
 <div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;                    suffix_i.y, suffix_i.x,</div>
@@ -772,42 +772,42 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;                <span class="keyword">const</span> suffix_type string_i = <a class="code" href="group___string_sets_module.html#ga2d872d0a546179d35d620624c6ae9534">make_suffix</a>( string_set[suffix_i.y], suffix_i.x );</div>
 <div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;                <span class="keyword">const</span> suffix_type string_p = <a class="code" href="group___string_sets_module.html#ga2d872d0a546179d35d620624c6ae9534">make_suffix</a>( string_set[suffix_p.y], suffix_p.x );</div>
 <div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;</div>
-<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;  I: \&quot;&quot;</span>);</div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;  I: \&quot;&quot;</span>);</div>
 <div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;                <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> j = 0; j &lt; <a class="code" href="group___basic.html#gae962be09940c267ce467e74a160a542a">nvbio::length</a>( string_i ); ++j)</div>
 <div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;                {</div>
 <div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;                    <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> c_i = string_i[j];</div>
-<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;                    <a class="code" href="console_8cpp.html#ac28cb6d1f02b9a70e257ab11cc3614bf">log_error_cont</a>(stderr, <span class="stringliteral">&quot;%u&quot;</span>, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(c_i) );</div>
+<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;                    <a class="code" href="group___basic.html#ga5aceab39b27c84ea2d80f17a31cba583">log_error_cont</a>(stderr, <span class="stringliteral">&quot;%u&quot;</span>, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(c_i) );</div>
 <div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;                }</div>
-<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;                <a class="code" href="console_8cpp.html#ac28cb6d1f02b9a70e257ab11cc3614bf">log_error_cont</a>(stderr, <span class="stringliteral">&quot;\&quot;\n&quot;</span> );</div>
+<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;                <a class="code" href="group___basic.html#ga5aceab39b27c84ea2d80f17a31cba583">log_error_cont</a>(stderr, <span class="stringliteral">&quot;\&quot;\n&quot;</span> );</div>
 <div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;</div>
-<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;  P: \&quot;&quot;</span>);</div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;  P: \&quot;&quot;</span>);</div>
 <div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;                <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> j = 0; j &lt; <a class="code" href="group___basic.html#gae962be09940c267ce467e74a160a542a">nvbio::length</a>( string_p ); ++j)</div>
 <div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;                {</div>
 <div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;                    <span class="keyword">const</span> <a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> c_p = string_p[j];</div>
-<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;                    <a class="code" href="console_8cpp.html#ac28cb6d1f02b9a70e257ab11cc3614bf">log_error_cont</a>(stderr, <span class="stringliteral">&quot;%u&quot;</span>, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(c_p) );</div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;                    <a class="code" href="group___basic.html#ga5aceab39b27c84ea2d80f17a31cba583">log_error_cont</a>(stderr, <span class="stringliteral">&quot;%u&quot;</span>, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(c_p) );</div>
 <div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;                }</div>
-<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;                <a class="code" href="console_8cpp.html#ac28cb6d1f02b9a70e257ab11cc3614bf">log_error_cont</a>(stderr, <span class="stringliteral">&quot;\&quot;\n&quot;</span> );</div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;                <a class="code" href="group___basic.html#ga5aceab39b27c84ea2d80f17a31cba583">log_error_cont</a>(stderr, <span class="stringliteral">&quot;\&quot;\n&quot;</span> );</div>
 <div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;</div>
 <div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;                exit(1);</div>
 <div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;            }</div>
 <div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;        }</div>
 <div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;    }</div>
-<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;    <a class="code" href="console_8cpp.html#a2c4c0d7ab0fcc45c6e6c643dddaa2d6c">log_visible</a>(stderr, <span class="stringliteral">&quot;\r  check sorting... done      \n&quot;</span>);</div>
+<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;    <a class="code" href="group___basic.html#ga406f766a3b25cdad5b5392c94605de14">log_visible</a>(stderr, <span class="stringliteral">&quot;\r  check sorting... done      \n&quot;</span>);</div>
 <div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;    exit(1);</div>
 <div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;<span class="preprocessor">  #endif</span></div>
 <div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;<span class="preprocessor">  #if defined(QUICK_CHECK)</span></div>
-<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;<span class="preprocessor"></span>    <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr,  <span class="stringliteral">&quot;  check sorting\n&quot;</span>);</div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;<span class="preprocessor"></span>    <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr,  <span class="stringliteral">&quot;  check sorting\n&quot;</span>);</div>
 <div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;    <span class="comment">// check that the suffix ranks are truly sorted</span></div>
 <div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;    <span class="keywordflow">if</span> (is_sorted&lt;host_tag&gt;( n_block_suffixes, &amp;g_sorted[0] ) == <span class="keyword">false</span>)</div>
 <div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;    {</div>
-<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;  BWTE: suffix ranks not in sorted order!\n&quot;</span>);</div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;  BWTE: suffix ranks not in sorted order!\n&quot;</span>);</div>
 <div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;<span class="preprocessor">      #if defined(QUICK_CHECK_REPORT)</span></div>
 <div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;<span class="preprocessor"></span>        <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> i = 0; i &lt; n_block_suffixes-1; ++i)</div>
 <div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;        {</div>
 <div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;            <span class="keywordflow">if</span> (g_sorted[i] &gt; g_sorted[i+1])</div>
 <div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;            {</div>
-<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;  g_s[%u-&gt;%u] = %llu &gt; g_s[%u-&gt;%u] = %llu\n&quot;</span>,</div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;  g_s[%u-&gt;%u] = %llu &gt; g_s[%u-&gt;%u] = %llu\n&quot;</span>,</div>
 <div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;                    i,   block.<a class="code" href="structnvbio_1_1_b_w_t_e_block.html#a0a594ddce40e6e4ab21b10410d23baab">h_SA</a>[i],   g_sorted[i],</div>
 <div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;                    i+1, block.<a class="code" href="structnvbio_1_1_b_w_t_e_block.html#a0a594ddce40e6e4ab21b10410d23baab">h_SA</a>[i+1], g_sorted[i+1] );</div>
 <div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;</div>
@@ -820,19 +820,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;                <span class="keyword">const</span> uint2 suffix2 = suffix_localizer( block.<a class="code" href="structnvbio_1_1_b_w_t_e_block.html#a0a594ddce40e6e4ab21b10410d23baab">h_SA</a>[i+1] );</div>
 <div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;</div>
 <div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;</div>
-<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;  (%02u,%8u): &quot;</span>, suffix1.x, suffix1.y);</div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;  (%02u,%8u): &quot;</span>, suffix1.x, suffix1.y);</div>
 <div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;                {</div>
 <div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;                    <span class="keyword">const</span> string_type <span class="keywordtype">string</span> = string_set[block_begin + suffix1.y];</div>
 <div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;                    <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> j = suffix1.x; j &lt; <a class="code" href="group___basic.html#gae962be09940c267ce467e74a160a542a">nvbio::length</a>( <span class="keywordtype">string</span> ); ++j)</div>
-<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;                        <a class="code" href="console_8cpp.html#ac28cb6d1f02b9a70e257ab11cc3614bf">log_error_cont</a>(stderr, <span class="stringliteral">&quot;%u&quot;</span>, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( <span class="keywordtype">string</span>[j] ) );</div>
-<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;                    <a class="code" href="console_8cpp.html#ac28cb6d1f02b9a70e257ab11cc3614bf">log_error_cont</a>(stderr, <span class="stringliteral">&quot;\n&quot;</span>);</div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;                        <a class="code" href="group___basic.html#ga5aceab39b27c84ea2d80f17a31cba583">log_error_cont</a>(stderr, <span class="stringliteral">&quot;%u&quot;</span>, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( <span class="keywordtype">string</span>[j] ) );</div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;                    <a class="code" href="group___basic.html#ga5aceab39b27c84ea2d80f17a31cba583">log_error_cont</a>(stderr, <span class="stringliteral">&quot;\n&quot;</span>);</div>
 <div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;                }</div>
-<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;  (%02u,%8u): &quot;</span>, suffix2.x, suffix2.y);</div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;  (%02u,%8u): &quot;</span>, suffix2.x, suffix2.y);</div>
 <div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;                {</div>
 <div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;                    <span class="keyword">const</span> string_type <span class="keywordtype">string</span> = string_set[block_begin + suffix2.y];</div>
 <div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;                    <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> j = suffix2.x; j &lt; <a class="code" href="group___basic.html#gae962be09940c267ce467e74a160a542a">nvbio::length</a>( <span class="keywordtype">string</span> ); ++j)</div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;                        <a class="code" href="console_8cpp.html#ac28cb6d1f02b9a70e257ab11cc3614bf">log_error_cont</a>(stderr, <span class="stringliteral">&quot;%u&quot;</span>, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( <span class="keywordtype">string</span>[j] ) );</div>
-<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;                    <a class="code" href="console_8cpp.html#ac28cb6d1f02b9a70e257ab11cc3614bf">log_error_cont</a>(stderr, <span class="stringliteral">&quot;\n&quot;</span>);</div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;                        <a class="code" href="group___basic.html#ga5aceab39b27c84ea2d80f17a31cba583">log_error_cont</a>(stderr, <span class="stringliteral">&quot;%u&quot;</span>, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( <span class="keywordtype">string</span>[j] ) );</div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;                    <a class="code" href="group___basic.html#ga5aceab39b27c84ea2d80f17a31cba583">log_error_cont</a>(stderr, <span class="stringliteral">&quot;\n&quot;</span>);</div>
 <div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;                }</div>
 <div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;                <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;            }</div>
@@ -862,14 +862,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;        BWT_ext_copy[i] = BWT_ext[i];</div>
 <div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;<span class="preprocessor">  #endif</span></div>
 <div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;    <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr,  <span class="stringliteral">&quot;  insert\n&quot;</span>);</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;    <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr,  <span class="stringliteral">&quot;  insert\n&quot;</span>);</div>
 <div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;    {</div>
 <div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;        ScopedTimer&lt;float&gt; timer( &amp;insert_time );</div>
 <div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;</div>
 <div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;        <span class="comment">// insert BWT[i] at g_sorted[i]</span></div>
 <div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;        BWT_ext.insert( n_block_suffixes, &amp;g_sorted[0], &amp;block.h_BWT[0] );</div>
 <div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;    }</div>
-<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;    <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr,  <span class="stringliteral">&quot;  insert dollars\n&quot;</span>);</div>
+<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;    <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr,  <span class="stringliteral">&quot;  insert dollars\n&quot;</span>);</div>
 <div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;    {</div>
 <div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;        ScopedTimer&lt;float&gt; timer( &amp;insert_dollars_time );</div>
 <div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;</div>
@@ -890,13 +890,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;            <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( block.h_dollar_pos ),</div>
 <div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;            <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( block.h_dollar_id ) );</div>
 <div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;    }</div>
-<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;    <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;  insert : %.1f M suffixes/s (symbols: %.1f%%, dollars: %.1f%%)\n&quot;</span>,</div>
+<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;    <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;  insert : %.1f M suffixes/s (symbols: %.1f%%, dollars: %.1f%%)\n&quot;</span>,</div>
 <div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;        (1.0e-6f * (n_processed_suffixes + n_block_suffixes)) / (insert_time + insert_dollars_time),</div>
 <div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;        100.0f * insert_time         / (insert_time + insert_dollars_time),</div>
 <div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;        100.0f * insert_dollars_time / (insert_time + insert_dollars_time));</div>
 <div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;</div>
 <div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;<span class="preprocessor">#if defined(CHECK_INSERTION)</span></div>
-<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;<span class="preprocessor"></span>    <a class="code" href="console_8cpp.html#a2c4c0d7ab0fcc45c6e6c643dddaa2d6c">log_visible</a>(stderr,  <span class="stringliteral">&quot;  check insertions&quot;</span>);</div>
+<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;<span class="preprocessor"></span>    <a class="code" href="group___basic.html#ga406f766a3b25cdad5b5392c94605de14">log_visible</a>(stderr,  <span class="stringliteral">&quot;  check insertions&quot;</span>);</div>
 <div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;    <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> occ[SYMBOL_COUNT] = { 0 };</div>
 <div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;    {</div>
 <div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;        <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> p = 0;</div>
@@ -905,7 +905,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> j = 0; j &lt; n_block_suffixes; ++j)</div>
 <div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;        {</div>
 <div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;            <span class="keywordflow">if</span> ((j % 1000) == 0)</div>
-<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;                <a class="code" href="console_8cpp.html#a2c4c0d7ab0fcc45c6e6c643dddaa2d6c">log_visible</a>(stderr, <span class="stringliteral">&quot;\r  check insertions... %6.2f%%     &quot;</span>, 100.0f * <span class="keywordtype">float</span>(j)/<span class="keywordtype">float</span>(n_block_suffixes));</div>
+<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;                <a class="code" href="group___basic.html#ga406f766a3b25cdad5b5392c94605de14">log_visible</a>(stderr, <span class="stringliteral">&quot;\r  check insertions... %6.2f%%     &quot;</span>, 100.0f * <span class="keywordtype">float</span>(j)/<span class="keywordtype">float</span>(n_block_suffixes));</div>
 <div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;</div>
 <div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;            <span class="keyword">const</span> <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> g_j = g_sorted[j];</div>
 <div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;</div>
@@ -913,7 +913,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;            {</div>
 <div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;                <span class="keywordflow">if</span> (BWT_ext[o] != BWT_ext_copy[p])</div>
 <div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160;                {</div>
-<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;                    <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;insertion mismatch at o[%llu]:p[%llu]: expected %u, got %u\n&quot;</span>, o, p,</div>
+<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;                    <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;insertion mismatch at o[%llu]:p[%llu]: expected %u, got %u\n&quot;</span>, o, p,</div>
 <div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;                        <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( BWT_ext_copy[p] ), <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( BWT_ext[o] ));</div>
 <div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;                    exit(1);</div>
 <div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160;                }</div>
@@ -924,7 +924,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;                    <span class="keyword">const</span> <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> r = BWT_ext.rank( o, q );</div>
 <div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;                    <span class="keywordflow">if</span> (r != occ[q])</div>
 <div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;                    {</div>
-<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;                        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;ranks mismatch at c[%u], o[%llu]:p[%llu]: expected %llu, got %llu\n&quot;</span>,</div>
+<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;                        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;ranks mismatch at c[%u], o[%llu]:p[%llu]: expected %llu, got %llu\n&quot;</span>,</div>
 <div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;                            <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(q), o, p, occ[q], r );</div>
 <div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;                        exit(1);</div>
 <div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;                    }</div>
@@ -940,7 +940,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160;            <span class="keywordflow">if</span> (BWT_ext[o] != cc)</div>
 <div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160;            {</div>
 <div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;                <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> ce = BWT_ext[o]; </div>
-<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;insertion mismatch at o[%llu]:j[%u]:g[%llu]: expected %u, got %u (page[%u:%llu:%p])\n&quot;</span>,</div>
+<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;insertion mismatch at o[%llu]:j[%u]:g[%llu]: expected %u, got %u (page[%u:%llu:%p])\n&quot;</span>,</div>
 <div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160;                    o, j, g_j,</div>
 <div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;                    cc, ce, BWT_ext.find_page(o), BWT_ext.m_offsets[ BWT_ext.find_page(o) ], BWT_ext.get_page( BWT_ext.find_page(o) ));</div>
 <div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;                exit(1);</div>
@@ -951,7 +951,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;                <span class="keyword">const</span> <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> r = BWT_ext.rank( o, q );</div>
 <div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;                <span class="keywordflow">if</span> (r != occ[q])</div>
 <div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160;                {</div>
-<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160;                    <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;ranks mismatch at c[%u], o[%llu]:j[%llu]: expected %llu, got %llu\n&quot;</span>,</div>
+<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160;                    <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;ranks mismatch at c[%u], o[%llu]:j[%llu]: expected %llu, got %llu\n&quot;</span>,</div>
 <div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;                        <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(q), o, p, occ[q], r );</div>
 <div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160;                    exit(1);</div>
 <div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;                }</div>
@@ -962,7 +962,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160;        {</div>
 <div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;            <span class="keywordflow">if</span> (BWT_ext[o] != BWT_ext_copy[p])</div>
 <div class="line"><a name="l00864"></a><span class="lineno">  864</span>&#160;            {</div>
-<div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;insertion mismatch at o[%llu]:p[%llu]: expected %u, got %u\n&quot;</span>, o, p,</div>
+<div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;insertion mismatch at o[%llu]:p[%llu]: expected %u, got %u\n&quot;</span>, o, p,</div>
 <div class="line"><a name="l00866"></a><span class="lineno">  866</span>&#160;                    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( BWT_ext_copy[p] ), <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( BWT_ext[o] ));</div>
 <div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160;                exit(1);</div>
 <div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160;            }</div>
@@ -972,7 +972,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00872"></a><span class="lineno">  872</span>&#160;                <span class="keyword">const</span> <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> r = BWT_ext.rank( o, q );</div>
 <div class="line"><a name="l00873"></a><span class="lineno">  873</span>&#160;                <span class="keywordflow">if</span> (r != occ[q])</div>
 <div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160;                {</div>
-<div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160;                    <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;ranks mismatch at c[%u], o[%llu]:p[%llu]: expected %llu, got %llu\n&quot;</span>,</div>
+<div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160;                    <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;ranks mismatch at c[%u], o[%llu]:p[%llu]: expected %llu, got %llu\n&quot;</span>,</div>
 <div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160;                        <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>(q), o, p, occ[q], r );</div>
 <div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160;                    exit(1);</div>
 <div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160;                }</div>
@@ -981,7 +981,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160;            ++p;</div>
 <div class="line"><a name="l00882"></a><span class="lineno">  882</span>&#160;        }</div>
 <div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160;    }</div>
-<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;    <a class="code" href="console_8cpp.html#a2c4c0d7ab0fcc45c6e6c643dddaa2d6c">log_visible</a>(stderr,  <span class="stringliteral">&quot;\r  check insertions           \n&quot;</span>);</div>
+<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;    <a class="code" href="group___basic.html#ga406f766a3b25cdad5b5392c94605de14">log_visible</a>(stderr,  <span class="stringliteral">&quot;\r  check insertions           \n&quot;</span>);</div>
 <div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;<span class="preprocessor"></span>}</div>
 <div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160;</div>
@@ -1012,7 +1012,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160;    }</div>
 <div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160;</div>
 <div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160;    <span class="comment">// alloc enough storage for the BWT vectors</span></div>
-<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;    <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;  allocating host BWT storage (%.1f GB)\n&quot;</span>,</div>
+<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;    <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;  allocating host BWT storage (%.1f GB)\n&quot;</span>,</div>
 <div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;        <span class="keywordtype">float</span>( BWT_ext.<a class="code" href="structnvbio_1_1_paged_text.html#a1ae8002a5b7891a9f541257ea934fdd8">needed_host_memory</a>( bwt_size ) + N * <span class="keyword">sizeof</span>(<a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>) ) / float(1024*1024*1024) );</div>
 <div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;</div>
 <div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160;    BWT_ext.<a class="code" href="structnvbio_1_1_paged_text.html#a21da10e6ecade057dff8113e6595d821">reserve</a>( bwt_size );</div>
@@ -1076,7 +1076,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;            }</div>
 <div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160;        }</div>
 <div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;</div>
-<div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160;        <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;  block [%u, %u] (%u suffixes)\n&quot;</span>, block_begin, block_end, n_block_suffixes);</div>
+<div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160;        <a class="code" href="group___basic.html#ga6d47fc29868f0be35a8fc846e415f79b">log_info</a>(stderr, <span class="stringliteral">&quot;  block [%u, %u] (%u suffixes)\n&quot;</span>, block_begin, block_end, n_block_suffixes);</div>
 <div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160;</div>
 <div class="line"><a name="l00988"></a><span class="lineno">  988</span>&#160;        bwte_context.<a class="code" href="structnvbio_1_1_b_w_t_e_context.html#a055e46cbbdb6e2d553bed8a1264ba287">append_block</a>(</div>
 <div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160;            block_begin,</div>
@@ -1097,7 +1097,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:41 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:03 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

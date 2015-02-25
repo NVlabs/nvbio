@@ -149,7 +149,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordflow">if</span> (argc == 1)</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr,<span class="stringliteral">&quot;nvSSA [-gpu] input-prefix [output-prefix]\n&quot;</span>);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="code" href="group___basic.html#ga6d47fc29868f0be35a8fc846e415f79b">log_info</a>(stderr,<span class="stringliteral">&quot;nvSSA [-gpu] input-prefix [output-prefix]\n&quot;</span>);</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        exit(0);</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    }</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
@@ -195,7 +195,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> sa_intv = <a class="code" href="structnvbio_1_1io_1_1_f_m_index_data_core.html#a0fc5bdeb9846f72e9a671df634fca3aa">nvbio::io::FMIndexData::SA_INT</a>;</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> ssa_len = (driver_data.<a class="code" href="structnvbio_1_1io_1_1_f_m_index_data_core.html#a29c26c3929448aa8a7b9cda6d43b8597">m_seq_length</a> + sa_intv) / sa_intv;</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;saving SSA... started\n&quot;</span>);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <a class="code" href="group___basic.html#ga6d47fc29868f0be35a8fc846e415f79b">log_info</a>(stderr, <span class="stringliteral">&quot;saving SSA... started\n&quot;</span>);</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    {</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        std::string file_name = std::string( output ) + std::string(<span class="stringliteral">&quot;.sa&quot;</span>);</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        FILE* file = fopen( file_name.c_str(), <span class="stringliteral">&quot;wb&quot;</span> );</div>
@@ -218,14 +218,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        fwrite( &amp;rssa.<a class="code" href="structnvbio_1_1_s_s_a__index__multiple.html#a039491cfebbdaf8828b8d6b8617f564e">m_ssa</a>[1],             <span class="keyword">sizeof</span>(<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>), ssa_len-1, file );</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        fclose( file );</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    }</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;saving SSA... done\n&quot;</span>);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <a class="code" href="group___basic.html#ga6d47fc29868f0be35a8fc846e415f79b">log_info</a>(stderr, <span class="stringliteral">&quot;saving SSA... done\n&quot;</span>);</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;}</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:45 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:07 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -325,7 +325,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;</div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    <span class="keywordflow">try</span></div>
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    {</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      initialize\n&quot;</span> ) );</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      initialize\n&quot;</span> ) );</div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;</div>
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="comment">// reserve temporary storage</span></div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <a class="code" href="structnvbio_1_1cuda_1_1_compression_sort.html#a9426d57b2a84716fb917e731dc07812d">reserve</a>( n_suffixes );</div>
@@ -389,7 +389,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;            <span class="comment">// extract the given radix word from each of the partially sorted suffixes and merge it with the existing keys</span></div>
 <div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;            <a class="code" href="structnvbio_1_1priv_1_1string__suffix__word__functor.html">priv::string_suffix_word_functor&lt;SYMBOL_SIZE,WORD_BITS,DOLLAR_BITS,string_type,uint32&gt;</a> word_functor( string_len, <span class="keywordtype">string</span>, word_idx );</div>
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;            <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      extract\n&quot;</span> ) );</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;            <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      extract\n&quot;</span> ) );</div>
 <div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;            <a class="code" href="group___primitives.html#ga0b41de45962c3b82d1fb26c5aa4b3c6e">thrust::transform</a>(</div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;                d_indices.begin(),</div>
 <div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;                d_indices.begin() + n_active_suffixes,</div>
@@ -405,7 +405,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;            timer.<a class="code" href="structnvbio_1_1cuda_1_1_timer.html#a944fa35847e996ab681f96ecd6953cb0">start</a>();</div>
 <div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;</div>
 <div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;            <span class="comment">// build the compressed flags</span></div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;            <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      pack-flags\n&quot;</span> ) );</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;            <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      pack-flags\n&quot;</span> ) );</div>
 <div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;            <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>* d_comp_flags = (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>*)<a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">nvbio::raw_pointer</a>( d_temp_flags );</div>
 <div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;            <a class="code" href="namespacenvbio_1_1priv.html#afbb0c296d8cf4b80c657f7606430aca1">priv::pack_flags</a>(</div>
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;                n_active_suffixes,</div>
@@ -416,7 +416,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;            <a class="code" href="namespacenvbio_1_1cuda.html#ae47791b87823645325b131f7c83f3291">cuda::check_error</a>(<span class="stringliteral">&quot;CompressionSort::sort() : pack_flags&quot;</span>);</div>
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;</div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;            <span class="comment">// sort within segments</span></div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;            <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      seg-sort\n&quot;</span> ) );</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;            <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      seg-sort\n&quot;</span> ) );</div>
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;            mgpu::SegSortPairsFromFlags(</div>
 <div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;                <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">nvbio::raw_pointer</a>( d_keys ),</div>
 <div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;                <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">nvbio::raw_pointer</a>( d_indices ),</div>
@@ -438,7 +438,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;            <span class="comment">// of them in the sorted list with its predecessor.</span></div>
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;            <span class="comment">// At that point, we can isolate all segments which contain more than 1 suffix and continue sorting</span></div>
 <div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;            <span class="comment">// those by themselves.</span></div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;            <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      build-head-flags\n&quot;</span> ) );</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;            <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      build-head-flags\n&quot;</span> ) );</div>
 <div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;            <a class="code" href="namespacenvbio_1_1priv.html#a1401af3048305df028763e93274f7ad9">priv::build_head_flags</a>(</div>
 <div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;                n_active_suffixes,</div>
 <div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;                <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">nvbio::raw_pointer</a>( d_keys ),</div>
@@ -469,7 +469,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;            <span class="keywordflow">if</span> (n_segments == n_active_suffixes) <span class="comment">// we are done!</span></div>
 <div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;            {</div>
 <div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;                <span class="comment">// scatter the partially sorted indices to the output in their proper place</span></div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      scatter-partials\n&quot;</span> ) );</div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      scatter-partials\n&quot;</span> ) );</div>
 <div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;                thrust::scatter(</div>
 <div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;                    d_indices.begin(),</div>
 <div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;                    d_indices.begin() + n_active_suffixes,</div>
@@ -512,7 +512,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;            <span class="comment">//if (2u*n_segments &gt;= n_active_suffixes)</span></div>
 <div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;            <span class="keywordflow">if</span> (2u*n_partials &lt;= n_active_suffixes)</div>
 <div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;            {</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      filter-unique %u\n&quot;</span>, n_partials ) );</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      filter-unique %u\n&quot;</span>, n_partials ) );</div>
 <div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;</div>
 <div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;                timer.<a class="code" href="structnvbio_1_1cuda_1_1_timer.html#a944fa35847e996ab681f96ecd6953cb0">start</a>();</div>
 <div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;</div>
@@ -572,12 +572,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;    }</div>
 <div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;    <span class="keywordflow">catch</span> (<a class="code" href="structnvbio_1_1cuda__error.html">cuda_error</a>&amp; error)</div>
 <div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;    {</div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;CompressionSort::sort() : cuda_error caught!\n  %s\n&quot;</span>, error.<a class="code" href="structnvbio_1_1cuda__error.html#ac0e8399c371e73a48c9f8132c9600041">what</a>());</div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;CompressionSort::sort() : cuda_error caught!\n  %s\n&quot;</span>, error.<a class="code" href="structnvbio_1_1cuda__error.html#ac0e8399c371e73a48c9f8132c9600041">what</a>());</div>
 <div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;        <span class="keywordflow">throw</span> error;</div>
 <div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;    }</div>
 <div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;    <span class="keywordflow">catch</span> (...)</div>
 <div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;    {</div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;CompressionSort::sort() : exception caught!\n&quot;</span>);</div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;CompressionSort::sort() : exception caught!\n&quot;</span>);</div>
 <div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;        <span class="keywordflow">throw</span>;</div>
 <div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;    }</div>
 <div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;}</div>
@@ -608,7 +608,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;</div>
 <div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;    <span class="keywordflow">try</span></div>
 <div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;    {</div>
-<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;        <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      initialize\n&quot;</span> ) );</div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;        <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      initialize\n&quot;</span> ) );</div>
 <div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;</div>
 <div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;        <span class="comment">// reserve temporary storage</span></div>
 <div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;        <a class="code" href="structnvbio_1_1cuda_1_1_compression_sort.html#a9426d57b2a84716fb917e731dc07812d">reserve</a>( n_strings );</div>
@@ -649,7 +649,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;        <span class="comment">//</span></div>
 <div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> word_block_begin = 0; word_block_begin &lt; max_words; word_block_begin += slice_size)</div>
 <div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;        {</div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;            <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      slice %u/%u (%u active)\n&quot;</span>, word_block_begin, max_words, n_active_strings ) );</div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;            <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      slice %u/%u (%u active)\n&quot;</span>, word_block_begin, max_words, n_active_strings ) );</div>
 <div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;            <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> word_block_end = <a class="code" href="group___basic_utils.html#gaeeb2406339f4edfcee3f007aaccd478e">nvbio::min</a>( word_block_begin + slice_size, max_words );</div>
 <div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;</div>
 <div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;            <a class="code" href="structnvbio_1_1cuda_1_1_timer.html">Timer</a> timer;</div>
@@ -692,7 +692,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;<span class="preprocessor"></span>                timer.<a class="code" href="structnvbio_1_1cuda_1_1_timer.html#a944fa35847e996ab681f96ecd6953cb0">start</a>();</div>
 <div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;</div>
 <div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;                <span class="comment">// extract only active radices, already sorted</span></div>
-<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      extract\n&quot;</span> ) );</div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      extract\n&quot;</span> ) );</div>
 <div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;                set.extract(</div>
 <div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;                    n_active_strings,</div>
 <div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;                    <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">raw_pointer</a>( d_indices ),</div>
@@ -708,7 +708,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;<span class="preprocessor"></span>                timer.<a class="code" href="structnvbio_1_1cuda_1_1_timer.html#a944fa35847e996ab681f96ecd6953cb0">start</a>();</div>
 <div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;</div>
 <div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;                <span class="comment">// extract all radices, not sorted</span></div>
-<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      extract\n&quot;</span> ) );</div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      extract\n&quot;</span> ) );</div>
 <div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;                set.extract(</div>
 <div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;                    n_strings,</div>
 <div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;                    NULL,</div>
@@ -724,7 +724,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;                timer.<a class="code" href="structnvbio_1_1cuda_1_1_timer.html#a944fa35847e996ab681f96ecd6953cb0">start</a>();</div>
 <div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;</div>
 <div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;                <span class="comment">// get the radices in proper order</span></div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      gather\n&quot;</span> ) );</div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      gather\n&quot;</span> ) );</div>
 <div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;                thrust::gather(</div>
 <div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;                    d_indices.begin(),</div>
 <div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;                    d_indices.begin() + n_active_strings,</div>
@@ -738,7 +738,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;<span class="preprocessor"></span>                timer.<a class="code" href="structnvbio_1_1cuda_1_1_timer.html#a944fa35847e996ab681f96ecd6953cb0">start</a>();</div>
 <div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;</div>
 <div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;                <span class="comment">// build the compressed flags</span></div>
-<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      pack-flags\n&quot;</span> ) );</div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      pack-flags\n&quot;</span> ) );</div>
 <div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;                <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>* d_comp_flags = (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>*)<a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">nvbio::raw_pointer</a>( d_temp_flags );</div>
 <div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;                <a class="code" href="namespacenvbio_1_1priv.html#afbb0c296d8cf4b80c657f7606430aca1">priv::pack_flags</a>(</div>
 <div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;                    n_active_strings,</div>
@@ -749,7 +749,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;                <a class="code" href="namespacenvbio_1_1cuda.html#ae47791b87823645325b131f7c83f3291">cuda::check_error</a>(<span class="stringliteral">&quot;CompressionSort::sort() : pack_flags&quot;</span>);</div>
 <div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;</div>
 <div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;                <span class="comment">// sort within segments</span></div>
-<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      seg-sort\n&quot;</span> ) );</div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      seg-sort\n&quot;</span> ) );</div>
 <div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;                mgpu::SegSortPairsFromFlags(</div>
 <div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;                    <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">nvbio::raw_pointer</a>( d_keys ),</div>
 <div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;                    <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">nvbio::raw_pointer</a>( d_indices ),</div>
@@ -771,7 +771,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;                <span class="comment">// of them in the sorted list with its predecessor.</span></div>
 <div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;                <span class="comment">// At that point, we can isolate all segments which contain more than 1 suffix and continue sorting</span></div>
 <div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;                <span class="comment">// those by themselves.</span></div>
-<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      build-head-flags\n&quot;</span> ) );</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;                <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      build-head-flags\n&quot;</span> ) );</div>
 <div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;                <a class="code" href="namespacenvbio_1_1priv.html#a1401af3048305df028763e93274f7ad9">priv::build_head_flags</a>(</div>
 <div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;                    n_active_strings,</div>
 <div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;                    <a class="code" href="namespacenvbio.html#a8ad991c39278eb9e0d0000f2b12031da">nvbio::raw_pointer</a>( d_keys ),</div>
@@ -807,7 +807,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;                    <span class="keywordflow">if</span> (n_active_strings == n_strings)</div>
 <div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;                    {</div>
 <div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;                        <span class="comment">// copy the fully sorted indices to the output in their proper place</span></div>
-<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;                        <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      copy-partials\n&quot;</span> ) );</div>
+<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;                        <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      copy-partials\n&quot;</span> ) );</div>
 <div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;                        <a class="code" href="namespacenvbio_1_1cuda.html#a14fff628aa09cc0400eee8f4e158686c">thrust::copy</a>(</div>
 <div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;                            d_indices.begin(),</div>
 <div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;                            d_indices.begin() + n_active_strings,</div>
@@ -817,7 +817,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;                    <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;                    {</div>
 <div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;                        <span class="comment">// scatter the partially sorted indices to the output in their proper place</span></div>
-<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;                        <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      scatter-partials\n&quot;</span> ) );</div>
+<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;                        <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      scatter-partials\n&quot;</span> ) );</div>
 <div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;                        thrust::scatter(</div>
 <div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;                            d_indices.begin(),</div>
 <div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;                            d_indices.begin() + n_active_strings,</div>
@@ -864,7 +864,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;                <span class="comment">//if (2u*n_segments &gt;= n_active_strings)</span></div>
 <div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160;                <span class="keywordflow">if</span> (2u*n_partials &lt;= n_active_strings)</div>
 <div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;                {</div>
-<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160;                    <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>( stderr, <span class="stringliteral">&quot;      filter-unique %u\n&quot;</span>, n_partials ) );</div>
+<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160;                    <a class="code" href="types_8h.html#a0586b64e0df13e3e3d956a7f178dd322">NVBIO_CUDA_DEBUG_STATEMENT</a>( <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>( stderr, <span class="stringliteral">&quot;      filter-unique %u\n&quot;</span>, n_partials ) );</div>
 <div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160;</div>
 <div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;                    timer.<a class="code" href="structnvbio_1_1cuda_1_1_timer.html#a944fa35847e996ab681f96ecd6953cb0">start</a>();</div>
 <div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160;</div>
@@ -928,12 +928,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160;    }</div>
 <div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160;    <span class="keywordflow">catch</span> (<a class="code" href="structnvbio_1_1cuda__error.html">cuda_error</a>&amp; error)</div>
 <div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160;    {</div>
-<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;CompressionSort::sort() : cuda_error caught!\n  %s\n&quot;</span>, error.<a class="code" href="structnvbio_1_1cuda__error.html#ac0e8399c371e73a48c9f8132c9600041">what</a>());</div>
+<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;CompressionSort::sort() : cuda_error caught!\n  %s\n&quot;</span>, error.<a class="code" href="structnvbio_1_1cuda__error.html#ac0e8399c371e73a48c9f8132c9600041">what</a>());</div>
 <div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;        <span class="keywordflow">throw</span> error;</div>
 <div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;    }</div>
 <div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160;    <span class="keywordflow">catch</span> (...)</div>
 <div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;    {</div>
-<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;CompressionSort::sort() : exception caught!\n&quot;</span>);</div>
+<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;CompressionSort::sort() : exception caught!\n&quot;</span>);</div>
 <div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160;        <span class="keywordflow">throw</span>;</div>
 <div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160;    }</div>
 <div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;}</div>
@@ -943,7 +943,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:41 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:03 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

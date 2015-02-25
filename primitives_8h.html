@@ -97,6 +97,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
@@ -108,6 +109,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;<a class="el" href="console_8h_source.html">nvbio/basic/console.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="vector_8h_source.html">nvbio/basic/vector.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="algorithms_8h_source.html">nvbio/basic/algorithms.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="cuda_2timer_8h_source.html">nvbio/basic/cuda/timer.h</a>&gt;</code><br/>
 <code>#include &lt;thrust/reduce.h&gt;</code><br/>
 <code>#include &lt;thrust/scan.h&gt;</code><br/>
 <code>#include &lt;thrust/copy.h&gt;</code><br/>
@@ -119,6 +121,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <p><a href="primitives_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1for__each__enactor.html">nvbio::for_each_enactor&lt; system_tag &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnvbio_1_1for__each__enactor_3_01device__tag_01_4.html">nvbio::for_each_enactor&lt; device_tag &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacenvbio"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenvbio.html">nvbio</a></td></tr>
@@ -139,9 +148,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga99051290b643f2f1e26be506fca151aa"><td class="memTemplParams" colspan="2">template&lt;typename system_tag , typename Iterator , typename Headflags &gt; </td></tr>
 <tr class="memitem:ga99051290b643f2f1e26be506fca151aa"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___primitives.html#ga99051290b643f2f1e26be506fca151aa">nvbio::is_segment_sorted</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 n, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Iterator values, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Headflags flags)</td></tr>
 <tr class="separator:ga99051290b643f2f1e26be506fca151aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga7e41fe5fa9492bbda2aca33a52732c25"><td class="memTemplParams" colspan="2">template&lt;typename system_tag , typename Iterator , typename Functor &gt; </td></tr>
-<tr class="memitem:ga7e41fe5fa9492bbda2aca33a52732c25"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">nvbio::for_each</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 n, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Iterator in, Functor functor)</td></tr>
-<tr class="separator:ga7e41fe5fa9492bbda2aca33a52732c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6e1fcd1d899ee0f5074461927484ed40"><td class="memTemplParams" colspan="2">template&lt;typename system_tag , typename Iterator , typename Functor &gt; </td></tr>
+<tr class="memitem:ga6e1fcd1d899ee0f5074461927484ed40"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">nvbio::for_each</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint64 n, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Iterator in, Functor functor)</td></tr>
+<tr class="separator:ga6e1fcd1d899ee0f5074461927484ed40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga0b41de45962c3b82d1fb26c5aa4b3c6e"><td class="memTemplParams" colspan="2">template&lt;typename system_tag , typename Iterator , typename Output , typename Functor &gt; </td></tr>
 <tr class="memitem:ga0b41de45962c3b82d1fb26c5aa4b3c6e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___primitives.html#ga0b41de45962c3b82d1fb26c5aa4b3c6e">nvbio::transform</a> (<a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> uint32 n, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Iterator in, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Output out, <a class="el" href="vs_2zlib_2zconf_8h.html#a2c212835823e3c54a8ab6d95c652660e">const</a> Functor functor)</td></tr>
 <tr class="separator:ga0b41de45962c3b82d1fb26c5aa4b3c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -189,7 +198,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:50 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:12 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

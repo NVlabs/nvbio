@@ -355,9 +355,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="comment">// invoke a functor for each element of the given sequence</span></div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator, <span class="keyword">typename</span> Functor&gt;</div>
-<div class="line"><a name="l00256"></a><span class="lineno"><a class="code" href="namespacenvbio.html#a83480cb50cd79fb77d1950c163b4ce33">  256</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">for_each</a>(</div>
+<div class="line"><a name="l00256"></a><span class="lineno"><a class="code" href="namespacenvbio.html#af52f257573fcc24105599356c085a230">  256</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">for_each</a>(</div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1host__tag.html">host_tag</a>          tag,</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            n,</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>            n,</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    <span class="keyword">const</span> Iterator          in,</div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;          Functor           functor)</div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;{</div>
@@ -371,32 +371,32 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="comment">// invoke a functor for each element of the given sequence</span></div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator, <span class="keyword">typename</span> Functor&gt;</div>
-<div class="line"><a name="l00272"></a><span class="lineno"><a class="code" href="namespacenvbio.html#aa1c05d4cf25bd9b6f1a200eaa35e055a">  272</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">for_each</a>(</div>
+<div class="line"><a name="l00272"></a><span class="lineno"><a class="code" href="namespacenvbio.html#a06e83067fba34e32ba49e3494db3ea54">  272</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">for_each</a>(</div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1device__tag.html">device_tag</a>        tag,</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            n,</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>            n,</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    <span class="keyword">const</span> Iterator          in,</div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;          Functor           functor)</div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;{</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">thrust::for_each</a>( in, in + n, functor );</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">thrust::for_each</a>( in, in + n, functor );</div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;}</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;</div>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="comment">// invoke a functor for each element of the given sequence</span></div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> system_tag, <span class="keyword">typename</span> Iterator, <span class="keyword">typename</span> Functor&gt;</div>
-<div class="line"><a name="l00284"></a><span class="lineno"><a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">  284</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">for_each</a>(</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            n,</div>
+<div class="line"><a name="l00284"></a><span class="lineno"><a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">  284</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">for_each</a>(</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>            n,</div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <span class="keyword">const</span> Iterator          in,</div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;          Functor           functor)</div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;{</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">for_each</a>( system_tag(), n, in, functor );</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">for_each</a>( system_tag(), n, in, functor );</div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;}</div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="comment">// apply a functor to each element of the given sequence</span></div>
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator, <span class="keyword">typename</span> Output, <span class="keyword">typename</span> Functor&gt;</div>
-<div class="line"><a name="l00295"></a><span class="lineno"><a class="code" href="namespacenvbio.html#ab31487037592b493e59205f66997e527">  295</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga0b41de45962c3b82d1fb26c5aa4b3c6e">transform</a>(</div>
+<div class="line"><a name="l00295"></a><span class="lineno"><a class="code" href="namespacenvbio.html#a3bf745b2850d6713e3c75e421daed8f2">  295</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="group___primitives.html#ga0b41de45962c3b82d1fb26c5aa4b3c6e">transform</a>(</div>
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    <span class="keyword">const</span> <a class="code" href="structnvbio_1_1device__tag.html">device_tag</a>        tag,</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>            n,</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>            n,</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    <span class="keyword">const</span> Iterator          in,</div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    <span class="keyword">const</span> Output            out,</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    <span class="keyword">const</span> Functor           functor)</div>
@@ -1473,11 +1473,98 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01371"></a><span class="lineno"> 1371</span>&#160;        C_values );</div>
 <div class="line"><a name="l01372"></a><span class="lineno"> 1372</span>&#160;}</div>
 <div class="line"><a name="l01373"></a><span class="lineno"> 1373</span>&#160;</div>
-<div class="line"><a name="l01374"></a><span class="lineno"> 1374</span>&#160;} <span class="comment">// namespace nvbio</span></div>
+<div class="line"><a name="l01374"></a><span class="lineno"> 1374</span>&#160;<span class="preprocessor">#if defined(__CUDACC__)</span></div>
+<div class="line"><a name="l01375"></a><span class="lineno"> 1375</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l01378"></a><span class="lineno"> 1378</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> iterator_type, <span class="keyword">typename</span> functor_type&gt;</div>
+<div class="line"><a name="l01379"></a><span class="lineno"> 1379</span>&#160;__global__</div>
+<div class="line"><a name="l01380"></a><span class="lineno"> 1380</span>&#160;<span class="keywordtype">void</span> for_each_kernel(<span class="keyword">const</span> <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> n, <span class="keyword">const</span> iterator_type in, <span class="keyword">const</span> functor_type f)</div>
+<div class="line"><a name="l01381"></a><span class="lineno"> 1381</span>&#160;{</div>
+<div class="line"><a name="l01382"></a><span class="lineno"> 1382</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> grid_size = blockDim.x * gridDim.x;</div>
+<div class="line"><a name="l01383"></a><span class="lineno"> 1383</span>&#160;</div>
+<div class="line"><a name="l01384"></a><span class="lineno"> 1384</span>&#160;    <span class="keywordflow">for</span> (<a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> i = threadIdx.x + blockIdx.x * blockDim.x; i &lt; n; i += grid_size)</div>
+<div class="line"><a name="l01385"></a><span class="lineno"> 1385</span>&#160;        f( in[i] );</div>
+<div class="line"><a name="l01386"></a><span class="lineno"> 1386</span>&#160;};</div>
+<div class="line"><a name="l01387"></a><span class="lineno"> 1387</span>&#160;</div>
+<div class="line"><a name="l01388"></a><span class="lineno"> 1388</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l01389"></a><span class="lineno"> 1389</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l01390"></a><span class="lineno"> 1390</span>&#160;<span class="comment">// ask the optimizer how many blocks we should try using next</span></div>
+<div class="line"><a name="l01391"></a><span class="lineno"> 1391</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l01392"></a><span class="lineno"> 1392</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> KernelFunction&gt;</div>
+<div class="line"><a name="l01393"></a><span class="lineno"> 1393</span>&#160;<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> for_each_enactor&lt;device_tag&gt;::suggested_blocks(KernelFunction kernel, <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> cta_size)<span class="keyword"> const</span></div>
+<div class="line"><a name="l01394"></a><span class="lineno"> 1394</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l01395"></a><span class="lineno"> 1395</span>&#160;<span class="preprocessor">#if defined(__CUDACC__)</span></div>
+<div class="line"><a name="l01396"></a><span class="lineno"> 1396</span>&#160;<span class="preprocessor"></span>    <span class="keywordflow">if</span> (m_blocks_hi == 0)</div>
+<div class="line"><a name="l01397"></a><span class="lineno"> 1397</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="namespacenvbio_1_1cuda.html#a05eee33ec76e0b7dbb955d2eca609648">cuda::multiprocessor_count</a>() * <a class="code" href="namespacenvbio_1_1cuda.html#a5fb5880feb0a0743ff1ae5c14f8cf73a">cuda::max_active_blocks_per_multiprocessor</a>( kernel, cta_size, 0u );</div>
+<div class="line"><a name="l01398"></a><span class="lineno"> 1398</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (m_blocks_lo == 0)</div>
+<div class="line"><a name="l01399"></a><span class="lineno"> 1399</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="namespacenvbio_1_1cuda.html#a05eee33ec76e0b7dbb955d2eca609648">cuda::multiprocessor_count</a>();</div>
+<div class="line"><a name="l01400"></a><span class="lineno"> 1400</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01401"></a><span class="lineno"> 1401</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="namespacenvbio_1_1cuda.html#a05eee33ec76e0b7dbb955d2eca609648">cuda::multiprocessor_count</a>() * (m_blocks_lo + m_blocks_hi) / 2;</div>
+<div class="line"><a name="l01402"></a><span class="lineno"> 1402</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l01403"></a><span class="lineno"> 1403</span>&#160;<span class="preprocessor"></span>    <span class="keywordflow">return</span> 0u;</div>
+<div class="line"><a name="l01404"></a><span class="lineno"> 1404</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l01405"></a><span class="lineno"> 1405</span>&#160;<span class="preprocessor"></span>}</div>
+<div class="line"><a name="l01406"></a><span class="lineno"> 1406</span>&#160;</div>
+<div class="line"><a name="l01407"></a><span class="lineno"> 1407</span>&#160;<span class="comment">// update the optimizer&#39;s internal state with the latest speed data-point</span></div>
+<div class="line"><a name="l01408"></a><span class="lineno"> 1408</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l01409"></a><span class="lineno"> 1409</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l01410"></a><span class="lineno"> 1410</span>&#160;<span class="keywordtype">void</span> for_each_enactor&lt;device_tag&gt;::update(<span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_blocks, <span class="keyword">const</span> <span class="keywordtype">float</span> speed)</div>
+<div class="line"><a name="l01411"></a><span class="lineno"> 1411</span>&#160;{</div>
+<div class="line"><a name="l01412"></a><span class="lineno"> 1412</span>&#160;<span class="preprocessor">#if defined(__CUDACC__)</span></div>
+<div class="line"><a name="l01413"></a><span class="lineno"> 1413</span>&#160;<span class="preprocessor"></span>    <span class="comment">// carry out a little binary search over the best number of blocks/SM</span></div>
+<div class="line"><a name="l01414"></a><span class="lineno"> 1414</span>&#160;    <span class="keywordflow">if</span> (m_blocks_hi == 0)</div>
+<div class="line"><a name="l01415"></a><span class="lineno"> 1415</span>&#160;    {</div>
+<div class="line"><a name="l01416"></a><span class="lineno"> 1416</span>&#160;        m_blocks_hi = n_blocks / <a class="code" href="namespacenvbio_1_1cuda.html#a05eee33ec76e0b7dbb955d2eca609648">cuda::multiprocessor_count</a>();</div>
+<div class="line"><a name="l01417"></a><span class="lineno"> 1417</span>&#160;        m_speed_hi  = speed;</div>
+<div class="line"><a name="l01418"></a><span class="lineno"> 1418</span>&#160;    }</div>
+<div class="line"><a name="l01419"></a><span class="lineno"> 1419</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (m_blocks_lo == 0)</div>
+<div class="line"><a name="l01420"></a><span class="lineno"> 1420</span>&#160;    {</div>
+<div class="line"><a name="l01421"></a><span class="lineno"> 1421</span>&#160;        m_blocks_lo = n_blocks / <a class="code" href="namespacenvbio_1_1cuda.html#a05eee33ec76e0b7dbb955d2eca609648">cuda::multiprocessor_count</a>();</div>
+<div class="line"><a name="l01422"></a><span class="lineno"> 1422</span>&#160;        m_speed_lo  = speed;</div>
+<div class="line"><a name="l01423"></a><span class="lineno"> 1423</span>&#160;    }</div>
+<div class="line"><a name="l01424"></a><span class="lineno"> 1424</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (m_speed_lo &gt; m_speed_hi)</div>
+<div class="line"><a name="l01425"></a><span class="lineno"> 1425</span>&#160;    {</div>
+<div class="line"><a name="l01426"></a><span class="lineno"> 1426</span>&#160;        m_blocks_hi = n_blocks / <a class="code" href="namespacenvbio_1_1cuda.html#a05eee33ec76e0b7dbb955d2eca609648">cuda::multiprocessor_count</a>();</div>
+<div class="line"><a name="l01427"></a><span class="lineno"> 1427</span>&#160;        m_speed_hi  = speed;</div>
+<div class="line"><a name="l01428"></a><span class="lineno"> 1428</span>&#160;    }</div>
+<div class="line"><a name="l01429"></a><span class="lineno"> 1429</span>&#160;    <span class="keywordflow">else</span> </div>
+<div class="line"><a name="l01430"></a><span class="lineno"> 1430</span>&#160;    {</div>
+<div class="line"><a name="l01431"></a><span class="lineno"> 1431</span>&#160;        m_blocks_lo = n_blocks / <a class="code" href="namespacenvbio_1_1cuda.html#a05eee33ec76e0b7dbb955d2eca609648">cuda::multiprocessor_count</a>();</div>
+<div class="line"><a name="l01432"></a><span class="lineno"> 1432</span>&#160;        m_speed_lo  = speed;</div>
+<div class="line"><a name="l01433"></a><span class="lineno"> 1433</span>&#160;    }</div>
+<div class="line"><a name="l01434"></a><span class="lineno"> 1434</span>&#160;    <span class="comment">// TODO: once the optimizer settles to a given value, it will never change:</span></div>
+<div class="line"><a name="l01435"></a><span class="lineno"> 1435</span>&#160;    <span class="comment">// we should explore using occasional &quot;mutations&quot; to adapt to possibly</span></div>
+<div class="line"><a name="l01436"></a><span class="lineno"> 1436</span>&#160;    <span class="comment">// changing conditions...</span></div>
+<div class="line"><a name="l01437"></a><span class="lineno"> 1437</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l01438"></a><span class="lineno"> 1438</span>&#160;<span class="preprocessor"></span>}</div>
+<div class="line"><a name="l01439"></a><span class="lineno"> 1439</span>&#160;</div>
+<div class="line"><a name="l01440"></a><span class="lineno"> 1440</span>&#160;<span class="comment">// enact the for_each</span></div>
+<div class="line"><a name="l01441"></a><span class="lineno"> 1441</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l01442"></a><span class="lineno"> 1442</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator, <span class="keyword">typename</span> Functor&gt;</div>
+<div class="line"><a name="l01443"></a><span class="lineno"><a class="code" href="structnvbio_1_1for__each__enactor_3_01device__tag_01_4.html#aeac4c89a2810b16ccd942bd105a8c82c"> 1443</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnvbio_1_1for__each__enactor.html#a8ab5589edf12c5c9efdc992fb425c829">for_each_enactor&lt;device_tag&gt;::operator () </a>(</div>
+<div class="line"><a name="l01444"></a><span class="lineno"> 1444</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a>            n,</div>
+<div class="line"><a name="l01445"></a><span class="lineno"> 1445</span>&#160;    <span class="keyword">const</span> Iterator          in,</div>
+<div class="line"><a name="l01446"></a><span class="lineno"> 1446</span>&#160;          Functor           functor)</div>
+<div class="line"><a name="l01447"></a><span class="lineno"> 1447</span>&#160;{</div>
+<div class="line"><a name="l01448"></a><span class="lineno"> 1448</span>&#160;<span class="preprocessor">#if defined(__CUDACC__)</span></div>
+<div class="line"><a name="l01449"></a><span class="lineno"> 1449</span>&#160;<span class="preprocessor"></span>    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> blockdim = 128;</div>
+<div class="line"><a name="l01450"></a><span class="lineno"> 1450</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_blocks = suggested_blocks( for_each_kernel&lt;Iterator,Functor&gt;, blockdim );</div>
+<div class="line"><a name="l01451"></a><span class="lineno"> 1451</span>&#160;</div>
+<div class="line"><a name="l01452"></a><span class="lineno"> 1452</span>&#160;    <a class="code" href="structnvbio_1_1cuda_1_1_timer.html">cuda::Timer</a> timer;</div>
+<div class="line"><a name="l01453"></a><span class="lineno"> 1453</span>&#160;    timer.<a class="code" href="structnvbio_1_1cuda_1_1_timer.html#a944fa35847e996ab681f96ecd6953cb0">start</a>();</div>
+<div class="line"><a name="l01454"></a><span class="lineno"> 1454</span>&#160;</div>
+<div class="line"><a name="l01455"></a><span class="lineno"> 1455</span>&#160;    for_each_kernel&lt;&lt;&lt;n_blocks,blockdim&gt;&gt;&gt;( n, in, functor );</div>
+<div class="line"><a name="l01456"></a><span class="lineno"> 1456</span>&#160;</div>
+<div class="line"><a name="l01457"></a><span class="lineno"> 1457</span>&#160;    timer.<a class="code" href="structnvbio_1_1cuda_1_1_timer.html#ad559677b791465bdee51d4848766a6d0">stop</a>();</div>
+<div class="line"><a name="l01458"></a><span class="lineno"> 1458</span>&#160;</div>
+<div class="line"><a name="l01459"></a><span class="lineno"> 1459</span>&#160;    update( n_blocks, <span class="keywordtype">float</span>(n) / timer.<a class="code" href="structnvbio_1_1cuda_1_1_timer.html#a9f0b57926e56612695ccb81dc3977e04">seconds</a>() );</div>
+<div class="line"><a name="l01460"></a><span class="lineno"> 1460</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l01461"></a><span class="lineno"> 1461</span>&#160;<span class="preprocessor"></span>}</div>
+<div class="line"><a name="l01462"></a><span class="lineno"> 1462</span>&#160;</div>
+<div class="line"><a name="l01463"></a><span class="lineno"> 1463</span>&#160;} <span class="comment">// namespace nvbio</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:33 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:32:55 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -404,7 +404,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;</div>
 <div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    <span class="keywordflow">if</span> (segment == NULL)</div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    {</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;PagedText: failed allocating segment\n&quot;</span>);</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;PagedText: failed allocating segment\n&quot;</span>);</div>
 <div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <span class="comment">//throw bad_alloc( &quot;PagedText: failed allocating segment\n&quot; );</span></div>
 <div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        exit(1);</div>
 <div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    }</div>
@@ -435,7 +435,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    {</div>
 <div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        omp_unset_lock( &amp;m_lock );</div>
 <div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;PagedText: exhausted page pool\n&quot;</span>);</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;PagedText: exhausted page pool\n&quot;</span>);</div>
 <div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <span class="comment">//throw bad_alloc( &quot;PagedText: exhausted page pool\n&quot; );</span></div>
 <div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        exit(1);</div>
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    }</div>
@@ -457,7 +457,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;</div>
 <div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <span class="keywordflow">if</span> (m_pool_size &gt;= m_page_count)</div>
 <div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    {</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;exceeded pool size %u - released more pages than have been allocated\n&quot;</span>, m_page_count);</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;exceeded pool size %u - released more pages than have been allocated\n&quot;</span>, m_page_count);</div>
 <div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        exit(1);</div>
 <div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    }</div>
 <div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;</div>
@@ -673,7 +673,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;</div>
 <div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;    <span class="keywordflow">if</span> (n_occ != n)</div>
 <div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;    {</div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;mismatching occurrence counters: expected %llu symbols, got %llu\n&quot;</span>, n, n_occ );</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;mismatching occurrence counters: expected %llu symbols, got %llu\n&quot;</span>, n, n_occ );</div>
 <div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;        <span class="comment">//throw runtime_error( &quot;mismatching occurrence counters: expected %llu symbols, got %llu\n&quot;, n, n_occ );</span></div>
 <div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;        exit(1);</div>
 <div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;    }</div>
@@ -726,7 +726,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;</div>
 <div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;            <span class="keywordflow">if</span> (cnt != k_out)</div>
 <div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;            {</div>
-<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;alloc_page(%u) : expected %u occurrences, got %u\n&quot;</span>, *out_leaf, k_out, cnt);</div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;alloc_page(%u) : expected %u occurrences, got %u\n&quot;</span>, *out_leaf, k_out, cnt);</div>
 <div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;                <span class="comment">//throw runtime_error( &quot;alloc_page(%u) : expected %u occurrences, got %u\n&quot;, *out_leaf, k_out, cnt );</span></div>
 <div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;                exit(1);</div>
 <div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;            }</div>
@@ -915,12 +915,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160;</div>
 <div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;        <span class="keywordflow">if</span> (out_leaf+1 != out_leaf_end)</div>
 <div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;        {</div>
-<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;            <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;mismatching number of output leaves: leaf[%u/%u] : expected %u, got %u\n&quot;</span>,</div>
+<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;            <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;mismatching number of output leaves: leaf[%u/%u] : expected %u, got %u\n&quot;</span>,</div>
 <div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;                in_leaf, in_leaves,</div>
 <div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;                out_leaf_end - out_leaf_begin,</div>
 <div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;                out_leaf     - out_leaf_begin);</div>
-<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;            <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;  in-size    : %u\n&quot;</span>, in_leaf_size);</div>
-<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;            <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;  insertions : %u\n&quot;</span>, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( g_end - g_begin ));</div>
+<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;            <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;  in-size    : %u\n&quot;</span>, in_leaf_size);</div>
+<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;            <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;  insertions : %u\n&quot;</span>, <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>( g_end - g_begin ));</div>
 <div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;</div>
 <div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;            <span class="comment">//throw runtime_error( &quot;mismatching number of output leaves: leaf[%u/%u] : expected %u, got %u\n&quot;,</span></div>
 <div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;            <span class="comment">//    in_leaf, in_leaves,</span></div>
@@ -1011,7 +1011,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> cnt = std::accumulate( partials, partials + SYMBOL_COUNT, 0u );</div>
 <div class="line"><a name="l00916"></a><span class="lineno">  916</span>&#160;        <span class="keywordflow">if</span> (cnt != k_out)</div>
 <div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160;        {</div>
-<div class="line"><a name="l00918"></a><span class="lineno">  918</span>&#160;            <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;merge_pages(%u) : expected %u occurrences, got %u\n&quot;</span>, out_leaf, k_out, cnt);</div>
+<div class="line"><a name="l00918"></a><span class="lineno">  918</span>&#160;            <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;merge_pages(%u) : expected %u occurrences, got %u\n&quot;</span>, out_leaf, k_out, cnt);</div>
 <div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160;            <span class="comment">//throw runtime_error( &quot;merge_pages(%u) : expected %u occurrences, got %u\n&quot;, out_leaf, k_out, cnt );</span></div>
 <div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160;            exit(1);</div>
 <div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160;        }</div>
@@ -1076,7 +1076,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;            ins_counts.begin(),</div>
 <div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;            temp_storage );</div>
 <div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;</div>
-<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;        <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    touched leaves %u, (%.2f%% - %.1fMB)\n&quot;</span>, n_touched, 100.0f * <span class="keywordtype">float</span>(n_touched) / <span class="keywordtype">float</span>(n_leaves), <span class="keywordtype">float</span>(n_touched)*(m_page_size*<span class="keyword">sizeof</span>(<a class="code" href="structnvbio_1_1_paged_text.html#abd22a14a4017142da6d75d1bf5a1ee64">word_type</a>)) / <span class="keywordtype">float</span>(1024*1024));</div>
+<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;        <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    touched leaves %u, (%.2f%% - %.1fMB)\n&quot;</span>, n_touched, 100.0f * <span class="keywordtype">float</span>(n_touched) / <span class="keywordtype">float</span>(n_leaves), <span class="keywordtype">float</span>(n_touched)*(m_page_size*<span class="keyword">sizeof</span>(<a class="code" href="structnvbio_1_1_paged_text.html#abd22a14a4017142da6d75d1bf5a1ee64">word_type</a>)) / <span class="keywordtype">float</span>(1024*1024));</div>
 <div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160;</div>
 <div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;        <span class="comment">// for each leaf l = h_ins_leaves[i], do h_leaf_sizes[l] += h_ins_counts[i]</span></div>
 <div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160;        nvbio::transform&lt;host_tag&gt;(</div>
@@ -1174,7 +1174,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01078"></a><span class="lineno"> 1078</span>&#160;</div>
 <div class="line"><a name="l01079"></a><span class="lineno"> 1079</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">float</span> utilization = (float( size() + n ) / float(LEAF_SYMBOLS)) / <span class="keywordtype">float</span>( out_leaves );</div>
 <div class="line"><a name="l01080"></a><span class="lineno"> 1080</span>&#160;</div>
-<div class="line"><a name="l01081"></a><span class="lineno"> 1081</span>&#160;    <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    copy pages %u -&gt; %u (utilization : %.1f%%)\n&quot;</span>,</div>
+<div class="line"><a name="l01081"></a><span class="lineno"> 1081</span>&#160;    <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    copy pages %u -&gt; %u (utilization : %.1f%%)\n&quot;</span>,</div>
 <div class="line"><a name="l01082"></a><span class="lineno"> 1082</span>&#160;        n_leaves, out_leaves,</div>
 <div class="line"><a name="l01083"></a><span class="lineno"> 1083</span>&#160;        100.0f * utilization );</div>
 <div class="line"><a name="l01084"></a><span class="lineno"> 1084</span>&#160;</div>
@@ -1238,7 +1238,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01142"></a><span class="lineno"> 1142</span>&#160;</div>
 <div class="line"><a name="l01143"></a><span class="lineno"> 1143</span>&#160;    <span class="keywordflow">if</span> (n_occ != m_offsets[ out_leaves ])</div>
 <div class="line"><a name="l01144"></a><span class="lineno"> 1144</span>&#160;    {</div>
-<div class="line"><a name="l01145"></a><span class="lineno"> 1145</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;mismatching occurrence counters: expected %llu symbols, got %llu\n&quot;</span>, m_offsets[ out_leaves ], n_occ );</div>
+<div class="line"><a name="l01145"></a><span class="lineno"> 1145</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;mismatching occurrence counters: expected %llu symbols, got %llu\n&quot;</span>, m_offsets[ out_leaves ], n_occ );</div>
 <div class="line"><a name="l01146"></a><span class="lineno"> 1146</span>&#160;        <span class="comment">//throw runtime_error( &quot;mismatching occurrence counters: expected %llu symbols, got %llu\n&quot;, m_offsets[ out_leaves ], n_occ );</span></div>
 <div class="line"><a name="l01147"></a><span class="lineno"> 1147</span>&#160;        exit(1);</div>
 <div class="line"><a name="l01148"></a><span class="lineno"> 1148</span>&#160;    }</div>
@@ -1260,7 +1260,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01164"></a><span class="lineno"> 1164</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> n_symbols  = size();</div>
 <div class="line"><a name="l01165"></a><span class="lineno"> 1165</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> out_leaves = <a class="code" href="group___basic_utils.html#gabf731ec687bc1c5397b265d41d76da50">util::divide_ri</a>( n_symbols, LEAF_SYMBOLS );</div>
 <div class="line"><a name="l01166"></a><span class="lineno"> 1166</span>&#160;</div>
-<div class="line"><a name="l01167"></a><span class="lineno"> 1167</span>&#160;    <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    defrag %u -&gt; %u\n&quot;</span>, in_leaves, out_leaves );</div>
+<div class="line"><a name="l01167"></a><span class="lineno"> 1167</span>&#160;    <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    defrag %u -&gt; %u\n&quot;</span>, in_leaves, out_leaves );</div>
 <div class="line"><a name="l01168"></a><span class="lineno"> 1168</span>&#160;</div>
 <div class="line"><a name="l01169"></a><span class="lineno"> 1169</span>&#160;    <a class="code" href="structnvbio_1_1vector.html">nvbio::vector&lt;host_tag,uint8&gt;</a> temp_storage;</div>
 <div class="line"><a name="l01170"></a><span class="lineno"> 1170</span>&#160;</div>
@@ -1327,7 +1327,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01231"></a><span class="lineno"> 1231</span>&#160;            &amp;m_counters[i*SYMBOL_COUNT] + SYMBOL_COUNT, 0u );</div>
 <div class="line"><a name="l01232"></a><span class="lineno"> 1232</span>&#160;</div>
 <div class="line"><a name="l01233"></a><span class="lineno"> 1233</span>&#160;        <span class="keywordflow">if</span> (cnt != LEAF_SYMBOLS)</div>
-<div class="line"><a name="l01234"></a><span class="lineno"> 1234</span>&#160;            <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;mismatching occurrence counters: at page[%u], expected %llu symbols, got %llu\n&quot;</span>, i, LEAF_SYMBOLS, cnt );</div>
+<div class="line"><a name="l01234"></a><span class="lineno"> 1234</span>&#160;            <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;mismatching occurrence counters: at page[%u], expected %llu symbols, got %llu\n&quot;</span>, i, LEAF_SYMBOLS, cnt );</div>
 <div class="line"><a name="l01235"></a><span class="lineno"> 1235</span>&#160;    }</div>
 <div class="line"><a name="l01236"></a><span class="lineno"> 1236</span>&#160;</div>
 <div class="line"><a name="l01237"></a><span class="lineno"> 1237</span>&#160;    <span class="comment">// do an exclusive prefix-sum on the occurrence counters</span></div>
@@ -1350,7 +1350,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01254"></a><span class="lineno"> 1254</span>&#160;</div>
 <div class="line"><a name="l01255"></a><span class="lineno"> 1255</span>&#160;    <span class="keywordflow">if</span> (n_occ != n_symbols)</div>
 <div class="line"><a name="l01256"></a><span class="lineno"> 1256</span>&#160;    {</div>
-<div class="line"><a name="l01257"></a><span class="lineno"> 1257</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;mismatching occurrence counters: expected %llu symbols, got %llu\n&quot;</span>, n_symbols, n_occ );</div>
+<div class="line"><a name="l01257"></a><span class="lineno"> 1257</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;mismatching occurrence counters: expected %llu symbols, got %llu\n&quot;</span>, n_symbols, n_occ );</div>
 <div class="line"><a name="l01258"></a><span class="lineno"> 1258</span>&#160;        <span class="comment">//throw runtime_error( &quot;mismatching occurrence counters: expected %llu symbols, got %llu\n&quot;, n_symbols, n_occ );</span></div>
 <div class="line"><a name="l01259"></a><span class="lineno"> 1259</span>&#160;        exit(1);</div>
 <div class="line"><a name="l01260"></a><span class="lineno"> 1260</span>&#160;    }</div>
@@ -1380,7 +1380,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:37 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:32:59 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

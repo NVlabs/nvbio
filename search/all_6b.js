@@ -110,7 +110,7 @@ var searchData=
   ['kmers_5finl_2eh',['kmers_inl.h',['../kmers__inl_8h.html',1,'']]],
   ['kmers_5fout',['kmers_out',['../structextract__non__overlapped__repeats.html#aedd3b8a698de07ee93d7aa3080fcac78',1,'extract_non_overlapped_repeats']]],
   ['kmers_5fto_5f64b_5ffunctor',['kmers_to_64b_functor',['../structkmers__to__64b__functor.html',1,'kmers_to_64b_functor&lt; string_set_type &gt;'],['../structkmers__to__64b__functor.html#a62c28728c6410212503c6377cbda3339',1,'kmers_to_64b_functor::kmers_to_64b_functor()']]],
-  ['kmerstype',['KmersType',['../bloom__filters_8h.html#ab645f21103d42e032c63ccc07b2db4e3',1,'bloom_filters.h']]],
+  ['kmerstype',['KmersType',['../group__nv_lighter_module.html#gab645f21103d42e032c63ccc07b2db4e3',1,'bloom_filters.h']]],
   ['kmp_5falloc',['kmp_alloc',['../klist_8h.html#aff5615e7c7adc1514e50e27cf4ac9167',1,'klist.h']]],
   ['kmp_5fdestroy',['kmp_destroy',['../klist_8h.html#a2f6f601ca8b8915d360801e47363f081',1,'klist.h']]],
   ['kmp_5ffree',['kmp_free',['../klist_8h.html#ac102063c37c4c1f888691c213e2ce076',1,'klist.h']]],

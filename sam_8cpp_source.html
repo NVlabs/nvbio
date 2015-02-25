@@ -147,7 +147,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">if</span> (fp == <a class="code" href="contrib_2zlib_2zlib_8h.html#ad15afa2776b41b2f4d8582dd152bd736">Z_NULL</a>)</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    {</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="comment">// this will cause init() to fail below</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;unable to open SAM file %s\n&quot;</span>, read_file_name);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;unable to open SAM file %s\n&quot;</span>, read_file_name);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_read_data_file.html#a8a76858f1fba62a3392449f2f9cce9f4">m_file_state</a> = <a class="code" href="structnvbio_1_1io_1_1_read_data_file.html#a2a89f7cc6637d06aba8960b61bb52ed0ad36cafc64169cd7582bb51b7a062fcb5">FILE_OPEN_FAILED</a>;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_read_data_file.html#a8a76858f1fba62a3392449f2f9cce9f4">m_file_state</a> = <a class="code" href="structnvbio_1_1io_1_1_read_data_file.html#a2a89f7cc6637d06aba8960b61bb52ed0acd9c53ec80a9d06780e2259ae83f0a16">FILE_OK</a>;</div>
@@ -180,7 +180,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordflow">if</span> (linebuf == NULL)</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        {</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;out of memory reading SAM file\n&quot;</span>);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;out of memory reading SAM file\n&quot;</span>);</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <a class="code" href="structnvbio_1_1io_1_1_read_data_file.html#a8a76858f1fba62a3392449f2f9cce9f4">m_file_state</a> = <a class="code" href="structnvbio_1_1io_1_1_read_data_file.html#a2a89f7cc6637d06aba8960b61bb52ed0a1c85523e24d20ebbfea056bb222327c2">FILE_STREAM_ERROR</a>;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        }</div>
@@ -217,7 +217,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            tmp = (<span class="keywordtype">char</span> *) realloc(linebuf, linebuf_size);</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            <span class="keywordflow">if</span> (tmp == NULL)</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            {</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;out of memory reading SAM file\n&quot;</span>);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;out of memory reading SAM file\n&quot;</span>);</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                <a class="code" href="structnvbio_1_1io_1_1_read_data_file.html#a8a76858f1fba62a3392449f2f9cce9f4">m_file_state</a> = <a class="code" href="structnvbio_1_1io_1_1_read_data_file.html#a2a89f7cc6637d06aba8960b61bb52ed0a1c85523e24d20ebbfea056bb222327c2">FILE_STREAM_ERROR</a>;</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            }</div>
@@ -301,10 +301,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                <span class="comment">// ignored</span></div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                <a class="code" href="console_8cpp.html#a872d273107f0e01ebbc5a3c6a4c2f591">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning: unknown header at line %d\n&quot;</span>, numLines);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                <a class="code" href="group___basic.html#ga1694ff1f3581185b63332068635682ce">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning: unknown header at line %d\n&quot;</span>, numLines);</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            }</div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            <a class="code" href="console_8cpp.html#a872d273107f0e01ebbc5a3c6a4c2f591">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning: malformed line %d\n&quot;</span>, numLines);</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            <a class="code" href="group___basic.html#ga1694ff1f3581185b63332068635682ce">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning: malformed line %d\n&quot;</span>, numLines);</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        }</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    } <span class="keywordflow">while</span>(linebuf[0] == <span class="charliteral">&#39;@&#39;</span>);</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;</div>
@@ -323,7 +323,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;</div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    <span class="keywordflow">if</span> (numLines != 1)</div>
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    {</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        <a class="code" href="console_8cpp.html#a872d273107f0e01ebbc5a3c6a4c2f591">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): @HD not the first line in the header section\n&quot;</span>, numLines);</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        <a class="code" href="group___basic.html#ga1694ff1f3581185b63332068635682ce">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): @HD not the first line in the header section\n&quot;</span>, numLines);</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    }</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="keywordflow">for</span>(;;)</div>
@@ -351,10 +351,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (strcmp(&amp;start[3], <span class="stringliteral">&quot;coordinate&quot;</span>) == 0) {</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;                sortOrder = <a class="code" href="structnvbio_1_1io_1_1_read_data_file___s_a_m.html#a993cc9f660aa5f78c40ee5cb2aab9964af890cd81ea9c1a3c629324f6e034dca8">SortOrder_coordinate</a>;</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                <a class="code" href="console_8cpp.html#a872d273107f0e01ebbc5a3c6a4c2f591">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): invalid sort order %s\n&quot;</span>, numLines, &amp;start[3]);</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                <a class="code" href="group___basic.html#ga1694ff1f3581185b63332068635682ce">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): invalid sort order %s\n&quot;</span>, numLines, &amp;start[3]);</div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;            }</div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;            <a class="code" href="console_8cpp.html#a872d273107f0e01ebbc5a3c6a4c2f591">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): invalid tag %s in @HD\n&quot;</span>, numLines, start);</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;            <a class="code" href="group___basic.html#ga1694ff1f3581185b63332068635682ce">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): invalid tag %s in @HD\n&quot;</span>, numLines, start);</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        }</div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;</div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        <span class="keywordflow">if</span> (!delim)</div>
@@ -369,7 +369,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;</div>
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <span class="keywordflow">if</span> (version == NULL)</div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    {</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        <a class="code" href="console_8cpp.html#a872d273107f0e01ebbc5a3c6a4c2f591">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): header does not contain a version tag\n&quot;</span>, numLines);</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        <a class="code" href="group___basic.html#ga1694ff1f3581185b63332068635682ce">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): header does not contain a version tag\n&quot;</span>, numLines);</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    }</div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;</div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
@@ -398,14 +398,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        {</div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;            <span class="keywordflow">if</span> (seq_name != NULL)</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;            {</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                <a class="code" href="console_8cpp.html#a872d273107f0e01ebbc5a3c6a4c2f591">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): multiple SN tags in @SQ record\n&quot;</span>, numLines);</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                <a class="code" href="group___basic.html#ga1694ff1f3581185b63332068635682ce">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): multiple SN tags in @SQ record\n&quot;</span>, numLines);</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;                seq_name = &amp;start[3];</div>
 <div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;            }</div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (strncmp(start, <span class="stringliteral">&quot;LN:&quot;</span>, strlen(<span class="stringliteral">&quot;LN:&quot;</span>)) == 0) {</div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;            <span class="keywordflow">if</span> (seq_len != NULL)</div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;            {</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;                <a class="code" href="console_8cpp.html#a872d273107f0e01ebbc5a3c6a4c2f591">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): multiple LN tags in @SQ record\n&quot;</span>, numLines);</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;                <a class="code" href="group___basic.html#ga1694ff1f3581185b63332068635682ce">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): multiple LN tags in @SQ record\n&quot;</span>, numLines);</div>
 <div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;                seq_len = &amp;start[3];</div>
 <div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            }</div>
@@ -423,7 +423,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    <span class="keywordflow">if</span> (seq_name == NULL || seq_len == NULL)</div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    {</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <a class="code" href="console_8cpp.html#a872d273107f0e01ebbc5a3c6a4c2f591">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): missing required tags in @SQ record\n&quot;</span>, numLines);</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <a class="code" href="group___basic.html#ga1694ff1f3581185b63332068635682ce">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): missing required tags in @SQ record\n&quot;</span>, numLines);</div>
 <div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    }</div>
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;</div>
@@ -435,7 +435,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="preprocessor"></span>    <span class="keywordflow">if</span> (!endptr || endptr == seq_len || *endptr != <span class="charliteral">&#39;\0&#39;</span>)</div>
 <div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    {</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        <a class="code" href="console_8cpp.html#a872d273107f0e01ebbc5a3c6a4c2f591">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): invalid sequence length in @SQ record\n&quot;</span>, numLines);</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        <a class="code" href="group___basic.html#ga1694ff1f3581185b63332068635682ce">log_warning</a>(stderr, <span class="stringliteral">&quot;SAM file warning (line %d): invalid sequence length in @SQ record\n&quot;</span>, numLines);</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    }</div>
 <div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;</div>
 <div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    <a class="code" href="structnvbio_1_1io_1_1_read_data_file___s_a_m.html#a0c08cfc76481bc8fd2aa7057e6689feb">sq_names</a>.push_back(std::string(seq_name));</div>
@@ -573,7 +573,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:39 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:00 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

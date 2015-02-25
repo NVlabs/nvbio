@@ -152,7 +152,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordflow">if</span> (fp == NULL)</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    {</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="comment">// this will cause init() to fail below</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;unable to open BAM file %s\n&quot;</span>, read_file_name);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;unable to open BAM file %s\n&quot;</span>, read_file_name);</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html#ad8e867c782ed17f806b4de29bb410a7d">m_file_state</a> = <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html#aafa121f1d856b5e7d5eddc3580324661a005e97525ff6e8811bceb82efc3691d1">FILE_OPEN_FAILED</a>;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html#ad8e867c782ed17f806b4de29bb410a7d">m_file_state</a> = <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html#aafa121f1d856b5e7d5eddc3580324661a5fe9e7561994afff503d8b100b85988c">FILE_OK</a>;</div>
@@ -181,7 +181,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            <span class="comment">// we&#39;re making the assumption that we never see Z_STREAM_END here</span></div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            assert(err != <a class="code" href="contrib_2zlib_2zlib_8h.html#a7d94a4a852228a899864a0053162e7a8">Z_STREAM_END</a>);</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;error processing BAM file: zlib error %d (%s)\n&quot;</span>, err, msg);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;error processing BAM file: zlib error %d (%s)\n&quot;</span>, err, msg);</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html#ad8e867c782ed17f806b4de29bb410a7d">m_file_state</a> = <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html#aafa121f1d856b5e7d5eddc3580324661ab5585b85bf45ba9f780e054279f27125">FILE_STREAM_ERROR</a>;</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        }</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
@@ -227,7 +227,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        header.<a class="code" href="structnvbio_1_1io_1_1_b_a_m__header.html#ad69db86245869f2037a738dcd0977b74">magic</a>[2] != <span class="charliteral">&#39;M&#39;</span> ||</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        header.<a class="code" href="structnvbio_1_1io_1_1_b_a_m__header.html#ad69db86245869f2037a738dcd0977b74">magic</a>[3] != <span class="charliteral">&#39;\1&#39;</span>)</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    {</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;error parsing BAM file (invalid magic)\n&quot;</span>);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;error parsing BAM file (invalid magic)\n&quot;</span>);</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html#ad8e867c782ed17f806b4de29bb410a7d">m_file_state</a> = <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html#aafa121f1d856b5e7d5eddc3580324661ad0503954f0d700bb41b7cec997013cad">FILE_PARSE_ERROR</a>;</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    }</div>
@@ -367,7 +367,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;</div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="gzread_8c.html#a2d0d971b446b67bbc4261fa5fef622bd">gzread</a>(fp, data.read_name, read_name_len) != read_name_len)</div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    {</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;error processing BAM file (could not fetch read name)\n&quot;</span>);</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;error processing BAM file (could not fetch read name)\n&quot;</span>);</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html#ad8e867c782ed17f806b4de29bb410a7d">m_file_state</a> = <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html#aafa121f1d856b5e7d5eddc3580324661ab5585b85bf45ba9f780e054279f27125">FILE_STREAM_ERROR</a>;</div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    }</div>
@@ -382,7 +382,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;</div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="gzread_8c.html#a2d0d971b446b67bbc4261fa5fef622bd">gzread</a>(fp, data.encoded_read, encoded_read_len) != encoded_read_len)</div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    {</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;error processing BAM file (could not fetch sequence data)\n&quot;</span>);</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;error processing BAM file (could not fetch sequence data)\n&quot;</span>);</div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html#ad8e867c782ed17f806b4de29bb410a7d">m_file_state</a> = <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html#aafa121f1d856b5e7d5eddc3580324661ab5585b85bf45ba9f780e054279f27125">FILE_STREAM_ERROR</a>;</div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    }</div>
@@ -391,7 +391,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    data.quality = (<a class="code" href="group___basic.html#gaec56d52d6a3fb4ac8fbbbe2db73f683d">uint8</a> *) malloc(align.<a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment.html#af08ac8cf01071abd06120442e82ff481">l_seq</a>);</div>
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="gzread_8c.html#a2d0d971b446b67bbc4261fa5fef622bd">gzread</a>(fp, data.quality, align.<a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment.html#af08ac8cf01071abd06120442e82ff481">l_seq</a>) != align.<a class="code" href="structnvbio_1_1io_1_1_b_a_m__alignment.html#af08ac8cf01071abd06120442e82ff481">l_seq</a>)</div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    {</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;error processing BAM file (could not fetch quality data)\n&quot;</span>);</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;error processing BAM file (could not fetch quality data)\n&quot;</span>);</div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html#ad8e867c782ed17f806b4de29bb410a7d">m_file_state</a> = <a class="code" href="structnvbio_1_1io_1_1_sequence_data_file.html#aafa121f1d856b5e7d5eddc3580324661ab5585b85bf45ba9f780e054279f27125">FILE_STREAM_ERROR</a>;</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    }</div>
@@ -482,7 +482,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:39 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:01 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

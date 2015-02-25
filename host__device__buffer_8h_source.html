@@ -174,7 +174,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        cudaError_t error = cudaHostRegister( &amp;m_hvec[0], <span class="keyword">sizeof</span>(T) * size, cudaHostRegisterMapped );</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordflow">if</span> (error)</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        {</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;host_device_buffer_zero_copy::resize(): failed locking %llu bytes\n  %s\n&quot;</span>, <span class="keyword">sizeof</span>(T)*size, cudaGetErrorString(error));</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;host_device_buffer_zero_copy::resize(): failed locking %llu bytes\n  %s\n&quot;</span>, <span class="keyword">sizeof</span>(T)*size, cudaGetErrorString(error));</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            <span class="keywordflow">throw</span> error;</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        }</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    }</div>
@@ -194,7 +194,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        cudaError_t error = cudaHostGetDevicePointer( &amp;ptr_d, const_cast&lt;T*&gt;(<a class="code" href="structnvbio_1_1cuda_1_1host__device__buffer__zero__copy.html#ac4f2091b21e66b84c4d71904584d5960">host_ptr</a>()), 0u );</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordflow">if</span> (error)</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        {</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;host_device_buffer_zero_copy::device_ptr(): failed mapping %llu bytes\n  %s\n&quot;</span>, <span class="keyword">sizeof</span>(T)*m_hvec.size(), cudaGetErrorString(error));</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;host_device_buffer_zero_copy::device_ptr(): failed mapping %llu bytes\n  %s\n&quot;</span>, <span class="keyword">sizeof</span>(T)*m_hvec.size(), cudaGetErrorString(error));</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordflow">throw</span> error;</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        }</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordflow">return</span> ptr_d;</div>
@@ -207,7 +207,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        cudaError_t error = cudaHostGetDevicePointer( &amp;ptr_d, <a class="code" href="structnvbio_1_1cuda_1_1host__device__buffer__zero__copy.html#ac4f2091b21e66b84c4d71904584d5960">host_ptr</a>(), 0u );</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordflow">if</span> (error)</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        {</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;host_device_buffer_zero_copy::device_ptr(): failed mapping %llu bytes\n  %s\n&quot;</span>, <span class="keyword">sizeof</span>(T)*m_hvec.size(), cudaGetErrorString(error));</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;host_device_buffer_zero_copy::device_ptr(): failed mapping %llu bytes\n  %s\n&quot;</span>, <span class="keyword">sizeof</span>(T)*m_hvec.size(), cudaGetErrorString(error));</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            <span class="keywordflow">throw</span> error;</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        }</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordflow">return</span> ptr_d;</div>
@@ -303,7 +303,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:33 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:32:54 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

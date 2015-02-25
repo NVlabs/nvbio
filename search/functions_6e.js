@@ -1,7 +1,6 @@
 var searchData=
 [
   ['n',['n',['../structnvbio_1_1bowtie2_1_1cuda_1_1_smith_waterman_scoring_scheme.html#ac219308b34283205a916990902de19d9',1,'nvbio::bowtie2::cuda::SmithWatermanScoringScheme']]],
-  ['n_5fblocks',['n_blocks',['../struct_occupancy_optimizer.html#a78b12882600b16d5cf732f01f4c568a1',1,'OccupancyOptimizer']]],
   ['n_5fgape',['n_gape',['../structnvbio_1_1alndiff_1_1_alignment_pair.html#af45882323b5bea85aeeda2377a0441fb',1,'nvbio::alndiff::AlignmentPair']]],
   ['n_5fgapo',['n_gapo',['../structnvbio_1_1alndiff_1_1_alignment_pair.html#acbaef8c9dd327206b1121729757d9de7',1,'nvbio::alndiff::AlignmentPair']]],
   ['n_5fhits',['n_hits',['../structnvbio_1_1_f_m_index_filter_3_01host__tag_00_01fm__index__type_01_4.html#aa9e2d6c5aa99aaab1ec5faa32f218dc2',1,'nvbio::FMIndexFilter&lt; host_tag, fm_index_type &gt;::n_hits()'],['../structnvbio_1_1_f_m_index_filter_3_01device__tag_00_01fm__index__type_01_4.html#a6a398cf9438fced98340146351e3dc6c',1,'nvbio::FMIndexFilter&lt; device_tag, fm_index_type &gt;::n_hits()'],['../structnvbio_1_1_m_e_m_filter_3_01host__tag_00_01fm__index__type_01_4.html#a9ed0e19caf304f7a913b5c8fe516b8e2',1,'nvbio::MEMFilter&lt; host_tag, fm_index_type &gt;::n_hits()'],['../structnvbio_1_1_m_e_m_filter_3_01device__tag_00_01fm__index__type_01_4.html#a8ef7182295214f0d2eefecac1fbc61d9',1,'nvbio::MEMFilter&lt; device_tag, fm_index_type &gt;::n_hits()']]],

@@ -154,7 +154,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    std::string base_input_name(pattern);</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordtype">size_t</span> last_slash = base_input_name.rfind(dirsep);</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    std::string base_path = base_input_name.substr( 0, last_slash+1 );</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;directory  : \&quot;%s\&quot;\n&quot;</span>, base_path.c_str());</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <a class="code" href="group___basic.html#ga6d47fc29868f0be35a8fc846e415f79b">log_info</a>(stderr, <span class="stringliteral">&quot;directory  : \&quot;%s\&quot;\n&quot;</span>, base_path.c_str());</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">typedef</span> std::pair&lt;nvbio::uint32, std::string&gt; sortkey;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    std::vector&lt;sortkey&gt; files;</div>
@@ -166,7 +166,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    intptr_t find_handle = _findfirst( base_input_name.c_str(), &amp;file_info );</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">if</span> (find_handle == -1)</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    {</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;unable to locate \&quot;%s\&quot;&quot;</span>, base_input_name.c_str());</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;unable to locate \&quot;%s\&quot;&quot;</span>, base_input_name.c_str());</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        exit(1);</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
@@ -219,7 +219,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:45 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:07 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

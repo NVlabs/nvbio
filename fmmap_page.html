@@ -123,7 +123,7 @@ Input</h1>
 <div class="line">    <a class="code" href="group___sequence_i_o.html#gaeda29063a8a35631e18372d8a6001e27" title="a SequenceData object stored in host memory ">io::SequenceDataHost</a> h_ref;</div>
 <div class="line">    <span class="keywordflow">if</span> (!<a class="code" href="namespacenvbio_1_1io.html#aadf9e7a4a14c2f357a4fc95f1c051950">io::load_sequence_file</a>( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a6c8c7655bd0085241eed95780a3aa4c4" title="4-letter DNA alphabet { A,C,G,T } ">DNA</a>, &amp;h_ref, index ))</div>
 <div class="line">    {</div>
-<div class="line">        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;    failed loading reference \&quot;%s\&quot;\n&quot;</span>, index);</div>
+<div class="line">        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;    failed loading reference \&quot;%s\&quot;\n&quot;</span>, index);</div>
 <div class="line">        <span class="keywordflow">return</span> 1u;</div>
 <div class="line">    }</div>
 <div class="line"></div>
@@ -131,7 +131,7 @@ Input</h1>
 <div class="line">    io::FMIndexDataHost h_fmi;</div>
 <div class="line">    <span class="keywordflow">if</span> (!h_fmi.load( index, <a class="code" href="group___sequence_i_o.html#ggaa3df48d0ab11675e05f2c34fb70e5673a8ff7c616502f05c17e72a0b525ff9d61">io::FMIndexData::FORWARD</a> | io::FMIndexData::SA ))</div>
 <div class="line">    {</div>
-<div class="line">        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;    failed loading index \&quot;%s\&quot;\n&quot;</span>, index);</div>
+<div class="line">        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;    failed loading index \&quot;%s\&quot;\n&quot;</span>, index);</div>
 <div class="line">        <span class="keywordflow">return</span> 1u;</div>
 <div class="line">    }</div>
 <div class="line">    ...</div>
@@ -173,7 +173,7 @@ Input</h1>
 <div class="line">    <span class="comment">// check whether the file opened correctly</span></div>
 <div class="line">    <span class="keywordflow">if</span> (read_data_file == NULL || read_data_file-&gt;is_ok() == <span class="keyword">false</span>)</div>
 <div class="line">    {</div>
-<div class="line">        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;    failed opening file \&quot;%s\&quot;\n&quot;</span>, reads);</div>
+<div class="line">        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;    failed opening file \&quot;%s\&quot;\n&quot;</span>, reads);</div>
 <div class="line">        <span class="keywordflow">return</span> 1u;</div>
 <div class="line">    }</div>
 <div class="line"></div>
@@ -186,7 +186,7 @@ Input</h1>
 <div class="line">        <span class="keywordflow">if</span> (<a class="code" href="namespacenvbio_1_1io.html#aff46befa264cba7847dfdcc470ffeda2">io::next</a>( <a class="code" href="group___alphabets_module.html#ggacd06da18687b2a345bef56a9fdad1a48a312b63ba76d209928476bcefde8f124d" title="5-letter DNA + N alphabet { A,C,G,T,N } ">DNA_N</a>, &amp;h_read_data, read_data_file, batch_reads, batch_bps ) == 0);</div>
 <div class="line">            <span class="keywordflow">break</span>;</div>
 <div class="line"></div>
-<div class="line">        <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;  loading reads... started\n&quot;</span>);</div>
+<div class="line">        <a class="code" href="group___basic.html#ga6d47fc29868f0be35a8fc846e415f79b">log_info</a>(stderr, <span class="stringliteral">&quot;  loading reads... started\n&quot;</span>);</div>
 <div class="line"></div>
 <div class="line">        <span class="comment">// copy it to the device</span></div>
 <div class="line">        <span class="keyword">const</span> <a class="code" href="group___sequence_i_o.html#ga320e6b720c7ea82793f41b21c184d960" title="a SequenceData object stored in device memory ">io::SequenceDataDevice</a> d_read_data( *h_read_data );</div>
@@ -194,8 +194,8 @@ Input</h1>
 <div class="line">        <span class="comment">// remember we generated two strands per input read...</span></div>
 <div class="line">        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_reads = d_read_data.size() / 2;</div>
 <div class="line"></div>
-<div class="line">        <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;  loading reads... done\n&quot;</span>);</div>
-<div class="line">        <a class="code" href="console_8cpp.html#a3f1311cb7f0df2f027275d682ccf0918">log_info</a>(stderr, <span class="stringliteral">&quot;    %u reads\n&quot;</span>, n_reads);</div>
+<div class="line">        <a class="code" href="group___basic.html#ga6d47fc29868f0be35a8fc846e415f79b">log_info</a>(stderr, <span class="stringliteral">&quot;  loading reads... done\n&quot;</span>);</div>
+<div class="line">        <a class="code" href="group___basic.html#ga6d47fc29868f0be35a8fc846e415f79b">log_info</a>(stderr, <span class="stringliteral">&quot;    %u reads\n&quot;</span>, n_reads);</div>
 <div class="line"></div>
 <div class="line">        <span class="comment">// do the real mapping work</span></div>
 <div class="line">        <a class="code" href="group___mapping.html#gad30b05e1249763bbda8b4745c92a42ae">map</a>( pipeline, d_read_data );</div>
@@ -375,7 +375,7 @@ Mapping</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:55 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:16 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

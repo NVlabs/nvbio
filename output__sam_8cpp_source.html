@@ -142,7 +142,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    fp = fopen(file_name, <span class="stringliteral">&quot;wt&quot;</span>);</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keywordflow">if</span> (fp == NULL)</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    {</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;SamOutput: could not open %s for writing\n&quot;</span>, file_name);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;SamOutput: could not open %s for writing\n&quot;</span>, file_name);</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    }</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
@@ -336,7 +336,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;{</div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    <span class="keywordflow">if</span> (alignment.mds_vec == NULL)</div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    {</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <a class="code" href="console_8cpp.html#a872d273107f0e01ebbc5a3c6a4c2f591">log_warning</a>(stderr, <span class="stringliteral">&quot;  SAM: alignment %u from read %u has an empty MD string\n&quot;</span>, alignment.aln_id, alignment.read_id);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <a class="code" href="group___basic.html#ga1694ff1f3581185b63332068635682ce">log_warning</a>(stderr, <span class="stringliteral">&quot;  SAM: alignment %u from read %u has an empty MD string\n&quot;</span>, alignment.aln_id, alignment.read_id);</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        sam_align.md_string[0] = <span class="charliteral">&#39;\0&#39;</span>;</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    }</div>
@@ -572,7 +572,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;    <span class="comment">// ... and make sure it makes (some) sense</span></div>
 <div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;    <span class="keywordflow">if</span> (computed_cigar_len != alignment.read_len)</div>
 <div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;    {</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;SAM output : cigar length doesn&#39;t match read %u (%u != %u)\n&quot;</span>,</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;SAM output : cigar length doesn&#39;t match read %u (%u != %u)\n&quot;</span>,</div>
 <div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;                  alignment.read_id <span class="comment">/* xxxnsubtil: global_read_id */</span>,</div>
 <div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;                  computed_cigar_len, alignment.read_len);</div>
 <div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;        <span class="keywordflow">return</span> sam_align.mapq;</div>
@@ -684,7 +684,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:38 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:00 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

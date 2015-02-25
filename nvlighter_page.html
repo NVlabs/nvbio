@@ -127,11 +127,14 @@ Usage</h1>
 * </pre> <dl class="section user"><dt></dt><dd>will use 20 CPU threads and GPU 0 and 1 to correct a 35x coverage human dataset and output the result to an LZ4-compressed FASTQ file; whereas the command:</dd></dl>
 <pre class="fragment">*  nvLighter -no-cpu -d 0 -k 31 3500000000 0.2 NA12878.fq.gz NA12878.corrected.txt.lz4
 * </pre> <dl class="section user"><dt></dt><dd>will use only GPU 0 to correct the same 35x coverage human reads and output the result to an LZ4-compressed .txt file. </dd></dl>
-<dl class="section user"><dt></dt><dd>As described in the original paper, the <em>alpha</em> parameter should be generally set as 7.0/C, where C is the coverage of the genome. If alpha is not specified, it will be computed with an additional streaming pass through the input reads. </dd></dl>
+<dl class="section user"><dt></dt><dd>As described in the original paper, the <em>alpha</em> parameter should be generally set as 7.0/C, where C is the coverage of the genome. If alpha is not specified, it will be computed with an additional streaming pass through the input reads.</dd></dl>
+<h1><a class="anchor" id="nvLighterArchitecture"></a>
+Architecture</h1>
+<p>nvLighter's class hierarchy is documented in the <a class="el" href="group__nv_lighter_module.html">nvLighter module</a>. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 21:15:55 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:16 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

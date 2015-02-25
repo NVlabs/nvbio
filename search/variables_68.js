@@ -83,6 +83,7 @@ var searchData=
   ['hmax',['Hmax',['../structkswq__t.html#a9df6d96e7551f2dc9c1c0228bf52147b',1,'kswq_t']]],
   ['hold',['hold',['../structinflate__state.html#a5a91b1c59e52f1aa7eda75b86b05b843',1,'inflate_state']]],
   ['host',['host',['../structknet_file__s.html#af4b6847fa80ce317c2dfc6a86bbcf7a5',1,'knetFile_s']]],
+  ['host_5ffor_5feach',['host_for_each',['../struct_error_correct_stage.html#afebcaf8a1ba073d9c5e4d78ab28e4ef7',1,'ErrorCorrectStage::host_for_each()'],['../struct_sample_kmers_stage.html#abf6e44aaf5e8955fe863ec7bde49452a',1,'SampleKmersStage::host_for_each()'],['../struct_trusted_kmers_stage.html#a2da320582dab693a208c14b2319cb5f7',1,'TrustedKmersStage::host_for_each()']]],
   ['host_5fmemory',['host_memory',['../group___sufsort.html#gae06d8cf3a51883f227a9c92f90bf67d8',1,'nvbio::BWTParams']]],
   ['how',['how',['../structgz__state.html#ac6e4b7db699aacd089f6d55b01483d6f',1,'gz_state']]],
   ['hrec',['hrec',['../structbcf__idinfo__t.html#ae5284e098d344848d45a8cc6ebd54f18',1,'bcf_idinfo_t::hrec()'],['../structbcf__hdr__t.html#a0f8ce91b3ede971ce852c08e45aa745c',1,'bcf_hdr_t::hrec()']]],

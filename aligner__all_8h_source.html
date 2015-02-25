@@ -202,7 +202,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="comment">// initialize the seed hit counts</span></div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#abd11acd2c94168d21e1049c9be354d29">hit_deques</a>.<a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array.html#a0bc12c5f1ad6e14eb8c07020a4da3b11">clear_deques</a>();</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;  map seed %u\n&quot;</span>, seed);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;  map seed %u\n&quot;</span>, seed);</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="comment">//</span></div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="comment">// perform mapping</span></div>
@@ -250,7 +250,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keywordflow">if</span> (params.<a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_params_p_o_d.html#a20a0eb57b6256df91248656c88239a86">keep_stats</a>)</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#a1c700501c1cd60526729b7c5addf3fd0">keep_stats</a>( reads.<a class="code" href="structnvbio_1_1io_1_1_sequence_data_access.html#a908a91e48c140d01d139de0b7ab6ab83">size</a>(), <a class="code" href="group___work_queue_detail.html#ga066726173aa1a4d079ac3f55085d4e21">stats</a> );</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;  score\n&quot;</span>);</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;  score\n&quot;</span>);</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#aa1368a085723b157064c3ffef8726603">score_all</a>(</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;            params,</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;            fmi,</div>
@@ -272,7 +272,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="comment">//</span></div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    <span class="comment">// perform mapping</span></div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    <span class="comment">//</span></div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;  map (%u seeds)\n&quot;</span>, max_seeds);</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;  map (%u seeds)\n&quot;</span>, max_seeds);</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    {</div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array_device_view.html">SeedHitDequeArrayDeviceView</a> hits = <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#abd11acd2c94168d21e1049c9be354d29">hit_deques</a>.<a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array.html#ae4dadcdabd1e393f776972e0ed252b79">device_view</a>();</div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;</div>
@@ -318,7 +318,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;            <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#a1c700501c1cd60526729b7c5addf3fd0">keep_stats</a>( reads.<a class="code" href="structnvbio_1_1io_1_1_sequence_data_access.html#a908a91e48c140d01d139de0b7ab6ab83">size</a>(), <a class="code" href="group___work_queue_detail.html#ga066726173aa1a4d079ac3f55085d4e21">stats</a> );</div>
 <div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    }</div>
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;  score\n&quot;</span>);</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;  score\n&quot;</span>);</div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#aa1368a085723b157064c3ffef8726603">score_all</a>(</div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        params,</div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        fmi,</div>
@@ -454,7 +454,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="keywordflow">if</span> (n_hit_ranges == 0)</div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;    ranges     : %u\n&quot;</span>, n_hit_ranges);</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;    ranges     : %u\n&quot;</span>, n_hit_ranges);</div>
 <div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;</div>
 <div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array_device_view.html">SeedHitDequeArrayDeviceView</a> hits = <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#abd11acd2c94168d21e1049c9be354d29">hit_deques</a>.<a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array.html#ae4dadcdabd1e393f776972e0ed252b79">device_view</a>();</div>
 <div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;</div>
@@ -472,7 +472,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    <a class="code" href="group___c_u_d_a_primitives.html#ga08bb5cd881e0a25f2bd22a3fbe12c49b">thrust::inclusive_scan</a>( <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#a3caa085d8e186e9e543538a8a10f3535">hits_range_scan_dvec</a>.begin(), <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#a3caa085d8e186e9e543538a8a10f3535">hits_range_scan_dvec</a>.begin() + n_hit_ranges, <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#a3caa085d8e186e9e543538a8a10f3535">hits_range_scan_dvec</a>.begin() );</div>
 <div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;</div>
 <div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    <span class="keyword">const</span> <a class="code" href="group___basic.html#gabceca7efbe8a079462f825131b2acccd">uint64</a> n_hits = <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#a3caa085d8e186e9e543538a8a10f3535">hits_range_scan_dvec</a>[ n_hit_ranges-1 ];</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;    hits       : %llu\n&quot;</span>, n_hits);</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;    hits       : %llu\n&quot;</span>, n_hits);</div>
 <div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;</div>
 <div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;<span class="preprocessor">    #if defined(NVBIO_CUDA_DEBUG)</span></div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;<span class="preprocessor"></span>    {</div>
@@ -492,7 +492,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;        }</div>
 <div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        <span class="keywordflow">if</span> (n_hits != total_hits)</div>
 <div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        {</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;            <a class="code" href="console_8cpp.html#a4666077df5b6eb45547efd029fc3689e">log_error</a>(stderr, <span class="stringliteral">&quot;  expected %llu hits, computed %llu\n&quot;</span>, total_hits, n_hits);</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;            <a class="code" href="group___basic.html#ga805efe83d517c885e4a3a55e581fc849">log_error</a>(stderr, <span class="stringliteral">&quot;  expected %llu hits, computed %llu\n&quot;</span>, total_hits, n_hits);</div>
 <div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;            <span class="keywordflow">throw</span> <a class="code" href="structnvbio_1_1runtime__error.html">nvbio::runtime_error</a>(<span class="stringliteral">&quot;invalid number of hits&quot;</span>);</div>
 <div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;        }</div>
 <div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    }</div>
@@ -538,7 +538,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;</div>
 <div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;        <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array_device_view.html">SeedHitDequeArrayDeviceView</a> hits = <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#abd11acd2c94168d21e1049c9be354d29">hit_deques</a>.<a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_seed_hit_deque_array.html#ae4dadcdabd1e393f776972e0ed252b79">device_view</a>();</div>
 <div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;        <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    select\n&quot;</span>);</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;        <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    select\n&quot;</span>);</div>
 <div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;        <a class="code" href="group___select.html#ga9ce7ff95853835a9cf9817e001fd8edd">select_all</a>(</div>
 <div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;            hit_offset,</div>
 <div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;            hit_count,</div>
@@ -561,7 +561,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;        pipeline.hits_queue_size = hit_count;</div>
 <div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;        pipeline.scoring_queues  = <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#a41ed46c025179a4d21066f56cda49865">scoring_queues</a>.<a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_scoring_queues.html#a431f54a858433e8258ffea1c70d99102">device_view</a>();</div>
 <div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;</div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;        <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    locate\n&quot;</span>);</div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;        <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    locate\n&quot;</span>);</div>
 <div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;        timer.<a class="code" href="structnvbio_1_1_timer.html#a81f4a384879cf65815000b582e465a65" title="start timing ">start</a>();</div>
 <div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;</div>
 <div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;        pipeline.idx_queue = <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#afc60f2e13e26a84a78bdbaf3517c36cf">sort_hi_bits</a>(</div>
@@ -606,7 +606,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;</div>
 <div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;        <span class="keywordflow">if</span> (1)</div>
 <div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;        {</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;            <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    dedup&quot;</span>);</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;            <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    dedup&quot;</span>);</div>
 <div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;            nvbio::transform&lt;device_tag&gt;(</div>
 <div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;                hit_count-1u,</div>
 <div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;                thrust::make_counting_iterator&lt;uint32&gt;(0) + 1u,</div>
@@ -646,7 +646,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;            <a class="code" href="namespacenvbio_1_1bowtie2_1_1cuda.html#afcde6a0a280b58dce3978bd5af58b60e">optional_device_synchronize</a>();</div>
 <div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;            <a class="code" href="namespacenvbio_1_1cuda.html#ae47791b87823645325b131f7c83f3291">nvbio::cuda::check_error</a>(<span class="stringliteral">&quot;copy-flagged kernel&quot;</span>);</div>
 <div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;</div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;            <a class="code" href="console_8cpp.html#a608be18bbbbcc3ac07cfbb6565b37478">log_debug_cont</a>(stderr, <span class="stringliteral">&quot; (%u/%u - %.2f)\n&quot;</span>, pipeline.hits_queue_size, hit_count, <span class="keywordtype">float</span>(pipeline.hits_queue_size)/<span class="keywordtype">float</span>(hit_count));</div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;            <a class="code" href="group___basic.html#gac426539864cd27f595cdfeef2e45d3c6">log_debug_cont</a>(stderr, <span class="stringliteral">&quot; (%u/%u - %.2f)\n&quot;</span>, pipeline.hits_queue_size, hit_count, <span class="keywordtype">float</span>(pipeline.hits_queue_size)/<span class="keywordtype">float</span>(hit_count));</div>
 <div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;        }</div>
 <div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;        <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;            pipeline.idx_queue = sorting_idx.first;</div>
@@ -659,7 +659,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;        <span class="comment">//</span></div>
 <div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;        timer.<a class="code" href="structnvbio_1_1_timer.html#a81f4a384879cf65815000b582e465a65" title="start timing ">start</a>();</div>
 <div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;</div>
-<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;        <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    score\n&quot;</span>);</div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;        <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    score\n&quot;</span>);</div>
 <div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;        <span class="keyword">const</span> <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> n_alignments = <a class="code" href="group___scoring.html#ga754ac5c111106ec7e9c63fb61aaca9cc">nvbio::bowtie2::cuda::score_all</a>(</div>
 <div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;            band_len,</div>
 <div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;            pipeline,</div>
@@ -674,8 +674,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;        stats.<a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a01f4649318493d37beb1f90e5a1ccc39">score</a>.<a class="code" href="structnvbio_1_1_time_series.html#ad42f010b74cf48e67dee5cbb2518927e">add</a>( hit_count, timer.<a class="code" href="structnvbio_1_1_timer.html#a22f9f6cb393a8355476b0d357afe406f">seconds</a>() );</div>
 <div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;</div>
 <div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;        total_alignments += n_alignments;</div>
-<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;        <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;\r    alignments : %u (%.1fM)    %.1f%%                &quot;</span>, n_alignments, <span class="keywordtype">float</span>(total_alignments)*1.0e-6f, 100.0f * <span class="keywordtype">float</span>(hit_offset + hit_count)/<span class="keywordtype">float</span>(n_hits));</div>
-<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;        <a class="code" href="console_8cpp.html#a608be18bbbbcc3ac07cfbb6565b37478">log_debug_cont</a>(stderr,<span class="stringliteral">&quot;\n&quot;</span>);</div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;        <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;\r    alignments : %u (%.1fM)    %.1f%%                &quot;</span>, n_alignments, <span class="keywordtype">float</span>(total_alignments)*1.0e-6f, 100.0f * <span class="keywordtype">float</span>(hit_offset + hit_count)/<span class="keywordtype">float</span>(n_hits));</div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;        <a class="code" href="group___basic.html#gac426539864cd27f595cdfeef2e45d3c6">log_debug_cont</a>(stderr,<span class="stringliteral">&quot;\n&quot;</span>);</div>
 <div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;</div>
 <div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;        buffer_count += n_alignments;</div>
 <div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;</div>
@@ -728,7 +728,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;            <a class="code" href="structcigar.html">cigar</a>.clear();</div>
 <div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;            <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#a8976b6cfebef54b7223cd7f453ea242a">mds</a>.<a class="code" href="structnvbio_1_1_device_vector_array.html#a65343e4aceae91170e04e73a3a0683e3">clear</a>();</div>
 <div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;</div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;            <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    traceback (%u alignments)\n&quot;</span>, n_backtracks);</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;            <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    traceback (%u alignments)\n&quot;</span>, n_backtracks);</div>
 <div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;            <a class="code" href="group___traceback.html#ga057e6065ec765c58fc13d18fff0b8b34">banded_traceback_all</a>(</div>
 <div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;                n_backtracks,</div>
 <div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;                <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#a0fc95551ef0cdac5d7bd454397eff074">idx_queue_dptr</a>,         <span class="comment">// input indices</span></div>
@@ -745,7 +745,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="structcigar.html">cigar</a>.has_overflown())</div>
 <div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="structnvbio_1_1runtime__error.html">nvbio::runtime_error</a>(<span class="stringliteral">&quot;CIGAR vector overflow\n&quot;</span>);</div>
 <div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;</div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;            <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    finish\n&quot;</span>);</div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;            <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    finish\n&quot;</span>);</div>
 <div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;            <a class="code" href="group___traceback.html#ga56cbbc259076652570bed97071e93dad">finish_alignment_all</a>(</div>
 <div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;                n_backtracks,</div>
 <div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;                <a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#a0fc95551ef0cdac5d7bd454397eff074">idx_queue_dptr</a>,             <span class="comment">// input indices</span></div>
@@ -767,7 +767,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;            stats.<a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_stats.html#a927874e1aad4acd6cfbfeaf620328c2b">backtrack</a>.<a class="code" href="structnvbio_1_1_time_series.html#ad42f010b74cf48e67dee5cbb2518927e">add</a>( n_backtracks, timer.<a class="code" href="structnvbio_1_1_timer.html#a22f9f6cb393a8355476b0d357afe406f">seconds</a>() );</div>
 <div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;</div>
 <div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;            <span class="comment">// wrap the results in a DeviceOutputBatchSE and process it</span></div>
-<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;            <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;    output\n&quot;</span>);</div>
+<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;            <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;    output\n&quot;</span>);</div>
 <div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;            {</div>
 <div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;                <a class="code" href="structnvbio_1_1io_1_1_device_output_batch_s_e.html">io::DeviceOutputBatchSE</a> gpu_batch(</div>
 <div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;                    n_backtracks,</div>
@@ -786,9 +786,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;            buffer_offset  = (buffer_offset + n_backtracks) % (<a class="code" href="structnvbio_1_1bowtie2_1_1cuda_1_1_aligner.html#ae49dbfbb9e977352299f2ac8313eb2e3">BATCH_SIZE</a>*2);</div>
 <div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;        }</div>
 <div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;    }</div>
-<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;    <a class="code" href="console_8cpp.html#a8dd41ea4c1b85b7a273a1e331598b6a9">log_verbose_nl</a>(stderr);</div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;    <a class="code" href="group___basic.html#ga7dbb1269cdb8e124361b56c09fc72ddc">log_verbose_nl</a>(stderr);</div>
 <div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;</div>
-<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;    <a class="code" href="console_8cpp.html#aac16712ff02527636363c19df654b90c">log_debug</a>(stderr, <span class="stringliteral">&quot;  alignments: %llu\n&quot;</span>, total_alignments);</div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;    <a class="code" href="group___basic.html#ga9d8ab2ba2d44d9382cc2a9c5458344bd">log_debug</a>(stderr, <span class="stringliteral">&quot;  alignments: %llu\n&quot;</span>, total_alignments);</div>
 <div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;}</div>
 <div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;</div>
 <div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;} <span class="comment">// namespace cuda</span></div>
@@ -797,7 +797,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:43 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:04 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

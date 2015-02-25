@@ -196,7 +196,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordtype">int</span> cuda_device = -1;</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordtype">int</span> device_count;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    cudaGetDeviceCount(&amp;device_count);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;  cuda devices : %d\n&quot;</span>, device_count);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;  cuda devices : %d\n&quot;</span>, device_count);</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a> tests = <a class="code" href="nvbio-test_8cpp.html#a44111c317cc6bb28715701cc508210a0af21c7069639c247a4c8e34aa0c65cce8">kALL</a>;</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
@@ -265,10 +265,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;            {</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                cudaDeviceProp device_prop;</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                cudaGetDeviceProperties( &amp;device_prop, device );</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;                <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;  device %d has compute capability %d.%d\n&quot;</span>, device, device_prop.major, device_prop.minor);</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;    SM count          : %u\n&quot;</span>, device_prop.multiProcessorCount);</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;    SM clock rate     : %u Mhz\n&quot;</span>, device_prop.clockRate / 1000);</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;    memory clock rate : %.1f Ghz\n&quot;</span>, <span class="keywordtype">float</span>(device_prop.memoryClockRate) * 1.0e-6f);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;                <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;  device %d has compute capability %d.%d\n&quot;</span>, device, device_prop.major, device_prop.minor);</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;    SM count          : %u\n&quot;</span>, device_prop.multiProcessorCount);</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;    SM clock rate     : %u Mhz\n&quot;</span>, device_prop.clockRate / 1000);</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;    memory clock rate : %.1f Ghz\n&quot;</span>, <span class="keywordtype">float</span>(device_prop.memoryClockRate) * 1.0e-6f);</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                <span class="keywordflow">if</span> (device_prop.major &gt;= best_device_prop.major &amp;&amp;</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;                    device_prop.minor &gt;= best_device_prop.minor)</div>
@@ -279,12 +279,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;            }</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;            cuda_device = best_device;</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        }</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;  chosen device %d\n&quot;</span>, cuda_device);</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;  chosen device %d\n&quot;</span>, cuda_device);</div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        {</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            cudaDeviceProp device_prop;</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            cudaGetDeviceProperties( &amp;device_prop, cuda_device );</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;    device name        : %s\n&quot;</span>, device_prop.name);</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            <a class="code" href="console_8cpp.html#a957771a16cfd89651126ab2c2dfa3683">log_verbose</a>(stderr, <span class="stringliteral">&quot;    compute capability : %d.%d\n&quot;</span>, device_prop.major, device_prop.minor);</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;    device name        : %s\n&quot;</span>, device_prop.name);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            <a class="code" href="group___basic.html#gaad1536fc2300100704ca2f6ac757e793">log_verbose</a>(stderr, <span class="stringliteral">&quot;    compute capability : %d.%d\n&quot;</span>, device_prop.major, device_prop.minor);</div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        }</div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        cudaSetDevice( cuda_device );</div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    }</div>
@@ -320,7 +320,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:30 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:32:52 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

@@ -142,7 +142,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">        d_seed_coords.begin() );                <span class="comment">// the iterator to the infix coordinates</span></div>
 <div class="line"></div>
 <div class="line">    ...</div>
-</div><!-- fragment --><dl class="section user"><dt></dt><dd>At this point it would be nice to do something with the string-set we just created. For the sake of the example, we will just print all its strings. Technically, we could just loop through the strings in the set, and print them on the host. However, suppose we want to do it in the native space of the set, i.e. on the device, and suppose we want to do it in parallel: how can we do this? Well, we will do it here using a <a class="el" href="primitives_page.html">parallel primitive</a>, and particularly the <a class="el" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">for_each()</a> construct:</dd></dl>
+</div><!-- fragment --><dl class="section user"><dt></dt><dd>At this point it would be nice to do something with the string-set we just created. For the sake of the example, we will just print all its strings. Technically, we could just loop through the strings in the set, and print them on the host. However, suppose we want to do it in the native space of the set, i.e. on the device, and suppose we want to do it in parallel: how can we do this? Well, we will do it here using a <a class="el" href="primitives_page.html">parallel primitive</a>, and particularly the <a class="el" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">for_each()</a> construct:</dd></dl>
 <div class="fragment"><div class="line">    ...</div>
 <div class="line"></div>
 <div class="line">    nvbio::for_each&lt;device_tag&gt;(</div>
@@ -150,7 +150,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">        seeds.begin(),                                <span class="comment">// the loop&#39;s begin iterator</span></div>
 <div class="line">        print_strings&lt;infix_set_type&gt;() );            <span class="comment">// the loop&#39;s body</span></div>
 <div class="line">}</div>
-</div><!-- fragment --> <dl class="section user"><dt></dt><dd><a class="el" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">for_each()</a> takes a functor encoding the body of our loop, and applies it to all elements of a sequence. In this case, the sequence is the string-set, and the body of our loop will be the following:</dd></dl>
+</div><!-- fragment --> <dl class="section user"><dt></dt><dd><a class="el" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">for_each()</a> takes a functor encoding the body of our loop, and applies it to all elements of a sequence. In this case, the sequence is the string-set, and the body of our loop will be the following:</dd></dl>
 <div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> <span class="keywordtype">string</span>_set_type&gt;</div>
 <div class="line"><span class="keyword">struct </span>print_strings</div>
 <div class="line">{</div>
@@ -176,7 +176,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:54 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:16 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

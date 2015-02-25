@@ -1168,7 +1168,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01066"></a><span class="lineno"> 1066</span>&#160;                        coords);</div>
 <div class="line"><a name="l01067"></a><span class="lineno"> 1067</span>&#160;</div>
 <div class="line"><a name="l01068"></a><span class="lineno"> 1068</span>&#160;        <span class="comment">// record the index into the kmer array in the coordinates vector</span></div>
-<div class="line"><a name="l01069"></a><span class="lineno"> 1069</span>&#160;        <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">thrust::for_each</a>(</div>
+<div class="line"><a name="l01069"></a><span class="lineno"> 1069</span>&#160;        <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">thrust::for_each</a>(</div>
 <div class="line"><a name="l01070"></a><span class="lineno"> 1070</span>&#160;                        thrust::make_counting_iterator&lt;uint32&gt;(0u),</div>
 <div class="line"><a name="l01071"></a><span class="lineno"> 1071</span>&#160;                        thrust::make_counting_iterator&lt;uint32&gt;(0u) + n_kmers,</div>
 <div class="line"><a name="l01072"></a><span class="lineno"> 1072</span>&#160;                        <a class="code" href="structset__global__id__region__id.html">set_global_id_region_id</a>(<a class="code" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#aadbb598b3a8d9501ca1ab7b28e78e320">plain_view</a>(coords), <a class="code" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#aadbb598b3a8d9501ca1ab7b28e78e320">plain_view</a>(active_region_ids)));</div>
@@ -1466,7 +1466,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01364"></a><span class="lineno"><a class="code" href="struct_d___kmer_set.html#af185e47325da5bfe47430989a45416e1"> 1364</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="struct_d___kmer_set.html#af185e47325da5bfe47430989a45416e1">D_KmerSet&lt;string_set_type&gt;::gen_global_unique_map</a>()</div>
 <div class="line"><a name="l01365"></a><span class="lineno"> 1365</span>&#160;{</div>
 <div class="line"><a name="l01366"></a><span class="lineno"> 1366</span>&#160;        <a class="code" href="structnvbio_1_1vector.html">D_VectorU8</a> unique_map_sorted(n_kmers);</div>
-<div class="line"><a name="l01367"></a><span class="lineno"> 1367</span>&#160;        <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">thrust::for_each</a>(</div>
+<div class="line"><a name="l01367"></a><span class="lineno"> 1367</span>&#160;        <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">thrust::for_each</a>(</div>
 <div class="line"><a name="l01368"></a><span class="lineno"> 1368</span>&#160;                                kmers_64b_unique_idxs.begin(),</div>
 <div class="line"><a name="l01369"></a><span class="lineno"> 1369</span>&#160;                                kmers_64b_unique_idxs.begin() + n_unique,</div>
 <div class="line"><a name="l01370"></a><span class="lineno"> 1370</span>&#160;                                <a class="code" href="structmark__kmer__uniqueness.html">mark_kmer_uniqueness</a>(<a class="code" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#aadbb598b3a8d9501ca1ab7b28e78e320">plain_view</a>(unique_map_sorted), <a class="code" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#aadbb598b3a8d9501ca1ab7b28e78e320">plain_view</a>(kmers_64b), <a class="code" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#aadbb598b3a8d9501ca1ab7b28e78e320">plain_view</a>(coords)));</div>
@@ -1484,7 +1484,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01382"></a><span class="lineno"> 1382</span>&#160;{</div>
 <div class="line"><a name="l01383"></a><span class="lineno"> 1383</span>&#160;        <a class="code" href="structnvbio_1_1vector.html">D_VectorU32</a> id_map_sorted(n_kmers);</div>
 <div class="line"><a name="l01384"></a><span class="lineno"> 1384</span>&#160;        thrust::fill(id_map_sorted.begin(), id_map_sorted.begin() + n_kmers, (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>) -1);</div>
-<div class="line"><a name="l01385"></a><span class="lineno"> 1385</span>&#160;        <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">thrust::for_each</a>(</div>
+<div class="line"><a name="l01385"></a><span class="lineno"> 1385</span>&#160;        <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">thrust::for_each</a>(</div>
 <div class="line"><a name="l01386"></a><span class="lineno"> 1386</span>&#160;                                thrust::make_zip_iterator(thrust::make_tuple(thrust::make_counting_iterator&lt;uint32&gt;(0u), kmers_64b_unique_idxs.begin())),</div>
 <div class="line"><a name="l01387"></a><span class="lineno"> 1387</span>&#160;                                thrust::make_zip_iterator(thrust::make_tuple(thrust::make_counting_iterator&lt;uint32&gt;(0u) + n_unique, kmers_64b_unique_idxs.begin() + n_unique)),</div>
 <div class="line"><a name="l01388"></a><span class="lineno"> 1388</span>&#160;                                <a class="code" href="structstore__kmer__unique__ids.html">store_kmer_unique_ids</a>(<a class="code" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#aadbb598b3a8d9501ca1ab7b28e78e320">plain_view</a>(id_map_sorted), <a class="code" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#aadbb598b3a8d9501ca1ab7b28e78e320">plain_view</a>(kmers_64b), <a class="code" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#aadbb598b3a8d9501ca1ab7b28e78e320">plain_view</a>(coords)));</div>
@@ -1501,7 +1501,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01399"></a><span class="lineno"><a class="code" href="struct_d___kmer_set.html#a37e6791327d49b2e02c0f4351fe77308"> 1399</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="struct_d___kmer_set.html#a37e6791327d49b2e02c0f4351fe77308">D_KmerSet&lt;string_set_type&gt;::gen_global_to_sorted_id_map</a>()</div>
 <div class="line"><a name="l01400"></a><span class="lineno"> 1400</span>&#160;{</div>
 <div class="line"><a name="l01401"></a><span class="lineno"> 1401</span>&#160;        global_to_sorted_id_map.resize(n_kmers);</div>
-<div class="line"><a name="l01402"></a><span class="lineno"> 1402</span>&#160;        <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">thrust::for_each</a>(</div>
+<div class="line"><a name="l01402"></a><span class="lineno"> 1402</span>&#160;        <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">thrust::for_each</a>(</div>
 <div class="line"><a name="l01403"></a><span class="lineno"> 1403</span>&#160;                        thrust::make_zip_iterator(thrust::make_tuple(thrust::make_counting_iterator&lt;uint32&gt;(0u), coords.begin())),</div>
 <div class="line"><a name="l01404"></a><span class="lineno"> 1404</span>&#160;                        thrust::make_zip_iterator(thrust::make_tuple(thrust::make_counting_iterator&lt;uint32&gt;(0u) + n_kmers, coords.begin() + n_kmers)),</div>
 <div class="line"><a name="l01405"></a><span class="lineno"> 1405</span>&#160;                        <a class="code" href="structglobal__to__sorted__id.html">global_to_sorted_id</a>(<a class="code" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#aadbb598b3a8d9501ca1ab7b28e78e320">plain_view</a>(global_to_sorted_id_map)));</div>
@@ -1513,7 +1513,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01411"></a><span class="lineno"> 1411</span>&#160;        global_unique_flag_map.resize(n_kmers);</div>
 <div class="line"><a name="l01412"></a><span class="lineno"> 1412</span>&#160;        global_to_UID_map.resize(n_kmers);</div>
 <div class="line"><a name="l01413"></a><span class="lineno"> 1413</span>&#160;        thrust::fill(global_to_UID_map.begin(), global_to_UID_map.begin() + n_kmers, (<a class="code" href="group___basic.html#gac34ecd066ef3371643ada1f73d9a2e96">uint32</a>) -1);</div>
-<div class="line"><a name="l01414"></a><span class="lineno"> 1414</span>&#160;        <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">thrust::for_each</a>(</div>
+<div class="line"><a name="l01414"></a><span class="lineno"> 1414</span>&#160;        <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">thrust::for_each</a>(</div>
 <div class="line"><a name="l01415"></a><span class="lineno"> 1415</span>&#160;                        thrust::make_counting_iterator&lt;uint32&gt;(0u),</div>
 <div class="line"><a name="l01416"></a><span class="lineno"> 1416</span>&#160;                        thrust::make_counting_iterator&lt;uint32&gt;(0u) + n_unique,</div>
 <div class="line"><a name="l01417"></a><span class="lineno"> 1417</span>&#160;                        <a class="code" href="structpopulate__unique__kmer__data.html">populate_unique_kmer_data</a>(<a class="code" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#aadbb598b3a8d9501ca1ab7b28e78e320">plain_view</a>(kmers_counts), <a class="code" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#aadbb598b3a8d9501ca1ab7b28e78e320">plain_view</a>(coords), <a class="code" href="structnvbio_1_1cuda_1_1_ping_pong_queues.html#aadbb598b3a8d9501ca1ab7b28e78e320">plain_view</a>(kmers_64b_unique_idxs),</div>
@@ -1567,7 +1567,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01465"></a><span class="lineno"> 1465</span>&#160;        <a class="code" href="structnvbio_1_1vector.html">D_VectorSetKmerCoord</a> super_kmers(n_chains);</div>
 <div class="line"><a name="l01466"></a><span class="lineno"> 1466</span>&#160;        <a class="code" href="structnvbio_1_1vector.html">D_VectorU32</a> prefix_uids(n_chains);</div>
 <div class="line"><a name="l01467"></a><span class="lineno"> 1467</span>&#160;        <a class="code" href="structnvbio_1_1vector.html">D_VectorU32</a> suffix_uids(n_chains);</div>
-<div class="line"><a name="l01468"></a><span class="lineno"> 1468</span>&#160;        <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">thrust::for_each</a>(</div>
+<div class="line"><a name="l01468"></a><span class="lineno"> 1468</span>&#160;        <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">thrust::for_each</a>(</div>
 <div class="line"><a name="l01469"></a><span class="lineno"> 1469</span>&#160;                        thrust::make_counting_iterator(0),</div>
 <div class="line"><a name="l01470"></a><span class="lineno"> 1470</span>&#160;                        thrust::make_counting_iterator(0) + n_chains,</div>
 <div class="line"><a name="l01471"></a><span class="lineno"> 1471</span>&#160;                        <a class="code" href="structextract__super__kmers__functor.html">extract_super_kmers_functor&lt;string_set_type&gt;</a>(</div>
@@ -1701,7 +1701,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01599"></a><span class="lineno"> 1599</span>&#160;        kmers_out.resize(n_unique + n_repeat);</div>
 <div class="line"><a name="l01600"></a><span class="lineno"> 1600</span>&#160;        prefix_ids_out.resize(n_prefsuf_to_extract);</div>
 <div class="line"><a name="l01601"></a><span class="lineno"> 1601</span>&#160;        suffix_ids_out.resize(n_prefsuf_to_extract);</div>
-<div class="line"><a name="l01602"></a><span class="lineno"> 1602</span>&#160;        <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">thrust::for_each</a>(</div>
+<div class="line"><a name="l01602"></a><span class="lineno"> 1602</span>&#160;        <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">thrust::for_each</a>(</div>
 <div class="line"><a name="l01603"></a><span class="lineno"> 1603</span>&#160;                        thrust::make_counting_iterator&lt;uint32&gt;(0u),</div>
 <div class="line"><a name="l01604"></a><span class="lineno"> 1604</span>&#160;                        thrust::make_counting_iterator&lt;uint32&gt;(0u) + n_super_kmers,</div>
 <div class="line"><a name="l01605"></a><span class="lineno"> 1605</span>&#160;                        <a class="code" href="structextract__non__overlapped__repeats.html">extract_non_overlapped_repeats&lt;string_set_type&gt;</a>(</div>
@@ -1721,7 +1721,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01619"></a><span class="lineno"> 1619</span>&#160;        <span class="comment">// count the number of repeated kmer adjacencies</span></div>
 <div class="line"><a name="l01620"></a><span class="lineno"> 1620</span>&#160;    adj_counts.resize(n_prefsuf_to_extract);</div>
 <div class="line"><a name="l01621"></a><span class="lineno"> 1621</span>&#160;        thrust::fill(adj_counts.begin(), adj_counts.begin() + n_prefsuf_to_extract, 1);</div>
-<div class="line"><a name="l01622"></a><span class="lineno"> 1622</span>&#160;        <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">thrust::for_each</a>(</div>
+<div class="line"><a name="l01622"></a><span class="lineno"> 1622</span>&#160;        <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">thrust::for_each</a>(</div>
 <div class="line"><a name="l01623"></a><span class="lineno"> 1623</span>&#160;                        thrust::make_counting_iterator&lt;uint32&gt;(1u),</div>
 <div class="line"><a name="l01624"></a><span class="lineno"> 1624</span>&#160;                        thrust::make_counting_iterator&lt;uint32&gt;(0u) + n_super_kmers,</div>
 <div class="line"><a name="l01625"></a><span class="lineno"> 1625</span>&#160;                        <a class="code" href="structcount__overlapped__adjacencies.html">count_overlapped_adjacencies</a>(</div>
@@ -1733,7 +1733,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:45 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:33:07 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

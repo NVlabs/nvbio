@@ -1288,7 +1288,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01186"></a><span class="lineno"> 1186</span>&#160;    m_mem_ranges.resize( m_n_queries, max_string_length * m_n_queries );</div>
 <div class="line"><a name="l01187"></a><span class="lineno"> 1187</span>&#160;</div>
 <div class="line"><a name="l01188"></a><span class="lineno"> 1188</span>&#160;    <span class="comment">// search the strings in the index, obtaining a set of ranges</span></div>
-<div class="line"><a name="l01189"></a><span class="lineno"> 1189</span>&#160;    <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">thrust::for_each</a>(</div>
+<div class="line"><a name="l01189"></a><span class="lineno"> 1189</span>&#160;    <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">thrust::for_each</a>(</div>
 <div class="line"><a name="l01190"></a><span class="lineno"> 1190</span>&#160;        thrust::make_counting_iterator&lt;uint32&gt;(0u),</div>
 <div class="line"><a name="l01191"></a><span class="lineno"> 1191</span>&#160;        thrust::make_counting_iterator&lt;uint32&gt;(0u) + m_n_queries,</div>
 <div class="line"><a name="l01192"></a><span class="lineno"> 1192</span>&#160;        <a class="code" href="structnvbio_1_1mem_1_1mem__functor.html">mem::mem_functor&lt;fm_index_type,string_set_type&gt;</a>(</div>
@@ -1433,7 +1433,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01331"></a><span class="lineno"> 1331</span>&#160;</div>
 <div class="line"><a name="l01332"></a><span class="lineno"> 1332</span>&#160;    <span class="comment">// search the strings in the index, obtaining a set of ranges</span></div>
 <div class="line"><a name="l01333"></a><span class="lineno"> 1333</span>&#160;    {</div>
-<div class="line"><a name="l01334"></a><span class="lineno"> 1334</span>&#160;        <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">thrust::for_each</a>(</div>
+<div class="line"><a name="l01334"></a><span class="lineno"> 1334</span>&#160;        <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">thrust::for_each</a>(</div>
 <div class="line"><a name="l01335"></a><span class="lineno"> 1335</span>&#160;            thrust::make_counting_iterator&lt;uint32&gt;(0u),</div>
 <div class="line"><a name="l01336"></a><span class="lineno"> 1336</span>&#160;            thrust::make_counting_iterator&lt;uint32&gt;(0u) + m_n_queries,</div>
 <div class="line"><a name="l01337"></a><span class="lineno"> 1337</span>&#160;            <a class="code" href="structnvbio_1_1mem_1_1right__mem__functor.html">mem::right_mem_functor&lt;fm_index_type,string_set_type&gt;</a>(</div>
@@ -1482,7 +1482,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01380"></a><span class="lineno"> 1380</span>&#160;            m_mem_ranges.<a class="code" href="structnvbio_1_1_device_vector_array.html#acd1e7981d964c93ef662e4dd920ac201">swap</a>( unsplit_mem_ranges );</div>
 <div class="line"><a name="l01381"></a><span class="lineno"> 1381</span>&#160;            m_mem_ranges.<a class="code" href="structnvbio_1_1_device_vector_array.html#afd364e68278b7a035e716d36c0d0f9bb">resize</a>( m_n_queries, max_string_length * m_n_queries );</div>
 <div class="line"><a name="l01382"></a><span class="lineno"> 1382</span>&#160;</div>
-<div class="line"><a name="l01383"></a><span class="lineno"> 1383</span>&#160;            <a class="code" href="group___primitives.html#ga7e41fe5fa9492bbda2aca33a52732c25">thrust::for_each</a>(</div>
+<div class="line"><a name="l01383"></a><span class="lineno"> 1383</span>&#160;            <a class="code" href="group___primitives.html#ga6e1fcd1d899ee0f5074461927484ed40">thrust::for_each</a>(</div>
 <div class="line"><a name="l01384"></a><span class="lineno"> 1384</span>&#160;                thrust::make_counting_iterator&lt;uint32&gt;(0u),</div>
 <div class="line"><a name="l01385"></a><span class="lineno"> 1385</span>&#160;                thrust::make_counting_iterator&lt;uint32&gt;(0u) + m_n_queries,</div>
 <div class="line"><a name="l01386"></a><span class="lineno"> 1386</span>&#160;                <a class="code" href="structnvbio_1_1mem_1_1split__mem__functor.html">mem::split_mem_functor&lt;fm_index_type,string_set_type&gt;</a>(</div>
@@ -1654,7 +1654,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 23 2015 19:36:37 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 25 2015 08:32:59 for NVBIO by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

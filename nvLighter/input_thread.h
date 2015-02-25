@@ -74,7 +74,7 @@ struct InputStageData
 };
 
 ///
-/// A small class implementing a Pipeline stage reading sequence batches from a file
+/// A small class implementing an nvbio::Pipeline stage reading sequence batches from a file
 ///
 struct InputStage
 {

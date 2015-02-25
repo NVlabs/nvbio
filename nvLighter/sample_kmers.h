@@ -46,7 +46,7 @@ using namespace nvbio;
 ///@{
 
 ///
-/// A small class implementing a Pipeline sink stage building the sampled kmers filter
+/// A small class implementing an nvbio::Pipeline sink stage building the sampled kmers filter
 ///
 struct SampleKmersStage
 {
@@ -95,7 +95,7 @@ struct SampleKmersStage
 
 
 ///
-/// A small class implementing a Pipeline sink stage building the trusted kmers filter
+/// A small class implementing an nvbio::Pipeline sink stage building the trusted kmers filter
 ///
 struct TrustedKmersStage
 {

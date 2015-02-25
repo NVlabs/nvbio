@@ -46,7 +46,7 @@ using namespace nvbio;
 ///@{
 
 ///
-/// A small class implementing a Pipeline stage performing the actual error correction work
+/// A small class implementing an nvbio::Pipeline stage performing the actual error correction work
 ///
 struct ErrorCorrectStage
 {

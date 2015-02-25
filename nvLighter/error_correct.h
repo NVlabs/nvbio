@@ -50,8 +50,8 @@ using namespace nvbio;
 ///
 struct ErrorCorrectStage
 {
-    typedef io::SequenceDataHost   argument_type;
-    typedef io::SequenceDataHost   return_type;
+    typedef nvbio::io::SequenceDataHost   argument_type;
+    typedef nvbio::io::SequenceDataHost   return_type;
 
     /// empty constructor
     ///

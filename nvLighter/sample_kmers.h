@@ -50,7 +50,7 @@ using namespace nvbio;
 ///
 struct SampleKmersStage
 {
-    typedef io::SequenceDataHost   argument_type;
+    typedef nvbio::io::SequenceDataHost   argument_type;
 
     /// empty constructor
     ///
@@ -99,7 +99,7 @@ struct SampleKmersStage
 ///
 struct TrustedKmersStage
 {
-    typedef io::SequenceDataHost   argument_type;
+    typedef nvbio::io::SequenceDataHost   argument_type;
 
     /// default constructor
     ///

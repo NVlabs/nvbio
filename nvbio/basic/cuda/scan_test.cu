@@ -36,7 +36,7 @@
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/cuda/scan.h>
-#include <thrust/device_vector.h>
+#include <nvbio/basic/vector.h>
 
 using namespace nvbio;
 
@@ -78,9 +78,9 @@ void all_test(uint32* dst)
     timer.start();
 
     for (uint32 i = 0; i < N_RUNS; ++i)
-        all_test_kernel<BLOCKDIM,VECDIM,N_TESTS><<<BLOCKDIM, N_THREADS / BLOCKDIM>>>( dst );
+        all_test_kernel<BLOCKDIM,VECDIM,N_TESTS><<<N_THREADS / BLOCKDIM, BLOCKDIM>>>( dst );
 
-    cudaThreadSynchronize();
+    cudaDeviceSynchronize();
 
     timer.stop();
 
@@ -96,9 +96,9 @@ void any_test(uint32* dst)
     timer.start();
 
     for (uint32 i = 0; i < N_RUNS; ++i)
-        any_test_kernel<BLOCKDIM,VECDIM,N_TESTS><<<BLOCKDIM, N_THREADS / BLOCKDIM>>>( dst );
+        any_test_kernel<BLOCKDIM,VECDIM,N_TESTS><<<N_THREADS / BLOCKDIM, BLOCKDIM>>>( dst );
 
-    cudaThreadSynchronize();
+    cudaDeviceSynchronize();
 
     timer.stop();
 
@@ -111,10 +111,10 @@ void scan_test()
 {
     const uint32 BLOCKDIM  = 128;
     const uint32 N_THREADS = BLOCKDIM * 1024;
-    NVBIO_VAR_UNUSED const uint32 N_TESTS   = 128;
+    NVBIO_VAR_UNUSED const uint32 N_TESTS = 128;
 
-    thrust::device_vector<uint32> dst( N_THREADS );
-    uint32* dst_dptr = thrust::raw_pointer_cast(&dst.front());
+    nvbio::vector<device_tag,uint32> dst( N_THREADS );
+    uint32* dst_dptr = nvbio::raw_pointer( dst );
 
     fprintf(stderr, "all test... started\n");
     all_test<N_THREADS,BLOCKDIM,2,N_TESTS>( dst_dptr );

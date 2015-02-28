@@ -45,6 +45,8 @@
 #include <nvbio/basic/packedstream.h>
 #include <nvbio/basic/thrust_view.h>
 #include <nvbio/basic/dna.h>
+#include <nvbio/basic/exceptions.h>
+#include <nvbio/basic/cuda/arch.h>
 #include <nvbio/fmindex/bwt.h>
 #include <nvbio/fasta/fasta.h>
 #include <nvbio/io/fmindex/fmindex.h>
@@ -701,51 +703,112 @@ int main(int argc, char* argv[])
     log_info(stderr, "input      : \"%s\"\n", input_name);
     log_info(stderr, "output     : \"%s\"\n", output_name);
 
-    int device_count;
-    cudaGetDeviceCount(&device_count);
-    log_verbose(stderr, "  cuda devices : %d\n", device_count);
-
-    // inspect and select cuda devices
-    if (device_count)
+    try
     {
-        if (cuda_device == -1)
-        {
-            int            best_device = 0;
-            cudaDeviceProp best_device_prop;
-            cudaGetDeviceProperties( &best_device_prop, best_device );
+        int device_count;
+        cudaGetDeviceCount(&device_count);
+        log_verbose(stderr, "  cuda devices : %d\n", device_count);
 
-            for (int device = 0; device < device_count; ++device)
+        cuda::check_error("cuda-check");
+
+        // inspect and select cuda devices
+        if (device_count)
+        {
+            if (cuda_device == -1)
+            {
+                int            best_device = 0;
+                cudaDeviceProp best_device_prop;
+                cudaGetDeviceProperties( &best_device_prop, best_device );
+
+                for (int device = 0; device < device_count; ++device)
+                {
+                    cudaDeviceProp device_prop;
+                    cudaGetDeviceProperties( &device_prop, device );
+                    log_verbose(stderr, "  device %d has compute capability %d.%d\n", device, device_prop.major, device_prop.minor);
+                    log_verbose(stderr, "    SM count          : %u\n", device_prop.multiProcessorCount);
+                    log_verbose(stderr, "    SM clock rate     : %u Mhz\n", device_prop.clockRate / 1000);
+                    log_verbose(stderr, "    memory clock rate : %.1f Ghz\n", float(device_prop.memoryClockRate) * 1.0e-6f);
+
+                    if (device_prop.major >= best_device_prop.major &&
+                        device_prop.minor >= best_device_prop.minor)
+                    {
+                        best_device_prop = device_prop;
+                        best_device      = device;
+                    }
+                }
+                cuda_device = best_device;
+            }
+            log_verbose(stderr, "  chosen device %d\n", cuda_device);
             {
                 cudaDeviceProp device_prop;
-                cudaGetDeviceProperties( &device_prop, device );
-                log_verbose(stderr, "  device %d has compute capability %d.%d\n", device, device_prop.major, device_prop.minor);
-                log_verbose(stderr, "    SM count          : %u\n", device_prop.multiProcessorCount);
-                log_verbose(stderr, "    SM clock rate     : %u Mhz\n", device_prop.clockRate / 1000);
-                log_verbose(stderr, "    memory clock rate : %.1f Ghz\n", float(device_prop.memoryClockRate) * 1.0e-6f);
-
-                if (device_prop.major >= best_device_prop.major &&
-                    device_prop.minor >= best_device_prop.minor)
-                {
-                    best_device_prop = device_prop;
-                    best_device      = device;
-                }
+                cudaGetDeviceProperties( &device_prop, cuda_device );
+                log_verbose(stderr, "    device name        : %s\n", device_prop.name);
+                log_verbose(stderr, "    compute capability : %d.%d\n", device_prop.major, device_prop.minor);
             }
-            cuda_device = best_device;
+            cudaSetDevice( cuda_device );
         }
-        log_verbose(stderr, "  chosen device %d\n", cuda_device);
-        {
-            cudaDeviceProp device_prop;
-            cudaGetDeviceProperties( &device_prop, cuda_device );
-            log_verbose(stderr, "    device name        : %s\n", device_prop.name);
-            log_verbose(stderr, "    compute capability : %d.%d\n", device_prop.major, device_prop.minor);
-        }
-        cudaSetDevice( cuda_device );
+
+        size_t free, total;
+        cudaMemGetInfo(&free, &total);
+        NVBIO_CUDA_DEBUG_STATEMENT( log_info(stderr,"device mem : total: %.1f GB, free: %.1f GB\n", float(total)/float(1024*1024*1024), float(free)/float(1024*1024*1024)) );
+
+        cuda::check_error("cuda-memory-check");
+
+        return build( input_name, output_name, pac_name, rpac_name, bwt_name, rbwt_name, sa_name, rsa_name, max_length, pac_type, crc );
     }
-
-    size_t free, total;
-    cudaMemGetInfo(&free, &total);
-    NVBIO_CUDA_DEBUG_STATEMENT( log_info(stderr,"device mem : total: %.1f GB, free: %.1f GB\n", float(total)/float(1024*1024*1024), float(free)/float(1024*1024*1024)) );
-
-    return build( input_name, output_name, pac_name, rpac_name, bwt_name, rbwt_name, sa_name, rsa_name, max_length, pac_type, crc );
+    catch (nvbio::cuda_error e)
+    {
+        log_error(stderr, "caught a nvbio::cuda_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (nvbio::bad_alloc e)
+    {
+        log_error(stderr, "caught a nvbio::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (nvbio::logic_error e)
+    {
+        log_error(stderr, "caught a nvbio::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (nvbio::runtime_error e)
+    {
+        log_error(stderr, "caught a nvbio::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (thrust::system::system_error e)
+    {
+        log_error(stderr, "caught a thrust::system_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (std::bad_alloc e)
+    {
+        log_error(stderr, "caught a std::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (std::logic_error e)
+    {
+        log_error(stderr, "caught a std::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (std::runtime_error e)
+    {
+        log_error(stderr, "caught a std::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (...)
+    {
+        log_error(stderr, "caught an unknown exception!\n");
+        return 1;
+    }
+    return 1;
 }
 

@@ -707,9 +707,9 @@ int main(int argc, char* argv[])
     {
         int device_count;
         cudaGetDeviceCount(&device_count);
-        log_verbose(stderr, "  cuda devices : %d\n", device_count);
-
         cuda::check_error("cuda-check");
+
+        log_verbose(stderr, "  cuda devices : %d\n", device_count);
 
         // inspect and select cuda devices
         if (device_count)

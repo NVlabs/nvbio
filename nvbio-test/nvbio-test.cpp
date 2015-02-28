@@ -33,6 +33,8 @@
 #include <string.h>
 #include <nvbio/basic/types.h>
 #include <nvbio/basic/console.h>
+#include <nvbio/basic/exceptions.h>
+#include <nvbio/basic/cuda/arch.h>
 #include <cuda_runtime_api.h>
 
 int cache_test();
@@ -89,129 +91,181 @@ enum Tests {
 
 int main(int argc, char* argv[])
 {
-    crcInit();
-
-    int cuda_device = -1;
-    int device_count;
-    cudaGetDeviceCount(&device_count);
-    log_verbose(stderr, "  cuda devices : %d\n", device_count);
-
-    uint32 tests = kALL;
-
-    int arg = 1;
-    if (argc > 1)
+    try
     {
-        if (strcmp( argv[arg], "-device" ) == 0)
+        crcInit();
+
+        int cuda_device = -1;
+        int device_count;
+        cudaGetDeviceCount(&device_count);
+        cuda::check_error("cuda-check");
+
+        log_verbose(stderr, "  cuda devices : %d\n", device_count);
+
+        uint32 tests = kALL;
+
+        int arg = 1;
+        if (argc > 1)
         {
-            cuda_device = atoi(argv[++arg]);
-            ++arg;
+            if (strcmp( argv[arg], "-device" ) == 0)
+            {
+                cuda_device = atoi(argv[++arg]);
+                ++arg;
+            }
+
+            if (arg < argc)
+            {
+                if (strcmp( argv[arg], "-string-set" ) == 0)
+                    tests = kStringSet;
+                else if (strcmp( argv[arg], "-scan" ) == 0)
+                    tests = kScan;
+                else if (strcmp( argv[arg], "-sum-tree" ) == 0)
+                    tests = kSumTree;
+                else if (strcmp( argv[arg], "-aln" ) == 0)
+                    tests = kAlignment;
+                else if (strcmp( argv[arg], "-html" ) == 0)
+                    tests = kHTML;
+                else if (strcmp( argv[arg], "-cache" ) == 0)
+                    tests = kCache;
+                else if (strcmp( argv[arg], "-packed-stream" ) == 0)
+                    tests = kPackedStream;
+                else if (strcmp( argv[arg], "-bwt" ) == 0)
+                    tests = kBWT;
+                else if (strcmp( argv[arg], "-rank" ) == 0)
+                    tests = kRank;
+                else if (strcmp( argv[arg], "-fm-index" ) == 0)
+                    tests = kFMIndex;
+                else if (strcmp( argv[arg], "-qgram" ) == 0)
+                    tests = kQGram;
+                else if (strcmp( argv[arg], "-alloc" ) == 0)
+                    tests = kAlloc;
+                else if (strcmp( argv[arg], "-syncblocks" ) == 0)
+                    tests = kSyncblocks;
+                else if (strcmp( argv[arg], "-condition" ) == 0)
+                    tests = kCondition;
+                else if (strcmp( argv[arg], "-work-queue" ) == 0)
+                    tests = kWorkQueue;
+                else if (strcmp( argv[arg], "-sequence" ) == 0)
+                    tests = kSequence;
+                else if (strcmp( argv[arg], "-wavelet" ) == 0)
+                    tests = kWaveletTree;
+                else if (strcmp( argv[arg], "-bloom-filter" ) == 0)
+                    tests = kBloomFilter;
+
+                ++arg;
+            }
         }
 
-        if (arg < argc)
+        // inspect and select cuda devices
+        if (device_count)
         {
-            if (strcmp( argv[arg], "-string-set" ) == 0)
-                tests = kStringSet;
-            else if (strcmp( argv[arg], "-scan" ) == 0)
-                tests = kScan;
-            else if (strcmp( argv[arg], "-sum-tree" ) == 0)
-                tests = kSumTree;
-            else if (strcmp( argv[arg], "-aln" ) == 0)
-                tests = kAlignment;
-            else if (strcmp( argv[arg], "-html" ) == 0)
-                tests = kHTML;
-            else if (strcmp( argv[arg], "-cache" ) == 0)
-                tests = kCache;
-            else if (strcmp( argv[arg], "-packed-stream" ) == 0)
-                tests = kPackedStream;
-            else if (strcmp( argv[arg], "-bwt" ) == 0)
-                tests = kBWT;
-            else if (strcmp( argv[arg], "-rank" ) == 0)
-                tests = kRank;
-            else if (strcmp( argv[arg], "-fm-index" ) == 0)
-                tests = kFMIndex;
-            else if (strcmp( argv[arg], "-qgram" ) == 0)
-                tests = kQGram;
-            else if (strcmp( argv[arg], "-alloc" ) == 0)
-                tests = kAlloc;
-            else if (strcmp( argv[arg], "-syncblocks" ) == 0)
-                tests = kSyncblocks;
-            else if (strcmp( argv[arg], "-condition" ) == 0)
-                tests = kCondition;
-            else if (strcmp( argv[arg], "-work-queue" ) == 0)
-                tests = kWorkQueue;
-            else if (strcmp( argv[arg], "-sequence" ) == 0)
-                tests = kSequence;
-            else if (strcmp( argv[arg], "-wavelet" ) == 0)
-                tests = kWaveletTree;
-            else if (strcmp( argv[arg], "-bloom-filter" ) == 0)
-                tests = kBloomFilter;
+            if (cuda_device == -1)
+            {
+                int            best_device = 0;
+                cudaDeviceProp best_device_prop;
+                cudaGetDeviceProperties( &best_device_prop, best_device );
 
-            ++arg;
-        }
-    }
+                for (int device = 0; device < device_count; ++device)
+                {
+                    cudaDeviceProp device_prop;
+                    cudaGetDeviceProperties( &device_prop, device );
+                    log_verbose(stderr, "  device %d has compute capability %d.%d\n", device, device_prop.major, device_prop.minor);
+                    log_verbose(stderr, "    SM count          : %u\n", device_prop.multiProcessorCount);
+                    log_verbose(stderr, "    SM clock rate     : %u Mhz\n", device_prop.clockRate / 1000);
+                    log_verbose(stderr, "    memory clock rate : %.1f Ghz\n", float(device_prop.memoryClockRate) * 1.0e-6f);
 
-    // inspect and select cuda devices
-    if (device_count)
-    {
-        if (cuda_device == -1)
-        {
-            int            best_device = 0;
-            cudaDeviceProp best_device_prop;
-            cudaGetDeviceProperties( &best_device_prop, best_device );
-
-            for (int device = 0; device < device_count; ++device)
+                    if (device_prop.major >= best_device_prop.major &&
+                        device_prop.minor >= best_device_prop.minor)
+                    {
+                        best_device_prop = device_prop;
+                        best_device      = device;
+                    }
+                }
+                cuda_device = best_device;
+            }
+            log_verbose(stderr, "  chosen device %d\n", cuda_device);
             {
                 cudaDeviceProp device_prop;
-                cudaGetDeviceProperties( &device_prop, device );
-                log_verbose(stderr, "  device %d has compute capability %d.%d\n", device, device_prop.major, device_prop.minor);
-                log_verbose(stderr, "    SM count          : %u\n", device_prop.multiProcessorCount);
-                log_verbose(stderr, "    SM clock rate     : %u Mhz\n", device_prop.clockRate / 1000);
-                log_verbose(stderr, "    memory clock rate : %.1f Ghz\n", float(device_prop.memoryClockRate) * 1.0e-6f);
-
-                if (device_prop.major >= best_device_prop.major &&
-                    device_prop.minor >= best_device_prop.minor)
-                {
-                    best_device_prop = device_prop;
-                    best_device      = device;
-                }
+                cudaGetDeviceProperties( &device_prop, cuda_device );
+                log_verbose(stderr, "    device name        : %s\n", device_prop.name);
+                log_verbose(stderr, "    compute capability : %d.%d\n", device_prop.major, device_prop.minor);
             }
-            cuda_device = best_device;
+            cudaSetDevice( cuda_device );
         }
-        log_verbose(stderr, "  chosen device %d\n", cuda_device);
-        {
-            cudaDeviceProp device_prop;
-            cudaGetDeviceProperties( &device_prop, cuda_device );
-            log_verbose(stderr, "    device name        : %s\n", device_prop.name);
-            log_verbose(stderr, "    compute capability : %d.%d\n", device_prop.major, device_prop.minor);
-        }
-        cudaSetDevice( cuda_device );
+
+        // allocate some heap
+        cudaDeviceSetLimit( cudaLimitMallocHeapSize, 128*1024*1024 );
+
+        argc = argc >= arg ? argc-arg : 0;
+
+        if (tests & kAlloc)         alloc_test();
+        if (tests & kSyncblocks)    syncblocks_test();
+        if (tests & kCondition)     condition_test();
+        if (tests & kWorkQueue)     work_queue_test( argc, argv+arg );
+        if (tests & kStringSet)     string_set_test( argc, argv+arg );
+        if (tests & kScan)          cuda::scan_test();
+        if (tests & kAlignment)     aln::test( argc, argv+arg );
+        if (tests & kSumTree)       sum_tree_test();
+        if (tests & kHTML)          html::test();
+        if (tests & kCache)         cache_test();
+        if (tests & kPackedStream)  packedstream_test();
+        if (tests & kBWT)           bwt_test();
+        if (tests & kRank)          rank_test( argc, argv+arg );
+        if (tests & kFMIndex)       fmindex_test( argc, argv+arg );
+        if (tests & kQGram)         qgram_test( argc, argv+arg );
+        if (tests & kSequence)      sequence_test( argc, argv+arg );
+        if (tests & kWaveletTree)   wavelet_test( argc, argv+arg );
+        if (tests & kBloomFilter)   bloom_filter_test( argc, argv+arg );
+
+        cudaDeviceReset();
+    	return 0;
     }
-
-    // allocate some heap
-    cudaDeviceSetLimit( cudaLimitMallocHeapSize, 128*1024*1024 );
-
-    argc = argc >= arg ? argc-arg : 0;
-
-    if (tests & kAlloc)         alloc_test();
-    if (tests & kSyncblocks)    syncblocks_test();
-    if (tests & kCondition)     condition_test();
-    if (tests & kWorkQueue)     work_queue_test( argc, argv+arg );
-    if (tests & kStringSet)     string_set_test( argc, argv+arg );
-    if (tests & kScan)          cuda::scan_test();
-    if (tests & kAlignment)     aln::test( argc, argv+arg );
-    if (tests & kSumTree)       sum_tree_test();
-    if (tests & kHTML)          html::test();
-    if (tests & kCache)         cache_test();
-    if (tests & kPackedStream)  packedstream_test();
-    if (tests & kBWT)           bwt_test();
-    if (tests & kRank)          rank_test( argc, argv+arg );
-    if (tests & kFMIndex)       fmindex_test( argc, argv+arg );
-    if (tests & kQGram)         qgram_test( argc, argv+arg );
-    if (tests & kSequence)      sequence_test( argc, argv+arg );
-    if (tests & kWaveletTree)   wavelet_test( argc, argv+arg );
-    if (tests & kBloomFilter)   bloom_filter_test( argc, argv+arg );
-
-    cudaDeviceReset();
-	return 0;
+    catch (nvbio::cuda_error e)
+    {
+        log_error(stderr, "caught a nvbio::cuda_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (nvbio::bad_alloc e)
+    {
+        log_error(stderr, "caught a nvbio::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (nvbio::logic_error e)
+    {
+        log_error(stderr, "caught a nvbio::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (nvbio::runtime_error e)
+    {
+        log_error(stderr, "caught a nvbio::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (std::bad_alloc e)
+    {
+        log_error(stderr, "caught a std::bad_alloc exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (std::logic_error e)
+    {
+        log_error(stderr, "caught a std::logic_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (std::runtime_error e)
+    {
+        log_error(stderr, "caught a std::runtime_error exception:\n");
+        log_error(stderr, "  %s\n", e.what());
+        return 1;
+    }
+    catch (...)
+    {
+        log_error(stderr, "caught an unknown exception!\n");
+        return 1;
+    }
 }
 

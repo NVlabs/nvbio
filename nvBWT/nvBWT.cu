@@ -809,6 +809,5 @@ int main(int argc, char* argv[])
         log_error(stderr, "caught an unknown exception!\n");
         return 1;
     }
-    return 1;
 }
 

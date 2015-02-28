@@ -45,6 +45,7 @@
 #include <nvbio/basic/dna.h>
 #include <nvbio/basic/vector.h>
 #include <nvbio/basic/system.h>
+#include <nvbio/basic/cuda/arch.h>
 #include <nvbio/strings/string_set.h>
 #include <nvbio/io/sequence/sequence.h>
 #include <stdio.h>
@@ -258,6 +259,8 @@ int main(int argc, char* argv[])
         // gather device memory stats
         size_t free_device, total_device;
         cudaMemGetInfo(&free_device, &total_device);
+        cuda::check_error("cuda-check");
+
         log_stats(stderr, "  device has %ld of %ld MB free\n", free_device/1024/1024, total_device/1024/1024);
 
     #ifdef _OPENMP

@@ -35,6 +35,7 @@
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/exceptions.h>
 #include <nvbio/basic/shared_pointer.h>
+#include <nvbio/basic/cuda/arch.h>
 #include <nvbio/io/fmindex/fmindex.h>
 #include <nvbio/io/sequence/sequence.h>
 #include <nvbio/io/sequence/sequence_mmap.h>
@@ -372,70 +373,72 @@ int main(int argc, char* argv[])
     }
     log_debug(stderr, "\n");
 
-    int device_count;
-    cudaGetDeviceCount(&device_count);
-    log_verbose(stderr, "  cuda devices : %d\n", device_count);
-
-    // inspect and select cuda devices
-    if (device_count > 0)
-    {
-        if (cuda_devices.empty())
-        {
-            int            best_device = 0;
-            cudaDeviceProp best_device_prop;
-            cudaGetDeviceProperties( &best_device_prop, best_device );
-
-            for (int device = 0; device < device_count; ++device)
-            {
-                cudaDeviceProp device_prop;
-                cudaGetDeviceProperties( &device_prop, device );
-                log_verbose(stderr, "  device %d has compute capability %d.%d\n", device, device_prop.major, device_prop.minor);
-                log_verbose(stderr, "    SM count          : %u\n", device_prop.multiProcessorCount);
-                log_verbose(stderr, "    SM clock rate     : %u Mhz\n", device_prop.clockRate / 1000);
-                log_verbose(stderr, "    memory clock rate : %.1f Ghz\n", float(device_prop.memoryClockRate) * 1.0e-6f);
-
-                if (device_prop.major >= best_device_prop.major &&
-                    device_prop.minor >= best_device_prop.minor)
-                {
-                    best_device_prop = device_prop;
-                    best_device      = device;
-                }
-            }
-            cuda_devices.push_back( best_device );
-        }
-
-        for (size_t i = 0; i < cuda_devices.size(); ++i)
-        {
-            cudaDeviceProp device_prop;
-            cudaGetDeviceProperties( &device_prop, cuda_devices[i] );
-            log_verbose(stderr, "  chosen device %d\n", cuda_devices[i]);
-            log_verbose(stderr, "    device name        : %s\n", device_prop.name);
-            log_verbose(stderr, "    compute capability : %d.%d\n", device_prop.major, device_prop.minor);
-        }
-    }
-    else
-    {
-        log_error(stderr, "no available CUDA devices\n");
-        exit(1);
-    }
-
-    if (legacy_cmdline)
-    {
-        const uint32 arg_offset = paired_end ? argc-4 : argc-3;
-        reference_name = argv[arg_offset];
-        if (paired_end)
-        {
-            read_name1 = argv[arg_offset+1];
-            read_name2 = argv[arg_offset+2];
-        }
-        else
-            read_name1 = argv[arg_offset+1];
-
-        output_name = argv[argc-1];
-    }
-
     try
     {
+        int device_count;
+        cudaGetDeviceCount(&device_count);
+        cuda::check_error("cuda-check");
+
+        log_verbose(stderr, "  cuda devices : %d\n", device_count);
+
+        // inspect and select cuda devices
+        if (device_count > 0)
+        {
+            if (cuda_devices.empty())
+            {
+                int            best_device = 0;
+                cudaDeviceProp best_device_prop;
+                cudaGetDeviceProperties( &best_device_prop, best_device );
+
+                for (int device = 0; device < device_count; ++device)
+                {
+                    cudaDeviceProp device_prop;
+                    cudaGetDeviceProperties( &device_prop, device );
+                    log_verbose(stderr, "  device %d has compute capability %d.%d\n", device, device_prop.major, device_prop.minor);
+                    log_verbose(stderr, "    SM count          : %u\n", device_prop.multiProcessorCount);
+                    log_verbose(stderr, "    SM clock rate     : %u Mhz\n", device_prop.clockRate / 1000);
+                    log_verbose(stderr, "    memory clock rate : %.1f Ghz\n", float(device_prop.memoryClockRate) * 1.0e-6f);
+
+                    if (device_prop.major >= best_device_prop.major &&
+                        device_prop.minor >= best_device_prop.minor)
+                    {
+                        best_device_prop = device_prop;
+                        best_device      = device;
+                    }
+                }
+                cuda_devices.push_back( best_device );
+            }
+
+            for (size_t i = 0; i < cuda_devices.size(); ++i)
+            {
+                cudaDeviceProp device_prop;
+                cudaGetDeviceProperties( &device_prop, cuda_devices[i] );
+                log_verbose(stderr, "  chosen device %d\n", cuda_devices[i]);
+                log_verbose(stderr, "    device name        : %s\n", device_prop.name);
+                log_verbose(stderr, "    compute capability : %d.%d\n", device_prop.major, device_prop.minor);
+            }
+        }
+        else
+        {
+            log_error(stderr, "no available CUDA devices\n");
+            exit(1);
+        }
+
+        if (legacy_cmdline)
+        {
+            const uint32 arg_offset = paired_end ? argc-4 : argc-3;
+            reference_name = argv[arg_offset];
+            if (paired_end)
+            {
+                read_name1 = argv[arg_offset+1];
+                read_name2 = argv[arg_offset+2];
+            }
+            else
+                read_name1 = argv[arg_offset+1];
+
+            output_name = argv[argc-1];
+        }
+
         //
         // Parse program options
         //

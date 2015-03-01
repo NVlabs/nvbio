@@ -206,9 +206,9 @@ bool to_packed(const char* reads_name, void* output_file, void* output_index, co
 
 enum Format
 {
-    ASCII   = 0u,
-    PACKED2 = 1u,
-    PACKED4 = 2u,
+    ASCII_FORMAT   = 0u,
+    PACKED2_FORMAT = 1u,
+    PACKED4_FORMAT = 2u,
 };
 
 int main(int argc, char* argv[])
@@ -216,12 +216,12 @@ int main(int argc, char* argv[])
     if (argc < 2)
     {
         log_info(stderr, "nvExtractReads [options] input output\n");
-        log_info(stderr, "  extract a set of reads to a plain ASCII or packed file with one read per line (.txt)\n\n");
+        log_info(stderr, "  extract a set of reads to a plain ASCII_FORMAT or packed file with one read per line (.txt)\n\n");
         log_info(stderr, "options:\n");
         log_info(stderr, "  --verbosity\n");
         log_info(stderr, "  -F | --skip-forward          skip forward strand\n");
         log_info(stderr, "  -R | --skip-reverse          skip forward strand\n");
-        log_info(stderr, "  -a | --ascii                 ASCII output\n");
+        log_info(stderr, "  -a | --ascii                 ASCII_FORMAT output\n");
         log_info(stderr, "  -p2 | --packed-2             2-bits packed output\n");
         log_info(stderr, "  -p4 | --packed-4             4-bits packed output\n");
         log_info(stderr, "  -i  | --idx string           save an index file\n");
@@ -233,7 +233,7 @@ int main(int argc, char* argv[])
     const char* idx_name    = NULL;
     bool  forward           = true;
     bool  reverse           = true;
-    Format format           = ASCII;
+    Format format           = ASCII_FORMAT;
     io::QualityEncoding qencoding = io::Phred33;
 
     for (int i = 0; i < argc - 2; ++i)
@@ -256,17 +256,17 @@ int main(int argc, char* argv[])
         else if (strcmp( argv[i], "-a" ) == 0 ||
                  strcmp( argv[i], "--ascii" ) == 0)  // ascii format
         {
-            format = ASCII;
+            format = ASCII_FORMAT;
         }
         else if (strcmp( argv[i], "-p2" ) == 0 ||
                  strcmp( argv[i], "--packed-2" ) == 0)  // 2-bits packed
         {
-            format = PACKED2;
+            format = PACKED2_FORMAT;
         }
         else if (strcmp( argv[i], "-p4" ) == 0 ||
                  strcmp( argv[i], "--packed-4" ) == 0)  // 4-bits packed
         {
-            format = PACKED4;
+            format = PACKED4_FORMAT;
         }
         else if (strcmp( argv[i], "-i" ) == 0 ||
                  strcmp( argv[i], "--idx" ) == 0)       // index file
@@ -293,9 +293,9 @@ int main(int argc, char* argv[])
     void* output_file  = NULL;
     void* output_index = NULL;
 
-    if (format == ASCII)
+    if (format == ASCII_FORMAT)
     {
-        // open a plain ASCII file
+        // open a plain ASCII_FORMAT file
         output_file = gzopen( out_name, is_gzipped ? "w1R" : "w" );
     }
     else
@@ -330,13 +330,13 @@ int main(int argc, char* argv[])
 
     switch (format)
     {
-    case ASCII:
+    case ASCII_FORMAT:
         success = to_ascii( reads_name, output_file, output_index, qencoding, io::SequenceEncoding(encoding_flags) );
         break;
-    case PACKED2:
+    case PACKED2_FORMAT:
         success = to_packed<2u>( reads_name, output_file, output_index, qencoding, io::SequenceEncoding(encoding_flags) );
         break;
-    case PACKED4:
+    case PACKED4_FORMAT:
         success = to_packed<4u>( reads_name, output_file, output_index, qencoding, io::SequenceEncoding(encoding_flags) );
         break;
     }

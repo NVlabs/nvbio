@@ -53,7 +53,7 @@ SamOutput::SamOutput(const char *file_name, AlignmentType alignment_type, BNT bn
 
 SamOutput::~SamOutput()
 {
-    if (fp)
+    if (fp && fp != stdout)
     {
         fclose(fp);
         fp = NULL;

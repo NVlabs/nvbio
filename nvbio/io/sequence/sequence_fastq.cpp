@@ -380,8 +380,6 @@ SequenceDataFile_FASTQ::SequenceDataFile_FASTQ(
     } else {
         m_file_state = FILE_OK;
     }
-
-    gzbuffer(m_file, m_buffer_size);
 }
 
 SequenceDataFile_FASTQ::~SequenceDataFile_FASTQ()

@@ -127,6 +127,28 @@ private:
     gzFile m_file;
 };
 
+/// loader for gzipped files
+/// this also works for plain uncompressed files, as zlib does that transparently
+///
+struct SequenceDataFile_FASTQ : public SequenceDataFile_FASTQ_parser
+{
+    SequenceDataFile_FASTQ(
+        const char*                      read_file_name,
+        const SequenceDataFile::Options& options);
+
+    ~SequenceDataFile_FASTQ();
+
+    virtual FileState fillBuffer(void);
+
+    virtual bool gets(char* buffer, int len) { return fgets( buffer, len, m_file ) != NULL; };
+
+    /// rewind the file
+    ///
+    virtual bool rewind();
+
+private:
+    FILE* m_file;
+};
 
 /// SequenceDataFile from a FASTQ file
 /// contains the code to parse FASTQ files and dump the results into a SequenceDataRAM object

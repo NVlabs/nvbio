@@ -368,6 +368,74 @@ bool SequenceDataFile_FASTQ_gz::rewind()
     return true;
 }
 
+
+SequenceDataFile_FASTQ::SequenceDataFile_FASTQ(
+    const char*                         read_file_name,
+    const SequenceDataFile::Options&    options)
+    : SequenceDataFile_FASTQ_parser(read_file_name, options)
+{
+    m_file = read_file_name ? fopen(read_file_name, "r") : stdin;
+    if (!m_file) {
+        m_file_state = FILE_OPEN_FAILED;
+    } else {
+        m_file_state = FILE_OK;
+    }
+
+    gzbuffer(m_file, m_buffer_size);
+}
+
+SequenceDataFile_FASTQ::~SequenceDataFile_FASTQ()
+{
+    if (m_file != stdin)
+        fclose( m_file );
+}
+
+//static float time = 0.0f;
+
+SequenceDataFile_FASTQ_parser::FileState SequenceDataFile_FASTQ::fillBuffer(void)
+{
+    m_buffer_size = fread(&m_buffer[0], 1u, (uint32)m_buffer.size(), m_file);
+
+    if (m_buffer_size <= 0)
+    {
+        // check for EOF separately; zlib will not always return Z_STREAM_END at EOF below
+        if (feof(m_file))
+            return FILE_EOF;
+        else
+        {
+            // ask zlib what happened and inform the user
+            int err;
+            const char *msg;
+            log_warning(stderr, "zlib error\n");
+
+            msg = gzerror(m_file, &err);
+            // we're making the assumption that we never see Z_STREAM_END here
+            assert(err != Z_STREAM_END);
+
+            log_error(stderr, "error processing FASTQ file: zlib error %d (%s)\n", err, msg);
+            return FILE_STREAM_ERROR;
+        }
+    }
+    return FILE_OK;
+}
+
+// rewind
+//
+bool SequenceDataFile_FASTQ::rewind()
+{
+    if (m_file == NULL || m_file == stdin || (m_file_state != FILE_OK && m_file_state != FILE_EOF))
+        return false;
+
+    fseek( m_file, 0u, SEEK_SET );
+
+    m_file_state = FILE_OK;
+
+    m_buffer_size = (uint32)m_buffer.size();
+    m_buffer_pos  = (uint32)m_buffer.size();
+    m_line        = 0;
+    return true;
+}
+
 // constructor
 //
 SequenceDataOutputFile_FASTQ::SequenceDataOutputFile_FASTQ(

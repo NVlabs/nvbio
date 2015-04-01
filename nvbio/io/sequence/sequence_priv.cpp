@@ -103,6 +103,14 @@ SequenceDataStream *open_sequence_file(
     options.trim3            = trim3;
     options.trim5            = trim5;
 
+    if (len == 0)
+    {
+        // read from FASTQ from stdin
+        return new SequenceDataFile_FASTQ(
+            NULL,
+            options );
+    }
+
     // do we have a .gz suffix?
     if (len >= strlen(".gz"))
     {

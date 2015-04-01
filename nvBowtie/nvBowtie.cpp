@@ -565,7 +565,7 @@ int main(int argc, char* argv[])
             log_visible(stderr, "opening read file [1] \"%s\"\n", read_name1);
             SharedPointer<nvbio::io::SequenceDataStream> read_data_file1(
                 nvbio::io::open_sequence_file(
-                    read_name1,
+                    strcmp( read_name1, "-" ) == 0 ? "" : read_name1,
                     qencoding,
                     max_reads,
                     max_read_len,
@@ -583,7 +583,7 @@ int main(int argc, char* argv[])
             log_visible(stderr, "opening read file [2] \"%s\"\n", read_name2);
             SharedPointer<nvbio::io::SequenceDataStream> read_data_file2(
                 nvbio::io::open_sequence_file(
-                    read_name2,
+                    strcmp( read_name2, "-" ) == 0 ? "" : read_name2,
                     qencoding,
                     max_reads,
                     max_read_len,
@@ -760,7 +760,7 @@ int main(int argc, char* argv[])
             log_visible(stderr, "opening read file \"%s\"\n", read_name1);
             SharedPointer<io::SequenceDataStream> read_data_file(
                 io::open_sequence_file(
-                    read_name1,
+                    strcmp( read_name1, "-" ) == 0 ? "" : read_name1,
                     qencoding,
                     max_reads,
                     max_read_len,

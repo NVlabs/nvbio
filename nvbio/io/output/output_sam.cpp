@@ -37,7 +37,8 @@ namespace io {
 SamOutput::SamOutput(const char *file_name, AlignmentType alignment_type, BNT bnt)
     : OutputFile(file_name, alignment_type, bnt)
 {
-    fp = fopen(file_name, "wt");
+    fp = file_name ? fopen(file_name, "wt") : stdout;
+
     if (fp == NULL)
     {
         log_error(stderr, "SamOutput: could not open %s for writing\n", file_name);

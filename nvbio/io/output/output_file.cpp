@@ -64,6 +64,12 @@ OutputFile *OutputFile::open(const char *file_name, AlignmentType aln_type, BNT 
     // parse out file extension; look for .sam, .bam suffixes
     uint32 len = uint32(strlen(file_name));
 
+    if (len == 0)
+    {
+        // dump SAM to stdout
+        return new SamOutput(NULL, aln_type, bnt);
+    }
+
     if (strcmp(file_name, "/dev/null") == 0)
     {
         return new OutputFile(file_name, aln_type, bnt);

@@ -352,6 +352,13 @@ int main(int argc, char* argv[])
         }
     }
 
+    if (strlen( read_name1 ) == 0 &&
+        strlen( read_name2 ) == 0)
+    {
+        log_error(stderr, "must specify at least one read input with -U/-1/-2\n");
+        return 1;
+    }
+
     log_info(stderr, "nvBowtie... started\n");
     log_debug(stderr, "  %-16s : %d\n", "max-reads",  max_reads);
     log_debug(stderr, "  %-16s : %d\n", "max-length", max_read_len);

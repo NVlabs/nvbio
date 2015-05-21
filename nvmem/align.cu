@@ -330,7 +330,7 @@ uint32 align_short(
             read_infix_set,
             reference_infix_set,
             sinks.begin(),
-            aln::ThreadScheduler<system_tag>(),
+            aln::DeviceThreadScheduler(),
             reads_access.max_sequence_len(),
             max_rspan );
 

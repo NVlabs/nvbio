@@ -18,5 +18,5 @@ util.cu
 )
 
 cuda_add_executable(nvmem ${nvmem_srcs})
-target_link_libraries(nvmem nvbio zlibstatic crcstatic ${SYSTEM_LINK_LIBRARIES})
+target_link_libraries(nvmem nvbio zlibstatic crcstatic lz4 ${SYSTEM_LINK_LIBRARIES})
 

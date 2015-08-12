@@ -9,6 +9,9 @@
 # bin/benchmark_swg_cpu data/1K-100nt.prof.1000.100.21.regions
 # bin/bench_swg_ref_2b_integer_gpu_100 data/1K-100nt.prof.1000.100.21.ref.regions data/profiles/hsapiens_v37.fa 
 
+squery?=100
+scandidate?=120
+
 # Shell interpreter #
 #####################
 SHELL := /bin/bash
@@ -33,6 +36,11 @@ CUDA_LIBRARY_FLAGS=-L/usr/local/cuda/lib64 -I/usr/local/cuda/include -lcuda -lcu
 GCC_GDB_FLAGS=-g -O0 -m64
 NVCC_GDB_FLAGS=-g -G -O0 -m64 -gencode arch=compute_52,code=sm_52
 
+all: gregions checksum \
+benchmark_swg_cpu benchmark_swg_farrar_gpu benchmark_swg_wozniak_gpu benchmark_swg_2b_integer_gpu \
+benchmark_swg_2b_video_gpu benchmark_swg_2b_mixed_gpu benchmark_swg_2b_mixedsim_gpu \
+benchmark_swg_ref_2b_integer_gpu swg_ref_2b_host-dbg swg_ref_2b_integer_gpu-dbg \
+benchmark_swg_ref_2b_integer_gpu-dbg
 
 # MODULES:
 alignments:

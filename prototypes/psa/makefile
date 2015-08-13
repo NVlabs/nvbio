@@ -34,7 +34,7 @@ CUDA_LIBRARY_FLAGS=-L/usr/local/cuda/lib64 -I/usr/local/cuda/include -lcuda -lcu
 # DEBUG FLAGS #
 ###############
 GCC_GDB_FLAGS=-g -O0 -m64
-NVCC_GDB_FLAGS=-g -G -O0 -m64 -gencode arch=compute_52,code=sm_52
+NVCC_GDB_FLAGS=-g -G -O0 -m64 -gencode arch=compute_35,code=sm_35
 
 all: gregions checksum \
 benchmark_swg_cpu benchmark_swg_farrar_gpu benchmark_swg_wozniak_gpu benchmark_swg_2b_integer_gpu \
@@ -74,20 +74,20 @@ swg_ref_2b_host:
 	$(CC) $(CFLAGS) -DCUDA -c src/gotoh/psa_swgotoh_ref_2b_gpu.c -o build/psa_swg_ref_2b_host.o $(CUDA_LIBRARY_FLAGS)
 swfarrar_gpu:
 	$(CC) $(CFLAGS) -DCUDA -c src/gotoh/misc/psa_swfarrar_gpu.c -o build/psa_swfarrar_host.o $(CUDA_LIBRARY_FLAGS)
-	$(NVCC) $(CUDA_FLAGS) -lineinfo --ptxas-options=-v -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -c src/gotoh/misc/psa_swfarrar_gpu.cu -o build/psa_swfarrar_device.o
+	$(NVCC) $(CUDA_FLAGS) -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -c src/gotoh/misc/psa_swfarrar_gpu.cu -o build/psa_swfarrar_device.o
 swwozniak_gpu:
 	$(CC) $(CFLAGS) -DCUDA -c src/gotoh/misc/psa_swwozniak_gpu.c -o build/psa_swwozniak_host.o $(CUDA_LIBRARY_FLAGS)
-	$(NVCC) $(CUDA_FLAGS) -lineinfo --ptxas-options=-v -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -c src/gotoh/misc/psa_swwozniak_gpu.cu -o build/psa_swwozniak_device.o
+	$(NVCC) $(CUDA_FLAGS) -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -c src/gotoh/misc/psa_swwozniak_gpu.cu -o build/psa_swwozniak_device.o
 swg_2b_integer_gpu:
-	$(NVCC) $(CUDA_FLAGS) -lineinfo --ptxas-options=-v -Xptxas -dlcm=ca -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -c src/gotoh/psa_swgotoh_2b_integer_gpu.cu -o build/psa_swg_2b_integer_device.o
+	$(NVCC) $(CUDA_FLAGS) -Xptxas -dlcm=ca -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -c src/gotoh/psa_swgotoh_2b_integer_gpu.cu -o build/psa_swg_2b_integer_device.o
 swg_2b_video_gpu:
-	$(NVCC) $(CUDA_FLAGS) -lineinfo --ptxas-options=-v -Xptxas -dlcm=ca -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -c src/gotoh/psa_swgotoh_2b_video_gpu.cu -o build/psa_swg_2b_video_device.o
+	$(NVCC) $(CUDA_FLAGS) -Xptxas -dlcm=ca -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -c src/gotoh/psa_swgotoh_2b_video_gpu.cu -o build/psa_swg_2b_video_device.o
 swg_2b_mixed_gpu:
-	$(NVCC) $(CUDA_FLAGS) -lineinfo --ptxas-options=-v -Xptxas -dlcm=ca -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -c src/gotoh/psa_swgotoh_2b_mixed_gpu.cu -o build/psa_swg_2b_mixed_device.o
+	$(NVCC) $(CUDA_FLAGS) -Xptxas -dlcm=ca -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -c src/gotoh/psa_swgotoh_2b_mixed_gpu.cu -o build/psa_swg_2b_mixed_device.o
 swg_2b_mixedsim_gpu:
-	$(NVCC) $(CUDA_FLAGS) -lineinfo --ptxas-options=-v -Xptxas -dlcm=ca -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -c src/gotoh/psa_swgotoh_2b_mixedsim_gpu.cu -o build/psa_swg_2b_mixedsim_device.o
+	$(NVCC) $(CUDA_FLAGS) -Xptxas -dlcm=ca -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -c src/gotoh/psa_swgotoh_2b_mixedsim_gpu.cu -o build/psa_swg_2b_mixedsim_device.o
 swg_ref_2b_integer_gpu:
-	$(NVCC) $(CUDA_FLAGS) -lineinfo --ptxas-options=-v -Xptxas -dlcm=ca -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -DREFERENCE -c src/gotoh/psa_swgotoh_ref_2b_integer_gpu.cu -o build/psa_swg_ref_2b_integer_device.o
+	$(NVCC) $(CUDA_FLAGS) -Xptxas -dlcm=ca -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -DREFERENCE -c src/gotoh/psa_swgotoh_ref_2b_integer_gpu.cu -o build/psa_swg_ref_2b_integer_device.o
 
 
 
@@ -132,9 +132,10 @@ time-dbg:
 swg_ref_2b_host-dbg:
 	$(CC) $(GCC_GDB_FLAGS) -DCUDA -c src/gotoh/psa_swgotoh_ref_2b_gpu.c -o build/psa_swg_ref_2b_host-dbg.o $(CUDA_LIBRARY_FLAGS)
 swg_ref_2b_integer_gpu-dbg:
-	$(NVCC) $(NVCC_GDB_FLAGS) -lineinfo --ptxas-options=-v -Xptxas -dlcm=ca -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -c src/gotoh/psa_swgotoh_ref_2b_integer_gpu.cu -o build/psa_swg_ref_2b_integer_device-dbg.o
+	$(NVCC) $(NVCC_GDB_FLAGS) -lineinfo -Xptxas -dlcm=ca -DCUDA -DQUERIES_SIZE=$(squery) -DCANDIDATES_SIZE=$(scandidate) -c src/gotoh/psa_swgotoh_ref_2b_integer_gpu.cu -o build/psa_swg_ref_2b_integer_device-dbg.o
+
 benchmark_swg_ref_2b_integer_gpu-dbg: alignments-dbg errors-dbg profile-dbg regions-dbg sequences-dbg swg_ref_2b_host-dbg swg_ref_2b_integer_gpu-dbg time-dbg
-	$(CC) $(GCC_GDB_FLAGS) -DCUDA build/psa_alignments-dbg.o build/psa_errors-dbg.o build/psa_profile-dbg.o build/psa_regions-dbg.o build/psa_sequences-dbg.o build/psa_swg_ref_2b_host-dbg.o build/psa_swg_ref_2b_integer_device-dbg.o build/psa_time-dbg.o tools/benchmark.c -o bin/bench_swg_ref_2b_integer_gpu_$(squery)-dbg $(CUDA_LIBRARY_FLAGS)
+	$(CC) $(GCC_GDB_FLAGS) -DCUDA -DREFERENCE build/psa_alignments-dbg.o build/psa_errors-dbg.o build/psa_profile-dbg.o build/psa_regions-dbg.o build/psa_sequences-dbg.o build/psa_swg_ref_2b_host-dbg.o build/psa_swg_ref_2b_integer_device-dbg.o build/psa_time-dbg.o tools/benchmark.c -o bin/bench_swg_ref_2b_integer_gpu_$(squery)-dbg $(CUDA_LIBRARY_FLAGS)
 
 
 #  INSTALL           #

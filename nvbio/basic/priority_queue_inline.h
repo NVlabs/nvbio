@@ -159,7 +159,7 @@ namespace priqueue
 // such element exists
 //
 template <typename Key, typename Container, typename Compare>
-NVBIO_FORCEINLINE NVBIO_HOST_DEVICE priority_queue<Key,Container,Compare>::iterator
+NVBIO_FORCEINLINE NVBIO_HOST_DEVICE typename priority_queue<Key,Container,Compare>::iterator
 priority_queue<Key,Container,Compare>::upper_bound(const Key& x)
 {
     uint32 max_i = 0;

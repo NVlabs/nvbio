@@ -1,4 +1,4 @@
-project(nvBio)
+﻿project(nvBio)
 
 cmake_minimum_required(VERSION 2.8)
 
@@ -87,6 +87,7 @@ add_subdirectory(contrib/moderngpu)
 add_subdirectory(contrib/htslib)
 
 add_subdirectory(nvbio)
+add_subdirectory(nvbio-test)
 add_subdirectory(nvBowtie)
 add_subdirectory(nvFM-server)
 add_subdirectory(nvBWT)
@@ -95,7 +96,6 @@ add_subdirectory(nvSSA)
 add_subdirectory(nvExtractReads)
 add_subdirectory(nvLighter)
 add_subdirectory(nvmem)
-add_subdirectory(nvbio-test)
 add_subdirectory(nvbio-aln-diff)
 add_subdirectory(nvMicroAssembly)
 add_subdirectory(sufsort-test)

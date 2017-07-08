@@ -1,4 +1,4 @@
-project(moderngpu)
+﻿project(moderngpu)
 cmake_minimum_required(VERSION 2.8)
 
 find_package(CUDA)
@@ -18,6 +18,8 @@ set(SRCS
     src/mmio.cpp
     src/sparsematrix.cpp
 )
+
+set(SOURCES ${SRCS})
 
 cuda_add_library(moderngpu STATIC ${SRCS})
 

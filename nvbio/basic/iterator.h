@@ -97,6 +97,25 @@ template <>                           struct iterator_category_system<forward_un
 template <>                           struct iterator_category_system<bidirectional_universal_iterator_tag> { typedef device_tag type; };
 template <>                           struct iterator_category_system<random_access_universal_iterator_tag> { typedef device_tag type; };
 
+
+template<>
+struct iterator_category_system<thrust::detail::iterator_category_with_system_and_traversal<
+thrust::random_access_device_iterator_tag, 
+thrust::device_system_tag, 
+thrust::random_access_traversal_tag>
+> {
+    typedef device_tag type;
+};
+
+template<>
+struct iterator_category_system<thrust::detail::iterator_category_with_system_and_traversal<
+thrust::random_access_host_iterator_tag, 
+thrust::host_system_tag, 
+thrust::random_access_traversal_tag>
+> {
+    typedef device_tag type;
+};
+
 template <typename iterator>
 struct iterator_system
 {

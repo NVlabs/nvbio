@@ -1,0 +1,7 @@
+/build2/
+/build/
+/.settings/
+*.cproject
+*.project
+*.txt.user
+*.udb

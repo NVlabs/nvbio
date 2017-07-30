@@ -26,7 +26,7 @@
  */
 
 #pragma once
-
+#include <thread>
 namespace nvbio {
 
 // return true if any item in the range [0,n) evaluates to true
@@ -1263,7 +1263,8 @@ void merge_by_key(
         }
     }
 
-    const uint32 n_threads = (uint32)omp_get_num_procs();
+    //const uint32 n_threads = (uint32)omp_get_num_procs();
+    const uint32 n_threads = std::thread::hardware_concurrency();
 
     nvbio::vector<host_tag,uint32> A_diag( n_threads+1 );
     nvbio::vector<host_tag,uint32> B_diag( n_threads+1 );

@@ -34,7 +34,7 @@
 #pragma once
 
 #include "util_namespace.cuh"
-#include <thrust/system/cuda/detail/cub/util_arch.cuh>
+//#include <thrust/system/cuda/detail/cub/util_arch.cuh>
 /// Optional outer namespace(s)
 CUB_NS_PREFIX
 

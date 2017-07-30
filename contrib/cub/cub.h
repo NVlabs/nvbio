@@ -1,6 +1,43 @@
 
 //#include <thrust/system/cuda/detail/cub/util_namespace.cuh>
 
-//#include <thrust/system/cuda/detail/cub/cub.cuh>
+
+
+//#include <thrust/system/cuda/detail/cub.h>
+
+
 #include "cub.cuh"
+#undef CUB_PTX_LOG_WARP_THREADS
+#undef CUB_LOG_WARP_THREADS
+#undef CUB_PTX_WARP_THREADS
+#undef CUB_WARP_THREADS
+#undef CUB_PTX_LOG_SMEM_BANKS
+#undef CUB_LOG_SMEM_BANKS
+#undef CUB_PTX_SMEM_BANKS
+#undef CUB_SMEM_BANKS
+#undef CUB_PTX_SMEM_BANK_BYTES
+#undef CUB_SMEM_BANK_BYTES
+#undef CUB_PTX_SMEM_BYTES
+#undef CUB_SMEM_BYTES
+#undef CUB_PTX_SMEM_ALLOC_UNIT
+#undef CUB_SMEM_ALLOC_UNIT
+#undef CUB_PTX_REGS_BY_BLOCK
+#undef CUB_REGS_BY_BLOCK
+#undef CUB_PTX_REG_ALLOC_UNIT
+#undef CUB_REG_ALLOC_UNIT
+#undef CUB_PTX_WARP_ALLOC_UNIT
+#undef CUB_WARP_ALLOC_UNIT
+#undef CUB_PTX_MAX_SM_THREADS
+#undef CUB_MAX_SM_THREADS
+#undef CUB_PTX_MAX_SM_BLOCKS
+#undef CUB_MAX_SM_BLOCKS
+#undef CUB_PTX_MAX_BLOCK_THREADS
+#undef CUB_MAX_BLOCK_THREADS
+#undef CUB_PTX_MAX_SM_REGISTERS
+#undef CUB_MAX_SM_REGISTERS
+#undef CUB_PTX_PREFER_CONFLICT_OVER_PADDING
+#undef CUB_PREFER_CONFLICT_OVER_PADDING
+
+
+
 //#define cub_ cub

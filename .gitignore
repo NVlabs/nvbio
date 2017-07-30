@@ -5,3 +5,6 @@
 *.project
 *.txt.user
 *.udb
+/cmake-build-debug/
+/.idea/
+/build.cmake/

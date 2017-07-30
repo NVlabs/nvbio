@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include <cub/cub.cuh>
+#include <cub/cub.h>
 #include <mgpuhost.cuh>
 #include <moderngpu.cuh>
 #include <nvbio/sufsort/sufsort_priv.h>

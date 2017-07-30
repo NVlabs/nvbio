@@ -34,7 +34,7 @@
 #pragma once
 
 #include "util_namespace.cuh"
-
+#include <thrust/system/cuda/detail/cub/util_arch.cuh>
 /// Optional outer namespace(s)
 CUB_NS_PREFIX
 
@@ -154,10 +154,12 @@ namespace cub {
             (10)))
 
 /// Prefer X-way conflict over padding
+#ifndef CUB_PREFER_CONFLICT_OVER_PADDING
 #define CUB_PREFER_CONFLICT_OVER_PADDING(arch)          \
     ((arch >= 300) ?                                    \
         (0) :                                           \
         (4))
+#endif
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS    // Do not document
 

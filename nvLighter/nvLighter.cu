@@ -30,7 +30,7 @@
 
 //#define NVBIO_CUDA_DEBUG
 
-#include <cub/cub.cuh>
+#include <cub/cub.h>
 #include <zlib/zlib.h>
 #include <nvbio/basic/omp.h>
 

@@ -1,4 +1,5 @@
-addsources(
+﻿
+set(SOURCES
 aligner_all_ed.cu
 aligner_all_sw.cu
 aligner_all.h
@@ -74,3 +75,6 @@ traceback_impl.h
 traceback_inl.h
 utils.h
 )
+
+
+addsources(${SOURCES})

@@ -39,7 +39,7 @@
 #include <thrust/iterator/counting_iterator.h>
 #include <mgpuhost.cuh>
 #include <moderngpu.cuh>
-#include <cub/cub.cuh>
+#include <cub/cub.h>
 
 namespace nvbio {
 namespace cuda {

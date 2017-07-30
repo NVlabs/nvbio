@@ -24,6 +24,7 @@ include("${NVBIO_SOURCE_ROOT}/cmake-local/nvbio.cmake")
 # grab gcc flags
 include("${NVBIO_SOURCE_ROOT}/cmake-local/gcc.cmake")
 
+
 # default to release builds
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
@@ -46,7 +47,7 @@ endif()
 find_package(CUDA)
 find_package(Doxygen)
 
-find_package(OpenMP)
+#find_package(OpenMP)
 if (OPENMP_FOUND)
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
@@ -74,17 +75,38 @@ endif()
 set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} ${CUDA_NVCC_DEBUG_FLAGS} --gpu-architecture=${GPU_ARCHITECTURE} -use_fast_math)
 
 set(cudpp_INCLUDE_DIRS ${NVBIO_SOURCE_ROOT})
-set(INCLUDE_DIRS ${NVBIO_SOURCE_ROOT} ${NVBIO_SOURCE_ROOT}/contrib ${CMAKE_BINARY_DIR}/contrib/zlib-1.2.7 ${NVBIO_SOURCE_ROOT}/contrib/crc ${NVBIO_SOURCE_ROOT}/contrib/bamtools ${NVBIO_SOURCE_ROOT}/contrib/moderngpu/include)
-include_directories(${INCLUDE_DIRS})
-# export our include directories in the cache for external projects to pick up
-set(nvbio_INCLUDE_DIRECTORIES ${INCLUDE_DIRS} CACHE STRING "nvbio include paths")
 
-add_subdirectory(contrib/zlib-1.2.7)
+set(INCLUDE_DIRS
+        ${NVBIO_SOURCE_ROOT}
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${NVBIO_SOURCE_ROOT}/contrib
+        #${CMAKE_BINARY_DIR}/contrib/zlib-1.2.7
+        ${NVBIO_SOURCE_ROOT}/contrib/crc
+        ${NVBIO_SOURCE_ROOT}/contrib/bamtools
+        ${NVBIO_SOURCE_ROOT}/contrib/moderngpu/include
+        )
+
+include_directories(${NVBIO_SOURCE_ROOT})
+include_directories("${NVBIO_SOURCE_ROOT}/contrib")
+#include_directories("${CMAKE_BINARY_DIR}/contrib/zlib-1.2.7")
+include_directories("${NVBIO_SOURCE_ROOT}/contrib/crc")
+include_directories("${NVBIO_SOURCE_ROOT}/contrib/bamtools")
+include_directories(SYSTEM "${NVBIO_SOURCE_ROOT}/contrib/moderngpu/include")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -iquote ${CMAKE_CURRENT_SOURCE_DIR}")
+
+# export our include directories in the cache for external projects to pick up
+set(nvBio_INCLUDE_DIRECTORIES
+        ${INCLUDE_DIRS} CACHE STRING "nvbio include paths")
+set(nvBio_INCLUDE
+        "${CMAKE_CURRENT_SOURCE_DIR}")
+
+#add_subdirectory(contrib/zlib-1.2.7)
 add_subdirectory(contrib/lz4)
 add_subdirectory(contrib/crc)
 add_subdirectory(contrib/bamtools)
 add_subdirectory(contrib/moderngpu)
-add_subdirectory(contrib/htslib)
+#add_subdirectory(contrib/htslib)
 
 add_subdirectory(nvbio)
 add_subdirectory(nvbio-test)

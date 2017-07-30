@@ -31,7 +31,7 @@
 #include <nvbio/basic/console.h>
 #include <nvbio/basic/thrust_view.h>
 #include <thrust/device_vector.h>
-#include <cub/cub.cuh>
+#include <cub/cub.h>
 
 /// \page cuda_primitives_page Parallel Primitives
 ///

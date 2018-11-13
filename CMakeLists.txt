@@ -104,12 +104,12 @@ set(nvBio_INCLUDE_DIRECTORIES
 set(nvBio_INCLUDE
         "${CMAKE_CURRENT_SOURCE_DIR}")
 
-#add_subdirectory(contrib/zlib-1.2.7)
+add_subdirectory(contrib/zlib-1.2.7)
 add_subdirectory(contrib/lz4)
 add_subdirectory(contrib/crc)
 add_subdirectory(contrib/bamtools)
 add_subdirectory(contrib/moderngpu)
-#add_subdirectory(contrib/htslib)
+add_subdirectory(contrib/htslib)
 
 add_subdirectory(nvbio)
 add_subdirectory(nvbio-test)

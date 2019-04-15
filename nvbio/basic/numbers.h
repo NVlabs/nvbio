@@ -34,6 +34,7 @@
 #include <nvbio/basic/iterator.h>
 #include <vector_types.h>
 #include <vector_functions.h>
+#include <cuda_fp16.h>
 
 namespace nvbio {
 

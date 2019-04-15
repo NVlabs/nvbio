@@ -35,8 +35,11 @@ namespace nvbio {
 
 #ifdef WIN32
 #else
+#if __cplusplus <= 199711L
+// if compiling with less than c++11
 //#define SharedPointer std::tr1::shared_ptr
 #pragma GCC poison shared_ptr
+#endif
 #endif
 
     // A shared pointer, with an interface same as the boost/tr1 one

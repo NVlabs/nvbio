@@ -28,7 +28,7 @@
 #pragma once
 
 #if defined(__CUDACC__)
-#include <cub/cub.h>
+#include <cub/cub.cuh>
 #endif
 
 #include <nvbio/basic/types.h>

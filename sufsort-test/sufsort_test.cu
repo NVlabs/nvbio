@@ -27,7 +27,7 @@
 
 #define NVBIO_CUDA_DEBUG
 
-#include <cub/cub.h>
+#include <cub/cub.cuh>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>

@@ -27,7 +27,7 @@
 
 #include <nvbio/basic/cuda/sort.h>
 #include <nvbio/basic/thrust_view.h>
-#include <cub/cub.h>
+#include <cub/cub.cuh>
 
 namespace nvbio {
 namespace cuda {

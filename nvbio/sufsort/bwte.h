@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include <cub/cub.h>
+#include <cub/cub.cuh>
 #include <mgpuhost.cuh>
 #include <moderngpu.cuh>
 #include <nvbio/basic/vector.h>

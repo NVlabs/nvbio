@@ -227,8 +227,6 @@ ReadDataFile_FASTQ_gz::ReadDataFile_FASTQ_gz(const char *read_file_name,
     gzbuffer(m_file, m_buffer_size);
 }
 
-static float time = 0.0f;
-
 ReadDataFile_FASTQ_parser::FileState ReadDataFile_FASTQ_gz::fillBuffer(void)
 {
     m_buffer_size = gzread(m_file, &m_buffer[0], (uint32)m_buffer.size());

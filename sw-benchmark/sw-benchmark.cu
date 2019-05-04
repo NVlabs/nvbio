@@ -464,6 +464,8 @@ int main(int argc, char* argv[])
     uint32      threads     = omp_get_num_procs();
     io::QualityEncoding qencoding = io::Phred33;
 
+    (void)threads; //Suppress unused variable warning
+
     for (int i = 0; i < argc-2; ++i)
     {
         if (strcmp( argv[i], "-tests" ) == 0)

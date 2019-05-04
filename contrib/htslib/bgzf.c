@@ -731,8 +731,8 @@ int bgzf_flush_try(BGZF *fp, ssize_t size)
 
 ssize_t bgzf_write(BGZF *fp, const void *data, size_t length)
 {
-    if ( !fp->is_compressed )
-        return hwrite(fp->fp, data, length);
+	if ( !fp->is_compressed )
+		return hwrite(fp->fp, data, length);
 
 	const uint8_t *input = (const uint8_t*)data;
 	ssize_t remaining = length;

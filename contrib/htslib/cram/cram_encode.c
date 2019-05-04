@@ -2165,6 +2165,7 @@ static int process_one_read(cram_fd *fd, cram_container *c,
 	cr->rg = brg ? brg->id : -1;
     } else if (fd->version == CRAM_1_VERS) {
 	SAM_RG *brg = sam_hdr_find_rg(fd->header, "UNKNOWN");
+  (void)brg; //Suppress unused variable warning
 	assert(brg);
     } else {
 	cr->rg = -1;

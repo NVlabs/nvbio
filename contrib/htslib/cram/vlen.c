@@ -121,6 +121,8 @@ int vflen(char *fmt, va_list ap)
     int i;
     double d; 
 
+    (void)i; //Suppress unused variable error
+
     /*
      * This code modifies 'ap', but we do not know if va_list is a structure
      * or a pointer to an array so we do not know if it is a local variable

@@ -4,6 +4,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#ifdef __linux__ 
+#include <unistd.h>
+#endif
+
 #ifndef HTS_BGZF_TYPEDEF
 typedef struct BGZF BGZF;
 #define HTS_BGZF_TYPEDEF

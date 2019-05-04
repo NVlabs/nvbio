@@ -123,7 +123,7 @@ struct DeviceGroup {
 	}
 };
 
-std::auto_ptr<DeviceGroup> deviceGroup;
+std::unique_ptr<DeviceGroup> deviceGroup;
 
 
 int CudaDevice::DeviceCount() {
@@ -213,7 +213,7 @@ struct ContextGroup {
 		}
 	}
 };
-std::auto_ptr<ContextGroup> contextGroup;
+std::unique_ptr<ContextGroup> contextGroup;
 
 CudaContext::CudaContext(CudaDevice& device, bool newStream, bool standard) :
 	_event(cudaEventDisableTiming /*| cudaEventBlockingSync */), 

@@ -419,7 +419,7 @@ MGPU_HOST void SpmvCsrIndirectBinary(MatrixIt matrix_global, ColsIt cols_global,
 
 template<typename T, typename CsrIt>
 MGPU_HOST void SpmvPreprocessUnary(int nz, CsrIt csr_global, int numRows,
-	bool supportEmpty, std::auto_ptr<SpmvPreprocessData>* ppData, 
+	bool supportEmpty, std::unique_ptr<SpmvPreprocessData>* ppData, 
 	CudaContext& context) {
 
 	typedef typename SpmvTuningPreprocess<sizeof(T), false>::Tuning Tuning;
@@ -429,7 +429,7 @@ MGPU_HOST void SpmvPreprocessUnary(int nz, CsrIt csr_global, int numRows,
 
 template<typename T, typename CsrIt>
 MGPU_HOST void SpmvPreprocessBinary(int nz, CsrIt csr_global, int numRows,
-	bool supportEmpty, std::auto_ptr<SpmvPreprocessData>* ppData,
+	bool supportEmpty, std::unique_ptr<SpmvPreprocessData>* ppData,
 	CudaContext& context) {
 
 	typedef typename SpmvTuningPreprocess<sizeof(T), true>::Tuning Tuning;

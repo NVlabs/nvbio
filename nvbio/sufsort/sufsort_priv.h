@@ -1765,7 +1765,7 @@ struct HostStringSetRadices
             {
                 // fetch the BWT symbols for this block of suffixes
                 #pragma omp parallel for
-                for (int i = 0; i < n_suffixes; ++i)
+                for (unsigned int i = 0; i < n_suffixes; ++i)
                 {
                     const priv::string_set_bwt_functor<string_set_type> bwt( m_string_set );
                     h_bwt[i] = bwt( m_suffixes[i] );

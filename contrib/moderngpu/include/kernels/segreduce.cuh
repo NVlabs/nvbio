@@ -55,10 +55,10 @@ struct SegReducePreprocessData {
 // Generic function for prep
 template<typename Tuning, typename CsrIt>
 MGPU_HOST void SegReducePreprocess(int count, CsrIt csr_global, int numSegments,
-	bool supportEmpty, std::auto_ptr<SegReducePreprocessData>* ppData, 
+	bool supportEmpty, std::unique_ptr<SegReducePreprocessData>* ppData, 
 	CudaContext& context) {
 
-	std::auto_ptr<SegReducePreprocessData> data(new SegReducePreprocessData);
+	std::unique_ptr<SegReducePreprocessData> data(new SegReducePreprocessData);
 
 	int2 launch = Tuning::GetLaunchParams(context);
 	int NV = launch.x * launch.y;
@@ -85,7 +85,7 @@ MGPU_HOST void SegReducePreprocess(int count, CsrIt csr_global, int numSegments,
 	data->threadCodesDevice = BuildCsrPlus<Tuning>(count, csr_global, 
 		data->limitsDevice->get(), numBlocks, context);
 
-	*ppData = data;
+	*ppData = std::move(data);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

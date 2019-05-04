@@ -174,7 +174,7 @@ MGPU_LAUNCH_BOUNDS void KernelReduceByKeyEmit(KeysIt keys_global,
 template<typename ValType, typename KeyType, typename KeysIt, typename Comp>
 MGPU_HOST void ReduceByKeyPreprocess(int count, KeysIt keys_global, 
 	KeyType* keysDest_global, Comp comp, int* count_host, int* count_global,
-	std::auto_ptr<ReduceByKeyPreprocessData>* ppData, CudaContext& context) {
+	std::unique_ptr<ReduceByKeyPreprocessData>* ppData, CudaContext& context) {
 
 	typedef typename SegReducePreprocessTuning<sizeof(ValType)>::Tuning Tuning;
 	int2 launch = Tuning::GetLaunchParams(context);
@@ -182,7 +182,7 @@ MGPU_HOST void ReduceByKeyPreprocess(int count, KeysIt keys_global,
 
 	const bool AsyncTransfer = true;
 
-	std::auto_ptr<ReduceByKeyPreprocessData> 
+	std::unique_ptr<ReduceByKeyPreprocessData> 
 		data(new ReduceByKeyPreprocessData);
 
 	int numBlocks = MGPU_DIV_UP(count, NV);
@@ -232,7 +232,7 @@ MGPU_HOST void ReduceByKeyPreprocess(int count, KeysIt keys_global,
 	}
 	data->numSegments = count_host ? *count_host : -1;
 
-	*ppData = data;
+	*ppData = std::move(data);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -245,7 +245,7 @@ MGPU_HOST void ReduceByKey(KeysIt keys_global, InputIt data_global, int count,
 	DestIt dest_global, int* count_host, int* count_global, 
 	CudaContext& context) {
 		
-	std::auto_ptr<ReduceByKeyPreprocessData> data;
+	std::unique_ptr<ReduceByKeyPreprocessData> data;
 	MGPU_MEM(int) countsDevice = context.Malloc<int>(1);
 	if(count_host && !count_global) count_global = countsDevice->get();
 

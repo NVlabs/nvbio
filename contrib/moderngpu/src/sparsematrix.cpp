@@ -50,7 +50,7 @@ struct MatrixElement {
 	}
 };
 
-bool ReadSparseMatrix(FILE* f, std::auto_ptr<SparseMatrix>* ppMatrix,
+bool ReadSparseMatrix(FILE* f, std::unique_ptr<SparseMatrix>* ppMatrix,
 	std::string& err) {
 
 	MM_typecode matcode;
@@ -110,7 +110,7 @@ bool ReadSparseMatrix(FILE* f, std::auto_ptr<SparseMatrix>* ppMatrix,
 
 	std::sort(elements.begin(), elements.end());
 
-	std::auto_ptr<SparseMatrix> m(new SparseMatrix);
+	std::unique_ptr<SparseMatrix> m(new SparseMatrix);
 	
 	nz = (int)elements.size();
 	m->height = height;
@@ -135,13 +135,13 @@ bool ReadSparseMatrix(FILE* f, std::auto_ptr<SparseMatrix>* ppMatrix,
 	}
 	m->csr[height] = scan;
 
-	*ppMatrix = m;
+	*ppMatrix = std::move(m);
 
 	return true;
 }
 
 bool ReadSparseMatrix(const char* filename,
-	std::auto_ptr<SparseMatrix>* ppMatrix, std::string& err) {
+	std::unique_ptr<SparseMatrix>* ppMatrix, std::string& err) {
 
 	FILE* f = fopen(filename, "r");
 	if(!f) {
@@ -156,12 +156,12 @@ bool ReadSparseMatrix(const char* filename,
 }
 
 bool LoadBinaryMatrix(const char* filename,
-	std::auto_ptr<SparseMatrix>* ppMatrix) {
+	std::unique_ptr<SparseMatrix>* ppMatrix) {
 
 	FILE* f = fopen(filename, "rb");
 	if(!f) return false;
 
-	std::auto_ptr<SparseMatrix> m(new SparseMatrix);
+	std::unique_ptr<SparseMatrix> m(new SparseMatrix);
 	fread(&m->height, 4, 1, f);
 	fread(&m->width, 4, 1, f);
 	fread(&m->nz, 4, 1, f);
@@ -176,7 +176,7 @@ bool LoadBinaryMatrix(const char* filename,
 
 	fclose(f);
 
-	*ppMatrix = m;
+	*ppMatrix = std::move(m);
 	return true;
 }
 
@@ -198,11 +198,11 @@ bool StoreBinaryMatrix(const char* filename, const SparseMatrix& m) {
 }
 
 bool LoadCachedMatrix(const char* filename, 
-	std::auto_ptr<SparseMatrix>* ppMatrix, std::string& err) {
+	std::unique_ptr<SparseMatrix>* ppMatrix, std::string& err) {
 
 	// Attempt to load the binary matrix. If that fails, load the Matrix Market
 	// ASCII matrix and store as binary.
-	std::auto_ptr<SparseMatrix> m;
+	std::unique_ptr<SparseMatrix> m;
 	char s[260];
 	sprintf(s, "%s.bin", filename);
 	bool success = LoadBinaryMatrix(s, &m);
@@ -213,7 +213,7 @@ bool LoadCachedMatrix(const char* filename,
 		printf("Creating temp file %s...\n", s);
 		StoreBinaryMatrix(s, *m);
 	}
-	*ppMatrix = m;
+	*ppMatrix = std::move(m);
 	return true;
 }
 
@@ -251,9 +251,9 @@ MatrixStats ComputeMatrixStats(const SparseMatrix& m) {
 // MulSparseMatrices
 
 int64 MulSparseMatrices(const SparseMatrix& A, const SparseMatrix& B,
-	std::auto_ptr<SparseMatrix>* ppC) {
+	std::unique_ptr<SparseMatrix>* ppC) {
 
-	std::auto_ptr<SparseMatrix> C(new SparseMatrix);
+	std::unique_ptr<SparseMatrix> C(new SparseMatrix);
 	C->height = A.height;
 	C->width = B.width;
 	C->nz = 0;
@@ -288,7 +288,7 @@ int64 MulSparseMatrices(const SparseMatrix& A, const SparseMatrix& B,
 		C->nz += (int)rowMap.size();
 	}
 
-	*ppC = C;
+	*ppC = std::move(C);
 	return numProducts;
 }
 

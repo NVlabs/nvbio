@@ -48,6 +48,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "io_lib_config.h"
 #endif
 
+#ifdef __linux__ 
+#include <unistd.h>
+#endif
+
 #include <stdio.h>
 #include <errno.h>
 #include <assert.h>

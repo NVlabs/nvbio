@@ -358,7 +358,7 @@ struct TrustedKmersFunctor
         uint64 kmer     = 0u;
         uint32 kmer_len = 0u;
 
-        const int32 occur_cnt = len - k + 1;
+        const uint32 occur_cnt = len - k + 1;
 
         // initialize all to false
         for (uint32 j = 0; j < (occur_cnt+31)/32; ++j)

@@ -1,4 +1,4 @@
-﻿
+
 set(SOURCES
 aligner_all_ed.cu
 aligner_all_sw.cu

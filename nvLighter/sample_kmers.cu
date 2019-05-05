@@ -219,49 +219,49 @@ bool SampleKmersStage::process(PipelineContext& context)
                 kmer_filter );
         }
     }
-    catch (nvbio::cuda_error e)
+    catch (nvbio::cuda_error &e)
     {
         log_error(stderr, "[SampleKmersStage] caught a nvbio::cuda_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         exit(1);
     }
-    catch (nvbio::bad_alloc e)
+    catch (nvbio::bad_alloc &e)
     {
         log_error(stderr, "[SampleKmersStage] caught a nvbio::bad_alloc exception:\n");
         log_error(stderr, "  %s\n", e.what());
         exit(1);
     }
-    catch (nvbio::logic_error e)
+    catch (nvbio::logic_error &e)
     {
         log_error(stderr, "[SampleKmersStage] caught a nvbio::logic_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         exit(1);
     }
-    catch (nvbio::runtime_error e)
+    catch (nvbio::runtime_error &e)
     {
         log_error(stderr, "[SampleKmersStage] caught a nvbio::runtime_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         exit(1);
     }
-    catch (thrust::system::system_error e)
+    catch (thrust::system::system_error &e)
     {
         log_error(stderr, "[SampleKmersStage] caught a thrust::system_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         exit(1);
     }
-    catch (std::bad_alloc e)
+    catch (std::bad_alloc &e)
     {
         log_error(stderr, "[SampleKmersStage] caught a std::bad_alloc exception:\n");
         log_error(stderr, "  %s\n", e.what());
         exit(1);
     }
-    catch (std::logic_error e)
+    catch (std::logic_error &e)
     {
         log_error(stderr, "[SampleKmersStage] caught a std::logic_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         exit(1);
     }
-    catch (std::runtime_error e)
+    catch (std::runtime_error &e)
     {
         log_error(stderr, "[SampleKmersStage] caught a std::runtime_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
@@ -558,49 +558,49 @@ bool TrustedKmersStage::process(PipelineContext& context)
                 kmer_filter );
         }
     }
-    catch (nvbio::cuda_error e)
+    catch (nvbio::cuda_error &e)
     {
         log_error(stderr, "[TrustedKmersStage] caught a nvbio::cuda_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         exit(1);
     }
-    catch (nvbio::bad_alloc e)
+    catch (nvbio::bad_alloc &e)
     {
         log_error(stderr, "[TrustedKmersStage] caught a nvbio::bad_alloc exception:\n");
         log_error(stderr, "  %s\n", e.what());
         exit(1);
     }
-    catch (nvbio::logic_error e)
+    catch (nvbio::logic_error &e)
     {
         log_error(stderr, "[TrustedKmersStage] caught a nvbio::logic_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         exit(1);
     }
-    catch (nvbio::runtime_error e)
+    catch (nvbio::runtime_error &e)
     {
         log_error(stderr, "[TrustedKmersStage] caught a nvbio::runtime_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         exit(1);
     }
-    catch (thrust::system::system_error e)
+    catch (thrust::system::system_error &e)
     {
         log_error(stderr, "[TrustedKmersStage] caught a thrust::system_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         exit(1);
     }
-    catch (std::bad_alloc e)
+    catch (std::bad_alloc &e)
     {
         log_error(stderr, "[TrustedKmersStage] caught a std::bad_alloc exception:\n");
         log_error(stderr, "  %s\n", e.what());
         exit(1);
     }
-    catch (std::logic_error e)
+    catch (std::logic_error &e)
     {
         log_error(stderr, "[TrustedKmersStage] caught a std::logic_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         exit(1);
     }
-    catch (std::runtime_error e)
+    catch (std::runtime_error &e)
     {
         log_error(stderr, "[TrustedKmersStage] caught a std::runtime_error exception:\n");
         log_error(stderr, "  %s\n", e.what());

@@ -38,7 +38,7 @@
 #include <nvbio/basic/vector.h>
 #include <nvbio/basic/cuda/arch.h>
 #include <nvbio/basic/cuda/condition.h>
-#include <cub/cub.h>
+#include <cub/cub.cuh>
 
 namespace nvbio {
 namespace condition {

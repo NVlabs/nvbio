@@ -30,7 +30,7 @@
 #include <nvbio/basic/types.h>
 #include <nvbio/basic/numbers.h>
 #include <nvbio/basic/cuda/arch.h>
-#include <cub/cub.h>
+#include <cub/cub.cuh>
 #include <thrust/copy.h>
 
 namespace nvbio {

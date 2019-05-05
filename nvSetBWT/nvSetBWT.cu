@@ -30,7 +30,7 @@
 
 //#define NVBIO_CUDA_DEBUG
 
-#include <cub/cub.h>
+#include <cub/cub.cuh>
 #include <nvbio/basic/omp.h>
 
 #include "input_thread.h"

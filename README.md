@@ -1,5 +1,4 @@
-[travis-badge]: https://img.shields.io/travis/vmiheer/nvbio/master.svg?label=Build
-[travis-link]: https://travis-ci.org/vmiheer/nvbio
+[![Build Status](https://travis-ci.com/vmiheer/nvbio.svg?branch=master)](https://travis-ci.com/vmiheer/nvbio)
 
 nvbio
 =====

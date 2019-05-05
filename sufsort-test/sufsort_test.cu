@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <algorithm>
+#include <stdexcept>
 #include <crc/crc.h>
 #ifdef _OPENMP
 #include <omp.h>
@@ -295,7 +296,16 @@ int sufsort_test(int argc, char* argv[])
             const uint32 N_symbols = uint32( ftell( file ) );
             thrust::host_vector<uint8> h_text( N_symbols );
             rewind( file );
-            fread( &h_text[0], 1, N_symbols, file );
+            auto symbols_retrieved = fread( &h_text[0], 1, N_symbols, file );
+            if(symbols_retrieved!=N_symbols){
+              if(feof(file)){
+                throw std::runtime_error("Unexpected end of file './data/howto'!");
+              } else {
+                auto errnum = ferror(file);
+                perror("Reading of './data/howto' failed");
+                throw std::runtime_error("Failed to read file './data/howto'!");
+              }
+            }
             fclose( file );
 
             thrust::device_vector<uint8>   d_text( h_text );

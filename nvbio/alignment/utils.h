@@ -91,7 +91,7 @@ template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> str
 ///
 struct SimpleSmithWatermanScheme
 {
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE SimpleSmithWatermanScheme() {}
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE SimpleSmithWatermanScheme() {} //TODO: Try to eliminate this to ensure scores are correctly set upon initialization
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE SimpleSmithWatermanScheme(
         const int32 match, const int32 mm, const int32 del, const int32 ins) :
         m_match(match), m_mismatch(mm), m_deletion(del), m_insertion(ins) {}
@@ -102,10 +102,10 @@ struct SimpleSmithWatermanScheme
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 deletion()                    const { return m_deletion; };
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE int32 insertion()                   const { return m_insertion; };
 
-    int32 m_match;
-    int32 m_mismatch;
-    int32 m_deletion;
-    int32 m_insertion;
+    int32 m_match     = 0;
+    int32 m_mismatch  = 0;
+    int32 m_deletion  = 0;
+    int32 m_insertion = 0;
 };
 
 ///

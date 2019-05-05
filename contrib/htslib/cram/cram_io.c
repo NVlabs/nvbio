@@ -1430,7 +1430,7 @@ static int cram_populate_ref(cram_fd *fd, int id, ref_entry *r) {
     char *ref_path = getenv("REF_PATH");
     SAM_hdr_type *ty;
     SAM_hdr_tag *tag;
-    char path[PATH_MAX], path_tmp[PATH_MAX];
+    char path[PATH_MAX], path_tmp[PATH_MAX+20];
     char *local_cache = getenv("REF_CACHE");
     mFILE *mf;
 

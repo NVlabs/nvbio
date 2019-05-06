@@ -33,6 +33,7 @@
  ******************************************************************************/
 
 #include "util/mgpucontext.h"
+#include <memory>
 
 namespace mgpu {
 	

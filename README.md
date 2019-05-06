@@ -39,5 +39,5 @@ use the cmake option `-DGPU_ARCHITECTURE=sm_XX`.
 
 The main contributors of NVBIO are:
 
-  Jacopo Pantaleoni  -  jpantaleoni@nvidia.com
-  Nuno Subtil        -  nsubtil@nvidia.com
+ * Jacopo Pantaleoni  -  jpantaleoni@nvidia.com
+ * Nuno Subtil        -  nsubtil@nvidia.com

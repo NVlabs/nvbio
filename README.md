@@ -23,19 +23,45 @@ strength aligner, reproducing most of Bowtie2's original features as well as
 adding a few more, such as efficient support for direct BAM (and soon CRAM)
 output.
 
-
 NVBIO is hosted on GitHub at `http://nvlabs.github.io/nvbio/`.
 
-To compile, you can perform the following easy steps from within the
-installation directory:
+
+
+Compilation
+-----------
+
+To compile, you first need to acquire submodules.
+
+You can do this while cloning using:
+
+    git clone --recursive git@github.com:vmiheer/nvbio.git
+
+You can do this after having cloned using:
+
+    git submodule update --init --recursive
+
+After this, you must build. To do so, enter the nvbio base directory and perform the following:
 
     mkdir build
     cd build
     cmake ..
     make -j8
-  
-By default, NVBIO will be compiled for sm_35. For newer architectures, please
-use the cmake option `-DGPU_ARCHITECTURE=sm_XX`.
+
+For CUDA 9, you must use GCC6 or less:
+
+    CXX=g++-6 CC=gcc-6 cmake ..
+
+For CUDA 10, you can use up to GCC8.2.
+
+CMake options:
+
+ * `-DGPU_ARCHITECTURE=sm_XX` - By default NVBIO will use sm_35.
+ * `-DCMAKE_BUILD_TYPE=Debug` - Compiles with debugging flags. By default full optimizations are used.
+
+
+
+Credits
+-------
 
 The main contributors of NVBIO are:
 

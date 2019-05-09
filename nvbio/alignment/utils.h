@@ -91,7 +91,7 @@ template <AlignmentType TYPE, typename scoring_type, typename algorithm_tag> str
 ///
 struct SimpleSmithWatermanScheme
 {
-    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE SimpleSmithWatermanScheme() {} //TODO: Try to eliminate this to ensure scores are correctly set upon initialization
+    NVBIO_FORCEINLINE NVBIO_HOST_DEVICE SimpleSmithWatermanScheme() {} //TODO: See if this can be removed so RAII enforces setting alignment scores correctly
     NVBIO_FORCEINLINE NVBIO_HOST_DEVICE SimpleSmithWatermanScheme(
         const int32 match, const int32 mm, const int32 del, const int32 ins) :
         m_match(match), m_mismatch(mm), m_deletion(del), m_insertion(ins) {}

@@ -258,11 +258,11 @@ struct BenchmarkWorkStream
     }
 
 private:
-    uint32  m_size;
-    uint32* m_payloads;
-    uint32  m_stride;
-    uint32* m_pool_size;
-    uint32* m_pool;
+    uint32  m_size      = 0;
+    uint32* m_payloads  = nullptr;
+    uint32  m_stride    = 0;
+    uint32* m_pool_size = nullptr;
+    uint32* m_pool      = nullptr;
 };
 
 template <uint32 PAYLOAD>

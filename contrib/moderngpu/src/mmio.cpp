@@ -456,7 +456,7 @@ char  *mm_typecode_to_str(MM_typecode matcode)
 {
     char buffer[MM_MAX_LINE_LENGTH];
     const char *types[4];
-	char *mm_strdup(const char *);
+    char *mm_strdup(const char *);
     int error =0;
 
     /* check for MTX type */

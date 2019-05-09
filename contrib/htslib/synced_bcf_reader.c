@@ -1038,7 +1038,9 @@ int bcf_sr_regions_next(bcf_sr_regions_t *reg)
 
     // reading from tabix
     char *chr, *chr_end;
-    int ichr = 0, ifrom = 1, ito = 2, is_bed = 0, from, to;
+    int ichr = 0, ifrom = 1, ito = 2, is_bed = 0;
+    int from = 0;
+    int to   = 0;
     if ( reg->tbx )
     {
         ichr   = reg->tbx->conf.sc-1;

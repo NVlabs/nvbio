@@ -3,7 +3,7 @@
 nvbio
 =====
 
-NVBIO is a library of reusable components designed by NVIDIA Corporatin to
+NVBIO is a library of reusable components designed by NVIDIA Corporation to
 accelerate bioinformatics applications using CUDA.
 
 Though it is specifically designed to unleash the power of NVIDIA GPUs, most of

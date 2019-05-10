@@ -325,7 +325,7 @@ int sam_hdr_add_lines(SAM_hdr *sh, const char *lines, int len) {
 	    SAM_hdr_type *t = kh_val(sh->h, k), *p;
 	    p = t->prev;
 	    
-	    assert(p->next = t);
+	    assert(p->next == t);
 	    p->next = h_type;
 	    h_type->prev = p;
 
@@ -446,7 +446,7 @@ int sam_hdr_vadd(SAM_hdr *sh, const char *type, va_list ap, ...) {
 	SAM_hdr_type *t = kh_val(sh->h, k), *p;
 	p = t->prev;
 	    
-	assert(p->next = t);
+	assert(p->next == t);
 	p->next = h_type;
 	h_type->prev = p;
 

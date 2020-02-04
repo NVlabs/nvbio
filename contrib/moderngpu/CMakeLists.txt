@@ -19,5 +19,7 @@ set(SRCS
     src/sparsematrix.cpp
 )
 
+set(SOURCES ${SRCS})
+
 cuda_add_library(moderngpu STATIC ${SRCS})
 

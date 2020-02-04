@@ -1292,7 +1292,7 @@ void generate_kernel_table(const uint32 id, const char* report, const KernelStat
                         max_speed = nvbio::max( speed, max_speed );
                     }
 
-                    char span_string[1024];
+                    char span_string[2048];
                     char units_string[1024];
                     for (uint32 i = 0; i < table.size(); ++i)
                     {

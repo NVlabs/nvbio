@@ -390,7 +390,7 @@ MGPU_HOST void IndirectReduceCsr(InputIt data_global, CsrIt csr_global,
 
 template<typename T, typename CsrIt>
 MGPU_HOST void SegReduceCsrPreprocess(int count, CsrIt csr_global, int numSegments,
-	bool supportEmpty, std::auto_ptr<SegReducePreprocessData>* ppData,
+	bool supportEmpty, std::unique_ptr<SegReducePreprocessData>* ppData,
 	CudaContext& context) {
 
 	typedef typename SegReducePreprocessTuning<sizeof(T)>::Tuning Tuning;

@@ -188,9 +188,9 @@ struct DeviceVectorArray
     uint64 resize(const uint32 size, const uint32 arena, const bool do_alloc = true)
     {
         uint64 bytes = 0;
-        if (do_alloc) m_arena.resize( arena ); bytes += sizeof(T)*arena;
-        if (do_alloc) m_index.resize( size );  bytes += sizeof(uint32)*size;
-        if (do_alloc) m_sizes.resize( size );  bytes += sizeof(uint32)*size;
+        if (do_alloc) { m_arena.resize( arena ); } bytes += sizeof(T)*arena;
+        if (do_alloc) { m_index.resize( size );  } bytes += sizeof(uint32)*size;
+        if (do_alloc) { m_sizes.resize( size );  } bytes += sizeof(uint32)*size;
         if (do_alloc)
         {
             // initialize all slots
@@ -306,9 +306,9 @@ struct HostVectorArray
     uint64 resize(const uint32 size, const uint32 arena, const bool do_alloc = true)
     {
         uint64 bytes = 0;
-        if (do_alloc) m_arena.resize( arena ); bytes += sizeof(T)*arena;
-        if (do_alloc) m_index.resize( size );  bytes += sizeof(uint32)*size;
-        if (do_alloc) m_sizes.resize( size );  bytes += sizeof(uint32)*size;
+        if (do_alloc) { m_arena.resize( arena ); } bytes += sizeof(T)*arena;
+        if (do_alloc) { m_index.resize( size );  } bytes += sizeof(uint32)*size;
+        if (do_alloc) { m_sizes.resize( size );  } bytes += sizeof(uint32)*size;
         if (do_alloc)
         {
             // initialize all slots

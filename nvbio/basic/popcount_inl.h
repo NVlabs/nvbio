@@ -366,32 +366,38 @@ NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_2bit(const uint64 mask, int c, c
 template <uint32 N>
 NVBIO_FORCEINLINE NVBIO_HOST_DEVICE uint32 popc_nbit(const uint32 x, int c)
 {
+    //The code originally used `int c` as an argument, but this raised warnings
+    //about comparisons between signed and unsigned values below. It's difficult
+    //to prove that the code doesn't call this with a signed integer, so we
+    //instead assert it and introduce an unsigned copy of `c`.
+    assert(c>=0);
+    uint32 cu = (uint32)c;
     if (N == 1)
     {
         const uint32 r = popc(x);
-        return c ? r : 32u - r;
+        return cu ? r : 32u - r;
     }
     else if (N == 2)
-        return popc_2bit(x,c);
+        return popc_2bit(x,cu);
     else if (N == 4)
     {
         // use brute-force - TODO: find a clever algorithm
-        return (((x >>  0) & 15u) == c) +
-               (((x >>  4) & 15u) == c) +
-               (((x >>  8) & 15u) == c) +
-               (((x >> 12) & 15u) == c) +
-               (((x >> 16) & 15u) == c) +
-               (((x >> 20) & 15u) == c) +
-               (((x >> 24) & 15u) == c) +
-               (((x >> 28) & 15u) == c);
+        return (((x >>  0) & 15u) == cu) +
+               (((x >>  4) & 15u) == cu) +
+               (((x >>  8) & 15u) == cu) +
+               (((x >> 12) & 15u) == cu) +
+               (((x >> 16) & 15u) == cu) +
+               (((x >> 20) & 15u) == cu) +
+               (((x >> 24) & 15u) == cu) +
+               (((x >> 28) & 15u) == cu);
     }
     else if (N == 8)
     {
         // use brute-force - TODO: find a clever algorithm
-        return (((x >>  0) & 255u) == c) +
-               (((x >>  8) & 255u) == c) +
-               (((x >> 16) & 255u) == c) +
-               (((x >> 24) & 255u) == c);
+        return (((x >>  0) & 255u) == cu) +
+               (((x >>  8) & 255u) == cu) +
+               (((x >> 16) & 255u) == cu) +
+               (((x >> 24) & 255u) == cu);
     }
     return 0u;
 }

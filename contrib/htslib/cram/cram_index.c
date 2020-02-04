@@ -426,7 +426,7 @@ static int cram_index_build_multiref(cram_fd *fd,
  */
 int cram_index_build(cram_fd *fd, const char *fn_base) {
     cram_container *c;
-    off_t cpos, spos, hpos;
+    off_t cpos, spos;
     zfp *fp;
     char fn_idx[PATH_MAX];
 
@@ -448,7 +448,8 @@ int cram_index_build(cram_fd *fd, const char *fn_base) {
             return 1;
         }
 
-        hpos = htell(fd->fp);
+        off_t hpos = htell(fd->fp);
+        (void)hpos; //Suppress unused variable warning
 
         if (!(c->comp_hdr_block = cram_read_block(fd)))
             return 1;

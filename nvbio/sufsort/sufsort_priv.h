@@ -41,6 +41,7 @@
 #include <thrust/adjacent_difference.h>
 #include <thrust/binary_search.h>
 #include <thrust/iterator/constant_iterator.h>
+#include <thrust/gather.h>
 
 #if defined(PLATFORM_X86)
 #include <emmintrin.h>                              // SSE intrinsics
@@ -1764,7 +1765,7 @@ struct HostStringSetRadices
             {
                 // fetch the BWT symbols for this block of suffixes
                 #pragma omp parallel for
-                for (int i = 0; i < n_suffixes; ++i)
+                for (unsigned int i = 0; i < n_suffixes; ++i)
                 {
                     const priv::string_set_bwt_functor<string_set_type> bwt( m_string_set );
                     h_bwt[i] = bwt( m_suffixes[i] );

@@ -71,5 +71,5 @@ void gpu_init(void)
     }
 
     cudaSetDevice(best_dev);
-    fprintf(stderr, "Running on %s (%d MB)\n", best_dev_prop.name, best_dev_prop.totalGlobalMem / 1024 / 1024);
+    fprintf(stderr, "Running on %s (%zu MB)\n", best_dev_prop.name, best_dev_prop.totalGlobalMem / 1024 / 1024);
 }

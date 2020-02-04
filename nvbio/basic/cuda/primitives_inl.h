@@ -199,6 +199,8 @@ typename std::iterator_traits<InputIterator>::value_type reduce(
 
     thrust::device_vector<value_type> d_out(1);
 
+    const value_type init = {};
+
     size_t temp_bytes = 0;
 
     cub::DeviceReduce::Reduce(
@@ -206,7 +208,8 @@ typename std::iterator_traits<InputIterator>::value_type reduce(
         d_in,
         d_out.begin(),
         int(n),
-        op );
+        op,
+        init );
 
     temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
     alloc_temp_storage( d_temp_storage, temp_bytes );
@@ -216,7 +219,8 @@ typename std::iterator_traits<InputIterator>::value_type reduce(
         d_in,
         d_out.begin(),
         int(n),
-        op );
+        op,
+        init);
 
     return d_out[0];
 }
@@ -404,7 +408,7 @@ uint32 runlength_encode(
     size_t                         temp_bytes = 0;
     thrust::device_vector<int>     d_num_selected(1);
 
-    cub::DeviceReduce::RunLengthEncode(
+    cub::DeviceRunLengthEncode::Encode(
         (void*)NULL, temp_bytes,
         d_in,
         d_out,
@@ -415,7 +419,7 @@ uint32 runlength_encode(
     temp_bytes = nvbio::max( uint64(temp_bytes), uint64(16) );
     alloc_temp_storage( d_temp_storage, temp_bytes );
 
-    cub::DeviceReduce::RunLengthEncode(
+    cub::DeviceRunLengthEncode::Encode(
         (void*)nvbio::plain_view( d_temp_storage ), temp_bytes,
         d_in,
         d_out,

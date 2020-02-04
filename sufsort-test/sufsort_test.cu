@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <algorithm>
+#include <stdexcept>
 #include <crc/crc.h>
 #ifdef _OPENMP
 #include <omp.h>
@@ -295,7 +296,16 @@ int sufsort_test(int argc, char* argv[])
             const uint32 N_symbols = uint32( ftell( file ) );
             thrust::host_vector<uint8> h_text( N_symbols );
             rewind( file );
-            fread( &h_text[0], 1, N_symbols, file );
+            auto symbols_retrieved = fread( &h_text[0], 1, N_symbols, file );
+            if(symbols_retrieved!=N_symbols){
+              if(feof(file)){
+                throw std::runtime_error("Unexpected end of file './data/howto'!");
+              } else {
+                auto errnum = ferror(file);
+                perror("Reading of './data/howto' failed");
+                throw std::runtime_error("Failed to read file './data/howto'!");
+              }
+            }
             fclose( file );
 
             thrust::device_vector<uint8>   d_text( h_text );
@@ -843,37 +853,37 @@ int main(int argc, char* argv[])
     {
         nvbio::sufsort_test( argc, argv+arg );
     }
-    catch (nvbio::cuda_error e)
+    catch (nvbio::cuda_error &e)
     {
         log_error(stderr, "caught a nvbio::cuda_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
     }
-    catch (nvbio::bad_alloc e)
+    catch (nvbio::bad_alloc &e)
     {
         log_error(stderr, "caught a nvbio::bad_alloc exception:\n");
         log_error(stderr, "  %s\n", e.what());
     }
-    catch (nvbio::logic_error e)
+    catch (nvbio::logic_error &e)
     {
         log_error(stderr, "caught a nvbio::logic_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
     }
-    catch (nvbio::runtime_error e)
+    catch (nvbio::runtime_error &e)
     {
         log_error(stderr, "caught a nvbio::runtime_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
     }
-    catch (std::bad_alloc e)
+    catch (std::bad_alloc &e)
     {
         log_error(stderr, "caught a std::bad_alloc exception:\n");
         log_error(stderr, "  %s\n", e.what());
     }
-    catch (std::logic_error e)
+    catch (std::logic_error &e)
     {
         log_error(stderr, "caught a std::logic_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
     }
-    catch (std::runtime_error e)
+    catch (std::runtime_error &e)
     {
         log_error(stderr, "caught a std::runtime_error exception:\n");
         log_error(stderr, "  %s\n", e.what());

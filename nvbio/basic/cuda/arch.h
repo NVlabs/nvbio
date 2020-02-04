@@ -38,6 +38,20 @@
 #include <thrust/device_vector.h>
 #include <thrust/host_vector.h>
 
+#if CUDA_VERSION >= 9000 || __CUDACC_VER_MAJOR__ >= 9
+// TODO: I think the code won't use these intrinsics in conditionals but in case
+// it uses it should take a ballot for active threads and then do intrinsics
+// More here: https://devblogs.nvidia.com/using-cuda-warp-level-primitives/
+// Maybe it's hack to put in here but it works.
+#define FULL_MASK 0xffffffff
+#define __any(p) __any_sync(FULL_MASK, (p))
+#define __all(p) __all_sync(FULL_MASK, (p))
+#define __ballot(p) __ballot_sync(FULL_MASK, (p))
+#define __shfl(var, srcThread) __shfl_sync(FULL_MASK, (var), (srcThread))
+#define __shfl_up(var, delta) __shfl_up_sync(FULL_MASK, (var), (delta))
+#define __shfl_down(var, delta) __shfl_down_sync(FULL_MASK, (var), (delta))
+#endif
+
 namespace nvbio {
 namespace cuda {
 

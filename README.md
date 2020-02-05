@@ -57,6 +57,13 @@ CMake options:
  * `-DCMAKE_BUILD_TYPE=Debug` - Compiles with debugging flags. By default full optimizations are used.
 
 
+Testing
+-------
+Running ./nvbio-test/nvbio-test will give the following error: 
+ ` warning : unable to open bwt "./data/human.NCBI36/Human.NCBI36.bwt" 
+   error   :     failed opening file "./data/SRR493095_1.fastq.gz" `
+
+You can obtain the file here https://www.ncbi.nlm.nih.gov/sra/SRX145461
 
 Credits
 -------

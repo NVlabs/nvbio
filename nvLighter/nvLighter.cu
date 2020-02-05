@@ -771,49 +771,49 @@ int main(int argc, char* argv[])
 
         log_visible(stderr,"nvLighter... done\n");
     }
-    catch (nvbio::cuda_error e)
+    catch (nvbio::cuda_error &e)
     {
         log_error(stderr, "caught a nvbio::cuda_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         return 1;
     }
-    catch (nvbio::bad_alloc e)
+    catch (nvbio::bad_alloc &e)
     {
         log_error(stderr, "caught a nvbio::bad_alloc exception:\n");
         log_error(stderr, "  %s\n", e.what());
         return 1;
     }
-    catch (nvbio::logic_error e)
+    catch (nvbio::logic_error &e)
     {
         log_error(stderr, "caught a nvbio::logic_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         return 1;
     }
-    catch (nvbio::runtime_error e)
+    catch (nvbio::runtime_error &e)
     {
         log_error(stderr, "caught a nvbio::runtime_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         return 1;
     }
-    catch (thrust::system::system_error e)
+    catch (thrust::system::system_error &e)
     {
         log_error(stderr, "caught a thrust::system_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         return 1;
     }
-    catch (std::bad_alloc e)
+    catch (std::bad_alloc &e)
     {
         log_error(stderr, "caught a std::bad_alloc exception:\n");
         log_error(stderr, "  %s\n", e.what());
         return 1;
     }
-    catch (std::logic_error e)
+    catch (std::logic_error &e)
     {
         log_error(stderr, "caught a std::logic_error exception:\n");
         log_error(stderr, "  %s\n", e.what());
         return 1;
     }
-    catch (std::runtime_error e)
+    catch (std::runtime_error &e)
     {
         log_error(stderr, "caught a std::runtime_error exception:\n");
         log_error(stderr, "  %s\n", e.what());

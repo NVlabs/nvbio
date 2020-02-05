@@ -33,6 +33,7 @@
  ******************************************************************************/
 
 #include "util/mgpucontext.h"
+#include <memory>
 
 namespace mgpu {
 	
@@ -123,7 +124,7 @@ struct DeviceGroup {
 	}
 };
 
-std::auto_ptr<DeviceGroup> deviceGroup;
+std::unique_ptr<DeviceGroup> deviceGroup;
 
 
 int CudaDevice::DeviceCount() {
@@ -213,7 +214,7 @@ struct ContextGroup {
 		}
 	}
 };
-std::auto_ptr<ContextGroup> contextGroup;
+std::unique_ptr<ContextGroup> contextGroup;
 
 CudaContext::CudaContext(CudaDevice& device, bool newStream, bool standard) :
 	_event(cudaEventDisableTiming /*| cudaEventBlockingSync */), 
@@ -230,13 +231,13 @@ CudaContext::CudaContext(CudaDevice& device, bool newStream, bool standard) :
 
 	// Allocate 4KB of page-locked memory.
 	cudaError_t error = cudaMallocHost((void**)&_pageLocked, 4096);
-    if(cudaSuccess != error) {
+        if(error!=cudaSuccess) {
 		fprintf(stderr, "ERROR ALLOCATING PAGE-LOCKED MEMORY FOR CUDA DEVICE %d\n",
 			device.Ordinal());
 		exit(0);
 	}
 
-// Allocate an auxiliary stream.
+	// Allocate an auxiliary stream.
 	error = cudaStreamCreate(&_auxStream);
 }
 

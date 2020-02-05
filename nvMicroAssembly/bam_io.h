@@ -31,6 +31,8 @@
 #include <htslib/hts.h>
 #include <htslib/bgzf.h>
 
+#include <thrust/gather.h>
+
 #include "assembly_types.h"
 
 using namespace nvbio;

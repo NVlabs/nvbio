@@ -448,7 +448,7 @@ void header(FILE* output, const char* title, const char* css, const char* meta)
     fprintf( output, "<head>\n" );
     fprintf( output, "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">\n" );
     if (meta != NULL)
-        fprintf( output, meta );
+        fprintf( output, "%s", meta );
     fprintf( output, "<title>%s</title>\n", title );
     const char* css_end = css + strlen( css )-4;
     if (strcmp( css_end, ".css" ) == 0)

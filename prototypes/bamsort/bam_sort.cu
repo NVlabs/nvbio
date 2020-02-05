@@ -24,7 +24,7 @@
 #include <nvbio/io/vcf.h>
 #include <nvbio/io/sequence/sequence_pac.h>
 
-#include <cub/cub.cuh>
+#include <cub/cub.h>
 #include <mgpuhost.cuh>
 #include <moderngpu.cuh>
 #include <nvbio/strings/string_set.h>

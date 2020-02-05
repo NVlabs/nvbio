@@ -34,6 +34,7 @@
 #include <nvbio/strings/seeds.h>
 
 #include "assembly_types.h"
+#include <thrust/iterator/discard_iterator.h>
 
 /* K-mer Extraction/Counting/Uniqueness Functionality */
 

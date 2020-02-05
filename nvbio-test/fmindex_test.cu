@@ -294,7 +294,7 @@ void synthetic_test_device(
                 bwt_it );
         }
     }
-    catch (std::exception exception)
+    catch (std::exception &exception)
     {
         fprintf(stderr, "  \nerror : exception caught : %s\n", exception.what());
         exit(1);
@@ -361,7 +361,7 @@ void synthetic_test_device(
                 bwt_it );
         }
     }
-    catch (std::exception exception)
+    catch (std::exception &exception)
     {
         fprintf(stderr, "  \nerror : exception caught : %s\n", exception.what());
         exit(1);

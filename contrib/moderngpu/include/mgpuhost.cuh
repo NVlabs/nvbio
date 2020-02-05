@@ -635,7 +635,7 @@ MGPU_HOST void IndirectReduceCsr(InputIt data_global, int count,
 template<typename T, typename CsrIt>
 MGPU_HOST void SegReduceCsrPreprocess(int count, CsrIt csr_global, 
 	int numSegments, bool supportEmpty, 
-	std::auto_ptr<SegReducePreprocessData>* ppData, CudaContext& context);
+	std::unique_ptr<SegReducePreprocessData>* ppData, CudaContext& context);
 
 template<typename InputIt, typename DestIt, typename T, typename Op>
 MGPU_HOST void SegReduceApply(const SegReducePreprocessData& preprocess, 
@@ -691,7 +691,7 @@ MGPU_HOST void ReduceByKey(KeysIt keys_global, InputIt data_global, int count,
 template<typename ValType, typename KeyType, typename KeysIt, typename Comp>
 MGPU_HOST void ReduceByKeyPreprocess(int count, KeysIt keys_global, 
 	KeyType* keysDest_global, Comp comp, int* count_host, int* count_global,
-	std::auto_ptr<ReduceByKeyPreprocessData>* ppData, CudaContext& context);
+	std::unique_ptr<ReduceByKeyPreprocessData>* ppData, CudaContext& context);
 
 template<typename InputIt, typename DestIt, typename T, typename Op>
 MGPU_HOST void ReduceByKeyApply(const ReduceByKeyPreprocessData& preprocess, 
@@ -790,12 +790,12 @@ MGPU_HOST void SpmvCsrIndirectBinary(MatrixIt matrix_global, ColsIt cols_global,
 // evaluated Spmv[Unary|Binary]Apply.
 template<typename T, typename CsrIt>
 MGPU_HOST void SpmvPreprocessUnary(int nz, CsrIt csr_global, int numRows,
-	bool supportEmpty, std::auto_ptr<SpmvPreprocessData>* ppData, 
+	bool supportEmpty, std::unique_ptr<SpmvPreprocessData>* ppData, 
 	CudaContext& context);
 
 template<typename T, typename CsrIt>
 MGPU_HOST void SpmvPreprocessBinary(int nz, CsrIt csr_global, int numRows,
-	bool supportEmpty, std::auto_ptr<SpmvPreprocessData>* ppData,
+	bool supportEmpty, std::unique_ptr<SpmvPreprocessData>* ppData,
 	CudaContext& context);
 
 template<typename ColsIt, typename VecIt, typename DestIt, typename T,

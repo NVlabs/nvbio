@@ -211,7 +211,7 @@ int main(int argc, char* argv[])
             // and execute the batch alignment, on a GPU device
             aln::batch_alignment_score(
                 aln::make_gotoh_aligner<aln::LOCAL,aln::TextBlockingTag>( scoring ),
-                make_concatenated_string_set( n_strings, thrust::make_constant_iterator<uint32>(0),      (const uint32*)raw_pointer( d_pattern_offsets ) ),
+                make_concatenated_string_set( n_strings, (const uint8*)raw_pointer( d_pattern_strings ), (const uint32*)raw_pointer( d_pattern_offsets ) ),
                 make_concatenated_string_set( n_strings, (const uint8*)raw_pointer( d_text_strings ),    (const uint32*)raw_pointer( d_text_offsets ) ),
                 sinks.begin(),
                 aln::DeviceThreadBlockScheduler<128,1>() );

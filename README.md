@@ -32,7 +32,7 @@ To compile, you first need to acquire submodules.
 
 You can do this while cloning using:
 
-    git clone --recursive git@github.com:vmiheer/nvbio.git
+    git clone --recursive https://github.com/NVlabs/nvbio
 
 You can do this after having cloned using:
 

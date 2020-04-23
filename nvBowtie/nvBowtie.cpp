@@ -151,7 +151,7 @@ int main(int argc, char* argv[])
         log_info(stderr,"    --rf                               paired mates are reverse-forward\n");
         log_info(stderr,"    --rr                               paired mates are reverse-reverse\n");
         log_info(stderr,"    --minins            int [0]        minimum insert length\n");
-        log_info(stderr,"    --minins            int [500]      maximum insert length\n");
+        log_info(stderr,"    --maxins            int [500]      maximum insert length\n");
         log_info(stderr,"    --overlap                          allow overlapping mates\n");
         log_info(stderr,"    --dovetail                         allow dovetailing mates\n");
         log_info(stderr,"    --no-mixed                         only report paired alignments\n");
